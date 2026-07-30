@@ -5,10 +5,10 @@ Started: 2026-07-30
 Resolved: 2026-07-30
 Related:
 
-- `docs/spec/operator-session-draft.md`
-- `docs/spec/cli-session-draft.md`
-- `docs/spec/coordinator-automation-draft.md`
-- `docs/spec/v1-draft.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/v1.md`
 - `docs/spec/architecture.md`
 - `docs/spec/discussions/operator-coordinator-conversation.md`
 - `docs/spec/discussions/cli-session-ux.md`
@@ -16,10 +16,10 @@ Related:
 ## Resolution
 
 Accepted with substantial corrections in
-[../operator-session-draft.md](../operator-session-draft.md),
-[../cli-session-draft.md](../cli-session-draft.md),
-[../coordinator-automation-draft.md](../coordinator-automation-draft.md),
-[../v1-draft.md](../v1-draft.md), and
+[../operator-session.md](../operator-session.md),
+[../cli-session.md](../cli-session.md),
+[../coordinator-automation.md](../coordinator-automation.md),
+[../v1.md](../v1.md), and
 [../architecture.md](../architecture.md).
 
 The normative resolution is:
@@ -186,7 +186,7 @@ presentation events for the active turn.
 
 **Severity:** Medium — feature is mentioned but mechanism undefined
 
-**Problem:** Both `operator-session-draft.md` §10.1 and `cli-session-draft.md`
+**Problem:** Both `operator-session.md` §10.1 and `cli-session.md`
 §10 mention `@session:opsess-9b2e:turn:5` as a valid reference form. But
 neither defines what the context broker does when it encounters this reference.
 
@@ -254,7 +254,7 @@ When the context broker encounters `@session:<id>:turn:<N>`:
 
 **Severity:** High — critical operator workflow has no defined mechanism
 
-**Problem:** Both `operator-session-draft.md` §15.2 and `coordinator-automation-
+**Problem:** Both `operator-session.md` §15.2 and `coordinator-automation-
 draft.md` state that certain changes "cannot be approved solely through an
 operator session" and "must route to the authoritative amendment workflow."
 But there is no command, no event, no mechanism, and no defined "amendment
@@ -809,7 +809,7 @@ limit: 50.
 
 **Severity:** Medium — operator needs to know if session state is healthy
 
-**Problem:** `v1-draft.md` §11.7 mentions doctor checks for "conversation
+**Problem:** `v1.md` §11.7 mentions doctor checks for "conversation
 lifecycle/journal/index consistency, retention permissions, budget accounting,
 stale proposals, and hold expiry/scope." These were written before the session
 model existed and reference "conversation" objects that no longer exist in the
@@ -962,7 +962,7 @@ operator sessions: 2 open · 0 active turns · budget healthy
 In logs and events, the producer field distinguishes `producer: "worker"` vs
 `producer: "operator-session"`.
 
-The vocabulary table in `operator-session-draft.md` already defines the
+The vocabulary table in `operator-session.md` already defines the
 distinction. This resolution applies the distinction consistently across all
 output surfaces.
 
@@ -1151,7 +1151,7 @@ The operator can copy-paste the session ID directly from status output.
 **Problem:** The cli-session spec mentions "a future documented structured
 attachment protocol" but doesn't architect the boundary between the session
 backend and a presentation client. The presentation events architecture is
-already defined (§6 of cli-session-draft.md). The natural extension is to
+already defined (§6 of cli-session.md). The natural extension is to
 define these events as a protocol boundary, not just an internal pattern.
 
 This matters for: testing (fixtures consume presentation events), IDE
@@ -1195,7 +1195,7 @@ v1 delivers the PTY attachment. The architecture note ensures that the
 presentation events are structured as a protocol from day one, not as
 internal implementation details that later need extraction.
 
-The existing presentation event vocabulary (§6 of cli-session-draft.md)
+The existing presentation event vocabulary (§6 of cli-session.md)
 is already sufficient for this boundary. No additional specification is needed
 for v1 beyond an architectural note in `architecture.md` §4.8 stating that
 the attachment service boundary uses typed presentation events and supports
@@ -1288,7 +1288,7 @@ turn, and `ask` (no session) the one-shot equivalent.
 
 ## 4. Relationship to existing spec documents
 
-### operator-session-draft.md
+### operator-session.md
 
 Gaps 3, 4, 5, 6, 7, 12, 13, 15, 18 affect this document directly. The
 proposed resolutions would:
@@ -1301,7 +1301,7 @@ proposed resolutions would:
 - Update vocabulary with worker-session/operator-session prefix convention in §4
 - Add upgrade behavior to a new § (or §20)
 
-### cli-session-draft.md
+### cli-session.md
 
 Gaps 1, 2, 8, 9, 14 affect this document directly. The proposed resolutions
 would:
@@ -1312,12 +1312,12 @@ would:
 - Clarify bare form behavior in §4
 - Add observer attachment lifecycle states to §4
 
-### coordinator-automation-draft.md
+### coordinator-automation.md
 
 Gap 4 affects the proposal vocabulary. The proposed resolution adds
 `propose-pack-amendment` to the closed proposal types list in §11.2.
 
-### v1-draft.md
+### v1.md
 
 Gap 11 affects the doctor check descriptions in §11.7. Gap 16 affects the
 status JSON schema in §11.3. Gap 6 affects the init flow in §11.1. Gap 13

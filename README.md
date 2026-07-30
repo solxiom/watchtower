@@ -23,7 +23,7 @@ integration are spec-driven work in progress.
 
 **Ecosystem:** pinned to `1.0.0-alpha` in `nira.json` (Nirvana shared store).
 
-Start with the [v1 product specification](docs/spec/v1-draft.md), then read the
+Start with the [v1 product specification](docs/spec/v1.md), then read the
 [architecture baseline](docs/spec/architecture.md) and
 [delivery roadmap](docs/spec/roadmap.md). The proposed multi-architect
 accepted-spec to implementation-pack workflow is defined separately in the
@@ -32,11 +32,11 @@ quality-first capability discovery, endpoint onboarding, and account-capacity
 planning phase is defined in the
 [allocation-planning draft](docs/spec/allocation-planning-draft.md). The v1
 coordinator execution contract is defined in the
-[coordinator-automation draft](docs/spec/coordinator-automation-draft.md), and
+[coordinator-automation specification](docs/spec/coordinator-automation.md), and
 the v1 bounded multi-turn operator interface is defined in the
-[operator-session draft](docs/spec/operator-session-draft.md), and its polished
+[operator-session specification](docs/spec/operator-session.md), and its polished
 foreground terminal contract is defined in the
-[CLI session draft](docs/spec/cli-session-draft.md).
+[CLI session specification](docs/spec/cli-session.md).
 
 ## Quick start (development)
 
@@ -118,14 +118,14 @@ reports, events, budgets, and logs stay inside the local lane overlay.
 
 ## Read first
 
-1. [docs/spec/v1-draft.md](docs/spec/v1-draft.md) — normative v1 product contract
+1. [docs/spec/v1.md](docs/spec/v1.md) — normative v1 product contract
 2. [docs/spec/architecture.md](docs/spec/architecture.md) — architecture and boundaries
 3. [docs/spec/roadmap.md](docs/spec/roadmap.md) — phased delivery plan
 4. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
 5. [docs/spec/allocation-planning-draft.md](docs/spec/allocation-planning-draft.md) — pack-to-endpoint allocation process
-6. [docs/spec/coordinator-automation-draft.md](docs/spec/coordinator-automation-draft.md) — v1 decision routing and effect safety
-7. [docs/spec/operator-session-draft.md](docs/spec/operator-session-draft.md) — v1 operator session and confirmed effects
-8. [docs/spec/cli-session-draft.md](docs/spec/cli-session-draft.md) — v1 foreground session attachment and terminal UX
+6. [docs/spec/coordinator-automation.md](docs/spec/coordinator-automation.md) — v1 decision routing and effect safety
+7. [docs/spec/operator-session.md](docs/spec/operator-session.md) — v1 operator session and confirmed effects
+8. [docs/spec/cli-session.md](docs/spec/cli-session.md) — v1 foreground session attachment and terminal UX
 9. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
 
 ## License

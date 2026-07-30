@@ -1,6 +1,6 @@
 # Watchtower v1 Operator Sessions
 
-Status: **Draft**
+Status: **Proposed — implementation-ready**
 Target release: `1.0.0`
 CLI groups: `wt coordinator ask|session`, `wt coordinator hold`
 Last updated: 2026-07-30
@@ -13,7 +13,10 @@ and
 with gap corrections from
 [discussions/operator-session-gaps.md](discussions/operator-session-gaps.md),
 and extends
-[coordinator-automation-draft.md](coordinator-automation-draft.md).
+[coordinator-automation.md](coordinator-automation.md).
+Exact operator authority, default limits, retention execution, adapter
+eligibility, and JSON/error behavior are closed by
+[v1-contracts.md](v1-contracts.md).
 
 ## 1. Product statement
 
@@ -168,6 +171,8 @@ Any non-pruned session → new OPEN child session
 | `pruned` | Full text removed according to policy; tombstones/digests remain |
 
 `idle` is an observation derived from `lastTurnAt`, not a durable state.
+`archived` is reserved in schema version 1 but no v1 command or automatic
+worker enters it; explicit prune operates directly on eligible closed content.
 Closed sessions are not reopened; `fork` creates a new identity and budget
 segment while preserving the relationship.
 
@@ -860,6 +865,7 @@ interactive attachment.
 | `wt coordinator session pin|unpin <id> <ref>` | Manage bounded continuity references |
 | `wt coordinator session compact <id>` | Create derived bounded continuity summary |
 | `wt coordinator session export <id>` | Deterministically export retained session records |
+| `wt coordinator session prune <id>` | Preview/confirm eligible full-text pruning and preserve tombstones |
 | `wt coordinator session amendment request <id>` | Create/confirm a typed amendment request from retained evidence |
 | `wt coordinator session budget grant <id>` | Preview/confirm a finite authorized budget grant |
 | `wt coordinator session apply <proposal-id>` | Preview/confirm/revalidate a proposed effect |
@@ -919,7 +925,7 @@ than being reconstructed.
 
 The complete terminal rendering, slash-command, streaming, signal, history,
 notification, accessibility, and attachment contract is normative in
-[cli-session-draft.md](cli-session-draft.md).
+[cli-session.md](cli-session.md).
 
 ## 20. Filesystem contract
 
@@ -1183,12 +1189,14 @@ Failures preserve message/turn identity when created and never imply an effect.
 
 ## 27. Open questions
 
-1. Which exact M0 natural-language templates should v1 support beyond explicit
-   structured commands?
-2. What default closed-session retention duration and disk limit should
-   ship?
-3. Which host adapters support safe interruption and provisional streaming?
-4. Should notification adapters be required for system-opened escalation
-   sessions, or may status polling be the v1 baseline?
-5. Which effect proposal types may a normal operator confirm without a
-   separate pack/spec amendment role?
+No v1-blocking questions remain:
+
+1. V1 supports no M0 natural-language templates; only registered structured
+   CLI/slash queries are M0.
+2. Closed retention defaults to 30 days with a 256 MiB lane session limit;
+   pruning is explicit.
+3. Streaming is optional and capability-tested; buffered validation is the
+   required fallback.
+4. Status polling is the v1 notification baseline; adapters are optional.
+5. Normal-operator confirmation authority is the closed registry in
+   [v1-contracts.md §5](v1-contracts.md#5-proposal-and-effect-registry).

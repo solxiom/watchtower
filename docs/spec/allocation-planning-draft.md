@@ -5,6 +5,10 @@ Target horizon: post-v1, after pack design
 CLI group: `wt allocation`
 Last updated: 2026-07-30
 
+This phase is post-v1. Its `allocation-required` family of states and command
+group do not alter the v1 lifecycle or initialization contract fixed in
+[v1-contracts.md](v1-contracts.md).
+
 This document specifies the phase between an accepted, sealed implementation
 pack and implementation dispatch. It converts provider-neutral batch
 requirements into a feasible, budget-aware plan for the models, accounts,
@@ -807,7 +811,7 @@ Re-review remains independent of the correction implementer.
 ### 12.4 Coordinator decision routing
 
 Coordinator decision classes from
-[coordinator-automation-draft.md](coordinator-automation-draft.md) are dynamic
+[coordinator-automation.md](coordinator-automation.md) are dynamic
 allocation slots:
 
 - `coordinator:D1`;
@@ -824,7 +828,7 @@ every cycle or bind one endpoint for the entire lane. Selection occurs when a
 cycle opens against the active snapshot and reservations.
 
 Operator-session routing follows
-[operator-session-draft.md](operator-session-draft.md). Each turn is
+[operator-session.md](operator-session.md). Each turn is
 routed independently; endpoint continuity is a preference only.
 Operator-session reserves are distinct from automated reject/recovery
 capacity. Compaction, forking, or opening a new session does not reset lane-wide

@@ -5,9 +5,14 @@ Decision date: 2026-07-30
 Outcome: **Committed design pack plus local execution overlay**
 Related:
 
-- `docs/spec/v1-draft.md` §§ 6–9
+- `docs/spec/v1.md` §§ 6–9
 - `docs/spec/architecture.md` §§ 3, 5, 12
 - `docs/spec/pack-design-draft.md` §§ 10–15
+
+Historical syntax note: this discussion originally used
+`wt init --from-pack`. The implementation-ready v1 contract supersedes that
+spelling with `wt init <slug> --impl-pack=<path>`; see
+`docs/spec/v1-contracts.md` §2.
 
 ## Context
 
@@ -190,8 +195,8 @@ pack throughout the lane, not a retrospective snapshot.
 - `wt pack init` creates a committed skeleton and local pack-design lane.
 - `wt pack validate`, `graph`, `diff`, and `seal` operate on the committed pack.
 - `wt pack context` creates local bounded context/prompt material.
-- `wt init --from-pack` binds an accepted committed pack to a new local
-  implementation lane.
+- `wt init <slug> --impl-pack=<path>` binds an accepted committed pack to a new
+  local implementation lane.
 - Future archive/cleanup commands may prune local prompts, reports, logs, and
   state, but never delete the committed pack.
 

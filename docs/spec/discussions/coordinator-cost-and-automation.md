@@ -5,14 +5,14 @@ Started: 2026-07-30
 Resolved: 2026-07-30
 Related:
 
-- `docs/spec/v1-draft.md` §§ 4, 10–14
+- `docs/spec/v1.md` §§ 4, 10–14
 - `docs/spec/architecture.md` §§ 2–4, 6, 9
 - `docs/spec/allocation-planning-draft.md` §§ 2, 8, 10
 
 ## Resolution
 
 Accepted with architectural corrections in
-[`../coordinator-automation-draft.md`](../coordinator-automation-draft.md).
+[`../coordinator-automation.md`](../coordinator-automation.md).
 Coordinator automation is required v1 behavior, not a post-v1 migration.
 
 The resolution keeps zero-token mechanical routing, narrow per-cycle context,
@@ -35,7 +35,8 @@ proposal in these important ways:
 - Watchtower starts new lanes only and does not migrate copied-template lanes.
 
 The remaining sections preserve the original proposal and evidence. Where they
-conflict with the resolution above, the normative coordinator-automation draft
+conflict with the resolution above, the normative coordinator-automation
+specification
 wins.
 
 ## 1. Problem statement
@@ -697,7 +698,7 @@ Structured selective-loading (decision envelope) is cheaper and verifiable.
 
 ## 12. Relationship to existing spec documents
 
-### v1-draft.md
+### v1.md
 
 The v1 spec already states (§1): "Watchtower is not the coordinator agent.
 It does not interpret acceptance, triage rejects, select the next batch, or

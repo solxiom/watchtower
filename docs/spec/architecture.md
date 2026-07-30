@@ -1,10 +1,14 @@
 # Watchtower Product Architecture
 
-Status: **Draft architecture baseline**
+Status: **Proposed — implementation-ready architecture baseline**
 Applies to: v1 foundation and post-v1 evolution
 Last updated: 2026-07-30
 
 ## 1. Architectural intent
+
+Exact v1 precedence and executable contracts live in
+[v1-contracts.md](v1-contracts.md). Post-v1 pack-design and allocation-planning
+drafts do not add states or commands to the v1 implementation-lane lifecycle.
 
 Watchtower should become the common local control plane for agile,
 agent-assisted development without becoming an agent framework or hiding
@@ -264,7 +268,7 @@ adapter observations, not hardcoded core-planner knowledge.
 ### 4.8 v1 coordinator decision plane
 
 The v1 decision plane is defined in
-[coordinator-automation-draft.md](coordinator-automation-draft.md):
+[coordinator-automation.md](coordinator-automation.md):
 
 | Service | Responsibility |
 |---------|----------------|
@@ -433,7 +437,7 @@ No lane mutation lock is held while an operator-session endpoint runs.
 Attachments are foreground presentation clients and hold neither lane authority
 nor provider memory. Automation continues unless an explicit scoped hold blocks
 the relevant future effect. Their terminal and presentation-event contract is
-defined in [cli-session-draft.md](cli-session-draft.md).
+defined in [cli-session.md](cli-session.md).
 
 Typed presentation events form a transport-neutral internal boundary for
 foundation/PTY testing. They are not a public wire protocol in v1; remote,

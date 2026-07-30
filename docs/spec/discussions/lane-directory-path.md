@@ -5,7 +5,7 @@ Decision date: 2026-07-30
 Outcome: **`.watchtower/lanes/<slug>/` with a structured execution overlay**
 Related:
 
-- `docs/spec/v1-draft.md` §§ 4, 7–9, 12, 14
+- `docs/spec/v1.md` §§ 4, 7–9, 12, 14
 - `docs/spec/architecture.md` §§ 3, 5–6, 12
 - `docs/spec/pack-design-draft.md` § 10
 

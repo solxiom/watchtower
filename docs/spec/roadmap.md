@@ -5,7 +5,7 @@ Last updated: 2026-07-30
 
 This roadmap sequences outcomes, not commits. Each milestone should land as a
 small implementation pack with work batches, independent review batches, and
-the corresponding updates to [v1-draft.md](v1-draft.md).
+the corresponding updates to [v1.md](v1.md).
 
 ## 1. Release strategy
 
@@ -37,8 +37,9 @@ Deliverables:
 - architecture baseline;
 - roadmap;
 - v1 coordinator-automation contract;
-- new-lane contract fixtures and runtime/knowledge asset inventories;
-- runtime and knowledge asset inventory;
+- new-lane fixture requirements and runtime/knowledge asset-inventory
+  contracts;
+- normative contract closure and machine-readable v1 schema bundle;
 - decisions for package name, `.watchtower/lanes` layout, stable identity,
   initiative/lane/repository cardinality, committed-pack boundary, selection,
   and runtime distribution.
@@ -49,7 +50,9 @@ Exit:
 - source-of-truth boundaries are explicit;
 - remaining questions are genuinely post-v1.
 
-Status: ⏳ Drafted; review required.
+Status: ✅ Specification contract frozen and implementation-ready. Concrete
+fixtures and packaged asset inventories land with their owning M1/M2
+implementation batches before those features become Stable.
 
 ### M1 — Read model and discovery
 

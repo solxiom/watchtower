@@ -5,10 +5,10 @@ Started: 2026-07-30
 Resolved: 2026-07-30
 Related:
 
-- `docs/spec/operator-session-draft.md` §§ 19, 24
-- `docs/spec/cli-session-draft.md`
-- `docs/spec/coordinator-automation-draft.md` § 15
-- `docs/spec/v1-draft.md` § 11.10
+- `docs/spec/operator-session.md` §§ 19, 24
+- `docs/spec/cli-session.md`
+- `docs/spec/coordinator-automation.md` § 15
+- `docs/spec/v1.md` § 11.10
 
 ## Resolution
 
@@ -35,7 +35,7 @@ boundaries:
 - foreground status observation requires neither a daemon nor model polling.
 
 The normative result is
-[../cli-session-draft.md](../cli-session-draft.md). Examples below record the
+[../cli-session.md](../cli-session.md). Examples below record the
 original proposal and may retain the earlier `chat` vocabulary; where they
 conflict, the normative operator-session and CLI-session drafts win.
 
@@ -746,8 +746,8 @@ authoritative conversation records.
 ## 16. Recommended next steps
 
 1. Adopt this discussion and extract the normative parts into
-   `operator-session-draft.md` §19 (CLI contract) and a new § for
-   session UX, or a separate `cli-session-draft.md`.
+   `operator-session.md` §19 (CLI contract) and a new § for
+   session UX, or a separate `cli-session.md`.
 
 2. Define the exact M0 slash-command contract and output schemas.
 

@@ -1,6 +1,6 @@
 # Watchtower v1 Operator Session CLI UX
 
-Status: **Draft**
+Status: **Proposed — implementation-ready**
 Target release: `1.0.0`
 CLI group: `wt coordinator session`
 Last updated: 2026-07-30
@@ -8,10 +8,12 @@ Last updated: 2026-07-30
 This document is normative for the polished foreground terminal attachment to
 an operator session. Session semantics, bounded memory, routing, retention,
 proposals, and effect authority remain normative in
-[operator-session-draft.md](operator-session-draft.md). This document resolves
+[operator-session.md](operator-session.md). This document resolves
 [discussions/cli-session-ux.md](discussions/cli-session-ux.md) and the UI
 portions of
 [discussions/operator-session-gaps.md](discussions/operator-session-gaps.md).
+Default limits, adapter capability fallback, output/error envelopes, and
+retention execution are normative in [v1-contracts.md](v1-contracts.md).
 
 ## 1. Product statement
 

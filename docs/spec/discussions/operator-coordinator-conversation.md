@@ -5,16 +5,16 @@ Started: 2026-07-30
 Resolved: 2026-07-30
 Related:
 
-- `docs/spec/operator-session-draft.md`
-- `docs/spec/cli-session-draft.md`
-- `docs/spec/coordinator-automation-draft.md` §§ 5, 15, 19
-- `docs/spec/v1-draft.md` §§ 5, 10–11
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- `docs/spec/coordinator-automation.md` §§ 5, 15, 19
+- `docs/spec/v1.md` §§ 5, 10–11
 - `docs/spec/discussions/coordinator-cost-and-automation.md` §§ 1.4, 3.7
 
 ## Resolution
 
 Accepted with corrections in
-[`../operator-session-draft.md`](../operator-session-draft.md) as
+[`../operator-session.md`](../operator-session.md) as
 required Watchtower v1 behavior.
 
 The resolution keeps first-class durable multi-turn interaction, M0 answers,
@@ -50,7 +50,7 @@ coordinator cycles — M0 mechanical routing, D1–D3 bounded decision cycles,
 decision envelopes, typed proposals, validated effects, and append-only
 journals. But the operator interaction model is a stub.
 
-Section 15 of `coordinator-automation-draft.md` is four paragraphs. It states
+Section 15 of `coordinator-automation.md` is four paragraphs. It states
 that operator session "uses a separate short-lived cycle and never joins
 the next automated coordinator context." It says operator requests are
 classified before model invocation and that safety escalation may interrupt
@@ -849,14 +849,14 @@ classification uses heuristics and routing policy, not a model judgment.
 
 ## 5. Relationship to existing spec documents
 
-### coordinator-automation-draft.md
+### coordinator-automation.md
 
 This discussion proposes replacing the four-paragraph §15 (Operator interaction)
 with a complete conversation model. The key architectural change: operator
 conversation is not "a separate short-lived cycle" but a "multi-turn
 conversation composed of bounded cycles with shared context."
 
-### v1-draft.md
+### v1.md
 
 The `wt coordinator` command group would expand from `index|status|context|explain|cycle|escalate` to include `ask`, `conversation list|history|close|resume|compact`.
 
@@ -917,7 +917,7 @@ services add `ConversationManager` and `OperatorMessageParser`.
 ## 7. Recommended next steps
 
 1. Adopt this discussion as resolved with corrections.
-2. Replace `coordinator-automation-draft.md` §15 with a full conversation
+2. Replace `coordinator-automation.md` §15 with a full conversation
    model section.
 3. Add conversation commands to the v1-draft command table.
 4. Add conversation budget to `coordinator-routing.json` schema.

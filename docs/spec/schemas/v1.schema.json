@@ -1,0 +1,295 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nirvana.dev/watchtower/spec/v1.schema.json",
+  "title": "Watchtower v1 public contracts",
+  "$ref": "#/$defs/commandResult",
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)[^\\\\\\u0000]+$"
+    },
+    "repository": {
+      "type": "object",
+      "required": ["id", "role", "access"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+        "role": {"type": "string", "minLength": 1},
+        "access": {"enum": ["read", "write"]}
+      },
+      "additionalProperties": true
+    },
+    "requirement": {
+      "type": "object",
+      "required": ["id", "repository", "source", "workBatches", "reviewBatches"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "repository": {"$ref": "#/$defs/id"},
+        "source": {"$ref": "#/$defs/relativePath"},
+        "workBatches": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "reviewBatches": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+      },
+      "additionalProperties": true
+    },
+    "batchRepository": {
+      "type": "object",
+      "required": ["id", "access", "paths", "claimMode"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "access": {"enum": ["read", "write"]},
+        "paths": {"type": "array", "items": {"$ref": "#/$defs/relativePath"}},
+        "claimMode": {"enum": ["read", "shared-write", "exclusive-write"]}
+      },
+      "additionalProperties": true
+    },
+    "batch": {
+      "type": "object",
+      "required": ["id", "title", "dependsOn", "primaryRepository", "workBrief", "reviewBrief", "requirements", "repositories", "implementationReasoning", "reviewReasoning", "workload", "proofClasses"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "title": {"type": "string", "minLength": 1},
+        "dependsOn": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "primaryRepository": {"$ref": "#/$defs/id"},
+        "workBrief": {"$ref": "#/$defs/relativePath"},
+        "reviewBrief": {"$ref": "#/$defs/relativePath"},
+        "requirements": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "repositories": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/batchRepository"}},
+        "implementationReasoning": {"enum": ["R1", "R2", "R3", "R4", "R5"]},
+        "reviewReasoning": {"enum": ["R1", "R2", "R3", "R4", "R5"]},
+        "workload": {"enum": ["small", "medium", "large", "very-large"]},
+        "proofClasses": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": true
+    },
+    "implementationPack": {
+      "type": "object",
+      "required": ["schemaVersion", "packId", "initiativeId", "authoredByLaneId", "kind", "status", "packRepository", "repositories", "sourceBaselines", "acceptedInputs", "artifacts", "requirements", "batches"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "packId": {"$ref": "#/$defs/id"},
+        "initiativeId": {"$ref": "#/$defs/id"},
+        "authoredByLaneId": {"type": "string", "format": "uuid"},
+        "kind": {"const": "implementation"},
+        "status": {"const": "accepted"},
+        "packRepository": {"$ref": "#/$defs/id"},
+        "repositories": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/repository"}},
+        "sourceBaselines": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "object", "required": ["revision", "dirty"], "properties": {"revision": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"}, "dirty": {"type": "boolean"}}, "additionalProperties": true}},
+        "acceptedInputs": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["repository", "path", "sha256", "acceptanceRef"], "properties": {"repository": {"$ref": "#/$defs/id"}, "path": {"$ref": "#/$defs/relativePath"}, "sha256": {"$ref": "#/$defs/digest"}, "acceptanceRef": {"$ref": "#/$defs/relativePath"}}, "additionalProperties": true}},
+        "artifacts": {"type": "object", "required": ["readme", "traceability", "implementationMap", "qualityRules", "roadmap", "tracker", "acceptance", "seal"], "additionalProperties": {"$ref": "#/$defs/relativePath"}},
+        "requirements": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/requirement"}},
+        "batches": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/batch"}}
+      },
+      "additionalProperties": true
+    },
+    "packAcceptance": {
+      "type": "object",
+      "required": ["schemaVersion", "packId", "verdict", "reviewerId", "reviewSessionId", "acceptedManifestDigest", "findings", "acceptanceCommit", "acceptedAt"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "packId": {"$ref": "#/$defs/id"},
+        "verdict": {"const": "accept"},
+        "reviewerId": {"$ref": "#/$defs/id"},
+        "reviewSessionId": {"$ref": "#/$defs/id"},
+        "acceptedManifestDigest": {"$ref": "#/$defs/digest"},
+        "findings": {"type": "array", "items": {"type": "object", "required": ["id", "severity", "disposition"], "properties": {"id": {"$ref": "#/$defs/id"}, "severity": {"enum": ["info", "minor", "major", "critical"]}, "disposition": {"enum": ["closed", "superseded"]}}, "additionalProperties": true}},
+        "acceptanceCommit": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"},
+        "acceptedAt": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": true
+    },
+    "sealedFile": {
+      "type": "object",
+      "required": ["path", "sha256", "bytes"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/digest"},
+        "bytes": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "implementationPackLock": {
+      "type": "object",
+      "required": ["schemaVersion", "packId", "sealId", "manifestDigest", "acceptanceDigest", "sourceBaselines", "files", "generatedAt"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "packId": {"$ref": "#/$defs/id"},
+        "sealId": {"$ref": "#/$defs/digest"},
+        "manifestDigest": {"$ref": "#/$defs/digest"},
+        "acceptanceDigest": {"$ref": "#/$defs/digest"},
+        "sourceBaselines": {"type": "object"},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/sealedFile"}},
+        "generatedAt": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": true
+    },
+    "durableEvent": {
+      "type": "object",
+      "required": ["schemaVersion", "eventId", "type", "sequence", "at", "laneId", "producer", "correlationId", "causationId", "policyVersion", "payload"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "eventId": {"$ref": "#/$defs/id"},
+        "type": {"type": "string", "minLength": 1},
+        "sequence": {"type": "integer", "minimum": 0},
+        "at": {"type": "string", "format": "date-time"},
+        "laneId": {"type": "string", "format": "uuid"},
+        "producer": {"type": "string", "minLength": 1},
+        "correlationId": {"$ref": "#/$defs/id"},
+        "causationId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "policyVersion": {"type": "string", "minLength": 1},
+        "payload": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "decisionProposal": {
+      "type": "object",
+      "required": ["schemaVersion", "cycleId", "proposalId", "type", "snapshotDigest", "expiresAt", "evidenceRefs", "body", "requestedEffects"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "cycleId": {"$ref": "#/$defs/id"},
+        "proposalId": {"$ref": "#/$defs/id"},
+        "type": {"enum": ["select-ready-batch", "classify-reject", "open-correction", "select-correction-route", "request-reroute", "propose-reconciliation", "request-pack-amendment", "grant-session-budget", "place-hold", "release-hold", "escalate"]},
+        "snapshotDigest": {"$ref": "#/$defs/digest"},
+        "expiresAt": {"type": "string", "format": "date-time"},
+        "evidenceRefs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "body": {"type": "object"},
+        "requestedEffects": {"type": "array", "items": {"type": "object", "required": ["effect"], "properties": {"effect": {"enum": ["dispatch-batch", "open-correction", "route-correction", "reroute-endpoint", "reconcile-projection", "create-amendment-request", "grant-session-budget", "place-hold", "release-hold", "open-escalation"]}}, "additionalProperties": true}}
+      },
+      "additionalProperties": true
+    },
+    "commandResult": {
+      "type": "object",
+      "required": ["schemaVersion", "command", "ok", "data"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "command": {"type": "string", "minLength": 1},
+        "ok": {"const": true},
+        "data": {}
+      },
+      "additionalProperties": false
+    },
+    "commandError": {
+      "type": "object",
+      "required": ["schemaVersion", "command", "ok", "error"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "command": {"type": "string", "minLength": 1},
+        "ok": {"const": false},
+        "error": {"type": "object", "required": ["code", "message", "exitCode"], "properties": {"code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"}, "message": {"type": "string"}, "exitCode": {"enum": [1, 2, 3, 4, 5]}, "details": {}}, "additionalProperties": false}
+      },
+      "additionalProperties": false
+    },
+    "page": {
+      "type": "object",
+      "required": ["items", "limit", "nextCursor", "revision"],
+      "properties": {
+        "items": {"type": "array", "maxItems": 200},
+        "limit": {"type": "integer", "minimum": 1, "maximum": 200},
+        "nextCursor": {"type": ["string", "null"]},
+        "revision": {"type": ["string", "integer"]}
+      },
+      "additionalProperties": true
+    },
+    "laneListPage": {"$ref": "#/$defs/page"},
+    "mutationResult": {
+      "type": "object",
+      "required": ["applied", "changed", "unchanged", "warnings"],
+      "properties": {
+        "applied": {"type": "boolean"},
+        "changed": {"type": "array", "items": {"type": "string"}},
+        "unchanged": {"type": "array", "items": {"type": "string"}},
+        "warnings": {"type": "array", "items": {"type": "object", "required": ["code", "message"], "properties": {"code": {"type": "string"}, "message": {"type": "string"}}, "additionalProperties": true}}
+      },
+      "additionalProperties": true
+    },
+    "laneStatus": {
+      "type": "object",
+      "required": ["lane", "repositories", "lifecycle", "health", "workerSessions", "watcher", "coordinator", "runtime"],
+      "properties": {
+        "lane": {"type": "object", "required": ["id", "slug", "initiativeId", "kind", "controlHome"], "properties": {"id": {"type": "string", "format": "uuid"}, "slug": {"type": "string"}, "initiativeId": {"type": "string"}, "kind": {"const": "implementation"}, "controlHome": {"type": "string"}}, "additionalProperties": true},
+        "repositories": {"type": "array"},
+        "lifecycle": {"type": "object", "required": ["status", "activeBatch"], "properties": {"status": {"enum": ["bootstrap", "active", "paused", "complete", "unknown"]}, "activeBatch": {"type": ["string", "null"]}}, "additionalProperties": true},
+        "health": {"type": "object", "required": ["status", "warnings"], "properties": {"status": {"enum": ["ok", "attention", "complete", "invalid"]}, "warnings": {"type": "array"}}, "additionalProperties": true},
+        "workerSessions": {"type": "object"},
+        "watcher": {"type": "object"},
+        "coordinator": {"type": "object"},
+        "runtime": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "resolvedConfig": {
+      "type": "object",
+      "required": ["laneId", "controlHome", "repositories", "laneDir", "runtimeRoot", "knowledgeRoot", "config", "redactedKeys"],
+      "properties": {
+        "laneId": {"type": "string", "format": "uuid"},
+        "controlHome": {"type": "string"},
+        "repositories": {"type": "array"},
+        "laneDir": {"type": "string"},
+        "runtimeRoot": {"type": "string"},
+        "knowledgeRoot": {"type": "string"},
+        "config": {"type": "object"},
+        "redactedKeys": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    },
+    "doctorReport": {"type": "object", "required": ["checks"], "properties": {"checks": {"type": "array", "items": {"type": "object", "required": ["id", "status"], "properties": {"id": {"$ref": "#/$defs/id"}, "status": {"enum": ["pass", "warn", "fail", "skip"]}}, "additionalProperties": true}}}, "additionalProperties": true},
+    "upgradePlan": {
+      "type": "object",
+      "required": ["from", "to", "applied", "changed", "unchanged", "preserved", "migrated", "conflicts"],
+      "properties": {
+        "from": {"type": "object"},
+        "to": {"type": "object"},
+        "applied": {"type": "boolean"},
+        "changed": {"type": "array"},
+        "unchanged": {"type": "array"},
+        "preserved": {"type": "array"},
+        "migrated": {"type": "array"},
+        "conflicts": {"type": "array"}
+      },
+      "additionalProperties": true
+    },
+    "versionReport": {
+      "type": "object",
+      "required": ["cliVersion", "runtimeVersion", "knowledgeVersion", "laneSchemaVersion"],
+      "properties": {
+        "cliVersion": {"type": "string"},
+        "runtimeVersion": {"type": ["string", "null"]},
+        "knowledgeVersion": {"type": ["string", "null"]},
+        "laneSchemaVersion": {"type": ["integer", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "coordinatorResult": {
+      "type": "object",
+      "required": ["laneId", "projectionRevision", "operation", "outcome"],
+      "properties": {
+        "laneId": {"type": "string", "format": "uuid"},
+        "projectionRevision": {"type": ["string", "integer"]},
+        "operation": {"type": "string"},
+        "outcome": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "eventPage": {"$ref": "#/$defs/page"},
+    "readySet": {"type": "object", "required": ["candidates", "blocked"], "properties": {"candidates": {"type": "array"}, "blocked": {"type": "array"}}, "additionalProperties": true},
+    "sessionPage": {"$ref": "#/$defs/page"},
+    "sessionResult": {
+      "type": "object",
+      "required": ["operatorSessionId", "state", "turn", "result"],
+      "properties": {
+        "operatorSessionId": {"$ref": "#/$defs/id"},
+        "state": {"enum": ["open", "active-turn", "suspended", "closed", "archived", "pruned"]},
+        "turn": {"type": ["integer", "null"], "minimum": 0},
+        "result": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  }
+}

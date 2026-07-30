@@ -11,7 +11,10 @@ specifications and their associated architecture, review, testing, and
 repository documentation into a consumable implementation pack.
 
 It is normative for the proposed process model. It does not add commands to
-the Watchtower v1 release defined in [v1-draft.md](v1-draft.md).
+the Watchtower v1 release defined in [v1.md](v1.md).
+It is a post-v1 producer specification and does not define the input accepted
+by v1 `wt init`; that normative consumer contract is
+[v1-contracts.md §3](v1-contracts.md#3-implementation-pack-consumer-contract).
 
 ## 1. Product statement
 
@@ -436,7 +439,8 @@ dependency, repository-claim, requirement, proof-class, and artifact-reference
 metadata to build coordinator indexes without parsing every Markdown document
 on each decision cycle.
 
-Illustrative v1 schema:
+Illustrative future producer shape (its emitted v1-compatible subset must
+validate against [schemas/v1.schema.json](schemas/v1.schema.json)):
 
 ```json
 {
@@ -991,7 +995,8 @@ beyond the referenced reviewer verdict.
 
 ### 19.9 Implementation handoff
 
-`wt init --from-pack` requires:
+The future handoff invokes the normative v1
+`wt init <slug> --impl-pack=...` contract and additionally requires:
 
 - accepted, sealed pack;
 - passing structural validation;
@@ -1005,11 +1010,12 @@ It derives implementation-pack path and batch IDs from the manifest, creates
 the implementation lane in the chosen control home, and records reciprocal
 stable lane-ID relations under the shared initiative. It registers every
 participating repository in the user-local membership index. It does not launch
-batch 1. The new implementation lane starts in `allocation-required` and must
-complete the process in
-[allocation-planning-draft.md](allocation-planning-draft.md) before any
-implementation dispatch. Pack capability classes become allocation inputs;
-the pack-design lane does not select machine-local accounts or endpoints.
+batch 1. For a post-v1 allocation-enabled runtime, the new implementation lane
+may enter `allocation-required` and complete
+[allocation-planning-draft.md](allocation-planning-draft.md) before dispatch.
+This does not add `allocation-required` to the v1 lifecycle. Pack capability
+classes become allocation inputs; the pack-design lane does not select
+machine-local accounts or endpoints.
 
 Handoff also invokes the deterministic v1 coordinator pack-index compiler.
 The derived index stays in the implementation lane's local `coordinator/`

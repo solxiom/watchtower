@@ -1,6 +1,6 @@
 # Watchtower v1 Coordinator Automation
 
-Status: **Draft**
+Status: **Proposed — implementation-ready**
 Target release: `1.0.0`
 CLI group: `wt coordinator`
 Last updated: 2026-07-30
@@ -12,6 +12,10 @@ It resolves the cost and automation questions raised in
 Watchtower is not the coordinator agent. It is the deterministic decision
 router, context broker, validator, and effect executor around short-lived
 coordinator decision agents.
+
+Exact rule order, capability floors, proposal/effect authority, adapter
+eligibility, default budgets, event durability, and recovery are closed by
+[v1-contracts.md](v1-contracts.md), which takes precedence on conflict.
 
 ## 1. Product statement
 
@@ -190,11 +194,16 @@ Rules:
 
 ## 7. Routing policy
 
-The knowledge pack contains a signed/versioned machine-readable routing policy.
+The knowledge pack contains a versioned machine-readable routing policy whose
+digest is authenticated by the packaged knowledge manifest. Package registry
+integrity is the v1 distribution trust boundary; a separate policy-signing PKI
+is not required.
 It maps trigger plus guard facts to a decision class and permitted proposal
 types.
 
-Illustrative rules:
+The complete ordered v1 rule registry and hard guards are normative in
+[v1-contracts.md §4](v1-contracts.md#4-routing-policy-and-capability-floors).
+The following is a non-exhaustive readable summary:
 
 | Trigger and guards | Class |
 |--------------------|-------|
@@ -659,6 +668,8 @@ v1 proposal types are closed and versioned:
 - `propose-reconciliation`;
 - `request-pack-amendment`;
 - `grant-session-budget`;
+- `place-hold`;
+- `release-hold`;
 - `escalate`.
 
 Adding a proposal type requires a knowledge-policy update, validator, effect
@@ -777,9 +788,9 @@ No stage is inferred from tmux prose.
 ## 15. Operator interaction
 
 The complete v1 contract lives in
-[operator-session-draft.md](operator-session-draft.md); the foreground
+[operator-session.md](operator-session.md); the foreground
 attachment contract lives in
-[cli-session-draft.md](cli-session-draft.md).
+[cli-session.md](cli-session.md).
 
 An operator session is a durable sequence of bounded advisory turns. Each turn
 uses a versioned lane snapshot, bounded recent/pinned memory, per-turn routing,
@@ -915,7 +926,7 @@ Budgets reserve:
       ready-set.json
       publication-status.json
       tracker-summary.md
-    operator-sessions/                 # operator-session-draft.md
+    operator-sessions/                 # operator-session.md
     amendment-requests/                # confirmed handoff evidence
     holds/                              # explicit scoped automation holds
 ```
@@ -1181,11 +1192,16 @@ must not grow linearly with total pack size.
 
 ## 26. Open questions
 
-1. Which host adapters can enforce typed output and broker-only context without
-   exposing unrestricted filesystem tools?
-2. Which concrete v1 endpoint capability classes map to D1–D3?
-3. What measured default budget ranges should ship after replay trials?
-4. Which external effects beyond tmux launch and Git push require explicit
-   prepare/attempt/verify adapters?
-5. Should safe operator cancellation terminate an invoked decision agent, or
-   only supersede its unapplied proposal?
+No v1-blocking questions remain:
+
+1. Unattended adapter eligibility is capability-tested; nonconforming host
+   adapters are advisory-confirmed or skill-only.
+2. D1, D2, and D3 require C2, C3, and C5 respectively.
+3. Shipping budget defaults are fixed and remain operator-tightenable.
+4. V1 external effect adapters are limited to tmux creation and Git push.
+5. Cancellation requests process-group interruption when the adapter supports
+   it; otherwise the result is superseded and cannot apply. Provider usage
+   after invocation is never claimed to be zero.
+
+These decisions are normative in
+[v1-contracts.md §§4–7](v1-contracts.md#4-routing-policy-and-capability-floors).
