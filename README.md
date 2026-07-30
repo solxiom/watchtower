@@ -5,7 +5,7 @@ multi-batch agent workflows with tmux implementers, reviewers, coordinators, and
 
 It replaces the copy-into-project bootstrap model used by
 [implementation-lane-coordinator](https://github.com/kavan/implementation-lane-coordinator)
-with a **global tool + per-project lane runtime**:
+with a **global tool + per-lane execution overlay**:
 
 - install `wt` once on your machine
 - run `wt init` inside any implementation repo
@@ -19,7 +19,13 @@ Watchtower is the **operator CLI** — init, discovery, packaging, upgrades, and
 Early development. The scaffold comes from `nira init:cli`; product commands and lane
 integration are spec-driven work in progress.
 
-See [docs/spec/v1-draft.md](docs/spec/v1-draft.md) for the current design draft.
+**Ecosystem:** pinned to `1.0.0-alpha` in `nira.json` (Nirvana shared store).
+
+Start with the [v1 product specification](docs/spec/v1-draft.md), then read the
+[architecture baseline](docs/spec/architecture.md) and
+[delivery roadmap](docs/spec/roadmap.md). The proposed multi-architect
+accepted-spec to implementation-pack workflow is defined separately in the
+[pack-design process draft](docs/spec/pack-design-draft.md).
 
 ## Quick start (development)
 
@@ -81,7 +87,7 @@ inside watchtower unless you explicitly want Nira lifecycle forwarding.
 
 | implementation-lane-coordinator | watchtower |
 |---------------------------------|------------|
-| Template copied into `.local/.../coordinator/` | Global CLI + minimal per-lane materialization |
+| Template copied into `.local/.../coordinator/` | Global CLI + `.watchtower/lanes/<slug>/` local overlay |
 | `./bin/init-lane.sh <workspace> ...` | `wt init <lane-slug> ...` (planned) |
 | Scripts live in each project | Canonical scripts bundled with `wt` install |
 | Docs/playbook in template repo | Shipped with watchtower; referenced by lane config |
@@ -90,10 +96,22 @@ Watchtower will absorb and evolve the coordinator shell runtime. The coordinator
 and decision rules remain portable agent instructions; watchtower owns **installation,
 paths, upgrades, and operator commands**.
 
+Watchtower starts with new work. Existing copied-template coordinator lanes are
+not discovered, imported, or upgraded; create a new `wt` lane for the next
+implementation effort.
+
+One repository may participate in many active lanes, and one lane may bind
+multiple repositories while keeping exactly one authoritative control home.
+Accepted implementation packs stay committed; model allocation, prompts,
+reports, events, budgets, and logs stay inside the local lane overlay.
+
 ## Read first
 
-1. [docs/spec/v1-draft.md](docs/spec/v1-draft.md) — product spec (draft)
-2. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
+1. [docs/spec/v1-draft.md](docs/spec/v1-draft.md) — normative v1 product contract
+2. [docs/spec/architecture.md](docs/spec/architecture.md) — architecture and boundaries
+3. [docs/spec/roadmap.md](docs/spec/roadmap.md) — phased delivery plan
+4. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
+5. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
 
 ## License
 

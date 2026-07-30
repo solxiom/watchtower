@@ -46,6 +46,8 @@ belongs in `src/commands/` and `src/foundation/`.
 
 ## Build and test
 
+Project ecosystem: **`1.0.0-alpha`** (`nira.json` → `ecosystem.version`).
+
 ```sh
 nvb build          # compile → build/
 nvb test           # build + Jasmine
@@ -75,19 +77,25 @@ nvb dist && npm install -g ./dist
 
 ## Lane path conventions (target projects)
 
-Default lane root (configurable later):
+Watchtower-owned lane root:
 
 ```text
-<workspace>/.local/agent-reports/<lane-slug>/coordinator/
+<control-home>/.watchtower/lanes/<lane-slug>/
 ```
 
-Key files: `lane.config.env`, `coordinator-lane-state.txt`, `worker-events.jsonl`.
+Key files: `lane.json`, `install.json`, `lane.config.env`,
+`repositories.local.json`, `state/coordinator-lane-state.txt`, and
+`state/worker-events.jsonl`.
 
-Walk up from `cwd` to find an active lane — same pattern as nvb/nira env discovery.
+One repository may participate in many lanes; one lane may bind many
+repositories but has exactly one control home. Home discovery walks up from
+`cwd`; secondary-repository discovery uses the validated user-local membership
+index.
 
 ## Non-negotiable rules
 
-- **Never commit** `dist/`, `build/`, `node_modules/`, `.nira/local/`
+- **Never commit** `dist/`, `build/`, `node_modules/`, `.nira/local/`,
+  `.watchtower/`
 - **Keep specs in sync** — update `docs/spec/v1-draft.md` when adding or changing commands
 - **Prefer foundation modules** over duplicating path/discovery logic in commands
 - **Delegate to shell scripts** for tmux/lane operations until TypeScript rewrites are justified

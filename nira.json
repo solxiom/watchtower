@@ -4,6 +4,6 @@
     version: '0.1.0',
     description: 'watchtower CLI project.',
     ecosystem: {
-        version: '1.0.0-test',
+        version: '1.0.0-alpha',
     },
 }
