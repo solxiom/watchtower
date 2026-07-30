@@ -10,7 +10,7 @@ Watchtower should become the common local control plane for agile,
 agent-assisted development without becoming an agent framework or hiding
 project truth in a proprietary database.
 
-The architecture is built around six separations:
+The architecture is built around seven separations:
 
 1. **Project intent vs local execution** — specs and implementation packs are
    committed; tmux state and reports stay local.
@@ -25,6 +25,8 @@ The architecture is built around six separations:
 6. **Portable capability vs local allocation** — committed packs state the
    capability a role needs; machine-local plans select current endpoints,
    accounts, users, and capacity.
+7. **Agent judgment vs effect authority** — coordinator agents propose typed
+   decisions; Watchtower validates and applies bounded effects.
 
 ## 2. Context
 
@@ -65,6 +67,7 @@ Initiative
         │     └── Batch [ordered, conditional, or parallel]
         ├── AllocationPlan [implementation lanes, 0..n revisions]
         ├── RuntimeBinding
+        ├── CoordinatorCycle [0..n, append-only journal]
         ├── WorkerSession [0..n]
         └── WorkerEvent [append-only]
 
@@ -131,6 +134,9 @@ remains deferred.
 | What capability does an assignment require? | Accepted implementation pack |
 | Which local endpoint performs pending work? | Active allocation-plan revision |
 | What account capacity is already promised? | Global local reservation ledger |
+| What semantic coordinator action is proposed? | Typed coordinator proposal |
+| Is the proposal legal now? | Knowledge policy plus Watchtower validator |
+| Who commits the bounded effect? | Single Watchtower effect executor |
 
 Watchtower can detect contradictions between authorities. It must not resolve a
 coordinator-policy contradiction by silently editing lane state.
@@ -250,6 +256,25 @@ Hermes, OpenCode, Codex, Cursor, Claude, and future CLIs integrate through the
 same tool-adapter contract. Their dynamic plans and model catalogs remain
 adapter observations, not hardcoded core-planner knowledge.
 
+### 4.8 v1 coordinator decision plane
+
+The v1 decision plane is defined in
+[coordinator-automation-draft.md](coordinator-automation-draft.md):
+
+| Service | Responsibility |
+|---------|----------------|
+| `CoordinatorRouter` | Match trigger and guard facts to M0 or D1–D3 policy |
+| `DecisionEnvelopeBuilder` | Construct deterministic bounded cycle input |
+| `CoordinatorContextBroker` | Serve allowlisted, metered, provenance-bearing context |
+| `CoordinatorProposalValidator` | Validate typed output against current policy and state |
+| `CoordinatorEffectPlanner` | Convert a valid proposal into bounded previewable effects |
+| `CoordinatorEffectExecutor` | Apply one idempotent effect plan and journal external attempts |
+| `CoordinatorProjection` | Derive ready set, lane, batch, and publication read models |
+
+The router may derive a uniquely preauthorized M0 transition, but it does not
+encode semantic reject, scope, or reconciliation judgment. Decision agents
+cannot write authoritative state.
+
 ## 5. Physical deployment
 
 ### 5.1 Package
@@ -302,6 +327,11 @@ budgets, and logs remain in the control home's lane directory. Post-v1
 allocation revisions live under `allocation/`; actual account and Unix-user
 identities never enter the committed pack.
 
+The v1 `coordinator/` subtree contains routing/context policy, bounded cycle
+artifacts, append-only decision/effect journals, and generated projections.
+Committed tracker prose remains project-owned; mechanical coordination updates
+the local projection rather than arbitrary Markdown.
+
 Each participating repository has a local binding declaring canonical path,
 role, read/write access, branch, and worktree mode. Concurrent writable lanes
 should use dedicated Git worktrees. Sharing one writable checkout is an
@@ -351,12 +381,30 @@ resolve + validate lane
   → preserve runtime exit and signal semantics
 ```
 
+### 6.4 Coordinator cycle
+
+```text
+durable trigger
+  → derive guards and route M0 or D1–D3
+  → construct bounded envelope
+  → apply unique preauthorized M0 effect
+     or invoke decision endpoint and receive typed proposal
+  → validate against current state and policy
+  → prepare/apply/verify bounded effects
+  → append decision/effect events and refresh projections
+```
+
+Only the effect executor mutates authoritative lane state. External tmux/Git
+effects use idempotent prepare/attempt/verify journals.
+
 ## 7. State evolution
 
 ### 7.1 v1 compatibility state
 
-The shell runtime remains the writer for shell state and JSONL events. The CLI
-is a strict, non-executing reader. This minimizes migration risk.
+Worker lifecycle remains compatible with shell state and JSONL events. The v1
+effect executor is the only writer of the shell-compatible coordinator-state
+projection. Coordinator decision/effect journals and JSON projections supply
+the auditable automation boundary; agents emit typed proposals only.
 
 ### 7.2 Future canonical state
 
@@ -509,6 +557,9 @@ details.
 | A-016 | Reserve finite endpoint capacity in one local cross-lane ledger | Prevents concurrent lanes from double-booking declared account capacity |
 | A-017 | Discover execution capabilities through versioned provider-neutral tool adapters | Supports changing CLI ecosystems without provider logic in the planner |
 | A-018 | Require explicit inventory approval and lane-specific eligibility | Discovery cannot silently authorize a model or grant project access |
+| A-019 | Make bounded coordinator automation required in v1 | Routine coordinator cost and cumulative context are core product problems |
+| A-020 | Give agents proposal authority and Watchtower sole effect authority | Validation after direct agent mutation is too late |
+| A-021 | Separate reviewer acceptance from Git publication | Partial publication must not corrupt semantic acceptance |
 
 ## 13. Architecture fitness checks
 
@@ -521,7 +572,12 @@ Every implementation change should preserve these properties:
 - runtime invocation is centralized;
 - package upgrade does not implicitly upgrade a lane;
 - no shell config/state is executed by TypeScript;
-- coordinator decisions remain outside CLI code;
+- semantic coordinator decisions remain outside CLI code;
+- coordinator agents cannot directly mutate authoritative state;
+- every mutating cycle has one effect authority, current-precondition
+  validation, and an idempotency identity;
+- mechanical coordination invokes no model when a unique preauthorized effect
+  is provable;
 - every lane has one authoritative control home and stable `laneId`;
 - committed packs refer to logical repository IDs, never machine paths;
 - concurrent writable lane bindings are conflict-checked;

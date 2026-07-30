@@ -9,9 +9,10 @@ Normative product docs for the `wt` CLI.
 | [roadmap.md](roadmap.md) | Planning | Milestones, implementation packs, release gates, and post-v1 horizons |
 | [pack-design-draft.md](pack-design-draft.md) | Draft | Canonical accepted-spec to implementation-pack process |
 | [allocation-planning-draft.md](allocation-planning-draft.md) | Draft | CLI/plan/model discovery plus quality-first implementation capacity allocation |
+| [coordinator-automation-draft.md](coordinator-automation-draft.md) | Draft | Normative v1 zero-token routing, bounded decision cycles, and validated effects |
 | [discussions/lane-directory-path.md](discussions/lane-directory-path.md) | Resolved | `.watchtower/lanes/<slug>/` execution-overlay decision |
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
-| [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Proposed | Coordinator context budget, task-tier dispatch, and mechanical automation |
+| [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |
 
 ## Conventions
 

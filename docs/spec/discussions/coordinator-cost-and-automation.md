@@ -1,12 +1,40 @@
 # Discussion: Coordinator Agent Cost, Quality Tiers, and Mechanical Automation
 
-Status: **Proposed**
+Status: **Resolved**
 Started: 2026-07-30
+Resolved: 2026-07-30
 Related:
 
 - `docs/spec/v1-draft.md` §§ 4, 10–14
 - `docs/spec/architecture.md` §§ 2–4, 6, 9
 - `docs/spec/allocation-planning-draft.md` §§ 2, 8, 10
+
+## Resolution
+
+Accepted with architectural corrections in
+[`../coordinator-automation-draft.md`](../coordinator-automation-draft.md).
+Coordinator automation is required v1 behavior, not a post-v1 migration.
+
+The resolution keeps zero-token mechanical routing, narrow per-cycle context,
+capability-matched decision agents, and allocation integration. It changes the
+proposal in these important ways:
+
+- agents emit typed proposals and never write authoritative state directly;
+- Watchtower validates current preconditions and is the sole effect authority;
+- deterministic work is `M0`; no cheap model is invoked for template fill;
+- graph traversal produces a ready set, while ambiguous selection remains a
+  decision;
+- reviewer acceptance remains distinct from Git publication;
+- decision class uses event plus guard facts, not event name alone;
+- context expansion is brokered, metered, and allowlisted;
+- coordinator events form an append-only decision/effect journal;
+- rollout uses shadow fixtures and one authority per lane, never fallback
+  between old and new coordinators; and
+- Watchtower starts new lanes only and does not migrate copied-template lanes.
+
+The remaining sections preserve the original proposal and evidence. Where they
+conflict with the resolution above, the normative coordinator-automation draft
+wins.
 
 ## 1. Problem statement
 
@@ -576,28 +604,26 @@ Select batch reordering when operator requests it
    watcher terminates it, logs the budget exceedance, and escalates to the
    operator. It does not silently restart with a higher budget.
 
-## 9. Migration from current coordinator model
+## 9. v1 delivery from the current prototype
 
-This is a post-v1 change. The current single-session, single-model coordinator
-continues to work in v1. The proposed model is an evolution, not a replacement
-that must ship before v1.
+The resolution makes this required v1 behavior. Delivery may be staged in
+implementation, but a released Watchtower lane has one effect authority and
+does not fall through to a lane-lifetime coordinator when a component is
+missing.
 
-Migration path:
+Delivery path:
 
-1. Ship v1 with the current coordinator model (single session, knowledge-pack
-   driven).
-2. Implement WT CLI mechanical actions (`wt events`, `wt state`, `wt batch`,
-   `wt tracker`, `wt session`, `wt coordinator context`).
-3. Implement tiered watcher routing in `coordinator-watch.sh`.
-4. Add coordinator tier assignments to the knowledge pack and allocation plan.
-5. Run side-by-side: the current coordinator delegates mechanical actions to
-   WT CLI while continuing to handle decisions. Operator reports confirm cost
-   reduction.
-6. Once stable, make tiered dispatch the default.
+1. Audit and classify current coordinator actions.
+2. Implement mechanical projections and decision envelopes.
+3. Implement typed proposals, validators, and effect plans.
+4. Compare calculated decisions in non-mutating shadow fixtures.
+5. Implement effect journals and idempotent bounded actions.
+6. Enable short-lived decision cycles and remove cumulative coordinator
+   authority before v1 acceptance.
 
-During migration, any step that has not been implemented falls through to the
-current coordinator session, so no lane is blocked by a partially implemented
-tier.
+Watchtower does not adopt or migrate copied-template lanes. Shadow behavior is
+a development/acceptance technique, not a product mode that creates competing
+writers.
 
 ## 10. Open questions
 

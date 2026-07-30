@@ -13,21 +13,25 @@ Build a **global CLI** that:
 2. Discovers active lanes from the current working directory
 3. Bundles coordinator shell scripts, docs references, and upgrade paths
 4. Exposes operator commands (`init`, `watch`, `status`, `upgrade`, …)
+5. Routes mechanical coordinator work without models and validates bounded
+   decision-agent proposals before applying effects
 
-Watchtower is **not** the coordinator agent. It does not replace Codex/Cursor lane
-coordination logic — it replaces the copy-paste install/bootstrap model from
-`implementation-lane-coordinator`.
+Watchtower is **not** the coordinator agent. Semantic reject, scope, and
+reconciliation judgment remains in Codex/Cursor-style decision agents.
+Watchtower owns deterministic routing, bounded context, proposal validation,
+and one safe effect-execution boundary in addition to replacing the copy-paste
+install/bootstrap model.
 
 ## Architecture (two layers)
 
 ```text
-wt (TypeScript CLI)     operator commands, discovery, packaging, upgrades
+wt (TypeScript CLI)     commands, discovery, decision routing/validation
         │
-        ▼ invokes
-lane runtime (shell)    coordinator-watch.sh, launch-*.sh, lane.config.env, state files
+        ▼ invokes bounded actions
+lane runtime (shell)    watcher, launchers, effect journals, state projections
         │
-        ▼ orchestrates
-tmux agents             implementers, reviewers, Codex coordinator session
+        ▼ invokes short-lived cycles
+tmux/CLI agents         implementers, reviewers, coordinator decision agents
 ```
 
 ## Repo layout conventions
@@ -85,7 +89,8 @@ Watchtower-owned lane root:
 
 Key files: `lane.json`, `install.json`, `lane.config.env`,
 `repositories.local.json`, `state/coordinator-lane-state.txt`, and
-`state/worker-events.jsonl`.
+`state/worker-events.jsonl`. Coordinator routing, bounded cycle artifacts,
+decision/effect journals, and projections live under `coordinator/`.
 
 One repository may participate in many lanes; one lane may bind many
 repositories but has exactly one control home. Home discovery walks up from
@@ -105,8 +110,10 @@ index.
 
 Lane coordination rules (wake checklist, reject triage, push on accept) live in
 `implementation-lane-coordinator` docs/playbook and skill until watchtower ships
-equivalent bundled docs. Do not re-specify coordinator agent behavior here — reference
-and bundle, don't fork.
+equivalent bundled docs. Import them auditably into the versioned knowledge pack.
+Do not encode semantic coordinator judgment in CLI code. Mechanical routing,
+typed proposal validation, and bounded effects follow
+`docs/spec/coordinator-automation-draft.md`.
 
 ## Spec workflow
 

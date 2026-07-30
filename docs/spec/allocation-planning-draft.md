@@ -242,6 +242,10 @@ For each batch and role, allocation consumes:
 - expected preserve-session policy; and
 - pack-level quality floors and budget guidance.
 
+It also consumes the installed v1 coordinator policy's D1–D3 minimum
+capability, context, tool, fallback, and reserve requirements. Coordinator M0
+is mechanical and consumes no endpoint.
+
 Pack suggestions are not local endpoint assignments. A suggestion such as
 “frontier reasoning, independent frontier review” remains portable. The local
 plan decides which currently available endpoints meet it.
@@ -800,6 +804,31 @@ Otherwise the active plan's correction fallback is used. The preserve-session
 decision is recorded; it is not inferred solely from a tmux session name.
 Re-review remains independent of the correction implementer.
 
+### 12.4 Coordinator decision routing
+
+Coordinator decision classes from
+[coordinator-automation-draft.md](coordinator-automation-draft.md) are dynamic
+allocation slots:
+
+- `coordinator:D1`;
+- `coordinator:D2`;
+- `coordinator:D3`; and
+- class-specific operator-conversation or escalation reserves.
+
+The plan assigns an eligible primary endpoint pool, explicit fallbacks, context
+budget, concurrency, and usage reserve for each class. It need not predict
+every cycle or bind one endpoint for the entire lane. Selection occurs when a
+cycle opens against the active snapshot and reservations.
+
+M0 never receives an endpoint. The coordinator router cannot choose its own
+model, use an implementation worker's session accidentally, or downgrade below
+the knowledge-policy minimum. When no capable route exists, coordinator
+dispatch pauses and reports infeasibility.
+
+The complete allocation feature supersedes the v1 manually supplied
+`coordinator-routing.json` by generating the same routing contract. Migration
+requires explicit validation/activation and never occurs as a runtime upgrade.
+
 ## 13. Filesystem contract
 
 ### 13.1 Global local capacity state
@@ -958,6 +987,7 @@ Rules:
 - telemetry quality per dimension;
 - estimate before dispatch and actual/updated estimate;
 - correction/re-review association; and
+- coordinator cycle and decision class when the assignment is coordination;
 - source adapter or operator attribution.
 
 Provider dimensions must remain distinct when they are not safely comparable.
@@ -1163,6 +1193,8 @@ For fixed normalized inputs:
       activated.
 - [ ] Every implementation, review, correction, and re-review requirement has
       a capable route or an explicit infeasibility result.
+- [ ] D1–D3 coordinator classes have capability-safe endpoint pools and
+      reserves, while M0 consumes no endpoint.
 - [ ] Cost optimization cannot weaken pack capability floors.
 - [ ] Account, session, and provider independence policies are validated.
 - [ ] Capacity values preserve provenance and unknown values are never rendered

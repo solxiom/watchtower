@@ -16,8 +16,9 @@ M0 Contract
       → M3 Create
         → M4 Operate
           → M5 Upgrade and knowledge
-            → M6 Release hardening
-              → v1
+            → M6 Coordinator automation
+              → M7 Release hardening
+                → v1
 ```
 
 The critical path establishes read-only discovery and schemas before any
@@ -35,6 +36,7 @@ Deliverables:
 - v1 product specification;
 - architecture baseline;
 - roadmap;
+- v1 coordinator-automation contract;
 - new-lane contract fixtures and runtime/knowledge asset inventories;
 - runtime and knowledge asset inventory;
 - decisions for package name, `.watchtower/lanes` layout, stable identity,
@@ -188,7 +190,42 @@ Key proof:
 
 Dependencies: M2, M3.
 
-### M6 — v1 release hardening
+### M6 — Coordinator economy and validated automation
+
+Outcome: routine coordination consumes zero model tokens, while semantic
+decisions use bounded capability-matched cycles with one safe effect authority.
+
+Scope:
+
+- audit imported coordinator actions into M0 and D1–D3;
+- deterministic worker-event projections and ready-set calculation;
+- versioned routing policy and hard escalation guards;
+- coordinator endpoint routing plan and reserves;
+- decision-envelope builder and metered context broker;
+- typed decision proposal schemas and validators;
+- atomic local effect executor;
+- prepare/attempt/verify journals for tmux launch and Git publication;
+- short-lived decision-agent invocation;
+- coordinator queue, cursor, usage, status, explain, and durable events;
+- `wt coordinator`, `wt events`, and `wt batch ready` commands; and
+- non-mutating shadow/replay fixtures before active effects.
+
+Key proof:
+
+- idle polling and uniquely preauthorized transitions invoke no model;
+- several ready batches without accepted priority cannot be selected
+  mechanically;
+- invalid/stale proposals cannot mutate lane state;
+- duplicate/interrupted cycles are idempotently recoverable;
+- reviewer acceptance survives partial publication;
+- loss of a required decision endpoint pauses rather than downgrades; and
+- long-lane replay reduces coordinator consumption without reducing transition
+  correctness or review quality.
+
+Dependencies: M1 read projections, M2 runtime/knowledge policy, M3 managed lane,
+and M4 watcher operation. May be developed in shadow fixtures alongside M5.
+
+### M7 — v1 release hardening
 
 Outcome: Watchtower is safe enough to replace template bootstrap for new daily
 lane operation.
@@ -201,6 +238,7 @@ Scope:
   partial-push recovery proof;
 - proof that copied-template lanes remain outside discovery and mutation;
 - one implementer → reviewer → accept cycle;
+- one M0 dispatch, D2 reject/correction cycle, and partial-publication recovery;
 - command/help/spec consistency audit;
 - package/global-install proof;
 - security/path/ownership regression suite;
@@ -215,7 +253,7 @@ Release gates:
 - canonical coordinator docs have one auditable source;
 - every deferred behavior is documented rather than half-implemented.
 
-Dependencies: M1–M5.
+Dependencies: M1–M6.
 
 ## 3. Suggested implementation packs
 
@@ -227,7 +265,8 @@ Avoid one monolithic “build Watchtower” lane. Suggested packs:
 | `wt-runtime-distribution` | M2 | Packaging and shell compatibility have distinct proof |
 | `wt-lane-lifecycle` | M3–M4 | Controlled workspace mutation plus operator commands |
 | `wt-upgrade-knowledge` | M5 | Schema/versioning risk deserves independent review |
-| `wt-v1-release` | M6 | Acceptance and documentation, not feature development |
+| `wt-coordinator-automation` | M6 | Decision/effect authority and cost safety deserve isolated proof |
+| `wt-v1-release` | M7 | Acceptance and documentation, not feature development |
 
 Each pack should use small batches with one reviewer-owned acceptance commit.
 The implementation coordinator's behavioral playbook remains referenced rather
@@ -348,7 +387,7 @@ compatibility spec.
 - automatic credential/account provisioning;
 - automatic account rotation to evade provider limits;
 - automatic speech-model downloads;
-- autonomous acceptance or reject routing in the CLI;
+- semantic acceptance or reject judgment encoded in deterministic CLI logic;
 - generic workflow DSL or public plugin SDK without a third proven workflow;
 - database persistence for local lane state.
 

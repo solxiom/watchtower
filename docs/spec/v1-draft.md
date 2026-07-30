@@ -6,9 +6,11 @@ CLI bin: `wt`
 Ecosystem: Nirvana (`@nirvana/base`, `@nirvana/builder`, `nvb`)
 Last updated: 2026-07-30
 
-This document is normative for v1 behavior. The broader architecture and
-post-v1 direction live in [architecture.md](architecture.md), and delivery
-sequencing lives in [roadmap.md](roadmap.md).
+This document is normative for v1 behavior. The broader architecture lives in
+[architecture.md](architecture.md), delivery sequencing lives in
+[roadmap.md](roadmap.md), and the detailed v1 coordinator execution contract
+lives in
+[coordinator-automation-draft.md](coordinator-automation-draft.md).
 
 ## 1. Product statement
 
@@ -25,12 +27,19 @@ Watchtower:
 - initializes new lane workspaces;
 - discovers lanes from any directory within a workspace;
 - reports operator-facing lane health and progress;
-- invokes watcher and runtime entrypoints safely;
+- routes durable events through zero-token mechanical handling or bounded
+  coordinator decision cycles;
+- validates typed coordinator proposals and applies permitted effects
+  atomically;
+- invokes watcher, worker, and runtime entrypoints safely;
 - installs the coordinator knowledge pack for supported agent hosts; and
 - upgrades managed assets without overwriting lane-owned state or prose.
 
-Watchtower is not the coordinator agent. It does not interpret acceptance,
-triage rejects, select the next batch, or create acceptance commits.
+Watchtower is not the coordinator agent. It derives facts, routes decision
+classes, brokers context, validates proposals, and executes preauthorized
+effects. Semantic reject triage, ambiguous scheduling, scope judgment, and
+complex reconciliation remain coordinator-agent decisions. Reviewer agents,
+not Watchtower or the coordinator, own semantic acceptance commits.
 
 ## 2. Problem
 
@@ -64,18 +73,22 @@ be frozen into generated launch wrappers or install-time assumptions.
 4. Discover a lane deterministically without hidden interactive behavior.
 5. Establish a clean managed-lane contract without importing copied-template
    lanes or their historical drift.
-6. Preserve the current shell runtime and coordinator knowledge as the
-   behavioral source of truth.
+6. Reuse audited shell primitives and coordinator knowledge policy while
+   introducing validated decision routing and effect execution.
 7. Expose stable human and JSON output for status and automation.
 8. Make upgrades explicit, previewable, and non-destructive.
 9. Support one repository participating in many lanes and one lane binding
    multiple repositories with exactly one control home.
 10. Detect unsafe concurrent writable-worktree conflicts before dispatch.
+11. Eliminate model use for mechanical coordination and bound every remaining
+    coordinator decision cycle.
+12. Keep one validated effect authority for lane transitions, launches, and
+    publication attempts.
 
 ### 3.2 v1 non-goals
 
-- Acting as an autonomous coordinator or replacing Codex/Cursor coordination.
-- Rewriting the coordinator state machine in TypeScript.
+- Encoding semantic coordinator judgment in TypeScript.
+- Letting decision agents directly mutate authoritative lane state.
 - Authoring implementation specs or deciding how work should be batched.
 - A terminal dashboard, web service, cloud control plane, or team server.
 - CI/headless execution without tmux.
@@ -83,7 +96,7 @@ be frozen into generated launch wrappers or install-time assumptions.
 - Downloading models or large speech assets automatically.
 - Treating tmux scrollback prose as an authoritative lifecycle protocol.
 
-Post-v1 planning and daily-development capabilities are described in the
+Additional planning and daily-development capabilities are described in the
 roadmap, but they must build on the v1 lane model rather than bypass it.
 
 ## 4. Product vocabulary
@@ -104,6 +117,10 @@ roadmap, but they must build on the v1 lane model rather than bypass it.
 | Worker | Implementer or reviewer agent running in a tmux session. |
 | Operator | Human using `wt` and directing the coordinator. |
 | Coordinator | Agent applying the bundled coordinator policy to the lane. |
+| Coordinator cycle | One bounded trigger, decision proposal, validation, and effect attempt. |
+| Decision envelope | Immutable narrow context assembled for one coordinator cycle. |
+| Effect executor | Watchtower/runtime boundary that applies a validated bounded mutation. |
+| Ready set | Pending batches whose dependencies and hard dispatch constraints currently pass. |
 
 ## 5. Product boundary
 
@@ -113,17 +130,19 @@ operator
    ▼
 wt TypeScript CLI
    ├── discovery, validation, rendering, install and upgrade
-   ├── invokes a named runtime action
-   └── never chooses a coordinator transition
+   ├── event routing, context broker, proposal validator
+   ├── derives M0 facts and uniquely preauthorized transitions
+   └── effect executor invokes bounded runtime actions
           │
           ▼
 versioned shell runtime
-   ├── watcher, launchers, event writer, tmux helpers
-   └── reads/writes lane-local state and observations
+   ├── watcher, decision/worker launchers, event writer, tmux helpers
+   └── applies validated effects and writes observations/journals
           │
           ▼
 coordinator + implementer/reviewer agents
-   └── apply the bundled knowledge pack and committed implementation pack
+   ├── coordinator emits typed decision proposals
+   └── workers apply the bundled knowledge and committed implementation pack
 ```
 
 The canonical coordinator decision rules remain the source of truth from
@@ -132,6 +151,11 @@ versioned knowledge pack. Watchtower must bundle them verbatim or by an
 auditable import process; it must not independently restate a divergent
 coordinator policy in CLI code.
 
+The detailed mechanical-versus-judgment boundary, decision classes, context
+broker, proposal schema, effect authority, and coordinator journal are
+normative in
+[coordinator-automation-draft.md](coordinator-automation-draft.md).
+
 ## 6. Ownership model
 
 Every lane artifact has exactly one ownership class.
@@ -139,9 +163,9 @@ Every lane artifact has exactly one ownership class.
 | Class | Examples | Upgrade behavior |
 |-------|----------|------------------|
 | Project-owned, committed | accepted implementation pack, work/review/correction briefs, traceability, roadmap, implementation tracker | Never created or changed by runtime upgrade |
-| Lane-owned, durable | `lane.config.env`, `repositories.local.json`, `model-plan.md`, lane state, operator tracker | Create once; never overwrite |
+| Lane-owned, durable | `lane.config.env`, `repositories.local.json`, `model-plan.md`, coordinator routing/context policy, lane state, operator tracker | Create once; never overwrite |
 | Watchtower-managed | `lane.json`, `install.json`, `bin/` runtime links, managed policy links | Validate and replace according to manifest |
-| Runtime-generated | reports, prompts, logs, locks, watcher state, worker events, budgets, assistant responses | Preserve; may be pruned only by an explicit future command |
+| Runtime-generated | reports, prompts, logs, locks, watcher state, worker/coordinator/effect events, cycle envelopes/proposals, projections, budgets, assistant responses | Preserve; may be pruned only by an explicit future command |
 
 An upgrade must stop with a conflict if a Watchtower-managed path was replaced
 by an unrecognized regular file. `--force` must not silently overwrite it.
@@ -212,6 +236,7 @@ entries are ignored and reported.
         repositories.local.json               # logical repo → local worktree bindings
         model-plan.md                         # local account/model allocation
         operator-tracker.md                   # local operational view
+        coordinator/                          # routing, cycles, journals, projections
         briefs/                               # lane-specific coordinator/worker briefs
         bin/                                  # managed runtime/policy links
         state/                                # lane state, events, locks, watcher state
@@ -233,6 +258,11 @@ pack push/pull because Git is the durable synchronization mechanism.
 The structured lane root is intentionally not flat: managed executables,
 durable operator configuration, runtime state, prompts, reports, and logs have
 separate ownership boundaries.
+
+The v1 `coordinator/` subtree follows
+[coordinator-automation-draft.md](coordinator-automation-draft.md). Coordinator
+agents may write only their cycle proposal output; Watchtower owns validation,
+effect application, journals, and generated projections.
 
 ### 7.3 Lane marker schema
 
@@ -465,7 +495,7 @@ Errors go to stderr. Normal human or JSON output goes to stdout.
 
 | Command | Status | Purpose |
 |---------|--------|---------|
-| `wt init <slug> --tmux-prefix=<prefix> --impl-pack=<path> [--scope=<bindings.json>] [--dry-run]` | ❌ | Create a new implementation lane |
+| `wt init <slug> --tmux-prefix=<prefix> --impl-pack=<path> --coordinator-routing=<path> [--scope=<bindings.json>] [--dry-run]` | ❌ | Create a new implementation lane |
 | `wt list` | ❌ | List lanes relevant to the resolved repository |
 | `wt status [--lane=<slug-or-uuid>]` | ❌ | Report lane, repositories, conflicts, batch, watcher, tmux, event, and runtime status |
 | `wt watch [--lane=<slug-or-uuid>]` | ❌ | Run the lane watcher in the foreground |
@@ -473,6 +503,9 @@ Errors go to stderr. Normal human or JSON output goes to stdout.
 | `wt config show [--lane=<slug-or-uuid>]` | ❌ | Print resolved identity, repositories, paths, and config |
 | `wt doctor [--lane=<slug-or-uuid>]` | ❌ | Validate bindings, conflicts, runtime, tools, accounts, and pack |
 | `wt skill install <codex\|cursor\|claude> [--scope=<scope>]` | ❌ | Install the bundled coordinator knowledge pack adapter |
+| `wt coordinator status|context|explain|cycle|escalate` | ❌ | Inspect, preview, or run bounded coordinator decision cycles |
+| `wt events tail|latest` | ❌ | Read validated durable event projections |
+| `wt batch ready` | ❌ | Calculate ready candidates and blocking reasons without selecting ambiguously |
 | `wt help [command]` | ✅ scaffold | Render static help |
 | `wt version` | ❌ | Print CLI, runtime, knowledge, and schema versions |
 
@@ -488,7 +521,9 @@ Required input:
 - `--tmux-prefix`, matching `^[a-z0-9][a-z0-9-]{0,15}$`;
 - `--impl-pack`, a path to a committed pack. It may be absolute or
   control-home-relative during invocation; Watchtower persists only the
-  manifest's logical repository ID and repository-relative path.
+  manifest's logical repository ID and repository-relative path; and
+- `--coordinator-routing`, a non-secret local JSON plan assigning eligible
+  endpoint IDs and reserves to D1–D3 decision classes.
 
 Optional input:
 
@@ -511,7 +546,9 @@ Preflight:
 8. classify accepted-input and per-repository source-baseline drift;
 9. detect active-lane writable worktree/branch/path conflicts;
 10. stage the selected runtime and knowledge versions;
-11. show the files, links, local bindings, and index entries to create.
+11. validate coordinator endpoint capability floors, fallbacks, and budget
+    reserves against the installed knowledge policy;
+12. show the files, links, local bindings, and index entries to create.
 
 Init never scaffolds or relocates the committed implementation pack. Pack
 creation belongs to the pack-design process or project authors.
@@ -522,7 +559,9 @@ Creates once:
 - `repositories.local.json`;
 - lane config;
 - lane state;
-- coordinator/implementer briefs and model-plan template;
+- coordinator routing/context policy, empty cycle journal/projections, and
+  coordinator/implementer briefs;
+- model-plan template;
 - local operator tracker;
 - structured state, prompt, report, budget, and log directories;
 - `bin/` links for every managed runtime action and policy;
@@ -552,6 +591,8 @@ It reports:
 - lane status and active batch from lane state;
 - implementation and review tmux session names and existence;
 - watcher status and last heartbeat when available;
+- coordinator queue, active cycle, decision class, route availability, last
+  outcome, and budget warning;
 - latest valid durable worker event;
 - accepted/total batch count when derivable;
 - configured, installed, and available runtime versions;
@@ -591,6 +632,12 @@ JSON output has a versioned top-level shape:
   "health": {"status": "attention", "warnings": []},
   "sessions": {"implementer": null, "reviewer": null},
   "watcher": {"running": false, "lastHeartbeatAt": null},
+  "coordinator": {
+    "activeCycle": null,
+    "decisionClass": null,
+    "routeAvailable": true,
+    "lastOutcome": null
+  },
   "runtime": {"configured": "1.0.0", "available": true}
 }
 ```
@@ -601,20 +648,27 @@ not be removed or change type.
 ### 11.4 `wt watch`
 
 `watch` validates the lane, exports the runtime invocation context, and `exec`s
-the bundled watcher in the foreground. It preserves watcher stdout exactly so
-host adapters can match `AGENT_LOOP_WAKE_lane`.
+the bundled watcher in the foreground. The watcher is the persistent zero-token
+event router defined in
+[coordinator-automation-draft.md](coordinator-automation-draft.md). It tails
+durable events, derives routing guards, handles mechanical observations,
+enqueues bounded decision cycles, and advances its cursor only after durable
+handling.
 
 It must not:
 
 - daemonize;
-- start a coordinator agent;
-- launch workers;
-- interpret wake events; or
-- convert heartbeats into model wakes.
+- use a model for idle polling, heartbeat, session presence, event filtering,
+  ready-set calculation, or deterministic template rendering;
+- give a coordinator agent direct state or effect authority;
+- infer lifecycle facts from tmux prose; or
+- silently downgrade a required coordinator decision class.
 
-The managed `bin/start-coordinator-loop.sh` entrypoint remains available for
-hosts that need it. Long-running process supervision is outside the TypeScript
-CLI in v1.
+The watcher may launch short-lived coordinator decision agents and workers only
+through validated routing and bounded runtime actions. It does not maintain a
+lane-lifetime coordinator conversation. Process supervision remains in the
+shell runtime; decision routing, validation, and effect contracts remain in
+shared foundation services.
 
 ### 11.5 `wt upgrade`
 
@@ -660,6 +714,8 @@ Checks are grouped and each returns `pass`, `warn`, `fail`, or `skip`:
 - `bash`, `git`, `tmux`, `jq`, `flock`, and `rg`;
 - configured OS accounts and their resolved CLIs;
 - active tmux naming consistency;
+- coordinator policy/routing compatibility, endpoint capability floors,
+  journal integrity, cursor consistency, and unresolved uncertain effects;
 - Git ignore coverage for `/.watchtower/`;
 - optional speech stack.
 
@@ -681,6 +737,25 @@ Supported v1 hosts are Codex, Cursor, and Claude. The command:
 Provider-specific wake wiring remains documented in the adapter; Watchtower
 does not claim a host notification is configured unless it verifies it.
 
+### 11.9 Coordinator and event commands
+
+The coordinator command group follows the complete contract in
+[coordinator-automation-draft.md](coordinator-automation-draft.md):
+
+- `status`, `context`, and `explain` are read-only;
+- `cycle --dry-run` constructs routing and envelope previews without invoking
+  or mutating; for an M0 trigger it may also preview the deterministic effect;
+- `cycle` processes one idempotent trigger through proposal validation and the
+  bounded effect executor;
+- `escalate` records explicit operator escalation;
+- `events tail|latest` exposes validated durable events without advancing the
+  watcher cursor; and
+- `batch ready` returns candidates and blocking reason codes, never an
+  arbitrary winner.
+
+There is no public raw state setter, arbitrary tracker mutation command, or
+shell-effect escape hatch.
+
 ## 12. Runtime invocation contract
 
 Foundation code invokes runtime actions through one adapter and exports:
@@ -697,6 +772,8 @@ WT_ACTIVE_REPOSITORY_ID
 WT_RUNTIME_ROOT
 WT_RUNTIME_VERSION
 WT_KNOWLEDGE_ROOT
+WT_COORDINATOR_CYCLE_ID
+WT_DECISION_CLASS
 ```
 
 Bundled scripts use `WT_LANE_DIR` for the structured local overlay,
@@ -705,6 +782,7 @@ managed runtime assets. Scripts must not reconstruct `.watchtower` paths,
 assume the control home is the only repository, or use hardcoded
 `.local/agent-reports` paths.
 
+Coordinator-only variables are present only for a bounded decision invocation.
 Worker launch actions resolve the batch's `primaryRepository` through the
 committed pack and local bindings, start the agent in that worktree, and export
 it as `WT_ACTIVE_REPOSITORY_ID`. The prompt still exposes every declared
@@ -727,11 +805,17 @@ log secrets or entire environment maps.
 
 The v1 runtime continues to use:
 
-- `state/coordinator-lane-state.txt` for coordinator-maintained lane state;
+- `state/coordinator-lane-state.txt` as a shell-compatible effect-executor
+  projection;
 - `state/worker-events.jsonl` for authoritative worker lifecycle events;
+- `coordinator/journal/coordinator-events.jsonl` and `effect-events.jsonl` for
+  authoritative decision/effect history;
+- `coordinator/projections/*.json` for deterministic current read models;
 - tmux only for presence and recovery observations; and
 - heartbeat/watcher files for liveness.
 
+The effect executor is the only v1 writer of the shell-compatible lane-state
+projection. Coordinator agents emit proposals and never write it directly.
 The CLI strictly parses state as scalar `key=value` records and never sources
 it. Unknown keys are preserved and surfaced under verbose/JSON diagnostics.
 
@@ -772,11 +856,14 @@ repository ID changed by the batch to its reviewer-owned acceptance commit:
 The acceptance pipeline verifies and pushes each commit independently and
 records a per-repository push journal. Git repositories do not form an atomic
 transaction: partial success is a recoverable state, not a reason to recreate
-commits or claim the batch is fully published.
+commits or revoke semantic acceptance.
 
-Coordinator transitions, reject triage, acceptance verification, push-on-
-accept, and next-batch dispatch belong to the bundled coordinator knowledge
-pack and shell runtime. They are deliberately not re-specified here.
+Semantic coordinator policy remains in the bundled knowledge pack. Watchtower
+derives ready sets, routes bounded decisions, validates typed proposals, and
+applies only legal bounded effects according to
+[coordinator-automation-draft.md](coordinator-automation-draft.md). Agent
+proposals, validation, effect preparation/attempt/verification, and escalation
+are append-only durable events; tmux prose is never authority.
 
 ## 14. Safety and concurrency
 
@@ -786,7 +873,7 @@ pack and shell runtime. They are deliberately not re-specified here.
   filesystem.
 - Read-only commands tolerate a busy lock and report that a mutation is active.
 - No command kills tmux unless a specifically documented runtime action is
-  invoked by the operator or coordinator.
+  invoked by an operator or validated effect plan.
 - `init` and `upgrade` reject paths escaping a declared repository binding,
   lane directory, or runtime store after symlink resolution.
 - Runtime checksum validation occurs before executable assets are staged.
@@ -796,6 +883,11 @@ pack and shell runtime. They are deliberately not re-specified here.
   every status/doctor run, and never implies path isolation.
 - Commands that push Git state remain delegated runtime actions and are never
   triggered by `status`, `doctor`, `init`, or `upgrade`.
+- Exactly one effect authority and one active mutating coordinator cycle exist
+  per lane.
+- External effects use prepare/attempt/verify journals and idempotency keys.
+- Coordinator agents cannot request arbitrary shell, path, state-key, or
+  tracker mutations.
 
 ## 15. Packaging
 
@@ -878,6 +970,17 @@ v1 is complete only when:
 - [ ] ambiguous multi-lane selection fails with actionable candidates;
 - [ ] `wt status --json` is stable and covered by contract tests;
 - [ ] `wt watch` preserves wake/heartbeat stdout and signal exit behavior;
+- [ ] idle polls, heartbeats, event filtering, session checks, and ready-set
+      calculation invoke no model;
+- [ ] coordinator decisions use fresh bounded envelopes, typed proposals,
+      brokered context, minimum-capability routing, and one validated effect
+      authority;
+- [ ] ambiguous batch selection and semantic reject triage cannot fall through
+      to mechanical routing;
+- [ ] reviewer acceptance remains durable and distinct from partial Git
+      publication;
+- [ ] interrupted or duplicate coordinator cycles recover idempotently from
+      decision/effect journals;
 - [ ] `wt doctor` detects missing dependencies, broken links, unsafe config,
       and missing implementation-pack structure;
 - [ ] `wt upgrade --apply` changes only manifest-owned paths and can retain the
@@ -908,6 +1011,11 @@ v1 is complete only when:
 | Piper assets | Operator-supplied optional dependency; never bundled or auto-downloaded in v1. |
 | Account defaults | No hardcoded personal usernames; init uses neutral placeholders or explicit input. |
 | Lane kinds | `implementation` only in v1; the first specified post-v1 kind is [`pack-design`](pack-design-draft.md). Allocation planning is a phase of an implementation lane, not another kind. |
+| Coordinator lifetime | Short-lived bounded decision cycles; no lane-lifetime conversation authority. |
+| Coordinator automation | M0 mechanical work uses zero model tokens; D1–D3 use minimum-capability routes. |
+| Agent authority | Coordinator agents emit typed proposals and never mutate authoritative state directly. |
+| Effect authority | One Watchtower validator/executor applies bounded idempotent effects. |
+| Acceptance/publication | Reviewer acceptance is semantic authority; Git publication is a separate recoverable process. |
 
 ## 19. Deferred questions
 
@@ -915,7 +1023,8 @@ These do not block v1:
 
 1. Should a future workspace registry declare lanes intended for teammates even
    though runtime state remains local?
-2. When should JSON replace shell state as the runtime write model?
+2. When may the shell-compatible state projection be retired after structured
+   coordinator projections and replay prove sufficient?
 3. Should a future portfolio view discover lanes across workspaces through an
    explicit user registry?
 4. When should the built-in lane-kind contract become a supported public plugin

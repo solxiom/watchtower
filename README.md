@@ -11,8 +11,10 @@ with a **global tool + per-lane execution overlay**:
 - run `wt init` inside any implementation repo
 - operate lanes with `wt watch`, `wt status`, `wt upgrade`, and related commands
 
-The lane coordinator **agent** (Codex, Cursor, etc.) still owns batch decisions.
-Watchtower is the **operator CLI** — init, discovery, packaging, upgrades, and script orchestration.
+Coordinator **agents** (Codex, Cursor, etc.) still own semantic judgment.
+Watchtower is the deterministic control plane: init, discovery, packaging,
+upgrades, zero-token event routing, bounded decision context, proposal
+validation, and safe effect execution.
 
 ## Status
 
@@ -28,7 +30,9 @@ accepted-spec to implementation-pack workflow is defined separately in the
 [pack-design process draft](docs/spec/pack-design-draft.md). The subsequent
 quality-first capability discovery, endpoint onboarding, and account-capacity
 planning phase is defined in the
-[allocation-planning draft](docs/spec/allocation-planning-draft.md).
+[allocation-planning draft](docs/spec/allocation-planning-draft.md). The v1
+coordinator execution contract is defined in the
+[coordinator-automation draft](docs/spec/coordinator-automation-draft.md).
 
 ## Quick start (development)
 
@@ -115,7 +119,8 @@ reports, events, budgets, and logs stay inside the local lane overlay.
 3. [docs/spec/roadmap.md](docs/spec/roadmap.md) — phased delivery plan
 4. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
 5. [docs/spec/allocation-planning-draft.md](docs/spec/allocation-planning-draft.md) — pack-to-endpoint allocation process
-6. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
+6. [docs/spec/coordinator-automation-draft.md](docs/spec/coordinator-automation-draft.md) — v1 decision routing and effect safety
+7. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
 
 ## License
 
