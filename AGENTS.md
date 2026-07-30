@@ -3,7 +3,9 @@
 You are working on **watchtower** (`wt`), a Nirvana-ecosystem CLI that manages
 implementation lanes (multi-batch agent workflows).
 
-Read this file first, then the specification at `docs/spec/v1.md`.
+Read this file first, then the specification at `docs/spec/v1.md` and the
+mandatory engineering/review policy at
+`docs/development/engineering-and-review-standard.md`.
 
 ## Mission
 
@@ -112,6 +114,14 @@ index.
 - **Prefer foundation modules** over duplicating path/discovery logic in commands
 - **Delegate to shell scripts** for tmux/lane operations until TypeScript rewrites are justified
 - **Match Nirvana CLI patterns** — `@nirvana/base/cli`, NVB for build/dist, colon tasks in runtime-nvb
+- **Use Nirvana first** — inspect pinned Nirvana packages and comparable Nira
+  usage before using bare Node APIs or implementing infrastructure locally
+- **Reject structural debt** — working behavior does not excuse god objects,
+  oversized modules, mixed responsibilities, layer violations, or generic
+  helper bags
+- **Apply the mandatory reviewer gates** in
+  `docs/development/engineering-and-review-standard.md`; known failures cannot
+  be accepted with a follow-up promise
 
 ## Source of truth for coordinator behavior
 

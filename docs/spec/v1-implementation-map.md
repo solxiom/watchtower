@@ -21,6 +21,9 @@ Normative behavior remains in:
 - [operator-session.md](operator-session.md); and
 - [cli-session.md](cli-session.md).
 
+All implementation and review batches are also governed by the mandatory
+[engineering and review standard](../development/engineering-and-review-standard.md).
+
 If implementation exposes a missing product decision, the affected batch
 stops and raises a specification amendment. A work batch may make bounded
 implementation clarifications, but it may not silently invent public behavior.
@@ -132,6 +135,9 @@ Every matching review brief must independently verify:
 
 - no behavior was invented beyond accepted specifications;
 - layer ownership and dependency direction are preserved;
+- the required Nirvana API usage audit proves Nirvana-first implementation;
+- module/function size evidence and architecture gates satisfy the mandatory
+  engineering standard;
 - public JSON and errors match the schema/version contract;
 - reads have no hidden writes;
 - path/config/untrusted-input boundaries fail closed;
@@ -141,9 +147,18 @@ Every matching review brief must independently verify:
 - `nvb build` and the relevant Jasmine suites pass; and
 - no generated, distribution, local-lane, or dependency artifact is committed.
 
+The review report must include the engineering standard's acceptance matrix.
+Any failed gate rejects the batch; known violations cannot be accepted with a
+follow-up correction promise.
+
 Global hard rejects include:
 
 - product logic added to `src/cli.ts`;
+- a god object, mixed-responsibility module, generic helper bag, or unapproved
+  module/function size violation;
+- bypassing a suitable Nirvana API without a proven `NIRVANA_API_GAP`;
+- raw subprocess, terminal, filesystem, SQL, or shell behavior outside its
+  declared adapter boundary;
 - shell evaluation of lane config or state by TypeScript;
 - full-pack/full-session fallback when an index is unavailable;
 - model use for an M0 operation;
@@ -152,7 +167,9 @@ Global hard rejects include:
 - unmanaged overwrite, path escape, or shared-write authorization by default;
 - acceptance inferred from tmux prose;
 - reviewer acceptance conflated with Git publication; or
-- command/help/schema drift.
+- command/help/schema drift;
+- missing Nirvana audit, size evidence, architecture-gate evidence, or reviewer
+  acceptance matrix.
 
 ## 4. Pack 1 — `wt-read-model` (M1)
 
@@ -161,7 +178,7 @@ pure/read-only contracts before workspace mutation.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
-| `RM-01` | Contract kernel and error taxonomy | — | `src/contracts/`, contract test helpers | Versioned IDs/types; exit-code mapping; exhaustive error fixtures |
+| `RM-01` | Contract kernel, error taxonomy, and source architecture gates | — | `src/contracts/`, contract and architecture test helpers | Versioned IDs/types; exit-code mapping; exhaustive error fixtures; automated engineering-standard hard rejects |
 | `DB-01` | SQLite driver, packaging, and derived-store feasibility | `RM-01` | storage interfaces, feasibility fixtures, ADR | Node/NVB/dist/global install; parameterization; FK/integrity; busy/WAL/permissions; rebuild and semantic-root proof |
 | `RM-02` | Public JSON envelopes and schema validation | `RM-01` | contracts, render/serialization foundation | Success/error envelopes; additive compatibility; no decorative JSON output |
 | `RM-03` | Canonical paths and workspace resolution | `RM-01` | path/workspace foundation | Resolution precedence; symlink/case/path-escape fixtures; missing explicit workspace |
@@ -175,7 +192,10 @@ pure/read-only contracts before workspace mutation.
 
 ### RM implementation notes
 
-- `RM-01` fixes domain types without depending on Nirvana rendering.
+- `RM-01` fixes domain types without depending on Nirvana rendering and
+  establishes the source architecture suite required by the engineering
+  standard. Every later batch extends that suite when it introduces a new
+  repeatable architecture rule or closes a checker gap.
 - `DB-01` selects and proves one conforming SQLite driver. Failure blocks
   derived-store implementation and requires a spec amendment; there is no
   silent JSON-shard fallback.
