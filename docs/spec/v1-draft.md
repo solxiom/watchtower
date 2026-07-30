@@ -374,7 +374,9 @@ cannot disagree.
 
 `model-plan.md` remains human/agent-authored in v1. The CLI does not parse it or
 generate per-batch launch wrappers. Generic launch scripts accept batch,
-account, model, and effort at invocation time.
+account, model, and effort at invocation time. Its post-v1 structured
+replacement is the implementation-lane phase defined in
+[allocation-planning-draft.md](allocation-planning-draft.md).
 
 ## 9. Discovery and lane selection
 
@@ -905,7 +907,7 @@ v1 is complete only when:
 | Ops tracker | `.watchtower/lanes/<slug>/operator-tracker.md`. |
 | Piper assets | Operator-supplied optional dependency; never bundled or auto-downloaded in v1. |
 | Account defaults | No hardcoded personal usernames; init uses neutral placeholders or explicit input. |
-| Lane kinds | `implementation` only in v1; the first specified post-v1 kind is [`pack-design`](pack-design-draft.md). |
+| Lane kinds | `implementation` only in v1; the first specified post-v1 kind is [`pack-design`](pack-design-draft.md). Allocation planning is a phase of an implementation lane, not another kind. |
 
 ## 19. Deferred questions
 

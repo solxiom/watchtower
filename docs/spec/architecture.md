@@ -10,7 +10,7 @@ Watchtower should become the common local control plane for agile,
 agent-assisted development without becoming an agent framework or hiding
 project truth in a proprietary database.
 
-The architecture is built around five separations:
+The architecture is built around six separations:
 
 1. **Project intent vs local execution** — specs and implementation packs are
    committed; tmux state and reports stay local.
@@ -22,6 +22,9 @@ The architecture is built around five separations:
    attention; tmux scrollback is diagnostic.
 5. **Workflow model vs provider adapter** — lane semantics do not depend on
    Codex, Cursor, Claude, or a specific notification mechanism.
+6. **Portable capability vs local allocation** — committed packs state the
+   capability a role needs; machine-local plans select current endpoints,
+   accounts, users, and capacity.
 
 ## 2. Context
 
@@ -60,6 +63,7 @@ Initiative
         ├── RepositoryBinding [1..n]
         ├── Plan / ImplementationPack
         │     └── Batch [ordered, conditional, or parallel]
+        ├── AllocationPlan [implementation lanes, 0..n revisions]
         ├── RuntimeBinding
         ├── WorkerSession [0..n]
         └── WorkerEvent [append-only]
@@ -100,6 +104,13 @@ converts accepted specifications into an independently reviewed implementation
 pack. Internal contracts carry `kind` so this addition does not require a
 filesystem break.
 
+Implementation allocation planning, specified in
+[allocation-planning-draft.md](allocation-planning-draft.md), is not a lane
+kind. It is a required, repeatable phase inside an implementation lane after
+pack handoff and before worker dispatch. Its plan is local because endpoint
+availability, account limits, Unix users, and reservations are time-sensitive
+machine facts.
+
 This is not permission to build a plugin system in v1. `pack-design` is now the
 second real workflow that justifies extracting a narrow internal lane-kind
 contract after the v1 foundation is stable. A public/general plugin interface
@@ -117,6 +128,9 @@ remains deferred.
 | Which runtime may manage this lane? | Install manifest |
 | What should the coordinator do next? | Coordinator knowledge pack |
 | What may Watchtower overwrite? | Managed-assets manifest |
+| What capability does an assignment require? | Accepted implementation pack |
+| Which local endpoint performs pending work? | Active allocation-plan revision |
+| What account capacity is already promised? | Global local reservation ledger |
 
 Watchtower can detect contradictions between authorities. It must not resolve a
 coordinator-policy contradiction by silently editing lane state.
@@ -216,6 +230,26 @@ The knowledge pack contains:
 Runtime and knowledge versions may advance independently, but a compatibility
 matrix in their manifests must prevent unsupported combinations.
 
+### 4.7 Post-v1 allocation services
+
+Implementation allocation adds provider-neutral services behind the
+`wt allocation` command group:
+
+| Service | Responsibility |
+|---------|----------------|
+| `ToolAdapterCatalog` | Load compatible, integrity-checked CLI discovery adapters |
+| `CapabilityDiscovery` | Probe allowlisted hosts/users without discovering credentials |
+| `EndpointInventory` | Preserve CLI → route → capacity pool → model → endpoint relationships |
+| `CapabilityCatalog` | Store versioned evidence, charging class, uncertainty, and expiry |
+| `ProjectEligibility` | Check approved endpoints against lane repositories, worktrees, runtime, and tools |
+| `CapacitySnapshotStore` | Capture immutable qualified availability observations |
+| `AllocationPlanner` | Apply quality-first hard constraints and deterministic preferences |
+| `ReservationLedger` | Atomically coordinate finite capacity across local lanes |
+
+Hermes, OpenCode, Codex, Cursor, Claude, and future CLIs integrate through the
+same tool-adapter contract. Their dynamic plans and model catalogs remain
+adapter observations, not hardcoded core-planner knowledge.
+
 ## 5. Physical deployment
 
 ### 5.1 Package
@@ -246,6 +280,13 @@ enables discovery from a secondary repository in a multi-repository lane. It
 is never lane authority: every result must resolve to a valid `lane.json`, and
 stale entries are ignored rather than silently repaired by read-only commands.
 
+Post-v1 allocation planning adds local capacity state under
+`<watchtower-data-root>/capacity/`: non-secret endpoint declarations, immutable
+discovery proposals and model catalogs, point-in-time snapshots, and an atomic
+cross-lane reservation ledger. Discovery scans only operator-allowlisted
+hosts, execution users, adapters, transports, and project roots. This data is
+local scheduling evidence, not credential or provider quota authority.
+
 ### 5.3 Control home and participating repositories
 
 The control home stores local execution state under:
@@ -257,7 +298,9 @@ The control home stores local execution state under:
 The complete runtime and canonical knowledge are not copied into each
 repository. The accepted design pack remains committed in its owning
 repository; generated prompts, model/account allocation, reports, events,
-budgets, and logs remain in the control home's lane directory.
+budgets, and logs remain in the control home's lane directory. Post-v1
+allocation revisions live under `allocation/`; actual account and Unix-user
+identities never enter the committed pack.
 
 Each participating repository has a local binding declaring canonical path,
 role, read/write access, branch, and worktree mode. Concurrent writable lanes
@@ -461,6 +504,11 @@ details.
 | A-011 | Model Repository ↔ Lane as many-to-many with one control home per lane | Supports concurrent lanes and cross-repository initiatives without duplicating state |
 | A-012 | Keep accepted design packs committed and execution overlays local | Preserves audit/reproducibility while removing runtime and prompt noise |
 | A-013 | Use dedicated worktrees for concurrent writable lanes by default | Prevents lanes from invalidating one another's source and proof |
+| A-014 | Model implementation allocation as an implementation-lane phase, not a lane kind | Allocation is time-sensitive execution planning for one existing lane |
+| A-015 | Keep capability requirements committed and endpoint assignments local | Packs stay portable and credentials/machine identity stay outside Git |
+| A-016 | Reserve finite endpoint capacity in one local cross-lane ledger | Prevents concurrent lanes from double-booking declared account capacity |
+| A-017 | Discover execution capabilities through versioned provider-neutral tool adapters | Supports changing CLI ecosystems without provider logic in the planner |
+| A-018 | Require explicit inventory approval and lane-specific eligibility | Discovery cannot silently authorize a model or grant project access |
 
 ## 13. Architecture fitness checks
 
@@ -477,5 +525,12 @@ Every implementation change should preserve these properties:
 - every lane has one authoritative control home and stable `laneId`;
 - committed packs refer to logical repository IDs, never machine paths;
 - concurrent writable lane bindings are conflict-checked;
+- pack capability floors cannot be silently weakened by local allocation;
+- machine-specific endpoint/account identities remain outside committed packs;
+- active endpoint reservations cannot be double-booked across local lanes;
+- capability discovery cannot exceed its explicit host/user/adapter/project
+  allowlist;
+- a dynamic model catalog cannot become allocation authority without provenance,
+  freshness, capability evidence, and operator approval;
 - human and JSON outputs derive from the same status contract; and
 - non-Watchtower lane directories are ignored and never mutated.

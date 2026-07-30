@@ -127,7 +127,7 @@ They have different roles, policies, artifacts, and transition vocabularies.
 | What evidence can accept the behavior? | Accepted proof requirements plus source-backed proof architecture |
 | How is work divided? | Accepted implementation map and batch graph |
 | Which agent edits canonical pack files? | Pack integrator during synthesis; pack reviewer during final verdict/acceptance |
-| Which model/account performs an assignment? | Local pack model/allocation plan |
+| Which model/account performs an implementation assignment? | Active local implementation allocation plan |
 | Is the pack semantically acceptable? | Independent pack reviewer |
 | Is the pack structurally valid? | `wt pack validate` |
 
@@ -171,7 +171,7 @@ Any pre-ACCEPTED state → ABANDONED (operator)
 | `correction` | Reviewer findings are being corrected by the integrator or a bounded architect |
 | `accepted` | Reviewer issued final ACCEPT and the committed pack is semantically approved |
 | `sealed` | File digests and structural validation match the accepted pack |
-| `handed-off` | An implementation lane has been initialized from the accepted pack |
+| `handed-off` | An implementation lane has been initialized from the accepted pack in `allocation-required` state |
 | `paused` | Operator stopped new assignments without deleting state |
 | `abandoned` | Operator intentionally ended the lane without an accepted pack |
 
@@ -210,6 +210,8 @@ independent reviewer verdict.
    implementation lane starts.
 10. Handoff does not make the pack-design lane the implementation coordinator;
     it closes or archives after recording the new lane reference.
+11. Handoff enters implementation allocation planning; it cannot launch an
+    implementation worker or preselect a local endpoint.
 
 ## 8. Roles and separation of duties
 
@@ -983,7 +985,7 @@ beyond the referenced reviewer verdict.
 - accepted, sealed pack;
 - passing structural validation;
 - no unclassified critical baseline drift;
-- implementation lane slug/prefix/account configuration and all local
+- implementation lane slug/prefix, initial allocation policy, and all local
   repository bindings;
 - no unsafe writable-worktree conflict with another active lane;
 - compatible implementation runtime and knowledge pack.
@@ -992,7 +994,11 @@ It derives implementation-pack path and batch IDs from the manifest, creates
 the implementation lane in the chosen control home, and records reciprocal
 stable lane-ID relations under the shared initiative. It registers every
 participating repository in the user-local membership index. It does not launch
-batch 1 unless explicitly requested by a separate operator action.
+batch 1. The new implementation lane starts in `allocation-required` and must
+complete the process in
+[allocation-planning-draft.md](allocation-planning-draft.md) before any
+implementation dispatch. Pack capability classes become allocation inputs;
+the pack-design lane does not select machine-local accounts or endpoints.
 
 ## 20. Pack reviewer protocol
 
@@ -1148,7 +1154,7 @@ The pilot must measure coordination overhead as well as token savings.
 | Model routing | Capability classes in committed pack; actual models/accounts local |
 | Budget enforcement | Warn at soft threshold; pause new dispatch at hard threshold |
 | State authority | Durable events/artifacts, never tmux prose |
-| Handoff | Accepted sealed pack initializes a separate implementation lane |
+| Handoff | Accepted sealed pack initializes a separate implementation lane in `allocation-required` state |
 
 ## 26. Open questions
 

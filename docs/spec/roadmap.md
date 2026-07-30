@@ -270,7 +270,37 @@ Design constraint: Markdown remains the human source of requirement and
 architecture truth. `implementation-pack.json` carries only structural
 metadata, graph edges, trace references, allocation classes, and file roles.
 
-### Horizon C — Agile workflow views
+### Horizon C — Implementation allocation planning
+
+Candidate release: v1.3.
+
+- implement the implementation-lane phase defined in
+  [allocation-planning-draft.md](allocation-planning-draft.md);
+- `wt allocation discover`, `inventory`, `catalog`, `check`, `snapshot`,
+  `plan`, `validate`, `review`, `activate`, `status`, `explain`, and `replan`;
+- versioned adapters for Hermes, OpenCode, Codex, Cursor, Claude, and future
+  compatible CLI families;
+- allowlisted, non-secret capability discovery across authorized hosts, Unix
+  users, provider accounts, and plan routes;
+- explicit inventory diffs and approval before discovered resources become
+  allocation authority;
+- dynamic model catalogs, shared capacity pools, capability evidence, charging
+  classes, freshness, and lane-specific eligibility;
+- point-in-time capacity snapshots with reported, operator-supplied, estimated,
+  or unknown telemetry;
+- quality-first deterministic routing from pack capability classes to local
+  models, efforts, CLIs, accounts, and users;
+- independent review, correction/re-review reserves, fallbacks, and
+  preserve-session routes;
+- atomic cross-lane capacity reservations and safe pending-work replanning; and
+- usage ledgers that keep tokens, subscription quota, money, concurrency,
+  reset windows, context, and operator time distinct.
+
+An implementation lane created from a sealed pack starts
+`allocation-required`. Infeasibility is an explicit result; Watchtower never
+silently downgrades below a pack capability floor to make a plan fit.
+
+### Horizon D — Agile workflow views
 
 Candidate release: v1.x.
 
@@ -282,7 +312,7 @@ Candidate release: v1.x.
 
 Metrics must not rank individual agents or infer quality from token spend.
 
-### Horizon D — Additional lane kinds
+### Horizon E — Additional lane kinds
 
 Candidate release: v2.
 
@@ -296,7 +326,7 @@ beyond `implementation` and `pack-design` before exposing a public lane engine:
 
 Only then consider a public lane-kind interface or plugin SDK.
 
-### Horizon E — Structured runtime state
+### Horizon F — Structured runtime state
 
 Candidate release: v2.
 
@@ -316,6 +346,7 @@ compatibility spec.
 - team authentication/authorization;
 - arbitrary project-defined executable hooks;
 - automatic credential/account provisioning;
+- automatic account rotation to evade provider limits;
 - automatic speech-model downloads;
 - autonomous acceptance or reject routing in the CLI;
 - generic workflow DSL or public plugin SDK without a third proven workflow;

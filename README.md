@@ -25,7 +25,10 @@ Start with the [v1 product specification](docs/spec/v1-draft.md), then read the
 [architecture baseline](docs/spec/architecture.md) and
 [delivery roadmap](docs/spec/roadmap.md). The proposed multi-architect
 accepted-spec to implementation-pack workflow is defined separately in the
-[pack-design process draft](docs/spec/pack-design-draft.md).
+[pack-design process draft](docs/spec/pack-design-draft.md). The subsequent
+quality-first capability discovery, endpoint onboarding, and account-capacity
+planning phase is defined in the
+[allocation-planning draft](docs/spec/allocation-planning-draft.md).
 
 ## Quick start (development)
 
@@ -111,7 +114,8 @@ reports, events, budgets, and logs stay inside the local lane overlay.
 2. [docs/spec/architecture.md](docs/spec/architecture.md) — architecture and boundaries
 3. [docs/spec/roadmap.md](docs/spec/roadmap.md) — phased delivery plan
 4. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
-5. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
+5. [docs/spec/allocation-planning-draft.md](docs/spec/allocation-planning-draft.md) — pack-to-endpoint allocation process
+6. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
 
 ## License
 
