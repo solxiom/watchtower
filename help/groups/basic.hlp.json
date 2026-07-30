@@ -1,0 +1,5 @@
+{
+  "name": "basic",
+  "label": "Basic commands",
+  "description": "Core watchtower CLI commands."
+}

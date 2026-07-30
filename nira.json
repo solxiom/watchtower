@@ -1,0 +1,9 @@
+{
+    name: 'watchtower',
+    type: 'cli',
+    version: '0.1.0',
+    description: 'watchtower CLI project.',
+    ecosystem: {
+        version: '1.0.0-test',
+    },
+}

@@ -1,0 +1,11 @@
+{
+  // Application config for watchtower.
+  // This file is loaded via @nirvana/commons config facades.
+  name: "watchtower",
+  env: "development",
+  paths: {
+    storage: "./storage",
+    logs: "./storage/logs",
+    cache: "./storage/cache"
+  }
+}

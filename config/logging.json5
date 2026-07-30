@@ -1,0 +1,16 @@
+{
+  // Logging config for watchtower.
+  // Logs stay local by default. Override env or path to redirect.
+  level: "info",
+  outputs: [
+    {
+      type: "console",
+      level: "info"
+    },
+    {
+      type: "file",
+      level: "debug",
+      path: "./storage/logs/app.log"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  /*This file supports JSON5 syntax — comments are allowed.*/
+  handlers: [
+    "./handlers/**/*"
+  ],
+  tasks: {
+    'build': {
+      doc: { summary: "Compile the watchtower source tree.", usage: "`nvb build`" },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+         args: [{ tsConfigFile: "./tsconfig.json", destPath: "./build" }],
+        type: "auto"
+      }
+    },
+    'build:tests': {
+      doc: { summary: "Compile watchtower source and spec trees for testing.", usage: "`nvb build:tests`" },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{ tsConfigFile: "./tsconfig.tests.json", destPath: "./build" }],
+        type: "auto"
+      }
+    },
+    'test': {
+      doc: { summary: "Build and run watchtower specs with Jasmine.", usage: "`nvb test`" },
+      runnerOpts: { preTasks: ["build:tests"], postTasks: [] },
+      handle: {
+        handler: "JasmineRunHandler",
+        args: [{
+          title: "Running watchtower specs:",
+          jasmineExecPath: "./node_modules/.bin/jasmine",
+          jasminConfigPath: "./spec/support/jasmine.json"
+        }],
+        type: "auto"
+      }
+    },
+    'clean': {
+      doc: { summary: "Remove the build output directory.", usage: "`nvb clean`" },
+      runnerOpts: {},
+      handle: { handler: "BasicCleanHandler", args: ["build"], type: "auto", preferType: "async" }
+    },
+    'dist:clean': {
+      doc: { summary: "Remove the dist output directory.", usage: "`nvb dist:clean`" },
+      runnerOpts: {},
+      handle: { handler: "BasicCleanHandler", args: ["dist"], type: "auto", preferType: "async" }
+    },
+    'dist:clean-build': {
+      doc: { summary: "Remove transient build output so dist leaves only packaged artifacts.", usage: "`nvb dist:clean-build`" },
+      runnerOpts: {},
+      handle: { handler: "BasicCleanHandler", args: ["build"], type: "auto", preferType: "async" }
+    },
+    'dist:compile': {
+      doc: { summary: "Compile watchtower source to dist/.", usage: "`nvb dist:compile`" },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{ tsConfigFile: "./tsconfig.dist.json", destPath: "./dist" }],
+        type: "auto"
+      }
+    },
+    'dist:copy-bin': {
+      doc: { summary: "Copy bin entry to dist/bin/.", usage: "`nvb dist:copy-bin`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{ src: "bin/wt.js", dest: "dist/bin" }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:copy-help': {
+      doc: { summary: "Copy help assets to dist/help/.", usage: "`nvb dist:copy-help`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{ src: "help/**/*", dest: "dist/help" }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:copy-config': {
+      doc: { summary: "Copy config assets to dist/config/.", usage: "`nvb dist:copy-config`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{ src: "config/**/*", dest: "dist/config" }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:runtime-nvb:compile': {
+      doc: { summary: "Compile runtime-nvb TypeScript to dist/runtime-nvb/.", usage: "`nvb dist:runtime-nvb:compile`" },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{ tsConfigFile: "./runtime-nvb/tsconfig.runtime-nvb.json", destPath: "./dist/runtime-nvb" }],
+           src: ["runtime-nvb/nvb-manifest.json", "runtime-nvb/runtime-nvb.json"],
+      }
+    },
+    'dist:runtime-nvb:copy': {
+      doc: { summary: "Copy runtime-nvb assets to dist/runtime-nvb/.", usage: "`nvb dist:runtime-nvb:copy`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{
+          src: ["runtime-nvb/nvb-manifest.json", "runtime-nvb/runtime-nvb.json"],
+          dest: "dist/runtime-nvb"
+        }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:fix-esm': {
+      doc: { summary: "Fix extensionless ESM imports in dist/.", usage: "`nvb dist:fix-esm`" },
+      runnerOpts: {},
+      handle: {
+        handler: "FixBrokenEsmImportsHandler",
+        args: ["dist", {}],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:clean-esm-stamp': {
+      doc: { summary: "Remove dist fix-esm stamp from the packaged artifact.", usage: "`nvb dist:clean-esm-stamp`" },
+      runnerOpts: {},
+      handle: {
+        handler: "BasicCleanHandler",
+        args: ["dist/.fix-esm-imports.stamp"],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:package': {
+      doc: { summary: "Write dist/package.json.", usage: "`nvb dist:package`" },
+      runnerOpts: {},
+      handle: {
+        handler: "DistPackageJSONBuilder",
+        args: [{
+          originalPkgJsonPath: "./package.json",
+          destPath: "./dist",
+          removeDevDependencies: true
+        }],
+        type: "auto"
+      }
+    },
+    'dist:chmod-bin': {
+      doc: { summary: "Mark all packaged dist bin entries executable.", usage: "`nvb dist:chmod-bin`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CommandHandler",
+        args: [{
+          name: "sh",
+          args: [
+            "-lc",
+            "node --input-type=module --eval 'import fs from \"fs\"; import path from \"path\"; const pkgPath = path.resolve(\"./dist/package.json\"); const pkg = JSON.parse(fs.readFileSync(pkgPath, \"utf8\")); const bins = pkg && typeof pkg.bin === \"object\" ? Object.values(pkg.bin) : []; for (const rel of bins) { const binPath = path.resolve(\"./dist\", String(rel).replace(/^\\.\\//, \"\")); if (fs.existsSync(binPath)) { fs.chmodSync(binPath, 0o755); } }'"
+          ]
+        }],
+        type: "auto"
+      }
+    },
+    'runtime-nvb:validate': {
+      doc: { summary: "Validate runtime-nvb manifest and file structure.", usage: "`nvb runtime-nvb:validate`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CommandHandler",
+        args: [{
+          name: "node",
+          args: ["--input-type=module", "--eval",
+            "import fs from 'fs'; const m = JSON.parse(fs.readFileSync('./runtime-nvb/nvb-manifest.json','utf8')); if (!m.schemaVersion) throw new Error('invalid manifest'); process.stdout.write('runtime-nvb manifest ok\\n');"]
+        }],
+        type: "auto"
+      }
+    }
+  },
+  groups: {
+    'dev:run': {
+      doc: { summary: "Build then run the CLI entry in development mode.", usage: "`nvb dev:run`" },
+      tasks: ["build"],
+      runnerOpts: { multiExecPolicy: "series" }
+    },
+    'dist': {
+      doc: { summary: "Produce the full dist package for watchtower.", usage: "`nvb dist`" },
+      tasks: [
+        "dist:clean-build",
+        "dist:clean",
+        "dist:compile",
+        "dist:fix-esm",
+        "dist:clean-esm-stamp",
+        "dist:copy-bin",
+        "dist:copy-help",
+        "dist:copy-config",
+        "dist:runtime-nvb:compile",
+        "dist:runtime-nvb:copy",
+        "dist:package",
+        "dist:chmod-bin",
+        "dist:clean-build"
+      ],
+      runnerOpts: { multiExecPolicy: "series" }
+    }
+  }
+}

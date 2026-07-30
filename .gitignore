@@ -1,0 +1,6 @@
+.idea
+.nira/local/
+dist/
+build/
+node_modules/
+.env

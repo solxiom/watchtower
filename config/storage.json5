@@ -1,0 +1,11 @@
+{
+  // Storage config for watchtower.
+  // Uses local filesystem storage by default.
+  disks: {
+    local: {
+      driver: "filesystem",
+      root: "./storage"
+    }
+  },
+  default: "local"
+}

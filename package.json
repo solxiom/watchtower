@@ -1,0 +1,27 @@
+{
+  "name": "watchtower",
+  "version": "0.1.0",
+  "description": "watchtower — a Nirvana-based CLI.",
+  "type": "module",
+  "bin": {
+    "wt": "./bin/wt.js"
+  },
+  "main": "src/index.ts",
+  "keywords": [],
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "dependencies": {
+    "@nirvana/base": "*",
+    "@nirvana/b-core": "*",
+    "@nirvana/builder": "*",
+    "@nirvana/commons": "*",
+    "@nirvana/framework": "*"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^4.3.1",
+    "@types/node": "^20.5.1",
+    "jasmine": "^6.0.0",
+    "jasmine-core": "^6.0.0",
+    "typescript": "^6.0.3"
+  }
+}

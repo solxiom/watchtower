@@ -1,0 +1,19 @@
+{
+  "name": "watchtower",
+  "bin": "wt",
+  "groups": [
+    {
+      "name": "basic",
+      "label": "Basic commands",
+      "description": "Core watchtower CLI commands."
+    }
+  ],
+  "commands": [
+    {
+      "name": "hello",
+      "group": "basic",
+      "summary": "Say hello from watchtower.",
+      "usage": "wt hello [--name=<name>]"
+    }
+  ]
+}

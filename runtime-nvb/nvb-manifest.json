@@ -1,0 +1,17 @@
+{
+  // Runtime-NVB product manifest for watchtower.
+  // This file is the entry point for the packaged NVB module shipped with the compiled CLI.
+  schemaVersion: 1,
+  id: "watchtower-runtime-nvb",
+  name: "watchtower Runtime NVB",
+  version: "0.1.0",
+  description: "Packaged NVB tasks shipped with watchtower.",
+  productNvb: {
+    config: "./runtime-nvb.json",
+    module: "./runtime-nvb.js"
+  },
+  handlers: [
+    "./handlers/**/*.js",
+    "./handlers/**/*.ts"
+  ]
+}
