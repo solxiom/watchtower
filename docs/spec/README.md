@@ -17,6 +17,7 @@ Normative product docs for the `wt` CLI.
 | [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |
 | [discussions/operator-coordinator-conversation.md](discussions/operator-coordinator-conversation.md) | Resolved | Human/coordinator conversation continuity, budget, UX, and concurrency proposal |
 | [discussions/cli-session-ux.md](discussions/cli-session-ux.md) | Resolved | Interactive operator-session UX proposal and adopted attachment model |
+| [discussions/operator-session-gaps.md](discussions/operator-session-gaps.md) | Proposed | 18 spec gaps and proposed resolutions — parser ambiguity, observer mode, session kinds, export, amendment routing, session policy, cross-session refs, doctor checks, reconnection UX, budget transfer, and attachment protocol |
 
 ## Conventions
 
