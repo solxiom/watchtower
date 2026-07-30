@@ -11,6 +11,7 @@ Normative product docs for the `wt` CLI.
 | [allocation-planning-draft.md](allocation-planning-draft.md) | Draft | CLI/plan/model discovery plus quality-first implementation capacity allocation |
 | [discussions/lane-directory-path.md](discussions/lane-directory-path.md) | Resolved | `.watchtower/lanes/<slug>/` execution-overlay decision |
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
+| [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Proposed | Coordinator context budget, task-tier dispatch, and mechanical automation |
 
 ## Conventions
 
