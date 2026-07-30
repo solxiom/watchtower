@@ -5,7 +5,9 @@ Last updated: 2026-07-30
 
 This roadmap sequences outcomes, not commits. Each milestone should land as a
 small implementation pack with work batches, independent review batches, and
-the corresponding updates to [v1.md](v1.md).
+the corresponding updates to [v1.md](v1.md). The complete cross-pack batch,
+dependency, ownership, and proof plan is
+[v1-implementation-map.md](v1-implementation-map.md).
 
 ## 1. Release strategy
 
