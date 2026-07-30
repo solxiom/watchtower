@@ -14,7 +14,7 @@ with a **global tool + per-lane execution overlay**:
 Coordinator **agents** (Codex, Cursor, etc.) still own semantic judgment.
 Watchtower is the deterministic control plane: init, discovery, packaging,
 upgrades, zero-token event routing, bounded decision context, proposal
-validation, bounded operator conversation, and safe effect execution.
+validation, bounded operator session, and safe effect execution.
 
 ## Status
 
@@ -34,7 +34,9 @@ planning phase is defined in the
 coordinator execution contract is defined in the
 [coordinator-automation draft](docs/spec/coordinator-automation-draft.md), and
 the v1 bounded multi-turn operator interface is defined in the
-[operator-conversation draft](docs/spec/operator-conversation-draft.md).
+[operator-session draft](docs/spec/operator-session-draft.md), and its polished
+foreground terminal contract is defined in the
+[CLI session draft](docs/spec/cli-session-draft.md).
 
 ## Quick start (development)
 
@@ -122,8 +124,9 @@ reports, events, budgets, and logs stay inside the local lane overlay.
 4. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
 5. [docs/spec/allocation-planning-draft.md](docs/spec/allocation-planning-draft.md) — pack-to-endpoint allocation process
 6. [docs/spec/coordinator-automation-draft.md](docs/spec/coordinator-automation-draft.md) — v1 decision routing and effect safety
-7. [docs/spec/operator-conversation-draft.md](docs/spec/operator-conversation-draft.md) — v1 operator conversation and confirmed effects
-8. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
+7. [docs/spec/operator-session-draft.md](docs/spec/operator-session-draft.md) — v1 operator session and confirmed effects
+8. [docs/spec/cli-session-draft.md](docs/spec/cli-session-draft.md) — v1 foreground session attachment and terminal UX
+9. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
 
 ## License
 

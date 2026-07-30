@@ -22,10 +22,12 @@ Watchtower owns deterministic routing, bounded context, proposal validation,
 seal-bound pack indexing, and one safe effect-execution boundary in addition
 to replacing the copy-paste install/bootstrap model.
 
-Operator conversation is a sequence of bounded advisory turns. It never grants
-an agent direct mutation authority or holds the lane mutation lock during model
-generation. Apply conversation proposals only through explicit confirmation,
-current-state validation, and the normal effect executor.
+An operator session is a durable sequence of bounded advisory turns. A lane may
+have many operator sessions; the foreground CLI attachment is not session
+memory or model authority. No session grants an agent direct mutation authority
+or holds the lane mutation lock during model generation. Apply session
+proposals only through explicit confirmation, current-state validation, and the
+normal effect executor.
 
 ## Architecture (two layers)
 
@@ -119,7 +121,8 @@ equivalent bundled docs. Import them auditably into the versioned knowledge pack
 Do not encode semantic coordinator judgment in CLI code. Mechanical routing,
 typed proposal validation, and bounded effects follow
 `docs/spec/coordinator-automation-draft.md`.
-Operator conversation follows `docs/spec/operator-conversation-draft.md`.
+Operator-session semantics follow `docs/spec/operator-session-draft.md`;
+foreground UI attachments follow `docs/spec/cli-session-draft.md`.
 
 ## Spec workflow
 

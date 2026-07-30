@@ -1,16 +1,45 @@
-# Discussion: Interactive CLI Session UX for Operator Conversation
+# Discussion: Interactive CLI Session UX for Operator Sessions
 
-Status: **Proposed**
+Status: **Resolved**
 Started: 2026-07-30
+Resolved: 2026-07-30
 Related:
 
-- `docs/spec/operator-conversation-draft.md` §§ 19, 24
+- `docs/spec/operator-session-draft.md` §§ 19, 24
+- `docs/spec/cli-session-draft.md`
 - `docs/spec/coordinator-automation-draft.md` § 15
 - `docs/spec/v1-draft.md` § 11.10
 
+## Resolution
+
+The polished UX is adopted for v1 with corrected terminology and authority
+boundaries:
+
+- the durable human–WT object is an **operator session**, not a chat;
+- `wt coordinator session` creates or resumes a foreground **attachment**;
+- a lane may have many operator sessions and many attachments;
+- one attachment is lane-bound and operates on one session at a time;
+- one operator session has at most one active turn, even when several
+  attachments observe it;
+- attachments, provider processes, terminal scrollback, and readline caches
+  are not durable memory or effect authority;
+- `ask` remains the scripting/one-result interface;
+- slash commands are classified shared WT operations, not all M0 or
+  token-free;
+- `/apply` still uses confirmation, current-state revalidation, and the sole
+  effect executor;
+- streaming remains provisional until response validation;
+- history caching is bounded and coupled to authoritative retention; and
+- foreground status observation requires neither a daemon nor model polling.
+
+The normative result is
+[../cli-session-draft.md](../cli-session-draft.md). Examples below record the
+original proposal and may retain the earlier `chat` vocabulary; where they
+conflict, the normative operator-session and CLI-session drafts win.
+
 ## 1. Problem statement
 
-The operator-conversation spec defines `wt coordinator chat` in one sentence:
+The operator-session spec defines `wt coordinator chat` in one sentence:
 "terminal/readline loop; it still executes one bounded turn at a time." The
 `ask` command takes a positional question and returns a response. The spec
 says `--stream` may show provisional chunks and that diagnostics go to stderr.
@@ -715,7 +744,7 @@ authoritative conversation records.
 ## 16. Recommended next steps
 
 1. Adopt this discussion and extract the normative parts into
-   `operator-conversation-draft.md` §19 (CLI contract) and a new § for
+   `operator-session-draft.md` §19 (CLI contract) and a new § for
    session UX, or a separate `cli-session-draft.md`.
 
 2. Define the exact M0 slash-command contract and output schemas.

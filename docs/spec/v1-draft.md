@@ -12,7 +12,9 @@ This document is normative for v1 behavior. The broader architecture lives in
 lives in
 [coordinator-automation-draft.md](coordinator-automation-draft.md). Bounded
 multi-turn operator interaction is normative in
-[operator-conversation-draft.md](operator-conversation-draft.md).
+[operator-session-draft.md](operator-session-draft.md), with the foreground
+terminal experience defined in
+[cli-session-draft.md](cli-session-draft.md).
 
 ## 1. Product statement
 
@@ -88,15 +90,18 @@ be frozen into generated launch wrappers or install-time assumptions.
     publication attempts.
 13. Keep routine coordinator context bounded independently of unrelated
     implementation-pack growth through deterministic seal-bound indexes.
-14. Give operators durable bounded conversation without creating a second
-    mutation authority or blocking automation implicitly.
+14. Give operators many durable bounded sessions per lane without creating a
+    second mutation authority or blocking automation implicitly.
+15. Provide a polished foreground operator-session UI without restoring a
+    persistent provider session or daemon.
 
 ### 3.2 v1 non-goals
 
 - Encoding semantic coordinator judgment in TypeScript.
 - Letting decision agents directly mutate authoritative lane state.
 - Authoring implementation specs or deciding how work should be batched.
-- A terminal dashboard, web service, cloud control plane, or team server.
+- A full-screen terminal dashboard, web service, cloud control plane, or team
+  server.
 - CI/headless execution without tmux.
 - A general plugin system or user-defined lane kinds.
 - Downloading models or large speech assets automatically.
@@ -128,8 +133,9 @@ roadmap, but they must build on the v1 lane model rather than bypass it.
 | Effect executor | Watchtower/runtime boundary that applies a validated bounded mutation. |
 | Ready set | Pending batches whose dependencies and hard dispatch constraints currently pass. |
 | Pack index | Deterministic local, seal-bound lookup structure derived from the accepted pack. |
-| Operator conversation | Durable lane-bound sequence of bounded advisory coordinator turns. |
-| Conversation hold | Explicit expiring block on declared future effects for a narrow scope. |
+| Operator session | Durable lane-bound sequence of bounded advisory coordinator turns. |
+| Session attachment | Ephemeral foreground terminal UI bound to one operator session at a time. |
+| Scoped hold | Explicit expiring block on declared future effects for a narrow scope. |
 
 ## 5. Product boundary
 
@@ -172,9 +178,9 @@ Every lane artifact has exactly one ownership class.
 | Class | Examples | Upgrade behavior |
 |-------|----------|------------------|
 | Project-owned, committed | accepted implementation pack, work/review/correction briefs, traceability, roadmap, implementation tracker | Never created or changed by runtime upgrade |
-| Lane-owned, durable | `lane.config.env`, `repositories.local.json`, `model-plan.md`, coordinator routing/context policy, operator conversations/holds, lane state, operator tracker | Create once; never overwrite |
+| Lane-owned, durable | `lane.config.env`, `repositories.local.json`, `model-plan.md`, coordinator routing/context policy, operator sessions/holds, lane state, operator tracker | Create once; never overwrite |
 | Watchtower-managed | `lane.json`, `install.json`, `bin/` runtime links, managed policy links | Validate and replace according to manifest |
-| Runtime-generated | reports, prompts, logs, locks, watcher state, worker/coordinator/effect events, cycle envelopes/proposals, conversation indexes/usage, projections, budgets, assistant responses | Preserve; prune only through an explicit retention command/policy |
+| Runtime-generated | reports, prompts, logs, locks, watcher state, worker/coordinator/effect events, cycle envelopes/proposals, operator-session indexes/usage, projections, budgets, assistant responses | Preserve; prune only through an explicit retention command/policy |
 
 An upgrade must stop with a conflict if a Watchtower-managed path was replaced
 by an unrecognized regular file. `--force` must not silently overwrite it.
@@ -246,7 +252,7 @@ entries are ignored and reported.
         model-plan.md                         # local account/model allocation
         operator-tracker.md                   # local operational view
         coordinator/                          # routing, cycles, journals, projections
-          conversations/                      # bounded operator turns and memory
+          operator-sessions/                  # bounded operator turns and memory
           holds/                              # explicit scoped automation holds
         briefs/                               # lane-specific coordinator/worker briefs
         bin/                                  # managed runtime/policy links
@@ -515,8 +521,9 @@ Errors go to stderr. Normal human or JSON output goes to stdout.
 | `wt doctor [--lane=<slug-or-uuid>]` | ❌ | Validate bindings, conflicts, runtime, tools, accounts, and pack |
 | `wt skill install <codex\|cursor\|claude> [--scope=<scope>]` | ❌ | Install the bundled coordinator knowledge pack adapter |
 | `wt coordinator index|status|context|explain|cycle|escalate` | ❌ | Build/inspect pack indexes or run bounded coordinator decision cycles |
-| `wt coordinator ask|chat` | ❌ | Ask one question or run bounded interactive operator conversation |
-| `wt coordinator conversation ...` | ❌ | Manage conversation lifecycle, history, memory, and proposed effects |
+| `wt coordinator ask` | ❌ | Ask one bounded question, optionally within an existing operator session |
+| `wt coordinator session [--resume=<id>]` | ❌ | Create or resume a polished foreground operator-session attachment |
+| `wt coordinator session list|show|history|suspend|resume|close|fork|pin|unpin|compact|apply` | ❌ | Manage operator-session lifecycle, memory, and proposed effects |
 | `wt coordinator hold place|release|list` | ❌ | Manage explicit scoped automation holds |
 | `wt events tail|latest` | ❌ | Read validated durable event projections |
 | `wt batch ready` | ❌ | Calculate ready candidates and blocking reasons without selecting ambiguously |
@@ -577,7 +584,7 @@ Creates once:
 - lane state;
 - coordinator routing/context policy, empty cycle journal/projections, and
   coordinator/implementer briefs;
-- empty conversation journal/index roots and hold registry;
+- empty operator-session journal/index roots and hold registry;
 - deterministic seal-bound coordinator pack indexes;
 - model-plan template;
 - local operator tracker;
@@ -611,7 +618,7 @@ It reports:
 - watcher status and last heartbeat when available;
 - coordinator queue, active cycle, decision class, route availability, last
   outcome, pack/runtime index freshness, and budget warning;
-- open/suspended/active conversation counts, conversation budget warnings,
+- open/suspended/active operator-session counts, session budget warnings,
   stale proposals, and active scoped holds;
 - latest valid durable worker event;
 - accepted/total batch count when derivable;
@@ -658,7 +665,7 @@ JSON output has a versioned top-level shape:
     "routeAvailable": true,
     "lastOutcome": null,
     "packIndex": {"status": "valid", "packSealId": "seal-43dc"},
-    "conversations": {"open": 0, "activeTurns": 0, "budgetWarning": false},
+    "operatorSessions": {"open": 0, "activeTurns": 0, "budgetWarning": false},
     "holds": []
   },
   "runtime": {"configured": "1.0.0", "available": true}
@@ -689,7 +696,7 @@ It must not:
 
 The watcher may launch short-lived coordinator decision agents and workers only
 through validated routing and bounded runtime actions. It does not maintain a
-lane-lifetime coordinator conversation. Process supervision remains in the
+lane-lifetime coordinator model session. Process supervision remains in the
 shell runtime; decision routing, validation, and effect contracts remain in
 shared foundation services.
 
@@ -740,7 +747,8 @@ Checks are grouped and each returns `pass`, `warn`, `fail`, or `skip`:
 - coordinator policy/routing compatibility, endpoint capability floors,
   pack-index freshness/integrity, journal integrity, cursor consistency, and
   unresolved uncertain effects;
-- conversation lifecycle/journal/index consistency, retention permissions,
+- operator-session lifecycle/journal/index consistency, attachment-safe
+  retention permissions,
   budget accounting, stale proposals, and hold expiry/scope;
 - Git ignore coverage for `/.watchtower/`;
 - optional speech stack.
@@ -777,7 +785,7 @@ The coordinator command group follows the complete contract in
   or mutating; for an M0 trigger it may also preview the deterministic effect;
 - `cycle` processes one idempotent trigger through proposal validation and the
   bounded effect executor;
-- `escalate` opens a durable attention conversation and any policy-required
+- `escalate` opens a durable attention operator session and any policy-required
   safety hold;
 - `events tail|latest` exposes validated durable events without advancing the
   watcher cursor; and
@@ -787,20 +795,27 @@ The coordinator command group follows the complete contract in
 There is no public raw state setter, arbitrary tracker mutation command, or
 shell-effect escape hatch.
 
-### 11.10 Operator conversation commands
+### 11.10 Operator session commands
 
 The complete command, lifecycle, memory, budget, concurrency, retention, and
 effect-confirmation contract is defined in
-[operator-conversation-draft.md](operator-conversation-draft.md).
+[operator-session-draft.md](operator-session-draft.md).
 
-- `ask` runs one bounded turn and returns a conversation ID;
-- `chat` provides a terminal loop composed of the same bounded turns;
-- conversation lifecycle/history/pin/compact operations are explicit;
-- conversation answers are advisory;
+- `ask` runs one bounded turn and returns an operator-session ID;
+- bare `session` creates or resumes a foreground attachment composed of the
+  same bounded turns;
+- a lane may contain many operator sessions, while each session has at most one
+  active turn;
+- session lifecycle/history/pin/compact operations are explicit;
+- session answers are advisory;
 - applying a proposal is a separate confirmed and revalidated effect;
 - automated cycles continue during model responses unless a scoped hold blocks
   the relevant future effect; and
-- no conversation model invocation holds the lane mutation lock.
+- no operator-session model invocation or attachment holds the lane mutation
+  lock.
+
+The attachment is TTY-only in v1; `ask` remains the scripting and one-result
+JSON interface. Exiting an attachment does not close its durable session.
 
 ## 12. Runtime invocation contract
 
@@ -936,9 +951,9 @@ are append-only durable events; tmux prose is never authority.
   tracker mutations.
 - Missing, stale, corrupt, or incompatible pack indexes block automated cycles;
   Watchtower never falls back to a full-pack scan or prompt.
-- Conversation turns hold only a conversation-turn lock while generating a
-  response; they never hold the lane mutation lock.
-- Conversation advice and unconfirmed proposals cause no lane effects.
+- Operator-session turns hold only an operator-session turn lock while
+  generating a response; they never hold the lane mutation lock.
+- Operator-session advice and unconfirmed proposals cause no lane effects.
 - Holds are explicit, scoped, expiring, journaled, and do not terminate active
   workers.
 
@@ -1038,11 +1053,14 @@ v1 is complete only when:
       publication;
 - [ ] interrupted or duplicate coordinator cycles recover idempotently from
       decision/effect journals;
-- [ ] operators can conduct bounded multi-turn conversations whose continuity
-      comes from local journal/index state rather than provider sessions;
-- [ ] advisory conversation continues alongside automation unless an explicit
+- [ ] operators can conduct multiple bounded multi-turn sessions per lane whose
+      continuity comes from local journal/index state rather than provider
+      sessions;
+- [ ] polished foreground attachments can create, resume, detach, and observe
+      those sessions without becoming memory or effect authority;
+- [ ] advisory sessions continue alongside automation unless an explicit
       scoped hold applies;
-- [ ] conversation proposals require confirmation and current-state
+- [ ] operator-session proposals require confirmation and current-state
       revalidation before the sole effect executor may act;
 - [ ] `wt doctor` detects missing dependencies, broken links, unsafe config,
       and missing implementation-pack structure;
@@ -1074,16 +1092,18 @@ v1 is complete only when:
 | Piper assets | Operator-supplied optional dependency; never bundled or auto-downloaded in v1. |
 | Account defaults | No hardcoded personal usernames; init uses neutral placeholders or explicit input. |
 | Lane kinds | `implementation` only in v1; the first specified post-v1 kind is [`pack-design`](pack-design-draft.md). Allocation planning is a phase of an implementation lane, not another kind. |
-| Coordinator lifetime | Short-lived bounded decision cycles; no lane-lifetime conversation authority. |
+| Coordinator lifetime | Short-lived bounded decision cycles; no lane-lifetime provider-session authority. |
 | Coordinator automation | M0 mechanical work uses zero model tokens; D1–D3 use minimum-capability routes. |
 | Agent authority | Coordinator agents emit typed proposals and never mutate authoritative state directly. |
 | Effect authority | One Watchtower validator/executor applies bounded idempotent effects. |
 | Acceptance/publication | Reviewer acceptance is semantic authority; Git publication is a separate recoverable process. |
 | Pack indexing | Deterministic local indexes tied to `packSealId`; derived and never semantic authority. |
 | Pack-size safety | Routine envelopes/queries are bounded by affected scope; no full-pack fallback. |
-| Operator conversation | Durable bounded advisory turns with per-turn routing and local continuity. |
-| Conversation mutation | Separate confirmed proposal through the normal effect executor. |
-| Conversation concurrency | No lane lock during model response; only explicit scoped holds pause effects. |
+| Operator session | Durable bounded advisory turns with per-turn routing and local continuity. |
+| Operator-session cardinality | Many per lane; policy bounds open sessions/concurrent turns, not historical identity count. |
+| Session attachment | Foreground lane-bound UI attached to one operator session at a time; not durable authority. |
+| Session mutation | Separate confirmed proposal through the normal effect executor. |
+| Session concurrency | At most one active turn per session; no lane lock during model response; only explicit scoped holds pause effects. |
 
 ## 19. Deferred questions
 

@@ -33,7 +33,7 @@ durable event or operator request
 ```
 
 The coordinator becomes a role fulfilled by bounded decision invocations. It
-does not remain one cumulative lane-lifetime conversation.
+does not remain one cumulative lane-lifetime provider session.
 
 ## 2. Goals and non-goals
 
@@ -50,7 +50,8 @@ does not remain one cumulative lane-lifetime conversation.
 6. Validate and apply permitted effects atomically and idempotently.
 7. Make coordinator decisions, context expansion, escalation, and effects
    auditable through durable events.
-8. Separate operator conversations from automated decision context.
+8. Separate durable operator sessions and their foreground attachments from
+   automated decision context.
 9. Bound coordinator tokens, cost, latency, and cycle count by decision class
    and lane.
 10. Preserve reviewer acceptance authority and multi-repository commit sets.
@@ -301,7 +302,7 @@ Include only:
 
 Do not preload:
 
-- prior coordinator conversations;
+- prior operator sessions;
 - every batch brief;
 - full worker-event history;
 - full Markdown tracker or roadmap;
@@ -768,17 +769,21 @@ No stage is inferred from tmux prose.
 ## 15. Operator interaction
 
 The complete v1 contract lives in
-[operator-conversation-draft.md](operator-conversation-draft.md).
+[operator-session-draft.md](operator-session-draft.md); the foreground
+attachment contract lives in
+[cli-session-draft.md](cli-session-draft.md).
 
-A conversation is a durable sequence of bounded advisory turns. Each turn uses
+An operator session is a durable sequence of bounded advisory turns. Each turn uses
 a versioned lane snapshot, bounded recent/pinned memory, per-turn routing, and a
 typed response. It does not hold the lane mutation lock while a model runs.
 Automated cycles continue unless an explicit scoped hold applies.
 
-Conversation advice has no effect authority. Any proposed mutation requires
+Operator-session advice has no effect authority. Any proposed mutation requires
 separate operator confirmation, current-state revalidation, and the normal
-effect executor. Conversation continuity comes from Watchtower journals and
-indexes, never a hidden provider session.
+effect executor. Session continuity comes from Watchtower journals and indexes,
+never a hidden provider session. A lane may have many operator sessions;
+foreground attachments are presentation clients and are not durable memory or
+effect authorities.
 
 ## 16. Endpoint routing and allocation
 
@@ -824,7 +829,7 @@ contains no credentials, and cannot route below knowledge-policy minimums.
       "fallbacks": []
     }
   },
-  "conversationClasses": {
+  "operatorSessionClasses": {
     "D1": {
       "primary": "codex-primary-high",
       "fallbacks": []
@@ -838,7 +843,7 @@ contains no credentials, and cannot route below knowledge-policy minimums.
       "fallbacks": []
     }
   },
-  "conversationBudgetPolicyRef": "context-policy.json#operatorConversation"
+  "operatorSessionBudgetPolicyRef": "context-policy.json#operatorSession"
 }
 ```
 
@@ -857,7 +862,7 @@ Budgets reserve:
 - reject/correction triage;
 - re-review coordination;
 - at least one complex escalation when policy requires; and
-- operator conversation separately.
+- operator session separately.
 
 ## 17. Filesystem contract
 
@@ -902,7 +907,7 @@ Budgets reserve:
       ready-set.json
       publication-status.json
       tracker-summary.md
-    conversations/                     # operator-conversation-draft.md
+    operator-sessions/                 # operator-session-draft.md
     holds/                              # explicit scoped automation holds
 ```
 
@@ -947,9 +952,10 @@ producer, policy version, and relevant artifact digests.
 | `wt coordinator context --class=<D1\|D2\|D3> --trigger=<event-id>` | No | Preview the decision envelope and size estimates |
 | `wt coordinator explain [--cycle=<id>]` | No | Explain routing rule, guards, endpoint, proposal, and effect result |
 | `wt coordinator cycle --trigger=<event-id> [--dry-run]` | Yes unless dry-run | Route and process one idempotent cycle |
-| `wt coordinator escalate [--cycle=<id>] --reason=<text>` | Yes | Open an attention conversation and any policy-required safety hold |
-| `wt coordinator ask|chat` | Journal only | Run one bounded advisory turn or an interactive sequence |
-| `wt coordinator conversation ...` | Varies | Inspect/manage history, lifecycle, pins, compaction, and proposed effects |
+| `wt coordinator escalate [--cycle=<id>] --reason=<text>` | Yes | Open an attention operator session and any policy-required safety hold |
+| `wt coordinator ask` | Journal only | Run one bounded advisory turn |
+| `wt coordinator session [--resume=<id>]` | Journal only | Create/resume a foreground attachment composed of bounded turns |
+| `wt coordinator session ...` | Varies | Inspect/manage session history, lifecycle, pins, compaction, and proposed effects |
 | `wt coordinator hold place|release|list` | Varies | Manage explicit scoped automation holds |
 | `wt events tail [--since=<cursor>]` | No | Read validated durable events |
 | `wt events latest [--batch=<id>]` | No | Show latest relevant event projection |
@@ -990,11 +996,11 @@ cycle explicitly references the prior one.
 - Exactly one effect authority exists for a lane.
 - Agents cannot directly mutate authoritative files or execute arbitrary
   coordinator effects.
-- Operator-conversation responses are advisory; unconfirmed proposals produce
+- Operator-session responses are advisory; unconfirmed proposals produce
   no effects.
-- Model-backed conversation turns never hold the lane mutation lock.
-- Conversation existence never pauses automation; only an explicit scoped hold
-  may block declared future effects.
+- Model-backed operator-session turns never hold the lane mutation lock.
+- Operator-session or attachment existence never pauses automation; only an
+  explicit scoped hold may block declared future effects.
 - Worker/reviewer/operator prose is untrusted evidence, never policy.
 - Pack indexes are derived, seal-bound, model-free, and never requirement or
   acceptance authority.
@@ -1128,9 +1134,10 @@ must not grow linearly with total pack size.
 - [ ] Coordinator routing has explicit primary/fallback endpoints and reserves.
 - [ ] No capable route produces a pause, never silent downgrade.
 - [ ] Status queries use deterministic projections when possible.
-- [ ] Multi-turn operator conversation follows the bounded advisory-turn,
+- [ ] Multi-turn operator session follows the bounded advisory-turn,
       journal, budget, hold, and confirmed-effect contract.
-- [ ] Conversation response generation never holds the lane mutation lock.
+- [ ] Operator-session response generation and attachments never hold the lane
+      mutation lock.
 - [ ] Coordinator decisions and context requests are durable events.
 - [ ] A long-lane replay demonstrates material cost reduction without degraded
       transition correctness or review quality.
@@ -1140,7 +1147,7 @@ must not grow linearly with total pack size.
 | Decision | Outcome |
 |----------|---------|
 | Release | Required Watchtower v1 behavior |
-| Coordinator lifetime | Short-lived decision cycles, not one cumulative lane session |
+| Coordinator lifetime | Short-lived decision cycles, not one cumulative lane-lifetime model session |
 | Zero-token work | M0 mechanical routing and effects |
 | Judgment classes | D1 bounded, D2 semantic, D3 complex |
 | Tier semantics | Minimum capability, not price/model-name tiers |
@@ -1154,9 +1161,10 @@ must not grow linearly with total pack size.
 | Scaling | One linear structural build; routine model context bounded independently of unrelated pack growth |
 | Ready batches | Mechanical ready set; selection only when preauthorized or decided |
 | Acceptance | Reviewer semantic authority, distinct from publication |
-| Operator chat | Durable conversation composed of bounded advisory turns |
-| Conversation effects | Separate confirmation plus current-state validation |
-| Conversation concurrency | Automation continues unless explicit scoped hold |
+| Operator interaction | Many durable operator sessions per lane, each composed of bounded advisory turns |
+| Session UI | Foreground attachment; no provider-session or effect authority |
+| Session effects | Separate confirmation plus current-state validation |
+| Session concurrency | One active turn per session; automation continues unless explicit scoped hold |
 | Allocation | Coordinator decision classes are explicit endpoint roles with reserves |
 | Failure | Pause/escalate rather than guess, coerce, or downgrade |
 | Legacy | No adopt, fallback, or mixed coordinator authority |

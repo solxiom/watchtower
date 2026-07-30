@@ -393,7 +393,7 @@ Proposed model:
 The watcher remains the persistent session-owner. The coordinator becomes a
 series of stateless decision invocations, each one brief and tier-matched.
 
-### 3.7 Operator conversation separation
+### 3.7 Operator session separation
 
 Operator mid-work conversations (questions, escalations, batch reordering) should
 spawn a separate coordinator session from the active decision cycle:
@@ -405,7 +405,7 @@ spawn a separate coordinator session from the active decision cycle:
 - Operator context is limited to the current lane status, active batch, recent
   event history (last 5 events), and tracker summary — not full lane history.
 
-This prevents operator conversations from inflating the context of the next
+This prevents operator sessions from inflating the context of the next
 automated decision cycle.
 
 ## 4. Coordinator prompt architecture
@@ -635,7 +635,7 @@ writers.
    expensive. Should there be a "persistent Tier 1 session" that handles
    multiple consecutive cheap cycles before exiting?
 
-2. **Operator conversation routing**: Should the operator be able to "talk to"
+2. **Operator session routing**: Should the operator be able to "talk to"
    a specific tier, or should all operator messages route through a default
    tier with the ability to escalate? A Tier 3 session handling "what's the
    status of batch 14?" is wasteful.
@@ -706,7 +706,7 @@ create acceptance commits."
 This discussion extends that boundary: the things Watchtower *should* do
 mechanically (event polling, batch graph traversal, state file I/O, session
 checks) and the things that genuinely require an agent (reject classification,
-multi-repo acceptance reasoning, operator conversation).
+multi-repo acceptance reasoning, operator session).
 
 ### architecture.md
 

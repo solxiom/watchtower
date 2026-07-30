@@ -214,10 +214,12 @@ Scope:
 - prepare/attempt/verify journals for tmux launch and Git publication;
 - short-lived decision-agent invocation;
 - coordinator queue, cursor, usage, status, explain, and durable events;
-- bounded operator `ask`/`chat`, conversation lifecycle/history/indexes,
-  per-turn routing, retention, and budget accounting;
-- advisory conversation proposals with separate confirmation/revalidation;
-- explicit scoped expiring holds and non-blocking conversation concurrency;
+- bounded operator `ask` plus polished `session` attachments, session
+  lifecycle/history/indexes, per-turn routing, retention, and budget
+  accounting;
+- many operator sessions per lane with one active turn per session;
+- advisory session proposals with separate confirmation/revalidation;
+- explicit scoped expiring holds and non-blocking session concurrency;
 - `wt coordinator`, `wt events`, and `wt batch ready` commands; and
 - non-mutating shadow/replay fixtures before active effects.
 
@@ -235,8 +237,10 @@ Key proof:
 - 30/300/3,000/10,000-batch fixtures keep routine envelope size bounded after
   indexing; and
 - stale/missing/corrupt indexes pause cycles instead of scanning pack prose;
-- long multi-turn conversation remains bounded, does not hold the lane mutation
-  lock, and cannot mutate state without confirmed revalidation.
+- long multi-turn operator sessions remain bounded, do not hold the lane
+  mutation lock, and cannot mutate state without confirmed revalidation; and
+- foreground attachments survive resume/detach, same-session contention,
+  streaming validation, and accessible terminal fixtures.
 
 Dependencies: M1 read projections, M2 runtime/knowledge policy, M3 managed lane,
 and M4 watcher operation. May be developed in shadow fixtures alongside M5.
@@ -255,8 +259,9 @@ Scope:
 - proof that copied-template lanes remain outside discovery and mutation;
 - one implementer → reviewer → accept cycle;
 - one M0 dispatch, D2 reject/correction cycle, and partial-publication recovery;
-- one multi-turn operator conversation spanning M0/D2/D3 turns, concurrent
-  automated state change, a stale advisory response, and confirmed proposal;
+- multiple operator sessions for one lane, including one spanning M0/D2/D3
+  turns, concurrent automated state change, a stale advisory response, and a
+  confirmed proposal;
 - large-pack proof that routine coordinator model input does not scale with
   unrelated pack size;
 - command/help/spec consistency audit;

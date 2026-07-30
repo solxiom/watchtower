@@ -5,6 +5,8 @@ Started: 2026-07-30
 Resolved: 2026-07-30
 Related:
 
+- `docs/spec/operator-session-draft.md`
+- `docs/spec/cli-session-draft.md`
 - `docs/spec/coordinator-automation-draft.md` §§ 5, 15, 19
 - `docs/spec/v1-draft.md` §§ 5, 10–11
 - `docs/spec/discussions/coordinator-cost-and-automation.md` §§ 1.4, 3.7
@@ -12,12 +14,14 @@ Related:
 ## Resolution
 
 Accepted with corrections in
-[`../operator-conversation-draft.md`](../operator-conversation-draft.md) as
+[`../operator-session-draft.md`](../operator-session-draft.md) as
 required Watchtower v1 behavior.
 
-The resolution keeps first-class durable multi-turn conversations, M0 answers,
+The resolution keeps first-class durable multi-turn interaction, M0 answers,
 per-turn D1–D3 routing, bounded memory, journaling, budgets, terminal CLI UX,
-allocation reserves, and escalation conversations. It changes the proposal in
+allocation reserves, and escalation entrypoints. The durable object is now
+called an **operator session**; one lane may have many, and its polished
+foreground process is an ephemeral **attachment**. It changes the proposal in
 these important ways:
 
 - conversation turns are advisory and never mutate lane state directly;
@@ -35,8 +39,9 @@ these important ways:
 - safety escalation creates an attention thread/hold even when no D3 model is
   available.
 
-The remaining sections preserve the original proposal and evidence. Where they
-conflict with this resolution, the normative operator-conversation draft wins.
+The remaining sections preserve the original proposal, evidence, and earlier
+`conversation` command/path vocabulary. Where they conflict with this
+resolution, the normative operator-session and CLI-session drafts win.
 
 ## 1. Problem statement
 
@@ -46,7 +51,7 @@ decision envelopes, typed proposals, validated effects, and append-only
 journals. But the operator interaction model is a stub.
 
 Section 15 of `coordinator-automation-draft.md` is four paragraphs. It states
-that operator conversation "uses a separate short-lived cycle and never joins
+that operator session "uses a separate short-lived cycle and never joins
 the next automated coordinator context." It says operator requests are
 classified before model invocation and that safety escalation may interrupt
 routine routing. It offers `wt coordinator escalate` as the sole operator-
@@ -79,7 +84,7 @@ trapped behind an escalation event that was designed for emergencies.
 
 ### 1.2 "Conversation" vs "cycle" mismatch
 
-The spec says the operator conversation is "a separate short-lived cycle." But
+The spec says the operator session is "a separate short-lived cycle." But
 a conversation is multi-turn by definition. Consider a realistic exchange:
 
 ```
@@ -139,7 +144,7 @@ rule, endpoint, proposal, validation, effect, and outcome are all captured.
 An operator can run `wt coordinator explain --cycle=<id>` and see exactly what
 happened.
 
-Operator conversations have no equivalent journal. There is no event type for
+Operator sessions have no equivalent journal. There is no event type for
 "operator asked a question," "coordinator answered," "operator requested
 reprioritization," or "conversation closed." The `escalate` command records an
 event, but escalation is one specific kind of operator communication — not
@@ -160,7 +165,7 @@ Automated cycles have defined budgets per decision class:
 | D2 | 32K tokens | 64K tokens |
 | D3 | 96K tokens | 192K tokens |
 
-Operator conversations have no budget. A long discussion about batch strategy
+Operator sessions have no budget. A long discussion about batch strategy
 could consume more tokens than a D3 complex-judgment cycle, but there's no
 admitted limit, no endpoint reserved for conversation, and no way to know when
 the conversation is getting expensive.
@@ -218,7 +223,7 @@ The spec does not describe:
 - Whether a conversation can be paused and resumed.
 - Whether multiple concurrent conversations are permitted.
 - Whether conversations time out.
-- Whether operator conversation history persists between CLI invocations.
+- Whether operator session history persists between CLI invocations.
 - What the operator sees — does the coordinator's response stream in real time
   or appear all at once? Are token counts visible? Can the operator interrupt
   the coordinator mid-response?
@@ -262,7 +267,7 @@ language channel. They escalate or they accept the opacity.
 
 ## 2. Requirements
 
-A credible operator conversation model must satisfy these requirements:
+A credible operator session model must satisfy these requirements:
 
 ### 2.1 Conversation command
 
@@ -636,7 +641,7 @@ CLI (M0):
   3. Check: is there an active mutating cycle? If yes, warn
   4. Load conversation context window (empty — new conversation)
   5. Load brokered context: B14 brief summary + tracker status + latest events
-  6. Build decision envelope (D2 class, operator-conversation trigger)
+  6. Build decision envelope (D2 class, operator-session trigger)
   7. Verify envelope fits turn budget
   8. Create conversation directory and identity
   9. Invoke D2 endpoint with envelope
@@ -729,12 +734,12 @@ dimensions.
 
 ### 3.10 Conversation budget in allocation planning
 
-When the full allocation-planning system is active, operator conversation
+When the full allocation-planning system is active, operator session
 endpoints are separate allocation slots:
 
-- `coordinator:operator-conversation:D1` — lightweight operator Q&A
-- `coordinator:operator-conversation:D2` — tactical discussion
-- `coordinator:operator-conversation:D3` — strategic/emergency conversation
+- `coordinator:operator-session:D1` — lightweight operator Q&A
+- `coordinator:operator-session:D2` — tactical discussion
+- `coordinator:operator-session:D3` — strategic/emergency conversation
 
 Reserves cover expected conversation load. An operator who runs out of
 conversation budget can explicitly override (audited) or wait for the next
@@ -786,7 +791,7 @@ Additional conversation events in `coordinator/journal/coordinator-events.jsonl`
 
 | Event | Meaning |
 |-------|---------|
-| `conversation-opened` | New operator conversation created |
+| `conversation-opened` | New operator session created |
 | `conversation-operator-message` | Operator turn recorded |
 | `conversation-coordinator-response` | Coordinator turn recorded |
 | `conversation-compacted` | Operator requested and received context compaction |
@@ -803,11 +808,11 @@ and token counts.
 ### 4.1 Operator talks directly to the long-running coordinator session
 
 Rejected. This is the model the whole coordinator-automation spec was designed
-to replace. One session accumulating all operator conversation + all automated
+to replace. One provider session accumulating all operator interaction and automated
 decisions produces unbounded context and requires a lane-lifetime frontier
 session.
 
-### 4.2 No operator conversation — just read-only commands and escalation
+### 4.2 No operator session — just read-only commands and escalation
 
 Rejected. Operators need to discuss strategy, question decisions, and explore
 what-ifs with the coordinator. Removing this path forces the operator to make
@@ -857,7 +862,7 @@ The `wt coordinator` command group would expand from `index|status|context|expla
 
 ### allocation-planning-draft.md
 
-Operator conversation endpoints become allocation slots with reserved budget.
+Operator session endpoints become allocation slots with reserved budget.
 The `coordinator-routing.json` v1 file adds conversation-specific budget
 parameters.
 

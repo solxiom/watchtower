@@ -68,7 +68,8 @@ Initiative
         ├── AllocationPlan [implementation lanes, 0..n revisions]
         ├── RuntimeBinding
         ├── CoordinatorCycle [0..n, append-only journal]
-        ├── OperatorConversation [0..n, bounded turn journal]
+        ├── OperatorSession [0..n, bounded turn journal]
+        │     └── SessionAttachment [0..n, ephemeral foreground client]
         ├── WorkerSession [0..n]
         └── WorkerEvent [append-only]
 
@@ -139,8 +140,8 @@ remains deferred.
 | Is the proposal legal now? | Knowledge policy plus Watchtower validator |
 | Who commits the bounded effect? | Single Watchtower effect executor |
 | What coordinator lookup data is valid? | Derived pack index matching the accepted `packSealId` |
-| What did an operator conversation say? | Retained append-only full-text turn journal |
-| Does conversation advice change the lane? | No; only separately confirmed/revalidated proposals may reach the effect executor |
+| What did an operator session say? | Retained append-only full-text turn journal |
+| Does operator-session advice change the lane? | No; only separately confirmed/revalidated proposals may reach the effect executor |
 
 Watchtower can detect contradictions between authorities. It must not resolve a
 coordinator-policy contradiction by silently editing lane state.
@@ -276,10 +277,12 @@ The v1 decision plane is defined in
 | `CoordinatorEffectPlanner` | Convert a valid proposal into bounded previewable effects |
 | `CoordinatorEffectExecutor` | Apply one idempotent effect plan and journal external attempts |
 | `CoordinatorProjection` | Derive ready set, lane, batch, and publication read models |
-| `OperatorConversationManager` | Own conversation identity, lifecycle, turns, retention, and forks |
+| `OperatorSessionManager` | Own operator-session identity, lifecycle, turns, retention, and forks |
 | `OperatorReferenceResolver` | Resolve exact lane/turn references conservatively through indexes |
-| `ConversationMemoryIndex` | Provide bounded recent/pinned/linked turn working sets |
-| `ConversationHoldStore` | Manage explicit scoped expiring blocks on future effects |
+| `OperatorSessionMemoryIndex` | Provide bounded recent/pinned/linked turn working sets |
+| `OperatorSessionAttachment` | Bind a foreground terminal to one session and translate input/presentation events |
+| `OperatorSessionRenderer` | Render typed presentation events accessibly without owning product behavior |
+| `ScopedHoldStore` | Manage explicit scoped expiring blocks on future effects |
 
 The router may derive a uniquely preauthorized M0 transition, but it does not
 encode semantic reject, scope, or reconciliation judgment. Decision agents
@@ -339,7 +342,7 @@ identities never enter the committed pack.
 
 The v1 `coordinator/` subtree contains routing/context policy, bounded cycle
 artifacts, deterministic pack indexes, append-only decision/effect journals,
-generated projections, operator conversations, and scoped holds. Committed
+generated projections, operator sessions, and scoped holds. Committed
 tracker prose remains project-owned; mechanical coordination updates the local
 projection rather than arbitrary Markdown.
 
@@ -409,7 +412,7 @@ durable trigger
 Only the effect executor mutates authoritative lane state. External tmux/Git
 effects use idempotent prepare/attempt/verify journals.
 
-### 6.5 Operator conversation turn
+### 6.5 Operator session turn
 
 ```text
 append operator message
@@ -421,8 +424,11 @@ append operator message
   → optional proposal awaits separate confirmation/revalidation
 ```
 
-No lane mutation lock is held while a conversation endpoint runs. Automation
-continues unless an explicit scoped hold blocks the relevant future effect.
+No lane mutation lock is held while an operator-session endpoint runs.
+Attachments are foreground presentation clients and hold neither lane authority
+nor provider memory. Automation continues unless an explicit scoped hold blocks
+the relevant future effect. Their terminal and presentation-event contract is
+defined in [cli-session-draft.md](cli-session-draft.md).
 
 ## 7. State evolution
 
@@ -562,7 +568,7 @@ Keep sanitized fixtures representing:
 - a large 30-batch Watchtower lane modeled on sanitized SQL-backends behavior;
 - synthetic 300, 3,000, and 10,000-batch packs with a fixed affected
   dependency neighborhood;
-- long bounded conversations with old-turn lookup, compaction, pruning, and
+- long bounded operator sessions with old-turn lookup, compaction, pruning, and
   lane-state changes during responses;
 - a non-Watchtower copied-template directory that discovery must ignore;
 - an active implement phase;
@@ -598,9 +604,11 @@ details.
 | A-021 | Separate reviewer acceptance from Git publication | Partial publication must not corrupt semantic acceptance |
 | A-022 | Compile deterministic local indexes tied to the pack seal | Routine coordinator cost must not scale with unrelated pack prose |
 | A-023 | Block on stale index instead of full-pack fallback | Predictable cost and correctness are safer than opportunistic context inflation |
-| A-024 | Model operator conversation as durable bounded advisory turns | Multi-turn continuity is necessary but must not restore cumulative sessions |
-| A-025 | Separate conversation from mutation and lane locking | Model latency must not block automation or bypass the sole effect authority |
+| A-024 | Model operator session as durable bounded advisory turns | Multi-turn continuity is necessary but must not restore cumulative sessions |
+| A-025 | Separate operator sessions from mutation and lane locking | Model latency must not block automation or bypass the sole effect authority |
 | A-026 | Pause automation only through explicit scoped holds | Discussion alone must not create hidden scheduling state |
+| A-027 | Allow many operator sessions per lane and distinguish them from UI attachments | Focus and continuity must not imply one lane-wide chat or persistent process |
+| A-028 | Drive the terminal through typed presentation events | A polished UI must reuse shared command/query authority and remain replaceable |
 
 ## 13. Architecture fitness checks
 
@@ -623,11 +631,14 @@ Every implementation change should preserve these properties:
   implementation pack;
 - every pack index is derived, model-free, reproducible, and matched to the
   active seal;
-- conversation continuity derives from bounded local journals/indexes, not
+- operator-session continuity derives from bounded local journals/indexes, not
   hidden provider history;
-- no conversation response generation holds the lane mutation lock;
-- conversation advice has no effect until separately confirmed and
+- no operator-session response generation or attachment holds the lane mutation
+  lock;
+- operator-session advice has no effect until separately confirmed and
   revalidated;
+- one lane may have many operator sessions, while each session permits at most
+  one active turn and every attachment is ephemeral;
 - every lane has one authoritative control home and stable `laneId`;
 - committed packs refer to logical repository IDs, never machine paths;
 - concurrent writable lane bindings are conflict-checked;
