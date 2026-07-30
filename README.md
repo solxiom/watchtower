@@ -1,38 +1,100 @@
-# watchtower
+# Watchtower
 
-A Nirvana-based CLI project.
+**Watchtower** (`wt`) is a CLI for managing **implementation lanes** —
+multi-batch agent workflows with tmux implementers, reviewers, coordinators, and lane state.
 
-## Getting started
+It replaces the copy-into-project bootstrap model used by
+[implementation-lane-coordinator](https://github.com/kavan/implementation-lane-coordinator)
+with a **global tool + per-project lane runtime**:
+
+- install `wt` once on your machine
+- run `wt init` inside any implementation repo
+- operate lanes with `wt watch`, `wt status`, `wt upgrade`, and related commands
+
+The lane coordinator **agent** (Codex, Cursor, etc.) still owns batch decisions.
+Watchtower is the **operator CLI** — init, discovery, packaging, upgrades, and script orchestration.
+
+## Status
+
+Early development. The scaffold comes from `nira init:cli`; product commands and lane
+integration are spec-driven work in progress.
+
+See [docs/spec/v1-draft.md](docs/spec/v1-draft.md) for the current design draft.
+
+## Quick start (development)
 
 ```sh
+git clone <repo-url> ~/Projects/watchtower
+cd ~/Projects/watchtower
 npm install
 nvb build
 nvb test
 ```
 
-## Run the CLI
+Run locally after build:
 
 ```sh
-node build/bin/wt.js hello
+node build/src/cli.js hello
+node build/src/cli.js help
 ```
 
-## Development
+Package and install globally:
 
-| Command       | Description                          |
-|---------------|--------------------------------------|
-| `nvb build`   | Compile TypeScript source            |
-| `nvb test`    | Build and run specs                  |
-| `nvb clean`   | Remove build output                  |
-
-## Project structure
-
+```sh
+nvb dist
+npm install -g ./dist
+wt help
 ```
-bin/          Executable entry script
-src/          TypeScript source
-  cli.ts      Outer CLI host entrypoint
-  run.ts      CLI runtime entrypoint
-  commands/   Command modules
-  contracts/  Shared type contracts
-help/         Help asset fragments
-spec/         Jasmine specs
+
+## Project layout
+
+```text
+bin/wt.js              npm bin shim → dist/src/cli.js
+src/
+  cli.ts               thin outer host
+  run.ts               CLI runtime (makeCLI)
+  commands/            wt subcommands (BaseCommand)
+  foundation/          shared internals (discovery, paths, lane IO)
+  contracts/           public types
+help/                  static help fragments
+runtime-nvb/           NVB tasks shipped inside dist/
+config/                default JSON5 config
+docs/spec/             product specification
+spec/                  Jasmine tests
+nvb.json               build / test / dist pipeline
+nira.json              Nira CLI project marker
 ```
+
+## Build commands
+
+| Command     | Description                          |
+|-------------|--------------------------------------|
+| `nvb build` | Compile TypeScript → `build/`        |
+| `nvb test`  | Build specs and run Jasmine          |
+| `nvb clean` | Remove `build/`                      |
+| `nvb dist`  | Produce self-contained package in `dist/` |
+
+Use **nvb** for this repo's own build loop. You do not need `nira build` when working
+inside watchtower unless you explicitly want Nira lifecycle forwarding.
+
+## Relationship to implementation-lane-coordinator
+
+| implementation-lane-coordinator | watchtower |
+|---------------------------------|------------|
+| Template copied into `.local/.../coordinator/` | Global CLI + minimal per-lane materialization |
+| `./bin/init-lane.sh <workspace> ...` | `wt init <lane-slug> ...` (planned) |
+| Scripts live in each project | Canonical scripts bundled with `wt` install |
+| Docs/playbook in template repo | Shipped with watchtower; referenced by lane config |
+
+Watchtower will absorb and evolve the coordinator shell runtime. The coordinator **skill**
+and decision rules remain portable agent instructions; watchtower owns **installation,
+paths, upgrades, and operator commands**.
+
+## Read first
+
+1. [docs/spec/v1-draft.md](docs/spec/v1-draft.md) — product spec (draft)
+2. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
+
+## License
+
+See LICENSE.txt (when present).
