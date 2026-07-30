@@ -17,7 +17,8 @@ For Watchtower v1, conflicts are resolved in this order:
 
 1. this contract-closure document and its schema bundle;
 2. [v1.md](v1.md);
-3. [coordinator-automation.md](coordinator-automation.md),
+3. [nirvana-integration-architecture.md](nirvana-integration-architecture.md),
+   [coordinator-automation.md](coordinator-automation.md),
    [operator-session.md](operator-session.md), and
    [cli-session.md](cli-session.md), within their stated scopes;
 4. [architecture.md](architecture.md); and
@@ -402,8 +403,8 @@ content.
 ### 8A.2 Storage abstraction
 
 Foundation services consume typed `PackIndexStore`, `RuntimeProjectionStore`,
-and `SessionIndexStore` interfaces. Commands, coordinator policy, adapters,
-and the shell runtime never open a database or issue SQL directly. V1 supplies
+and `SessionIndexStore` interfaces. Commands, coordinator policy, TaskHandlers,
+and shell leaf adapters never open a database or issue SQL directly. V1 supplies
 one SQLite implementation; arbitrary SQL, extension loading, user SQL hooks,
 and database paths from project configuration are forbidden.
 

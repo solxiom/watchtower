@@ -113,7 +113,7 @@ creates recovery work but does not revoke a valid reviewer acceptance.
 
 ### 5.1 Mechanical work
 
-Watchtower or the shell runtime performs:
+Watchtower application services or the lane-pinned NVB task runtime performs:
 
 - cursor-based worker-event polling and schema validation;
 - heartbeat and tmux session observation;
@@ -390,7 +390,7 @@ with their source digest. Large prose remains at its canonical path.
 The v1 physical representation is the typed lane-local SQLite storage boundary
 defined in [v1-contracts.md §8A](v1-contracts.md#8a-derived-sqlite-storage-contract).
 Pack, runtime, and session databases are disposable derived stores. Commands,
-agents, policy, and shell scripts never issue SQL directly; they use bounded
+agents, policy, TaskHandlers, and shell leaf adapters never issue SQL directly; they use bounded
 typed foundation queries. A monolithic JSON file, ad hoc SQL escape hatch, or
 database-only authority is not conforming.
 

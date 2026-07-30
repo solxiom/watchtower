@@ -37,6 +37,7 @@ Deliverables:
 
 - v1 product specification;
 - architecture baseline;
+- Nirvana facade and packaged NVB execution architecture;
 - roadmap;
 - v1 coordinator-automation contract;
 - new-lane fixture requirements and runtime/knowledge asset-inventory
@@ -99,10 +100,14 @@ Scope:
 - import the canonical coordinator runtime;
 - close the current template copy-manifest omissions;
 - runtime and knowledge manifests;
+- immutable NVB task catalog and lane-pinned task profiles;
 - checksum and executable-mode validation;
 - `nvb dist` staging tasks;
 - XDG runtime catalog and immutable staging;
-- runtime invocation adapter and `WT_*` contract;
+- `LaneTaskRunner`, structured NVB event/result mapping, and `WT_*`
+  environment/signal contract;
+- shell-runtime audit into TaskHandlers, retained leaf adapters, temporary
+  wrappers, and removals;
 - conforming embedded-SQLite driver distribution/global-install proof;
 - managed `bin/` link strategy;
 - removal of hardcoded `.local/agent-reports` assumptions;

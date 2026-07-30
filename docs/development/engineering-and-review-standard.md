@@ -3,7 +3,7 @@
 Status: **Mandatory project-wide acceptance policy**
 
 This standard applies to every current and future Watchtower change: TypeScript,
-shell runtime, NVB tasks, tests, schemas, templates, generated source, and
+NVB task runtime, shell leaves, tests, schemas, templates, generated source, and
 documentation. Working behavior is necessary but insufficient. A change is not
 acceptable when it introduces structural debt, bypasses Nirvana capabilities,
 weakens an authority boundary, or makes the system materially harder to test
@@ -48,10 +48,10 @@ Nirvana release.
 | `src/contracts/` | Types, schemas, reason codes, errors, public envelopes | I/O, rendering, orchestration |
 | `src/foundation/` | Capability-oriented application services, parsers, planners, validators, ports and adapters | Unrelated helper collections or terminal presentation |
 | presentation modules | Human and JSON rendering from typed results | Discovery, mutation, policy decisions |
-| runtime adapter | The single TypeScript-to-versioned-runtime boundary | Semantic coordinator judgment |
+| lane task runner | The single application-to-packaged-NVB boundary | Lane selection, policy, arbitrary task names, semantic judgment |
 | SQLite stores | Derived projections, sessions, cache metadata behind explicit interfaces | Authoritative product state or business policy |
-| `runtime-nvb/` | Build, distribution, migration, and packaged automation tasks | Interactive command behavior |
-| versioned shell runtime | tmux, Git, watcher, launcher, journal, and bounded effects | Unvalidated model authority |
+| `runtime-nvb/` | Immutable task catalog, focused TaskHandlers, deterministic workflow composition | Public command behavior or alternate effect authority |
+| leaf runtime adapters | Bounded tmux, Git, external-agent, and compatibility integration | Workflow orchestration, policy, arbitrary shell |
 
 Dependencies point inward. Commands depend on contracts and focused foundation
 capabilities. Foundation code depends on contracts and explicit infrastructure
@@ -78,7 +78,8 @@ Nirvana packages and a comparable Nira call site. The default choices are:
 | Assertions and guards | `X` |
 | Collection/cursor behavior | Nirvana collection and cursor abstractions |
 | Storage/disk behavior | Nirvana storage and disk facades where their semantics fit |
-| Build and distribution | NVB tasks and handlers |
+| Task execution | `@nirvana/commons` NVB facade and typed run events/results |
+| Build, distribution, mechanical workflow | NVB tasks, groups, and focused `TaskHandler` classes |
 | Reusable services | Existing commons/framework services before local reinvention |
 
 Every non-trivial implementation and review report must contain a
@@ -111,6 +112,27 @@ available Nirvana API.
   typed results or throw typed errors.
 - Import an SQLite driver or issue SQL only inside the three specification-owned
   derived stores and their migrations.
+
+### 3.2 Required facade boundaries
+
+Detailed ownership follows
+[`nirvana-integration-architecture.md`](../spec/nirvana-integration-architecture.md):
+
+- Commands use Nirvana CLI and presentation APIs but do not import storage,
+  logger, NVB, SQL, or subprocess capabilities.
+- Foundation services depend on narrow injected ports, not global facades.
+- A storage adapter uses Nirvana storage for ordinary managed-root operations.
+  Durable atomic writes, locks, append journals, canonical path security, and
+  SQLite remain named adapters where the facade lacks required semantics.
+- A logger adapter owns Nirvana logger configuration and redaction. Logger
+  output is diagnostic, never presentation or authoritative state.
+- `LaneTaskRunner` is the only internal NVB invocation boundary. It targets the
+  checksum-verified packaged Watchtower config/module and accepts only
+  allowlisted task IDs.
+- Substantial deterministic workflows use packaged TaskHandlers/task groups.
+  Shell is restricted to cataloged leaf integrations.
+- Watchtower never creates, edits, or discovers tasks from a participating
+  project's root `nvb.json`.
 
 ## 4. Module and function size limits
 
@@ -263,6 +285,8 @@ The source architecture suite must fail builds for:
 - invalid naming and foreign API re-exports;
 - forbidden dependency direction or cycles;
 - product logic accumulating in `src/cli.ts` or `src/run.ts`;
+- direct NVB invocation outside `LaneTaskRunner`, project-root Watchtower task
+  definitions, arbitrary task selection, or workflow-level shell scripts;
 - newly added lifecycle npm scripts; and
 - committed `build/`, `dist/`, `node_modules/`, `.nira/local/`, or
   `.watchtower/` artifacts.
@@ -278,10 +302,11 @@ Review in this order:
 1. specification scope and authority;
 2. layer ownership and dependency direction;
 3. Nirvana API usage audit;
-4. module responsibilities, sizes, names, and public surfaces;
-5. correctness, failure behavior, security, and authority boundaries;
-6. test quality and required build/dist proof;
-7. help, schemas, examples, and specification synchronization.
+4. NVB catalog/profile integrity and facade/shell boundaries;
+5. module responsibilities, sizes, names, and public surfaces;
+6. correctness, failure behavior, security, and authority boundaries;
+7. test quality and required build/dist proof;
+8. help, schemas, examples, and specification synchronization.
 
 Every review report must include this matrix with evidence:
 
@@ -290,6 +315,7 @@ Every review report must include this matrix with evidence:
 | Specification and batch scope | PASS / FAIL |
 | Layering and responsibilities | PASS / FAIL |
 | Nirvana-first API use | PASS / FAIL |
+| NVB task-runtime and facade boundaries | PASS / FAIL |
 | Size and complexity limits | PASS / FAIL |
 | Contracts and failure behavior | PASS / FAIL |
 | State/effect/security boundaries | PASS / FAIL |
@@ -328,9 +354,13 @@ Reject the batch when it contains any of the following:
 13. new npm lifecycle/script orchestration instead of NVB;
 14. a promise to “refactor later” for debt introduced by the current batch;
 15. missing required review evidence, including the Nirvana audit and size
-    report; or
+    report;
 16. any weakening of reviewer independence, proposal validation, lock rules, or
-    the single effect-execution authority.
+    the single effect-execution authority;
+17. project-root/user-editable Watchtower tasks, arbitrary NVB task selection,
+    or direct NVB invocation outside `LaneTaskRunner`; or
+18. workflow orchestration implemented in shell instead of focused TaskHandlers
+    and an NVB task group.
 
 ## 13. Definition of done
 

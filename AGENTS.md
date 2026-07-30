@@ -5,7 +5,8 @@ implementation lanes (multi-batch agent workflows).
 
 Read this file first, then the specification at `docs/spec/v1.md` and the
 mandatory engineering/review policy at
-`docs/development/engineering-and-review-standard.md`.
+`docs/development/engineering-and-review-standard.md`. Runtime and facade
+choices follow `docs/spec/nirvana-integration-architecture.md`.
 
 ## Mission
 
@@ -13,7 +14,7 @@ Build a **global CLI** that:
 
 1. Initializes lane runtime in target projects without copying the full template tree
 2. Discovers active lanes from the current working directory
-3. Bundles coordinator shell scripts, docs references, and upgrade paths
+3. Bundles the NVB task runtime, audited leaf executables, docs references, and upgrade paths
 4. Exposes operator commands (`init`, `watch`, `status`, `upgrade`, …)
 5. Routes mechanical coordinator work without models and validates bounded
    decision-agent proposals before applying effects
@@ -31,17 +32,24 @@ or holds the lane mutation lock during model generation. Apply session
 proposals only through explicit confirmation, current-state validation, and the
 normal effect executor.
 
-## Architecture (two layers)
+## Architecture
 
 ```text
-wt (TypeScript CLI)     commands, discovery, decision routing/validation
-        │
-        ▼ invokes bounded actions
-lane runtime (shell)    watcher, launchers, effect journals, state projections
-        │
-        ▼ invokes short-lived cycles
-tmux/CLI agents         implementers, reviewers, coordinator decision agents
+wt CLI                   selection, policy, validation, planning, presentation
+  │
+  ▼ invokes allowlisted internal actions
+lane task runtime        immutable packaged NVB catalog + focused TaskHandlers
+  │
+  ▼ invokes bounded capabilities
+Nirvana/leaf adapters    storage, logger, cmd, durable stores, tmux/Git/agent leafs
+  │
+  ▼
+tmux/CLI agents          implementers, reviewers, coordinator decision agents
 ```
+
+The effective task profile is pinned per lane. Watchtower never modifies a
+participating repository's root `nvb.json`; workflow-level shell scripts are
+rejected in favor of NVB task composition.
 
 ## Repo layout conventions
 
@@ -51,7 +59,7 @@ tmux/CLI agents         implementers, reviewers, coordinator decision agents
 | `src/foundation/` | Discovery, path resolution, lane config IO, script delegation |
 | `src/contracts/` | Public types shared across commands |
 | `help/commands/` | Help fragment per command |
-| `runtime-nvb/` | NVB handlers/tasks shipped in `dist/` (heavy automation) |
+| `runtime-nvb/` | Immutable internal NVB task catalog and focused handlers shipped in `dist/` |
 | `docs/spec/` | Normative product spec (update when behavior changes) |
 
 **Do not** put product logic in `src/cli.ts` — it stays a thin host. Command behavior
@@ -112,8 +120,11 @@ index.
   `.watchtower/`
 - **Keep specs in sync** — update `docs/spec/v1.md` when adding or changing commands
 - **Prefer foundation modules** over duplicating path/discovery logic in commands
-- **Delegate to shell scripts** for tmux/lane operations until TypeScript rewrites are justified
+- **Use packaged NVB tasks** for substantial deterministic workflows; retain
+  shell only as an audited leaf adapter where no conforming Nirvana API exists
 - **Match Nirvana CLI patterns** — `@nirvana/base/cli`, NVB for build/dist, colon tasks in runtime-nvb
+- **Never edit project NVB config** — lane task profiles select only from the
+  checksum-verified Watchtower runtime catalog
 - **Use Nirvana first** — inspect pinned Nirvana packages and comparable Nira
   usage before using bare Node APIs or implementing infrastructure locally
 - **Reject structural debt** — working behavior does not excuse god objects,

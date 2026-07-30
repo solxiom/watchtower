@@ -9,6 +9,9 @@ Last updated: 2026-07-30
 Exact v1 precedence and executable contracts live in
 [v1-contracts.md](v1-contracts.md). Post-v1 pack-design and allocation-planning
 drafts do not add states or commands to the v1 implementation-lane lifecycle.
+Nirvana facade ownership, the packaged NVB task runtime, lane task profiles,
+and the remaining shell-leaf boundary are normative in
+[nirvana-integration-architecture.md](nirvana-integration-architecture.md).
 
 Watchtower should become the common local control plane for agile,
 agent-assisted development without becoming an agent framework or hiding
@@ -16,7 +19,7 @@ project truth in a proprietary database. V1 uses embedded SQLite only for
 disposable lane-local indexes and projections whose authority remains in
 sealed packs and append-only files.
 
-The architecture is built around seven separations:
+The architecture is built around eight separations:
 
 1. **Project intent vs local execution** — specs and implementation packs are
    committed; tmux state and reports stay local.
@@ -33,6 +36,9 @@ The architecture is built around seven separations:
    accounts, users, and capacity.
 7. **Agent judgment vs effect authority** — coordinator agents propose typed
    decisions; Watchtower validates and applies bounded effects.
+8. **Product policy vs mechanical task execution** — application services
+   authorize typed actions; a pinned NVB task profile coordinates mechanics,
+   and shell remains only a bounded leaf adapter.
 
 ## 2. Context
 
@@ -48,8 +54,8 @@ The architecture is built around seven separations:
 └──────────────┬──────────────────────────────┬───────────────┘
                │ invoke                       │ install/reference
 ┌──────────────▼──────────────┐   ┌───────────▼───────────────┐
-│ Versioned runtime          │   │ Versioned knowledge pack  │
-│ shell + tmux + event tools │   │ policy + guides + skill   │
+│ Versioned task runtime     │   │ Versioned knowledge pack  │
+│ NVB handlers + leaf tools  │   │ policy + guides + skill   │
 └──────────────┬──────────────┘   └───────────┬───────────────┘
                │                              │ interpreted by
 ┌──────────────▼──────────────────────────────▼───────────────┐
@@ -191,7 +197,9 @@ Suggested v1 modules:
 | `SessionInspector` | Read-only tmux presence/pane metadata |
 | `RuntimeCatalog` | Validate package and XDG runtime manifests |
 | `RuntimeInstaller` | Stage immutable runtime/knowledge versions |
-| `RuntimeInvoker` | Map supported actions to subprocess invocation context |
+| `LaneTaskCatalog` | Verify the immutable runtime task catalog and lane-pinned profile |
+| `LaneTaskRunner` | Map supported action IDs to structured NVB runs and results |
+| `LeafRuntimeInvoker` | Invoke cataloged tmux/Git/agent compatibility leaves with explicit argv/environment |
 | `LaneInitializer` | Transactional create-once lane materialization |
 | `LaneUpgrader` | Preview/apply schema and managed-asset changes |
 | `LaneDoctor` | Composable diagnostic checks |
@@ -218,20 +226,25 @@ so command specs do not require real tmux or global user-data mutation.
 Types that exist only to implement one foundation module remain private to that
 module.
 
-### 4.5 Runtime adapter
+### 4.5 Lane task runtime and leaf adapter
 
-All script delegation crosses `RuntimeInvoker`. It:
+Substantial deterministic workflow execution crosses `LaneTaskRunner`. It:
 
-1. verifies the action is declared by the runtime manifest;
-2. resolves the selected lane and versioned runtime root;
-3. supplies `WT_*` context;
-4. chooses inherited or captured stdio based on the action;
-5. forwards signals and exit status; and
-6. never invokes a string through an interpolating shell when an argv form is
-   possible.
+1. verifies the action in the immutable runtime task catalog and lane profile;
+2. resolves the checksum-verified packaged NVB config/module;
+3. maps one typed Watchtower action to one allowlisted TaskHandler/task group;
+4. supplies explicit cwd, typed input, environment, stdio, and cancellation
+   behavior;
+5. consumes structured NVB events/results; and
+6. never grants policy or effect authority to NVB.
 
-This boundary lets scripts migrate selectively to TypeScript later without
-changing command contracts.
+`LeafRuntimeInvoker` is used only by focused handlers for cataloged tmux, Git,
+agent CLI, or compatibility executables. It uses argv and a sanitized
+environment, forwards signals/status where required, and never invokes
+interpolated shell text.
+
+The complete contract is
+[nirvana-integration-architecture.md](nirvana-integration-architecture.md).
 
 ### 4.6 Knowledge pack
 
@@ -475,10 +488,10 @@ rebuildable query infrastructure behind foundation interfaces.
 ### 8.1 Deliberate extension points
 
 - lane `kind` in markers and status;
-- runtime action manifest;
+- runtime action/task-catalog manifest and lane task profile;
 - versioned knowledge adapters;
 - stable JSON output;
-- runtime invocation boundary;
+- lane task runner and leaf invocation boundaries;
 - pack validators that can be added without owning project prose.
 
 ### 8.2 Deferred extension points
@@ -642,7 +655,11 @@ Every implementation change should preserve these properties:
 - commands do not duplicate discovery or path construction;
 - read-only commands perform no hidden writes;
 - only manifest-owned paths are upgradeable;
-- runtime invocation is centralized;
+- internal task execution is centralized in `LaneTaskRunner`;
+- the effective lane task profile selects only checksum-verified packaged tasks
+  and never modifies a participating project's NVB config;
+- workflow orchestration lives in focused TaskHandlers/NVB groups, with shell
+  restricted to manifest-declared leaf adapters;
 - package upgrade does not implicitly upgrade a lane;
 - no shell config/state is executed by TypeScript;
 - semantic coordinator decisions remain outside CLI code;
@@ -657,7 +674,7 @@ Every implementation change should preserve these properties:
   active seal;
 - raw SQLite bytes never define semantic identity; canonical logical rows and
   source checkpoints do;
-- commands, agents, policy, and shell scripts cannot issue SQL or treat a
+- commands, agents, policy, TaskHandlers, and shell leaves cannot issue SQL or treat a
   derived database as authority;
 - operator-session continuity derives from bounded local journals/indexes, not
   hidden provider history;

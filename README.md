@@ -29,6 +29,8 @@ Start with the [v1 product specification](docs/spec/v1.md), then read the
 [v1 implementation map](docs/spec/v1-implementation-map.md), and all work is
 governed by the mandatory
 [engineering and review standard](docs/development/engineering-and-review-standard.md).
+The detailed facade, NVB task-runtime, and shell-leaf boundaries are defined in
+the [Nirvana integration architecture](docs/spec/nirvana-integration-architecture.md).
 The proposed multi-architect
 accepted-spec to implementation-pack workflow is defined separately in the
 [pack-design process draft](docs/spec/pack-design-draft.md). The subsequent
@@ -107,9 +109,11 @@ inside watchtower unless you explicitly want Nira lifecycle forwarding.
 | Scripts live in each project | Canonical scripts bundled with `wt` install |
 | Docs/playbook in template repo | Shipped with watchtower; referenced by lane config |
 
-Watchtower will absorb and evolve the coordinator shell runtime. The coordinator **skill**
-and decision rules remain portable agent instructions; watchtower owns **installation,
-paths, upgrades, and operator commands**.
+Watchtower will absorb the coordinator workflow into its packaged NVB task
+runtime while retaining audited shell executables only as leaf integrations.
+The coordinator **skill** and decision rules remain portable agent
+instructions; watchtower owns **installation, paths, upgrades, task execution,
+and operator commands**.
 
 Watchtower starts with new work. Existing copied-template coordinator lanes are
 not discovered, imported, or upgraded; create a new `wt` lane for the next
@@ -127,12 +131,13 @@ reports, events, budgets, and logs stay inside the local lane overlay.
 3. [docs/spec/roadmap.md](docs/spec/roadmap.md) — phased delivery plan
 4. [docs/spec/v1-implementation-map.md](docs/spec/v1-implementation-map.md) — complete v1 work/review batch map
 5. [docs/development/engineering-and-review-standard.md](docs/development/engineering-and-review-standard.md) — mandatory coding and acceptance policy
-6. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
-7. [docs/spec/allocation-planning-draft.md](docs/spec/allocation-planning-draft.md) — pack-to-endpoint allocation process
-8. [docs/spec/coordinator-automation.md](docs/spec/coordinator-automation.md) — v1 decision routing and effect safety
-9. [docs/spec/operator-session.md](docs/spec/operator-session.md) — v1 operator session and confirmed effects
-10. [docs/spec/cli-session.md](docs/spec/cli-session.md) — v1 foreground session attachment and terminal UX
-11. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
+6. [docs/spec/nirvana-integration-architecture.md](docs/spec/nirvana-integration-architecture.md) — facade, NVB task-runtime, and shell-leaf boundaries
+7. [docs/spec/pack-design-draft.md](docs/spec/pack-design-draft.md) — spec-to-pack process
+8. [docs/spec/allocation-planning-draft.md](docs/spec/allocation-planning-draft.md) — pack-to-endpoint allocation process
+9. [docs/spec/coordinator-automation.md](docs/spec/coordinator-automation.md) — v1 decision routing and effect safety
+10. [docs/spec/operator-session.md](docs/spec/operator-session.md) — v1 operator session and confirmed effects
+11. [docs/spec/cli-session.md](docs/spec/cli-session.md) — v1 foreground session attachment and terminal UX
+12. [AGENTS.md](AGENTS.md) — guidance for AI agents working in this repo
 
 ## License
 

@@ -17,6 +17,7 @@ Normative behavior remains in:
 - [v1-contracts.md](v1-contracts.md);
 - [schemas/v1.schema.json](schemas/v1.schema.json);
 - [architecture.md](architecture.md);
+- [nirvana-integration-architecture.md](nirvana-integration-architecture.md);
 - [coordinator-automation.md](coordinator-automation.md);
 - [operator-session.md](operator-session.md); and
 - [cli-session.md](cli-session.md).
@@ -95,7 +96,8 @@ then are removed by `LC-08`.
 | Command orchestration/rendering | `src/commands/` | Duplicated path, parser, or runtime logic |
 | Paths/discovery/config/state | `src/foundation/` | Ad hoc command-local implementations |
 | Shared schemas/types/errors | `src/contracts/` | Untyped command-specific shapes |
-| Shell/tmux/Git effects | Versioned runtime invoked through one adapter | Arbitrary shell escape from commands or agents |
+| Mechanical workflow execution | Immutable packaged NVB catalog invoked through `LaneTaskRunner` | Project-root tasks or arbitrary task selection |
+| Shell/tmux/Git/agent effects | Cataloged leaf adapters invoked by focused TaskHandlers | Workflow-level shell or direct command/agent escape |
 | Coordinator policy | Versioned knowledge pack | Semantic policy restated in TypeScript |
 | Public help | `help/commands/`, `help/help.json` | Undocumented flags implemented only in code |
 | Product acceptance | `spec/` plus end-to-end fixtures | Manual-only claims |
@@ -136,6 +138,8 @@ Every matching review brief must independently verify:
 - no behavior was invented beyond accepted specifications;
 - layer ownership and dependency direction are preserved;
 - the required Nirvana API usage audit proves Nirvana-first implementation;
+- packaged NVB task/catalog/profile and facade boundaries match
+  [nirvana-integration-architecture.md](nirvana-integration-architecture.md);
 - module/function size evidence and architecture gates satisfy the mandatory
   engineering standard;
 - public JSON and errors match the schema/version contract;
@@ -159,6 +163,8 @@ Global hard rejects include:
 - bypassing a suitable Nirvana API without a proven `NIRVANA_API_GAP`;
 - raw subprocess, terminal, filesystem, SQL, or shell behavior outside its
   declared adapter boundary;
+- project-root/user-editable Watchtower tasks, arbitrary NVB task selection,
+  direct NVB invocation outside `LaneTaskRunner`, or workflow-level shell;
 - shell evaluation of lane config or state by TypeScript;
 - full-pack/full-session fallback when an index is unavailable;
 - model use for an M0 operation;
@@ -211,18 +217,18 @@ select, and describe managed lanes without changing any byte.
 
 ## 5. Pack 2 — `wt-runtime-distribution` (M2)
 
-Purpose: turn the inherited shell runtime and coordinator knowledge into a
-complete, immutable, auditable distribution.
+Purpose: turn inherited coordinator behavior into a complete, immutable,
+auditable NVB task runtime, cataloged leaf set, and knowledge distribution.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
-| `RT-01` | Canonical runtime and knowledge asset audit/import | `RM-01` | `runtime/`, `knowledge/`, import record | Source provenance; behavioral inventory; no omitted coordinator action/doc |
-| `RT-02` | Runtime and knowledge manifests | `RT-01` | manifests and validation contracts | Every asset/checksum/mode/action represented; missing/extra file rejection |
-| `RT-03` | NVB distribution staging | `RT-02`, `DB-01` | `runtime-nvb/`, dist configuration | Required dist layout including SQLite driver; executable preservation; reproducible manifest validation |
+| `RT-01` | Canonical runtime/knowledge audit and shell classification | `RM-01` | `runtime/`, `knowledge/`, import record | Source provenance; no omitted action/doc; every script classified as TaskHandler, leaf, temporary wrapper, or removal |
+| `RT-02` | Runtime, knowledge, NVB task-catalog, and lane-profile manifests | `RT-01` | capability catalog fragments, deterministic aggregate task, manifests and validation contracts | Every asset/checksum/mode/action/task/input/result represented; duplicate/stale aggregate rejection; profile cannot add code/tasks; missing/extra rejection |
+| `RT-03` | Packaged NVB task runtime and distribution staging | `RT-02`, `DB-01` | `runtime-nvb/`, TaskHandlers, dist configuration | Public pinned TaskHandler API; structured events/results; required dist including SQLite driver; executable preservation; reproducible validation |
 | `RT-04` | Immutable data-root catalog and staging | `RT-02`, `RM-03` | runtime catalog foundation | XDG precedence; atomic first stage; two versions coexist; immutable version roots |
-| `RT-05` | Central runtime invocation adapter | `RT-04`, `RM-01` | runtime adapter foundation | argv-only execution; `WT_*` allowlist; cwd/account/access validation; signal/exit forwarding |
-| `RT-06` | Managed lane links and compatibility names | `RT-04`, `RT-05` | managed-asset foundation | Manifest-only ownership; link targets/checksums; collision/path-escape refusal |
-| `RT-07` | Packaged watcher and runtime smoke proof | `RT-03`, `RT-05`, `RT-06` | integration fixtures | Relocated package works; wake stdout/signal behavior; worker accounts read but cannot write |
+| `RT-05` | `LaneTaskRunner` and leaf invocation adapter | `RT-03`, `RT-04`, `RM-01` | task/runtime adapters foundation | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
+| `RT-06` | Managed lane links, task profiles, and compatibility names | `RT-04`, `RT-05` | managed-asset/task-profile foundation | Manifest-only ownership; task catalog/profile pin; project `nvb.json` unchanged; link targets/checksums; collision/path-escape refusal |
+| `RT-07` | Packaged watcher and task-runtime smoke proof | `RT-03`, `RT-05`, `RT-06` | integration fixtures | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |
 
 Pack exit: the npm distribution contains one provably complete runtime and
 knowledge version that can be staged and invoked independently of package
@@ -278,10 +284,10 @@ effect authority, and durable bounded operator sessions.
 | `CA-07` | Immutable decision envelopes | `CA-02`–`CA-06` | envelope foundation | Stable semantic digest; bounded default context; untrusted-content delimiting |
 | `CA-08` | Context broker and cycle budgets | `CA-02`, `CA-06`, `CA-07` | broker/usage foundation | Allowlisted queries; provenance/redaction; soft/hard limits; usage quality |
 | `CA-09` | Typed proposals and current-state validator | `CA-05`, `CA-07`, `CA-08` | proposal contracts/validator | Every proposal type; permitted origin/class/effect; stale/illegal/invalid cases |
-| `CA-10` | Atomic lane-local effect executor | `LC-03`, `CA-09` | effect foundation/runtime actions | One authority; lock/revalidation/idempotency; all-or-nothing projections/journals |
-| `CA-11` | Tmux prepare/attempt/verify effect adapter | `RT-05`, `CA-10` | runtime tmux action | Unknown launch recovery; duplicate suppression; no arbitrary kill/shell |
-| `CA-12` | Acceptance and Git publication adapter | `RM-08`, `CA-10` | Git verification/runtime action | Reviewer-session ownership; commit-set validation; partial push recovery |
-| `CA-13` | Coordinator queue, cursor, replay, and watcher integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator runtime | Stable priority; fsynced cursor advance; interrupted/duplicate/uncertain replay |
+| `CA-10` | Atomic lane-local effect executor and invocation envelopes | `LC-03`, `CA-09` | effect foundation/NVB task boundary | One authority; lock/revalidation/idempotency; single-use task envelope; all-or-nothing projections/journals |
+| `CA-11` | Tmux prepare/attempt/verify effect handler | `RT-05`, `CA-10` | focused TaskHandler and tmux leaf | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
+| `CA-12` | Acceptance and Git publication handler | `RM-08`, `CA-10` | focused TaskHandler and Git leaf/verification | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
+| `CA-13` | Coordinator queue, cursor, replay, and watcher task integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator TaskHandlers | Stable priority; fsynced cursor advance; interrupted/duplicate/uncertain replay; no workflow-level shell |
 | `CA-14` | Coordinator, event, and ready-set commands | `CA-01`–`CA-13` | commands/help/rendering | Index/status/context/explain/cycle/escalate/events/ready; dry-run purity |
 | `CA-15` | Operator-session persistence and lifecycle | `CA-03`, `UK-02` | session store/contracts | Many sessions; one active turn each; immutable closed history; crash-safe journals |
 | `CA-16` | Session SQLite index, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
@@ -311,7 +317,7 @@ Purpose: qualify the assembled product rather than add features.
 |----|------------|------------|-------------------|----------------|
 | `REL-01` | Fresh-lane implementer→reviewer→accept trial | `LC-08`, `UK-05`, `CA-18` | end-to-end fixture/release evidence | Global install; init; dispatch; handoff; independent accept; publication |
 | `REL-02` | Concurrent and multi-repository recovery trials | `REL-01` | system acceptance fixtures | Two isolated lanes; multi-repo commit set; shared-write refusal; partial push recovery |
-| `REL-03` | Security, ownership, performance, and package qualification | `REL-01`, `REL-02` | release/security/performance evidence | Traversal/config/permission suite; bounded discovery/status; manifest/global install proof |
+| `REL-03` | Security, ownership, performance, and package qualification | `REL-01`, `REL-02` | release/security/performance evidence | Traversal/config/permission suite; bounded discovery/status; task/catalog/profile escape and environment isolation; manifest/global install proof |
 | `REL-04` | Documentation consistency and release gate | `REL-01`–`REL-03` | help/docs/release notes | Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme |
 
 Pack exit: every release criterion in [v1.md §17](v1.md#17-release-acceptance)
