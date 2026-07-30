@@ -13,6 +13,7 @@ Normative product docs for the `wt` CLI.
 | [discussions/lane-directory-path.md](discussions/lane-directory-path.md) | Resolved | `.watchtower/lanes/<slug>/` execution-overlay decision |
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
 | [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |
+| [discussions/operator-coordinator-conversation.md](discussions/operator-coordinator-conversation.md) | Proposed | Multi-turn human-operator conversation model, context inheritance, and conversation journals |
 
 ## Conventions
 
