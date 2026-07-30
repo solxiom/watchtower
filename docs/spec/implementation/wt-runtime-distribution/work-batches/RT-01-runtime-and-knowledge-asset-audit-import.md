@@ -1,5 +1,47 @@
 # Batch RT-01 — Canonical Runtime and Knowledge Asset Audit/Import
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Phase: Asset audit and manifest foundation
 Depends on: RM-01 accepted (Pack 1 — contract kernel and error taxonomy)
@@ -9,7 +51,7 @@ Depends on: RM-01 accepted (Pack 1 — contract kernel and error taxonomy)
 
 ## Objective
 
-Audit and import every inherited shell runtime script and coordinator knowledge
+Audit, classify, and import every inherited shell runtime script and coordinator knowledge
 asset from the `implementation-lane-coordinator` source. Record full provenance.
 Build a complete behavioral inventory covering every coordinator action and doc.
 No asset may be packaged in RT-03 without first appearing in this audit.
@@ -25,6 +67,17 @@ No asset may be packaged in RT-03 without first appearing in this audit.
    - coordinator action(s) the script implements
    - whether the script is a watcher, worker launcher, event writer, tmux
      helper, or other runtime role
+   - inputs, outputs, mutation class, authority assumptions, and external tools
+   - exactly one migration class:
+     `replace-with-task-handler`, `retain-as-leaf`, `temporary-wrapper`, or
+     `remove`
+   - for a temporary wrapper: owning TaskHandler, compatibility reason, removal
+     batch, and expiry
+
+   Workflow, copying, validation, journaling, and projection scripts must be
+   classified for TaskHandler replacement. A retained leaf is limited to
+   bounded tmux/Git/agent/tool integration with no workflow sequencing or
+   semantic judgment.
 
 2. Discover every coordinator knowledge doc in the inherited source tree. For
    each doc record:
@@ -40,8 +93,8 @@ No asset may be packaged in RT-03 without first appearing in this audit.
    - action name → knowledge doc(s) that describe or govern it
    - knowledge doc → behavioral role classification
 
-4. Write the audit results into `src/foundation/runtime-assets.ts` and
-   `src/foundation/asset-audit.ts` as typed, versioned records. Include:
+4. Write the audit results into `src/foundation/RuntimeAssets.ts` and
+   `src/foundation/AssetAudit.ts` as typed, versioned records. Include:
    - a `RuntimeAssetRecord` type with source, digest, role, and action mappings
    - a `KnowledgeAssetRecord` type with source, digest, title, and role
    - a `BehavioralInventory` type mapping actions to scripts and docs
@@ -54,9 +107,9 @@ No asset may be packaged in RT-03 without first appearing in this audit.
 
 ## Expected Ownership
 
-- `src/foundation/runtime-assets.ts` — canonical asset records, import
+- `src/foundation/RuntimeAssets.ts` — canonical asset records, import
   provenance, runtime script registry
-- `src/foundation/asset-audit.ts` — behavioral inventory, coordinator action map,
+- `src/foundation/AssetAudit.ts` — behavioral inventory, coordinator action map,
   completeness cross-reference
 - `src/contracts/manifests.ts` — `RuntimeAssetRecord` and `KnowledgeAssetRecord`
   types (if not already present from RM-01)
@@ -78,13 +131,14 @@ No asset may be packaged in RT-03 without first appearing in this audit.
 
 ## What Must Not Change
 
-- Do not modify any inherited shell script or knowledge doc content — this is
-  pure audit
+- Do not silently modify inherited content during provenance capture. Verbatim
+  import is audit evidence, not approval to ship workflow-level shell.
 - Do not execute any inherited shell script during audit
 - Do not import or depend on the coordinator source repository at build time
   — the audit records are static typed data
 - Do not create new runtime scripts or knowledge docs in this batch
-- Do not introduce any NVB staging, catalog, or adapter logic
+- Do not implement NVB staging, catalog, handlers, or adapters yet; do produce
+  the complete classification/migration input those batches require.
 
 ## Review Procedure Highlights
 
@@ -117,10 +171,14 @@ specifications, not from filenames or the batch title alone.
 
 ## Structural And Module-Size Acceptance
 
-- `runtime-assets.ts` must be a focused data module, not a runtime logic owner.
+- `RuntimeAssets.ts` must be a focused data module, not a runtime logic owner.
   Target 220 lines or fewer.
-- `asset-audit.ts` must own the behavioral inventory and cross-reference logic
+- `AssetAudit.ts` must own the behavioral inventory and cross-reference logic
   only. Target 220 lines or fewer.
 - Asset record types in contracts must be pure type definitions with zero
   runtime behavior. Target 160 lines or fewer.
-- No single module may exceed 350 lines for new hand-maintained code.
+- Every new hand-maintained module follows the exact category matrix: the
+  audit/orchestration owner prefers at most 140 lines, warns at 141–180, and
+  rejects over 200; foundation services prefer at most 200, warn at 201–260,
+  and reject over 300; type-only contracts prefer at most 240, warn at
+  241–320, and reject over 400. Cohesion can require an earlier split.

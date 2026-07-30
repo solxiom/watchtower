@@ -1,6 +1,20 @@
 # wt-coordinator-automation — Implementation Pack 5
 
-Status: **Proposed — pack authored, awaiting lane initialization**
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Target release: `1.0.0`
 Pack ID: `CA-01` through `CA-18`
 Work batches: **18** | Review batches: **18**
@@ -28,10 +42,11 @@ Deliver the complete coordinator-automation surface defined in
 
 1. Deterministic seal-bound pack indexes that keep routine coordinator context
    bounded independently of unrelated implementation-pack growth.
-2. Sharded index publication with direct bounded reads, limits, cursors,
-   truncation, and stale/missing/corrupt-block handling.
-3. Runtime journal indexes and projections with checkpoints, prefix digests,
-   incremental append, and partial-tail/rebuild behavior.
+2. Derived SQLite index stores with typed bounded reads, limits, cursors,
+   truncation, and stale/missing/corrupt-store refusal.
+3. Runtime SQLite indexes and projections with journal checkpoints, prefix
+   digests, one-writer/WAL-reader discipline, incremental append, and
+   partial-tail/staged-rebuild behavior.
 4. Ready-set and resource-claim projection — DAG/dependency/claim/capacity
    blockers without arbitrary winner selection.
 5. Ordered routing policy and capability floors — every v1 rule/guard,
@@ -44,14 +59,18 @@ Deliver the complete coordinator-automation surface defined in
    soft/hard limits, usage quality.
 9. Typed proposals (all 11 types) and current-state validator — every proposal
    type with permitted origin/class/effect and stale/illegal/invalid handling.
-10. Atomic lane-local effect executor — one authority, lock/revalidation/
-    idempotency, all-or-nothing projections/journals.
-11. Tmux prepare/attempt/verify effect adapter with unknown launch recovery,
-    duplicate suppression, and no arbitrary kill/shell.
-12. Acceptance and Git publication adapter — reviewer-session ownership,
-    commit-set validation, and partial push recovery.
-13. Coordinator queue, cursor, replay, and watcher integration — stable priority,
-    fsynced cursor advance, and interrupted/duplicate/uncertain replay.
+10. Atomic lane-local effect executor with single-use invocation envelopes —
+    one authority, lock/revalidation/idempotency, and all-or-nothing
+    projections/journals.
+11. Tmux prepare/attempt/verify TaskHandler plus cataloged tmux leaf, with
+    unknown-launch recovery, duplicate suppression, and no arbitrary
+    task/kill/shell.
+12. Acceptance and Git publication TaskHandler plus bounded Git leaf/API
+    adapter — reviewer-session ownership, commit-set validation, Nirvana Git API
+    audit, and partial-push recovery.
+13. Coordinator queue, cursor, replay, and watcher TaskHandler integration —
+    stable priority, fsynced cursor advance, interrupted/duplicate/uncertain
+    replay, and no workflow-level shell.
 14. Coordinator, event, and ready-set commands with index/status/context/
     explain/cycle/escalate/events/ready and dry-run purity.
 15. Operator-session persistence and lifecycle — many sessions per lane, one
@@ -68,24 +87,24 @@ Deliver the complete coordinator-automation surface defined in
 
 | Batch ID | Name | Reasoning | Primary ownership |
 |----------|------|-----------|-------------------|
-| CA-01 | Deterministic sealed-pack index compiler | R5 | `src/foundation/pack-index.ts`, `src/foundation/pack-index-compiler.ts` |
-| CA-02 | Sharded index publication and bounded queries | R5 | `src/foundation/index-store.ts`, `src/foundation/index-query.ts` |
-| CA-03 | Runtime journal indexes and projections | R4 | `src/foundation/journal-index.ts`, `src/foundation/journal-projection.ts` |
-| CA-04 | Ready set and resource-claim projection | R5 | `src/foundation/ready-set.ts`, `src/foundation/resource-claims.ts` |
-| CA-05 | Ordered routing policy and capability floors | R4 | `src/foundation/routing-policy.ts`, `src/foundation/capability-floors.ts` |
-| CA-06 | Endpoint adapter eligibility and isolation | R4 | `src/foundation/endpoint-adapter.ts`, `src/foundation/endpoint-eligibility.ts` |
-| CA-07 | Immutable decision envelopes | R4 | `src/foundation/decision-envelope.ts`, `src/contracts/decision.ts` |
-| CA-08 | Context broker and cycle budgets | R5 | `src/foundation/context-broker.ts`, `src/foundation/cycle-budget.ts` |
-| CA-09 | Typed proposals and current-state validator | R5 | `src/contracts/proposals.ts`, `src/foundation/proposal-validator.ts` |
-| CA-10 | Atomic lane-local effect executor | R5 | `src/foundation/effect-executor.ts`, `src/foundation/effect-plan.ts` |
-| CA-11 | Tmux prepare/attempt/verify effect adapter | R4 | `src/foundation/tmux-effect.ts`, `src/foundation/tmux-adapter.ts` |
-| CA-12 | Acceptance and Git publication adapter | R4 | `src/foundation/git-acceptance.ts` |
-| CA-13 | Coordinator queue, cursor, replay, and watcher integration | R5 | `src/foundation/coordinator-queue.ts`, `src/foundation/coordinator-replay.ts` |
-| CA-14 | Coordinator, event, and ready-set commands | R4 | `src/commands/CoordinatorCommands.ts`, help files |
-| CA-15 | Operator-session persistence and lifecycle | R4 | `src/foundation/session-store.ts`, `src/foundation/session-lifecycle.ts` |
-| CA-16 | Session indexes, references, pins, and compaction | R5 | `src/foundation/session-indexes.ts`, `src/foundation/session-compaction.ts` |
-| CA-17 | Session routing, budgets, proposals, holds, and amendments | R5 | `src/foundation/session-routing.ts`, `src/foundation/session-budgets.ts`, `src/foundation/session-holds.ts` |
-| CA-18 | Session CLI/PTY attachment and M6 acceptance | R5 | `src/commands/SessionCommands.ts`, `src/foundation/terminal-renderer.ts`, `src/foundation/pty-attachment.ts`, help |
+| CA-01 | Deterministic sealed-pack SQLite compiler | R5 | focused `PackIndexCompiler` and SQLite publication capsule |
+| CA-02 | SQLite index stores and bounded typed queries | R5 | focused typed store/query ports |
+| CA-03 | Runtime SQLite indexes and projections | R4 | journal checkpoint and projection stores |
+| CA-04 | Ready set and resource-claim projection | R5 | `src/foundation/ReadySet.ts`, `src/foundation/ResourceClaims.ts` |
+| CA-05 | Ordered routing policy and capability floors | R4 | `src/foundation/RoutingPolicy.ts`, `src/foundation/CapabilityFloors.ts` |
+| CA-06 | Endpoint adapter eligibility and isolation | R4 | `src/foundation/EndpointAdapter.ts`, `src/foundation/EndpointEligibility.ts` |
+| CA-07 | Immutable decision envelopes | R4 | `src/foundation/DecisionEnvelope.ts`, `src/contracts/decision.ts` |
+| CA-08 | Context broker and cycle budgets | R5 | `src/foundation/ContextBroker.ts`, `src/foundation/CycleBudget.ts` |
+| CA-09 | Typed proposals and current-state validator | R5 | `src/contracts/proposals.ts`, `src/foundation/ProposalValidator.ts` |
+| CA-10 | Atomic effect executor and invocation envelopes | R5 | effect executor, envelope validator, packaged task boundary |
+| CA-11 | Tmux effect TaskHandler and leaf | R4 | focused handler plus cataloged tmux leaf |
+| CA-12 | Acceptance and Git publication handler | R4 | focused handler plus audited Git API/leaf |
+| CA-13 | Queue, replay, and watcher task integration | R5 | queue/replay services and focused TaskHandlers |
+| CA-14 | Coordinator, event, and ready-set commands | R4 | one command class and help fragment per subcommand |
+| CA-15 | Operator-session persistence and lifecycle | R4 | `src/foundation/SessionStore.ts`, `src/foundation/SessionLifecycle.ts` |
+| CA-16 | Session indexes, references, pins, and compaction | R5 | `src/foundation/SessionIndexes.ts`, `src/foundation/SessionCompaction.ts` |
+| CA-17 | Session routing, budgets, proposals, holds, and amendments | R5 | `src/foundation/SessionRouting.ts`, `src/foundation/SessionBudgets.ts`, `src/foundation/SessionHolds.ts` |
+| CA-18 | Session CLI/PTY attachment and M6 acceptance | R5 | one command class per subcommand, focused terminal renderer/attachment services, help |
 
 ## Dependency Graph (Within Pack)
 

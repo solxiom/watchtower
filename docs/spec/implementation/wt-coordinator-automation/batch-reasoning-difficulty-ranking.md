@@ -1,5 +1,19 @@
 # wt-coordinator-automation Batch Reasoning-Difficulty Ranking
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: **agent-assignment and supervision guide**
 Date: 2026-07-30
 Scope: reasoning difficulty across the 18 CA work batches in Pack 5
@@ -58,7 +72,7 @@ The ranking weighs the following factors.
 | Ownership complexity | More layers or independent construction paths must agree |
 | State-machine depth | Behavior depends on non-trivial lifecycle state transitions |
 | Concurrency/recovery | Interrupted, duplicate, uncertain state requires correct replay |
-| Index/hash-chain integrity | Identical bytes required across runs; partial-block handling |
+| Index/semantic-root integrity | Identical logical rows/root across rebuilds; stale/corrupt-store refusal |
 | Compatibility sensitivity | Changes can alter how automated cycles, proposals, or effects execute |
 | Failure-boundary complexity | Must distinguish when failure occurs and what state may still be claimed |
 | Cross-pack contract load | Batch consumes several earlier handoffs and must not reinterpret them |
@@ -77,8 +91,8 @@ The ranking weighs the following factors.
 | 6 | CA-17 | R5 | Session routing, budgets, proposals, holds interleaving | M0/D1–D3 routing for session turns; finite grants within lane-wide ceilings and protected reserves; scoped holds that block specific future effects without blocking unrelated automation; confirmation/revalidation before effect execution | Holding the lane lock during model response, allowing budget overrun, or letting holds block unrelated automation |
 | 7 | CA-08 | R5 | Context broker with usage budgets and provenance | Allowlisted queries must be metered, provenance-tracked, redacted; soft/hard limits on input/output/broker/wall-clock per decision class; usage quality must be tracked without becoming a second budget authority | Skipping provenance on a query path, conflating soft and hard limit behavior, or leaking untrusted agent content through broker queries |
 | 8 | CA-16 | R5 | Session memory bounds — compaction, capsules, transitive reference proof | Bounded working sets must not grow with session turn count; same-lane turn capsules must be non-transitive; compaction must produce source-turn-referencing summaries without inventing content; no full-history fallback | Creating transitive reference chains through capsules, compacting without source references, or loading full session text into any working set |
-| 9 | CA-02 | R5 | Sharded index with corruption-safe bounded queries | Direct bounded reads with limits/cursors/truncation; stale/missing/corrupt block detection and handling; must not silently serve partial data; shard selection must be deterministic | Serving truncated data as complete, silently skipping a corrupt block, or using block index as implicit ordering |
-| 10 | CA-01 | R5 | Deterministic sealed-pack index compiler | Identical semantic bytes from identical sealed input; path/digest/cross-reference checks; linear build with intermediate verification; any implementation variance breaks the seal-verification model | Introducing non-deterministic ordering, omitting cross-reference validation, or computing digest from non-canonical input |
+| 9 | CA-02 | R5 | SQLite stores with corruption-safe bounded typed queries | Indexed reads with limits/cursors/truncation; stale/missing/corrupt-store detection; no direct SQL outside the owning store capsule; no full-pack or JSON-shard fallback | Serving truncated data as complete, silently opening a corrupt/stale store, or letting query services bypass typed store methods |
+| 10 | CA-01 | R5 | Deterministic sealed-pack SQLite compiler | Identical logical rows and semantic root from identical sealed input; path/digest/FK/cross-reference checks; staged immutable publication and linear build; SQLite file bytes are not compared as authority | Introducing non-deterministic logical ordering, omitting cross-reference validation, or deriving the semantic root from SQLite page bytes |
 | 11 | CA-17 | Upper R4 (review half: R5) | Session routing/budgets/holds at the integration boundary | See Rank 6 — this batch additionally verifies that session budgets, routing, proposals, and holds interact correctly under concurrent automated cycles and operator turns | — |
 | 12 | CA-14 | R4 | Command integration across 13 prior service batches | Index/status/context/explain/cycle/escalate/events/ready commands; must render human/JSON output; dry-run purity; every error/empty/invalid path; help fragments | Putting coordinator logic in command classes, reimplementing routing, or missing a required command flag/output format |
 | 13 | CA-07 | R4 | Immutable decision envelopes | Stable semantic digest; bounded default context; untrusted-content delimiting; must survive cycle replay and produce identical bytes | Digest instability across inputs, leaking raw untrusted content without delimiting, or embedding mutable references |

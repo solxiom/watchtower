@@ -1,5 +1,82 @@
 # Agent Launch Prompt — Review Batch RT-05
 
+## Governing Contract And Precedence — Mandatory
+
+This prompt is an execution aid, not product authority. Resolve conflicts in
+this order and stop for a specification amendment rather than inventing
+behavior:
+
+1. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
+2. `docs/spec/v1.md`
+3. `docs/spec/nirvana-integration-architecture.md`,
+   `docs/spec/coordinator-automation.md`, `docs/spec/operator-session.md`, and
+   `docs/spec/cli-session.md` within their scopes
+4. `docs/spec/architecture.md`
+5. `docs/development/engineering-and-review-standard.md`
+6. `AGENTS.md`
+7. the accepted implementation map, pack rules, and this batch brief
+
+The implementation/review agent must read the mandatory engineering standard
+and Nirvana integration architecture in full. A stale path, module suggestion,
+or technical mechanism in this prompt must be corrected to the governing
+contract while preserving the batch objective and proof obligations.
+
+## Nirvana-First And NVB Execution Gate — Mandatory
+
+- Complete and report the required Nirvana API usage audit before introducing
+  infrastructure or bare Node behavior.
+- Commands use Nirvana command, argument, pretty, and terminal-view APIs and
+  remain thin.
+- Public reason codes, exit mappings, event names, and schema identifiers remain
+  owned by accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`. A
+  batch-local symbolic name is not automatically public; reconcile it with the
+  registry, and update the owning contract/schema in the same batch when a new
+  public identifier is genuinely required.
+- Use the Nirvana storage facade for ordinary managed-root operations only
+  after CLI-safe root/bootstrap semantics are proved. Atomic durability,
+  canonical path security, locking, append-only journals, ownership/modes, and
+  SQLite stay behind focused adapters when the facade lacks required semantics.
+- Use the Nirvana logger only through the Watchtower logging boundary for
+  redacted diagnostics. Logs are never command output, lifecycle events,
+  acceptance evidence, or authoritative journals.
+- Substantial deterministic workflows use the immutable packaged Watchtower
+  NVB catalog, focused TaskHandlers, and task groups.
+- `LaneTaskRunner` is the only internal NVB invocation boundary. Task selection
+  is an allowlisted Watchtower action mapping, never an arbitrary user/agent
+  task name or parent-project discovery.
+- Never create or modify a participating repository's root `nvb.json`.
+- Shell is restricted to checksum-manifested leaf adapters for tmux, Git, or
+  external tools when no conforming Nirvana API exists. Workflow-level shell is
+  a hard reject.
+- Mutating tasks do not gain authority from NVB. They require the normal
+  Watchtower effect executor, current-state validation, locks, idempotency, and
+  a valid single-use invocation envelope.
+
+## Project-Wide Structural And Size Gate — Mandatory
+
+Apply the exact limits in
+`docs/development/engineering-and-review-standard.md`; pack-local numbers may
+be stricter but may never relax them:
+
+- CLI entry, command, or NVB task: preferred at most 120 lines, warning at
+  121–160, hard reject over 180.
+- Orchestrator, controller, or renderer shell: preferred at most 140 lines,
+  warning at 141–180, hard reject over 200.
+- Foundation service, planner, validator, adapter, or store: preferred at most
+  200 lines, warning at 201–260, hard reject over 300.
+- Contract/type/schema registry: preferred at most 240 lines, warning at
+  241–320, hard reject over 400.
+- Test/spec module: preferred at most 300 lines, warning at 301–420, hard reject
+  over 500.
+- Function: target at most 40 lines, justification at 41–60, reject over 80.
+- Constructor: target at most 25 lines, warning at 26–40, reject over 50.
+
+Passing a line limit never excuses mixed responsibilities, a god object,
+generic helper bag, hidden cycle, foreign API laundering, or layer violation.
+Use `PascalCase` for classes/class-owning files, `lowerCamelCase` for non-class
+modules and directories, and never introduce dashed or underscored backend
+source/spec names.
+
 ## Recommended agent/model class for forwarding:
 
 - brief-declared reasoning level: `R5`
@@ -32,41 +109,98 @@ The declared `R` class is authoritative. Select a currently available agent that
 can load the complete context, inspect and edit the repository, and run proof
 without replacing evidence with narrative confidence.
 
+## Structural Design And Module-Size Gate
+
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
 ## Your Review Mission
 
-You are assigned **review batch RT-05** — the hardest security audit in this pack.
-Verify that the `RuntimeAdapter` is the single invocation boundary, enforces
-argv-only execution, allowlists only `WT_*` env variables, validates
-cwd/account/access, forwards signals correctly, and never leaks secrets.
+You are assigned **review batch RT-05** — the hardest security audit in this
+pack. Verify that `LaneTaskRunner` is the only application-to-NVB boundary,
+uses a typed catalog action and explicit immutable target, validates structured
+events/results, and exposes only a narrow cataloged leaf boundary to owning
+TaskHandlers. Independently verify every Nirvana capability claim.
 
 ## Read In This Order
 
 1. `docs/spec/implementation/wt-runtime-distribution/review-batches/RT-05-review-central-runtime-invocation-adapter.md`
 2. Paired work brief and implementation report
-3. `docs/spec/v1.md` §12, `docs/spec/architecture.md` §§4.5, 6.3, 9.1
-4. Quality rules
+3. `docs/spec/nirvana-integration-architecture.md`, especially sections 3,
+   4.5–4.7, 8–10
+4. `docs/spec/v1-contracts.md`, schema, v1 spec, architecture, and
+   implementation map
+5. Quality rules, accepted RT-02/RT-03/RT-04 artifacts, and pinned Nirvana
+   package source/types with comparable Nira/Nirvana usage
 
 ## Required Independent Proof
 
-- Audit entire codebase for `child_process.spawn/exec/execFile/fork` — only
-  `RuntimeAdapter.invoke()` may spawn
-- Mock `spawn` and assert: `{ shell: false }`, no template literals
-- Assert env object: only `^WT_` keys, no `process.env` keys
-- Test cwd: non-existent dir, file path → rejection
-- Test access: missing entrypoint, non-readable, non-executable → rejection
-- Test action: unregistered action → rejection before spawn
-- Test escape: `..` escaping runtime root → rejection before spawn
-- Test signal forwarding: SIGINT stops real subprocess, exit code propagated
-- Test verbose: `WT_*` key names present, values absent
-- Test `buildInvocationContext`: correct `WT_*` map, coordinator vars absent for
-  non-decision invocations
-- Architecture checks
+- Reproduce a pinned Nirvana API capability matrix for explicit config/module
+  target, cwd, args, events/results, environment, cancellation/signals, stdin,
+  and PTY; verify every gap is explicitly named
+- Audit NVB facade calls, direct `nvb`, Nirvana `cmd`, raw
+  `node:child_process`, and executable calls across the codebase
+- Verify `LaneTaskRunner` alone is application-visible and leaf invocation is
+  visible only to owning TaskHandlers
+- Attempt arbitrary task/group/config/module selection, malicious cwd and
+  project `nvb.json`, target/path escape, and catalog/profile pin drift
+- Tamper typed inputs, structured events, and results; require deterministic
+  validation and no terminal-text parsing
+- Verify task-declared environment construction, no wholesale `process.env`,
+  and redacted diagnostics
+- Verify leaf containment, checksum, executable mode, cwd, argv, and
+  environment enforcement
+- Audit an optional Nirvana `cmd` fallback against the named API gap and reject
+  direct raw subprocess use
+- Require real proof for any foreground cancellation/signal/stdin/PTY claim;
+  otherwise verify that path remains outside this adapter
+- Run architecture, adversarial, integration, naming, and size checks
 
 ## Acceptance Gate
 
-Accept only if one invocation boundary exists, `{ shell: false }` enforced, only
-`WT_*` keys in env, `process.env` never passed, all rejection paths proved,
-signal/exit forwarding works, and verbose output is safe.
+Accept only if `LaneTaskRunner` is the sole application boundary, callers
+cannot select tasks or targets, immutable pins and typed results are enforced,
+Nirvana usage is proven or explicitly gapped, leaves remain bounded, no raw
+subprocess/workflow shell survives, and unproved foreground semantics are not
+advertised.
 
 ## Rejection Correction Brief Rule
 

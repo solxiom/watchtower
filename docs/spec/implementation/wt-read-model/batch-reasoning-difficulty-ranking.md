@@ -1,5 +1,19 @@
 # Watchtower v1 Read Model Batch Reasoning-Difficulty Ranking
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: implementation-planning aid
 Date: 2026-07-30
 Scope: reasoning difficulty across the ten wt-read-model work batches
@@ -160,10 +174,10 @@ CA-16, and REL-03.
 
 The batch must:
 
-- evaluate and select a conforming SQLite driver (`better-sqlite3` preferred
-  per Nirvana ecosystem conventions)
-- build a typed `src/foundation/storage/` capsule (`StorageAdapter`,
-  `SqliteConfig`, `SqliteDriver`) with parameterized queries, FK enforcement,
+- evaluate viable candidates and select a conforming SQLite driver from
+  reproduced contract, packaging, lifecycle, and platform evidence
+- build a typed `src/foundation/storage/` capsule (focused SQLite ports,
+  `SqliteConfig`, and selected-driver `SqliteDriver`) with parameterized queries, FK enforcement,
   WAL mode, busy-timeout, and staged rebuild semantics
 - write an ADR documenting the selection, failure model, platform constraints,
   and the no-JSON-shard-fallback rule

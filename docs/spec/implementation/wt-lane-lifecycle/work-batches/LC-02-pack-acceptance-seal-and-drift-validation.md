@@ -1,5 +1,47 @@
 # Work Batch LC-02 — Pack Acceptance, Seal, and Drift Validation
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Implementation reasoning: R5
 Review reasoning: R5
@@ -11,8 +53,8 @@ Workload: large
 Validate implementation packs against the JSON Schema bundle. Reproduce
 signed seals using RFC 8785 canonicalization. Classify drift between the
 committed pack and the working tree using the drift reason matrix.
-This batch owns the pack consumer foundation: `pack-consumer.ts` and
-`pack-seal.ts`.
+This batch owns the pack consumer foundation: `PackConsumer.ts` and
+`PackSeal.ts`.
 
 ## Specification References
 
@@ -29,10 +71,10 @@ This batch owns the pack consumer foundation: `pack-consumer.ts` and
 
 ### New foundation modules
 
-- `src/foundation/pack-consumer.ts` — JSON Schema validation for
+- `src/foundation/PackConsumer.ts` — JSON Schema validation for
   `implementation-pack.json`, `implementation-pack.lock.json`,
   `pack-acceptance.json`; file-set validation; acceptance verification
-- `src/foundation/pack-seal.ts` — RFC 8785 canonicalization, semantic
+- `src/foundation/PackSeal.ts` — RFC 8785 canonicalization, semantic
   digest computation, seal reproduction, drift classification matrix
 
 ## Dependencies
@@ -112,7 +154,7 @@ function computeFileDigest(path: string): Promise<string>;
 
 ## Implementation Steps
 
-1. **Create `src/foundation/pack-consumer.ts`**
+1. **Create `src/foundation/PackConsumer.ts`**
    - Import JSON Schema validator (ajv or equivalent already in deps)
    - Load `docs/spec/schemas/v1.schema.json` and compile validators for:
      - `$defs.implementationPack` — validate `implementation-pack.json`
@@ -132,7 +174,7 @@ function computeFileDigest(path: string): Promise<string>;
    - `verifyPackLock(root)`: validate lock schema, verify every sealed file
      exists and has matching digest, verify lock seal matches recomputed seal
 
-2. **Create `src/foundation/pack-seal.ts`**
+2. **Create `src/foundation/PackSeal.ts`**
    - Implement RFC 8785 JSON Canonicalization Scheme:
      - Sort object keys by code-point order
      - Serialize numbers without exponential notation
@@ -213,7 +255,7 @@ function computeFileDigest(path: string): Promise<string>;
 
 ## Handoff Notes
 
-After acceptance, `pack-consumer.ts` and `pack-seal.ts` are the sole owners of
+After acceptance, `PackConsumer.ts` and `PackSeal.ts` are the sole owners of
 pack validation and seal logic. LC-03 calls pack consumer to verify the
 referenced pack during init. LC-05 calls pack seal to verify the active
 packSealId during index construction.

@@ -1,10 +1,55 @@
 # Batch CA-01 — Deterministic sealed-pack SQLite compiler
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Index foundation
 Depends on: DB-01, LC-02, LC-05 accepted
-Owned files: `src/foundation/pack-index.ts`, `src/foundation/pack-index-compiler.ts`, `coordinator/index/pack/<index-id>/`
+Owned files: `src/foundation/PackIndex.ts`,
+`src/foundation/PackIndexWriter.ts`,
+`src/foundation/PackIndexCompiler.ts`,
+`coordinator/index/pack/<index-id>/`
 
 **Required implementor reasoning class:** `R5`
 **Class rationale:** deterministic SQLite index with seal verification; identical logical rows required across independent compilations from the same sealed input. FK integrity across artifacts, batches, dependencies, requirements, repository-claims, and proofs. Staged immutable publication with crash safety at every stage. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -47,14 +92,14 @@ define semantic identity. Canonical logical rows and source checkpoints do.
    `index_meta.schema_version`. The compiler writes the schema inside a single
    transaction after all integrity checks pass.
 
-3. **Implement `src/foundation/pack-index.ts`:**
+3. **Implement `src/foundation/PackIndex.ts`:**
    - Define the `PackIndex` type — a deterministic local index derived from the
      sealed implementation pack, destined for SQLite publication.
    - Define `PackIndexBatch`, `PackIndexRequirement`, `PackIndexRepository`,
      `PackIndexArtifact`, `PackIndexDependency`, `PackIndexProof` types.
    - All types are plain objects; no class instance state for the index itself.
 
-4. **Implement `src/foundation/pack-index-compiler.ts`:**
+4. **Implement `src/foundation/PackIndexCompiler.ts`:**
    - `compilePackIndex(packRoot: string, lock: PackLock, dbPath: string): PackIndex` —
      reads `implementation-pack.json`, validates against the lock's `sealId`,
      extracts all logical rows, and writes them into a SQLite database at `dbPath`.
@@ -153,17 +198,25 @@ define semantic identity. Canonical logical rows and source checkpoints do.
 
 ## Expected Ownership
 
-- `src/foundation/pack-index.ts` — pure type definitions for the deterministic
+- `src/foundation/PackIndex.ts` — pure type definitions for the deterministic
   pack index. No file I/O, no compilation logic, no SQLite imports.
-- `src/foundation/pack-index-compiler.ts` — the sole compilation authority.
-  Owns `compilePackIndex`, `verifyPackSeal`, `computeSemanticRoot`,
-  `publishIndex`, cross-reference validation, FK integrity checks, staged
-  write-then-rename, and seal-drift detection. Uses the DB-01 storage adapter
-  for all SQLite access.
+- `src/foundation/PackIndexWriter.ts` — narrow domain writer/store capsule for
+  pack-index schema creation, parameterized row insertion, integrity checks,
+  canonical logical export, and staged close. It consumes DB-01's focused
+  SQLite ports and owns pack-index SQL without importing the selected driver.
+- `src/foundation/PackIndexCompiler.ts` — thin deterministic orchestration over
+  focused seal verifier, pack row extractor/cross-reference validator,
+  semantic-root calculator, typed `PackIndexWriter`, and staged publisher.
+- Focused collaborators own seal/path/digest verification, logical-row
+  extraction/FK validation, canonical semantic export, and atomic publication;
+  no compiler god object owns all algorithms.
+- The writer consumes DB-01 focused SQLite ports. No CA module imports the
+  selected driver package, and pack-index SQL stays inside
+  `PackIndexWriter.ts`.
 - `coordinator/index/pack/<index-id>/` — the published index directory, managed
   exclusively by the compiler and the atomic pointer switch.
-- No other module duplicates compilation, seal verification, cross-reference
-  checking, or index publication.
+- No other module duplicates these truths; splitting responsibility does not
+  create alternate authorities.
 
 ## Tests And Evidence
 
@@ -195,7 +248,7 @@ define semantic identity. Canonical logical rows and source checkpoints do.
 - **Linear build proof:** Compile a 300-batch synthetic pack and prove compilation
   visits each source file exactly once and produces correct cross-references.
 - **Model-free proof:** Static analysis or architecture check proving no model/AI
-  import exists in `pack-index.ts` or `pack-index-compiler.ts`.
+  import exists in `PackIndex.ts` or `PackIndexCompiler.ts`.
 
 ## What Must Not Change
 
@@ -206,7 +259,7 @@ define semantic identity. Canonical logical rows and source checkpoints do.
 - Do not treat raw SQLite bytes as semantic identity — only canonical logical
   rows and source checkpoints define identity.
 - Do not introduce non-deterministic ordering (e.g., `Object.keys()` without sort).
-- Do not bypass the DB-01 storage adapter for raw SQLite access.
+- Do not bypass DB-01 focused SQLite ports or expose raw SQL/driver internals.
 
 ## Review Procedure Highlights
 
@@ -222,8 +275,10 @@ define semantic identity. Canonical logical rows and source checkpoints do.
 6. Verify that no model/AI import exists in the compiler.
 7. Verify that all fixture error cases produce the correct error code and
    message with the exact source location.
-8. Verify the compiler uses the DB-01 storage adapter; no raw SQLite access
-   outside the adapter boundary.
+8. Verify the compiler delegates persistence to `PackIndexWriter`, which uses
+   DB-01's focused SQLite ports. The selected driver package and
+   driver-specific primitives stay in DB-01's driver capsule; pack-index SQL
+   stays in `PackIndexWriter.ts`.
 9. Verify seal-drift detection: changing the pack seal between compilations
    produces SEAL_DRIFT_DETECTED before the new compilation can publish.
 10. Verify that semantic root is computed from canonical logical rows, never

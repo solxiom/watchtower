@@ -1,5 +1,19 @@
 # wt-runtime-distribution — Batch Reasoning Difficulty Ranking
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: **Proposed — pack-authoring baseline**
 Date: 2026-07-30
 
@@ -61,7 +75,7 @@ exit code and error.
 
 ### 2. RT-06 — Managed Lane Links and Compatibility Names (R4)
 
-Hard integration batch bridging the immutable catalog, runtime adapter, and lane
+Hard integration batch bridging the immutable catalog, task/leaf boundaries, and lane
 layout. Managed links must:
 
 - validate every symlink target checksum against the runtime manifest
@@ -135,15 +149,17 @@ than incorrect behavior.
 
 Build-automation batch. Must:
 
-- configure `runtime-nvb/dist.nvb` with `wt:pack:runtime` and
-  `wt:runtime:validate` tasks
+- implement focused public-API TaskHandlers and deterministic config/catalog
+  aggregates, then extend actual repository `nvb.json`/handler surfaces with
+  `wt:pack:runtime` and `wt:runtime:validate`
 - produce correct `dist/` layout with `runtime/manifest.json`,
   `runtime/coordinator/`, `knowledge/manifest.json`, `knowledge/playbook.md`,
   `knowledge/guides/`, `knowledge/skill/`, `knowledge/adapters/`
 - preserve executable bits on runtime scripts
 - run build validation comparing packaged manifests with actual files
 - fail on missing, extra, non-executable, or checksum-mismatched assets
-- update `nira.json` with NVB task registrations
+- keep `nira.json` as ecosystem metadata and prove current NVB registration
+  through the repository's real build configuration
 
 The work is bounded: NVB task configuration following accepted patterns, manifest
 validation against known schemas, and layout verification. No novel security or

@@ -1,11 +1,25 @@
 # wt-upgrade-knowledge — Implementation Pack 4
 
-Status: ❌ Pending — pack authoring complete, implementation not started
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Date: 2026-07-30
 Pack ID: `wt-upgrade-knowledge`
 Pack order: 4 of 6
 Milestone: M5
-Owner areas: Watchtower `src/commands/UpgradeCommand.ts`, `src/commands/SkillInstallCommand.ts`, `src/commands/VersionCommand.ts`, `src/foundation/upgrade-planner.ts`, `src/foundation/migration-registry.ts`, `src/foundation/migration-steps.ts`, `src/foundation/upgrade-apply.ts`, `src/foundation/upgrade-recovery.ts`, `src/foundation/host-adapters.ts`, `help/commands/`
+Owner areas: Watchtower `src/commands/UpgradeCommand.ts`, `src/commands/SkillInstallCommand.ts`, `src/commands/VersionCommand.ts`, `src/foundation/UpgradePlanner.ts`, `src/foundation/MigrationRegistry.ts`, `src/foundation/MigrationSteps.ts`, `src/foundation/UpgradeApply.ts`, `src/foundation/UpgradeRecovery.ts`, `src/foundation/HostAdapters.ts`, `help/commands/`
 
 ## Purpose
 
@@ -71,14 +85,14 @@ The accepted delivery must guarantee:
 
 ## Canonical Pack Rules
 
-- `src/foundation/upgrade-planner.ts` owns the compatibility matrix and
+- `src/foundation/UpgradePlanner.ts` owns the compatibility matrix and
   read-only preview; it never mutates lane state
-- `src/foundation/migration-registry.ts` and `migration-steps.ts` own pure
+- `src/foundation/MigrationRegistry.ts` and `migrationSteps.ts` own pure
   version-steps; no runtime execution, no session closure, no arbitrary pruning
-- `src/foundation/upgrade-apply.ts` owns manifest-last atomic switch and crash
-  recovery; `upgrade-recovery.ts` owns post-crash validation and old-runtime
+- `src/foundation/UpgradeApply.ts` owns manifest-last atomic switch and crash
+  recovery; `UpgradeRecovery.ts` owns post-crash validation and old-runtime
   usability
-- `src/foundation/host-adapters.ts` owns host-specific knowledge installation;
+- `src/foundation/HostAdapters.ts` owns host-specific knowledge installation;
   no lane-specific state embeds in personal skill paths
 - `src/commands/UpgradeCommand.ts` orchestrates preview/apply; `SkillInstallCommand.ts`
   orchestrates preview/replace/scope; `VersionCommand.ts` reports versions
@@ -93,20 +107,20 @@ The accepted delivery must guarantee:
 
 ### Upgrade foundation owners
 
-- `src/foundation/upgrade-planner.ts` — compatibility matrix, changed/preserved/
+- `src/foundation/UpgradePlanner.ts` — compatibility matrix, changed/preserved/
   conflict classification, read-only preview
-- `src/foundation/migration-registry.ts` — version-step registry, dependency
+- `src/foundation/MigrationRegistry.ts` — version-step registry, dependency
   ordering
-- `src/foundation/migration-steps.ts` — individual migration step execution,
+- `src/foundation/MigrationSteps.ts` — individual migration step execution,
   value/history/pin/lifecycle preservation
-- `src/foundation/upgrade-apply.ts` — manifest-last atomic switch, link
+- `src/foundation/UpgradeApply.ts` — manifest-last atomic switch, link
   replacement, pointer update
-- `src/foundation/upgrade-recovery.ts` — crash recovery, old-runtime validation,
+- `src/foundation/UpgradeRecovery.ts` — crash recovery, old-runtime validation,
   downgrade guard
 
 ### Host adapter owners
 
-- `src/foundation/host-adapters.ts` — Codex/Cursor/Claude adapter factory,
+- `src/foundation/HostAdapters.ts` — Codex/Cursor/Claude adapter factory,
   preview/replace/scope, version record
 
 ### Command owners

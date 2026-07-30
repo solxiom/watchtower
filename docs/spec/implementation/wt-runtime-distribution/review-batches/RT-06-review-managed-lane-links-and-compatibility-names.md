@@ -1,5 +1,47 @@
 # Review Batch RT-06 — Managed Lane Links and Compatibility Names
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Reviews work batch: RT-06
 Depends on: RT-06 implementation complete, implementation report written
@@ -11,7 +53,10 @@ Depends on: RT-06 implementation complete, implementation report written
 
 Confirm that managed lane links validate targets against runtime manifest
 checksums, refuse collisions with non-managed files, reject path-escape, and
-enforce manifest-only ownership. No second managed-asset authority exists.
+enforce manifest-only ownership. Also verify exact lane task-profile pins,
+catalog-only compatibility aliases, immutable config/module containment, and
+project `nvb.json` non-interference. No second managed-asset/profile authority
+exists.
 
 ## Required Independent Proof
 
@@ -38,14 +83,23 @@ enforce manifest-only ownership. No second managed-asset authority exists.
 11. Test compatibility name resolution: known name → canonical action; unknown
     name → `null`.
 12. Test `createLinks` creates parent directories for `bin/` if absent.
-13. Run architecture checks.
+13. Verify `install.json.taskRuntime` exactly pins catalog/profile/runtime
+    identities/digests and immutable config/module targets.
+14. Attempt profile-added code/tasks/handlers, checksum override, disallowed
+    action, and target escape; require rejection.
+15. Create a malicious project `nvb.json`; prove it is neither read nor changed
+    and cannot alter the RT-05 target/task selection.
+16. Verify planning, validation, mutation, compatibility, and profile binding
+    remain focused collaborators rather than one `ManagedAssets` god object.
+17. Run architecture checks.
 
 ## Acceptance Gate
 
-Accept only if managed links validate checksums, refuse collision and escape,
-compatibility names resolve correctly, removal is safe (only manifest-matching
-symlinks), validation reports all defect classes, and only `ManagedAssets`
-creates managed symlinks.
+Accept only if managed links validate checksums, refuse collision/escape,
+compatibility names resolve only to profile-allowed catalog actions, task
+runtime pins and target containment are exact, project `nvb.json` is unchanged
+and irrelevant, removal is safe, all defect classes are reported, and focused
+owners preserve one managed-asset/profile authority.
 
 ## Rejection Correction Brief Rule
 

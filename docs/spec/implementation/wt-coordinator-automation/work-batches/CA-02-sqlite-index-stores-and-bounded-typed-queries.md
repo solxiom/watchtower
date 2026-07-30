@@ -1,10 +1,52 @@
 # Batch CA-02 — SQLite index stores and bounded typed queries
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Index foundation
 Depends on: CA-01 accepted
-Owned files: `src/foundation/index-query.ts`, `src/foundation/index-store.ts`
+Owned files: `src/foundation/IndexQuery.ts`, `src/foundation/IndexStore.ts`
 
 **Required implementor reasoning class:** `R5`
 **Class rationale:** typed query facade over compiled SQLite index, corruption-safe bounded reads, stale-index detection, and storage capsule isolation. Direct bounded reads only — no unindexed scans, no transitive joins without a covering index, no table scans. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -29,10 +71,11 @@ scans without a covering index.
    Study `coordinator-automation.md §9.4` for query contract with record limits,
    graph depth, byte limits, token estimates, provenance, and truncation markers.
 
-2. **Implement `src/foundation/index-store.ts`:**
-   - `IndexStore` class encapsulating all SQLite access behind the DB-01 storage
-     adapter. No module outside `index-store.ts` and `index-query.ts` imports
-     or uses SQLite primitives (`better-sqlite3`, `Database`, `Statement`).
+2. **Implement `src/foundation/IndexStore.ts`:**
+   - `IndexStore` encapsulates domain-specific pack-index persistence and
+     parameterized statements behind DB-01 focused SQLite ports. Neither
+     `IndexStore` nor `IndexQuery` imports the selected driver package, accepts
+     arbitrary SQL, or exposes database handles/statements.
    - `openIndex(indexPath: string): IndexStore` — opens or creates the SQLite
      database at the given path, enables WAL mode, sets busy timeout, and runs
      `PRAGMA foreign_keys = ON`. Validates the schema version from `index_meta`.
@@ -50,7 +93,7 @@ scans without a covering index.
      in `index_meta` match the expected values. Mismatch → refuse to open,
      return `INDEX_STALE`.
 
-3. **Implement `src/foundation/index-query.ts`:**
+3. **Implement `src/foundation/IndexQuery.ts`:**
    - `IndexQuery` class for bounded, typed lookups against the open `IndexStore`.
      No consumer of `IndexQuery` ever touches SQL or a database handle.
    - **Typed query methods:**
@@ -98,8 +141,8 @@ scans without a covering index.
        multi-table context; consumers never compose raw queries.
    - **No direct SQL exposed:**
      - Grep for `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` — these must
-       appear ONLY inside `src/foundation/index-store.ts`, never in
-       `index-query.ts` or any consumer module.
+       appear ONLY inside `src/foundation/IndexStore.ts`, never in
+       `IndexQuery.ts` or any consumer module.
      - `IndexQuery` calls typed methods on `IndexStore`, which internally
        translates to parameterized SQL. The query layer composes typed calls,
        never SQL strings.
@@ -120,16 +163,17 @@ scans without a covering index.
      falls back to scanning the pack JSON files or loading full-shard data
      into memory.
    - Grep the entire codebase for pack-manifest reading, JSONL scanning, or
-     full-file loading outside `pack-index-compiler.ts` — prove none exist
+     full-file loading outside `PackIndexCompiler.ts` — prove none exist
      in query/store paths.
 
 ## Expected Ownership
 
-- `src/foundation/index-store.ts` — owns all SQLite access: opening, closing,
+- `src/foundation/IndexStore.ts` — owns all SQLite access: opening, closing,
   integrity checking, invalidation, and the typed internal query methods that
-  translate to parameterized SQL. No other module imports `better-sqlite3` or
-  any SQLite primitive.
-- `src/foundation/index-query.ts` — owns the typed query facade: all public
+  translate through focused typed store methods. The DB-01 driver capsule alone
+  imports the selected package; query/application modules use no driver
+  primitive.
+- `src/foundation/IndexQuery.ts` — owns the typed query facade: all public
   query methods, cursor/pagination management, bounded-context assembly,
   corruption/stale detection dispatch, and the no-fallback guarantee. Calls
   `IndexStore` typed methods only; never constructs SQL strings.
@@ -157,10 +201,10 @@ scans without a covering index.
   enforced and truncated results are marked.
 - **Model-free proof:** Architecture check verifying no model/AI imports.
 - **No raw SQL exposed:** Grep for `.exec(`, `.run(`, `.prepare(`, `.all(`,
-  `.get(` — prove they appear ONLY in `index-store.ts`, never in `index-query.ts`
+  `.get(` — prove they appear ONLY in `IndexStore.ts`, never in `IndexQuery.ts`
   or any consumer.
 - **No full-pack/JSON-shard fallback:** Grep for pack manifest reading or JSONL
-  scanning in `index-query.ts` and `index-store.ts` — prove none exist.
+  scanning in `IndexQuery.ts` and `IndexStore.ts` — prove none exist.
 
 ## What Must Not Change
 
@@ -168,7 +212,9 @@ scans without a covering index.
 - Do not expose raw SQL or database handles to any consumer.
 - Do not fall back to reading pack files when the index is unavailable.
 - Do not invoke any model, LLM, or AI.
-- Do not import `better-sqlite3` or similar outside `index-store.ts`.
+- Do not import the selected SQLite driver package outside the DB-01 driver
+  capsule; `IndexStore` owns pack-index SQL/statement definitions behind typed
+  methods.
 - Do not modify the lane directory layout from `v1.md §7.2`.
 
 ## Review Procedure Highlights
@@ -176,7 +222,7 @@ scans without a covering index.
 1. Independently open a compiled index and verify every typed query method
    returns correct results.
 2. Verify that `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` appear ONLY in
-   `index-store.ts` — never in `index-query.ts` or any consumer module.
+   `IndexStore.ts` — never in `IndexQuery.ts` or any consumer module.
 3. Verify that when the SQLite database is corrupt, missing, or stale, NO query
    completes and NO partial data is returned.
 4. Verify boundedness: no query performs a full table scan or unindexed scan.

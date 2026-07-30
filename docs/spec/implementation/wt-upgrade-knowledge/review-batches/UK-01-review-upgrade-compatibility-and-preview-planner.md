@@ -1,5 +1,47 @@
 # UK-01 Review: Upgrade Compatibility And Preview Planner — Review Brief
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Review batch ID: `UK-01-review`
 Reviews work batch: `UK-01` — Upgrade compatibility and preview planner
 Reviewer reasoning class: R4 (deep repository reasoning)
@@ -19,10 +61,13 @@ every managed asset and that the preview command never mutates lane state.
 
 ### 1. Source ownership verification
 
-- [ ] `upgrade-planner.ts` owns the classification algorithm; `UpgradeCommand.ts` delegates and renders
+- [ ] `UpgradePlanner.ts` owns the classification algorithm; `UpgradeCommand.ts` delegates and renders
 - [ ] No classification logic or manifest comparison lives in the command class
 - [ ] No product logic in `src/cli.ts`
-- [ ] Command fits within size bands (≤ 220 lines for command, ≤ 350 for planner)
+- [ ] Command and planner satisfy the exact structural matrix: command prefers
+      at most 120 lines, warns at 121–160, and rejects over 180; foundation
+      planner prefers at most 200, warns at 201–260, and rejects over 300.
+      Cohesion remains mandatory below every threshold.
 
 ### 2. Classification correctness
 
@@ -59,7 +104,9 @@ every managed asset and that the preview command never mutates lane state.
 - [ ] Rerun all Jasmine specs independently; compare results with implementation report
 - [ ] Verify every classification spec has a counterexample that fails without the implementation
 - [ ] Verify no-mutation spec uses a write-tracking mechanism (not narrative)
-- [ ] Verify `upgradePlan` JSON output against schema bundle using `ajv` or equivalent
+- [ ] Verify `upgradePlan` JSON output against the schema bundle through the
+      accepted RM-02 schema-validation boundary; do not add or bypass it with
+      an ad hoc validator dependency
 
 ### 7. Documentation and status
 
@@ -199,10 +246,48 @@ Before evaluating the implementation:
 
 ## Structural Design And Module-Size Gate
 
-- Verify command file line count. Flag if over 220.
-- Verify planner file line count. Flag if over 350.
-- Verify test modules are split by classification family if over 300 lines.
-- Verify no `helpers/`, `utils/`, `common/`, or `misc/` modules were created.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Your Review Mission
 
@@ -216,7 +301,7 @@ Independently verify every claim in the UK-01 implementation:
    error occurred?
 4. Validate `upgradePlan` JSON output against the schema bundle using a
    schema validator.
-5. Trace the classification algorithm source: is it in `upgrade-planner.ts`
+5. Trace the classification algorithm source: is it in `UpgradePlanner.ts`
    or leaked into `UpgradeCommand.ts`?
 6. Verify every exit code matches the spec: 0, 2, 3, 4, 5.
 7. Verify `--apply` is parsed but not implemented.

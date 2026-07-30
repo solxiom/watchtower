@@ -1,5 +1,47 @@
 # UK-04: Codex, Cursor, And Claude Knowledge Installers — Work Brief
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Batch ID: `UK-04`
 Pack: `wt-upgrade-knowledge` (pack 4 of 6)
 Reasoning class: R3 (bounded repository reasoning)
@@ -19,7 +61,7 @@ making false notification claims.
 
 ## Files Owned By This Batch
 
-- `src/foundation/host-adapters.ts` — NEW: adapter factory, per-host knowledge installers
+- `src/foundation/HostAdapters.ts` — NEW: adapter factory, per-host knowledge installers
 - `src/commands/SkillInstallCommand.ts` — NEW: user-facing skill install orchestration
 - `spec/basic/skill-install.spec.ts` — NEW: unit and integration specs
 
@@ -73,7 +115,7 @@ making false notification claims.
 
 ## Implementation Steps
 
-1. **Host adapter factory** (`src/foundation/host-adapters.ts`):
+1. **Host adapter factory** (`src/foundation/HostAdapters.ts`):
    - `resolveHostAdapter(host: 'codex' | 'cursor' | 'claude'): HostAdapter`
    - `HostAdapter` interface: `preview(knowledgeRoot, scope, options)`, `install(knowledgeRoot, scope, options)`, `getInstalledVersion(destination)`
    - Each adapter implementation is a focused module or internal class
@@ -138,7 +180,9 @@ making false notification claims.
 - No false notification claim (adapter result always `unverified`)
 - `--replace` requirement enforced in non-interactive mode
 - `--json` validates against `mutationResult` schema
-- Command fits within 160/220-line bands; adapters within 220/300
+- Command prefers at most 120 lines, warns at 121–160, and rejects over 180;
+  each focused adapter prefers at most 200, warns at 201–260, and rejects over
+  300. Passing a count never excuses a mixed host-adapter responsibility.
 - No product logic in `src/cli.ts`
 
 ## Implementation Report
@@ -270,19 +314,54 @@ Before writing any implementation code:
 
 ## Structural Design And Module-Size Gate
 
-- `SkillInstallCommand` (command front door): target 160 lines; scrutinize
-  at 220; hard reject above 300
-- `host-adapters.ts` (factory + common interface): target 220 lines for the
-  factory and common logic; split per-adapter implementations into focused
-  internal modules if any adapter exceeds 100 lines of unique logic
-- Test module: target 300 lines; split by adapter if larger
-- No monolithic adapter-does-everything module
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Your Mission
 
 Create the host adapters and skill install command:
 
-1. Implement `src/foundation/host-adapters.ts` with the factory and three
+1. Implement `src/foundation/HostAdapters.ts` with the factory and three
    adapter implementations
 2. Implement `src/commands/SkillInstallCommand.ts` with preview/replace/scope/
    dry-run behavior

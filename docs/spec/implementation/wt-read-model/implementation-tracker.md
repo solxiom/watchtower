@@ -1,5 +1,19 @@
 # Watchtower v1 Read Model Implementation Tracker
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 **Status:** ⏳ Awaiting implementation — M1 read-model pack
 **Last Updated:** 2026-07-30
 **Scope:** Watchtower v1 read-only foundation — contracts, parsers, discovery, membership, bindings, observations, and commands
@@ -19,9 +33,10 @@
   primary models, alternatives, steering-only tools, prohibited final-pass
   classes, context requirements, and final-authority limits are never reduced
   to an `R` label plus shorthand.
-- Hand-maintained modules target focused 160/220-line bands, receive mandatory
-  scrutiny through 300/350 lines, and have an absolute 400-line ceiling without
-  allowing line count to excuse mixed responsibilities.
+- Hand-maintained modules use the exact category matrix (120 command/front
+  door, 140 orchestrator, 200 foundation, 240 contracts, and 300 tests as
+  preferred maxima), including its category-specific warning and hard-reject
+  bands; no count excuses mixed responsibilities.
 - DB-01 depends on RM-01 accepted; it gates the derived-store path.
 - RM-02 through RM-05 may proceed in parallel after RM-01 accepted.
 - RM-06 depends on RM-03 and RM-04 accepted.
@@ -61,7 +76,7 @@
 | Batch | Minimum proof posture |
 |-------|-----------------------|
 | RM-01 | Type-level fixtures for every error code and exit-code mapping; versioned IDs for every domain type; exhaustive error fixtures including unknown, boundary, and malformed cases; proof that no exit code is reused or unmapped |
-| DB-01 | Driver selection ADR documenting `better-sqlite3` choice, failure model, and no-JSON-shard-fallback rule; global install proof (`nvb dist && npm install -g ./dist`); parameterized query execution with typed row access; foreign-key enforcement; WAL mode activation; busy-timeout handling; owner-only permissions; integrity check; corruption detection; staged rebuild; semantic-root reproduction; crash safety proof |
+| DB-01 | Driver selection ADR documenting viable candidates, reproduced evidence, selected package/version, failure model, supported targets, and no-JSON-shard-fallback rule; global install proof (`nvb dist && npm install -g ./dist`); parameterized typed operations; FK enforcement; WAL; busy timeout; permissions; integrity/corruption; staged rebuild; semantic-root reproduction; crash safety |
 | RM-02 | Schema validation of success/error envelopes against v1.schema.json; round-trip serialization of every `commandResult` and `commandError` variant; proof that `--json` produces no decorative text on stdout; additive-field compatibility proof within schema version 1 |
 | RM-03 | Fixture-proven resolution precedence for `WATCHTOWER_DATA_HOME`, XDG fallback, explicit `--workspace`, git toplevel, and ancestor walk; symlink/case/path-escape rejection fixtures covering `..`, symlink loops, null bytes, and control characters; missing workspace error fixtures |
 | RM-04 | 30+ fixture malicious-shell corpus validation (no execution); known-key parsing with exact value reproduction; unknown-key preservation proof; blank-line and comment handling; line-number diagnostics for every rejection class |
@@ -80,7 +95,7 @@ RM-01: Contract kernel and error taxonomy
   +--- DB-01: SQLite driver, packaging, and derived-store feasibility
   |
   |
-  |--- 
+  |---
   |   v
   | RM-02: JSON envelopes and schema validation
   |

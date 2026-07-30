@@ -1,7 +1,18 @@
-# wt-runtime-distribution — Implementation Quality And Agent Rules
+# wt-runtime-distribution Implementation Quality And Agent Rules
 
-Status: active pack quality rules
-Date: 2026-07-30
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
 
 ## Purpose
 
@@ -18,19 +29,21 @@ They supplement:
 
 ## Shared Quality Rules
 
-- Keep the `RuntimeAdapter` as the single invocation boundary for all runtime
-  actions; no command or foundation service may spawn runtime scripts directly.
+- Keep `LaneTaskRunner` as the sole application NVB invocation boundary.
+  Commands and application services cannot invoke NVB, Nirvana `cmd`, or a
+  runtime executable directly.
 - Keep one lower-layer owner per major concern: asset audit, manifest validation,
-  data-root resolution, catalog staging, runtime adapter, managed assets, NVB
+  data-root resolution, catalog staging, lane task runner, leaf adapter, managed assets, NVB
   staging automation, and integration smoke proof.
 - Never evaluate lane config or state through shell execution in TypeScript.
   Parse strict scalar subsets only.
-- Never log secrets or complete environment maps during invocation diagnostics.
-  Only resolved `WT_*` key names may appear in verbose output, never their values.
-- Never import `node:child_process` with `{ shell: true }` in the runtime adapter.
-  All subprocess invocation uses `spawn()` with an argv array.
-- `WT_*` environment variables are allowlisted; the adapter exports only keys
-  matching `^WT_` from the resolved lane context and never passes `process.env`.
+- Never log secrets or complete environment maps during invocation diagnostics;
+  task/leaf-declared key names may be logged only after redaction.
+- Never import `node:child_process`. An evidenced facade gap may use one narrow
+  Nirvana `cmd` adapter behind `LaneTaskRunner` and the same explicit NVB target.
+- Task/leaf environments are explicitly declared and derived from validated
+  lane context; a `WT_` prefix alone is insufficient and `process.env` is never
+  forwarded wholesale.
 - Immutable version roots must not be writable after staging. The catalog must
   fail a write attempt against an existing version root.
 - Managed lane links must validate the link target checksum against the runtime
@@ -67,7 +80,8 @@ source owners as acceptance anchors.
 - `docs/spec/v1.md` — §§7 (filesystem contract), 12 (runtime invocation contract),
   15 (packaging)
 - `docs/spec/v1-contracts.md` — §§1 (precedence), 4 (routing), 11 (locking/transactions)
-- `docs/spec/architecture.md` — §§4.5 (runtime adapter), 5.2 (user data), 6.3
+- `docs/spec/architecture.md` — §§4.5 (lane task runtime and leaf adapter),
+  5.2 (user data), 6.3
   (runtime execution), 9.1 (trust zones)
 - `docs/spec/schemas/v1.schema.json` — JSON Schema bundle
 
@@ -75,34 +89,34 @@ source owners as acceptance anchors.
 
 - `src/contracts/` — manifest types, public runtime/knowledge shapes
 - `src/foundation/` — asset audit, manifest validator, runtime catalog, data-root,
-  runtime adapter, runtime invoke, managed assets
+  lane task runner, leaf/foreground invocation, managed assets
 - `runtime-nvb/` — distribution staging tasks
 - `spec/integration/` — runtime smoke proof
 
 ### Build and workflow owners
 
-- `nira.json` — NVB task registrations
+- `nvb.json` and repository NVB handlers — development build/dist task owners;
+  `nira.json` remains ecosystem metadata
 - `package.json` — package metadata; no npm script sprawl
 
 ## Architectural Non-Negotiables
 
 These are hard acceptance rules for every `wt-runtime-distribution` batch.
 
-- Do not invoke a runtime script from a command class directly. All invocation
-  crosses `RuntimeAdapter`.
-- Do not construct shell command strings with template literals. Use `spawn()`
-  with an argv array.
-- Do not pass `process.env` to a runtime subprocess. Export only resolved `WT_*`
-  keys.
-- Do not log the complete resolved environment. Only `WT_*` key names may appear
-  in `--verbose` output.
+- Do not invoke NVB, Nirvana `cmd`, or a runtime leaf from a command/application
+  service. Application invocation crosses `LaneTaskRunner`; leaves are reached
+  only by their owning TaskHandlers through `LeafRuntimeInvoker`.
+- Do not construct shell command strings. Use typed actions, explicit pinned
+  NVB targets, and argv-only audited Nirvana command calls for leaves/fallback.
+- Do not pass `process.env` wholesale. Supply only task-declared keys from
+  validated context and redact all values from diagnostics.
 - Do not create a second immutable-catalog owner. One catalog class stages and
   validates version roots.
-- Do not create a second invocation boundary. One adapter constructs argv,
-  environment, and validation.
+- Do not create a second application task boundary. `LaneTaskRunner` owns typed
+  action/target/result mapping; `LeafRuntimeInvoker` owns only cataloged leaves.
 - Do not create a second managed-asset authority. One owner validates link
   targets, checksums, collisions, and escapes.
-- Do not import shell-mode `child_process` anywhere.
+- Do not import `node:child_process` anywhere.
 - Do not import `fs.promises.symlink` without preceding target validation and
   escape checks.
 - Do not let a stale or missing runtime manifest produce a silent null-default
@@ -135,8 +149,8 @@ of deep behavior.
 
 Examples of hard reject shapes:
 
-- `RuntimeAdapter` accumulating filesystem access checks, OS user resolution,
-  environment validation, subprocess management, and signal forwarding in one
+- `NirvanaLaneTaskRunner` accumulating catalog/profile verification, context
+  construction, event mapping, leaf execution, rendering, and policy in one
   class
 - `RuntimeCatalog` owning XDG resolution, atomic staging, checksum validation,
   and version management without delegation
@@ -178,34 +192,49 @@ modules.
 
 Line count is a design alarm, not a license to pack unrelated behavior up to a
 limit. Count physical source lines, including comments and blank lines, for new
-files and materially rewritten files. Generated artifacts and third-party
-vendored sources are outside these targets only when their generated or
-vendored ownership is explicit and they contain no hand-maintained behavior.
+files and materially rewritten files. Generated artifacts are outside these
+targets only when their generated ownership is explicit and they contain no
+hand-maintained behavior.
 
-Required size bands:
+The project-wide engineering standard defines these exact size bands:
 
-- Front doors, factories, registries, commands, and public barrels should target
-  160 lines or fewer. From 161 through 220 lines, the implementation agent must
-  justify every retained responsibility and the reviewer must inspect for
-  extraction opportunities. A hand-maintained front door over 220 lines is
-  rejectable unless an existing repo-owned constraint makes immediate extraction
-  riskier and a narrowly scoped exception is recorded. No such front door may
-  exceed 300 lines.
-- Focused implementation modules should target 220 lines or fewer. From 221
-  through 300 lines, the agent must include a responsibility inventory and the
-  reviewer must independently decide whether the module still has one cohesive
-  reason to change. From 301 through 350 lines, splitting is expected and
-  acceptance requires a concrete, source-backed reason why a split would make
-  ownership less clear. Above 350 lines is a hard rejection for new or
-  materially rewritten hand-maintained implementation modules.
-- Four hundred physical lines is the absolute ceiling for any hand-maintained
-  JS/TS source or spec module touched by this pack. The 400-line ceiling is not
-  an exception target: a file can and should be rejected well below it when it
-  mixes responsibilities, hides a state machine, duplicates policy, or acts as
-  an overflow container.
-- Test modules should normally stay at or under 300 lines. Larger scenario
-  matrices must be split by contract family, fixture owner, or acceptance-ID
-  range and share focused fixture builders rather than one giant test file.
+| Module category | Preferred maximum | Warning band | Hard rejection |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB task front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contracts and type-only modules | 240 | 241–320 | over 400 |
+| Test/spec modules | 300 | 301–420 | over 500 |
+
+Functions target 40 lines or fewer, enter a warning band at 41–60 lines, and
+are rejected above 80 lines. Constructors target 25 lines or fewer, enter a
+warning band at 26–40 lines, and are rejected above 50 lines. A warning-band
+module or function requires a responsibility inventory and explicit reviewer
+judgment; reaching a hard limit is not an automatic entitlement to an
+exception.
+
+Every module must have one primary responsibility and one cohesive reason to
+change. Commands and NVB TaskHandlers validate, normalize, delegate, and map
+results; they do not become workflow owners. Orchestrators sequence focused
+collaborators without absorbing storage, validation, rendering, subprocess, or
+state-machine algorithms. Contracts remain type-only. Human rendering is not
+mixed with mutation or persistence.
+
+An exception must be approved before implementation and must identify the exact
+file, the proposed maximum, the concrete reason splitting would make ownership
+less clear, the approving reviewer, and an expiry or follow-up batch. A
+retroactive exception is invalid. Existing oversized files are not precedent:
+when touched they must become smaller, be split, or remain line-count neutral
+with a recorded extraction plan and reviewer approval.
+
+Naming is part of the structural gate. Class-owning TypeScript modules use
+PascalCase filenames, functions and values use lowerCamelCase, and new source
+filenames do not use dashes or underscores. Generic overflow owners such as
+`helpers`, `utils`, `common`, and `misc` are rejected.
+
+Larger test scenario matrices must be split by contract family, fixture owner,
+or acceptance-ID range and share focused fixture builders rather than one giant
+test file.
 - Existing oversized files are not permission to add more behavior. If a batch
   must touch one, it should leave the file no larger unless the added lines are
   temporary extraction glue removed in the same batch. The report must record
@@ -213,29 +242,29 @@ Required size bands:
 
 Responsibility gates apply independently of line count:
 
-- three or more independently nameable responsibilities in one module require
-  a split, even when the file is under 220 lines
-- state transition policy, transport or process I/O, mapping/normalization, and
-  human rendering must not accumulate in one owner
-- a class that owns environment construction, subprocess management, signal
-  forwarding, and access validation is a god object and must be rejected
-- a coordinator may sequence collaborators but must not absorb their
-  algorithms; a registry may resolve owners but must not reimplement them
-- a barrel exports the capsule surface only and must not become a forwarding
-  layer for foreign APIs
+- Three or more independently nameable responsibilities in one module require
+  a split, even when the file is below its preferred maximum.
+- State transition policy, transport or driver I/O, mapping/normalization, and
+  human rendering must not accumulate in one owner.
+- A class that owns index compilation, query routing, digest verification, and
+  corruption repair is a god object and must be rejected.
+- A coordinator may sequence collaborators but must not absorb their algorithms;
+  a registry may resolve owners but must not reimplement them.
+- A barrel exports the capsule surface only and must not become a forwarding
+  layer for foreign APIs.
 
 Additional reject conditions:
 
-- a file mixes unrelated concerns such as parsing plus staging plus invocation
-  plus rendering
-- a new helper bag (`helpers`, `utils`, `common`, `misc`) becomes the overflow
-  owner
-- a large legacy file grows materially without extracting lower-layer ownership
-- comments are used to justify mixed responsibility instead of splitting owners
+- A file mixes unrelated concerns such as index building plus proposal validation
+  plus effect journaling.
+- A new helper bag (`helpers`, `utils`, `common`, `misc`) becomes the overflow owner.
+- A large legacy file grows materially without extracting lower-layer ownership.
+- Comments are used to justify mixed responsibility instead of splitting owners.
 
 Every implementation report must include line counts for all new files and
-materially rewritten files. Every review report must independently reproduce or
-verify those counts and state whether each warning-band file remains cohesive.
+materially rewritten files, categorized against the matrix above. Every review
+report must independently reproduce or verify those counts and state whether
+each warning-band file and function remains cohesive.
 Passing the line-count gate never overrides the responsibility gates above.
 
 ## Agent Reasoning Classes And Batch Assignment
@@ -309,7 +338,8 @@ handoff requirements must not be removed or compressed into ambiguous shorthand.
 
 Apply the Watchtower repo's source naming conventions strictly:
 
-- Class and main module files: PascalCase (e.g., `RuntimeAdapter.ts`)
+- Class and main module files: PascalCase (for example,
+  `NirvanaLaneTaskRunner.ts`)
 - Non-class module files: lowerCamelCase (e.g., `runtimeInvoke.ts`)
 - Directory names for source/spec: lowerCamelCase or feature-name
 - No dash-case or underscore-case in JS/TS source/spec paths
@@ -320,9 +350,9 @@ Apply the Watchtower repo's source naming conventions strictly:
 
 Reject the batch if it introduces any of the following:
 
-- a subprocess invocation using `{ shell: true }` or string-based command
-  construction
-- complete `process.env` passed to a runtime subprocess
+- direct `node:child_process`, implicit NVB target discovery, or string-based
+  command construction
+- complete `process.env` passed to a task or leaf
 - secrets or environment values logged at any verbosity level
 - runtime entrypoint invocation without cwd, account, or access validation
 - a symlink target accepted without checksum comparison against the runtime
@@ -391,17 +421,18 @@ No batch is acceptable on narrative confidence alone.
 
 Reject the batch immediately if any answer is "yes."
 
-1. Did the implementation invoke a runtime script from a command class directly
-   without crossing the `RuntimeAdapter`?
-2. Did a front door become the main owner of subprocess management, environment
-   construction, or access validation logic?
+1. Did a command or application service invoke NVB, Nirvana `cmd`, or a runtime
+   leaf without crossing `LaneTaskRunner`, or did a leaf bypass its owning
+   TaskHandler and `LeafRuntimeInvoker`?
+2. Did a front door become the main owner of catalog/profile validation,
+   environment construction, event/result mapping, or leaf execution?
 3. Is any important behavior owned by more than one module or layer (e.g., two
-   modules independently constructing `WT_*` environments)?
+   modules independently constructing task environments)?
 4. Did the implementation guard only the final invocation while allowing
    unsanitized environment or shell evaluation?
-5. Can a runtime script be invoked with `{ shell: true }` or through string
-   interpolation anywhere in the adapter?
-6. Did the adapter pass complete `process.env` to a runtime subprocess?
+5. Can a caller select an arbitrary task/config/module/leaf, cause implicit
+   project `nvb.json` discovery, or reach direct raw subprocess execution?
+6. Did the runner or leaf adapter pass complete `process.env`?
 7. Are secrets, environment values, or command arguments logged at any verbosity
    level?
 8. Was proof omitted, deferred, mis-layered, only narrated, or run through an
@@ -451,5 +482,7 @@ accept.
   temporary fixes, or one-off maintenance flows.
 - Keep `package.json` `scripts` minimal and only when there is a clear
   product/runtime requirement.
-- If a new workflow is needed, add it to `runtime-nvb/` or `nira.json` task
-  registrations instead of expanding `package.json` scripts.
+- If a new packaged workflow is needed, add it to reviewed `runtime-nvb/`
+  fragments/handlers and regenerate the catalog. Repository development
+  workflows use the actual `nvb.json`/handler surface. Do not use `nira.json`
+  as an invented task registry.

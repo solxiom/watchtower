@@ -1,5 +1,82 @@
 # Agent Launch Prompt — Work Batch CA-02
 
+## Governing Contract And Precedence — Mandatory
+
+This prompt is an execution aid, not product authority. Resolve conflicts in
+this order and stop for a specification amendment rather than inventing
+behavior:
+
+1. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
+2. `docs/spec/v1.md`
+3. `docs/spec/nirvana-integration-architecture.md`,
+   `docs/spec/coordinator-automation.md`, `docs/spec/operator-session.md`, and
+   `docs/spec/cli-session.md` within their scopes
+4. `docs/spec/architecture.md`
+5. `docs/development/engineering-and-review-standard.md`
+6. `AGENTS.md`
+7. the accepted implementation map, pack rules, and this batch brief
+
+The implementation/review agent must read the mandatory engineering standard
+and Nirvana integration architecture in full. A stale path, module suggestion,
+or technical mechanism in this prompt must be corrected to the governing
+contract while preserving the batch objective and proof obligations.
+
+## Nirvana-First And NVB Execution Gate — Mandatory
+
+- Complete and report the required Nirvana API usage audit before introducing
+  infrastructure or bare Node behavior.
+- Commands use Nirvana command, argument, pretty, and terminal-view APIs and
+  remain thin.
+- Public reason codes, exit mappings, event names, and schema identifiers remain
+  owned by accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`. A
+  batch-local symbolic name is not automatically public; reconcile it with the
+  registry, and update the owning contract/schema in the same batch when a new
+  public identifier is genuinely required.
+- Use the Nirvana storage facade for ordinary managed-root operations only
+  after CLI-safe root/bootstrap semantics are proved. Atomic durability,
+  canonical path security, locking, append-only journals, ownership/modes, and
+  SQLite stay behind focused adapters when the facade lacks required semantics.
+- Use the Nirvana logger only through the Watchtower logging boundary for
+  redacted diagnostics. Logs are never command output, lifecycle events,
+  acceptance evidence, or authoritative journals.
+- Substantial deterministic workflows use the immutable packaged Watchtower
+  NVB catalog, focused TaskHandlers, and task groups.
+- `LaneTaskRunner` is the only internal NVB invocation boundary. Task selection
+  is an allowlisted Watchtower action mapping, never an arbitrary user/agent
+  task name or parent-project discovery.
+- Never create or modify a participating repository's root `nvb.json`.
+- Shell is restricted to checksum-manifested leaf adapters for tmux, Git, or
+  external tools when no conforming Nirvana API exists. Workflow-level shell is
+  a hard reject.
+- Mutating tasks do not gain authority from NVB. They require the normal
+  Watchtower effect executor, current-state validation, locks, idempotency, and
+  a valid single-use invocation envelope.
+
+## Project-Wide Structural And Size Gate — Mandatory
+
+Apply the exact limits in
+`docs/development/engineering-and-review-standard.md`; pack-local numbers may
+be stricter but may never relax them:
+
+- CLI entry, command, or NVB task: preferred at most 120 lines, warning at
+  121–160, hard reject over 180.
+- Orchestrator, controller, or renderer shell: preferred at most 140 lines,
+  warning at 141–180, hard reject over 200.
+- Foundation service, planner, validator, adapter, or store: preferred at most
+  200 lines, warning at 201–260, hard reject over 300.
+- Contract/type/schema registry: preferred at most 240 lines, warning at
+  241–320, hard reject over 400.
+- Test/spec module: preferred at most 300 lines, warning at 301–420, hard reject
+  over 500.
+- Function: target at most 40 lines, justification at 41–60, reject over 80.
+- Constructor: target at most 25 lines, warning at 26–40, reject over 50.
+
+Passing a line limit never excuses mixed responsibilities, a god object,
+generic helper bag, hidden cycle, foreign API laundering, or layer violation.
+Use `PascalCase` for classes/class-owning files, `lowerCamelCase` for non-class
+modules and directories, and never introduce dashed or underscored backend
+source/spec names.
+
 ## Recommended agent/model class for forwarding:
 
 - brief-declared reasoning level: `R5`
@@ -63,12 +140,13 @@ Repository prerequisites before item 1: `AGENTS.md`.
 11. `docs/spec/implementation/wt-coordinator-automation/implementation-quality-and-agent-rules.md`
 12. `docs/spec/v1-implementation-map.md` — section 8 (CA-02)
 13. Accepted CA-01 compiler output — the SQLite schema (all tables with FK constraints), `computeSemanticRoot`, and the published `current.json` pointer format
-14. Accepted DB-01 storage adapter
+14. Accepted DB-01 focused SQLite ports and driver capsule, including the
+    recorded driver decision and typed lifecycle/failure contracts
 15. the canonical source owners you will actually change:
-    - `src/foundation/index-store.ts` (create)
-    - `src/foundation/index-query.ts` (create)
-    - `spec/basic/index-store-spec.ts` (create)
-    - `spec/basic/index-query-spec.ts` (create)
+    - `src/foundation/IndexStore.ts` (create)
+    - `src/foundation/IndexQuery.ts` (create)
+    - `spec/basic/indexStore.spec.ts` (create)
+    - `spec/basic/indexQuery.spec.ts` (create)
 
 ## Reasoning / Agent Class
 
@@ -97,7 +175,7 @@ Before editing or accepting code:
 3. Enumerate public invariants, invalid states, failure precedence, concurrency
    or re-entrancy risks, compatibility constraints, and deliberately unsupported
    behavior before choosing or evaluating a design. Pay special attention to:
-   no raw SQL exposed outside `index-store.ts`; no full-pack-scan fallback;
+   no raw SQL exposed outside `IndexStore.ts`; no full-pack-scan fallback;
    corruption detected and refused, never silently served.
 4. Use counterexamples: identify at least one plausible shortcut that would pass
    a happy-path test while violating ownership, safety, or public result
@@ -110,41 +188,60 @@ Before editing or accepting code:
 
 ## Structural Design And Module-Size Gate
 
-The batch must preserve focused ownership and must not produce a ball of mud,
-god object, giant coordinator, or overflow helper module.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
 
-- Front doors and public barrels target 160 lines or fewer. Files from 161
-  through 220 lines require an explicit cohesion justification. A hand-maintained
-  front door over 220 lines is rejectable without a narrow pre-existing
-  constraint, and no front door may exceed 300 lines.
-- Focused implementation modules target 220 lines or fewer. Files from 221
-  through 300 lines require a responsibility inventory and independent reviewer
-  scrutiny. Files from 301 through 350 lines are expected to split; acceptance
-  requires a source-backed reason why splitting would reduce ownership clarity.
-  New or materially rewritten implementation modules above 350 lines are rejected.
-- Four hundred physical lines is the absolute ceiling for every hand-maintained
-  JS/TS source or spec module touched by this lane. The ceiling does not make a
-  mixed-responsibility file acceptable.
-- Split a module below those thresholds when it owns three or more independently
-  nameable concerns.
-- Do not create generic `helpers`, `utils`, `common`, or `misc` overflow bags.
-  Use feature-local capsules with explicit owner names.
-- Record physical line counts for every new or materially rewritten file. The
-  reviewer must independently verify warning-band files and reject unjustified
-  growth.
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
 
 ## Your Mission
 
 Build the typed query facade over the compiled SQLite index:
 
-1. Create `src/foundation/index-store.ts` — the ONLY module that imports
-   `better-sqlite3` or any SQLite primitive. Owns: `openIndex`, `close`,
+1. Create `src/foundation/IndexStore.ts` — the domain pack-index store behind
+   DB-01 focused SQLite ports. It does not import the selected driver package
+   or expose arbitrary SQL/handles. Owns: `openIndex`, `close`,
    `verifyIndexIntegrity` (PRAGMA integrity_check + FK verification + semantic
    root check), `invalidateIndex`, `currentIndexDigest`, and all internal typed
    query methods that translate to parameterized SQL. No raw SQL strings are
    accepted from callers.
 
-2. Create `src/foundation/index-query.ts` — the typed query facade. Owns:
+2. Create `src/foundation/IndexQuery.ts` — the typed query facade. Owns:
    - `getArtifact`, `getBatch`, `getBatches`, `getBatchesByIds`,
      `getDependencies`, `getDependents`, `getRequirements`, `getRepositories`,
      `getProofs`, `getArtifactsByBatch`
@@ -173,7 +270,8 @@ Build the typed query facade over the compiled SQLite index:
 
 - Do not expose raw SQL, database handles, or SQLite primitives to any
   consumer of `IndexQuery`.
-- Do not import `better-sqlite3` outside `index-store.ts`.
+- Do not import the selected SQLite driver package outside the DB-01 driver
+  capsule. Keep pack-index statements inside `IndexStore` typed methods.
 - Do not fall back to reading pack JSON files when the index is unavailable.
 - Do not serve partial or unverified data when the index is corrupt.
 - Do not invoke any model, LLM, or AI.
@@ -197,7 +295,7 @@ Before finishing, verify and report:
 - Page limit 201 → `INDEX_LIMIT_EXCEEDED`
 - Dependency resolution correct for 5-deep chain; depth limit 10 enforced
 - No raw SQL exposed: grep `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` —
-  prove they appear ONLY in `index-store.ts`
+  prove they appear ONLY in `IndexStore.ts`
 - No full-pack/JSON-shard fallback in query/store paths
 - Model-free architecture check passes
 - exact proof commands used
@@ -250,7 +348,7 @@ The report must include:
 - physical line counts for every new source/spec file
 - responsibility inventories for warning-band files
 - proof commands and outcomes
-- grep results proving no raw SQL outside `index-store.ts`
+- grep results proving no raw SQL outside `IndexStore.ts`
 - grep results proving no full-pack fallback
 - final `git status --short`
 - one proposed commit message for the reviewer
@@ -262,8 +360,8 @@ When you work always plan and make task lists and todos!
 ## Leave a helpful handoff message for the next agent
 
 State: which files were created/changed, the complete typed query method
-signatures, the storage capsule boundary (what lives in `index-store.ts` vs
-`index-query.ts`), which proofs passed, the grep evidence for no-raw-SQL and
+signatures, the storage capsule boundary (what lives in `IndexStore.ts` vs
+`IndexQuery.ts`), which proofs passed, the grep evidence for no-raw-SQL and
 no-full-pack-fallback, and what the CA-03 (runtime SQLite indexes and
 projections) agent needs to know about the typed query contract and the
 `IndexStore` interface.

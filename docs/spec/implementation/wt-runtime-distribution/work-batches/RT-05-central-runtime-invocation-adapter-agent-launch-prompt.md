@@ -1,5 +1,82 @@
 # Agent Launch Prompt — Work Batch RT-05
 
+## Governing Contract And Precedence — Mandatory
+
+This prompt is an execution aid, not product authority. Resolve conflicts in
+this order and stop for a specification amendment rather than inventing
+behavior:
+
+1. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
+2. `docs/spec/v1.md`
+3. `docs/spec/nirvana-integration-architecture.md`,
+   `docs/spec/coordinator-automation.md`, `docs/spec/operator-session.md`, and
+   `docs/spec/cli-session.md` within their scopes
+4. `docs/spec/architecture.md`
+5. `docs/development/engineering-and-review-standard.md`
+6. `AGENTS.md`
+7. the accepted implementation map, pack rules, and this batch brief
+
+The implementation/review agent must read the mandatory engineering standard
+and Nirvana integration architecture in full. A stale path, module suggestion,
+or technical mechanism in this prompt must be corrected to the governing
+contract while preserving the batch objective and proof obligations.
+
+## Nirvana-First And NVB Execution Gate — Mandatory
+
+- Complete and report the required Nirvana API usage audit before introducing
+  infrastructure or bare Node behavior.
+- Commands use Nirvana command, argument, pretty, and terminal-view APIs and
+  remain thin.
+- Public reason codes, exit mappings, event names, and schema identifiers remain
+  owned by accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`. A
+  batch-local symbolic name is not automatically public; reconcile it with the
+  registry, and update the owning contract/schema in the same batch when a new
+  public identifier is genuinely required.
+- Use the Nirvana storage facade for ordinary managed-root operations only
+  after CLI-safe root/bootstrap semantics are proved. Atomic durability,
+  canonical path security, locking, append-only journals, ownership/modes, and
+  SQLite stay behind focused adapters when the facade lacks required semantics.
+- Use the Nirvana logger only through the Watchtower logging boundary for
+  redacted diagnostics. Logs are never command output, lifecycle events,
+  acceptance evidence, or authoritative journals.
+- Substantial deterministic workflows use the immutable packaged Watchtower
+  NVB catalog, focused TaskHandlers, and task groups.
+- `LaneTaskRunner` is the only internal NVB invocation boundary. Task selection
+  is an allowlisted Watchtower action mapping, never an arbitrary user/agent
+  task name or parent-project discovery.
+- Never create or modify a participating repository's root `nvb.json`.
+- Shell is restricted to checksum-manifested leaf adapters for tmux, Git, or
+  external tools when no conforming Nirvana API exists. Workflow-level shell is
+  a hard reject.
+- Mutating tasks do not gain authority from NVB. They require the normal
+  Watchtower effect executor, current-state validation, locks, idempotency, and
+  a valid single-use invocation envelope.
+
+## Project-Wide Structural And Size Gate — Mandatory
+
+Apply the exact limits in
+`docs/development/engineering-and-review-standard.md`; pack-local numbers may
+be stricter but may never relax them:
+
+- CLI entry, command, or NVB task: preferred at most 120 lines, warning at
+  121–160, hard reject over 180.
+- Orchestrator, controller, or renderer shell: preferred at most 140 lines,
+  warning at 141–180, hard reject over 200.
+- Foundation service, planner, validator, adapter, or store: preferred at most
+  200 lines, warning at 201–260, hard reject over 300.
+- Contract/type/schema registry: preferred at most 240 lines, warning at
+  241–320, hard reject over 400.
+- Test/spec module: preferred at most 300 lines, warning at 301–420, hard reject
+  over 500.
+- Function: target at most 40 lines, justification at 41–60, reject over 80.
+- Constructor: target at most 25 lines, warning at 26–40, reject over 50.
+
+Passing a line limit never excuses mixed responsibilities, a god object,
+generic helper bag, hidden cycle, foreign API laundering, or layer violation.
+Use `PascalCase` for classes/class-owning files, `lowerCamelCase` for non-class
+modules and directories, and never introduce dashed or underscored backend
+source/spec names.
+
 ## Recommended agent/model class for forwarding:
 
 - brief-declared reasoning level: `R5`
@@ -49,12 +126,13 @@ the required proof without replacing evidence with narrative confidence.
 You are assigned **implementation work batch RT-05** for the Watchtower
 `wt-runtime-distribution` pack.
 
-This is the **hardest batch in the pack** — the single security boundary between
-the TypeScript control plane and the shell runtime. Every runtime invocation
-crosses this adapter. No command or foundation service may spawn runtime scripts
-directly. The adapter must enforce argv-only execution, `WT_*` environment
-allowlisting, cwd/account/access validation, signal forwarding, and subprocess
-lifecycle safety.
+This is the **hardest batch in the pack** — it establishes the single
+application-to-NVB boundary and the narrow leaf-executable boundary below
+focused TaskHandlers. No command or application service may invoke NVB, Nirvana
+`cmd`, or a runtime executable directly. The implementation must enforce typed
+action selection, immutable config/module pins, catalog/profile validation,
+structured event/result evidence, task-declared environment isolation, and
+honest handling of unproved foreground stdin/signal/PTY semantics.
 
 ## Read In This Order
 
@@ -65,11 +143,15 @@ Repository prerequisites: `AGENTS.md`.
 3. `docs/spec/implementation/wt-runtime-distribution/work-batches/00-work-batch-index.md`
 4. `docs/spec/implementation/wt-runtime-distribution/README.md`
 5. `docs/spec/implementation/wt-runtime-distribution/implementation-quality-and-agent-rules.md`
-6. `docs/spec/v1.md` — especially §12 (runtime invocation contract)
-7. `docs/spec/v1-contracts.md` — especially §4 (routing), §6 (adapter contract)
-8. `docs/spec/architecture.md` — especially §4.5 (runtime adapter), §6.3 (runtime execution), §9.1 (trust zones)
-9. RT-04 catalog — `src/foundation/runtime-catalog.ts` and `src/foundation/data-root.ts`
-10. RT-02 manifest types — `src/contracts/manifests.ts`
+6. `docs/spec/nirvana-integration-architecture.md` — especially sections 3,
+   4.5–4.7, 8, 9, and 10
+7. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
+8. `docs/spec/v1.md`, `docs/spec/architecture.md`, and
+   `docs/spec/v1-implementation-map.md`
+9. Accepted RT-02 task-catalog/profile contracts and RT-03 packaged NVB runtime
+10. Accepted RT-04 immutable data-root/catalog implementation and reports
+11. Installed pinned `@nirvana/*` package source/types plus relevant Nira and
+    Nirvana NVB usage
 
 ## Reasoning / Agent Class
 
@@ -96,77 +178,118 @@ Repository prerequisites: `AGENTS.md`.
 
 Before editing or accepting code:
 
-1. Build a dependency and ownership map from the runtime invocation contract to
-   the exact adapter, invoker, and manifest entry points.
+1. Build a dependency and ownership map from typed lane action through
+   application service, `LaneTaskRunner`, explicit immutable NVB target,
+   TaskHandler, and any cataloged leaf executable.
 2. Inspect the current source and accepted predecessor-batch output.
-3. Enumerate every safety invariant: no shell-mode spawn, no `process.env` leak,
-   `WT_*` only, cwd must exist, entrypoint must be readable/executable, action
-   must be in manifest, script path must not escape runtime root.
-4. Use counterexamples for every invariant: `spawn` with `{ shell: true }`,
-   merging `process.env`, invoking unregistered action, path with `..` escaping
-   runtime root, cwd removed after validation, signal to already-exited child.
-5. Treat the adapter as a security boundary. Every bypass is a hard reject.
-6. Treat predecessor reports as leads, not proof.
+3. Audit pinned Nirvana APIs and comparable ecosystem use. Record exact symbols
+   and proof for explicit config/module target, cwd, args, events/results,
+   environment, cancellation/signals, stdin, and PTY; name every unsupported
+   capability `NIRVANA_API_GAP`.
+4. Enumerate safety invariants: no arbitrary task/config/module/leaf selection,
+   no implicit cwd discovery, no project `nvb.json`, no wholesale `process.env`,
+   no terminal-text result parsing, no target/path escape, no unverified pin,
+   and no raw `node:child_process`.
+5. Use counterexamples for every invariant, including a malicious repository
+   task file, alternate cwd, catalog/profile digest drift, malformed NVB event
+   and result, undeclared environment key, and executable checksum/mode drift.
+6. Treat both boundaries as security boundaries. Every bypass is a hard reject.
+7. Treat predecessor reports as leads, not proof.
 
 ## Structural Design And Module-Size Gate
 
-- `runtime-adapter.ts` must be a thin facade: validate inputs, resolve action,
-  spawn, forward signals. Target 160 lines or fewer. Max 300 lines.
-- `runtime-invoke.ts` owns context construction and action resolution. Target
-  220 lines or fewer.
-- Split below thresholds when the adapter accumulates subprocess management,
-  environment validation, and signal handling in one class.
-- Do not create `helpers`, `utils`, `common`, or `misc` overflow bags.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
 
 ## Your Mission
 
-Implement the single runtime invocation adapter:
+Implement the typed packaged-task invocation boundary:
 
-1. Implement `RuntimeAdapter.invoke()` in `src/foundation/runtime-adapter.ts`:
-   - `spawn()` with `{ shell: false }` and argv array — never string command
-   - `WT_*` environment only — never `process.env`
-   - cwd must exist and be a directory
-   - OS account must have read + execute on the entrypoint
-   - action must be in the runtime manifest
-   - script path must not escape the runtime root after canonical resolution
-   - `--verbose` logs `WT_*` key names only, never values
-   - signal forwarding: SIGINT, SIGTERM, SIGHUP
-   - exit code and signal status preserved from child
-2. Implement `RuntimeInvoker.buildInvocationContext()` in
-   `src/foundation/runtime-invoke.ts`:
-   - resolve runtime version from lane's install manifest and catalog
-   - build `WT_*` map: `WT_WORKSPACE`, `WT_LANE_ID`, `WT_INITIATIVE_ID`,
-     `WT_LANE_SLUG`, `WT_LANE_DIR`, `WT_HOME_REPOSITORY_ID`,
-     `WT_REPOSITORIES_FILE`, `WT_ACTIVE_REPOSITORY_ID`, `WT_RUNTIME_ROOT`,
-     `WT_RUNTIME_VERSION`, `WT_KNOWLEDGE_ROOT`
-   - coordinator-only variables for decision invocations only
+1. Define the closed `LaneTaskAction`, request, structured result, and failure
+   contracts in `src/contracts/laneTasks.ts`. Callers cannot supply raw task,
+   config, module, executable, command, or environment values.
+2. Implement the `LaneTaskRunner` port and `NirvanaLaneTaskRunner` adapter:
+   - resolve action through the accepted lane task profile;
+   - validate catalog/profile identity, version, digest, schema, and runtime pin;
+   - invoke the pinned Nirvana `nvb` facade with explicit immutable config and
+     module targets, cwd, and typed arguments;
+   - collect and validate structured events/results without terminal parsing;
+   - return evidence without rendering, policy decisions, or journal authority.
+3. Record the full pinned Nirvana capability audit. If a required
+   non-interactive facade feature is absent, add only a narrowly justified
+   `NirvanaCmdNvbAdapter` behind the same port, using Nirvana `cmd`, exact
+   explicit targets, and argv—not direct `node:child_process`.
+4. Implement `LeafRuntimeInvoker` for manifest-declared executable leaves used
+   by their owning TaskHandlers. Enforce containment, checksum, mode, cwd,
+   typed argv, task-declared environment, redaction, and typed exit results.
+5. Keep foreground stdin/signal/PTY paths on the accepted product lifecycle
+   owner unless pinned API and real integration proof establish support.
 
 ## What You Must Not Do
 
-- Do not use `{ shell: true }` anywhere in the adapter.
-- Do not use template literals for command construction.
-- Do not pass `process.env` to child processes.
+- Do not use direct `node:child_process` or implicit NVB target discovery.
+- Do not let callers select task/group/config/module/executable values.
+- Do not pass `process.env` wholesale.
 - Do not log environment values at any level.
-- Do not invoke actions outside the runtime manifest.
+- Do not parse terminal text as an NVB result or treat NVB logs as authority.
+- Do not invoke actions outside the catalog/profile allowlist.
 - Do not create a second invocation boundary.
+- Do not claim foreground cancellation/signal/stdin/PTY support without pinned
+  API and integration proof.
 - Do not introduce managed-link or smoke-proof logic.
 - Do not commit.
 
 ## Required Proof
 
-- `spawn` called with `{ shell: false }` (mock and assert)
-- Only `WT_*` keys in env object (assert exact keys)
-- `process.env` never merged or passed
-- cwd rejection: non-existent dir, file path
-- Access rejection: non-readable, non-executable entrypoint
-- Unregistered action rejected before spawn
-- Path escape rejected (e.g., `..` segments)
-- SIGINT forwarded to child
-- Exit code preserved
-- Signal exit detected
-- Verbose output has key names only, never values
-- `buildInvocationContext` produces correct `WT_*` map
-- Coordinator-only variables absent for non-decision invocations
+- Pinned Nirvana API capability matrix with source/type/example references
+- Exact one-to-one action-to-catalog-task mappings
+- Explicit immutable config/module targets under changed and malicious cwd
+- Arbitrary task/config/module and project `nvb.json` rejection
+- Catalog/profile version, digest, schema, and runtime-pin rejection
+- Typed input plus structured event/result validation
+- Task-declared environment isolation and diagnostic redaction
+- Leaf containment, checksum, mode, cwd, argv, and environment rejection cases
+- No direct raw subprocess or direct `nvb` call outside an explicitly justified
+  Nirvana `cmd` fallback
+- Foreground stdin/signal/PTY support proven or explicitly kept out of scope
 - Architecture checks pass
 
 ## User / Ownership Rule
@@ -186,7 +309,8 @@ When you work always plan and make task lists and todos!
 
 ## Leave a helpful handoff message for the next agent
 
-Record the exact `WT_*` variable names, every rejection path and its error code,
-the signal forwarding behavior, the mock-based proof strategy, and the adapter's
-role as the single invocation boundary. Make explicit that every later command
-and coordinator automation batch must cross this adapter for any runtime action.
+Record the exact action/task mapping, catalog/profile pins, explicit NVB
+targets, task-declared environment keys, structured result mapping, every
+rejection class, all `NIRVANA_API_GAP` findings, and whether a narrow Nirvana
+`cmd` fallback was required. Make explicit that later application services use
+`LaneTaskRunner`, while owning TaskHandlers alone may reach cataloged leaves.

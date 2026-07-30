@@ -1,5 +1,47 @@
 # Batch RT-04 — Immutable Data-Root Catalog and Staging
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Phase: NVB distribution and immutable catalog
 Depends on: RT-02 accepted (manifest types), RM-03 accepted (canonical paths and workspace resolution from Pack 1)
@@ -15,7 +57,7 @@ roots. Validate package and staged runtime manifests.
 
 ## Required Work
 
-1. Implement `resolveDataRoot()` in `src/foundation/data-root.ts`:
+1. Implement `resolveDataRoot()` in `src/foundation/DataRoot.ts`:
    - precedence: `WATCHTOWER_DATA_HOME` env > `XDG_DATA_HOME/watchtower` >
      `~/.local/share/watchtower`
    - resolve `~` from the effective OS user's home directory (via `os.userInfo()`,
@@ -24,7 +66,7 @@ roots. Validate package and staged runtime manifests.
    - return the canonical path; throw if the path is unresolvable
    - the function is pure resolution — it does not create directories
 
-2. Implement `RuntimeCatalog` in `src/foundation/runtime-catalog.ts`:
+2. Implement `RuntimeCatalog` in `src/foundation/RuntimeCatalog.ts`:
    - `stageRuntime(runtimeVersion: string, packageManifest: RuntimeManifestV1,
      sourceRuntimeDir: string): void`
      - validate `runtimeVersion` matches `^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$`
@@ -58,8 +100,8 @@ roots. Validate package and staged runtime manifests.
 
 ## Expected Ownership
 
-- `src/foundation/data-root.ts` — `resolveDataRoot()`, XDG precedence logic
-- `src/foundation/runtime-catalog.ts` — `RuntimeCatalog` class with staging,
+- `src/foundation/DataRoot.ts` — `resolveDataRoot()`, XDG precedence logic
+- `src/foundation/RuntimeCatalog.ts` — `RuntimeCatalog` class with staging,
   validation, and query methods
 
 ## Tests And Evidence

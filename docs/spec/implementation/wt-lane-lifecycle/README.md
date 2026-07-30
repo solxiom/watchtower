@@ -1,6 +1,20 @@
 # wt-lane-lifecycle — Implementation Pack 3
 
-Status: ⏳ Pack authoring — work/review briefs complete
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Date: 2026-07-30
 Owner: Watchtower v1
 Pack ID: wt-lane-lifecycle
@@ -68,8 +82,8 @@ artifacts, but must not shorten a safety section into a link or summary. Wrong
 claims and broken paths must be replaced with equally detailed or more detailed
 correct instructions.
 
-The authoritative reasoning-class matrix, source-size bands, absolute 400-line
-ceiling, responsibility gates, and prompt-integrity policy live in
+The authoritative reasoning-class matrix, source-size bands, category-specific hard-reject
+ceilings, responsibility gates, and prompt-integrity policy live in
 `implementation-quality-and-agent-rules.md`. A batch prompt that conflicts with
 that file must be corrected before the batch starts.
 
@@ -136,17 +150,17 @@ The accepted delivery must guarantee:
 
 - `src/commands/InitCommand.ts` owns init argument validation and user-facing
   orchestration; it calls foundation services
-- `src/foundation/init-planner.ts` owns preflight plan construction
-- `src/foundation/pack-consumer.ts` and `pack-seal.ts` own pack validation
+- `src/foundation/InitPlanner.ts` owns preflight plan construction
+- `src/foundation/PackConsumer.ts` and `PackSeal.ts` own pack validation
   and seal reproduction
-- `src/foundation/lane-store.ts` and `transactional-writer.ts` own layout
+- `src/foundation/LaneStore.ts` and `TransactionalWriter.ts` own layout
   and transactional commit
-- `src/foundation/binding-mutator.ts` and `membership-registrar.ts` own
+- `src/foundation/BindingMutator.ts` and `MembershipRegistrar.ts` own
   repository/index mutation
-- `src/foundation/coordinator-baseline.ts` and `pack-index-bootstrap.ts`
+- `src/foundation/CoordinatorBaseline.ts` and `PackIndexBootstrap.ts`
   own policy/index seeding
 - `src/commands/WatchCommand.ts` owns watch preflight and invocation
-- `src/foundation/doctor-registry.ts` and `src/commands/DoctorCommand.ts`
+- `src/foundation/DoctorRegistry.ts` and `src/commands/DoctorCommand.ts`
   own diagnostic checks and orchestration
 - keep commands thin and delegate to foundation services
 - apply the repo file-size, helper-capsule, naming, and module-size rules
@@ -160,33 +174,33 @@ This lane should be read with an explicit owner map in mind.
 
 ### Init owner
 
-- `src/foundation/init-planner.ts` — preflight plan, argument validation,
+- `src/foundation/InitPlanner.ts` — preflight plan, argument validation,
   prefix/scope/routing checks
 - `src/commands/InitCommand.ts` — CLI orchestration, rendering, dry-run
 
 ### Pack consumer owners
 
-- `src/foundation/pack-consumer.ts` — JSON Schema validation, file-set checks
-- `src/foundation/pack-seal.ts` — RFC 8785 seal reproduction, drift matrix
+- `src/foundation/PackConsumer.ts` — JSON Schema validation, file-set checks
+- `src/foundation/PackSeal.ts` — RFC 8785 seal reproduction, drift matrix
 
 ### Lane store owners
 
-- `src/foundation/lane-store.ts` — lane directory layout, manifest generation
-- `src/foundation/transactional-writer.ts` — adjacent staging, atomic rename,
+- `src/foundation/LaneStore.ts` — lane directory layout, manifest generation
+- `src/foundation/TransactionalWriter.ts` — adjacent staging, atomic rename,
   fsync, rollback on failure
 
 ### Binding owners
 
-- `src/foundation/binding-mutator.ts` — lock order, conditional Git-ignore
+- `src/foundation/BindingMutator.ts` — lock order, conditional Git-ignore
   write/rollback
-- `src/foundation/membership-registrar.ts` — post-commit idempotent index
+- `src/foundation/MembershipRegistrar.ts` — post-commit idempotent index
   registration
 
 ### Coordinator bootstrap owners
 
-- `src/foundation/coordinator-baseline.ts` — seed finite policies with
+- `src/foundation/CoordinatorBaseline.ts` — seed finite policies with
   correct provenance
-- `src/foundation/pack-index-bootstrap.ts` — sealed index construction
+- `src/foundation/PackIndexBootstrap.ts` — sealed index construction
 
 ### Watch owners
 
@@ -195,7 +209,7 @@ This lane should be read with an explicit owner map in mind.
 
 ### Doctor owners
 
-- `src/foundation/doctor-registry.ts` — composable diagnostic check definitions
+- `src/foundation/DoctorRegistry.ts` — composable diagnostic check definitions
 - `src/commands/DoctorCommand.ts` — CLI orchestration, rendering grouped results
 
 ### Integration owners

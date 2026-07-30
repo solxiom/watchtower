@@ -1,5 +1,47 @@
 # Batch RM-01 — Contract Kernel And Error Taxonomy
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Phase: Contract foundation
 Depends on: —
@@ -25,7 +67,7 @@ No batch may begin implementation before RM-01 is accepted.
    `ERR_AMBIGUOUS_SELECTION`, `ERR_INVALID_LANE_CONFIG`, `ERR_WORKSPACE_NOT_FOUND`,
    `ERR_PATH_ESCAPE`, `ERR_PARSE_FAILURE`, `ERR_MISSING_DEPENDENCY`,
    `ERR_MANAGED_CONFLICT`, `ERR_INTERNAL`, and all required variants.
-3. Define exit-code constants and a mapping utility in `src/contracts/exit-codes.ts`.
+3. Define exit-code constants and a mapping utility in `src/contracts/exitCodes.ts`.
    Export `ExitCode` as a numeric literal union (1-5). Provide a function mapping
    error codes to exit codes.
 4. Create exhaustive error fixtures: one fixture per error code demonstrating
@@ -38,7 +80,7 @@ No batch may begin implementation before RM-01 is accepted.
 
 - `src/contracts/types.ts` — domain types and their focused specs.
 - `src/contracts/errors.ts` — error taxonomy and its focused specs.
-- `src/contracts/exit-codes.ts` — exit-code constants and its focused specs.
+- `src/contracts/exitCodes.ts` — exit-code constants and its focused specs.
 - `src/contracts/index.ts` — public barrel.
 
 ## Tests And Evidence
@@ -82,23 +124,48 @@ source, not from the batch title or predecessor report alone.
 
 ## Structural And Module-Size Acceptance
 
-This batch must leave focused, named owners and must reject ball-of-mud growth,
-god objects, giant coordinators, and generic overflow modules.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
 
-- Front doors and public barrels target at most 160 physical lines. The 161-220
-  band requires explicit cohesion justification; over 220 is rejectable without
-  a narrow pre-existing constraint, and 300 is the absolute front-door ceiling.
-- Focused implementation modules target at most 220 physical lines. The 221-300
-  band requires a responsibility inventory; 301-350 requires a source-backed
-  reason not to split; over 350 is rejected for new or materially rewritten
-  hand-maintained implementation code.
-- No hand-maintained JS/TS source or spec module touched by the lane may exceed
-  400 physical lines. This ceiling never excuses mixed responsibilities.
-- Split below the numeric thresholds when one file combines three or more
-  independently nameable concerns.
-- Do not create `helpers`, `utils`, `common`, or `misc` bags.
-- Record physical line counts for every new or materially rewritten file in the
-  implementation report.
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Required Review Packet
 

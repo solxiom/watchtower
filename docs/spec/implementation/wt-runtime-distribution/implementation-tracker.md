@@ -1,10 +1,24 @@
 # wt-runtime-distribution — Implementation Tracker
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 **Status:** ⏳ Pack awaiting first batch acceptance
 **Last Updated:** 2026-07-30
 **Scope:** Inherited shell runtime and coordinator knowledge → complete, immutable,
 auditable distribution — asset audit, manifests, NVB staging, immutable catalog,
-runtime adapter, managed links, and integration smoke proof
+`LaneTaskRunner`/leaf boundaries, managed links, and integration smoke proof
 
 ## Implementation-Pack Readiness
 
@@ -18,7 +32,10 @@ runtime adapter, managed links, and integration smoke proof
   implementor reasoning.
 - ⏳ Every launch prompt retains a complete forwarding profile both at the top
   and beside its local implementor/reviewer reasoning section.
-- ⏳ Hand-maintained modules target focused 160/220-line bands.
+- ⏳ Hand-maintained modules must use the exact project-wide category matrix:
+  120 command/TaskHandler/front door, 140 orchestrator, 200 foundation, 240
+  contracts, and 300 tests as preferred maxima, with their specified warning
+  and hard-reject bands.
 - ⏳ Pack 1 (`wt-read-model`) dependency interfaces are declared per batch.
 
 ## Status Legend
@@ -37,7 +54,7 @@ runtime adapter, managed links, and integration smoke proof
 | RT-02 | Manifest foundation | ❌ Pending | Awaiting RT-01 acceptance |
 | RT-03 | NVB staging | ❌ Pending | Awaiting RT-02 and DB-01 acceptance |
 | RT-04 | Immutable catalog | ❌ Pending | Awaiting RT-02 and RM-03 acceptance |
-| RT-05 | Runtime adapter | ❌ Pending | Awaiting RT-04 and RM-01 acceptance |
+| RT-05 | `LaneTaskRunner` and leaf invocation adapter | ❌ Pending | Awaiting RT-04 and RM-01 acceptance |
 | RT-06 | Managed links | ❌ Pending | Awaiting RT-04 and RT-05 acceptance |
 | RT-07 | Smoke proof | ❌ Pending | Awaiting RT-03, RT-05, and RT-06 acceptance |
 
@@ -45,9 +62,9 @@ runtime adapter, managed links, and integration smoke proof
 
 | Batch | Minimum proof posture |
 |-------|-----------------------|
-| RT-01 | Audit every inherited shell runtime script and coordinator knowledge doc; record source path, SHA-256, line count, description, and coordinator action mapping; build behavioral inventory covering every coordinator action and doc without omissions; prove no script or doc is missed |
+| RT-01 | Audit every inherited shell runtime script and coordinator knowledge doc; record provenance, digest, size, action, inputs/outputs, mutation/authority assumptions, and external tools; classify each script as TaskHandler replacement, bounded leaf, temporary wrapper with removal owner/expiry, or removal; prove no script/doc/action is missed and no workflow shell is mislabeled as a leaf |
 | RT-02 | Define `RuntimeManifestV1` and `KnowledgeManifestV1` types with `schemaVersion`, `checksums`, `mode`, and `actions`; implement validator that rejects missing, extra, non-executable, and checksum-mismatched assets; prove every asset/checksum/mode/action is represented and every rejection path works |
-| RT-03 | Configure `runtime-nvb/dist.nvb` with `wt:pack:runtime` and `wt:runtime:validate` tasks; package SQLite native driver binary from DB-01 into `dist/driver/` for all target platforms; prove `nvb dist` produces correct `dist/` layout; prove executable bits preserved; prove build validation fails on missing, extra, non-executable, and checksum-mismatched assets; prove driver binary loads from dist location; prove dist manifest includes driver checksum and platform mapping |
+| RT-03 | Implement capability fragments and focused public-API TaskHandlers; deterministically generate/validate `runtime-nvb.json` and `task-catalog.json`; use actual repository `nvb.json`/handler conventions for `wt:pack:runtime` and `wt:runtime:validate`; package runtime, knowledge, complete task runtime, and DB-01-selected driver artifacts; prove clean global install per supported target, modes/checksums, stale/duplicate aggregate rejection, relocated loading, and reproducible managed output |
 | RT-04 | Implement XDG precedence resolver; prove `WATCHTOWER_DATA_HOME` > `XDG_DATA_HOME/watchtower` > `~/.local/share/watchtower`; prove atomic first-stage writes via temp-file-atomic-rename; prove two versions coexist under `<data-root>/runtimes/`; prove version roots are content-addressed and immutable after staging |
 | RT-05 | Implement single invocation adapter; prove argv-only execution with `{ shell: false }`; prove `WT_*` allowlist excludes non-`WT_` keys; prove cwd validated as existing directory; prove OS account resolved and entrypoint access checked; prove signal/exit forwarding; prove runtime manifest action validation |
 | RT-06 | Implement `ManagedAssets`; prove manifest-only ownership for managed files; prove link targets validated against runtime manifest checksums; prove collision with non-managed files refused; prove symlink path-escape after resolution refused; prove compatibility names resolve through `actions` array |

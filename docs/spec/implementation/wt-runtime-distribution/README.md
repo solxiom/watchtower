@@ -1,6 +1,20 @@
 # wt-runtime-distribution — Implementation Pack 2
 
-Status: **Proposed — pack-authoring baseline**
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Target release: `1.0.0`
 Pack order: 2 of 6
 Owner areas: Watchtower `src/foundation/`, `src/contracts/`, `runtime-nvb/`, `dist/`, `spec/integration/`
@@ -10,7 +24,7 @@ Date: 2026-07-30
 
 This implementation pack turns the inherited shell runtime and coordinator
 knowledge into a complete, immutable, auditable distribution. It is the second
-of six sealed implementation packs and builds on the accepted read-model
+of six draft implementation packs and is designed to build on the accepted read-model
 foundation from Pack 1 (`wt-read-model`).
 
 The pack establishes:
@@ -64,8 +78,8 @@ artifacts, but must not shorten a safety section into a link or summary. Wrong
 claims and broken paths must be replaced with equally detailed or more detailed
 correct instructions.
 
-The authoritative reasoning-class matrix, source-size bands, absolute 400-line
-ceiling, responsibility gates, and prompt-integrity policy live in
+The authoritative reasoning-class matrix, source-size bands, category-specific hard-reject
+ceilings, responsibility gates, and prompt-integrity policy live in
 `implementation-quality-and-agent-rules.md`. A batch prompt that conflicts with
 that file must be corrected before the batch starts.
 
@@ -146,27 +160,31 @@ This pack should be read with an explicit owner map in mind.
 
 ### Foundation owners
 
-- `src/foundation/runtime-assets.ts` — canonical runtime asset importer with source
+- `src/foundation/RuntimeAssets.ts` — canonical runtime asset importer with source
   provenance tracking
-- `src/foundation/asset-audit.ts` — behavioral inventory for every coordinator
+- `src/foundation/AssetAudit.ts` — behavioral inventory for every coordinator
   action and doc
-- `src/foundation/manifest-validator.ts` — manifest validation with missing/extra
+- `src/foundation/ManifestValidator.ts` — manifest validation with missing/extra
   file rejection and checksum enforcement
-- `src/foundation/runtime-catalog.ts` — immutable version catalog with atomic
+- `src/foundation/RuntimeCatalog.ts` — immutable version catalog with atomic
   staging and version coexistence
-- `src/foundation/data-root.ts` — XDG precedence for `WATCHTOWER_DATA_HOME`,
+- `src/foundation/DataRoot.ts` — XDG precedence for `WATCHTOWER_DATA_HOME`,
   atomic first-stage, content-addressed roots
-- `src/foundation/runtime-adapter.ts` — single invocation boundary with argv-only
-  execution, `WT_*` allowlist, and signal forwarding
-- `src/foundation/runtime-invoke.ts` — action-specific invocation context
-  resolution
-- `src/foundation/managed-assets.ts` — manifest-only managed file ownership, link
+- `src/foundation/LaneTaskRunner.ts` — sole application task-invocation port
+- `src/foundation/NirvanaLaneTaskRunner.ts` — explicit pinned NVB target and
+  typed event/result adapter
+- `src/foundation/LeafRuntimeInvoker.ts` — argv-only cataloged executable-leaf
+  boundary beneath owning TaskHandlers
+- `src/foundation/ManagedAssets.ts` — manifest-only managed file ownership, link
   targets/checksums, collision/path-escape refusal
 
 ### NVB automation owners
 
-- `runtime-nvb/dist.nvb` — distribution staging tasks, manifest validation,
-  executable preservation, reproducible builds
+- `runtime-nvb/catalog/`, `runtime-nvb/handlers/`, `runtime-nvb/runtimeNvb.ts`,
+  generated `runtime-nvb.json`, and generated `task-catalog.json` — packaged
+  task runtime
+- repository `nvb.json`/handler surfaces — distribution staging, manifest/
+  catalog validation, executable preservation, reproducible builds
 
 ### Integration proof owners
 
@@ -251,7 +269,7 @@ wt-runtime-distribution (Pack 2)
 No NVB distribution staging work may begin before the manifest schemas are
 accepted. No runtime invocation adapter work may begin before the immutable
 catalog foundation is accepted. No smoke proof may begin before the NVB dist
-pipeline, runtime adapter, and managed links are all accepted.
+pipeline, `LaneTaskRunner`/leaf boundaries, and managed links are all accepted.
 
 ## Reviewer Operating Standard
 

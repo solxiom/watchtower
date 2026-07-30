@@ -1,5 +1,19 @@
 # wt-coordinator-automation Implementation Tracker
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: **active tracking document**
 Date: 2026-07-30
 Pack: 5 of 6 — `wt-coordinator-automation`
@@ -9,24 +23,24 @@ Batches: 18 work + 18 review
 
 | Batch | Phase | Work brief | Review brief | Current status |
 |-------|-------|------------|--------------|----------------|
-| CA-01 | Index foundation | [work](work-batches/CA-01-deterministic-sealed-pack-index-compiler.md) | [review](review-batches/REV-CA-01-deterministic-sealed-pack-index-compiler.md) | ❌ Not started |
-| CA-02 | Index foundation | [work](work-batches/CA-02-sharded-index-publication-and-bounded-queries.md) | [review](review-batches/REV-CA-02-sharded-index-publication-and-bounded-queries.md) | ❌ Not started |
-| CA-03 | Index foundation | [work](work-batches/CA-03-runtime-journal-indexes-and-projections.md) | [review](review-batches/REV-CA-03-runtime-journal-indexes-and-projections.md) | ❌ Not started |
-| CA-04 | Index foundation | [work](work-batches/CA-04-ready-set-and-resource-claim-projection.md) | [review](review-batches/REV-CA-04-ready-set-and-resource-claim-projection.md) | ❌ Not started |
-| CA-05 | Routing/decision | [work](work-batches/CA-05-ordered-routing-policy-and-capability-floors.md) | [review](review-batches/REV-CA-05-ordered-routing-policy-and-capability-floors.md) | ❌ Not started |
-| CA-06 | Routing/decision | [work](work-batches/CA-06-endpoint-adapter-eligibility-and-isolation.md) | [review](review-batches/REV-CA-06-endpoint-adapter-eligibility-and-isolation.md) | ❌ Not started |
-| CA-07 | Routing/decision | [work](work-batches/CA-07-immutable-decision-envelopes.md) | [review](review-batches/REV-CA-07-immutable-decision-envelopes.md) | ❌ Not started |
-| CA-08 | Routing/decision | [work](work-batches/CA-08-context-broker-and-cycle-budgets.md) | [review](review-batches/REV-CA-08-context-broker-and-cycle-budgets.md) | ❌ Not started |
-| CA-09 | Routing/decision | [work](work-batches/CA-09-typed-proposals-and-current-state-validator.md) | [review](review-batches/REV-CA-09-typed-proposals-and-current-state-validator.md) | ❌ Not started |
-| CA-10 | Effect foundation | [work](work-batches/CA-10-atomic-lane-local-effect-executor.md) | [review](review-batches/REV-CA-10-atomic-lane-local-effect-executor.md) | ❌ Not started |
-| CA-11 | Effect foundation | [work](work-batches/CA-11-tmux-prepare-attempt-verify-effect-adapter.md) | [review](review-batches/REV-CA-11-tmux-prepare-attempt-verify-effect-adapter.md) | ❌ Not started |
-| CA-12 | Effect foundation | [work](work-batches/CA-12-acceptance-and-git-publication-adapter.md) | [review](review-batches/REV-CA-12-acceptance-and-git-publication-adapter.md) | ❌ Not started |
-| CA-13 | Effect foundation | [work](work-batches/CA-13-coordinator-queue-cursor-replay-and-watcher-integration.md) | [review](review-batches/REV-CA-13-coordinator-queue-cursor-replay-and-watcher-integration.md) | ❌ Not started |
-| CA-14 | Commands/sessions | [work](work-batches/CA-14-coordinator-event-and-ready-set-commands.md) | [review](review-batches/REV-CA-14-coordinator-event-and-ready-set-commands.md) | ❌ Not started |
-| CA-15 | Commands/sessions | [work](work-batches/CA-15-operator-session-persistence-and-lifecycle.md) | [review](review-batches/REV-CA-15-operator-session-persistence-and-lifecycle.md) | ❌ Not started |
-| CA-16 | Commands/sessions | [work](work-batches/CA-16-session-indexes-references-pins-and-compaction.md) | [review](review-batches/REV-CA-16-session-indexes-references-pins-and-compaction.md) | ❌ Not started |
-| CA-17 | Commands/sessions | [work](work-batches/CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | [review](review-batches/REV-CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | ❌ Not started |
-| CA-18 | Commands/sessions | [work](work-batches/CA-18-session-cli-pty-attachment-and-m6-acceptance.md) | [review](review-batches/REV-CA-18-session-cli-pty-attachment-and-m6-acceptance.md) | ❌ Not started |
+| CA-01 | Index foundation | [work](work-batches/CA-01-deterministic-sealed-pack-sqlite-compiler.md) | [review](review-batches/CA-01-review-deterministic-sealed-pack-sqlite-compiler.md) | ❌ Not started |
+| CA-02 | Index foundation | [work](work-batches/CA-02-sqlite-index-stores-and-bounded-typed-queries.md) | [review](review-batches/CA-02-review-sqlite-index-stores-and-bounded-typed-queries.md) | ❌ Not started |
+| CA-03 | Index foundation | [work](work-batches/CA-03-runtime-sqlite-indexes-and-projections.md) | [review](review-batches/CA-03-review-runtime-sqlite-indexes-and-projections.md) | ❌ Not started |
+| CA-04 | Index foundation | [work](work-batches/CA-04-ready-set-and-resource-claim-projection.md) | [review](review-batches/CA-04-review-ready-set-and-resource-claim-projection.md) | ❌ Not started |
+| CA-05 | Routing/decision | [work](work-batches/CA-05-ordered-routing-policy-and-capability-floors.md) | [review](review-batches/CA-05-review-ordered-routing-policy-and-capability-floors.md) | ❌ Not started |
+| CA-06 | Routing/decision | [work](work-batches/CA-06-endpoint-adapter-eligibility-and-isolation.md) | [review](review-batches/CA-06-review-endpoint-adapter-eligibility-and-isolation.md) | ❌ Not started |
+| CA-07 | Routing/decision | [work](work-batches/CA-07-immutable-decision-envelopes.md) | [review](review-batches/CA-07-review-immutable-decision-envelopes.md) | ❌ Not started |
+| CA-08 | Routing/decision | [work](work-batches/CA-08-context-broker-and-cycle-budgets.md) | [review](review-batches/CA-08-review-context-broker-and-cycle-budgets.md) | ❌ Not started |
+| CA-09 | Routing/decision | [work](work-batches/CA-09-typed-proposals-and-current-state-validator.md) | [review](review-batches/CA-09-review-typed-proposals-and-current-state-validator.md) | ❌ Not started |
+| CA-10 | Effect foundation | [work](work-batches/CA-10-atomic-lane-local-effect-executor.md) | [review](review-batches/CA-10-review-atomic-lane-local-effect-executor.md) | ❌ Not started |
+| CA-11 | Effect foundation | [work](work-batches/CA-11-tmux-prepare-attempt-verify-effect-adapter.md) | [review](review-batches/CA-11-review-tmux-prepare-attempt-verify-effect-adapter.md) | ❌ Not started |
+| CA-12 | Effect foundation | [work](work-batches/CA-12-acceptance-and-git-publication-adapter.md) | [review](review-batches/CA-12-review-acceptance-and-git-publication-adapter.md) | ❌ Not started |
+| CA-13 | Effect foundation | [work](work-batches/CA-13-coordinator-queue-cursor-replay-and-watcher-integration.md) | [review](review-batches/CA-13-review-coordinator-queue-cursor-replay-and-watcher-integration.md) | ❌ Not started |
+| CA-14 | Commands/sessions | [work](work-batches/CA-14-coordinator-event-and-ready-set-commands.md) | [review](review-batches/CA-14-review-coordinator-event-and-ready-set-commands.md) | ❌ Not started |
+| CA-15 | Commands/sessions | [work](work-batches/CA-15-operator-session-persistence-and-lifecycle.md) | [review](review-batches/CA-15-review-operator-session-persistence-and-lifecycle.md) | ❌ Not started |
+| CA-16 | Commands/sessions | [work](work-batches/CA-16-session-sqlite-index-references-pins-and-compaction.md) | [review](review-batches/CA-16-review-session-sqlite-index-references-pins-and-compaction.md) | ❌ Not started |
+| CA-17 | Commands/sessions | [work](work-batches/CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | [review](review-batches/CA-17-review-session-routing-budgets-proposals-holds-and-amendments.md) | ❌ Not started |
+| CA-18 | Commands/sessions | [work](work-batches/CA-18-session-cli-pty-attachment-and-m6-acceptance.md) | [review](review-batches/CA-18-review-session-cli-pty-attachment-and-m6-acceptance.md) | ❌ Not started |
 
 ## Batch Dependencies
 
@@ -56,7 +70,7 @@ Batches: 18 work + 18 review
 | Batch | Implementor | Reviewer | Reason for floor |
 |-------|------------|----------|------------------|
 | CA-01 | R5 | R5 | Deterministic index with seal verification; hash-chain correctness |
-| CA-02 | R5 | R5 | Sharded index with corruption handling; partial-block recovery |
+| CA-02 | R5 | R5 | Typed SQLite stores, bounded indexed queries, stale/corrupt refusal |
 | CA-03 | R4 | R4 | Journal indexes and projections with checkpoint integrity |
 | CA-04 | R5 | R5 | DAG scheduling projection; dependency/claim/capacity blocker resolution |
 | CA-05 | R4 | R4 | Routing policy classification with first-match determinism |

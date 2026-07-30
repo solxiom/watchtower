@@ -1,10 +1,52 @@
 # Batch CA-17 — Session Routing, Budgets, Proposals, Holds, and Amendments
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Session services and effect integration
 Depends on: CA-06, CA-08, CA-09, CA-10, CA-15, CA-16 accepted
-Owned files: `src/foundation/session-routing.ts`, `src/foundation/session-budgets.ts`, `src/foundation/session-holds.ts`
+Owned files: `src/foundation/SessionRouting.ts`, `src/foundation/SessionBudgets.ts`, `src/foundation/SessionHolds.ts`
 
 **Required implementor reasoning class:** `R5`
 **Class rationale:** M0/D1–D3 turn classification with conservative routing, finite budget grants and reserves within lane-wide limits, proposal confirmation flow with current-state revalidation and CA-10 execution, scoped time-bound holds with explicit blocking semantics, and amendment-request handoffs. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -29,7 +71,7 @@ amendment-request handoffs (confirmed pack/spec change requests).
    CA-06 for endpoint adapter eligibility, CA-08 for context broker and budgets,
    CA-09 for typed proposals and validator, and CA-10 for effect executor.
 
-2. **Implement `src/foundation/session-routing.ts`:**
+2. **Implement `src/foundation/SessionRouting.ts`:**
    - `SessionRouter` class — classifies each operator turn and routes it to the
      appropriate endpoint.
    - `classifyTurn(turn: PendingTurn, session: OperatorSession): TurnClassification` —
@@ -70,7 +112,7 @@ amendment-request handoffs (confirmed pack/spec change requests).
      - Route loss (no eligible endpoint) preserves the session and pauses the
        turn; it never silently downgrades.
 
-3. **Implement `src/foundation/session-budgets.ts`:**
+3. **Implement `src/foundation/SessionBudgets.ts`:**
    - `SessionBudgetManager` class — manages per-session and lane-wide budget
      accounting.
    - **Budget dimensions (per `operator-session.md §13`):**
@@ -103,7 +145,7 @@ amendment-request handoffs (confirmed pack/spec change requests).
      automated coordinator-cycle budgets. Session consumption cannot deplete
      automated reject/recovery capacity.
 
-4. **Implement `src/foundation/session-holds.ts`:**
+4. **Implement `src/foundation/SessionHolds.ts`:**
    - `SessionHoldManager` class — manages explicit scoped holds.
    - **Hold lifecycle:**
      - `placeHold(params: PlaceHoldParams): Hold` — creates a scoped, expiring
@@ -173,15 +215,15 @@ amendment-request handoffs (confirmed pack/spec change requests).
 
 ## Expected Ownership
 
-- `src/foundation/session-routing.ts` — owns M0/D1–D3 classification, turn
+- `src/foundation/SessionRouting.ts` — owns M0/D1–D3 classification, turn
   routing to endpoints, classification rules, and hard guards.
-- `src/foundation/session-budgets.ts` — owns per-session and lane-wide budget
+- `src/foundation/SessionBudgets.ts` — owns per-session and lane-wide budget
   accounting, grant management, soft/hard limit enforcement, and reserve
   protection.
-- `src/foundation/session-holds.ts` — owns hold lifecycle (place, release, list,
+- `src/foundation/SessionHolds.ts` — owns hold lifecycle (place, release, list,
   block check), scope enforcement, expiry, and system-hold notification.
 - SessionProposalHandler and AmendmentRequestHandler are co-located with the
-  holds module or in a separate `src/foundation/session-proposals.ts` as
+  holds module or in a separate `src/foundation/SessionProposals.ts` as
   implementation dictates.
 
 ## Tests And Evidence
@@ -261,16 +303,48 @@ boundary, and every proposal state transition.
 
 ## Structural And Module-Size Acceptance
 
-- `src/foundation/session-routing.ts` target ≤250 lines (classification rules,
-  M0 query registry, routing selection). Responsibility inventory at 201+.
-- `src/foundation/session-budgets.ts` target ≤250 lines (dimensions, checks,
-  grants, reserves). Responsibility inventory at 201+.
-- `src/foundation/session-holds.ts` target ≤200 lines (place, release, list,
-  block check, expiry).
-- Additional `src/foundation/session-proposals.ts` target ≤250 lines if the
-  proposal handler and amendment request handler are separated.
-- Test modules ≤300 lines; split by routing, budgets, holds, proposals, and
-  amendments families.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Required Review Packet
 

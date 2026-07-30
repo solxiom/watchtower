@@ -1,20 +1,38 @@
 # Watchtower v1 — Implementation Packs
 
-Status: **Active — pack authoring**
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Acceptance instrument: review batch
 Date: 2026-07-30
 
 ## Lane Purpose
 
-This directory contains the six sealed implementation packs that govern
-construction of Watchtower v1 (`1.0.0`). Each pack is an independently
-accepted bundle of work batches, paired review batches, and supporting
-documents that together deliver one bounded product milestone.
+This directory contains six draft implementation packs intended to govern
+construction of Watchtower v1 (`1.0.0`) after independent pack review,
+acceptance, and sealing. Each candidate pack contains work batches, paired
+review batches, launch prompts, and supporting documents for one bounded
+product milestone. None is currently a sealed lane-initialization authority.
 
 Normative behavior remains in `../v1.md`, `../v1-contracts.md`,
 `../schemas/v1.schema.json`, `../architecture.md`,
+`../nirvana-integration-architecture.md`,
 `../coordinator-automation.md`, `../operator-session.md`, and
-`../cli-session.md`. These packs translate those specifications into
+`../cli-session.md`, together with
+`../../development/engineering-and-review-standard.md`. These packs translate
+those specifications into
 actionable implementation contracts; they do not override or reinterpret
 the product specification.
 
@@ -52,9 +70,11 @@ wt-read-model ───────────────┐
                                             wt-v1-release
 ```
 
-Each pack is accepted independently. A later pack may begin fixture-only
-preparation against an accepted interface, but production integration requires
-the owning pack's acceptance.
+Each pack has an independent exit gate, but scheduling is batch-DAG driven
+rather than blanket pack-serial. A later-pack batch may begin only when every
+dependency named for that batch is independently accepted. It may integrate
+only the accepted interfaces it depends on; it must not assume the remainder
+of a predecessor pack is accepted or stable.
 
 ## Per-Pack Directory Layout
 
@@ -113,8 +133,10 @@ memory, and release qualification respectively.
 2. If a batch exposes a missing product decision, the affected batch stops
    and raises a specification amendment. The pack does not proceed until the
    spec resolves the question.
-3. The six packs are accepted sequentially; pack N+1 may not merge production
-   integration before pack N is accepted.
+3. Execute the dependency waves in `docs/spec/v1-implementation-map.md §10`.
+   Cross-pack work is permitted at the exact accepted predecessor-batch
+   boundaries named there; pack directory order is not an extra dependency and
+   does not override the DAG.
 4. Corrections retain the same work/review identity and append a correction
    number; they are not preallocated as additional batches.
 5. Cross-pack compatibility surfaces require reproducible golden evidence.

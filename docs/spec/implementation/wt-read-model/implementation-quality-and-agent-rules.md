@@ -1,5 +1,19 @@
 # Watchtower v1 Read Model Implementation Quality And Agent Rules
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: active lane quality rules
 Date: 2026-07-30
 
@@ -65,25 +79,25 @@ intuition.
 
 - `src/contracts/types.ts` — domain types, lane references, repository bindings
 - `src/contracts/errors.ts` — error taxonomy, exit-code mappings
-- `src/contracts/exit-codes.ts` — exit-code constants
+- `src/contracts/exitCodes.ts` — exit-code constants
 - `src/contracts/events.ts` — worker-event types
-- `src/foundation/serializer.ts` — JSON envelope construction
-- `src/foundation/result-renderer.ts` — human/JSON parity rendering
-- `src/foundation/paths.ts` — canonical path resolution
-- `src/foundation/workspace.ts` — workspace and control-home resolution
-- `src/foundation/xdg.ts` — XDG data-home resolution
-- `src/foundation/parsers.ts` — shared parser utilities
-- `src/foundation/env-parser.ts` — strict env-file parser
-- `src/foundation/state-parser.ts` — lane-state parser
-- `src/foundation/jsonl-parser.ts` — JSONL event parser
-- `src/foundation/discovery.ts` — home-lane discovery
-- `src/foundation/lane-selector.ts` — deterministic lane selection
-- `src/foundation/membership.ts` — membership-index validation
-- `src/foundation/secondary-discovery.ts` — secondary-repository discovery
-- `src/foundation/bindings.ts` — repository binding computation
-- `src/foundation/conflicts.ts` — writable conflict detection
-- `src/foundation/observations.ts` — tmux/watcher/worker observations
-- `src/foundation/heartbeat.ts` — heartbeat detection
+- `src/foundation/commandEnvelopeSerializer.ts` — JSON envelope construction
+- `src/foundation/ResultRenderer.ts` — human/JSON parity rendering
+- `src/foundation/canonicalPaths.ts` — canonical path resolution
+- `src/foundation/workspaceResolver.ts` — workspace and control-home resolution
+- `src/foundation/dataHomeResolver.ts` — XDG data-home resolution
+- `src/foundation/scalarLineParser.ts` — shared parser utilities
+- `src/foundation/EnvParser.ts` — strict env-file parser
+- `src/foundation/StateParser.ts` — lane-state parser
+- `src/foundation/JsonlParser.ts` — JSONL event parser
+- `src/foundation/laneDiscovery.ts` — home-lane discovery
+- `src/foundation/LaneSelector.ts` — deterministic lane selection
+- `src/foundation/membershipIndex.ts` — membership-index validation
+- `src/foundation/SecondaryDiscovery.ts` — secondary-repository discovery
+- `src/foundation/repositoryBindings.ts` — repository binding computation
+- `src/foundation/writableConflicts.ts` — writable conflict detection
+- `src/foundation/runtimeObservations.ts` — tmux/watcher/worker observations
+- `src/foundation/heartbeatObservation.ts` — heartbeat detection
 
 ## Architectural Non-Negotiables
 
@@ -158,37 +172,54 @@ truth independently, the batch is not acceptable.
 
 ## Module Size And Clean-Code Rules
 
-This lane must not normalize god objects, giant files, or mixed-responsibility
+This pack must not normalize god objects, giant files, or mixed-responsibility
 modules.
 
 Line count is a design alarm, not a license to pack unrelated behavior up to a
 limit. Count physical source lines, including comments and blank lines, for new
-files and materially rewritten files.
+files and materially rewritten files. Generated artifacts are outside these
+targets only when their generated ownership is explicit and they contain no
+hand-maintained behavior.
 
-Required size bands:
+The project-wide engineering standard defines these exact size bands:
 
-- Front doors, commands, serializers, renderers, and public barrels should
-  target 160 lines or fewer. From 161 through 220 lines, the implementation
-  agent must justify every retained responsibility and the reviewer must
-  inspect for extraction opportunities. A hand-maintained front door over 220
-  lines is rejectable unless an existing repo-owned constraint makes immediate
-  extraction riskier and a narrowly scoped exception is recorded. No such
-  front door may exceed 300 lines.
-- Focused implementation modules should target 220 lines or fewer. From 221
-  through 300 lines, the agent must include a responsibility inventory and the
-  reviewer must independently decide whether the module still has one cohesive
-  reason to change. From 301 through 350 lines, splitting is expected and
-  acceptance requires a concrete, source-backed reason why a split would make
-  ownership less clear. Above 350 lines is a hard rejection for new or
-  materially rewritten hand-maintained implementation modules.
-- Four hundred physical lines is the absolute ceiling for any hand-maintained
-  JS/TS source or spec module touched by this lane. The 400-line ceiling is not
-  an exception target: a file can and should be rejected well below it when it
-  mixes responsibilities, hides a state machine, duplicates policy, or acts as
-  an overflow container.
-- Test modules should normally stay at or under 300 lines. Larger scenario
-  matrices must be split by contract family, fixture owner, or test-ID range
-  and share focused fixture builders rather than one giant test file.
+| Module category | Preferred maximum | Warning band | Hard rejection |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB task front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contracts and type-only modules | 240 | 241–320 | over 400 |
+| Test/spec modules | 300 | 301–420 | over 500 |
+
+Functions target 40 lines or fewer, enter a warning band at 41–60 lines, and
+are rejected above 80 lines. Constructors target 25 lines or fewer, enter a
+warning band at 26–40 lines, and are rejected above 50 lines. A warning-band
+module or function requires a responsibility inventory and explicit reviewer
+judgment; reaching a hard limit is not an automatic entitlement to an
+exception.
+
+Every module must have one primary responsibility and one cohesive reason to
+change. Commands and NVB TaskHandlers validate, normalize, delegate, and map
+results; they do not become workflow owners. Orchestrators sequence focused
+collaborators without absorbing storage, validation, rendering, subprocess, or
+state-machine algorithms. Contracts remain type-only. Human rendering is not
+mixed with mutation or persistence.
+
+An exception must be approved before implementation and must identify the exact
+file, the proposed maximum, the concrete reason splitting would make ownership
+less clear, the approving reviewer, and an expiry or follow-up batch. A
+retroactive exception is invalid. Existing oversized files are not precedent:
+when touched they must become smaller, be split, or remain line-count neutral
+with a recorded extraction plan and reviewer approval.
+
+Naming is part of the structural gate. Class-owning TypeScript modules use
+PascalCase filenames, functions and values use lowerCamelCase, and new source
+filenames do not use dashes or underscores. Generic overflow owners such as
+`helpers`, `utils`, `common`, and `misc` are rejected.
+
+Larger test scenario matrices must be split by contract family, fixture owner,
+or acceptance-ID range and share focused fixture builders rather than one giant
+test file.
 - Existing oversized files are not permission to add more behavior. If a batch
   must touch one, it should leave the file no larger unless the added lines are
   temporary extraction glue removed in the same batch. The report must record
@@ -196,28 +227,29 @@ Required size bands:
 
 Responsibility gates apply independently of line count:
 
-- three or more independently nameable responsibilities in one module require
-  a split, even when the file is under 220 lines
-- state transition policy, transport or driver I/O, mapping/normalization, and
-  human rendering must not accumulate in one owner
-- a class that owns lifecycle, event parsing, status projection, and
-  rendering is a god object and must be rejected
-- a command may sequence foundation collaborators but must not absorb their
-  algorithms; a selector may resolve owners but must not reimplement them
-- a barrel exports the module surface only and must not become a forwarding
-  layer for foreign APIs
+- Three or more independently nameable responsibilities in one module require
+  a split, even when the file is below its preferred maximum.
+- State transition policy, transport or driver I/O, mapping/normalization, and
+  human rendering must not accumulate in one owner.
+- A class that owns index compilation, query routing, digest verification, and
+  corruption repair is a god object and must be rejected.
+- A coordinator may sequence collaborators but must not absorb their algorithms;
+  a registry may resolve owners but must not reimplement them.
+- A barrel exports the capsule surface only and must not become a forwarding
+  layer for foreign APIs.
 
 Additional reject conditions:
 
-- a file mixes unrelated concerns such as parsing plus discovery plus rendering
-- a new helper bag (`helpers`, `utils`, `common`, `misc`) becomes the overflow
-  owner
-- a large legacy file grows materially without extracting lower-layer ownership
-- comments are used to justify mixed responsibility instead of splitting owners
+- A file mixes unrelated concerns such as index building plus proposal validation
+  plus effect journaling.
+- A new helper bag (`helpers`, `utils`, `common`, `misc`) becomes the overflow owner.
+- A large legacy file grows materially without extracting lower-layer ownership.
+- Comments are used to justify mixed responsibility instead of splitting owners.
 
 Every implementation report must include line counts for all new files and
-materially rewritten files. Every review report must independently reproduce or
-verify those counts and state whether each warning-band file remains cohesive.
+materially rewritten files, categorized against the matrix above. Every review
+report must independently reproduce or verify those counts and state whether
+each warning-band file and function remains cohesive.
 Passing the line-count gate never overrides the responsibility gates above.
 
 ## Agent Reasoning Classes And Batch Assignment
@@ -324,9 +356,12 @@ Reject the batch immediately if any answer is "yes."
 2. Did shell eval of lane config occur by TypeScript?
    — _Config must be parsed by the strict non-executing scanner; no `source`, `sh -c`, `exec`, or `eval`._
 
-3. Did any new or materially rewritten JS/TS source or spec file exceed 400
-   physical lines?
-   — _The absolute ceiling is 400 lines. Files at or over this line count with mixed responsibilities are rejected._
+3. Did any new or materially rewritten module, function, or constructor exceed
+   its category-specific hard limit from the project-wide matrix, or did a
+   warning-band owner lack an independently reviewed responsibility inventory?
+   — _Commands reject above 180, orchestrators above 200, foundation owners
+   above 300, contracts above 400, tests above 500, functions above 80, and
+   constructors above 50; responsibility gates may reject earlier._
 
 4. Did a new `helpers`, `utils`, `common`, or `misc` bag appear?
    — _No generic overflow containers. Use feature-local capsules with explicit owner names._

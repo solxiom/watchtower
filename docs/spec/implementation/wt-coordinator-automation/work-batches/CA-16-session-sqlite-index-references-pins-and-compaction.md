@@ -1,10 +1,52 @@
 # Batch CA-16 — Session SQLite Index, References, Pins, and Compaction
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Session memory foundation
 Depends on: CA-02, CA-15 accepted
-Owned files: `src/foundation/session-indexes.ts`, `src/foundation/session-compaction.ts`
+Owned files: `src/foundation/SessionIndexes.ts`, `src/foundation/SessionCompaction.ts`
 
 **Required implementor reasoning class:** `R5`
 **Class rationale:** SQLite-backed session indexes storing bounded metadata and excerpts, cross-session turn reference capsules, compaction with source-turn preservation, and the critical constraint that exact full text remains journal-owned — index is derived and disposable. No full-history fallback. No raw SQL from consumers. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -29,7 +71,7 @@ infrastructure; sessions.sqlite is never session authority.
    CA-02 for the SQLite index store and bounded typed query contracts. Study
    accepted CA-15 for session journal and turn format.
 
-2. **Implement `src/foundation/session-indexes.ts`:**
+2. **Implement `src/foundation/SessionIndexes.ts`:**
    - `SessionIndexBuilder` class — builds the derived `sessions.sqlite` index
      from the append-only session journals and turn directories.
    - **SQLite schema:**
@@ -89,7 +131,7 @@ infrastructure; sessions.sqlite is never session authority.
      from the journals. The index manifest records this contract. No
      authoritative data lives only in the index.
 
-3. **Implement `src/foundation/session-compaction.ts`:**
+3. **Implement `src/foundation/SessionCompaction.ts`:**
    - `SessionCompactor` class — manages compaction of session indexes.
    - `compact(sessionId: string, options: CompactOptions): CompactResult` —
      prunes old turn index rows while preserving: pinned turns, recent turns
@@ -140,9 +182,9 @@ infrastructure; sessions.sqlite is never session authority.
 
 ## Expected Ownership
 
-- `src/foundation/session-indexes.ts` — owns the SQLite session index schema,
+- `src/foundation/SessionIndexes.ts` — owns the SQLite session index schema,
   build, incremental update, bounded typed queries, and cross-session capsules.
-- `src/foundation/session-compaction.ts` — owns index compaction (prune old,
+- `src/foundation/SessionCompaction.ts` — owns index compaction (prune old,
   preserve pinned/recent) with preview and the no-full-history-fallback
   constraint.
 - No other module may query session metadata through SQL or bypass the typed
@@ -217,15 +259,48 @@ point, and every capsule construction rule.
 
 ## Structural And Module-Size Acceptance
 
-- `src/foundation/session-indexes.ts` target ≤350 lines (SQLite schema, build,
-  incremental update, typed queries, cross-session capsules). Responsibility
-  inventory at 221+. Warning-band justification at 301+. Splitting into
-  `session-index-schema.ts`, `session-index-queries.ts`, and
-  `session-capsules.ts` is expected as the module grows.
-- `src/foundation/session-compaction.ts` target ≤200 lines (pruning, preview,
-  preservation rules).
-- Test modules ≤300 lines; split by build, queries, capsules, compaction, and
-  disposability families.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Required Review Packet
 

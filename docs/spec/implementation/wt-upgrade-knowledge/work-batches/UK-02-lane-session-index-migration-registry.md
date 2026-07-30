@@ -1,5 +1,47 @@
 # UK-02: Lane/Session/Index Migration Registry — Work Brief
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Batch ID: `UK-02`
 Pack: `wt-upgrade-knowledge` (pack 4 of 6)
 Reasoning class: R5 (highest available reasoning)
@@ -19,8 +61,8 @@ preserving every lane-owned value and historical artifact.
 
 ## Files Owned By This Batch
 
-- `src/foundation/migration-registry.ts` — NEW: version-step registry, dependency ordering, step composition
-- `src/foundation/migration-steps.ts` — NEW: individual migration step implementations for v1 schema versions
+- `src/foundation/MigrationRegistry.ts` — NEW: version-step registry, dependency ordering, step composition
+- `src/foundation/MigrationSteps.ts` — NEW: individual migration step implementations for v1 schema versions
 - `spec/basic/migration-registry.spec.ts` — NEW: unit and integration specs
 
 ## What Migration Steps Must Preserve
@@ -44,7 +86,7 @@ Every migration step must leave these artifacts byte-identical or truth-equivale
 
 ## Implementation Steps
 
-1. **Migration registry** (`src/foundation/migration-registry.ts`):
+1. **Migration registry** (`src/foundation/MigrationRegistry.ts`):
    - A registry mapping `{sourceSchemaVersion, targetSchemaVersion}` to a migration step function
    - Steps are keyed by exact version pair (e.g., `1 → 2`, `2 → 3`)
    - `resolveMigrationChain(fromVersion, toVersion)`: compute ordered list of steps via shortest path
@@ -52,7 +94,7 @@ Every migration step must leave these artifacts byte-identical or truth-equivale
    - Each step function signature: `(laneDir: string) => Promise<void>` — pure transformation, no external effects
    - The registry is closed for v1; new steps registered only when new schema versions are defined
 
-2. **Migration steps** (`src/foundation/migration-steps.ts`):
+2. **Migration steps** (`src/foundation/MigrationSteps.ts`):
    - One function per supported version transition
    - Each function:
      a. reads source artifacts from `laneDir`
@@ -108,7 +150,11 @@ Every migration step must leave these artifacts byte-identical or truth-equivale
 - Every artifact class has preservation proof
 - No runtime action, session closure, or content pruning during any migration step
 - Migration registry correctly resolves chains and fails on missing intermediate steps
-- Module sizes within bands (registry ≤ 220, steps ≤ 300 per version-pair file, specs ≤ 300)
+- Module sizes follow the exact category matrix: the registry prefers at most
+  120 lines, warns at 121–160, and rejects over 180; each foundation migration
+  step module prefers at most 200, warns at 201–260, and rejects over 300; each
+  spec prefers at most 300, warns at 301–420, and rejects over 500. Every file
+  must remain cohesive below those limits.
 - No product logic in `src/cli.ts`
 
 ## Implementation Report
@@ -251,21 +297,56 @@ Before writing any implementation code:
 
 ## Structural Design And Module-Size Gate
 
-- `migration-registry.ts` (registry): target 160 lines; hard reject above 220
-- `migration-steps.ts` (steps): target 220 lines per version-pair file; split
-  into `migration-steps/v1-to-v2.ts`, `migration-steps/v2-to-v3.ts`, etc. if
-  multiple version pairs exist; each file hard reject above 300
-- Test module: target 300 lines per artifact class; hard reject above 400
-- No monolithic migration-steps module over 400 lines
-- No `helpers/`, `utils/`, `common/`, or `misc/` overflow modules
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Your Mission
 
 Create the migration registry and version-step implementations:
 
-1. Implement `src/foundation/migration-registry.ts` with version-pair
+1. Implement `src/foundation/MigrationRegistry.ts` with version-pair
    registration and chain resolution
-2. Implement `src/foundation/migration-steps.ts` with all v1→v1.* steps that
+2. Implement `src/foundation/MigrationSteps.ts` with all v1→v1.* steps that
    are defined (at minimum, a v1→v1 no-op step proving the registry works;
    additional steps as needed for v1 schema evolution)
 3. Write comprehensive Jasmine specs covering every migration step, chain
@@ -279,7 +360,7 @@ Create the migration registry and version-step implementations:
 - Change lane lifecycle states or modify committed implementation packs
 - Implement atomic staging or crash recovery (owned by UK-03)
 - Implement `--apply` orchestration or upgrade command integration
-- Modify the UK-01 `UpgradeCommand` or `upgrade-planner.ts`
+- Modify the UK-01 `UpgradeCommand` or `UpgradePlanner.ts`
 - Add product logic to `src/cli.ts`
 - Commit any code
 

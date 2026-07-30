@@ -1,5 +1,19 @@
 # wt-upgrade-knowledge Implementation Tracker
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 **Status:** ❌ Pending — all 5 batches planned, none started
 **Last Updated:** 2026-07-30
 **Scope:** Upgrade compatibility, migration registry, atomic apply/recovery, host knowledge installers, version reporting, and help closure
@@ -16,8 +30,10 @@
   reasoning is never lower than implementor reasoning.
 - ✅ Every launch prompt retains a complete forwarding profile both at the top
   and beside its local implementor/reviewer reasoning section.
-- ✅ Hand-maintained modules target focused 160/220-line bands, receive mandatory
-  scrutiny through 300/350 lines, and have an absolute 400-line ceiling.
+- ✅ Hand-maintained modules use the exact category matrix (120 command/front
+  door, 140 orchestrator, 200 foundation, 240 contracts, and 300 tests as
+  preferred maxima), including its category-specific warning and hard-reject
+  bands; no count excuses mixed responsibilities.
 - ✅ The 16-item reviewer hard-reject checklist is complete and governs every
   review batch.
 - ❌ No batch has been implemented.
@@ -74,11 +90,11 @@ RM-01 (contracts)
 
 - **Pack head:** ❌ No batch has started. Begin UK-01.
 - **UK-01:** ❌ Pending. Depends on LC-03 (transactional lane layout) and RT-02
-  (runtime/knowledge manifests) being accepted. Creates `src/foundation/upgrade-planner.ts`
+  (runtime/knowledge manifests) being accepted. Creates `src/foundation/UpgradePlanner.ts`
   and `src/commands/UpgradeCommand.ts`.
 - **UK-04:** ❌ Pending. Depends on RT-01 (runtime/knowledge asset audit) and
   RT-02 being accepted. May proceed in parallel with UK-01/UK-02.
-  Creates `src/foundation/host-adapters.ts` and `src/commands/SkillInstallCommand.ts`.
+  Creates `src/foundation/HostAdapters.ts` and `src/commands/SkillInstallCommand.ts`.
 - **UK-02:** ❌ Pending. Depends on UK-01 and LC-05 accepted.
 - **UK-03:** ❌ Pending. Depends on UK-02, RT-04, and RT-06 accepted.
 - **UK-05:** ❌ Pending. Depends on UK-03 and UK-04 accepted. Integration gate.

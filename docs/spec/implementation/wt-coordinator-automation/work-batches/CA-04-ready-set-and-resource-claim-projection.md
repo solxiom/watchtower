@@ -1,10 +1,52 @@
 # Batch CA-04 — Ready Set and Resource-Claim Projection
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Index foundation
 Depends on: RM-08, CA-01, CA-03 accepted
-Owned files: `src/foundation/ready-set.ts`, `src/foundation/resource-claims.ts`
+Owned files: `src/foundation/ReadySet.ts`, `src/foundation/ResourceClaims.ts`
 
 **Required implementor reasoning class:** `R5`
 **Class rationale:** DAG scheduling projection with dependency/claim/capacity blocker resolution. The ready set must be computed deterministically from pack index + events + claims + routing state. No arbitrary winner selection. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -22,7 +64,7 @@ Entirely model-free and deterministic.
    for routing policy and the ready-set role in M0/D1 classification. Study
    `v1.md §7.4` for repository bindings and claim semantics.
 
-2. **Implement `src/foundation/resource-claims.ts`:**
+2. **Implement `src/foundation/ResourceClaims.ts`:**
    - `ResourceClaimStore` for evaluating claim conflicts across active lanes.
    - `evaluateClaimConflict(batch: BatchIndexEntry, activeClaims: ResourceClaim[]): ClaimConflictReport` —
      for a candidate batch and the set of currently active claims across all
@@ -39,7 +81,7 @@ Entirely model-free and deterministic.
    - `ClaimBlocker` type: `{kind: 'worktree' | 'branch' | 'path' | 'capacity', sourceBatch, sourceLane, detail}`.
    - All claim evaluation is synchronous and model-free.
 
-3. **Implement `src/foundation/ready-set.ts`:**
+3. **Implement `src/foundation/ReadySet.ts`:**
    - `computeReadySet(params: ReadySetParams): ReadySetResult` — compute the ready set
      from pack index, accepted batches, active claims, and endpoint availability.
    - **Parameters:**
@@ -102,10 +144,10 @@ Entirely model-free and deterministic.
 
 ## Expected Ownership
 
-- `src/foundation/resource-claims.ts` — owns claim evaluation, worktree/branch/path
+- `src/foundation/ResourceClaims.ts` — owns claim evaluation, worktree/branch/path
   conflict detection, and claim registration. No scheduling logic.
-- `src/foundation/ready-set.ts` — owns the ready-set algorithm, classification,
-  and blocking-reason computation. Delegates claim checking to `resource-claims.ts`.
+- `src/foundation/ReadySet.ts` — owns the ready-set algorithm, classification,
+  and blocking-reason computation. Delegates claim checking to `ResourceClaims.ts`.
 - No other module duplicates ready-set calculation or claim-conflict evaluation.
 
 ## Tests And Evidence
@@ -212,16 +254,55 @@ CA-04 is R5 because the ready-set DAG computation is the mechanical heartbeat of
 
 ## Structural Design And Module-Size Gate
 
-- `src/foundation/resource-claims.ts` target ≤220 lines. Multiple claim-check methods but one cohesive responsibility.
-- `src/foundation/ready-set.ts` target ≤250 lines. DAG traversal, classification, and blocking-reason computation are cohesive scheduling functions.
-- Test modules ≤300 lines; split by claim-conflict, DAG-traversal, and classification families.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Your Mission
 
 1. Read all reference documents.
 2. Inspect accepted CA-01, CA-03, RM-08 output for type compatibility.
-3. Implement `src/foundation/resource-claims.ts` with all claim-check and conflict-detection logic.
-4. Implement `src/foundation/ready-set.ts` with `computeReadySet`, `classifyReadySet`, and `computeBlockingReasons`.
+3. Implement `src/foundation/ResourceClaims.ts` with all claim-check and conflict-detection logic.
+4. Implement `src/foundation/ReadySet.ts` with `computeReadySet`, `classifyReadySet`, and `computeBlockingReasons`.
 5. Implement the complete error taxonomy.
 6. Create focused specs for: empty set, unique candidate, priority resolution, ambiguous (both kinds), every blocking reason, DAG correctness, claim-conflict matrices, and model-free proof.
 7. Produce implementation report.

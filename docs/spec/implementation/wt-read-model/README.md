@@ -1,6 +1,20 @@
 # Watchtower v1 Read Model Implementation Lane
 
-Status: ⏳ Awaiting implementation (M1 — Read-only discovery, inspection, and stable output)
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Date: 2026-07-30
 Owner areas: `src/contracts/`, `src/foundation/`, `src/commands/`, `help/commands/`
 
@@ -68,8 +82,8 @@ artifacts, but must not shorten a safety section into a link or summary. Wrong
 claims and broken paths must be replaced with equally detailed or more detailed
 correct instructions.
 
-The authoritative reasoning-class matrix, source-size bands, absolute 400-line
-ceiling, responsibility gates, and prompt-integrity policy live in
+The authoritative reasoning-class matrix, source-size bands, category-specific hard-reject
+ceilings, responsibility gates, and prompt-integrity policy live in
 `implementation-quality-and-agent-rules.md`. A batch prompt that conflicts with
 that file must be corrected before the batch starts.
 
@@ -123,7 +137,7 @@ The accepted delivery must guarantee:
 
 - versioned domain types with exhaustive error fixtures and exit-code mappings
   consumed by every later batch
-- a proven SQLite driver (`better-sqlite3`) with typed storage abstraction,
+- an evidence-selected conforming SQLite driver with focused typed ports,
   parameterized queries, FK enforcement, WAL mode, busy-timeout, rebuild
   semantics, semantic-root reproduction, and global install proof; an ADR
   documenting the selection, failure model, and no-JSON-shard-fallback rule
@@ -174,73 +188,74 @@ This lane should be read with an explicit owner map in mind.
   workspace context, status shapes
 - `src/contracts/errors.ts` — error taxonomy with exit-code mappings and
   exhaustive fixtures
-- `src/contracts/exit-codes.ts` — exit-code constants and mapping utilities
+- `src/contracts/exitCodes.ts` — exit-code constants and mapping utilities
 - `src/contracts/events.ts` — durable worker-event types, role/event vocabulary
 - `src/contracts/index.ts` — public barrel exporting all stable types
 
 ### Storage owners
 
-- `src/foundation/storage/StorageAdapter.ts` — typed storage abstraction interface
+- focused type-only SQLite connection/transaction/store ports — no universal
+  `StorageAdapter`
 - `src/foundation/storage/SqliteConfig.ts` — typed configuration capsule with shipping defaults
-- `src/foundation/storage/SqliteDriver.ts` — concrete `better-sqlite3` wrapper
+- `src/foundation/storage/SqliteDriver.ts` — evidence-selected driver adapter
 - `docs/spec/decisions/sqlite-driver-selection.md` — architectural decision record
 - `spec/storage/feasibility.spec.ts` — storage feasibility and proof fixtures
 
 ### Serialization and rendering owners
 
-- `src/foundation/serializer.ts` — JSON envelope construction, schema validation,
+- `src/foundation/commandEnvelopeSerializer.ts` — JSON envelope construction, schema validation,
   success/error rendering
-- `src/foundation/result-renderer.ts` — human/JSON parity rendering, redaction,
+- `src/foundation/ResultRenderer.ts` — human/JSON parity rendering, redaction,
   no decorative output
 
 ### Path and workspace owners
 
-- `src/foundation/paths.ts` — canonical path resolution, symlink/case safety,
+- `src/foundation/canonicalPaths.ts` — canonical path resolution, symlink/case safety,
   path-escape rejection
-- `src/foundation/workspace.ts` — workspace resolution, control-home discovery,
+- `src/foundation/workspaceResolver.ts` — workspace resolution, control-home discovery,
   repository/worktree identification
-- `src/foundation/xdg.ts` — XDG data-home resolution, `WATCHTOWER_DATA_HOME`
+- `src/foundation/dataHomeResolver.ts` — XDG data-home resolution, `WATCHTOWER_DATA_HOME`
   precedence
 
 ### Parser owners
 
-- `src/foundation/parsers.ts` — shared parser utilities and validation primitives
-- `src/foundation/env-parser.ts` — strict non-executing env-file parser,
+- `src/foundation/scalarLineParser.ts` — shared parser utilities and validation primitives
+- `src/foundation/EnvParser.ts` — strict non-executing env-file parser,
   redaction hooks
-- `src/foundation/state-parser.ts` — lane-state file parser, status projection,
+- `src/foundation/StateParser.ts` — lane-state file parser, status projection,
   unknown-key preservation
 
 ### Event parsing owners
 
-- `src/foundation/jsonl-parser.ts` — validated JSONL parsing, malformed/partial
+- `src/foundation/JsonlParser.ts` — validated JSONL parsing, malformed/partial
   line handling, bounded latest-N lookup
 
 ### Discovery owners
 
-- `src/foundation/discovery.ts` — home-lane discovery, directory walking,
+- `src/foundation/laneDiscovery.ts` — home-lane discovery, directory walking,
   `lane.json` validation
-- `src/foundation/lane-selector.ts` — deterministic lane selection by UUID, slug,
+- `src/foundation/LaneSelector.ts` — deterministic lane selection by UUID, slug,
   or single deduction; complete ambiguity matrix
 
 ### Membership owners
 
-- `src/foundation/membership.ts` — user-local membership-index validation,
+- `src/foundation/membershipIndex.ts` — user-local membership-index validation,
   stale-entry detection/reporting
-- `src/foundation/secondary-discovery.ts` — secondary-repository lane discovery
+- `src/foundation/SecondaryDiscovery.ts` — secondary-repository lane discovery
   through validated membership index
 
 ### Binding owners
 
-- `src/foundation/bindings.ts` — canonical repository binding computation,
+- `src/foundation/repositoryBindings.ts` — canonical repository binding computation,
   branch/worktree/access verification
-- `src/foundation/conflicts.ts` — writable claim-overlap detection, dedicated vs
+- `src/foundation/writableConflicts.ts` — writable claim-overlap detection, dedicated vs
   shared worktree classification
 
 ### Observation owners
 
-- `src/foundation/observations.ts` — tmux, watcher, and worker qualified-name
+- `src/foundation/runtimeObservations.ts` — tmux, watcher, and worker qualified-name
   reading
-- `src/foundation/heartbeat.ts` — heartbeat detection, staleness classification
+- `src/foundation/heartbeatObservation.ts` — heartbeat detection, staleness classification
 
 ### Command owners
 
@@ -368,7 +383,7 @@ Completion for wt-read-model means:
 
 - the error taxonomy is accepted with versioned IDs, exhaustive fixtures, and
   exit-code mappings consumed unchanged by every later batch
-- one conforming SQLite driver (`better-sqlite3`) is selected, proven in global
+- one conforming SQLite driver is selected from reproduced evidence and proven in global
   install context, and wrapped in a typed storage abstraction with FK enforcement,
   WAL mode, busy-timeout, rebuild semantics, and semantic-root reproduction; an
   ADR documents the decision and the no-JSON-shard-fallback rule

@@ -1,5 +1,19 @@
 # wt-lane-lifecycle Implementation Tracker
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 **Status:** ⏳ Pack authoring — 0/8 batches implemented
 **Last Updated:** 2026-07-30
 **Scope:** Lane lifecycle — init planning, pack validation, transactional layout, bindings, coordinator bootstrap, watch, doctor, and integration/scaffold removal
@@ -18,9 +32,10 @@
 - ✅ Reasoning floors are assigned by state, concurrency, transaction,
   seal-validation, cross-repository, integration, and closure risk; reviewer
   reasoning is never lower than implementor reasoning.
-- ✅ Hand-maintained modules target focused 160/220-line bands, receive mandatory
-  scrutiny through 300/350 lines, and have an absolute 400-line ceiling without
-  allowing line count to excuse mixed responsibilities.
+- ✅ Hand-maintained modules use the exact category matrix (120 command/front
+  door, 140 orchestrator, 200 foundation, 240 contracts, and 300 tests as
+  preferred maxima), including its category-specific warning and hard-reject
+  bands; no count excuses mixed responsibilities.
 - ✅ Dependencies declare exact prerequisite batch IDs from packs 1-2.
 
 ## Status Legend

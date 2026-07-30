@@ -1,5 +1,82 @@
 # Agent Launch Prompt — Review Batch LC-06
 
+## Governing Contract And Precedence — Mandatory
+
+This prompt is an execution aid, not product authority. Resolve conflicts in
+this order and stop for a specification amendment rather than inventing
+behavior:
+
+1. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
+2. `docs/spec/v1.md`
+3. `docs/spec/nirvana-integration-architecture.md`,
+   `docs/spec/coordinator-automation.md`, `docs/spec/operator-session.md`, and
+   `docs/spec/cli-session.md` within their scopes
+4. `docs/spec/architecture.md`
+5. `docs/development/engineering-and-review-standard.md`
+6. `AGENTS.md`
+7. the accepted implementation map, pack rules, and this batch brief
+
+The implementation/review agent must read the mandatory engineering standard
+and Nirvana integration architecture in full. A stale path, module suggestion,
+or technical mechanism in this prompt must be corrected to the governing
+contract while preserving the batch objective and proof obligations.
+
+## Nirvana-First And NVB Execution Gate — Mandatory
+
+- Complete and report the required Nirvana API usage audit before introducing
+  infrastructure or bare Node behavior.
+- Commands use Nirvana command, argument, pretty, and terminal-view APIs and
+  remain thin.
+- Public reason codes, exit mappings, event names, and schema identifiers remain
+  owned by accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`. A
+  batch-local symbolic name is not automatically public; reconcile it with the
+  registry, and update the owning contract/schema in the same batch when a new
+  public identifier is genuinely required.
+- Use the Nirvana storage facade for ordinary managed-root operations only
+  after CLI-safe root/bootstrap semantics are proved. Atomic durability,
+  canonical path security, locking, append-only journals, ownership/modes, and
+  SQLite stay behind focused adapters when the facade lacks required semantics.
+- Use the Nirvana logger only through the Watchtower logging boundary for
+  redacted diagnostics. Logs are never command output, lifecycle events,
+  acceptance evidence, or authoritative journals.
+- Substantial deterministic workflows use the immutable packaged Watchtower
+  NVB catalog, focused TaskHandlers, and task groups.
+- `LaneTaskRunner` is the only internal NVB invocation boundary. Task selection
+  is an allowlisted Watchtower action mapping, never an arbitrary user/agent
+  task name or parent-project discovery.
+- Never create or modify a participating repository's root `nvb.json`.
+- Shell is restricted to checksum-manifested leaf adapters for tmux, Git, or
+  external tools when no conforming Nirvana API exists. Workflow-level shell is
+  a hard reject.
+- Mutating tasks do not gain authority from NVB. They require the normal
+  Watchtower effect executor, current-state validation, locks, idempotency, and
+  a valid single-use invocation envelope.
+
+## Project-Wide Structural And Size Gate — Mandatory
+
+Apply the exact limits in
+`docs/development/engineering-and-review-standard.md`; pack-local numbers may
+be stricter but may never relax them:
+
+- CLI entry, command, or NVB task: preferred at most 120 lines, warning at
+  121–160, hard reject over 180.
+- Orchestrator, controller, or renderer shell: preferred at most 140 lines,
+  warning at 141–180, hard reject over 200.
+- Foundation service, planner, validator, adapter, or store: preferred at most
+  200 lines, warning at 201–260, hard reject over 300.
+- Contract/type/schema registry: preferred at most 240 lines, warning at
+  241–320, hard reject over 400.
+- Test/spec module: preferred at most 300 lines, warning at 301–420, hard reject
+  over 500.
+- Function: target at most 40 lines, justification at 41–60, reject over 80.
+- Constructor: target at most 25 lines, warning at 26–40, reject over 50.
+
+Passing a line limit never excuses mixed responsibilities, a god object,
+generic helper bag, hidden cycle, foreign API laundering, or layer violation.
+Use `PascalCase` for classes/class-owning files, `lowerCamelCase` for non-class
+modules and directories, and never introduce dashed or underscored backend
+source/spec names.
+
 ## Recommended agent/model class for forwarding:
 
 - brief-declared reasoning level: `R4`
@@ -41,13 +118,57 @@ Repository prerequisites: `AGENTS.md`.
 5. `.local/agent-reports/wt-lane-lifecycle/LC-06-foreground-watch-command.md` (implementation report)
 6. `docs/spec/v1.md` — §11.4 (watch command), §12 (runtime invocation contract: WT_* vars), §14 (no daemonization)
 7. `docs/spec/v1-contracts.md` — §8 (watch exit codes, rejects --json)
-8. `docs/spec/architecture.md` — §4.5 (runtime adapter), §6.3 (runtime execution flow)
+8. `docs/spec/architecture.md` — §4.5 (lane task runtime and leaf adapter),
+   §6.3 (runtime execution flow)
 9. `docs/spec/implementation/wt-lane-lifecycle/implementation-quality-and-agent-rules.md`
 10. the actual changed source files:
      - `src/commands/WatchCommand.ts`
      - `help/commands/watch.hlp.json`
      - `help/help.json`
      - `spec/commands/WatchCommand.spec.ts`
+
+## Structural Design And Module-Size Gate
+
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
 
 ## Your Review Mission
 
@@ -67,12 +188,25 @@ exports WT_* variables, and execs the watcher in the foreground:
    - Non-executable watcher → exit 4
    - Checksum mismatch → exit 4
    For each, verify the error message is clear and actionable.
-3. **WT_* variable audit**: instrument or inspect the environment passed to RuntimeInvoker. Verify all required variables: `WT_WORKSPACE`, `WT_LANE_ID`, `WT_INITIATIVE_ID`, `WT_LANE_SLUG`, `WT_LANE_DIR`, `WT_HOME_REPOSITORY_ID`, `WT_REPOSITORIES_FILE`, `WT_ACTIVE_REPOSITORY_ID`, `WT_RUNTIME_ROOT`, `WT_RUNTIME_VERSION`, `WT_KNOWLEDGE_ROOT`. Verify each has the correct value. Verify coordinator-only variables (`WT_COORDINATOR_CYCLE_ID`, `WT_DECISION_CLASS`) are NOT set.
-4. **RuntimeInvoker call verification**: verify the RuntimeInvoker is called with:
-   - Correct action name (from runtime manifest)
-   - Merged env object (process.env + WT_* vars)
-   - `stdio: "inherit"`
-   Verify the invoker handles argv, cwd, signal forwarding, and exit code propagation.
+3. **WT_* variable and isolation audit**: instrument the environment passed
+   through the RT-05 foreground boundary. Verify all required variables:
+   `WT_WORKSPACE`, `WT_LANE_ID`, `WT_INITIATIVE_ID`, `WT_LANE_SLUG`,
+   `WT_LANE_DIR`, `WT_HOME_REPOSITORY_ID`, `WT_REPOSITORIES_FILE`,
+   `WT_ACTIVE_REPOSITORY_ID`, `WT_RUNTIME_ROOT`, `WT_RUNTIME_VERSION`, and
+   `WT_KNOWLEDGE_ROOT`. Verify canonical values, verify coordinator-only
+   variables (`WT_COORDINATOR_CYCLE_ID`, `WT_DECISION_CLASS`) are absent, seed
+   parent sentinel secrets/undeclared keys and prove they are absent, and prove
+   diagnostics contain no environment values.
+4. **Foreground-boundary verification**: verify:
+   - the action and entrypoint come from the checksum-verified runtime catalog
+     and lane profile, never a hardcoded path or project `nvb.json`;
+   - `WatchCommand` delegates to `ForegroundWatcher`;
+   - the environment is an explicit allowlist and stdio is inherited;
+   - `LaneTaskRunner` is used only if RT-05 evidence proves required foreground
+     stdin/signal semantics; otherwise the exact documented narrow Nirvana
+     `cmd`-based central foreground path is used; and
+   - argv, cwd, signal forwarding, cancellation, and exit propagation follow
+     the accepted RT-05 contract.
 5. **Foreground exec proof**: verify the watcher is NOT daemonized. The CLI must exec the watcher and wait — no fork/detach, no backgrounding, no setsid. Verify by inspecting the code and by observing process tree during execution.
 6. **Stdio passthrough**: verify the watcher's stdout and stderr appear in the terminal. The CLI must not capture, buffer, or redirect them.
 7. **Ctrl-C termination**: start the watcher, send SIGINT. Verify the foreground process group terminates. Verify no orphaned child processes remain (use `ps` or `pgrep` to check).

@@ -1,5 +1,47 @@
 # Work Batch LC-04 — Bindings, Git-ignore, and Membership Registration
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Implementation reasoning: R4
 Review reasoning: R5
@@ -29,10 +71,10 @@ foundation.
 
 ### New foundation modules
 
-- `src/foundation/binding-mutator.ts` — acquire locks in spec order, write
+- `src/foundation/BindingMutator.ts` — acquire locks in spec order, write
   repository bindings, manage `.gitignore` atomically with digest-aware
   conditional rollback
-- `src/foundation/membership-registrar.ts` — post-commit idempotent
+- `src/foundation/MembershipRegistrar.ts` — post-commit idempotent
   membership index registration, retry logic, warning on failure
 
 ## Dependencies
@@ -89,7 +131,7 @@ function registerLaneWithRetry(laneDir: string, maxRetries?: number): Promise<Re
 
 ## Implementation Steps
 
-1. **Create `src/foundation/binding-mutator.ts`**
+1. **Create `src/foundation/BindingMutator.ts`**
    - `acquireInitLocks`: acquire locks in the fixed order:
      - data-root catalog/membership-index lock
      - lane lock (`.watchtower/lanes/{slug}/state/lane.lock`)
@@ -117,7 +159,7 @@ function registerLaneWithRetry(laneDir: string, maxRetries?: number): Promise<Re
      - Write `repositories.local.json` into the lane directory
      - This is the canonical binding record for this lane
 
-2. **Create `src/foundation/membership-registrar.ts`**
+2. **Create `src/foundation/MembershipRegistrar.ts`**
    - `registerLane(laneDir)`:
      - Acquire membership-index lock
      - Read current `repository-memberships.json`
@@ -188,7 +230,7 @@ function registerLaneWithRetry(laneDir: string, maxRetries?: number): Promise<Re
 
 ## Handoff Notes
 
-After acceptance, `binding-mutator.ts` and `membership-registrar.ts` are the
+After acceptance, `BindingMutator.ts` and `MembershipRegistrar.ts` are the
 sole owners of repository binding writes and membership index registration.
 LC-05 (coordinator baseline) may read the committed lane directory but does
 not write bindings. LC-07 (doctor) reads membership index for staleness checks.

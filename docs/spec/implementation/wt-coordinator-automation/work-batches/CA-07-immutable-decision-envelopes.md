@@ -1,10 +1,52 @@
 # Batch CA-07 — Immutable Decision Envelopes
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Routing and decision foundation
 Depends on: CA-02 through CA-06 accepted
-Owned files: `src/foundation/decision-envelope.ts`, `src/contracts/decision.ts`
+Owned files: `src/foundation/DecisionEnvelope.ts`, `src/contracts/decision.ts`
 
 **Required implementor reasoning class:** `R4`
 **Class rationale:** immutable decision envelope construction with stable semantic digests, bounded default context, and untrusted-content delimiting. The class is a floor; escalate when source inspection exposes additional risk.
@@ -63,7 +105,7 @@ between trusted (index-derived) and untrusted (agent/operator) content.
    - `UntrustedSection` — operator message or existing cycle proposals, clearly
      delimited as untrusted.
 
-3. **Implement `src/foundation/decision-envelope.ts`:**
+3. **Implement `src/foundation/DecisionEnvelope.ts`:**
    - `DecisionEnvelopeBuilder` class that constructs immutable envelopes.
    - `buildEnvelope(params: EnvelopeParams): DecisionEnvelope` — assembles a
      complete envelope from bounded index queries, journal projections, and
@@ -107,7 +149,7 @@ between trusted (index-derived) and untrusted (agent/operator) content.
 
 - `src/contracts/decision.ts` — owns the `DecisionEnvelope`, `BoundedContext`,
   and sub-section type definitions. Pure types, no logic.
-- `src/foundation/decision-envelope.ts` — owns envelope construction, digest
+- `src/foundation/DecisionEnvelope.ts` — owns envelope construction, digest
   computation/verification, boundedness enforcement, and content delimiting.
 - No other module duplicates envelope construction or digest computation.
 
@@ -207,15 +249,54 @@ CA-07 is R4 because the envelope is the immutable boundary between deterministic
 
 ## Structural Design And Module-Size Gate
 
-- `src/contracts/decision.ts` target ≤120 lines — pure type definitions.
-- `src/foundation/decision-envelope.ts` target ≤220 lines. Builder + digest + verification.
-- Test modules ≤300 lines; split by construction, digest, boundedness, and trust-boundary families.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Your Mission
 
 1. Read all reference documents and inspect CA-02/CA-03/CA-05/CA-06 output.
 2. Implement `src/contracts/decision.ts` with complete `DecisionEnvelope`, `BoundedContext`, and sub-section types.
-3. Implement `src/foundation/decision-envelope.ts` with `DecisionEnvelopeBuilder`, digest computation/verification, and boundedness enforcement.
+3. Implement `src/foundation/DecisionEnvelope.ts` with `DecisionEnvelopeBuilder`, digest computation/verification, and boundedness enforcement.
 4. Create focused specs for: stable digest, boundedness, content delimiting, expiry, staleness, index unavailability, RFC 8785 format, and model-free proof.
 5. Produce implementation report, update tracker, leave handoff.
 

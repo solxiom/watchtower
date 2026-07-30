@@ -1,5 +1,47 @@
 # Work Batch LC-03 — Transactional Lane Layout and Manifests
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Implementation reasoning: R5
 Review reasoning: R5
@@ -12,7 +54,7 @@ Create the complete lane directory layout transactionally. Use adjacent staging,
 atomic commit via rename, and full rollback on any write/fsync/rename failure.
 Generate schema-valid `lane.json` and `install.json`. Write manifests last so
 an interrupted operation is detectable. This batch owns the lane store
-foundation: `lane-store.ts` and `transactional-writer.ts`.
+foundation: `LaneStore.ts` and `TransactionalWriter.ts`.
 
 ## Specification References
 
@@ -31,10 +73,10 @@ foundation: `lane-store.ts` and `transactional-writer.ts`.
 
 ### New foundation modules
 
-- `src/foundation/lane-store.ts` — constructs complete lane layout plan,
+- `src/foundation/LaneStore.ts` — constructs complete lane layout plan,
   generates schema-valid `lane.json`, `install.json`, `repositories.local.json`,
   `lane.config.env`
-- `src/foundation/transactional-writer.ts` — adjacent staging directory,
+- `src/foundation/TransactionalWriter.ts` — adjacent staging directory,
   atomic rename commit point, fsync discipline, complete rollback on failure,
   manifest-last ordering
 
@@ -72,7 +114,7 @@ interface LaneFile {
 }
 
 interface ManagedLink {
-  path: string;                 // e.g. "bin/coordinator-watch.sh"
+  path: string;                 // manifest-declared lane-relative entrypoint
   target: string;               // absolute path in runtime store
   sha256?: string;              // expected checksum of target
 }
@@ -104,7 +146,7 @@ function rollbackStaging(stagingDir: string): Promise<void>;
 
 ## Implementation Steps
 
-1. **Create `src/foundation/transactional-writer.ts`**
+1. **Create `src/foundation/TransactionalWriter.ts`**
    - `commitLane(layout: LaneLayout)`: the atomic commit path
      - Create staging directory adjacent to final lane dir (same filesystem):
        `{controlHome}/.watchtower/lanes/.staging-{uuid}/`
@@ -129,7 +171,7 @@ function rollbackStaging(stagingDir: string): Promise<void>;
      - Do not touch anything outside staging (the destination never existed before rename)
    - `rollbackStaging(stagingDir)`: remove the staging directory and all contents
 
-2. **Create `src/foundation/lane-store.ts`**
+2. **Create `src/foundation/LaneStore.ts`**
    - `buildLaneLayout(plan, runtimeRefs)`: produce complete `LaneLayout` from plan
      - Compute absolute lane dir path from control home and slug
      - Enumerate all directories per v1.md §7.2:
@@ -232,7 +274,7 @@ function rollbackStaging(stagingDir: string): Promise<void>;
 
 ## Handoff Notes
 
-After acceptance, `lane-store.ts` and `transactional-writer.ts` are the sole
+After acceptance, `LaneStore.ts` and `TransactionalWriter.ts` are the sole
 owners of lane materialization. LC-04 calls the lane store to know which paths
 exist before binding repositories. LC-05 calls the lane store to know the lane
 directory structure before seeding baselines.

@@ -1,5 +1,47 @@
 # Work Batch LC-01 — Init Argument Resolution and Preflight Plan
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Implementation reasoning: R4
 Review reasoning: R5
@@ -28,7 +70,7 @@ batch owns the init planning foundation and the `InitCommand` front door.
 
 ### New foundation modules
 
-- `src/foundation/init-planner.ts` — preflight plan construction, argument
+- `src/foundation/InitPlanner.ts` — preflight plan construction, argument
   validation, dry-run plan enumeration; the single owner of init planning logic
 
 ### New command
@@ -98,7 +140,7 @@ export default class InitCommand extends BaseCommand implements Command {
 
 ## Implementation Steps
 
-1. **Create `src/foundation/init-planner.ts`**
+1. **Create `src/foundation/InitPlanner.ts`**
    - Import RM-03 workspace resolution, RM-08 conflict detection, RT-04 runtime catalog
    - Implement `validateInitArgs`: parse and validate slug, tmux-prefix,
      impl-pack path, coordinator-routing JSON, scope JSON, runtime version,

@@ -1,10 +1,52 @@
 # Batch CA-13 — Coordinator Queue, Cursor, Replay, and Watcher Integration
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Coordinator runtime integration
 Depends on: CA-03, CA-05, CA-10, CA-11, CA-12 accepted
-Owned files: `src/foundation/coordinator-queue.ts`, `src/foundation/coordinator-replay.ts`
+Owned files: `src/foundation/CoordinatorQueue.ts`, `src/foundation/CoordinatorReplay.ts`
 
 **Required implementor reasoning class:** `R5`
 **Class rationale:** stable priority queue with fsynced cursor advance, interrupted-cycle recovery (half-applied effects), duplicate-event handling, uncertain-outcome replay from cursor, and watcher-to-coordinator integration. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -17,6 +59,23 @@ interrupted-cycle and duplicate-event handling, uncertain-outcome replay from
 cursor, and full watcher integration — the watcher emits triggers, the
 coordinator dequeues and routes.
 
+## Required NVB Integration Shape
+
+Use focused packaged TaskHandlers for substantial deterministic watcher/
+coordinator mechanics assigned to CA-13: bounded trigger ingestion, queue
+maintenance, cursor/checkpoint persistence, and replay probes where the
+catalog's typed inputs/results fit. Application services retain priority
+policy, cycle state, effect authority, and journal truth and call tasks only
+through `LaneTaskRunner`.
+
+Task groups may express deterministic mechanical ordering, but no handler or
+group chooses semantic routing, advances a cursor before authoritative terminal
+evidence, or mutates outside a valid CA-10 invocation envelope. Retained shell
+is limited to cataloged external-tool leaves. New workflow-level watcher/
+coordinator shell and direct executable/NVB calls are hard rejects. Prove
+interrupted, duplicate, and uncertain task results replay from authoritative
+journals without reusing a consumed envelope or duplicating a completed effect.
+
 ## Required Work
 
 1. **Read the normative queue and replay contracts.** Study
@@ -25,7 +84,7 @@ coordinator dequeues and routes.
    Study accepted CA-03 for runtime journal indexes, CA-05 for routing policy,
    CA-10 for effect execution, and CA-11/CA-12 for external-effect journals.
 
-2. **Implement `src/foundation/coordinator-queue.ts`:**
+2. **Implement `src/foundation/CoordinatorQueue.ts`:**
    - `CoordinatorQueue` class — a stable priority queue for coordinator cycles.
    - `enqueue(trigger: CoordinatorTrigger): EnqueueResult` — adds a trigger to
      the queue with a deterministic priority calculated from: trigger class
@@ -58,7 +117,7 @@ coordinator dequeues and routes.
    - `EnqueueResult` type: `{ok, triggerId, position, queueLength}`.
    - `DequeueResult` type: `{ok, trigger?, reason?}`.
 
-3. **Implement `src/foundation/coordinator-replay.ts`:**
+3. **Implement `src/foundation/CoordinatorReplay.ts`:**
    - `CursorManager` class — manages the watcher event cursor with fsynced
      advance.
    - `advanceCursor(currentCursor: string, newEventId: string, effectOutcome:
@@ -123,9 +182,9 @@ coordinator dequeues and routes.
 
 ## Expected Ownership
 
-- `src/foundation/coordinator-queue.ts` — owns queue creation, enqueue/dequeue
+- `src/foundation/CoordinatorQueue.ts` — owns queue creation, enqueue/dequeue
   with stable priority, queue persistence, and duplicate suppression.
-- `src/foundation/coordinator-replay.ts` — owns cursor management with fsynced
+- `src/foundation/CoordinatorReplay.ts` — owns cursor management with fsynced
   advance, interrupted-cycle recovery, uncertain-outcome escalation, and
   watcher-to-coordinator integration.
 - No other module may advance the cursor, enqueue coordinator triggers, or
@@ -187,16 +246,48 @@ edge case.
 
 ## Structural And Module-Size Acceptance
 
-- `src/foundation/coordinator-queue.ts` target ≤250 lines (enqueue/dequeue
-  with priority, persistence, and duplicate suppression). Responsibility
-  inventory at 201–250.
-- `src/foundation/coordinator-replay.ts` target ≤300 lines (cursor with
-  fsync, interrupted-cycle recovery state machine, uncertain-outcome
-  escalation, and watcher integration). Warning-band justification at 251+.
-  Splitting into `coordinator-cursor.ts` and `coordinator-replay.ts` is
-  expected as the recovery state machine grows.
-- Test modules ≤300 lines; split by priority, persistence, duplicate,
-  cursor, crash-recovery, and watcher-integration families.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Required Review Packet
 

@@ -1,5 +1,19 @@
 # wt-runtime-distribution — Implementation Roadmap
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: **Proposed — pack-authoring baseline**
 Target release: `1.0.0`
 Pack order: 2 of 6
@@ -36,13 +50,15 @@ immutable, auditable distribution. The delivery must guarantee:
 
 ## Non-Negotiable Delivery Rules
 
-- Keep one lower-layer owner for each major concern: asset audit, manifest
-  validation, data-root catalog, runtime adapter, managed assets, NVB staging
-- Keep the runtime invocation adapter as the single invocation boundary; do not
-  spawn shell scripts from commands or foundation services directly
+- Keep one lower-layer owner for each major concern: asset audit and shell
+  classification, manifest/catalog/profile validation, data-root catalog,
+  lane task runner, leaf invocation, managed assets, and NVB staging
+- Keep `LaneTaskRunner` as the sole application NVB boundary; commands and
+  application services do not call NVB, Nirvana `cmd`, or leaves directly
 - Never evaluate lane config or state through shell execution in TypeScript
 - Never log secrets or complete environment maps during invocation diagnostics
-- Never import `node:child_process` shell-mode in the adapter
+- Never use direct `node:child_process`; an evidenced compatibility fallback
+  uses the Nirvana `cmd` facade behind `LaneTaskRunner`
 - Do not implement runtime behavior in `src/cli.ts` or `src/run.ts`
 - Do not create `helpers`, `utils`, `common`, or `misc` overflow modules
 - Apply the repo file-size, naming, directory-shadow, and helper-capsule rules
@@ -56,12 +72,12 @@ The main specs leave some details intentionally open.
 For this implementation pack, use the following clarifications so batch work
 and review remain aligned:
 
-- runtime invocation is argv-only; the adapter constructs `child_process.spawn`
-  with an argv array and never uses `{ shell: true }` or template literal
-  interpolation
-- `WT_*` environment variables are allowlisted; the adapter exports only keys
-  matching `^WT_` from the resolved lane context and never passes the full
-  `process.env`
+- application invocation maps one typed action to one allowlisted task and uses
+  explicit checksum-verified NVB config/module targets; leaf invocation is
+  argv-only through the audited Nirvana command API
+- environment is declared per task/leaf and derived from validated lane
+  context; a `WT_` prefix alone is not authority and `process.env` is never
+  forwarded wholesale
 - XDG precedence is `WATCHTOWER_DATA_HOME` > `XDG_DATA_HOME/watchtower` >
   `~/.local/share/watchtower`; the adapter resolves `~` from the effective OS
   user's home directory, not `$HOME`
@@ -127,45 +143,54 @@ Status: ❌ Batches RT-03–RT-04 pending
 
 Acceptance snapshot (target):
 
-- `runtime-nvb/dist.nvb` defines `wt:pack:runtime` and `wt:runtime:validate` tasks
+- capability fragments deterministically generate current `runtime-nvb.json`
+  and `task-catalog.json`; focused handlers extend the pinned public
+  `TaskHandler` API
+- repository `nvb.json`/handler surfaces define `wt:pack:runtime` and
+  `wt:runtime:validate`
 - `nvb dist` produces a `dist/` tree with `runtime/manifest.json`,
   `runtime/coordinator/`, `knowledge/manifest.json`, `knowledge/playbook.md`,
   `knowledge/guides/`, `knowledge/skill/`, and `knowledge/adapters/`
 - build validation compares packaged manifests with actual files and fails on
   missing, extra, non-executable, or checksum-mismatched managed assets
-- `nira.json` updated with NVB task registrations
+- `nira.json` remains ecosystem metadata; no invented task registration is
+  added there
 - XDG precedence resolver returns canonical data-root path
 - atomic first-stage writes use temp-file-atomic-rename
 - two runtime versions coexist under `<data-root>/runtimes/`
 - version roots are content-addressed and immutable after staging
 - `RuntimeCatalog` validates package and XDG runtime manifests
 
-### Phase 3: Runtime Adapter, Managed Links, and Smoke Proof
+### Phase 3: Task Runner, Managed Links, and Smoke Proof
 
 Goal:
 
-- deliver the central runtime invocation adapter, managed lane links, and
+- deliver the lane task runner and narrow leaf adapter, managed lane links, and
   integration smoke proof
 
 Batches:
 
-- RT-05 — Central runtime invocation adapter
-- RT-06 — Managed lane links and compatibility names
-- RT-07 — Packaged watcher and runtime smoke proof
+- RT-05 — LaneTaskRunner and leaf invocation adapter
+- RT-06 — Managed lane links, task profiles, and compatibility names
+- RT-07 — Packaged watcher and task-runtime smoke proof
 
 Status: ❌ Batches RT-05–RT-07 pending
 
 Acceptance snapshot (target):
 
-- `RuntimeAdapter` is the single invocation boundary for all runtime actions
-- actions are validated against the runtime manifest before invocation
-- invocation uses `child_process.spawn` with argv array and `{ shell: false }`
-- only `WT_*` environment variables are exported; `process.env` is never passed
+- `LaneTaskRunner` is the single application NVB invocation boundary
+- actions map through a validated lane profile to an immutable catalog task
+- the pinned NVB config/module target is explicit and project `nvb.json` is
+  ignored
+- structured NVB events/results are validated without terminal-text parsing
+- leaf invocation uses audited Nirvana command APIs with argv arrays
+- task/leaf environments are declared and `process.env` is never passed
 - cwd is validated to exist and be a directory
 - effective OS user is resolved and access is checked on runtime entrypoints
 - signal forwarding preserves SIGINT, SIGTERM, and SIGHUP semantics
 - exit status is forwarded from the child process
-- `RuntimeInvoker` maps supported actions to subprocess invocation context
+- pinned facade support or an explicit `NIRVANA_API_GAP` is recorded for
+  environment, cancellation/signals, stdin, and PTY
 - managed lane links are symlinks from `bin/` to immutable runtime store paths
 - `ManagedAssets` validates link targets against the runtime manifest checksum
 - collisions with non-managed files are refused

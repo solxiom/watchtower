@@ -1,5 +1,19 @@
 # Watchtower v1 Coordinator Automation Review Batches
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: active review brief pack
 Date: 2026-07-30
 
@@ -46,7 +60,7 @@ For index-foundation batches that use SQLite:
 
 - **No raw SQL exposed to consumers**: Grep for `.exec(`, `.run(`, `.prepare(`,
   `.all(`, `.get(` — these must appear ONLY inside the designated storage
-  capsule module (`index-store.ts`, `journal-wal.ts`). Any occurrence outside
+  capsule module (`IndexStore.ts`, `JournalWal.ts`). Any occurrence outside
   the capsule is a hard reject.
 - **SQLite bytes never treated as semantic authority**: Verify that the semantic
   root is computed from canonical logical rows (RFC 8785 canonicalized export),

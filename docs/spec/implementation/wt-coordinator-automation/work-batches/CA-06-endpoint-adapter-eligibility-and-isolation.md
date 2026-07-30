@@ -1,10 +1,52 @@
 # Batch CA-06 — Endpoint Adapter Eligibility and Isolation
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Routing and decision foundation
 Depends on: RT-05, CA-05 accepted
-Owned files: `src/foundation/endpoint-adapter.ts`, `src/foundation/endpoint-eligibility.ts`
+Owned files: `src/foundation/EndpointAdapter.ts`, `src/foundation/EndpointEligibility.ts`
 
 **Required implementor reasoning class:** `R4`
 **Class rationale:** endpoint adapter eligibility classification and isolation proof. Provider-neutral adapter layer distinguishing unattended, advisory-confirmed, and skill-only modes. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -24,7 +66,7 @@ cannot reach the decision envelope or effect executor.
    fallback, and usage telemetry. Study `coordinator-automation.md §8` for
    endpoint invocation and §9 for adapter isolation.
 
-2. **Implement `src/foundation/endpoint-adapter.ts`:**
+2. **Implement `src/foundation/EndpointAdapter.ts`:**
    - `EndpointAdapter` interface — the provider-neutral contract every adapter
      must implement:
      - `adapterId: string` — unique adapter identity.
@@ -40,7 +82,7 @@ cannot reach the decision envelope or effect executor.
    - `UsageTelemetry` type: `{classification: 'reported' | 'estimated' | 'unknown', ...}`.
    - `EligibilityReport` type: `{eligible: boolean, unmetRequirements: string[]}`.
 
-3. **Implement `src/foundation/endpoint-eligibility.ts`:**
+3. **Implement `src/foundation/EndpointEligibility.ts`:**
    - `EndpointEligibilityChecker` class that proves adapter eligibility before
      any unattended invocation.
    - `proveUnattendedEligibility(adapter: EndpointAdapter): EligibilityReport` —
@@ -93,9 +135,9 @@ cannot reach the decision envelope or effect executor.
 
 ## Expected Ownership
 
-- `src/foundation/endpoint-adapter.ts` — owns the `EndpointAdapter` interface,
+- `src/foundation/EndpointAdapter.ts` — owns the `EndpointAdapter` interface,
   `AdapterClassification` type, and all adapter type definitions.
-- `src/foundation/endpoint-eligibility.ts` — owns eligibility proof, classification,
+- `src/foundation/EndpointEligibility.ts` — owns eligibility proof, classification,
   invocation-bounds enforcement, and result-channel validation.
 - No other module duplicates adapter classification, eligibility checking, or
   invocation-bound enforcement.
@@ -124,7 +166,7 @@ cannot reach the decision envelope or effect executor.
 
 ## What Must Not Change
 
-- Do not modify the central runtime adapter (RT-05).
+- Do not modify RT-05's `LaneTaskRunner`, TaskHandler, or leaf boundaries.
 - Do not implement any concrete Codex, Cursor, or Claude adapter — the adapter
   layer is provider-neutral.
 - Do not execute any adapter against real lane state during eligibility checking.
@@ -197,15 +239,54 @@ CA-06 is R4 because the adapter eligibility proof is the definitive guard betwee
 
 ## Structural Design And Module-Size Gate
 
-- `src/foundation/endpoint-adapter.ts` target ≤120 lines — interface and type definitions.
-- `src/foundation/endpoint-eligibility.ts` target ≤250 lines. 10 checks + classification + bounds enforcement. Responsibility inventory at 221–300.
-- Test modules ≤300 lines; split by eligibility, classification, bounds, and sandbox families.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
+
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
+
+# Agent Launch Prompt — Work Batch RT-05
 
 ## Your Mission
 
 1. Read all reference documents and inspect RT-05/CA-05 output.
-2. Implement `src/foundation/endpoint-adapter.ts` with the complete `EndpointAdapter` interface and type definitions.
-3. Implement `src/foundation/endpoint-eligibility.ts` with eligibility proof, classification, and invocation-bound enforcement.
+2. Implement `src/foundation/EndpointAdapter.ts` with the complete `EndpointAdapter` interface and type definitions.
+3. Implement `src/foundation/EndpointEligibility.ts` with eligibility proof, classification, and invocation-bound enforcement.
 4. Create focused specs for: all 10 eligibility checks, skill-only rejection, advisory-confirmed requirement, write-denial proof, output/wall-clock bounds, invalid results, deterministic classification, and provider-neutrality.
 5. Produce implementation report.
 6. Update tracker.

@@ -1,5 +1,19 @@
 # Review Batch Index — Watchtower v1 Coordinator Automation
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: active index
 Date: 2026-07-30
 
@@ -12,7 +26,7 @@ is complete and the implementation report is written.
 | Review batch | Reviews work batch | Reviewer minimum proof |
 |-------------|-------------------|----------------------|
 | CA-01 | CA-01 | Independently compile the same sealed pack twice; prove identical logical rows and semantic-root digest from independent SQLite databases; verify FK integrity across all tables; simulate crash at every staged-publication stage; verify semantic root computed from logical rows, never SQLite bytes; corrupt partial index detected and refused; seal-drift detection; model-free check |
-| CA-02 | CA-02 | Independently open compiled index and verify all typed query methods return correct results; grep for `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` — prove they appear ONLY in `index-store.ts`; verify SQLite bytes never treated as semantic authority; corrupt/missing/stale index → no query completes, no partial data; verify no full-pack/JSON-shard fallback exists; cursor/revision semantics; page/depth limits enforced |
+| CA-02 | CA-02 | Independently open compiled index and verify all typed query methods return correct results; grep for `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` — prove they appear ONLY in `IndexStore.ts`; verify SQLite bytes never treated as semantic authority; corrupt/missing/stale index → no query completes, no partial data; verify no full-pack/JSON-shard fallback exists; cursor/revision semantics; page/depth limits enforced |
 | CA-03 | CA-03 | Independently append events and verify checkpoint integrity; verify WAL-mode concurrent reader behavior; corrupt SQLite database → detection and staged rebuild from authoritative JSONL; verify rebuild idempotency; verify all projections deterministic; verify authoritative JSONL never modified; verify projections use JournalIndex typed reads, never raw SQL or JSONL |
 | CA-04 | CA-04 | Independently calculate ready set from 30-batch fixture; verify all dependency/claim/capacity blockers correctly identified; prove deterministic output from identical inputs; verify no arbitrary winner selection (multiple ready → all reported); model-free check |
 | CA-05 | CA-05 | Independently verify all 15 routing rules in correct order; prove first-match determinism; verify every guard condition with positive/negative fixtures; verify D1→C2, D2→C3, D3→C5 floors; verify M0 never invokes model; verify escalation never downgrades below minimum |

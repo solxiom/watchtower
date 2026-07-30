@@ -1,5 +1,47 @@
 # Review Batch CA-10 — Atomic Lane-Local Effect Executor
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ⏳ Awaiting review
 Reasoning: `R5`
 Paired work brief: `work-batches/CA-10-atomic-lane-local-effect-executor.md`
@@ -7,8 +49,8 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-10-atomic
 
 ## Scope Verification
 
-- [ ] `src/foundation/effect-plan.ts` created with `EffectPlanner`
-- [ ] `src/foundation/effect-executor.ts` created with `EffectExecutor`
+- [ ] `src/foundation/EffectPlan.ts` created with `EffectPlanner`
+- [ ] `src/foundation/EffectExecutor.ts` created with `EffectExecutor`
 - [ ] Complete effect registry matching `v1-contracts.md §5`
 - [ ] Lock acquisition before any mutation
 - [ ] Current-state revalidation before commit
@@ -17,6 +59,15 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-10-atomic
 - [ ] External effects use prepare/attempt/verify journal states
 - [ ] Effect preview without mutation
 - [ ] No raw mutation commands exposed through public CLI
+
+## Mandatory Task-Boundary Proof
+
+Independently verify that mutating packaged TaskHandlers are reachable only from
+the sole executor through a CA-10 single-use invocation envelope. Reproduce
+forged, expired, reused, wrong-action/effect, stale-snapshot, tampered, and
+concurrent-double-consumption failures. Verify the envelope contains no
+arbitrary task/config/module/path/command/environment and structured NVB
+events/results remain attempt evidence rather than authority or journal truth.
 
 ## Required Independent Proof
 

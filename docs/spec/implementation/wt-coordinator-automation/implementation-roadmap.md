@@ -1,5 +1,19 @@
 # wt-coordinator-automation Implementation Roadmap
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: **Proposed — pack authored, awaiting lane initialization**
 Date: 2026-07-30
 Pack: 5 of 6 — `wt-coordinator-automation`
@@ -27,8 +41,9 @@ into the definitive typed, validated, bounded Watchtower automation plane.
 The delivery must guarantee:
 
 - Deterministic seal-bound pack indexes compiled and verified without any model.
-- Sharded index publication with corruption-safe direct bounded reads.
-- Runtime journal indexes and projections with checkpoint/prefix-digest integrity.
+- SQLite index publication with corruption-safe typed bounded reads.
+- Runtime SQLite indexes and projections with checkpoint/prefix-digest
+  integrity and staged rebuild.
 - Ready-set DAG projection with dependency/claim/capacity blockers, no arbitrary winner.
 - Ordered routing policy with every v1 rule/guard at D1/C2, D2/C3, D3/C5 floors.
 - Endpoint adapter eligibility proven before any unattended invocation.
@@ -36,9 +51,12 @@ The delivery must guarantee:
 - Context broker with allowlisted queries, provenance/redaction, and soft/hard limits.
 - Typed proposals (all 11 types) with current-state validation and stale/illegal/invalid handling.
 - One atomic lane-local effect executor with lock/revalidation/idempotency.
-- Tmux prepare/attempt/verify adapter with unknown-launch recovery and duplicate suppression.
-- Git acceptance adapter with reviewer-session ownership and partial-push recovery.
-- Coordinator queue, cursor, replay, and watcher integration with stable priority and fsynced advance.
+- Tmux prepare/attempt/verify TaskHandler plus cataloged leaf, with
+  unknown-launch recovery and duplicate suppression.
+- Git acceptance TaskHandler plus audited Nirvana Git API/leaf, with
+  reviewer-session ownership and partial-push recovery.
+- Coordinator queue, cursor, replay, and watcher TaskHandler integration with
+  stable priority, fsynced advance, and no workflow-level shell.
 - Coordinator command group with index/status/context/explain/cycle/escalate/events/ready.
 - Durable operator-session persistence with many sessions per lane and crash-safe journals.
 - Session indexes, references, pins, and compaction with bounded working sets.
@@ -54,20 +72,21 @@ services before any decision routing or effect work begins.
 
 Batches:
 
-- CA-01 — Deterministic sealed-pack index compiler
-- CA-02 — Sharded index publication and bounded queries
-- CA-03 — Runtime journal indexes and projections
+- CA-01 — Deterministic sealed-pack SQLite compiler
+- CA-02 — SQLite index stores and bounded typed queries
+- CA-03 — Runtime SQLite indexes and projections
 - CA-04 — Ready set and resource-claim projection
 
 Status: ❌ Not started
 
 Acceptance snapshot (target):
 
-- Identical semantic bytes from the same sealed input.
+- Identical logical rows and semantic root from the same sealed input; SQLite
+  file bytes and page order are not semantic authority.
 - Path/digest/cross-reference checks enforced.
 - Linear build with intermediate verification.
 - Direct bounded reads with limits/cursors/truncation.
-- Stale/missing/corrupt block handling.
+- Stale/missing/corrupt store refusal with no partial-data fallback.
 - Checkpoints/prefix digests with incremental append.
 - Partial-tail/rebuild behavior for journal recovery.
 - DAG/dependency/claim/capacity blockers computed deterministically.
@@ -194,7 +213,8 @@ No session attachment may begin before all session services are accepted.
 ## Recommended Honest Execution Order
 
 1. Compile deterministic sealed-pack index with seal verification (CA-01)
-2. Publish sharded index with bounded queries and corruption handling (CA-02)
+2. Publish typed SQLite index stores with bounded queries and stale/corrupt
+   refusal (CA-02)
 3. Build journal indexes and projections with checkpoint integrity (CA-03)
 4. Project ready set and resource claims from DAG data (CA-04)
 5. Implement ordered routing policy and capability floors (CA-05)

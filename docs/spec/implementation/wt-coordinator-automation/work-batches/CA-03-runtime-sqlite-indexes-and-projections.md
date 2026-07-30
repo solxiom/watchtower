@@ -1,10 +1,52 @@
 # Batch CA-03 — Runtime SQLite indexes and projections
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Index foundation
 Depends on: RM-05, CA-02 accepted
-Owned files: `src/foundation/journal-index.ts`, `src/foundation/journal-projection.ts`, `src/foundation/journal-wal.ts`
+Owned files: `src/foundation/JournalIndex.ts`, `src/foundation/JournalProjection.ts`, `src/foundation/JournalWal.ts`
 
 **Required implementor reasoning class:** `R4`
 **Class rationale:** SQLite-backed journal indexes with WAL-mode concurrency, checkpoint integrity, incremental append to derived indexes, corruption detection and staged rebuild from authoritative append-only journals, and partial-tail event handling. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -27,7 +69,7 @@ checkpointed).
    §18 for coordinator/effect event vocabulary. Study the accepted CA-02
    `IndexStore` and `IndexQuery` contracts for the typed query boundary.
 
-2. **Implement `src/foundation/journal-wal.ts`:**
+2. **Implement `src/foundation/JournalWal.ts`:**
    - `JournalWAL` class managing WAL-mode SQLite access for journal indexes.
      Single writer (effect executor or watcher) with concurrent WAL-mode readers
      for projection queries.
@@ -39,10 +81,11 @@ checkpointed).
      into the main database (called after significant append batches or on close).
    - `closeJournalStore(store: JournalStore): void` — checkpoints WAL (normal
      mode), waits for readers, and closes.
-   - All SQLite access goes through the DB-01 storage adapter. No raw SQLite
-     primitives exposed to consumers of `JournalWAL`.
+   - Connections/transactions go through DB-01 focused SQLite ports.
+     Runtime-index statement definitions remain inside focused store owners; no
+     selected-driver import or raw primitive reaches consumers.
 
-3. **Implement `src/foundation/journal-index.ts`:**
+3. **Implement `src/foundation/JournalIndex.ts`:**
    - `JournalIndex` class managing the derived SQLite journal index tables.
    - Schema tables:
      - `journal_event` — `(sequence INTEGER PK, event_id TEXT UNIQUE NOT NULL, event_type TEXT NOT NULL, role TEXT, batch_id TEXT, cycle_id TEXT, correlation_id TEXT, payload_json TEXT NOT NULL, byte_offset INTEGER NOT NULL, byte_length INTEGER NOT NULL, created_at TEXT NOT NULL)`
@@ -74,15 +117,19 @@ checkpointed).
      - If the authoritative JSONL journal ends with a non-newline-terminated or
        truncated line (detected by RM-05's parser), `JournalIndex` excludes it
        from the index and reports `JOURNAL_CORRUPT_TAIL`.
-     - Mutations are blocked until an explicit `rebuildIndex` verifies and
-       truncates only the incomplete tail.
+     - Mutations are blocked while that partial tail remains. `rebuildIndex`
+       may index the complete prefix but must leave authoritative JSONL
+       byte-for-byte unchanged. Only the authoritative writer completing the
+       record, or a separately authorized journal-repair workflow, may resolve
+       the source condition.
    - `rebuildIndex(journalPath: string): void` — re-reads the complete
-     authoritative JSONL journal from byte 0, verifies every record's schema
-     and sequence continuity, truncates only a confirmed incomplete final
-     record, deletes all existing SQLite index rows, and repopulates from
-     scratch in a single transaction. Updates the checkpoint.
+     prefix of the authoritative JSONL journal from byte 0, verifies every
+     complete record's schema and sequence continuity, leaves any incomplete
+     final record untouched, and builds a staged replacement index from
+     scratch. It verifies and atomically publishes the staged database before
+     updating the checkpoint; it never clears the active index in place.
 
-4. **Implement `src/foundation/journal-projection.ts`:**
+4. **Implement `src/foundation/JournalProjection.ts`:**
    - `JournalProjection` class for deriving deterministic read-model projections
      from the journal index.
    - All projections read through `JournalIndex` typed methods, never raw SQL
@@ -135,14 +182,14 @@ checkpointed).
 
 ## Expected Ownership
 
-- `src/foundation/journal-wal.ts` — owns WAL-mode SQLite access for journal
+- `src/foundation/JournalWal.ts` — owns WAL-mode SQLite access for journal
   indexes. Single writer / concurrent reader contract. WAL checkpoint and close
-  semantics. Uses DB-01 storage adapter for all SQLite access.
-- `src/foundation/journal-index.ts` — owns the derived SQLite journal index
+  semantics. Uses DB-01 focused SQLite ports for connection/transaction access.
+- `src/foundation/JournalIndex.ts` — owns the derived SQLite journal index
   schema, incremental append from authoritative JSONL, checkpoint management,
   sequence continuity validation, partial-tail handling, corruption detection,
-  and staged rebuild. Uses `journal-wal.ts` for database access.
-- `src/foundation/journal-projection.ts` — owns all deterministic projections
+  and staged rebuild. Uses `JournalWal.ts` for database access.
+- `src/foundation/JournalProjection.ts` — owns all deterministic projections
   from journal-index state. Reads only through `JournalIndex` typed methods;
   never touches raw JSONL or raw SQL.
 - No other module duplicates journal indexing, WAL management, checkpoint
@@ -159,7 +206,8 @@ checkpointed).
   without SQLITE_BUSY errors.
 - **Partial tail:** Append a complete entry plus a truncated line to the
   authoritative JSONL. Verify corruption detection and mutation blocking.
-  Verify rebuild removes only the incomplete tail.
+  Verify rebuild indexes only the complete prefix and leaves the authoritative
+  journal byte-for-byte unchanged.
 - **Sequence gap:** Append events with sequences 0, 1, 2, then 4 (skipping 3).
   Verify `JOURNAL_SEQUENCE_GAP` detection and append blocking.
 - **Invalid record:** Append a malformed JSONL line. Verify validation failure.
@@ -187,7 +235,8 @@ checkpointed).
   modules (journal writing is owned by the effect executor, CA-10).
 - Do not expose raw SQLite primitives to consumers.
 - Do not invoke any model, LLM, or AI.
-- Do not import `better-sqlite3` or similar outside `journal-wal.ts`.
+- Do not import the selected driver package in CA-03; only the DB-01 driver
+  capsule imports it. Keep runtime-index SQL inside focused store owners.
 - Do not modify the lane directory layout.
 
 ## Review Procedure Highlights

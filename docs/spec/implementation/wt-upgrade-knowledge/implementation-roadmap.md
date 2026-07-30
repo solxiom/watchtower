@@ -1,5 +1,19 @@
 # wt-upgrade-knowledge Implementation Roadmap
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: ❌ Pending — pack design complete, implementation not started
 Date: 2026-07-30
 Owner areas: Watchtower upgrade foundation, host adapters, upgrade/skill-install/version commands
@@ -82,7 +96,7 @@ Status: ❌ Pending
 
 Acceptance snapshot (target):
 
-- `upgrade-planner.ts` ingested from lane manifests and packaged runtime/
+- `UpgradePlanner.ts` ingested from lane manifests and packaged runtime/
   knowledge manifests
 - three-way comparison: current install manifest, new runtime manifest,
   new knowledge manifest
@@ -119,9 +133,9 @@ Status: ❌ Pending — depends on UK-01 accepted
 
 Acceptance snapshot (target):
 
-- `migration-registry.ts` registers migration step functions by source and
+- `MigrationRegistry.ts` registers migration step functions by source and
   target schema version
-- `migration-steps.ts` owns individual step implementations; each step is a
+- `migrationSteps.ts` owns individual step implementations; each step is a
   pure function from old state to new state
 - step ordering uses a dependency graph: every adjacent version pair has at
   most one migration step; chains compose from current version to target
@@ -155,14 +169,14 @@ Status: ❌ Pending — depends on UK-02 accepted
 
 Acceptance snapshot (target):
 
-- `upgrade-apply.ts` stages all new managed assets alongside the old ones
+- `UpgradeApply.ts` stages all new managed assets alongside the old ones
   without overwriting them until the final atomic pointer switch
 - staging directory adjacent to the lane directory; atomic rename for each
   managed link
 - every new managed asset validated against the packaged runtime manifest
   checksum before staging
 - manifest (`install.json`) written last after all assets fsynced
-- `upgrade-recovery.ts` detects an incomplete upgrade (staging artifacts
+- `UpgradeRecovery.ts` detects an incomplete upgrade (staging artifacts
   present but manifest not updated) and restores the authoritative previous
   manifest
 - old runtime links remain intact and the old runtime is invocable after
@@ -190,7 +204,7 @@ Status: ❌ Pending — depends on RT-01, RT-02 accepted
 
 Acceptance snapshot (target):
 
-- `host-adapters.ts` provides a factory that resolves the correct adapter
+- `hostAdapters.ts` provides a factory that resolves the correct adapter
   for a given host identifier: `codex`, `cursor`, `claude`
 - each adapter previews: source knowledge location, destination host-specific
   path, scope of files to write, and any existing files that would be replaced

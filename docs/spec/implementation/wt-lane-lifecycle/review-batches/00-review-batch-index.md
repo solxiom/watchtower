@@ -1,5 +1,19 @@
 # Review Batch Index — Watchtower v1 Lane Lifecycle
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: active index
 Date: 2026-07-30
 
@@ -17,7 +31,7 @@ review batches are accepted.
 | LC-03 | LC-03 | Adjacent staging on same filesystem; atomic rename commit point with no observable partial state; rollback on write failure, fsync failure, rename failure, partial manifest generation; manifest written last; `lane.json` and `install.json` schema validation; duplicate lane rejection; complete lane-directory layout |
 | LC-04 | LC-04 | Lock acquisition order in all code paths (data-root → lane → session → projection/index); `.gitignore` atomic update preserving original content; conditional rollback on digest mismatch; membership index under its lock; post-commit registration retry; idempotent registration; stale entries reported but never repaired |
 | LC-05 | LC-05 | Shipping-policy baseline: every value matches v1-contracts.md §7 exactly; routing policy: all 15 rules present in correct order; operator-session policy defaults match; provenance markers reference correct spec sections; pack index seal matches active pack seal; deterministic byte-identical reproduction; no model invocation; no full-pack fallback |
-| LC-06 | LC-06 | All preflight failure conditions (exit 3, 4, 5 with correct codes); `--json` rejected with exit 2; WT_* variables complete and correct (11 required, 0 coordinator-only); RuntimeInvoker called with correct action, env, and stdio: "inherit"; foreground exec (no daemonization); Ctrl-C terminates without orphans; exit code propagation |
+| LC-06 | LC-06 | All preflight failure conditions (exit 3, 4, 5 with correct codes); `--json` rejected with exit 2; WT_* allowlist complete and correct (11 required, 0 coordinator-only or inherited sentinel secrets); manifest/profile entrypoint and accepted RT-05 foreground boundary verified; inherited stdio; no daemonization; Ctrl-C terminates without orphans; exit code propagation |
 | LC-07 | LC-07 | All 15 check categories represented with at least one check each; every check returns correct pass/warn/fail/skip on appropriate fixtures; tool checks (fail on absent mandatory, warn on absent optional); read-only proof (zero filesystem writes); exit code 0 on pass/warn, exit code 4 on any fail; JSON output matches doctorReport schema; grouped category output |
 | LC-08 | LC-08 | End-to-end fixture: init creates valid lane, status reads it, watch preflight passes, doctor returns pass/warn; rollback proof: invalid init and missing-arg init leave no residual state; all hello artifacts deleted (`src/commands/HelloCommand.ts`, `help/commands/hello.hlp.json`, hello spec); `src/commands/index.ts` cleaned; `help/help.json` cleaned; zero hello references in `src/`, `help/`, `spec/`, `runtime-nvb/`; `nvb build` and `nvb test` pass after removal; all real commands intact |
 

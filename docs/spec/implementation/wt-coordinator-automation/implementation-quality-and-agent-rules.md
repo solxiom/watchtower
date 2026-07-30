@@ -1,5 +1,19 @@
 # wt-coordinator-automation Implementation Quality And Agent Rules
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: **active pack quality rules**
 Date: 2026-07-30
 
@@ -90,8 +104,8 @@ Examples of hard reject shapes:
 - A command class accumulating index compilation or routing logic.
 - `CoordinatorEffectExecutor` owning proposal validation plus effect planning plus journal
   writing plus projection refresh.
-- `CoordinatorIndexQuery` owning shard selection plus cursor management plus digest
-  verification plus corruption repair.
+- `CoordinatorIndexQuery` owning typed query composition plus cursor management
+  plus digest verification plus corruption repair.
 - `OperatorSessionRenderer` owning lifecycle state transitions plus budget accounting
   plus proposal handling.
 - The PTY attachment owning session policy, routing, or budget decisions.
@@ -106,7 +120,7 @@ Reject the batch if any important truth is recomputed in multiple layers.
 This includes:
 
 - Pack-index compilation and seal verification.
-- Index shard selection and bounded cursor management.
+- Typed SQLite query composition and bounded cursor management.
 - Journal checkpoint and prefix-digest derivation.
 - Ready-set DAG calculation and claim-capacity blocking.
 - Routing-policy rule matching and class assignment.
@@ -136,30 +150,45 @@ files and materially rewritten files. Generated artifacts are outside these
 targets only when their generated ownership is explicit and they contain no
 hand-maintained behavior.
 
-Required size bands:
+The project-wide engineering standard defines these exact size bands:
 
-- Front doors, factories, registries, commands, renderers, and public barrels
-  should target 160 lines or fewer. From 161 through 220 lines, the implementation
-  agent must justify every retained responsibility and the reviewer must inspect
-  for extraction opportunities. A hand-maintained front door over 220 lines is
-  rejectable unless an existing repo-owned constraint makes immediate extraction
-  riskier and a narrowly scoped exception is recorded. No such front door may
-  exceed 300 lines.
-- Focused implementation modules should target 220 lines or fewer. From 221
-  through 300 lines, the agent must include a responsibility inventory and the
-  reviewer must independently decide whether the module still has one cohesive
-  reason to change. From 301 through 350 lines, splitting is expected and
-  acceptance requires a concrete, source-backed reason why a split would make
-  ownership less clear. Above 350 lines is a hard rejection for new or
-  materially rewritten hand-maintained implementation modules.
-- Four hundred physical lines is the absolute ceiling for any hand-maintained
-  JS/TS source or spec module touched by this pack. The 400-line ceiling is not
-  an exception target: a file can and should be rejected well below it when it
-  mixes responsibilities, hides a state machine, duplicates policy, or acts as
-  an overflow container.
-- Test modules should normally stay at or under 300 lines. Larger scenario
-  matrices must be split by contract family, fixture owner, or acceptance-ID
-  range and share focused fixture builders rather than one giant test file.
+| Module category | Preferred maximum | Warning band | Hard rejection |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB task front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contracts and type-only modules | 240 | 241–320 | over 400 |
+| Test/spec modules | 300 | 301–420 | over 500 |
+
+Functions target 40 lines or fewer, enter a warning band at 41–60 lines, and
+are rejected above 80 lines. Constructors target 25 lines or fewer, enter a
+warning band at 26–40 lines, and are rejected above 50 lines. A warning-band
+module or function requires a responsibility inventory and explicit reviewer
+judgment; reaching a hard limit is not an automatic entitlement to an
+exception.
+
+Every module must have one primary responsibility and one cohesive reason to
+change. Commands and NVB TaskHandlers validate, normalize, delegate, and map
+results; they do not become workflow owners. Orchestrators sequence focused
+collaborators without absorbing storage, validation, rendering, subprocess, or
+state-machine algorithms. Contracts remain type-only. Human rendering is not
+mixed with mutation or persistence.
+
+An exception must be approved before implementation and must identify the exact
+file, the proposed maximum, the concrete reason splitting would make ownership
+less clear, the approving reviewer, and an expiry or follow-up batch. A
+retroactive exception is invalid. Existing oversized files are not precedent:
+when touched they must become smaller, be split, or remain line-count neutral
+with a recorded extraction plan and reviewer approval.
+
+Naming is part of the structural gate. Class-owning TypeScript modules use
+PascalCase filenames, functions and values use lowerCamelCase, and new source
+filenames do not use dashes or underscores. Generic overflow owners such as
+`helpers`, `utils`, `common`, and `misc` are rejected.
+
+Larger test scenario matrices must be split by contract family, fixture owner,
+or acceptance-ID range and share focused fixture builders rather than one giant
+test file.
 - Existing oversized files are not permission to add more behavior. If a batch
   must touch one, it should leave the file no larger unless the added lines are
   temporary extraction glue removed in the same batch. The report must record
@@ -168,7 +197,7 @@ Required size bands:
 Responsibility gates apply independently of line count:
 
 - Three or more independently nameable responsibilities in one module require
-  a split, even when the file is under 220 lines.
+  a split, even when the file is below its preferred maximum.
 - State transition policy, transport or driver I/O, mapping/normalization, and
   human rendering must not accumulate in one owner.
 - A class that owns index compilation, query routing, digest verification, and
@@ -187,8 +216,9 @@ Additional reject conditions:
 - Comments are used to justify mixed responsibility instead of splitting owners.
 
 Every implementation report must include line counts for all new files and
-materially rewritten files. Every review report must independently reproduce or
-verify those counts and state whether each warning-band file remains cohesive.
+materially rewritten files, categorized against the matrix above. Every review
+report must independently reproduce or verify those counts and state whether
+each warning-band file and function remains cohesive.
 Passing the line-count gate never overrides the responsibility gates above.
 
 ## Agent Reasoning Classes And Batch Assignment
@@ -213,8 +243,8 @@ to confirm that the implementor followed a checklist.
 
 | Batch | Implementor | Reviewer | Reason for the floor |
 |-------|------------|----------|----------------------|
-| CA-01 | R5 | R5 | Deterministic index with seal verification; identical semantic byte requirement |
-| CA-02 | R5 | R5 | Sharded index with corruption handling; partial-block recovery semantics |
+| CA-01 | R5 | R5 | Deterministic SQLite compiler; identical logical rows and semantic root |
+| CA-02 | R5 | R5 | Typed SQLite stores, bounded queries, and stale/corrupt refusal |
 | CA-03 | R4 | R4 | Journal indexes and projections; checkpoint integrity is bounded |
 | CA-04 | R5 | R5 | DAG scheduling projection; dependency/claim/capacity blocker resolution |
 | CA-05 | R4 | R4 | Routing policy classification; first-match determinism is straightforward |
@@ -350,9 +380,11 @@ If the reviewer cannot write that summary precisely, the batch is not ready to a
 
 - User-facing help fragments must stay synchronized with acceptance state.
 - Internal spec/status docs must stay synchronized.
-- Do not describe the inherited shell coordinator as legacy or deprecated.
-  Frame this pack as adding validated, bounded TypeScript foundations around
-  the existing coordinator shell runtime.
+- Describe inherited coordinator behavior by provenance and RT-01 migration
+  class, not by assuming it remains a workflow shell runtime. Substantial
+  mechanics belong in focused packaged TaskHandlers; only manifest-declared,
+  audited leaves or time-bounded compatibility wrappers may remain executable
+  shell, with the owner/removal/expiry evidence required by RT-01.
 - Update the v1.md command table status markers when a command becomes
   implemented and independently accepted.
 - Update the architecture.md service table when a new foundation module is

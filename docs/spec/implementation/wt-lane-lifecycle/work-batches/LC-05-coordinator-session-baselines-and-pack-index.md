@@ -1,5 +1,47 @@
 # Work Batch LC-05 — Coordinator/Session Baselines and Initial Pack Index
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Status: ❌ Pending
 Implementation reasoning: R5
 Review reasoning: R5
@@ -29,10 +71,10 @@ bootstrap foundation.
 
 ### New foundation modules
 
-- `src/foundation/coordinator-baseline.ts` — seed finite routing policies,
+- `src/foundation/CoordinatorBaseline.ts` — seed finite routing policies,
   operator-session policies, and all shipping defaults with correct provenance
   references to v1-contracts.md §4 and §7
-- `src/foundation/pack-index-bootstrap.ts` — deterministic compilation of
+- `src/foundation/PackIndexBootstrap.ts` — deterministic compilation of
   batch metadata, dependency graph, requirement traceability, and cross-reference
   entries into a seal-bound index; no model, no full-pack fallback
 
@@ -125,7 +167,7 @@ function verifyPackIndex(index: PackIndex, sealId: string): boolean;
 
 ## Implementation Steps
 
-1. **Create `src/foundation/coordinator-baseline.ts`**
+1. **Create `src/foundation/CoordinatorBaseline.ts`**
    - `seedRoutingBaseline(laneDir, policyHash)`:
      - Construct `RoutingPolicyBaseline` with every rule from v1-contracts.md §4:
        - `safety-integrity-v1` → D3 plus system hold
@@ -166,7 +208,7 @@ function verifyPackIndex(index: PackIndex, sealId: string): boolean;
      operator-session journal/index roots, amendment-request store,
      hold registry
 
-2. **Create `src/foundation/pack-index-bootstrap.ts`**
+2. **Create `src/foundation/PackIndexBootstrap.ts`**
    - `buildPackIndex(packRoot, sealId)`:
      - Read `implementation-pack.json` from pack root
      - Extract every batch entry: id, title, dependsOn, primaryRepository,
@@ -236,7 +278,7 @@ function verifyPackIndex(index: PackIndex, sealId: string): boolean;
 
 ## Handoff Notes
 
-After acceptance, `coordinator-baseline.ts` and `pack-index-bootstrap.ts` are
+After acceptance, `CoordinatorBaseline.ts` and `PackIndexBootstrap.ts` are
 the sole owners of policy seeding and index construction. LC-06 (watch)
 reads the routing policy and pack index from coordinator/ to validate
 preflight. LC-07 (doctor) reads all baselines and index files for integrity

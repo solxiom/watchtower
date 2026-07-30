@@ -1,5 +1,82 @@
 # Agent Launch Prompt — Work Batch CA-11
 
+## Governing Contract And Precedence — Mandatory
+
+This prompt is an execution aid, not product authority. Resolve conflicts in
+this order and stop for a specification amendment rather than inventing
+behavior:
+
+1. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
+2. `docs/spec/v1.md`
+3. `docs/spec/nirvana-integration-architecture.md`,
+   `docs/spec/coordinator-automation.md`, `docs/spec/operator-session.md`, and
+   `docs/spec/cli-session.md` within their scopes
+4. `docs/spec/architecture.md`
+5. `docs/development/engineering-and-review-standard.md`
+6. `AGENTS.md`
+7. the accepted implementation map, pack rules, and this batch brief
+
+The implementation/review agent must read the mandatory engineering standard
+and Nirvana integration architecture in full. A stale path, module suggestion,
+or technical mechanism in this prompt must be corrected to the governing
+contract while preserving the batch objective and proof obligations.
+
+## Nirvana-First And NVB Execution Gate — Mandatory
+
+- Complete and report the required Nirvana API usage audit before introducing
+  infrastructure or bare Node behavior.
+- Commands use Nirvana command, argument, pretty, and terminal-view APIs and
+  remain thin.
+- Public reason codes, exit mappings, event names, and schema identifiers remain
+  owned by accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`. A
+  batch-local symbolic name is not automatically public; reconcile it with the
+  registry, and update the owning contract/schema in the same batch when a new
+  public identifier is genuinely required.
+- Use the Nirvana storage facade for ordinary managed-root operations only
+  after CLI-safe root/bootstrap semantics are proved. Atomic durability,
+  canonical path security, locking, append-only journals, ownership/modes, and
+  SQLite stay behind focused adapters when the facade lacks required semantics.
+- Use the Nirvana logger only through the Watchtower logging boundary for
+  redacted diagnostics. Logs are never command output, lifecycle events,
+  acceptance evidence, or authoritative journals.
+- Substantial deterministic workflows use the immutable packaged Watchtower
+  NVB catalog, focused TaskHandlers, and task groups.
+- `LaneTaskRunner` is the only internal NVB invocation boundary. Task selection
+  is an allowlisted Watchtower action mapping, never an arbitrary user/agent
+  task name or parent-project discovery.
+- Never create or modify a participating repository's root `nvb.json`.
+- Shell is restricted to checksum-manifested leaf adapters for tmux, Git, or
+  external tools when no conforming Nirvana API exists. Workflow-level shell is
+  a hard reject.
+- Mutating tasks do not gain authority from NVB. They require the normal
+  Watchtower effect executor, current-state validation, locks, idempotency, and
+  a valid single-use invocation envelope.
+
+## Project-Wide Structural And Size Gate — Mandatory
+
+Apply the exact limits in
+`docs/development/engineering-and-review-standard.md`; pack-local numbers may
+be stricter but may never relax them:
+
+- CLI entry, command, or NVB task: preferred at most 120 lines, warning at
+  121–160, hard reject over 180.
+- Orchestrator, controller, or renderer shell: preferred at most 140 lines,
+  warning at 141–180, hard reject over 200.
+- Foundation service, planner, validator, adapter, or store: preferred at most
+  200 lines, warning at 201–260, hard reject over 300.
+- Contract/type/schema registry: preferred at most 240 lines, warning at
+  241–320, hard reject over 400.
+- Test/spec module: preferred at most 300 lines, warning at 301–420, hard reject
+  over 500.
+- Function: target at most 40 lines, justification at 41–60, reject over 80.
+- Constructor: target at most 25 lines, warning at 26–40, reject over 50.
+
+Passing a line limit never excuses mixed responsibilities, a god object,
+generic helper bag, hidden cycle, foreign API laundering, or layer violation.
+Use `PascalCase` for classes/class-owning files, `lowerCamelCase` for non-class
+modules and directories, and never introduce dashed or underscored backend
+source/spec names.
+
 ## Recommended agent/model class for forwarding:
 
 - brief-declared reasoning level: `R4`
@@ -62,8 +139,8 @@ Repository prerequisites before item 1: `AGENTS.md`.
 8. Accepted RT-05 central runtime invocation adapter contract
 9. Accepted CA-10 atomic lane-local effect executor contract
 10. the canonical source owners you will actually work with:
-    - `src/foundation/tmux-effect.ts` (create)
-    - `src/foundation/tmux-adapter.ts` (create)
+    - `src/foundation/TmuxEffect.ts` (create)
+    - `src/foundation/TmuxAdapter.ts` (create)
 
 ## Reasoning / Agent Class
 
@@ -101,39 +178,64 @@ Before editing or accepting code:
 
 ## Structural Design And Module-Size Gate
 
-The batch must preserve focused ownership and must not produce a ball of mud,
-god object, giant coordinator, or overflow helper module.
+Line count is a design alarm, never permission to accumulate unrelated work.
+Count physical lines, including comments and blanks, in new and materially
+rewritten hand-maintained files. Generated artifacts are excluded only when
+their generator ownership is explicit and they contain no hand-maintained
+behavior.
 
-- Front doors and public barrels target 160 lines or fewer. Files from 161
-  through 220 lines require an explicit cohesion justification. A hand-maintained
-  front door over 220 lines is rejectable without a narrow pre-existing
-  constraint, and no front door may exceed 300 lines.
-- Focused implementation modules target 220 lines or fewer. Files from 221
-  through 300 lines require a responsibility inventory and independent reviewer
-  scrutiny. Files from 301 through 350 lines are expected to split; acceptance
-  requires a source-backed reason why splitting would reduce ownership clarity.
-  New or materially rewritten implementation modules above 350 lines are rejected.
-- Four hundred physical lines is the absolute ceiling for every hand-maintained
-  JS/TS source or spec module touched by this lane. The ceiling does not make a
-  mixed-responsibility file acceptable.
-- Split a module below those thresholds when it owns three or more independently
-  nameable concerns.
-- Do not create generic `helpers`, `utils`, `common`, or `misc` overflow bags.
-  Use feature-local capsules with explicit owner names.
-- Record physical line counts for every new or materially rewritten file. The
-  reviewer must independently verify warning-band files and reject unjustified
-  growth.
+Use the exact project-wide matrix:
+
+| Category | Preferred maximum | Warning band | Hard reject |
+| --- | ---: | ---: | ---: |
+| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
+| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
+| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
+| Contract/type-only module | 240 | 241–320 | over 400 |
+| Test/spec module | 300 | 301–420 | over 500 |
+
+Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
+target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
+a responsibility inventory and explicit reviewer judgment.
+
+Every module has one primary responsibility and one cohesive reason to change.
+Commands and TaskHandlers validate, normalize, delegate, and map results.
+Orchestrators sequence collaborators without absorbing their algorithms.
+Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
+not accumulate in one owner. Three independently nameable responsibilities
+require a split even below a preferred maximum.
+
+Class-owning TypeScript modules use PascalCase filenames; function/value modules
+use lowerCamelCase. New source filenames do not use dashes or underscores.
+Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+
+Any size exception must be approved before implementation and name the exact
+file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
+Existing oversized files are not precedent: when touched they become smaller,
+split, or remain line-count neutral under an approved extraction plan.
+
+The implementation report records categorized line counts for every new or
+materially rewritten file plus warning-band functions/constructors. The
+reviewer reproduces those counts and independently judges cohesion. Passing a
+line-count check never overrides the responsibility gate.
 
 ## Your Mission
 
 Implement the tmux prepare/attempt/verify effect adapter:
 
-1. Create `src/foundation/tmux-adapter.ts` with `TmuxAdapter`, `TmuxEffectCommand`,
+0. Implement one focused packaged tmux effect TaskHandler selected through
+   `LaneTaskRunner` with a valid CA-10 single-use envelope, plus one
+   manifest-declared tmux leaf behind `LeafRuntimeInvoker`. The handler owns
+   bounded prepare/attempt/verify mechanics and structured results; it owns no
+   proposal policy, effect authority, rendering, or journal truth. The leaf
+   accepts only the closed typed tmux operation/argv and cannot select tasks,
+   kill variants, shell text, targets, environment maps, or paths.
+1. Create `src/foundation/TmuxAdapter.ts` with `TmuxAdapter`, `TmuxEffectCommand`,
    `PrepareResult`, `AttemptResult`, `VerifyResult`, and the complete
    prepare/attempt/verify pipeline. Implement sanitization grammar that rejects
    all shell metacharacters. Implement the closed allowed command set. Route all
-   execution through the accepted RT-05 runtime adapter.
-2. Create `src/foundation/tmux-effect.ts` with `TmuxEffectExecutor`,
+   execution through the accepted RT-05 TaskHandler/leaf boundary.
+2. Create `src/foundation/TmuxEffect.ts` with `TmuxEffectExecutor`,
    `executeTmuxEffect`, unknown-launch recovery, duplicate suppression via
    idempotency key, the forbidden-operation blocklist, and CA-10 integration
    through a typed interface. Implement phase journaling using CA-10's effect
@@ -142,7 +244,7 @@ Implement the tmux prepare/attempt/verify effect adapter:
    sanitization, missing target, every forbidden command, successful
    attempt→verify, failed command, uncertain verify, idempotent duplicate
    suppression, unknown-launch recovery, and proof that no shell metacharacter
-   reaches the runtime adapter.
+   reaches the leaf adapter.
 4. Produce implementation report, update tracker/roadmap, leave handoff.
 
 ## What You Must Not Do
@@ -150,9 +252,11 @@ Implement the tmux prepare/attempt/verify effect adapter:
 - Do not expand the allowed tmux command set beyond the closed registry.
 - Do not permit any shell metacharacter or path-like value in target identifiers.
 - Do not create a direct tmux invocation path that bypasses the adapter.
-- Do not modify CA-10's effect executor or the RT-05 central runtime adapter.
+- Do not modify CA-10's effect executor or RT-05's task/leaf boundaries.
 - Do not invoke models.
-- Do not add npm scripts or NVB tasks.
+- Do not add npm scripts, public/project-root tasks, or unrelated catalog
+  tasks. This batch must implement its focused packaged tmux effect TaskHandler
+  and cataloged tmux leaf through the accepted runtime-nvb ownership surface.
 - Do not commit.
 
 ## Required Proof
@@ -195,7 +299,7 @@ or accepted status:
 ## Non-Negotiable Rules
 
 - every tmux command must be from the closed allowed set
-- no shell metacharacter reaches the runtime adapter
+- no shell metacharacter reaches `LeafRuntimeInvoker`
 - duplicate suppression through idempotency key is mandatory
 - unknown-launch recovery must probe, never re-execute blindly
 - no arbitrary kill or shell escape

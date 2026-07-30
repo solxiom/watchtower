@@ -1,6 +1,20 @@
 # Watchtower v1 Release — Implementation Pack 6
 
-Status: 🔴 Pending — batch authoring complete, implementation not started
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
+Status: **Draft — correction audit complete; awaiting independent pack review**
 Target release: `1.0.0`
 Pack order: 6 of 6
 Work/review pairs: 4
@@ -67,8 +81,8 @@ artifacts, but must not shorten a safety section into a link or summary. Wrong
 claims and broken paths must be replaced with equally detailed or more detailed
 correct instructions.
 
-The authoritative reasoning-class matrix, source-size bands, absolute 400-line
-ceiling, responsibility gates, and prompt-integrity policy live in
+The authoritative reasoning-class matrix, source-size bands, category-specific hard-reject
+ceilings, responsibility gates, and prompt-integrity policy live in
 `implementation-quality-and-agent-rules.md`. A batch prompt that conflicts with
 that file must be corrected before the batch starts.
 

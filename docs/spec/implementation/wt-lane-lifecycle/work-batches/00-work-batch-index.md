@@ -1,5 +1,19 @@
 # Work Batch Index — wt-lane-lifecycle
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: ⏳ Pack authoring
 Date: 2026-07-30
 
@@ -23,13 +37,13 @@ the 1-indexed batch number 1-8. Each batch has:
 
 | ID | Title | Reasoning (I/R) | Depends on | Primary files | Workload |
 |----|-------|-----------------|------------|---------------|----------|
-| LC-01 | Init argument resolution and preflight plan | R4 / R5 | RM-03, RM-08, RT-04 | `src/foundation/init-planner.ts`, `src/commands/InitCommand.ts` | medium |
-| LC-02 | Pack acceptance, seal, and drift validation | R5 / R5 | RM-01, RM-08 | `src/foundation/pack-consumer.ts`, `src/foundation/pack-seal.ts` | large |
-| LC-03 | Transactional lane layout and manifests | R5 / R5 | LC-01, LC-02, RT-06 | `src/foundation/lane-store.ts`, `src/foundation/transactional-writer.ts` | very-large |
-| LC-04 | Bindings, Git-ignore, and membership registration | R4 / R5 | LC-03, RM-07 | `src/foundation/binding-mutator.ts`, `src/foundation/membership-registrar.ts` | medium |
-| LC-05 | Coordinator/session baselines and initial pack index | R5 / R5 | LC-02, LC-03, RT-02 | `src/foundation/coordinator-baseline.ts`, `src/foundation/pack-index-bootstrap.ts` | large |
+| LC-01 | Init argument resolution and preflight plan | R4 / R5 | RM-03, RM-08, RT-04 | `src/foundation/InitPlanner.ts`, `src/commands/InitCommand.ts` | medium |
+| LC-02 | Pack acceptance, seal, and drift validation | R5 / R5 | RM-01, RM-08 | `src/foundation/PackConsumer.ts`, `src/foundation/PackSeal.ts` | large |
+| LC-03 | Transactional lane layout and manifests | R5 / R5 | LC-01, LC-02, RT-06 | `src/foundation/LaneStore.ts`, `src/foundation/TransactionalWriter.ts` | very-large |
+| LC-04 | Bindings, Git-ignore, and membership registration | R4 / R5 | LC-03, RM-07 | `src/foundation/BindingMutator.ts`, `src/foundation/MembershipRegistrar.ts` | medium |
+| LC-05 | Coordinator/session baselines and initial pack index | R5 / R5 | LC-02, LC-03, RT-02 | `src/foundation/CoordinatorBaseline.ts`, `src/foundation/PackIndexBootstrap.ts` | large |
 | LC-06 | Foreground watch command | R4 / R4 | LC-05, RT-07 | `src/commands/WatchCommand.ts` | medium |
-| LC-07 | Comprehensive doctor registry | R4 / R5 | LC-04, LC-05, LC-06, RM-09 | `src/foundation/doctor-registry.ts`, `src/commands/DoctorCommand.ts` | large |
+| LC-07 | Comprehensive doctor registry | R4 / R5 | LC-04, LC-05, LC-06, RM-09 | `src/foundation/DoctorRegistry.ts`, `src/commands/DoctorCommand.ts` | large |
 | LC-08 | Lifecycle integration and scaffold removal | R3 / R4 | LC-07, RM-10 | `spec/e2e/lifecycle.spec.ts`, removal of hello artifacts | medium |
 
 ## Dependency Graph

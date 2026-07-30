@@ -1,5 +1,19 @@
 # Review Batch Index — Watchtower v1 Read Model
 
+> **Draft pack-authoring artifact.** This document is not a seal, acceptance
+> record, or authority to initialize a lane. Before pack acceptance, reconcile
+> it with `docs/spec/v1-implementation-map.md`,
+> `docs/development/engineering-and-review-standard.md`, and
+> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
+> `docs/spec/v1-contracts.md` governs every conflict.
+
+All implementation/review work uses thin Nirvana command front doors,
+capability-owned foundation modules, the immutable packaged NVB task catalog,
+`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
+Nirvana storage adapters, and manifest-declared shell leaves only. Project
+`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
+limits, and acceptance-with-follow-up are forbidden.
+
 Status: active index
 Date: 2026-07-30
 
@@ -12,11 +26,11 @@ is complete and the implementation report is written.
 | Review batch | Reviews work batch | Reviewer minimum proof |
 |-------------|-------------------|----------------------|
 | RM-01 | RM-01 | Enumerate every error code; verify exit-code mappings (1-5); confirm no unmapped or reused codes; validate every domain type against v1.schema.json; exhaustively test error fixtures; verify `src/contracts/index.ts` exports all symbols |
-| DB-01 | DB-01 | Independently verify driver selection rationale against ADR; rerun every feasibility fixture (global install, FK enforcement, WAL mode, busy-timeout, permissions, integrity, corruption detection, staged rebuild, semantic-root reproduction, crash safety); audit StorageAdapter contract for raw SQL leaks; verify SqliteConfig defaults match v1-contracts.md §8A.4; confirm no derived indexes implemented; verify ADR documents no-JSON-shard-fallback rule; prove global install resolves driver correctly |
+| DB-01 | DB-01 | Independently verify evidence-based driver selection against the ADR; rerun every feasibility fixture (global install, FK enforcement, WAL mode, busy-timeout, permissions, integrity, corruption detection, staged rebuild, semantic-root reproduction, crash safety); audit focused SQLite/store ports for raw SQL, path, extension, and driver leaks; verify SqliteConfig defaults match v1-contracts.md §8A.4; confirm no derived indexes implemented; verify ADR documents no-JSON-shard-fallback rule; prove global install resolves the selected driver correctly |
 | RM-02 | RM-02 | Round-trip test every envelope variant through schema validation; verify `--json` produces one value with no ANSI/decorations; prove additive compatibility (optional field addition does not break); confirm serializer does not define domain types; trace every output path |
 | RM-03 | RM-03 | Trace every resolution path through precedence chain; verify every path-escape class is rejected; confirm missing workspace is error not creation; verify canonicalization before comparison; test symlink/case safety |
 | RM-04 | RM-04 | Independently run 30+ malicious-shell corpus; verify zero executions; trace known-key preservation; test unknown-key handling; verify contradictory state detection; confirm every rejection has line-number diagnostics |
-| RM-05 | RM-05 | Verify all four event types parse correctly; test every malformation class (bad JSON, partial line, unknown type, missing fields); confirm bounded latest-N ordering; prove malformed records don't drop valid ones; test empty and malformed-only files |
+| RM-05 | RM-05 | Derive the complete event-type/role compatibility matrix from the accepted schema/contracts and verify every valid combination; test bad JSON, partial line, unknown type, role/type mismatch, and missing fields; confirm bounded latest-N ordering; prove malformed records do not drop valid ones; test empty and malformed-only files |
 | RM-06 | RM-06 | Enumerate every ambiguity matrix cell for focused tests; verify UUID, slug, cwd-descendant, single-deduction, zero-lane, multi-lane, invalid-lane.json, missing-schemaVersion; test symlink resolution during walk; confirm no interactive picker |
 | RM-07 | RM-07 | Verify every stale-entry class (PATH_MISSING, LANE_JSON_MISSING, BINDING_MISMATCH) is detected; prove index file unchanged after every read; test mixed valid+stale index; confirm missing index returns empty; verify secondary discovery |
 | RM-08 | RM-08 | Verify canonical binding computation for valid and missing repositories; test branch/access/worktree validation; prove all three conflict classes (SHARED_WRITE, PATH_CONFLICT, BRANCH_CONFLICT) are detected; confirm dedicated is default; verify no false positives |

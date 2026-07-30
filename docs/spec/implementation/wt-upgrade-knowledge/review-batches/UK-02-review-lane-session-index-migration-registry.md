@@ -1,5 +1,47 @@
 # UK-02 Review: Lane/Session/Index Migration Registry — Review Brief
 
+## Mandatory Governing References
+
+This draft brief is subordinate to:
+
+- `AGENTS.md`
+- `docs/development/engineering-and-review-standard.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+- `docs/spec/v1.md`
+- `docs/spec/nirvana-integration-architecture.md`
+- `docs/spec/architecture.md`
+- `docs/spec/v1-implementation-map.md`
+- `docs/spec/coordinator-automation.md`
+- `docs/spec/operator-session.md`
+- `docs/spec/cli-session.md`
+- this pack's `implementation-quality-and-agent-rules.md`
+
+Only the references relevant to the batch's accepted scope need drive its
+product logic, but the engineering and Nirvana/NVB architecture standards
+always apply. If this brief names a stale path, title, size threshold, or
+mechanism, follow the governing source and correct the brief/report rather than
+implementing the stale claim. Stop for a specification amendment when the
+governing sources leave a product decision unresolved.
+
+## Mandatory Cross-Cutting Acceptance
+
+- Include a Nirvana API usage audit with inspected packages/symbols, comparable
+  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
+- Keep commands as thin Nirvana front doors and place behavior in
+  capability-oriented foundation owners.
+- Use the packaged immutable NVB task catalog for substantial mechanical
+  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
+  `nvb.json` files are never modified or trusted as Watchtower authority.
+- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
+  arbitrary task selection, and direct raw subprocess use are hard rejects.
+- Apply the exact module/function/constructor limits and reviewer matrix from
+  the mandatory engineering standard. A pack-local statement cannot relax
+  those limits.
+- Reconcile every reason code, exit mapping, event name, and schema identifier
+  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
+  illustrative name does not silently create a public identifier.
+
 Review batch ID: `UK-02-review`
 Reviews work batch: `UK-02` — Lane/session/index migration registry
 Reviewer reasoning class: R5 (highest available reasoning)
@@ -20,8 +62,8 @@ that no step executes runtime actions, closes sessions, or prunes content.
 
 ### 1. Source ownership verification
 
-- [ ] `migration-registry.ts` owns step registration and chain resolution
-- [ ] `migration-steps.ts` owns individual step implementations
+- [ ] `MigrationRegistry.ts` owns step registration and chain resolution
+- [ ] `migrationSteps.ts` owns individual step implementations
 - [ ] No migration logic in `UpgradeCommand.ts`
 - [ ] No product logic in `src/cli.ts`
 
@@ -184,7 +226,7 @@ that passes your review becomes permanent data loss. You are the gate.
    verify it is pure (no subprocess, no network, no session lifecycle call).
 3. **Invariants**: verify: (a) `diff` shows zero changes to lane-owned files;
    (b) session-index rebuild output matches independent rebuild;
-   (c) no `child_process` import in migration-steps.ts.
+   (c) no `child_process` import in migrationSteps.ts.
 4. **Counterexamples**: for at least three artifact classes, design a
    counterexample that would break preservation (e.g., changing key order in
    JSON, truncating a journal line). Verify the test catches it.
@@ -203,7 +245,7 @@ that passes your review becomes permanent data loss. You are the gate.
 4. Independently rebuild session indexes from source journals. Compare to
    migration output.
 5. Independently verify policy-baseline operator values unchanged.
-6. Verify zero `child_process` or equivalent imports in migration-steps.
+6. Verify zero `child_process` or equivalent imports in `migrationSteps.ts`.
 7. Verify no session lifecycle changes during any step.
 8. Verify `nvb build` passes independently.
 
