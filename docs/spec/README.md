@@ -15,6 +15,7 @@ Normative product docs for the `wt` CLI.
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
 | [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |
 | [discussions/operator-coordinator-conversation.md](discussions/operator-coordinator-conversation.md) | Resolved | Human/coordinator conversation continuity, budget, UX, and concurrency proposal |
+| [discussions/cli-session-ux.md](discussions/cli-session-ux.md) | Proposed | Interactive CLI chat session UX — streaming, slash commands, rendering, session management |
 
 ## Conventions
 
