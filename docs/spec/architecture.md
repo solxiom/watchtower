@@ -137,6 +137,7 @@ remains deferred.
 | What semantic coordinator action is proposed? | Typed coordinator proposal |
 | Is the proposal legal now? | Knowledge policy plus Watchtower validator |
 | Who commits the bounded effect? | Single Watchtower effect executor |
+| What coordinator lookup data is valid? | Derived pack index matching the accepted `packSealId` |
 
 Watchtower can detect contradictions between authorities. It must not resolve a
 coordinator-policy contradiction by silently editing lane state.
@@ -263,6 +264,8 @@ The v1 decision plane is defined in
 
 | Service | Responsibility |
 |---------|----------------|
+| `CoordinatorPackIndex` | Compile and verify deterministic seal-bound structural indexes |
+| `CoordinatorIndexQuery` | Enforce bounded, paginated, provenance-bearing lookups |
 | `CoordinatorRouter` | Match trigger and guard facts to M0 or D1–D3 policy |
 | `DecisionEnvelopeBuilder` | Construct deterministic bounded cycle input |
 | `CoordinatorContextBroker` | Serve allowlisted, metered, provenance-bearing context |
@@ -328,9 +331,10 @@ allocation revisions live under `allocation/`; actual account and Unix-user
 identities never enter the committed pack.
 
 The v1 `coordinator/` subtree contains routing/context policy, bounded cycle
-artifacts, append-only decision/effect journals, and generated projections.
-Committed tracker prose remains project-owned; mechanical coordination updates
-the local projection rather than arbitrary Markdown.
+artifacts, deterministic pack indexes, append-only decision/effect journals,
+and generated projections. Committed tracker prose remains project-owned;
+mechanical coordination updates the local projection rather than arbitrary
+Markdown.
 
 Each participating repository has a local binding declaring canonical path,
 role, read/write access, branch, and worktree mode. Concurrent writable lanes
@@ -385,7 +389,8 @@ resolve + validate lane
 
 ```text
 durable trigger
-  → derive guards and route M0 or D1–D3
+  → verify pack index matches active seal
+  → derive guards and route M0 or D1–D3 through bounded index queries
   → construct bounded envelope
   → apply unique preauthorized M0 effect
      or invoke decision endpoint and receive typed proposal
@@ -499,6 +504,9 @@ log by default.
 - writable worktree/branch/path conflict detection;
 - path traversal and symlink escape checks;
 - event validation and status projection;
+- deterministic pack-index compilation, sharding, bounded queries, and
+  seal-drift invalidation;
+- coordinator envelope-size invariance across unrelated pack growth;
 - redaction;
 - exit-code mapping.
 
@@ -515,7 +523,9 @@ Use temporary fixture workspaces for:
 - refusal to initialize over an unmarked pre-existing lane directory;
 - broken and repaired managed links;
 - runtime upgrade and failed atomic switch;
-- workspace relocation.
+- workspace relocation;
+- staged pack-index build and atomic current-pointer switch;
+- stale/corrupt index refusal without full-pack fallback.
 
 ### 11.3 Runtime integration
 
@@ -528,6 +538,8 @@ Keep sanitized fixtures representing:
 
 - a newly initialized Watchtower lane;
 - a large 30-batch Watchtower lane modeled on sanitized SQL-backends behavior;
+- synthetic 300, 3,000, and 10,000-batch packs with a fixed affected
+  dependency neighborhood;
 - a non-Watchtower copied-template directory that discovery must ignore;
 - an active implement phase;
 - review, reject, correction, complete, and inconsistent states.
@@ -560,6 +572,8 @@ details.
 | A-019 | Make bounded coordinator automation required in v1 | Routine coordinator cost and cumulative context are core product problems |
 | A-020 | Give agents proposal authority and Watchtower sole effect authority | Validation after direct agent mutation is too late |
 | A-021 | Separate reviewer acceptance from Git publication | Partial publication must not corrupt semantic acceptance |
+| A-022 | Compile deterministic local indexes tied to the pack seal | Routine coordinator cost must not scale with unrelated pack prose |
+| A-023 | Block on stale index instead of full-pack fallback | Predictable cost and correctness are safer than opportunistic context inflation |
 
 ## 13. Architecture fitness checks
 
@@ -578,6 +592,10 @@ Every implementation change should preserve these properties:
   validation, and an idempotency identity;
 - mechanical coordination invokes no model when a unique preauthorized effect
   is provable;
+- routine coordinator queries are bounded and do not scan or preload the full
+  implementation pack;
+- every pack index is derived, model-free, reproducible, and matched to the
+  active seal;
 - every lane has one authoritative control home and stable `laneId`;
 - committed packs refer to logical repository IDs, never machine paths;
 - concurrent writable lane bindings are conflict-checked;

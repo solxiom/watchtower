@@ -19,8 +19,8 @@ Build a **global CLI** that:
 Watchtower is **not** the coordinator agent. Semantic reject, scope, and
 reconciliation judgment remains in Codex/Cursor-style decision agents.
 Watchtower owns deterministic routing, bounded context, proposal validation,
-and one safe effect-execution boundary in addition to replacing the copy-paste
-install/bootstrap model.
+seal-bound pack indexing, and one safe effect-execution boundary in addition
+to replacing the copy-paste install/bootstrap model.
 
 ## Architecture (two layers)
 

@@ -84,6 +84,8 @@ be frozen into generated launch wrappers or install-time assumptions.
     coordinator decision cycle.
 12. Keep one validated effect authority for lane transitions, launches, and
     publication attempts.
+13. Keep routine coordinator context bounded independently of unrelated
+    implementation-pack growth through deterministic seal-bound indexes.
 
 ### 3.2 v1 non-goals
 
@@ -121,6 +123,7 @@ roadmap, but they must build on the v1 lane model rather than bypass it.
 | Decision envelope | Immutable narrow context assembled for one coordinator cycle. |
 | Effect executor | Watchtower/runtime boundary that applies a validated bounded mutation. |
 | Ready set | Pending batches whose dependencies and hard dispatch constraints currently pass. |
+| Pack index | Deterministic local, seal-bound lookup structure derived from the accepted pack. |
 
 ## 5. Product boundary
 
@@ -130,7 +133,7 @@ operator
    ▼
 wt TypeScript CLI
    ├── discovery, validation, rendering, install and upgrade
-   ├── event routing, context broker, proposal validator
+   ├── pack indexing, event routing, context broker, proposal validator
    ├── derives M0 facts and uniquely preauthorized transitions
    └── effect executor invokes bounded runtime actions
           │
@@ -503,7 +506,7 @@ Errors go to stderr. Normal human or JSON output goes to stdout.
 | `wt config show [--lane=<slug-or-uuid>]` | ❌ | Print resolved identity, repositories, paths, and config |
 | `wt doctor [--lane=<slug-or-uuid>]` | ❌ | Validate bindings, conflicts, runtime, tools, accounts, and pack |
 | `wt skill install <codex\|cursor\|claude> [--scope=<scope>]` | ❌ | Install the bundled coordinator knowledge pack adapter |
-| `wt coordinator status|context|explain|cycle|escalate` | ❌ | Inspect, preview, or run bounded coordinator decision cycles |
+| `wt coordinator index|status|context|explain|cycle|escalate` | ❌ | Build/inspect pack indexes or run bounded coordinator decision cycles |
 | `wt events tail|latest` | ❌ | Read validated durable event projections |
 | `wt batch ready` | ❌ | Calculate ready candidates and blocking reasons without selecting ambiguously |
 | `wt help [command]` | ✅ scaffold | Render static help |
@@ -548,7 +551,9 @@ Preflight:
 10. stage the selected runtime and knowledge versions;
 11. validate coordinator endpoint capability floors, fallbacks, and budget
     reserves against the installed knowledge policy;
-12. show the files, links, local bindings, and index entries to create.
+12. deterministically build and verify coordinator pack indexes against the
+    accepted `packSealId`; and
+13. show the files, links, local bindings, and index entries to create.
 
 Init never scaffolds or relocates the committed implementation pack. Pack
 creation belongs to the pack-design process or project authors.
@@ -561,6 +566,7 @@ Creates once:
 - lane state;
 - coordinator routing/context policy, empty cycle journal/projections, and
   coordinator/implementer briefs;
+- deterministic seal-bound coordinator pack indexes;
 - model-plan template;
 - local operator tracker;
 - structured state, prompt, report, budget, and log directories;
@@ -592,7 +598,7 @@ It reports:
 - implementation and review tmux session names and existence;
 - watcher status and last heartbeat when available;
 - coordinator queue, active cycle, decision class, route availability, last
-  outcome, and budget warning;
+  outcome, pack/runtime index freshness, and budget warning;
 - latest valid durable worker event;
 - accepted/total batch count when derivable;
 - configured, installed, and available runtime versions;
@@ -636,7 +642,8 @@ JSON output has a versioned top-level shape:
     "activeCycle": null,
     "decisionClass": null,
     "routeAvailable": true,
-    "lastOutcome": null
+    "lastOutcome": null,
+    "packIndex": {"status": "valid", "packSealId": "seal-43dc"}
   },
   "runtime": {"configured": "1.0.0", "available": true}
 }
@@ -715,7 +722,8 @@ Checks are grouped and each returns `pass`, `warn`, `fail`, or `skip`:
 - configured OS accounts and their resolved CLIs;
 - active tmux naming consistency;
 - coordinator policy/routing compatibility, endpoint capability floors,
-  journal integrity, cursor consistency, and unresolved uncertain effects;
+  pack-index freshness/integrity, journal integrity, cursor consistency, and
+  unresolved uncertain effects;
 - Git ignore coverage for `/.watchtower/`;
 - optional speech stack.
 
@@ -743,6 +751,10 @@ The coordinator command group follows the complete contract in
 [coordinator-automation-draft.md](coordinator-automation-draft.md):
 
 - `status`, `context`, and `explain` are read-only;
+- `index build` deterministically compiles a staged index and atomically
+  installs it only when it matches the accepted pack seal;
+- `index status|verify|explain` are read-only and never repair or load complete
+  canonical prose;
 - `cycle --dry-run` constructs routing and envelope previews without invoking
   or mutating; for an M0 trigger it may also preview the deterministic effect;
 - `cycle` processes one idempotent trigger through proposal validation and the
@@ -888,6 +900,8 @@ are append-only durable events; tmux prose is never authority.
 - External effects use prepare/attempt/verify journals and idempotency keys.
 - Coordinator agents cannot request arbitrary shell, path, state-key, or
   tracker mutations.
+- Missing, stale, corrupt, or incompatible pack indexes block automated cycles;
+  Watchtower never falls back to a full-pack scan or prompt.
 
 ## 15. Packaging
 
@@ -975,6 +989,10 @@ v1 is complete only when:
 - [ ] coordinator decisions use fresh bounded envelopes, typed proposals,
       brokered context, minimum-capability routing, and one validated effect
       authority;
+- [ ] every coordinator cycle uses a verified index matching the active pack
+      seal, and routine context remains bounded as unrelated pack size grows;
+- [ ] stale/missing indexes block safely without full-pack scanning or model
+      summarization;
 - [ ] ambiguous batch selection and semantic reject triage cannot fall through
       to mechanical routing;
 - [ ] reviewer acceptance remains durable and distinct from partial Git
@@ -1016,6 +1034,8 @@ v1 is complete only when:
 | Agent authority | Coordinator agents emit typed proposals and never mutate authoritative state directly. |
 | Effect authority | One Watchtower validator/executor applies bounded idempotent effects. |
 | Acceptance/publication | Reviewer acceptance is semantic authority; Git publication is a separate recoverable process. |
+| Pack indexing | Deterministic local indexes tied to `packSealId`; derived and never semantic authority. |
+| Pack-size safety | Routine envelopes/queries are bounded by affected scope; no full-pack fallback. |
 
 ## 19. Deferred questions
 

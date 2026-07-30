@@ -125,6 +125,7 @@ Scope:
 - `wt init` dry run, create, and rollback;
 - neutral lane templates;
 - implementation-pack structural validation;
+- deterministic coordinator pack-index compilation tied to `packSealId`;
 - canonical tracker placement;
 - ownership classification in human output.
 
@@ -136,6 +137,8 @@ Key proof:
 - init requires `/.watchtower/` Git-ignore coverage;
 - init accepts a committed multi-repository pack and binds every logical
   repository ID;
+- init fails transactionally when the sealed pack cannot produce a valid
+  coordinator index;
 - concurrent writable lanes default to dedicated worktrees;
 - copied-template lanes remain undiscovered and untouched.
 
@@ -199,6 +202,10 @@ Scope:
 
 - audit imported coordinator actions into M0 and D1–D3;
 - deterministic worker-event projections and ready-set calculation;
+- deterministic artifact, batch, dependency, requirement, repository-claim,
+  proof, event, and decision indexes;
+- bounded/paginated coordinator index-query contract with no full-pack
+  fallback;
 - versioned routing policy and hard escalation guards;
 - coordinator endpoint routing plan and reserves;
 - decision-envelope builder and metered context broker;
@@ -220,7 +227,10 @@ Key proof:
 - reviewer acceptance survives partial publication;
 - loss of a required decision endpoint pauses rather than downgrades; and
 - long-lane replay reduces coordinator consumption without reducing transition
-  correctness or review quality.
+  correctness or review quality;
+- 30/300/3,000/10,000-batch fixtures keep routine envelope size bounded after
+  indexing; and
+- stale/missing/corrupt indexes pause cycles instead of scanning pack prose.
 
 Dependencies: M1 read projections, M2 runtime/knowledge policy, M3 managed lane,
 and M4 watcher operation. May be developed in shadow fixtures alongside M5.
@@ -239,6 +249,8 @@ Scope:
 - proof that copied-template lanes remain outside discovery and mutation;
 - one implementer → reviewer → accept cycle;
 - one M0 dispatch, D2 reject/correction cycle, and partial-publication recovery;
+- large-pack proof that routine coordinator model input does not scale with
+  unrelated pack size;
 - command/help/spec consistency audit;
 - package/global-install proof;
 - security/path/ownership regression suite;

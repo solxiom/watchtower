@@ -27,6 +27,8 @@ proposal in these important ways:
 - reviewer acceptance remains distinct from Git publication;
 - decision class uses event plus guard facts, not event name alone;
 - context expansion is brokered, metered, and allowlisted;
+- sealed packs compile into deterministic bounded-query indexes; stale indexes
+  pause rather than triggering a complete-pack fallback;
 - coordinator events form an append-only decision/effect journal;
 - rollout uses shadow fixtures and one authority per lane, never fallback
   between old and new coordinators; and

@@ -430,6 +430,12 @@ These artifacts are never committed.
 `implementation-pack.json` contains structure and trace references, not
 duplicated requirements prose.
 
+It is also the primary structural input for the v1 coordinator pack-index
+compiler. The committed manifest must contain enough explicit identity,
+dependency, repository-claim, requirement, proof-class, and artifact-reference
+metadata to build coordinator indexes without parsing every Markdown document
+on each decision cycle.
+
 Illustrative v1 schema:
 
 ```json
@@ -522,6 +528,8 @@ Rules:
 - every requirement reference maps to at least one batch;
 - each batch declares reasoning and workload independently;
 - actual model/account names do not appear in the manifest;
+- coordinator-critical relationships are explicit structural references and
+  must not exist only in unindexed prose;
 - unknown fields are preserved when schema-compatible.
 
 ## 12. Required canonical artifacts
@@ -902,7 +910,10 @@ Deterministic validation includes:
 - reasoning/workload declarations;
 - machine-local paths or model/account names in committed metadata;
 - committed runtime prompt duplication warnings;
-- tracker/roadmap/index batch-set consistency; and
+- tracker/roadmap/index batch-set consistency;
+- coordinator-indexability: stable IDs, resolvable artifact references,
+  reverse-reference inputs, repository claims, proof classes, and digest
+  coverage required by the v1 compiler; and
 - pack status/seal consistency.
 
 Validation cannot determine:
@@ -999,6 +1010,11 @@ complete the process in
 [allocation-planning-draft.md](allocation-planning-draft.md) before any
 implementation dispatch. Pack capability classes become allocation inputs;
 the pack-design lane does not select machine-local accounts or endpoints.
+
+Handoff also invokes the deterministic v1 coordinator pack-index compiler.
+The derived index stays in the implementation lane's local `coordinator/`
+subtree and is tied to the pack seal. Build or verification failure aborts
+handoff transactionally; it never causes a full-pack runtime fallback.
 
 ## 20. Pack reviewer protocol
 
@@ -1133,6 +1149,8 @@ The pilot must measure coordination overhead as well as token savings.
 - [ ] Seal invalidates after pack or accepted-input drift.
 - [ ] Accepted sealed pack initializes an implementation lane without manual
       path re-entry.
+- [ ] Every accepted pack is structurally indexable without model
+      summarization, and its derived coordinator index matches the pack seal.
 - [ ] A RouteGroup-v2-scale pilot demonstrates bounded context, independent
       review, and lower duplication than the current hand-authored format.
 

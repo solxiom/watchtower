@@ -233,6 +233,11 @@ The CLI constructs one immutable JSON envelope:
   "decisionClass": "D2",
   "routingRuleId": "reviewer-reject-v1",
   "policyVersion": "1.0.0",
+  "packIndex": {
+    "packSealId": "seal-43dc",
+    "manifestDigest": "sha256:...",
+    "compilerVersion": "1.0.0"
+  },
   "trigger": {
     "eventId": "evt-772",
     "event": "reject",
@@ -311,9 +316,244 @@ Worker reports, reviewer prose, repository files, and operator-supplied text are
 untrusted data. Envelopes label and delimit them as evidence, never as policy
 instructions. Only the installed knowledge pack defines coordinator rules.
 
-## 9. Context broker and budgets
+## 9. Pack index and bounded memory
 
-### 9.1 Brokered context
+### 9.1 Purpose and authority
+
+Coordinator cost must not grow in proportion to the complete implementation
+pack on every cycle. Watchtower compiles a deterministic local read index once
+per sealed pack and uses bounded index queries for envelopes, projections, and
+context requests.
+
+The accepted pack and append-only journals remain authority. Static pack
+indexes are:
+
+- derived from `implementation-pack.json`, its lock file, canonical artifacts,
+  and verified file digests;
+- identified by `packSealId`, index schema, compiler version, and source
+  digests;
+- local under the lane's ignored coordinator directory;
+- reproducible without a model;
+- safe to delete and rebuild; and
+- never a source of requirements, acceptance, architecture, or prose.
+
+Runtime-memory indexes are separately derived from append-only worker,
+coordinator, and effect journals. They record journal identity, byte length,
+last event ID/offset, and checksum checkpoint. Appending runtime events never
+invalidates the sealed-pack index.
+
+A missing, stale, corrupt, or incompatible index blocks automated coordinator
+cycles. Watchtower must not fall back to scanning or preloading the whole pack.
+
+### 9.2 Index structure
+
+```text
+coordinator/index/
+  pack/
+    current.json
+    <index-id>/
+      index-manifest.json
+      artifacts/<shard>/<key-hash>.json
+      batches/<shard>/<key-hash>.json
+      dependencies/<shard>/<batch-key-hash>.json
+      requirements/<shard>/<key-hash>.json
+      repository-claims/<repository>/<shard>.json
+      proofs/<shard>/<key-hash>.json
+  runtime/
+    index-manifest.json
+    events/<shard>/<key-hash>.json
+    decisions/<shard>/<key-hash>.json
+```
+
+| Index | Required lookups |
+|-------|------------------|
+| Artifact | Logical role/path → repository, digest, bytes, headings, owning batch |
+| Batch | Batch ID → title, briefs, reasoning/workload, requirements, repositories, proof classes |
+| Dependency | Batch → direct parents/children; accepted/pending projection → ready candidates |
+| Requirement | Requirement ID → work batches, review batches, proof references |
+| Repository claim | Repository/path/ownership area → potentially conflicting batches |
+| Proof | Proof class/environment → owning batches, commands/references, review evidence |
+| Event (runtime) | Batch/role/type → latest journal offset and bounded conflict window |
+| Decision (runtime) | Batch/cycle/trigger → latest proposal, effect, outcome, and correlation |
+
+Indexes contain normalized references and mechanically extracted metadata, not
+model-generated summaries. Human-authored titles and identifiers may be copied
+with their source digest. Large prose remains at its canonical path.
+
+The physical representation must support bounded direct lookup. A monolithic
+JSON file that must be fully parsed for one batch or requirement query is not a
+conforming v1 index. The default representation uses deterministic hash
+sharding with maximum records/bytes per shard. An alternative representation
+is allowed only when contract tests prove equivalent bounded lookup, immutable
+identity, integrity verification, and rebuild behavior without adding a
+database requirement.
+
+### 9.3 Index manifest
+
+```json
+{
+  "schemaVersion": 1,
+  "compilerVersion": "1.0.0",
+  "laneId": "9d0ee3d2-8833-4fb7-b112-8438f04f57d2",
+  "packId": "route-groups-v2",
+  "packSealId": "seal-43dc",
+  "source": {
+    "repository": "awrux",
+    "path": "docs/spec/routing/route-groups/implementation/v2",
+    "manifestDigest": "sha256:...",
+    "lockDigest": "sha256:..."
+  },
+  "counts": {
+    "artifacts": 84,
+    "batches": 30,
+    "dependencyEdges": 38,
+    "requirements": 126,
+    "repositoryClaims": 91
+  },
+  "indexes": {
+    "batch": {
+      "path": "batches",
+      "semanticRoot": "sha256:..."
+    },
+    "dependency": {
+      "path": "dependencies",
+      "semanticRoot": "sha256:..."
+    }
+  },
+  "builtAt": "2026-07-30T12:00:00Z"
+}
+```
+
+`builtAt` is informational and excluded from semantic index identity. The same
+pack bytes, compiler version, and index schema produce the same semantic index
+identity and equivalent record bytes apart from fields explicitly declared
+informational.
+
+`current.json` is an atomic pointer containing only index ID, pack seal, schema,
+compiler version, and manifest digest. Index directories are immutable after
+publication. The watcher verifies a new index before pinning it for cycles;
+read-only commands do not switch the pointer.
+
+### 9.4 Query contract
+
+The context broker exposes typed queries, never unrestricted full-index dumps:
+
+```text
+batch.get(batchId)
+batch.artifacts(batchId, roles, limit)
+dependency.neighborhood(batchId, direction, depth, nodeLimit)
+dependency.ready(changedBatchIds)
+requirement.lookup(requirementIds, limit)
+claim.conflicts(repositoryId, paths, limit)
+proof.forBatch(batchId, limit)
+event.window(batchId, roles, eventLimit, byteLimit)
+decision.latest(batchId, type)
+artifact.section(ref, headingId, byteLimit)
+```
+
+Every query declares:
+
+- maximum records;
+- maximum graph depth and nodes when applicable;
+- maximum returned bytes;
+- estimated tokens for the selected endpoint when available;
+- stable truncation order and continuation cursor;
+- provenance and source digests; and
+- whether truncation occurred.
+
+The broker rejects an unbounded query. Truncation never silently implies
+completeness; the coordinator must request a permitted next page or escalate.
+
+### 9.5 Complexity and scaling requirements
+
+Let:
+
+- `F` be indexed pack artifacts;
+- `B` be batches;
+- `E` be dependency edges;
+- `R` be requirement references; and
+- `C` be repository/path claims.
+
+The full deterministic build may be `O(F + B + E + R + C)` and occurs at init,
+seal change, or explicit rebuild—not on every wake.
+
+After build:
+
+- direct batch/artifact/requirement lookup is expected `O(1)` or `O(log n)`;
+- one direct lookup reads only the manifest/pointer and addressed bounded
+  shard(s), never every index record;
+- a dependency query is proportional to the returned bounded neighborhood;
+- ready-set maintenance after an acceptance is proportional to the changed
+  batch and affected outgoing edges, not all pack prose;
+- latest-event lookup uses indexed offsets, not a full JSONL rescan;
+- one routine envelope reads only bounded records for its trigger; and
+- default envelope byte/token limits do not increase merely because unrelated
+  batches or artifacts are added.
+
+No v1 correctness guarantee depends on embeddings, vector search, an external
+database, model summarization, or provider prompt caching. Implementations may
+use safe caches, but authoritative lookup remains structured and reproducible.
+
+### 9.6 Memory model
+
+The coordinator has no private lane-lifetime conversational memory. Durable
+memory consists of:
+
+1. accepted pack and seal;
+2. append-only worker/coordinator/effect events;
+3. deterministic indexes;
+4. derived current projections; and
+5. explicit decision evidence references.
+
+Per-cycle memory is the envelope plus brokered bounded context. Static policy
+and immutable artifact content may use host prompt caching when available, but
+cache hits are an optimization and never part of correctness or budget truth.
+
+Decision rationale is not repeatedly copied into later prompts. Later cycles
+load a prior decision only by typed lookup when it is relevant to the current
+trigger.
+
+### 9.7 Freshness and rebuild
+
+Pack-index verification runs before routing:
+
+- matching `packSealId`, manifest/lock digests, compiler version, and schema;
+- every indexed path remains within its logical repository/pack root;
+- every index digest matches;
+- counts and cross-references are internally consistent; and
+- static cross-references resolve against the sealed pack.
+
+Runtime-index verification checks journal identity, checkpoint digest, byte
+length, last event/offset, and append-only continuity. A runtime index may
+incrementally consume verified appended records. Truncation, replacement, or
+invalid continuity makes it stale and requires a deterministic rebuild from
+the journal.
+
+Pack drift marks the pack index stale before another cycle begins. Read-only
+status may report stale details, but it cannot repair them. `index build`
+requires an accepted sealed pack and writes to a staged directory before an
+atomic switch. A semantic pack change requires normal pack revalidation and
+resealing; index rebuild cannot legitimize drift.
+
+### 9.8 Hard pack-size safety guarantee
+
+For M0, D1, and ordinary D2 cycles:
+
+- no complete-pack scan is permitted after a valid index exists;
+- no complete tracker, roadmap, brief set, report set, or event journal is
+  loaded into model context;
+- unrelated pack growth cannot increase the default decision envelope;
+- context queries remain within class and endpoint budgets; and
+- stale/missing index state pauses automation instead of taking an expensive
+  fallback path.
+
+D3 may request a wider affected subgraph, but every request remains explicitly
+bounded, metered, paginated, and auditable. “Complex” does not authorize loading
+the full lane by default.
+
+## 10. Context broker and budgets
+
+### 10.1 Brokered context
 
 A decision agent requests additional context by typed reference:
 
@@ -342,7 +582,7 @@ The agent does not receive unrestricted filesystem tools for authoritative
 coordinator context. A host that cannot enforce the broker boundary cannot run
 unattended decision cycles.
 
-### 9.2 Budget dimensions
+### 10.2 Budget dimensions
 
 Budget policy separates:
 
@@ -369,9 +609,9 @@ At a hard limit, no further broker context is returned and the agent must
 propose a bounded result or escalation. Watchtower does not kill a process in a
 way that could leave an external side effect ambiguous.
 
-## 10. Decision proposal
+## 11. Decision proposal
 
-### 10.1 Schema
+### 11.1 Schema
 
 The agent emits one JSON value:
 
@@ -406,7 +646,7 @@ Proposals contain references and bounded rationale. They contain no shell
 commands, arbitrary paths, environment maps, credentials, or direct state-file
 edits.
 
-### 10.2 Proposal types
+### 11.2 Proposal types
 
 v1 proposal types are closed and versioned:
 
@@ -422,9 +662,9 @@ v1 proposal types are closed and versioned:
 Adding a proposal type requires a knowledge-policy update, validator, effect
 mapping, fixtures, and spec update.
 
-## 11. Validation and effect execution
+## 12. Validation and effect execution
 
-### 11.1 Validation
+### 12.1 Validation
 
 Before any effect, Watchtower proves:
 
@@ -445,7 +685,7 @@ Before any effect, Watchtower proves:
 A failed proposal is recorded and may route to escalation. It is never partially
 applied or repaired by guessing agent intent.
 
-### 11.2 Atomic effect plan
+### 12.2 Atomic effect plan
 
 The executor converts a valid proposal into a previewable effect plan:
 
@@ -463,14 +703,14 @@ such as tmux launch and Git push cannot join a filesystem transaction, so they
 use prepare/attempt/verify journal states and idempotency keys. Recovery reads
 the journal rather than repeating an unknown effect.
 
-### 11.3 No raw mutation commands
+### 12.3 No raw mutation commands
 
 The public CLI does not expose unrestricted commands such as
 `wt state set <arbitrary-key>` or arbitrary tracker-line mutation. Those would
 bypass transition policy. All mutations use bounded domain actions and the same
 validator/effect executor as automated cycles.
 
-## 12. Acceptance and publication
+## 13. Acceptance and publication
 
 Reviewer ACCEPT is authoritative only after Watchtower verifies:
 
@@ -497,7 +737,7 @@ Complex judgment may propose retry order, operator escalation, or a replacement
 publication route, but cannot discard reviewer acceptance without a separate
 authorized invalidation process.
 
-## 13. Watcher and queue model
+## 14. Watcher and queue model
 
 The persistent watcher is a zero-token event router. It:
 
@@ -526,7 +766,7 @@ requested → routed → invoked → proposed → validated
 
 No stage is inferred from tmux prose.
 
-## 14. Operator interaction
+## 15. Operator interaction
 
 Operator requests are classified before model invocation:
 
@@ -541,7 +781,7 @@ Operator conversation uses a separate short-lived cycle and never joins the
 next automated coordinator context. A pending safety escalation may interrupt
 routine routing; ordinary questions do not silently cancel a mutating cycle.
 
-## 15. Endpoint routing and allocation
+## 16. Endpoint routing and allocation
 
 Coordinator decision classes are allocation roles. An active structured
 allocation plan should assign primary/fallback endpoint pools and reserves for
@@ -605,7 +845,7 @@ Budgets reserve:
 - at least one complex escalation when policy requires; and
 - operator conversation separately.
 
-## 16. Filesystem contract
+## 17. Filesystem contract
 
 ```text
 <control-home>/.watchtower/lanes/<slug>/
@@ -613,6 +853,21 @@ Budgets reserve:
     routing-policy.json
     coordinator-routing.json
     context-policy.json
+    index/
+      pack/
+        current.json
+        <index-id>/
+          index-manifest.json
+          artifacts/
+          batches/
+          dependencies/
+          requirements/
+          repository-claims/
+          proofs/
+      runtime/
+        index-manifest.json
+        events/
+        decisions/
     queue.json
     cursor.json
     cycles/
@@ -645,7 +900,7 @@ coordinator effects update the local generated tracker projection. A committed
 tracker change requires an explicitly defined project-owned workflow; the
 runtime must not mechanically rewrite arbitrary Markdown.
 
-## 17. Durable coordinator events
+## 18. Durable coordinator events
 
 | Event | Meaning |
 |-------|---------|
@@ -665,10 +920,13 @@ runtime must not mechanically rewrite arbitrary Markdown.
 Every record has schema version, event ID, time, lane ID, cycle/correlation ID,
 producer, policy version, and relevant artifact digests.
 
-## 18. CLI contract
+## 19. CLI contract
 
 | Command | Mutation | Purpose |
 |---------|----------|---------|
+| `wt coordinator index build [--runtime]` | Yes | Compile the sealed-pack index, or rebuild runtime indexes from append-only journals |
+| `wt coordinator index status|verify` | No | Report freshness, digests, counts, compiler compatibility, and corruption |
+| `wt coordinator index explain <batch-or-requirement>` | No | Show bounded index references and provenance without loading canonical prose |
 | `wt coordinator status` | No | Show queue, active cycle, routing, budget, and last outcome |
 | `wt coordinator context --class=<D1\|D2\|D3> --trigger=<event-id>` | No | Preview the decision envelope and size estimates |
 | `wt coordinator explain [--cycle=<id>]` | No | Explain routing rule, guards, endpoint, proposal, and effect result |
@@ -685,12 +943,16 @@ shell mutation commands.
 All mutating commands support stable idempotency keys internally. Human and
 `--json` output derive from the same contracts.
 
-## 19. Failure semantics
+## 20. Failure semantics
 
 | Code | Meaning |
 |------|---------|
 | `COORDINATOR_TRIGGER_INVALID` | Trigger is malformed, stale, duplicate, or incompatible |
 | `COORDINATOR_POLICY_MISMATCH` | Installed policy, runtime, and envelope versions disagree |
+| `COORDINATOR_INDEX_MISSING` | Required compiled pack index does not exist |
+| `COORDINATOR_INDEX_STALE` | Pack seal/source digest does not match the installed index |
+| `COORDINATOR_INDEX_INVALID` | Index schema, digest, path, count, or cross-reference failed |
+| `COORDINATOR_QUERY_UNBOUNDED` | Context/index request lacks an admitted record, depth, byte, or token limit |
 | `COORDINATOR_CONTEXT_LIMIT` | Requested context exceeds the admitted cycle budget |
 | `COORDINATOR_ROUTE_UNAVAILABLE` | No endpoint meets minimum decision capability |
 | `COORDINATOR_OUTPUT_INVALID` | Agent output is not one permitted proposal |
@@ -704,12 +966,16 @@ Failures do not advance the worker-event cursor past an unhandled trigger.
 Retry uses the same cycle/effect identity when safe; otherwise a superseding
 cycle explicitly references the prior one.
 
-## 20. Safety properties
+## 21. Safety properties
 
 - Exactly one effect authority exists for a lane.
 - Agents cannot directly mutate authoritative files or execute arbitrary
   coordinator effects.
 - Worker/reviewer/operator prose is untrusted evidence, never policy.
+- Pack indexes are derived, seal-bound, model-free, and never requirement or
+  acceptance authority.
+- Missing/stale/corrupt indexes pause automation; no full-pack fallback exists.
+- Every index and context query is bounded, paginated, and provenance-bearing.
 - Every automatic effect is uniquely preauthorized or backed by a valid typed
   proposal.
 - Every transition is revalidated against current state immediately before
@@ -724,29 +990,33 @@ cycle explicitly references the prior one.
 - No old copied-template lane is discovered or given fallback authority.
 - Secrets never enter envelopes, proposals, journals, or routing output.
 
-## 21. Delivery strategy
+## 22. Delivery strategy
 
 Coordinator automation is required for v1, but delivery is staged:
 
 1. audit every imported coordinator action as M0, D1, D2, or D3;
-2. implement durable read projections, ready-set calculation, and envelopes;
-3. implement decision proposal validators and effect planning;
-4. run decision and effect calculation in shadow fixtures with no mutation;
-5. implement atomic lane-local effects and external-effect journals;
-6. enable short-lived D1–D3 cycles;
-7. remove lane-lifetime coordinator-session authority; and
-8. run replay and real-lane acceptance trials.
+2. implement deterministic pack indexes and bounded query contracts;
+3. implement durable read projections, ready-set calculation, and envelopes;
+4. implement decision proposal validators and effect planning;
+5. run decision and effect calculation in shadow fixtures with no mutation;
+6. implement atomic lane-local effects and external-effect journals;
+7. enable short-lived D1–D3 cycles;
+8. remove lane-lifetime coordinator-session authority; and
+9. run replay, scale, and real-lane acceptance trials.
 
 This is implementation sequencing, not a product compatibility mode. Watchtower
 starts new lanes only; it does not import old coordinator lanes. A created lane
 uses one declared coordinator mode and never falls through between competing
 authorities because a feature is missing.
 
-## 22. Testing strategy
+## 23. Testing strategy
 
-### 22.1 Deterministic fixtures
+### 23.1 Deterministic fixtures
 
 - no-event poll uses M0 and zero agent invocation;
+- pack-index output is deterministic for fixed pack bytes/compiler/schema;
+- stale, corrupt, missing, and path-escaping indexes block cycles;
+- unrelated batches do not enter a bounded batch query or envelope;
 - unique ready batch produces a stable preauthorized effect;
 - multiple ready batches without priority require a decision;
 - invalid and duplicate worker events do not advance the cursor;
@@ -755,7 +1025,7 @@ authorities because a feature is missing.
 - unauthorized context references are denied and recorded; and
 - untrusted report prose cannot alter permitted proposal types.
 
-### 22.2 Proposal and effect fixtures
+### 23.2 Proposal and effect fixtures
 
 - every proposal type has valid, invalid, stale, and illegal-transition cases;
 - an agent cannot request arbitrary shell/state changes;
@@ -766,7 +1036,7 @@ authorities because a feature is missing.
 - correction preserves reviewer independence; and
 - route loss pauses rather than downgrades.
 
-### 22.3 Cost and quality proof
+### 23.3 Cost and quality proof
 
 Replay a representative long lane through:
 
@@ -787,11 +1057,38 @@ The v1 model must reduce routine coordinator consumption materially without
 increasing invalid transitions, lost acceptance state, reviewer-independence
 violations, or unresolved corrections. Token savings alone cannot accept it.
 
-## 23. v1 acceptance criteria
+### 23.4 Pack-size scaling proof
+
+Generate sealed fixtures with the same active batch and affected dependency
+neighborhood at 30, 300, 3,000, and 10,000 batches. After one index build:
+
+- M0/D1/ordinary-D2 envelope bytes and estimated tokens remain within the same
+  configured bound;
+- unrelated batch growth adds no broker records to the cycle;
+- ready-set updates inspect only affected dependency edges;
+- latest-event lookup does not rescan the full journal;
+- query truncation and continuation are stable;
+- index verification detects any source/seal drift; and
+- no model is invoked to build, verify, or query the index.
+
+Build time/storage may grow linearly with pack structure. Per-cycle model input
+must not grow linearly with total pack size.
+
+## 24. v1 acceptance criteria
 
 - [ ] Idle polling, heartbeat, event filtering, session checks, and ready-set
       calculation invoke no model.
 - [ ] Each judgment cycle uses a fresh bounded decision envelope.
+- [ ] Every cycle references a valid deterministic pack index matching the
+      active `packSealId` and runtime indexes matching journal checkpoints.
+- [ ] Missing, stale, corrupt, or incompatible indexes block automation rather
+      than causing complete-pack scanning or prompt loading.
+- [ ] Index queries enforce record, graph-depth/node, byte, and token-estimate
+      limits with explicit pagination/truncation.
+- [ ] One direct lookup reads bounded addressable shards; no conforming
+      implementation parses a monolithic full-pack index per query.
+- [ ] Routine coordinator input depends on the affected batch and bounded
+      neighborhood, not total pack size.
 - [ ] Decision class derives from versioned policy plus guard facts, not model
       name or event name alone.
 - [ ] Operator policy can escalate but cannot lower the minimum capability.
@@ -811,7 +1108,7 @@ violations, or unresolved corrections. Token savings alone cannot accept it.
 - [ ] A long-lane replay demonstrates material cost reduction without degraded
       transition correctness or review quality.
 
-## 24. Decisions fixed by this draft
+## 25. Decisions fixed by this draft
 
 | Decision | Outcome |
 |----------|---------|
@@ -825,6 +1122,9 @@ violations, or unresolved corrections. Token savings alone cannot accept it.
 | Mutation authority | Watchtower validated effect executor |
 | State history | Append-only decision/effect journal with derived projections |
 | Context | Narrow envelope plus metered typed broker |
+| Pack memory | Deterministic seal-bound local indexes plus bounded queries |
+| Pack-size failure | Pause on unavailable index; never full-pack fallback |
+| Scaling | One linear structural build; routine model context bounded independently of unrelated pack growth |
 | Ready batches | Mechanical ready set; selection only when preauthorized or decided |
 | Acceptance | Reviewer semantic authority, distinct from publication |
 | Operator chat | Separate bounded cycle |
@@ -832,7 +1132,7 @@ violations, or unresolved corrections. Token savings alone cannot accept it.
 | Failure | Pause/escalate rather than guess, coerce, or downgrade |
 | Legacy | No adopt, fallback, or mixed coordinator authority |
 
-## 25. Open questions
+## 26. Open questions
 
 1. Which host adapters can enforce typed output and broker-only context without
    exposing unrestricted filesystem tools?
