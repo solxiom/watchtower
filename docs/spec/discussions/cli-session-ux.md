@@ -16,7 +16,9 @@ The polished UX is adopted for v1 with corrected terminology and authority
 boundaries:
 
 - the durable human–WT object is an **operator session**, not a chat;
-- `wt coordinator session` creates or resumes a foreground **attachment**;
+- bare `wt coordinator session` creates a new session/attachment;
+- `wt coordinator session attach <id>` attaches to an existing session, while
+  lifecycle `resume` only changes `suspended → open`;
 - a lane may have many operator sessions and many attachments;
 - one attachment is lane-bound and operates on one session at a time;
 - one operator session has at most one active turn, even when several

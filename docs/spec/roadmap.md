@@ -218,6 +218,12 @@ Scope:
   lifecycle/history/indexes, per-turn routing, retention, and budget
   accounting;
 - many operator sessions per lane with one active turn per session;
+- explicit create/attach/resume syntax, M0 observer mode, and fail-closed
+  invocation confirmation;
+- bounded same-lane cross-session turn capsules, deterministic export, and
+  paginated session discovery;
+- versioned finite session policy initialized with each lane;
+- confirmed amendment-request handoffs and finite session-budget grants;
 - advisory session proposals with separate confirmation/revalidation;
 - explicit scoped expiring holds and non-blocking session concurrency;
 - `wt coordinator`, `wt events`, and `wt batch ready` commands; and
@@ -238,9 +244,15 @@ Key proof:
   indexing; and
 - stale/missing/corrupt indexes pause cycles instead of scanning pack prose;
 - long multi-turn operator sessions remain bounded, do not hold the lane
-  mutation lock, and cannot mutate state without confirmed revalidation; and
+  mutation lock, and cannot mutate state without confirmed revalidation;
 - foreground attachments survive resume/detach, same-session contention,
-  streaming validation, and accessible terminal fixtures.
+  streaming validation, observer restrictions, reconnection changes, and
+  accessible terminal fixtures;
+- `ask --session` and attached turns build equivalent bounded working sets;
+- runtime/knowledge/pack evolution preserves historical session snapshots
+  without silently clearing pins or changing lifecycle;
+- status and doctor remain bounded while reporting qualified worker/operator
+  sessions and explicit integrity failures.
 
 Dependencies: M1 read projections, M2 runtime/knowledge policy, M3 managed lane,
 and M4 watcher operation. May be developed in shadow fixtures alongside M5.

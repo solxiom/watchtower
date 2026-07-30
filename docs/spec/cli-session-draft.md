@@ -9,7 +9,9 @@ This document is normative for the polished foreground terminal attachment to
 an operator session. Session semantics, bounded memory, routing, retention,
 proposals, and effect authority remain normative in
 [operator-session-draft.md](operator-session-draft.md). This document resolves
-[discussions/cli-session-ux.md](discussions/cli-session-ux.md).
+[discussions/cli-session-ux.md](discussions/cli-session-ux.md) and the UI
+portions of
+[discussions/operator-session-gaps.md](discussions/operator-session-gaps.md).
 
 ## 1. Product statement
 
@@ -90,18 +92,27 @@ and budgets remain attributable and bounded.
 
 ```text
 wt coordinator session
-  [--resume=<operator-session-id>]
   [--topic=<text>]
+  [--policy-profile=<id>]
+  [--tag=<tag>...]
+  [--stream|--no-stream]
+  [--banner=<compact|full|minimal>]
+
+wt coordinator session attach <operator-session-id>
+  [--observe]
   [--stream|--no-stream]
   [--wait-for-active-turn]
   [--banner=<compact|full|minimal>]
 ```
 
-- Without `--resume`, WT creates a new open operator session and attaches.
-- With `--resume`, WT validates the selected lane and session, rebuilds the
-  bounded current projection from its indexes, and attaches without appending
-  a turn.
-- `--topic` names a newly created session and is invalid with `--resume`.
+- Bare `session` creates a new open operator session and attaches.
+- `session attach <id>` validates the selected lane and session, loads its
+  bounded current projection from verified indexes, and attaches without
+  appending a turn or changing lifecycle state.
+- `session resume <id>` is reserved for the `suspended → open` lifecycle
+  transition and does not attach.
+- `--topic`, `--policy-profile`, and `--tag` apply only to creation.
+- `--observe` creates an explicitly read-only attachment.
 - The command requires an interactive terminal in v1.
 - `wt coordinator ask` remains the stdin, pipe, and one-result JSON interface.
 - `wt coordinator chat` is not a v1 alias; an unknown-command diagnostic may
@@ -113,7 +124,8 @@ Attachment states are local and ephemeral:
 
 ```text
 STARTING → ATTACHED ↔ TURN_ACTIVE → DETACHING → STOPPED
-                    ↘ SESSION_UNAVAILABLE
+             ↘ OBSERVING
+             ↘ SESSION_UNAVAILABLE
 ```
 
 An attachment in `SESSION_UNAVAILABLE` may use `/new`, `/switch`, or `/exit`;
@@ -137,7 +149,7 @@ Example:
 ```text
 watchtower 1.0.0 — operator session
 lane: sql-backends · active · batch B22
-session: opsess-7f3a · open · 4 turns · budget healthy
+operator-session: opsess-7f3a · open · 4 turns · budget healthy
 routing: D2 codex-primary-medium · D3 codex-primary-high
 
 Responses are advisory. /apply previews and confirms proposed effects.
@@ -148,6 +160,17 @@ Type /help for commands. Ctrl-D detaches.
 
 The banner must not disclose OS usernames, account credentials, provider
 secrets, or raw environment values. Endpoint aliases are allowed.
+
+When attaching to an existing session, the banner additionally shows the last
+turn time and a deterministic M0 change projection from that turn's snapshot
+to current lane state. It includes policy-bounded recent worker events, holds,
+watcher/coordinator outcomes, and budget changes with stable IDs and a
+`(+N more; /events …)` continuation when truncated. It is never
+model-summarized.
+
+`compact` is the default reconnection banner. `full` may include an existing
+bounded last-turn capsule; `minimal` shows identity and whether changes exist.
+No banner mode suppresses safety, staleness, policy, or budget failures.
 
 ## 6. Presentation architecture
 
@@ -178,6 +201,11 @@ Each event carries stable lane, operator-session, turn, correlation, and
 revision identifiers as applicable. Presentation events are renderable as
 plain text and test fixtures; they do not replace authoritative journals.
 
+This is a transport-neutral internal boundary in v1, not a public JSON wire
+protocol. The v1 product supplies the foreground PTY attachment only. Socket,
+IDE, web, and remote transports require a later versioned authentication,
+authorization, replay, backpressure, and compatibility contract.
+
 Terminal Markdown, colors, separators, progress indicators, and compact tables
 belong to shared rendering utilities usable by other `wt` commands. Provider
 adapters normalize streaming and usage telemetry before the renderer sees it.
@@ -195,9 +223,29 @@ Resolved: batch:B14, event:evt-772
 Routing: D2 · codex-primary-medium · estimated 18K input tokens
 ```
 
-This display does not create an implicit confirmation pause. Cancellation
-before spend is guaranteed only by `ask --dry-run` or an explicit configured
-confirm-before-invoke mode. Once adapter invocation starts, WT must not claim
+This display does not create an implicit confirmation pause unless attachment
+preference or lane policy selects confirmation mode `d3`, `d2-d3`, or `all`.
+`off` is the UI default, but lane policy may require a stricter minimum that a
+preference cannot weaken.
+
+- `off`: no UI-added pause;
+- `d3`: confirm D3 model-backed turns;
+- `d2-d3`: confirm D2 and D3 model-backed turns; and
+- `all`: confirm every model-backed turn.
+
+M0 never requires model-invocation confirmation.
+
+When confirmation applies, WT displays resolved context, route, telemetry
+quality, estimated usage, session/lane remaining limits, and protected reserve
+impact before asking whether to invoke. Declining records
+`operator-session-turn-cancelled-before-invocation` with zero model use because
+the operator message already has a durable turn identity. It does not silently
+delete the message or disable future confirmation.
+
+Non-interactive `ask` fails with
+`OPERATOR_SESSION_CONFIRMATION_REQUIRED` when policy requires confirmation,
+unless the caller supplied explicit `--confirm-invoke`. It never silently
+treats confirmation as off. Once adapter invocation starts, WT must not claim
 that Ctrl-C prevented provider usage.
 
 M0 responses display `M0 · no model invoked` and use a compact deterministic
@@ -273,6 +321,7 @@ through the natural-language classifier.
 | `/context` | Exact bounded working-set manifest, not hidden provider history |
 | `/proposals` | Current unapplied session proposals |
 | `/sessions` | Operator sessions for the selected lane |
+| `/export [options]` | Deterministically render retained records; no model summary |
 
 ### 9.2 Session metadata and lifecycle commands
 
@@ -287,6 +336,7 @@ through the natural-language classifier.
 | `/suspend` | Suspend the current session after confirmation |
 | `/resume` | Resume the currently bound suspended session |
 | `/close` | Terminally close the current session after confirmation |
+| `/budget grant ...` | Preview/confirm a finite authorized session budget grant |
 
 Pin/unpin operations are reversible journal mutations and do not require a
 confirmation prompt by default. Compaction may invoke a model and consume
@@ -300,6 +350,7 @@ resets lane-wide usage.
 |---------|----------|
 | `/apply <proposal-id> [--dry-run]` | Preview, confirm, revalidate, and invoke the normal effect executor |
 | `/reject <proposal-id>` | Journal explicit operator rejection |
+| `/amend [--from-turn=<id>] [--rationale=<text>]` | Prepare/confirm a typed amendment-request handoff |
 
 `/apply` is only a UI shortcut for
 `wt coordinator session apply <proposal-id>`. It does not grant inline agent
@@ -314,11 +365,32 @@ execution.
 | `/help` | Show commands and completion hints |
 | `/clear` | Clear presentation only; retained session state is unchanged |
 | `/verbose` | Toggle attachment diagnostics |
+| `/confirm-mode [off|d3|d2-d3|all] [--save]` | Show/change attachment invocation confirmation preference |
 | `/exit`, `/quit` | Detach without closing |
 
 Unknown commands show an exact error and nearest documented candidates. The
 attachment does not execute arbitrary shell commands or unrelated mutating WT
 commands.
+
+Confirmation preference cannot weaken lane policy. Without `--save`, a
+`/confirm-mode` change lasts only for the attachment; `--save` updates the
+operator-local UI preference, not session policy or budget.
+
+### 9.5 Observer attachments
+
+An attachment created with `--observe`:
+
+- may execute only the read-only commands in §9.1;
+- accepts no natural-language turns or session/effect mutations;
+- holds no session write lock, endpoint slot, or budget reservation;
+- may observe durable validated, stale, interrupted, and failed turn events;
+- does not receive another process's provisional chunks in v1; and
+- displays an explicit read-only banner/prompt and detaches without changing
+  session state.
+
+Any number of local observers is allowed within filesystem access and resource
+policy. Observer mode does not broaden multi-user permissions or expose
+full-text content to an OS account that could not already read it.
 
 ## 10. Input, completion, and references
 
@@ -342,6 +414,14 @@ material, credentials, and arbitrary filesystem paths before invocation.
 An unresolved or ambiguous explicit reference fails before model use. Friendly
 natural-language references remain subject to the conservative resolver in the
 operator-session spec.
+
+Slash parsing is deterministic:
+
+- a leading token exactly matching the closed registry is a command and invalid
+  arguments produce a command error;
+- an unknown leading `/word` is an error, never a paid natural-language turn;
+- `//text` explicitly escapes to natural language and journals `/text`; and
+- slash-like text after the first token is ordinary message content.
 
 ## 11. History and retention
 
@@ -374,6 +454,11 @@ When another attachment attempts a turn for the same active session:
   another invocation; and
 - no waiting attachment holds the session write lock, lane mutation lock, or
   endpoint reservation.
+
+An observer follows durable journal/index checkpoints and can issue M0 queries
+while another turn runs. V1 does not relay in-memory provisional chunks between
+attachments; completed/failed/interrupted events are sufficient for correctness
+without a daemon or attachment IPC authority.
 
 Lane notifications derive mechanically from journal/index checkpoints. They:
 
@@ -432,23 +517,27 @@ Display preferences are operator-local and non-authoritative:
 ```
 
 Supported preference classes include streaming, banner density, preflight
-visibility/confirmation, footer density, notification classes, color,
-accessible append-only rendering, and bounded history-cache limits.
+visibility, `confirmBeforeInvoke: off|d3|d2-d3|all`, footer density,
+notification classes, color, accessible append-only rendering, and bounded
+history-cache limits.
 
 Preferences cannot change decision-class floors, endpoint eligibility,
-budgets, retention authority, confirmation policy, hold semantics, or effect
-permissions. Unknown keys are preserved for forward compatibility but ignored
-with a diagnostic.
+budgets, retention authority, the lane-policy confirmation minimum, hold
+semantics, or effect permissions. Unknown keys are preserved for forward
+compatibility but ignored with a diagnostic.
 
 ## 16. Testing strategy
 
 Contract and PTY fixtures cover:
 
-- new, resumed, suspended, closed, forked, and pruned sessions;
+- new, attached, resumed, suspended, closed, forked, and pruned sessions;
 - multiple sessions for one lane and concurrent attachments;
+- observer attachments permit only M0 reads and never relay provisional chunks;
 - same-session turn contention and explicit waiting;
 - M0, D1, D2, and D3 display paths;
 - preflight refusal, route loss, budget exhaustion, and adapter failure;
+- every confirmation mode, policy minimum, explicit non-interactive
+  authorization, and fail-closed non-interactive refusal;
 - buffered and provisional streaming with validation replacement;
 - Ctrl-C at editing, preflight, invocation, and confirmation stages;
 - Ctrl-D and terminal loss without session closure;
@@ -456,26 +545,34 @@ Contract and PTY fixtures cover:
 - slash-command classification and proof that M0 commands invoke no model;
 - `/apply` proof that no effect bypasses revalidation/execution;
 - multiline input, paste, completion, ambiguous references, and path escape;
+- exact slash parsing, typo failure, `//` escape, and embedded slash prose;
 - no-color, screen-reader, narrow-terminal, and redirected-output behavior;
-- history-cache retention coupling and restrictive permissions; and
-- attachment restart with continuity reconstructed only from journals/indexes.
+- history-cache retention coupling and restrictive permissions;
+- attachment restart with continuity reconstructed only from journals/indexes;
+  and
+- deterministic bounded change projection on reconnection.
 
 Golden rendering fixtures consume typed presentation events rather than
 provider output directly.
 
 ## 17. v1 acceptance criteria
 
-- [ ] `wt coordinator session` creates or resumes a durable operator session
-      through a polished foreground attachment.
+- [ ] Bare `wt coordinator session` creates a durable operator session;
+      `session attach <id>` attaches and `session resume <id>` only changes
+      suspended lifecycle state.
 - [ ] One lane supports multiple independent open and historical operator
       sessions.
 - [ ] Multiple attachments do not create competing turn or effect authority.
+- [ ] Observer attachments provide read-only M0 access to durable validated
+      events without endpoint use or provisional cross-process relay.
 - [ ] Every natural-language input remains one bounded independently routed
       turn.
 - [ ] M0 slash commands invoke no model and mutating commands use their normal
       authority path.
 - [ ] Streaming is visibly provisional until schema validation completes.
 - [ ] Routing, budget, references, usage quality, and staleness are visible.
+- [ ] Required invocation confirmation fails closed in non-interactive use and
+      cancellation journals zero model use.
 - [ ] Ctrl-C and terminal loss preserve auditable interruption with no partial
       effect.
 - [ ] Exiting an attachment does not close or suspend its operator session.
@@ -483,6 +580,8 @@ provider output directly.
       artifacts.
 - [ ] Notifications invoke no model and do not interrupt active typing or
       confirmation.
+- [ ] Reconnection shows a bounded deterministic change projection.
+- [ ] Slash-command typos cannot fall through to a paid natural-language turn.
 - [ ] No-color and accessible append-only output retain all semantic
       information.
 - [ ] The attachment requires no daemon, provider-side conversation, or lane
@@ -493,14 +592,18 @@ provider output directly.
 | Decision | Outcome |
 |----------|---------|
 | Operator command | `wt coordinator session`; `chat` is not the normative command |
+| Existing-session command | `session attach <id>`; `session resume <id>` is lifecycle-only |
 | Durable object | Operator session |
 | UI process | Ephemeral foreground attachment |
 | Lane cardinality | Many operator sessions per lane |
 | Attachment binding | One lane and at most one current operator session |
 | Same-session concurrency | At most one active turn; other attachments observe/fail/wait explicitly |
+| Observer | Read-only M0 attachment over durable validated events; no provisional relay in v1 |
 | Scripting | `wt coordinator ask`; interactive session is TTY-only in v1 |
 | Streaming | Default for capable TTY adapters; provisional until validated |
 | Slash commands | Closed registry over shared WT services, not shell execution |
+| Slash escape | Unknown leading slash is an error; `//` explicitly sends natural language |
+| Invocation confirmation | Attachment preference may strengthen policy; required non-interactive confirmation fails closed |
 | Effects | `/apply` uses normal confirmation, revalidation, and effect executor |
 | History | Journal/index authority; optional bounded retention-coupled UI cache |
 | Status updates | Foreground M0 observation; no daemon or model polling |

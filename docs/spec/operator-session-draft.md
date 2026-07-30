@@ -10,6 +10,8 @@ resolves
 [discussions/operator-coordinator-conversation.md](discussions/operator-coordinator-conversation.md)
 and
 [discussions/cli-session-ux.md](discussions/cli-session-ux.md),
+with gap corrections from
+[discussions/operator-session-gaps.md](discussions/operator-session-gaps.md),
 and extends
 [coordinator-automation-draft.md](coordinator-automation-draft.md).
 
@@ -122,6 +124,9 @@ effect executor may act.
 | Provisional stream | Unvalidated partial model output shown for responsiveness |
 | Worker session | Implementation/review agent process, normally hosted by tmux; not an operator session |
 | Provider invocation | One bounded model execution; provider-side continuity is never authoritative |
+| Turn reference capsule | Deterministic bounded same-lane projection of one referenced turn |
+| Amendment request | Durable handoff asking an authoritative pack/spec workflow to evaluate a change |
+| Budget grant | Audited finite authorization for additional session usage within lane-wide policy |
 
 ## 5. Authority model
 
@@ -184,6 +189,9 @@ client option and does not reserve endpoint capacity.
   "schemaVersion": 1,
   "operatorSessionId": "opsess-3f8a1b2c",
   "laneId": "9d0ee3d2-8833-4fb7-b112-8438f04f57d2",
+  "origin": "operator",
+  "policyProfileId": "operator-standard",
+  "tags": ["investigation"],
   "state": "open",
   "topic": "batch 14 reject triage",
   "createdAt": "2026-07-30T14:00:00Z",
@@ -199,10 +207,23 @@ client option and does not reserve endpoint capacity.
 }
 ```
 
+`origin` is the closed value `operator` or `system-escalation`.
+`policyProfileId` selects a named finite policy profile and `tags` are
+non-authoritative operator labels. A profile supplies limits/reserves and may
+raise a minimum guard, but cannot directly select or lower a turn's decision
+class. A system escalation may select an escalation profile and create a
+policy-required safety hold through the independent safety path; ordinary
+session creation never creates a hold.
+
 Operator-session identity does not contain an attachment ID, permanent
 endpoint, worker session, or decision class. Each turn is classified and routed
 independently. Endpoint continuity is a soft preference only when capability,
 availability, and budget still pass.
+
+An operator-created fork has `origin: operator`, references its parent, and
+inherits the parent profile only when that profile remains authorized; an
+explicit authorized profile may replace it. Tags are copied only when
+explicitly requested.
 
 ## 8. Turn processing
 
@@ -364,7 +385,31 @@ Explicit CLI options such as `--include-batch`, `--include-event`,
 typed references. Included files must be within an allowed repository/lane
 root, are treated as evidence, and remain subject to byte/token limits.
 
-### 10.2 M0 questions
+### 10.2 Cross-session turn references
+
+`session:<id>:turn:<N>` may reference only a retained turn in the same lane.
+Cross-lane references fail with `OPERATOR_SESSION_REFERENCE_DENIED`. The
+resolver loads one deterministic bounded turn reference capsule containing:
+
+- operator-session and turn identity;
+- timestamp, decision class, routing alias, and snapshot revision;
+- resolved evidence references and staleness;
+- open questions;
+- proposal IDs and types only; and
+- a byte-capped answer excerpt with the complete answer digest and original
+  byte length.
+
+The excerpt is explicitly labeled incomplete when truncated. WT does not call
+a model to summarize it, imply that an excerpt is the complete answer, or load
+the operator message, other turns, compactions, or full source-session history.
+Transitive turn/session references are never expanded automatically.
+
+Capsule bytes count against the current turn's context budget and are shown in
+preflight provenance. Pruned source content resolves to its tombstone and
+`OPERATOR_SESSION_CONTENT_PRUNED`; oversized or unavailable content never
+causes an unbounded fallback.
+
+### 10.3 M0 questions
 
 M0 answers only exact policy-defined query forms whose complete answer is
 mechanically available, such as:
@@ -382,7 +427,7 @@ M0 answers include the projection revision and are journaled for continuity.
 If the requested answer requires summarizing prose, comparing meaning, or
 making a recommendation, it is not M0.
 
-### 10.3 D1–D3 classification
+### 10.4 D1–D3 classification
 
 Deterministic routing uses explicit operator class, resolved references, exact
 request form, lane guards, and conservative keyword/shape rules:
@@ -493,6 +538,28 @@ Every dimension records telemetry quality. Defaults are finite policy, not
 unlimited. Concrete token limits are endpoint/tokenizer-specific and therefore
 belong to routing/context policy rather than universal spec constants.
 
+### 13.1 Required policy
+
+Before the first session starts, the resolved lane context policy must contain
+a schema/versioned `operatorSession` section with:
+
+- named policy profiles and a default operator profile;
+- per-turn and per-session limits for every accounted usage dimension;
+- lane-wide limits and protected escalation/recovery reserves;
+- maximum open sessions and concurrent active turns;
+- recent-turn, pin, cross-session-capsule, broker, and compaction bounds;
+- closed/archive retention and stored-byte limits;
+- confirmation requirements that policy may mandate independently of UI
+  preferences; and
+- telemetry-quality behavior when a provider dimension is unknown.
+
+All required limits are finite or explicitly unavailable; unknown capacity is
+never interpreted as zero or infinity. `wt init` materializes a valid
+lane-owned policy from the installed versioned baseline. Operators may edit
+lane-owned values, but upgrades never silently overwrite them or insert new
+meaning-bearing defaults. A required schema migration is previewed and applied
+atomically or blocks the upgrade.
+
 Soft limit:
 
 - warn before invocation;
@@ -506,6 +573,26 @@ Hard limit:
 - preserve the session;
 - permit an audited policy override when authorized; and
 - never suggest opening a new session as a budget bypass.
+
+### 13.2 Finite budget grants
+
+An authorized operator may request a budget grant when lane-wide policy and
+reserves permit it:
+
+```text
+wt coordinator session budget grant <operator-session-id>
+  (--turns=<N> | --usage=<dimension:value>)
+  --reason=<text>
+  [--expires-at=<timestamp>]
+  [--dry-run]
+```
+
+A grant is a separately confirmed, journaled, finite allowance for one turn,
+an explicit number of turns, a bounded usage dimension, or an expiry window.
+It does not permanently rewrite the session profile, increase the lane-wide
+hard limit, replenish allocation capacity, consume protected
+escalation/recovery reserves, or transfer accounting from another session.
+Unknown provider capacity cannot be granted as a guessed token amount.
 
 ## 14. Endpoint routing
 
@@ -565,10 +652,52 @@ At minimum:
 
 Skipping accepted required work, changing committed dependency structure,
 weakening review, or changing specification scope cannot be approved solely
-through an operator session. The proposal must route to the authoritative amendment
-workflow.
+through an operator session. The proposal must route to the authoritative
+amendment workflow.
 
-### 15.3 Apply command
+### 15.3 Amendment-request handoff
+
+The closed proposal vocabulary includes `request-pack-amendment`:
+
+```json
+{
+  "proposalId": "opsess-prop-92",
+  "type": "request-pack-amendment",
+  "operatorSessionId": "opsess-3f8a1b2c",
+  "sourceTurnId": "turn-0004",
+  "rationale": "Finding F3 may require expanding the accepted API contract.",
+  "affectedBatchIds": ["B14"],
+  "affectedFindingIds": ["B14:F3"],
+  "evidenceRefs": ["event:evt-772", "finding:B14:F3"],
+  "snapshotRevision": 82
+}
+```
+
+After operator confirmation and current-state validation, the effect executor
+records a durable amendment request plus a lane/initiative handoff event. The
+request is evidence for a future authoritative pack/spec workflow; it is not a
+pack edit, accepted scope change, new batch, or approval.
+
+Creating the request does not implicitly suspend/close the operator session,
+place a hold, or invoke an undefined pack command. If affected implementation
+work must pause, the operator separately confirms a scoped hold. When an
+initiative-linked pack-design workflow is available, it may discover the
+request through the initiative event contract and later report a superseding
+accepted pack seal.
+
+```text
+wt coordinator session amendment request <operator-session-id>
+  --from-turn=<turn-id>
+  [--proposal=<proposal-id>]
+  [--rationale=<text>]
+  [--dry-run]
+```
+
+The command deterministically reuses a valid retained proposal or collects
+explicit operator rationale/evidence; it does not invoke a model to invent the
+request. Actual recording follows the normal preview/confirmation/effect path.
+
+### 15.4 Apply command
 
 ```sh
 wt coordinator session apply <proposal-id> [--dry-run]
@@ -650,7 +779,8 @@ Safety does not depend on model availability.
 `wt coordinator escalate`:
 
 1. records the escalation and any required system hold;
-2. creates an escalation session;
+2. creates a session with `origin: system-escalation` and the configured
+   escalation policy profile;
 3. references the concerning cycle/effect/events;
 4. attempts a D3 turn only if route and budget are available;
 5. otherwise leaves a durable operator-attention thread; and
@@ -667,6 +797,7 @@ the session model and not merely a pause flag.
 ```text
 wt coordinator ask [<question>]
   [--session=<operator-session-id>]
+  [--one-shot]
   [--class=<D1|D2|D3>]
   [--include-batch=<id>]
   [--include-event=<id>]
@@ -675,21 +806,35 @@ wt coordinator ask [<question>]
   [--include-file=<path>]
   [--message-file=<path|->]
   [--dry-run]
+  [--confirm-invoke]
   [--stream]
 
 wt coordinator session
-  [--resume=<operator-session-id>]
   [--topic=<text>]
+  [--policy-profile=<id>]
+  [--tag=<tag>...]
+  [--stream|--no-stream]
+
+wt coordinator session attach <operator-session-id>
+  [--observe]
   [--stream|--no-stream]
   [--wait-for-active-turn]
 ```
 
 With no positional question, `ask` reads one message from stdin.
-`--message-file=-` supports multi-line stdin explicitly. `session` with no
-lifecycle subcommand is the polished foreground terminal attachment. It
-creates an operator session when `--resume` is absent and attaches to the
-selected existing session when it is present. Every natural-language input
-still executes exactly one bounded turn.
+`--message-file=-` supports multi-line stdin explicitly. Bare `session` creates
+a new open operator session and attaches. `session attach` binds to an existing
+open session without changing lifecycle state. `session resume` remains only
+the explicit `suspended → open` lifecycle transition. An unrecognized
+positional token is never guessed to be a session ID.
+
+`ask --session=<id>` uses exactly the same lifecycle validation,
+operator-session turn lock, bounded working set, pins, unresolved
+questions/proposals, snapshot, classification, routing, budgets, journaling,
+and staleness pipeline as an attachment turn. Only input and rendering differ.
+`ask` without `--session` creates an open resumable session and returns its ID.
+`--one-shot` closes that newly created session after a completed response; it
+is invalid with `--session` and does not conceal interrupted/failed history.
 
 `--dry-run` never invokes a model or mutates a journal. It resolves references,
 classifies, builds the working set/envelope, and estimates usage. Without
@@ -705,27 +850,59 @@ interactive attachment.
 
 | Command | Purpose |
 |---------|---------|
-| `wt coordinator session list` | List sessions, state, topic, budget, last turn, holds, and stale proposals |
+| `wt coordinator session list [filters]` | Page sessions by state, origin/profile/tag, topic, time, holds/proposals, and stable sort |
 | `wt coordinator session show <id>` | Show identity, snapshot summary, pins, open questions, proposals, and budget |
 | `wt coordinator session history <id>` | Page retained turns with references, routing, usage, and interruption state |
 | `wt coordinator session suspend <id>` | Prevent new turns while retaining resumability |
-| `wt coordinator session resume <id>` | Resume a suspended session |
+| `wt coordinator session resume <id>` | Change a suspended session back to open; it does not attach |
 | `wt coordinator session close <id>` | Terminal close with rationale |
 | `wt coordinator session fork <id>` | Start a related session with explicit inherited pins/turn refs |
 | `wt coordinator session pin|unpin <id> <ref>` | Manage bounded continuity references |
 | `wt coordinator session compact <id>` | Create derived bounded continuity summary |
+| `wt coordinator session export <id>` | Deterministically export retained session records |
+| `wt coordinator session amendment request <id>` | Create/confirm a typed amendment request from retained evidence |
+| `wt coordinator session budget grant <id>` | Preview/confirm a finite authorized budget grant |
 | `wt coordinator session apply <proposal-id>` | Preview/confirm/revalidate a proposed effect |
 | `wt coordinator hold place|release|list` | Manage explicit scoped holds |
 
 History output is paginated. Read-only commands never compact, resume, repair
 indexes, renew holds, or modify retention.
 
-The bare interactive form and lifecycle subcommands share one namespace:
-`wt coordinator session` attaches, while `wt coordinator session list|show|…`
-performs the named operation. The parser must not guess whether an unrecognized
-positional token is a session ID.
+`session list` supports repeatable `--state`, `--origin`, `--policy-profile`,
+and `--tag` filters plus literal case-insensitive `--topic`, `--since`,
+`--before`, `--with-holds`, `--with-unapplied-proposals`, stable
+`--sort=created|last-turn|turns`, bounded `--limit`, and opaque
+`--cursor`. The default is last-turn descending with operator-session ID as a
+stable tie-break. JSON returns a page and next cursor, never an unbounded
+array.
 
-### 19.3 Output and interruption
+### 19.3 Export
+
+```text
+wt coordinator session export <operator-session-id>
+  [--format=markdown|json]
+  [--turns=<range>]
+  [--include-routing]
+  [--redact|--no-redact]
+  [--output=<path>]
+  [--overwrite]
+  [--confirm-sensitive]
+```
+
+Export is a deterministic read of retained exact turn content, structured
+records, tombstones, and an already-existing compaction when explicitly
+selected. It never invokes a model to create an export summary. Redaction is
+on by default. Markdown and JSON identify the lane/session, selected turns,
+digests, snapshot/routing provenance, usage quality, proposals, staleness,
+pruning, and the non-authoritative nature of advice.
+
+An output file is an external snapshot, not session authority. WT refuses to
+overwrite an existing path without explicit `--overwrite`. `--no-redact`
+requires an interactive sensitive-data confirmation or an explicit
+non-interactive `--confirm-sensitive`. Pruned content exports tombstones rather
+than being reconstructed.
+
+### 19.4 Output and interruption
 
 - Normal answer goes to stdout; diagnostics/budget/staleness go to stderr.
 - `ask --json` emits one documented result and disables decorative streaming.
@@ -738,7 +915,7 @@ positional token is a session ID.
   `interrupted`, applies no effects, and leaves the session resumable.
 - The result shows session ID, turn, class, endpoint alias, reported or
   estimated usage, remaining budget, staleness, unresolved references, and
-  resume command.
+  attach command.
 
 The complete terminal rendering, slash-command, streaming, signal, history,
 notification, accessibility, and attachment contract is normative in
@@ -767,6 +944,8 @@ notification, accessibility, and attachment contract is normative in
         artifact-references/
         proposals/
         open-questions/
+  amendment-requests/
+    <amendment-request-id>.json
   holds/
     <hold-id>.json
   context-policy.json
@@ -776,6 +955,29 @@ Session artifacts are local and ignored by Git. Open/suspended full text
 is required for continuity. Default file permissions are owner-only unless a
 configured multi-user coordinator route requires narrowly granted read access;
 write ownership remains with the operator/effect executor.
+
+### 20.1 Runtime, knowledge, policy, and pack evolution
+
+Operator sessions survive lane runtime/knowledge upgrades and accepted-pack
+seal changes:
+
+- historical turns and snapshots remain immutable and retain their original
+  runtime, knowledge, policy, index, and `packSealId` provenance;
+- a new turn captures current revisions and records any seal/policy transition;
+- a runtime upgrade does not itself imply that the accepted pack seal changed;
+- lane-owned policy is preserved unless an explicit previewed schema migration
+  is required;
+- session-index migration/rebuild is model-free, staged, verified, and explicit
+  in the upgrade/index plan;
+- an incompatible or failed migration blocks new turns safely without hiding
+  retained history; and
+- upgrade never silently clears pins, closes/suspends/archives sessions, prunes
+  content, or replaces missing references.
+
+A reference to an artifact absent from the current pack remains historical
+evidence about its recorded snapshot and is surfaced as unavailable/currently
+superseded. The operator may explicitly unpin, close, or fork after reviewing
+the transition.
 
 ## 21. Retention and privacy
 
@@ -812,6 +1014,7 @@ Pruning is explicit or policy-scheduled through an auditable mutation. It:
 | `operator-session-response-complete` | Typed validated answer recorded |
 | `operator-session-turn-interrupted` | Partial provisional output retained; no answer authority |
 | `operator-session-turn-failed` | Turn ended without complete response |
+| `operator-session-turn-cancelled-before-invocation` | Operator declined preflight; zero model invocation recorded |
 | `operator-session-suspended` | New turns disabled |
 | `operator-session-resumed` | Suspended session reopened |
 | `operator-session-closed` | Terminal closure |
@@ -820,10 +1023,12 @@ Pruning is explicit or policy-scheduled through an auditable mutation. It:
 | `operator-session-compacted` | Derived continuity artifact written |
 | `operator-session-budget-warning` | Soft threshold crossed |
 | `operator-session-budget-exceeded` | Model-backed turns blocked at hard threshold |
+| `operator-session-budget-granted` | Finite authorized grant created, expired, or consumed |
 | `operator-session-proposal-confirmed` | Operator confirmed proposal for revalidation |
 | `operator-session-proposal-rejected` | Operator or validator rejected proposal |
 | `operator-session-stale-response` | Relevant lane revision changed during turn |
 | `operator-session-pruned` | Full text replaced by retention tombstones |
+| `amendment-requested` | Confirmed handoff recorded without changing the pack |
 | `hold-placed` | Explicit/system scoped hold active |
 | `hold-released` | Hold removed/expired with reason |
 | `escalation-opened` | Attention thread and optional safety hold created |
@@ -838,10 +1043,13 @@ timestamp, policy/index revisions, and correlation IDs.
 | `OPERATOR_SESSION_NOT_FOUND` | Session ID is unknown in the selected lane |
 | `OPERATOR_SESSION_STATE_INVALID` | Requested action is illegal for lifecycle state |
 | `OPERATOR_SESSION_TURN_ACTIVE` | Another turn already runs for this session |
+| `OPERATOR_SESSION_OBSERVER_READ_ONLY` | Observer attachment attempted a turn or mutation |
 | `OPERATOR_SESSION_REFERENCE_AMBIGUOUS` | Explicit-looking reference has several candidates |
 | `OPERATOR_SESSION_REFERENCE_DENIED` | Included artifact is outside allowed scope |
 | `OPERATOR_SESSION_INDEX_STALE` | Journal/index checkpoint mismatch blocks resumption |
+| `OPERATOR_SESSION_POLICY_INVALID` | Required finite policy is missing, invalid, or migration-blocked |
 | `OPERATOR_SESSION_BUDGET_EXCEEDED` | Hard turn/session/lane limit blocks model invocation |
+| `OPERATOR_SESSION_CONFIRMATION_REQUIRED` | Policy requires explicit invocation/effect confirmation |
 | `OPERATOR_SESSION_ROUTE_UNAVAILABLE` | No endpoint meets the selected minimum class |
 | `OPERATOR_SESSION_RESPONSE_INVALID` | Endpoint did not return one valid advisory response |
 | `OPERATOR_SESSION_RESPONSE_STALE` | Relevant state changed during generation |
@@ -857,6 +1065,8 @@ Failures preserve message/turn identity when created and never imply an effect.
 ### 24.1 Session and memory
 
 - multi-turn follow-ups resolve prior turn references;
+- same-lane cross-session references load one bounded non-transitive capsule;
+- cross-lane, pruned, and truncated capsule behavior is explicit;
 - short-lived endpoints reconstruct continuity from the bounded working set;
 - full history is never preloaded;
 - stale session index blocks instead of scanning all turns;
@@ -873,7 +1083,9 @@ Failures preserve message/turn identity when created and never imply an effect.
 - operator override can escalate but not downgrade;
 - each turn records endpoint and telemetry quality;
 - route loss preserves session and pauses the turn;
-- session reserves remain distinct from automated recovery reserves; and
+- session reserves remain distinct from automated recovery reserves;
+- finite budget grants cannot increase lane limits or consume protected
+  reserves; and
 - increasing old session history does not increase the default working
   set beyond configured bounds.
 
@@ -884,6 +1096,8 @@ Failures preserve message/turn identity when created and never imply an effect.
 - no operator-session turn holds the lane mutation lock while a model runs;
 - advice and unconfirmed proposals cause zero effects;
 - confirmed proposals are revalidated against current state;
+- amendment requests create handoff evidence but no pack edit, implicit hold,
+  session suspension, or undefined command invocation;
 - illegal skip/scope/review changes route to amendment rather than apply;
 - explicit hold blocks only declared future effects;
 - Ctrl-C journals interruption and leaves no partial effect; and
@@ -896,14 +1110,19 @@ Failures preserve message/turn identity when created and never imply an effect.
 - full text uses restrictive permissions;
 - logs and JSON output redact configured secrets;
 - pruning preserves tombstones and immutable effect references; and
-- execution users receive only the turn content required for their invocation.
+- execution users receive only the turn content required for their invocation;
+  and
+- runtime/knowledge/pack evolution preserves old snapshots and performs no
+  silent pin, lifecycle, or retention mutation.
 
 ## 25. v1 acceptance criteria
 
 - [ ] Operators can ask one-shot and multi-turn questions through the CLI.
+- [ ] `ask --session` uses the same bounded turn pipeline as an attachment;
+      `ask` creates a resumable session unless `--one-shot` is explicit.
 - [ ] A lane supports multiple independent operator sessions; policy bounds
       open/concurrent use without imposing one session per lane.
-- [ ] Foreground attachments create, resume, switch, and detach without
+- [ ] Foreground attachments create, attach, switch, and detach without
       becoming durable memory or closing a session implicitly.
 - [ ] Every model-backed turn is short-lived, bounded, and independently
       routed.
@@ -913,6 +1132,8 @@ Failures preserve message/turn identity when created and never imply an effect.
 - [ ] Ambiguous references and classifications never silently under-route.
 - [ ] Full text is retained while a session is resumable.
 - [ ] Session working sets remain bounded as history grows.
+- [ ] Cross-session references are same-lane, bounded, non-transitive, and
+      provenance-bearing.
 - [ ] Compaction and session forking do not reset cumulative/lane budget.
 - [ ] Advisory turns do not hold the lane mutation lock during model work.
 - [ ] Automated cycles continue unless an explicit scoped hold blocks them.
@@ -920,11 +1141,17 @@ Failures preserve message/turn identity when created and never imply an effect.
 - [ ] Session advice has no direct mutation authority.
 - [ ] Effects require explicit confirmation, current-state validation, and the
       normal effect executor.
+- [ ] Amendment requests are durable handoffs, not implicit pack edits, holds,
+      lifecycle changes, or command execution.
+- [ ] Finite budget grants remain within lane-wide policy and protected
+      reserves.
 - [ ] Closed sessions are immutable; continuation uses fork.
 - [ ] Escalation creates a usable attention session even when no D3
       endpoint is available.
 - [ ] Interruption, failure, retention, pruning, and exact-replay availability
       are explicit and auditable.
+- [ ] Runtime/knowledge upgrades and pack-seal changes preserve historical
+      snapshots and never silently mutate pins or session lifecycle.
 
 ## 26. Decisions fixed by this draft
 
@@ -934,6 +1161,7 @@ Failures preserve message/turn identity when created and never imply an effect.
 | Model | First-class durable operator session composed of bounded turns |
 | Cardinality | Many operator sessions per lane; one active turn per session |
 | Attachment | Ephemeral foreground client bound to one lane and one current session |
+| Identity policy | Closed origin plus named policy profile and non-authoritative tags; never a decision-class downgrade |
 | Continuity | Watchtower journal/index working set, not provider session |
 | Mutation | Advisory by default; separately confirmed/revalidated effect proposals |
 | Concurrency | No lane lock during response generation |
@@ -946,6 +1174,10 @@ Failures preserve message/turn identity when created and never imply an effect.
 | Closed state | Terminal; use fork for later continuation |
 | Holds | Explicit, scoped, expiring, and independently journaled |
 | Escalation | Attention session plus optional system safety hold |
+| Amendment | Confirmed durable request/handoff; never an implicit pack mutation |
+| Budget override | Finite audited grant within lane-wide limits and protected reserves |
+| Export | Deterministic retained records with redaction; no generated summary |
+| Evolution | Historical snapshots survive runtime/knowledge/pack changes without silent mutation |
 | Streaming | Capability-dependent and provisional; capable TTY attachments default on, but only a validated complete response is authoritative |
 | Memory | Bounded sharded session indexes; no full-history fallback |
 

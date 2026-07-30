@@ -830,6 +830,12 @@ Operator-session reserves are distinct from automated reject/recovery
 capacity. Compaction, forking, or opening a new session does not reset lane-wide
 usage or replenish reservations.
 
+An operator-session policy profile may raise expected context/reserve needs but
+never selects or lowers the per-turn D1–D3 capability floor. A finite
+session-budget grant cannot increase lane-wide capacity, release another
+lane's reservation, consume protected recovery/escalation reserves, or convert
+unknown provider capacity into assumed availability.
+
 M0 never receives an endpoint. The coordinator router cannot choose its own
 model, use an implementation worker's session accidentally, or downgrade below
 the knowledge-policy minimum. When no capable route exists, coordinator

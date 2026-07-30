@@ -253,6 +253,7 @@ entries are ignored and reported.
         operator-tracker.md                   # local operational view
         coordinator/                          # routing, cycles, journals, projections
           operator-sessions/                  # bounded operator turns and memory
+          amendment-requests/                 # confirmed handoff evidence, never pack edits
           holds/                              # explicit scoped automation holds
         briefs/                               # lane-specific coordinator/worker briefs
         bin/                                  # managed runtime/policy links
@@ -522,8 +523,9 @@ Errors go to stderr. Normal human or JSON output goes to stdout.
 | `wt skill install <codex\|cursor\|claude> [--scope=<scope>]` | ❌ | Install the bundled coordinator knowledge pack adapter |
 | `wt coordinator index|status|context|explain|cycle|escalate` | ❌ | Build/inspect pack indexes or run bounded coordinator decision cycles |
 | `wt coordinator ask` | ❌ | Ask one bounded question, optionally within an existing operator session |
-| `wt coordinator session [--resume=<id>]` | ❌ | Create or resume a polished foreground operator-session attachment |
-| `wt coordinator session list|show|history|suspend|resume|close|fork|pin|unpin|compact|apply` | ❌ | Manage operator-session lifecycle, memory, and proposed effects |
+| `wt coordinator session` | ❌ | Create a new session and polished foreground attachment |
+| `wt coordinator session attach <id> [--observe]` | ❌ | Attach interactively to an existing session |
+| `wt coordinator session list|show|history|suspend|resume|close|fork|pin|unpin|compact|export|amendment|budget|apply` | ❌ | Manage operator-session lifecycle, memory, handoffs, grants, and proposed effects |
 | `wt coordinator hold place|release|list` | ❌ | Manage explicit scoped automation holds |
 | `wt events tail|latest` | ❌ | Read validated durable event projections |
 | `wt batch ready` | ❌ | Calculate ready candidates and blocking reasons without selecting ambiguously |
@@ -569,9 +571,13 @@ Preflight:
 10. stage the selected runtime and knowledge versions;
 11. validate coordinator endpoint capability floors, fallbacks, and budget
     reserves against the installed knowledge policy;
-12. deterministically build and verify coordinator pack indexes against the
+12. resolve and validate a finite versioned operator-session policy baseline,
+    profiles, lane-wide limits, protected reserves, retention, and context
+    bounds;
+13. deterministically build and verify coordinator pack indexes against the
     accepted `packSealId`; and
-13. show the files, links, local bindings, and index entries to create.
+14. show the files, links, local bindings, policy provenance, and index entries
+    to create.
 
 Init never scaffolds or relocates the committed implementation pack. Pack
 creation belongs to the pack-design process or project authors.
@@ -582,9 +588,11 @@ Creates once:
 - `repositories.local.json`;
 - lane config;
 - lane state;
-- coordinator routing/context policy, empty cycle journal/projections, and
+- lane-owned coordinator routing/context policy materialized from the installed
+  versioned baseline, empty cycle journal/projections, and
   coordinator/implementer briefs;
-- empty operator-session journal/index roots and hold registry;
+- empty operator-session journal/index roots, amendment-request store, and hold
+  registry;
 - deterministic seal-bound coordinator pack indexes;
 - model-plan template;
 - local operator tracker;
@@ -614,12 +622,13 @@ It reports:
 - all logical repository bindings, local paths, branches, access, and worktree
   modes;
 - lane status and active batch from lane state;
-- implementation and review tmux session names and existence;
+- qualified worker-session implementation/review names and existence;
 - watcher status and last heartbeat when available;
 - coordinator queue, active cycle, decision class, route availability, last
   outcome, pack/runtime index freshness, and budget warning;
 - open/suspended/active operator-session counts, session budget warnings,
-  stale proposals, and active scoped holds;
+  stale proposals, active scoped holds, and a policy-bounded recent/actionable
+  session summary with truncation metadata;
 - latest valid durable worker event;
 - accepted/total batch count when derivable;
 - configured, installed, and available runtime versions;
@@ -657,7 +666,7 @@ JSON output has a versioned top-level shape:
   ],
   "lifecycle": {"status": "active", "activeBatch": "22"},
   "health": {"status": "attention", "warnings": []},
-  "sessions": {"implementer": null, "reviewer": null},
+  "workerSessions": {"implementer": null, "reviewer": null},
   "watcher": {"running": false, "lastHeartbeatAt": null},
   "coordinator": {
     "activeCycle": null,
@@ -665,7 +674,13 @@ JSON output has a versioned top-level shape:
     "routeAvailable": true,
     "lastOutcome": null,
     "packIndex": {"status": "valid", "packSealId": "seal-43dc"},
-    "operatorSessions": {"open": 0, "activeTurns": 0, "budgetWarning": false},
+    "operatorSessions": {
+      "open": 0,
+      "activeTurns": 0,
+      "budgetWarning": false,
+      "recent": [],
+      "recentTruncated": false
+    },
     "holds": []
   },
   "runtime": {"configured": "1.0.0", "available": true}
@@ -674,6 +689,12 @@ JSON output has a versioned top-level shape:
 
 New optional fields may be added within schema version 1. Existing fields may
 not be removed or change type.
+
+Status never embeds an unbounded session list. `recent` uses a documented
+policy-bounded maximum and stable last-turn ordering; complete discovery and
+pagination belong to `wt coordinator session list`. Each recent entry contains
+only ID, origin/profile, state, topic, turn count, last-turn time, active-turn
+flag, and actionable hold/proposal counts—never turn text or full proposals.
 
 ### 11.4 `wt watch`
 
@@ -711,12 +732,22 @@ Upgrade order:
 3. validate the new packaged manifest and checksums;
 4. stage the immutable runtime if absent;
 5. calculate marker schema changes and managed-link changes;
-6. stop on unmanaged collisions;
-7. atomically update links;
-8. write manifests last;
-9. print changed, unchanged, preserved, and conflicted paths.
+6. preview any required lane-owned policy/session schema migration without
+   changing operator values silently;
+7. stage and verify any model-free session-index migration/rebuild;
+8. stop on unmanaged collisions or incompatible/failed migration;
+9. atomically update links and required migrations;
+10. write manifests last;
+11. print changed, unchanged, preserved, migrated, and conflicted paths.
 
-Upgrade never overwrites lane-owned or runtime-generated artifacts.
+Upgrade never overwrites lane-owned or runtime-generated artifacts except an
+explicit previewed compatible schema migration that preserves operator values
+and audit history.
+
+Historical operator-session turns preserve their original runtime, knowledge,
+policy, index, and pack-seal provenance. Upgrade never silently clears pins,
+changes session lifecycle, archives sessions, or prunes content. A runtime
+upgrade does not imply an accepted-pack seal change.
 
 `--to=<version>` selects an installed or package-provided compatible runtime.
 Downgrade requires `--allow-downgrade` and must fail when the lane schema is not
@@ -747,15 +778,25 @@ Checks are grouped and each returns `pass`, `warn`, `fail`, or `skip`:
 - coordinator policy/routing compatibility, endpoint capability floors,
   pack-index freshness/integrity, journal integrity, cursor consistency, and
   unresolved uncertain effects;
-- operator-session lifecycle/journal/index consistency, attachment-safe
-  retention permissions,
-  budget accounting, stale proposals, and hold expiry/scope;
+- operator-session policy presence/schema, finite limits, profiles, protected
+  reserves, and maximum-open/concurrent constraints;
+- session identity/lifecycle validity, journal sequence/schema, turn artifact
+  completeness, and journal/index checkpoint/digest consistency;
+- operator-session usage versus the lane-wide ledger, grant bounds/expiry, and
+  retention usage against policy warning thresholds;
+- owner-only or explicitly authorized full-text permissions and
+  retention-coupled UI-cache permissions;
+- unapplied proposals requiring revalidation, expired holds, idle sessions,
+  and orphaned session artifacts; stale applicability is not inferred solely
+  from any lane revision change;
 - Git ignore coverage for `/.watchtower/`;
 - optional speech stack.
 
-Core dependency or schema failures produce exit code 4. Optional speech checks
-are warnings. Doctor is read-only in v1; repair must be an explicit init or
-upgrade action.
+Policy/schema corruption, journal/index mismatch, accounting drift, or unsafe
+permissions produce exit code 4. Limit proximity, idle sessions, expired
+artifacts awaiting normal cleanup, and orphan warnings do not. Optional speech
+checks are warnings. Doctor is read-only in v1; repair/rebuild/migration must be
+an explicit init, index, retention, or upgrade action.
 
 ### 11.8 `wt skill install`
 
@@ -801,12 +842,21 @@ The complete command, lifecycle, memory, budget, concurrency, retention, and
 effect-confirmation contract is defined in
 [operator-session-draft.md](operator-session-draft.md).
 
-- `ask` runs one bounded turn and returns an operator-session ID;
-- bare `session` creates or resumes a foreground attachment composed of the
-  same bounded turns;
+- `ask` runs one bounded turn and returns an operator-session ID; when targeting
+  an existing session it uses the identical bounded working-set pipeline;
+- bare `session` creates a new session and foreground attachment;
+- `session attach <id>` attaches without changing lifecycle, while
+  `session resume <id>` only changes `suspended → open`;
 - a lane may contain many operator sessions, while each session has at most one
   active turn;
-- session lifecycle/history/pin/compact operations are explicit;
+- observer attachments are M0/read-only and consume no endpoint;
+- session lifecycle/history/pin/compact/export operations are explicit and
+  bounded;
+- cross-session turn references are same-lane, capped, non-transitive capsules;
+- amendment requests create durable handoffs without implicit pack edits,
+  holds, or session lifecycle changes;
+- budget overrides are finite grants within lane-wide limits and protected
+  reserves;
 - session answers are advisory;
 - applying a proposal is a separate confirmed and revalidated effect;
 - automated cycles continue during model responses unless a scoped hold blocks
@@ -1056,16 +1106,23 @@ v1 is complete only when:
 - [ ] operators can conduct multiple bounded multi-turn sessions per lane whose
       continuity comes from local journal/index state rather than provider
       sessions;
-- [ ] polished foreground attachments can create, resume, detach, and observe
+- [ ] polished foreground attachments can create, attach, detach, and observe
       those sessions without becoming memory or effect authority;
+- [ ] attachment, lifecycle resume, observer, and scripting commands have
+      unambiguous syntax and fail-closed confirmation behavior;
+- [ ] cross-session references and status/list output remain bounded as session
+      count/history grows;
+- [ ] amendment requests, deterministic export, and finite budget grants
+      preserve their authority and retention boundaries;
 - [ ] advisory sessions continue alongside automation unless an explicit
       scoped hold applies;
 - [ ] operator-session proposals require confirmation and current-state
       revalidation before the sole effect executor may act;
 - [ ] `wt doctor` detects missing dependencies, broken links, unsafe config,
       and missing implementation-pack structure;
-- [ ] `wt upgrade --apply` changes only manifest-owned paths and can retain the
-      old runtime on failure;
+- [ ] `wt upgrade --apply` changes only manifest-owned paths plus explicitly
+      previewed compatible schema migrations, can retain the old runtime on
+      failure, and preserves operator-session history and values;
 - [ ] coordinator knowledge is bundled and installable for Codex, Cursor, and
       Claude;
 - [ ] a fresh lane completes one implementer → reviewer → accept cycle using
@@ -1102,8 +1159,13 @@ v1 is complete only when:
 | Operator session | Durable bounded advisory turns with per-turn routing and local continuity. |
 | Operator-session cardinality | Many per lane; policy bounds open sessions/concurrent turns, not historical identity count. |
 | Session attachment | Foreground lane-bound UI attached to one operator session at a time; not durable authority. |
+| Attachment syntax | Bare `session` creates; `session attach` attaches; `session resume` changes suspended lifecycle only. |
+| Session identity profile | Closed origin plus named policy profile/tags; turn routing remains independently guarded. |
 | Session mutation | Separate confirmed proposal through the normal effect executor. |
 | Session concurrency | At most one active turn per session; no lane lock during model response; only explicit scoped holds pause effects. |
+| Session handoff | Amendment request is durable evidence, not a pack edit or implicit hold. |
+| Session budget override | Finite audited grant within lane-wide limits and protected reserves. |
+| Session evolution | Historical snapshots survive runtime/knowledge/pack changes without silent lifecycle or pin mutation. |
 
 ## 19. Deferred questions
 

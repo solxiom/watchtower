@@ -657,10 +657,18 @@ v1 proposal types are closed and versioned:
 - `select-correction-route`;
 - `request-reroute`;
 - `propose-reconciliation`;
+- `request-pack-amendment`;
+- `grant-session-budget`;
 - `escalate`.
 
 Adding a proposal type requires a knowledge-policy update, validator, effect
 mapping, fixtures, and spec update.
+
+`request-pack-amendment` is permitted only for an operator-session/amendment
+envelope and maps to a durable handoff record/event, never a pack edit.
+`grant-session-budget` is permitted only with explicit operator authority and
+maps to a finite grant within current lane-wide limits/protected reserves,
+never a permanent policy rewrite.
 
 ## 12. Validation and effect execution
 
@@ -773,9 +781,9 @@ The complete v1 contract lives in
 attachment contract lives in
 [cli-session-draft.md](cli-session-draft.md).
 
-An operator session is a durable sequence of bounded advisory turns. Each turn uses
-a versioned lane snapshot, bounded recent/pinned memory, per-turn routing, and a
-typed response. It does not hold the lane mutation lock while a model runs.
+An operator session is a durable sequence of bounded advisory turns. Each turn
+uses a versioned lane snapshot, bounded recent/pinned memory, per-turn routing,
+and a typed response. It does not hold the lane mutation lock while a model runs.
 Automated cycles continue unless an explicit scoped hold applies.
 
 Operator-session advice has no effect authority. Any proposed mutation requires
@@ -908,6 +916,7 @@ Budgets reserve:
       publication-status.json
       tracker-summary.md
     operator-sessions/                 # operator-session-draft.md
+    amendment-requests/                # confirmed handoff evidence
     holds/                              # explicit scoped automation holds
 ```
 
@@ -954,8 +963,9 @@ producer, policy version, and relevant artifact digests.
 | `wt coordinator cycle --trigger=<event-id> [--dry-run]` | Yes unless dry-run | Route and process one idempotent cycle |
 | `wt coordinator escalate [--cycle=<id>] --reason=<text>` | Yes | Open an attention operator session and any policy-required safety hold |
 | `wt coordinator ask` | Journal only | Run one bounded advisory turn |
-| `wt coordinator session [--resume=<id>]` | Journal only | Create/resume a foreground attachment composed of bounded turns |
-| `wt coordinator session ...` | Varies | Inspect/manage session history, lifecycle, pins, compaction, and proposed effects |
+| `wt coordinator session` | Journal only | Create a session and foreground attachment |
+| `wt coordinator session attach <id> [--observe]` | No | Attach to an existing session without changing lifecycle |
+| `wt coordinator session ...` | Varies | Inspect/manage session history, lifecycle, pins, compaction, export, handoffs, grants, and proposed effects |
 | `wt coordinator hold place|release|list` | Varies | Manage explicit scoped automation holds |
 | `wt events tail [--since=<cursor>]` | No | Read validated durable events |
 | `wt events latest [--batch=<id>]` | No | Show latest relevant event projection |

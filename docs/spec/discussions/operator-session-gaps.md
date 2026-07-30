@@ -1,7 +1,8 @@
 # Discussion: Operator Session Spec Gaps and Suggested Resolutions
 
-Status: **Proposed**
+Status: **Resolved**
 Started: 2026-07-30
+Resolved: 2026-07-30
 Related:
 
 - `docs/spec/operator-session-draft.md`
@@ -11,6 +12,41 @@ Related:
 - `docs/spec/architecture.md`
 - `docs/spec/discussions/operator-coordinator-conversation.md`
 - `docs/spec/discussions/cli-session-ux.md`
+
+## Resolution
+
+Accepted with substantial corrections in
+[../operator-session-draft.md](../operator-session-draft.md),
+[../cli-session-draft.md](../cli-session-draft.md),
+[../coordinator-automation-draft.md](../coordinator-automation-draft.md),
+[../v1-draft.md](../v1-draft.md), and
+[../architecture.md](../architecture.md).
+
+The normative resolution is:
+
+| Gap | Outcome |
+|-----|---------|
+| 1 | Bare `session` creates, `session attach <id>` attaches, and lifecycle `resume` only changes `suspended → open`; no `unsuspend` command |
+| 2 | Read-only observer attachment adopted over durable validated events; no provisional cross-process relay in v1 |
+| 3 | Same-lane bounded non-transitive turn reference capsules adopted |
+| 4 | Confirmed amendment-request handoff adopted; no implicit hold, suspension, pack edit, or undefined command invocation |
+| 5 | Broad purpose/kind taxonomy rejected; closed origin plus named policy profile and non-authoritative tags adopted |
+| 6 | Init must materialize/validate a finite versioned operator-session policy; universal token numbers rejected |
+| 7 | Deterministic redacted export adopted; model-generated export summaries rejected |
+| 8 | Confirmation modes adopted with policy floors and fail-closed non-interactive behavior; silent disable/`skip` rejected |
+| 9 | `//` prose escape adopted; unknown leading slash remains an error, never a paid turn |
+| 10 | Bounded filtered/cursor-paginated listing adopted without kind filtering |
+| 11 | Explicit read-only doctor integrity checks adopted with policy-defined thresholds |
+| 12 | Historical session survival adopted; runtime upgrade/pack seal are distinguished and silent pin/lifecycle mutation rejected |
+| 13 | Qualified `workerSessions`/`operatorSessions` output adopted |
+| 14 | Existing reconnection contract strengthened with a bounded deterministic change projection |
+| 15 | Finite audited grants adopted; permanent ceiling changes and cross-session transfer rejected |
+| 16 | Bounded recent/actionable status summaries adopted; unbounded embedded session arrays rejected |
+| 17 | Transport-neutral internal presentation boundary clarified; no public socket/IDE/web protocol promised in v1 |
+| 18 | `ask --session` uses the attachment turn pipeline; new asks stay resumable unless explicit `--one-shot` |
+
+The remaining discussion preserves the original gap analysis and proposed
+solutions. Where it conflicts with this resolution, the normative drafts win.
 
 ## 1. Problem statement
 
@@ -342,7 +378,7 @@ auto-created holds; the Q&A should not.
 
 Add a `kind` field to session identity with a closed v1 vocabulary:
 
-```json
+```jsonc
 {
   "operatorSessionId": "opsess-3f8a1b2c",
   "kind": "investigation",
@@ -623,7 +659,7 @@ Add a preference and a `/confirm-mode` toggle:
 
 **Operator preference:**
 
-```json
+```jsonc
 {
   "chat": {
     "confirmBeforeInvoke": "off" | "d2-d3" | "d3-only" | "all"

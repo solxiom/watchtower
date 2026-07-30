@@ -280,6 +280,10 @@ The v1 decision plane is defined in
 | `OperatorSessionManager` | Own operator-session identity, lifecycle, turns, retention, and forks |
 | `OperatorReferenceResolver` | Resolve exact lane/turn references conservatively through indexes |
 | `OperatorSessionMemoryIndex` | Provide bounded recent/pinned/linked turn working sets |
+| `TurnReferenceCapsuleBuilder` | Project one same-lane referenced turn into bounded non-transitive evidence |
+| `OperatorSessionPolicyResolver` | Resolve versioned baseline plus lane-owned finite profiles, limits, reserves, and retention |
+| `AmendmentRequestStore` | Record confirmed pack/spec handoffs without changing accepted artifacts |
+| `OperatorSessionBudgetGrantStore` | Track finite audited grants within lane-wide limits and reserves |
 | `OperatorSessionAttachment` | Bind a foreground terminal to one session and translate input/presentation events |
 | `OperatorSessionRenderer` | Render typed presentation events accessibly without owning product behavior |
 | `ScopedHoldStore` | Manage explicit scoped expiring blocks on future effects |
@@ -342,7 +346,8 @@ identities never enter the committed pack.
 
 The v1 `coordinator/` subtree contains routing/context policy, bounded cycle
 artifacts, deterministic pack indexes, append-only decision/effect journals,
-generated projections, operator sessions, and scoped holds. Committed
+generated projections, operator sessions, amendment-request handoffs, and
+scoped holds. Committed
 tracker prose remains project-owned; mechanical coordination updates the local
 projection rather than arbitrary Markdown.
 
@@ -429,6 +434,11 @@ Attachments are foreground presentation clients and hold neither lane authority
 nor provider memory. Automation continues unless an explicit scoped hold blocks
 the relevant future effect. Their terminal and presentation-event contract is
 defined in [cli-session-draft.md](cli-session-draft.md).
+
+Typed presentation events form a transport-neutral internal boundary for
+foundation/PTY testing. They are not a public wire protocol in v1; remote,
+socket, IDE, or web transports require separate authentication, replay,
+backpressure, and compatibility contracts.
 
 ## 7. State evolution
 
@@ -609,6 +619,10 @@ details.
 | A-026 | Pause automation only through explicit scoped holds | Discussion alone must not create hidden scheduling state |
 | A-027 | Allow many operator sessions per lane and distinguish them from UI attachments | Focus and continuity must not imply one lane-wide chat or persistent process |
 | A-028 | Drive the terminal through typed presentation events | A polished UI must reuse shared command/query authority and remain replaceable |
+| A-029 | Separate create, attach, and lifecycle resume commands | Terminal binding and durable lifecycle are different operations |
+| A-030 | Use bounded same-lane turn capsules for cross-session context | Useful continuity must not create transitive or unbounded history loading |
+| A-031 | Model amendment and budget changes as confirmed bounded handoffs/grants | Operator discussion cannot silently rewrite packs, policy, or protected reserves |
+| A-032 | Treat presentation events as internal transport-neutral contracts in v1 | Testability is required without prematurely promising a public remote protocol |
 
 ## 13. Architecture fitness checks
 
@@ -639,6 +653,9 @@ Every implementation change should preserve these properties:
   revalidated;
 - one lane may have many operator sessions, while each session permits at most
   one active turn and every attachment is ephemeral;
+- cross-session references load one bounded same-lane non-transitive capsule;
+- amendment requests and budget grants pass through typed confirmation and
+  never imply pack mutation, implicit holds, or lane-budget expansion;
 - every lane has one authoritative control home and stable `laneId`;
 - committed packs refer to logical repository IDs, never machine paths;
 - concurrent writable lane bindings are conflict-checked;
