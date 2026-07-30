@@ -1,12 +1,42 @@
 # Discussion: Human-Operator ↔ Coordinator Conversation Model
 
-Status: **Proposed**
+Status: **Resolved**
 Started: 2026-07-30
+Resolved: 2026-07-30
 Related:
 
 - `docs/spec/coordinator-automation-draft.md` §§ 5, 15, 19
 - `docs/spec/v1-draft.md` §§ 5, 10–11
 - `docs/spec/discussions/coordinator-cost-and-automation.md` §§ 1.4, 3.7
+
+## Resolution
+
+Accepted with corrections in
+[`../operator-conversation-draft.md`](../operator-conversation-draft.md) as
+required Watchtower v1 behavior.
+
+The resolution keeps first-class durable multi-turn conversations, M0 answers,
+per-turn D1–D3 routing, bounded memory, journaling, budgets, terminal CLI UX,
+allocation reserves, and escalation conversations. It changes the proposal in
+these important ways:
+
+- conversation turns are advisory and never mutate lane state directly;
+- model generation does not hold the lane mutation lock;
+- automated cycles continue unless an explicit scoped, expiring hold applies;
+- conversation effects require separate operator confirmation and current-state
+  revalidation through the normal effect executor;
+- full text is required while a conversation remains resumable;
+- exact replay is unavailable after policy-driven pruning;
+- compaction/forking cannot reset cumulative or lane-wide usage;
+- M0 is limited to exactly provable query forms; unknown natural language
+  defaults conservatively to D2 and hard guards raise it to D3;
+- endpoint/class selection occurs per turn rather than per conversation;
+- closed conversations are terminal and later work uses a fork; and
+- safety escalation creates an attention thread/hold even when no D3 model is
+  available.
+
+The remaining sections preserve the original proposal and evidence. Where they
+conflict with this resolution, the normative operator-conversation draft wins.
 
 ## 1. Problem statement
 

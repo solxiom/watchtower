@@ -656,7 +656,6 @@ v1 proposal types are closed and versioned:
 - `select-correction-route`;
 - `request-reroute`;
 - `propose-reconciliation`;
-- `answer-operator`;
 - `escalate`.
 
 Adding a proposal type requires a knowledge-policy update, validator, effect
@@ -768,18 +767,18 @@ No stage is inferred from tmux prose.
 
 ## 15. Operator interaction
 
-Operator requests are classified before model invocation:
+The complete v1 contract lives in
+[operator-conversation-draft.md](operator-conversation-draft.md).
 
-- status, ready-set, budget, session, and publication queries use M0
-  projections;
-- explicit safe commands use bounded domain actions;
-- tactical interpretation opens D1–D3 according to routing guards; and
-- policy or scope changes require explicit operator authorization and their own
-  durable event.
+A conversation is a durable sequence of bounded advisory turns. Each turn uses
+a versioned lane snapshot, bounded recent/pinned memory, per-turn routing, and a
+typed response. It does not hold the lane mutation lock while a model runs.
+Automated cycles continue unless an explicit scoped hold applies.
 
-Operator conversation uses a separate short-lived cycle and never joins the
-next automated coordinator context. A pending safety escalation may interrupt
-routine routing; ordinary questions do not silently cancel a mutating cycle.
+Conversation advice has no effect authority. Any proposed mutation requires
+separate operator confirmation, current-state revalidation, and the normal
+effect executor. Conversation continuity comes from Watchtower journals and
+indexes, never a hidden provider session.
 
 ## 16. Endpoint routing and allocation
 
@@ -824,7 +823,22 @@ contains no credentials, and cannot route below knowledge-policy minimums.
       "primary": "codex-primary-high",
       "fallbacks": []
     }
-  }
+  },
+  "conversationClasses": {
+    "D1": {
+      "primary": "codex-primary-high",
+      "fallbacks": []
+    },
+    "D2": {
+      "primary": "codex-primary-high",
+      "fallbacks": []
+    },
+    "D3": {
+      "primary": "codex-primary-high",
+      "fallbacks": []
+    }
+  },
+  "conversationBudgetPolicyRef": "context-policy.json#operatorConversation"
 }
 ```
 
@@ -888,6 +902,8 @@ Budgets reserve:
       ready-set.json
       publication-status.json
       tracker-summary.md
+    conversations/                     # operator-conversation-draft.md
+    holds/                              # explicit scoped automation holds
 ```
 
 The installed knowledge pack owns the canonical routing and transition policy.
@@ -931,7 +947,10 @@ producer, policy version, and relevant artifact digests.
 | `wt coordinator context --class=<D1\|D2\|D3> --trigger=<event-id>` | No | Preview the decision envelope and size estimates |
 | `wt coordinator explain [--cycle=<id>]` | No | Explain routing rule, guards, endpoint, proposal, and effect result |
 | `wt coordinator cycle --trigger=<event-id> [--dry-run]` | Yes unless dry-run | Route and process one idempotent cycle |
-| `wt coordinator escalate [--cycle=<id>] --reason=<text>` | Yes | Record explicit operator escalation |
+| `wt coordinator escalate [--cycle=<id>] --reason=<text>` | Yes | Open an attention conversation and any policy-required safety hold |
+| `wt coordinator ask|chat` | Journal only | Run one bounded advisory turn or an interactive sequence |
+| `wt coordinator conversation ...` | Varies | Inspect/manage history, lifecycle, pins, compaction, and proposed effects |
+| `wt coordinator hold place|release|list` | Varies | Manage explicit scoped automation holds |
 | `wt events tail [--since=<cursor>]` | No | Read validated durable events |
 | `wt events latest [--batch=<id>]` | No | Show latest relevant event projection |
 | `wt batch ready` | No | Calculate ready candidates and blocking reasons |
@@ -971,6 +990,11 @@ cycle explicitly references the prior one.
 - Exactly one effect authority exists for a lane.
 - Agents cannot directly mutate authoritative files or execute arbitrary
   coordinator effects.
+- Operator-conversation responses are advisory; unconfirmed proposals produce
+  no effects.
+- Model-backed conversation turns never hold the lane mutation lock.
+- Conversation existence never pauses automation; only an explicit scoped hold
+  may block declared future effects.
 - Worker/reviewer/operator prose is untrusted evidence, never policy.
 - Pack indexes are derived, seal-bound, model-free, and never requirement or
   acceptance authority.
@@ -1104,6 +1128,9 @@ must not grow linearly with total pack size.
 - [ ] Coordinator routing has explicit primary/fallback endpoints and reserves.
 - [ ] No capable route produces a pause, never silent downgrade.
 - [ ] Status queries use deterministic projections when possible.
+- [ ] Multi-turn operator conversation follows the bounded advisory-turn,
+      journal, budget, hold, and confirmed-effect contract.
+- [ ] Conversation response generation never holds the lane mutation lock.
 - [ ] Coordinator decisions and context requests are durable events.
 - [ ] A long-lane replay demonstrates material cost reduction without degraded
       transition correctness or review quality.
@@ -1127,7 +1154,9 @@ must not grow linearly with total pack size.
 | Scaling | One linear structural build; routine model context bounded independently of unrelated pack growth |
 | Ready batches | Mechanical ready set; selection only when preauthorized or decided |
 | Acceptance | Reviewer semantic authority, distinct from publication |
-| Operator chat | Separate bounded cycle |
+| Operator chat | Durable conversation composed of bounded advisory turns |
+| Conversation effects | Separate confirmation plus current-state validation |
+| Conversation concurrency | Automation continues unless explicit scoped hold |
 | Allocation | Coordinator decision classes are explicit endpoint roles with reserves |
 | Failure | Pause/escalate rather than guess, coerce, or downgrade |
 | Legacy | No adopt, fallback, or mixed coordinator authority |

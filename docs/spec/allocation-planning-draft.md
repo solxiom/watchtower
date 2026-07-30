@@ -813,12 +813,22 @@ allocation slots:
 - `coordinator:D1`;
 - `coordinator:D2`;
 - `coordinator:D3`; and
-- class-specific operator-conversation or escalation reserves.
+- `coordinator:operator-conversation:D1`;
+- `coordinator:operator-conversation:D2`;
+- `coordinator:operator-conversation:D3`; and
+- escalation and conversation-compaction reserves.
 
 The plan assigns an eligible primary endpoint pool, explicit fallbacks, context
 budget, concurrency, and usage reserve for each class. It need not predict
 every cycle or bind one endpoint for the entire lane. Selection occurs when a
 cycle opens against the active snapshot and reservations.
+
+Operator conversation follows
+[operator-conversation-draft.md](operator-conversation-draft.md). Each turn is
+routed independently; endpoint continuity is a preference only. Conversation
+reserves are distinct from automated reject/recovery capacity. Compaction,
+forking, or opening a new conversation does not reset lane-wide usage or
+replenish reservations.
 
 M0 never receives an endpoint. The coordinator router cannot choose its own
 model, use an implementation worker's session accidentally, or downgrade below
@@ -1195,6 +1205,8 @@ For fixed normalized inputs:
       a capable route or an explicit infeasibility result.
 - [ ] D1–D3 coordinator classes have capability-safe endpoint pools and
       reserves, while M0 consumes no endpoint.
+- [ ] Operator-conversation D1–D3 turns have separate pools/reserves and cannot
+      consume all automated recovery capacity or reset usage through forks.
 - [ ] Cost optimization cannot weaken pack capability floors.
 - [ ] Account, session, and provider independence policies are validated.
 - [ ] Capacity values preserve provenance and unknown values are never rendered

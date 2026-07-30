@@ -214,6 +214,10 @@ Scope:
 - prepare/attempt/verify journals for tmux launch and Git publication;
 - short-lived decision-agent invocation;
 - coordinator queue, cursor, usage, status, explain, and durable events;
+- bounded operator `ask`/`chat`, conversation lifecycle/history/indexes,
+  per-turn routing, retention, and budget accounting;
+- advisory conversation proposals with separate confirmation/revalidation;
+- explicit scoped expiring holds and non-blocking conversation concurrency;
 - `wt coordinator`, `wt events`, and `wt batch ready` commands; and
 - non-mutating shadow/replay fixtures before active effects.
 
@@ -225,12 +229,14 @@ Key proof:
 - invalid/stale proposals cannot mutate lane state;
 - duplicate/interrupted cycles are idempotently recoverable;
 - reviewer acceptance survives partial publication;
-- loss of a required decision endpoint pauses rather than downgrades; and
+- loss of a required decision endpoint pauses rather than downgrades;
 - long-lane replay reduces coordinator consumption without reducing transition
   correctness or review quality;
 - 30/300/3,000/10,000-batch fixtures keep routine envelope size bounded after
   indexing; and
-- stale/missing/corrupt indexes pause cycles instead of scanning pack prose.
+- stale/missing/corrupt indexes pause cycles instead of scanning pack prose;
+- long multi-turn conversation remains bounded, does not hold the lane mutation
+  lock, and cannot mutate state without confirmed revalidation.
 
 Dependencies: M1 read projections, M2 runtime/knowledge policy, M3 managed lane,
 and M4 watcher operation. May be developed in shadow fixtures alongside M5.
@@ -249,6 +255,8 @@ Scope:
 - proof that copied-template lanes remain outside discovery and mutation;
 - one implementer → reviewer → accept cycle;
 - one M0 dispatch, D2 reject/correction cycle, and partial-publication recovery;
+- one multi-turn operator conversation spanning M0/D2/D3 turns, concurrent
+  automated state change, a stale advisory response, and confirmed proposal;
 - large-pack proof that routine coordinator model input does not scale with
   unrelated pack size;
 - command/help/spec consistency audit;

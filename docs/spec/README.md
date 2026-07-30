@@ -10,10 +10,11 @@ Normative product docs for the `wt` CLI.
 | [pack-design-draft.md](pack-design-draft.md) | Draft | Canonical accepted-spec to implementation-pack process |
 | [allocation-planning-draft.md](allocation-planning-draft.md) | Draft | CLI/plan/model discovery plus quality-first implementation capacity allocation |
 | [coordinator-automation-draft.md](coordinator-automation-draft.md) | Draft | Normative v1 pack indexing, bounded decision cycles, zero-token routing, and validated effects |
+| [operator-conversation-draft.md](operator-conversation-draft.md) | Draft | Normative v1 bounded multi-turn operator conversation and confirmed-effect boundary |
 | [discussions/lane-directory-path.md](discussions/lane-directory-path.md) | Resolved | `.watchtower/lanes/<slug>/` execution-overlay decision |
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
 | [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |
-| [discussions/operator-coordinator-conversation.md](discussions/operator-coordinator-conversation.md) | Proposed | Multi-turn human-operator conversation model, context inheritance, and conversation journals |
+| [discussions/operator-coordinator-conversation.md](discussions/operator-coordinator-conversation.md) | Resolved | Human/coordinator conversation continuity, budget, UX, and concurrency proposal |
 
 ## Conventions
 

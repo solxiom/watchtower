@@ -68,6 +68,7 @@ Initiative
         ├── AllocationPlan [implementation lanes, 0..n revisions]
         ├── RuntimeBinding
         ├── CoordinatorCycle [0..n, append-only journal]
+        ├── OperatorConversation [0..n, bounded turn journal]
         ├── WorkerSession [0..n]
         └── WorkerEvent [append-only]
 
@@ -138,6 +139,8 @@ remains deferred.
 | Is the proposal legal now? | Knowledge policy plus Watchtower validator |
 | Who commits the bounded effect? | Single Watchtower effect executor |
 | What coordinator lookup data is valid? | Derived pack index matching the accepted `packSealId` |
+| What did an operator conversation say? | Retained append-only full-text turn journal |
+| Does conversation advice change the lane? | No; only separately confirmed/revalidated proposals may reach the effect executor |
 
 Watchtower can detect contradictions between authorities. It must not resolve a
 coordinator-policy contradiction by silently editing lane state.
@@ -273,6 +276,10 @@ The v1 decision plane is defined in
 | `CoordinatorEffectPlanner` | Convert a valid proposal into bounded previewable effects |
 | `CoordinatorEffectExecutor` | Apply one idempotent effect plan and journal external attempts |
 | `CoordinatorProjection` | Derive ready set, lane, batch, and publication read models |
+| `OperatorConversationManager` | Own conversation identity, lifecycle, turns, retention, and forks |
+| `OperatorReferenceResolver` | Resolve exact lane/turn references conservatively through indexes |
+| `ConversationMemoryIndex` | Provide bounded recent/pinned/linked turn working sets |
+| `ConversationHoldStore` | Manage explicit scoped expiring blocks on future effects |
 
 The router may derive a uniquely preauthorized M0 transition, but it does not
 encode semantic reject, scope, or reconciliation judgment. Decision agents
@@ -332,9 +339,9 @@ identities never enter the committed pack.
 
 The v1 `coordinator/` subtree contains routing/context policy, bounded cycle
 artifacts, deterministic pack indexes, append-only decision/effect journals,
-and generated projections. Committed tracker prose remains project-owned;
-mechanical coordination updates the local projection rather than arbitrary
-Markdown.
+generated projections, operator conversations, and scoped holds. Committed
+tracker prose remains project-owned; mechanical coordination updates the local
+projection rather than arbitrary Markdown.
 
 Each participating repository has a local binding declaring canonical path,
 role, read/write access, branch, and worktree mode. Concurrent writable lanes
@@ -401,6 +408,21 @@ durable trigger
 
 Only the effect executor mutates authoritative lane state. External tmux/Git
 effects use idempotent prepare/attempt/verify journals.
+
+### 6.5 Operator conversation turn
+
+```text
+append operator message
+  → capture immutable lane/index/budget/hold snapshot
+  → exact M0 reference/query resolution
+  → bounded working set + per-turn D1–D3 route when needed
+  → typed advisory response
+  → append response and staleness
+  → optional proposal awaits separate confirmation/revalidation
+```
+
+No lane mutation lock is held while a conversation endpoint runs. Automation
+continues unless an explicit scoped hold blocks the relevant future effect.
 
 ## 7. State evolution
 
@@ -540,6 +562,8 @@ Keep sanitized fixtures representing:
 - a large 30-batch Watchtower lane modeled on sanitized SQL-backends behavior;
 - synthetic 300, 3,000, and 10,000-batch packs with a fixed affected
   dependency neighborhood;
+- long bounded conversations with old-turn lookup, compaction, pruning, and
+  lane-state changes during responses;
 - a non-Watchtower copied-template directory that discovery must ignore;
 - an active implement phase;
 - review, reject, correction, complete, and inconsistent states.
@@ -574,6 +598,9 @@ details.
 | A-021 | Separate reviewer acceptance from Git publication | Partial publication must not corrupt semantic acceptance |
 | A-022 | Compile deterministic local indexes tied to the pack seal | Routine coordinator cost must not scale with unrelated pack prose |
 | A-023 | Block on stale index instead of full-pack fallback | Predictable cost and correctness are safer than opportunistic context inflation |
+| A-024 | Model operator conversation as durable bounded advisory turns | Multi-turn continuity is necessary but must not restore cumulative sessions |
+| A-025 | Separate conversation from mutation and lane locking | Model latency must not block automation or bypass the sole effect authority |
+| A-026 | Pause automation only through explicit scoped holds | Discussion alone must not create hidden scheduling state |
 
 ## 13. Architecture fitness checks
 
@@ -596,6 +623,11 @@ Every implementation change should preserve these properties:
   implementation pack;
 - every pack index is derived, model-free, reproducible, and matched to the
   active seal;
+- conversation continuity derives from bounded local journals/indexes, not
+  hidden provider history;
+- no conversation response generation holds the lane mutation lock;
+- conversation advice has no effect until separately confirmed and
+  revalidated;
 - every lane has one authoritative control home and stable `laneId`;
 - committed packs refer to logical repository IDs, never machine paths;
 - concurrent writable lane bindings are conflict-checked;
