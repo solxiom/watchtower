@@ -3,7 +3,7 @@
 Status: **Proposed — implementation-ready**
 Target release: `1.0.0`
 Schema bundle: [schemas/v1.schema.json](schemas/v1.schema.json)
-Last updated: 2026-07-30
+Last updated: 2026-07-31
 
 This document closes the executable contracts required to implement
 [v1.md](v1.md). It is intentionally narrower than the product
@@ -36,6 +36,36 @@ the affected feature until this precedence chain is updated.
 “Proposed — implementation-ready” means product choices are closed but
 implementation and conformance tests may not yet exist. “Stable” remains
 reserved for implemented, passing behavior.
+
+### 1.1 Runtime and TUI engine baseline
+
+Watchtower v1 requires official Node.js `>=26.4.0`. The package `engines`
+contract, development/runtime validation, distribution metadata, doctor, and
+global-install fixtures must agree with that floor.
+
+The full-screen operator-session engine is:
+
+```text
+@opentui/core       imperative native renderer
+@opentui/keymap     framework-neutral action/key binding engine
+```
+
+Both are consumed only through an accepted generic Nirvana TUI adapter.
+React, Solid, Ink, JSX/TSX, Babel, framework bindings, and a second frontend
+build pipeline are not part of Watchtower v1.
+
+OpenTUI native rendering under Node requires `--experimental-ffi`. Enabling the
+Node permission model additionally requires an explicit, least-privilege
+`--allow-ffi`; Watchtower must not enable or broaden the permission model
+implicitly. FFI is presentation infrastructure only and grants no lane,
+session, task, model, filesystem, subprocess, or effect authority.
+
+`CA-18` is a blocking feasibility and packaging gate, not permission to assume
+compatibility. It must prove that the flag, OpenTUI imports, native artifact,
+bootstrap strategy, and renderer lifecycle do not regress Nirvana commands,
+NVB tasks, tests, distribution, or ordinary non-TUI execution. Failure stops
+the TUI path and requires a specification amendment; it does not silently
+select another renderer.
 
 ## 2. Fixed v1 lifecycle and initialization syntax
 

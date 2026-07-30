@@ -15,7 +15,7 @@ Normative product docs for the `wt` CLI.
 | [allocation-planning-draft.md](allocation-planning-draft.md) | Draft | CLI/plan/model discovery plus quality-first implementation capacity allocation |
 | [coordinator-automation.md](coordinator-automation.md) | Proposed | Normative v1 pack indexing, bounded decision cycles, zero-token routing, and validated effects |
 | [operator-session.md](operator-session.md) | Proposed | Normative v1 bounded multi-turn operator session and confirmed-effect boundary |
-| [cli-session.md](cli-session.md) | Proposed | Normative v1 foreground attachment, terminal UX, slash commands, streaming, and accessibility |
+| [cli-session.md](cli-session.md) | Proposed | Normative v1 full-screen operator-session TUI, right inspector, interaction, rendering, streaming, and accessibility |
 | [discussions/lane-directory-path.md](discussions/lane-directory-path.md) | Resolved | `.watchtower/lanes/<slug>/` execution-overlay decision |
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
 | [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |

@@ -1,5 +1,10 @@
 # wt-coordinator-automation Implementation Roadmap
 
+> **Superseded for repacking on 2026-07-31.** Its monolithic `CA-18` plan is
+> replaced by `CA-18` through `CA-24` in
+> `docs/spec/v1-implementation-map.md §1.2` and `§8`. Do not use this roadmap
+> for dispatch until it is regenerated.
+
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
 > it with `docs/spec/v1-implementation-map.md`,

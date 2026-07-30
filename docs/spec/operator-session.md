@@ -3,7 +3,7 @@
 Status: **Proposed — implementation-ready**
 Target release: `1.0.0`
 CLI groups: `wt coordinator ask|session`, `wt coordinator hold`
-Last updated: 2026-07-30
+Last updated: 2026-07-31
 
 This document is normative for durable human–Watchtower operator sessions. It
 resolves
@@ -103,18 +103,20 @@ effect executor may act.
 - Letting a session bypass pack amendment, reviewer acceptance, or effect
   validation.
 - Committing session journals or full text to project Git.
-- Treating a foreground attachment, terminal scrollback, readline cache, tmux
-  pane, or provider process as durable session authority.
+- Treating a foreground TUI attachment, terminal screen/scrollback, component
+  state, render buffer, tmux pane, or provider process as durable session
+  authority.
 - Turning the session UI into a general shell or unrestricted `wt` command
   executor.
-- Requiring a daemon or full-screen cursor-addressed TUI for v1.
+- Requiring a daemon, network service, or provider-side persistent conversation
+  for the local full-screen v1 TUI.
 
 ## 4. Vocabulary
 
 | Term | Definition |
 |------|------------|
 | Operator session | Durable lane-bound sequence of operator/coordinator turns with its own topic, lifecycle, memory, and budget segment |
-| Session attachment | Ephemeral foreground terminal client attached to one operator session |
+| Session attachment | Ephemeral full-screen foreground TUI client attached to one operator session |
 | Turn | One operator message plus its M0 or D1–D3 response attempt |
 | Session snapshot | Immutable lane/index/event revisions used by one turn |
 | Working set | Bounded recent turns, pinned references, open questions, and relevant proposals loaded for a turn |

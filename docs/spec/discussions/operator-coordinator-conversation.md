@@ -18,11 +18,12 @@ Accepted with corrections in
 required Watchtower v1 behavior.
 
 The resolution keeps first-class durable multi-turn interaction, M0 answers,
-per-turn D1–D3 routing, bounded memory, journaling, budgets, terminal CLI UX,
-allocation reserves, and escalation entrypoints. The durable object is now
-called an **operator session**; one lane may have many, and its polished
-foreground process is an ephemeral **attachment**. It changes the proposal in
-these important ways:
+per-turn D1–D3 routing, bounded memory, journaling, budgets, full-screen
+terminal UX, allocation reserves, and escalation entrypoints. The durable
+object is now called an **operator session**; one lane may have many, and its
+polished foreground process is an ephemeral full-screen TUI **attachment**.
+The canonical wide TUI keeps conversation on the left and bounded contextual
+inspection on the right. It changes the proposal in these important ways:
 
 - conversation turns are advisory and never mutate lane state directly;
 - model generation does not hold the lane mutation lock;
@@ -40,8 +41,9 @@ these important ways:
   available.
 
 The remaining sections preserve the original proposal, evidence, and earlier
-`conversation` command/path vocabulary. Where they conflict with this
-resolution, the normative operator-session and CLI-session drafts win.
+`conversation`, line-terminal, and future-TUI vocabulary. Where they conflict
+with this resolution, the normative operator-session and CLI-session drafts
+win.
 
 ## 1. Problem statement
 

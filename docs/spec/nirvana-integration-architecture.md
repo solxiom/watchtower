@@ -1,7 +1,7 @@
 # Watchtower Nirvana Integration and NVB Execution Architecture
 
 Status: **Normative v1 implementation architecture**
-Last updated: 2026-07-30
+Last updated: 2026-07-31
 
 This document defines where Watchtower uses Nirvana facades, where NVB owns
 mechanical task orchestration, and where narrow platform adapters remain
@@ -191,6 +191,22 @@ Commands own:
 - outer exit-code translation.
 
 Commands never invoke NVB, storage, logging, SQL, or subprocess APIs directly.
+
+The full-screen operator-session TUI is a distinct presentation application,
+not a large command renderer. Its command class performs selection and
+bootstrap, then delegates attachment lifecycle to focused TUI application
+services. The pinned `TerminalView` does not provide full-screen input, layout,
+focus, viewport, animation, or terminal-restoration semantics, so the TUI must
+use the accepted generic Nirvana adapter defined by
+[cli-session.md §14.4](cli-session.md#144-nirvana-tui-capability-and-renderer-selection).
+Watchtower must not fill that gap with feature-local ANSI, width, layout,
+keymap, theme, or animation utilities.
+
+The selected engine behind that adapter is imperative `@opentui/core` plus
+`@opentui/keymap` under Node `>=26.4.0`. No command or foundation module uses
+React, Solid, Ink, JSX/TSX, Babel, or an OpenTUI framework binding. Native
+renderer import and FFI bootstrap remain absent from ordinary one-shot command
+paths and require the accepted `CA-18` compatibility evidence.
 
 ### 4.2 Guards, values, and collections
 
@@ -465,10 +481,13 @@ New workflow-level shell scripts are a hard reject. A retained leaf is invoked
 only by its owning TaskHandler or the central adapter, never directly by a
 command or model.
 
-The foreground watcher and terminal attachment remain on their proven runtime
-path until NVB has explicit foreground signal, stdin, and PTY evidence. They
-must still use NVB tasks for bounded sub-operations where doing so preserves
-the foreground contract.
+The foreground watcher and full-screen TUI attachment remain direct
+application lifecycles rather than long-running NVB tasks. The TUI uses the
+accepted generic Nirvana interactive-renderer adapter for input, layout,
+rendering, and restoration; it invokes packaged NVB tasks only for bounded
+sub-operations where doing so preserves the foreground contract. Any proposal
+to host the TUI lifecycle through NVB requires explicit stdin, raw-mode,
+resize, signal, suspend/resume, alternate-screen, and restoration proof.
 
 ## 10. Implementation and review acceptance
 

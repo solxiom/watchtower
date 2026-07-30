@@ -2,7 +2,7 @@
 
 Status: **Proposed — implementation-ready architecture baseline**
 Applies to: v1 foundation and post-v1 evolution
-Last updated: 2026-07-30
+Last updated: 2026-07-31
 
 ## 1. Architectural intent
 
@@ -303,8 +303,12 @@ The v1 decision plane is defined in
 | `OperatorSessionPolicyResolver` | Resolve versioned baseline plus lane-owned finite profiles, limits, reserves, and retention |
 | `AmendmentRequestStore` | Record confirmed pack/spec handoffs without changing accepted artifacts |
 | `OperatorSessionBudgetGrantStore` | Track finite audited grants within lane-wide limits and reserves |
-| `OperatorSessionAttachment` | Bind a foreground terminal to one session and translate input/presentation events |
-| `OperatorSessionRenderer` | Render typed presentation events accessibly without owning product behavior |
+| `OperatorSessionAttachment` | Own one ephemeral full-screen TUI lifecycle and bind it to one lane/session |
+| `OperatorTuiEventReducer` | Reduce typed presentation events and bounded queries into immutable view models |
+| `OperatorTuiFocusManager` | Own the single focus target, overlays, and central action/keymap dispatch |
+| `OperatorTuiLayout` | Resolve canonical right-inspector and responsive drawer/single-pane layouts |
+| `OperatorTuiRenderScheduler` | Coalesce bounded frames, provisional rendering, resize, and animation without dropping product events |
+| `NirvanaTuiAdapter` | Supply generic terminal input, layout, rendering, theme, and restoration capabilities behind a tested port |
 | `ScopedHoldStore` | Manage explicit scoped expiring blocks on future effects |
 
 The router may derive a uniquely preauthorized M0 transition, but it does not
@@ -640,12 +644,16 @@ details.
 | A-025 | Separate operator sessions from mutation and lane locking | Model latency must not block automation or bypass the sole effect authority |
 | A-026 | Pause automation only through explicit scoped holds | Discussion alone must not create hidden scheduling state |
 | A-027 | Allow many operator sessions per lane and distinguish them from UI attachments | Focus and continuity must not imply one lane-wide chat or persistent process |
-| A-028 | Drive the terminal through typed presentation events | A polished UI must reuse shared command/query authority and remain replaceable |
+| A-028 | Drive the full-screen TUI through typed presentation events and bounded view models | A polished UI must reuse shared command/query authority and remain replaceable |
 | A-029 | Separate create, attach, and lifecycle resume commands | Terminal binding and durable lifecycle are different operations |
 | A-030 | Use bounded same-lane turn capsules for cross-session context | Useful continuity must not create transitive or unbounded history loading |
 | A-031 | Model amendment and budget changes as confirmed bounded handoffs/grants | Operator discussion cannot silently rewrite packs, policy, or protected reserves |
 | A-032 | Treat presentation events as internal transport-neutral contracts in v1 | Testability is required without prematurely promising a public remote protocol |
 | A-033 | Use lane-local SQLite only for disposable derived indexes/projections | Avoid rebuilding database mechanics with JSON shards while preserving packs/journals as inspectable authority |
+| A-034 | Require a full-screen v1 operator TUI with a dominant left conversation and right inspector | Daily operator work needs one cohesive high-quality workspace without replacing scripting surfaces |
+| A-035 | Put reusable input/layout/rendering mechanics behind a Nirvana TUI capability | Watchtower components must not become a private ANSI, layout, keymap, or animation framework |
+| A-036 | Keep `ask`, JSON, and ordinary commands first-class beside the TUI | Interactive presentation and automation have different consumers but share product authority |
+| A-037 | Use imperative OpenTUI core/keymap under Node 26.4+ behind Nirvana, with no React/Solid/JSX stack | Match the required TUI quality while preserving plain-TypeScript Nirvana architecture and one build system |
 
 ## 13. Architecture fitness checks
 
@@ -684,6 +692,15 @@ Every implementation change should preserve these properties:
   revalidated;
 - one lane may have many operator sessions, while each session permits at most
   one active turn and every attachment is ephemeral;
+- the v1 attachment is a full-screen TUI whose panels, focus, scroll,
+  animation, and render buffers never become durable session or lane state;
+- the canonical wide TUI keeps conversation on the left and bounded context in
+  a right inspector, with deterministic responsive degradation;
+- TUI components consume bounded view models and cannot import stores,
+  providers, effects, SQL, NVB, or raw subprocess capabilities;
+- renderer selection passes Node/NVB/native-package, PTY, Unicode,
+  accessibility, performance, and restoration gates through a generic Nirvana
+  capability;
 - cross-session references load one bounded same-lane non-transitive capsule;
 - amendment requests and budget grants pass through typed confirmation and
   never imply pack mutation, implicit holds, or lane-budget expansion;

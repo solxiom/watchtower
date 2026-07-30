@@ -1,5 +1,12 @@
 # Review Batch Index — Watchtower v1 Coordinator Automation
 
+> **Superseded for repacking on 2026-07-31.** The old `CA-18` review is not
+> acceptance authority; use the `CA-18`–`CA-24` map in
+> `docs/spec/v1-implementation-map.md` when regenerating this index.
+> The replacement
+> [CA-18 review brief](CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md)
+> is a repack-staging draft only; this index remains superseded.
+
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
 > it with `docs/spec/v1-implementation-map.md`,

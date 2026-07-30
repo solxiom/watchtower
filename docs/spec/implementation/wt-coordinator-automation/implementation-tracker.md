@@ -1,5 +1,9 @@
 # wt-coordinator-automation Implementation Tracker
 
+> **Superseded for repacking on 2026-07-31.** The 18-batch matrix does not
+> include the required full-screen TUI decomposition. Do not dispatch from this
+> tracker until it is regenerated from `docs/spec/v1-implementation-map.md`.
+
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
 > it with `docs/spec/v1-implementation-map.md`,
@@ -14,7 +18,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **active tracking document**
+Status: **Superseded — full-screen TUI repack required**
 Date: 2026-07-30
 Pack: 5 of 6 — `wt-coordinator-automation`
 Batches: 18 work + 18 review

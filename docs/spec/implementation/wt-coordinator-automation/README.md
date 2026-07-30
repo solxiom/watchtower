@@ -1,5 +1,16 @@
 # wt-coordinator-automation — Implementation Pack 5
 
+> **Superseded for repacking (2026-07-31).** The full-screen v1 TUI amendment
+> replaces monolithic `CA-18` with `CA-18` through `CA-24`. This 18-batch draft
+> must not be reviewed, sealed, or used to initialize a lane. Re-author it from
+> `docs/spec/v1-implementation-map.md §1.2` and `§8`.
+>
+> Repack staging has begun with the replacement
+> [CA-18 work brief](work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md)
+> and
+> [CA-18 review brief](review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md).
+> Those drafts do not reactivate this pack.
+
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
 > it with `docs/spec/v1-implementation-map.md`,
@@ -14,11 +25,11 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Draft — correction audit complete; awaiting independent pack review**
+Status: **Superseded — full-screen TUI repack required**
 Target release: `1.0.0`
 Pack ID: `CA-01` through `CA-18`
 Work batches: **18** | Review batches: **18**
-Last updated: 2026-07-30
+Last updated: 2026-07-31
 
 ## Purpose
 

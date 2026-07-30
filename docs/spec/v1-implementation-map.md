@@ -2,9 +2,9 @@
 
 Status: **Proposed — pack-authoring baseline**
 Target release: `1.0.0`
-Work batches: **53**
-Required review batches: **53**
-Last updated: 2026-07-30
+Work batches: **59**
+Required review batches: **59**
+Last updated: 2026-07-31
 
 This document maps the accepted Watchtower v1 specification into bounded
 implementation work. It is the master construction plan from which six sealed
@@ -39,9 +39,9 @@ V1 is split into six independently accepted implementation packs:
 | 2 | `wt-runtime-distribution` | M2 | 7 | Complete versioned runtime/knowledge distribution |
 | 3 | `wt-lane-lifecycle` | M3–M4 | 8 | Transactional init, watch, and doctor |
 | 4 | `wt-upgrade-knowledge` | M5 | 5 | Safe upgrades and host knowledge installation |
-| 5 | `wt-coordinator-automation` | M6 | 18 | Bounded decisions, effects, sessions, and terminal UX |
+| 5 | `wt-coordinator-automation` | M6 | 24 | Bounded decisions, effects, sessions, and full-screen terminal UX |
 | 6 | `wt-v1-release` | M7 | 4 | End-to-end qualification and release |
-| | **Total** | | **53 work + 53 review** | |
+| | **Total** | | **59 work + 59 review** | |
 
 Each work batch has exactly one matching review batch named
 `REV-<work-batch-id>`. Corrections retain the same work/review identity and
@@ -65,6 +65,37 @@ superseded and must not initialize an implementation lane. Pack authors must:
 
 Mechanical filename or prose substitution is insufficient because the storage
 failure model, proof, packaging, and semantic-identity rules changed.
+
+### 1.2 Full-screen-TUI amendment impact
+
+Any implementation pack that still defines one monolithic `CA-18` session
+CLI/PTY batch is superseded and must not dispatch that batch. The full-screen
+v1 TUI changes the delivery shape from a line-oriented attachment to a
+component TUI with renderer/native packaging, responsive layout, conversation,
+inspector, command, streaming, accessibility, and recovery responsibilities.
+
+Pack authors must:
+
+1. replace the old `CA-18` brief with `CA-18` through `CA-24` as mapped in §8;
+2. add one independent review brief and evidence report per work batch;
+3. update pack README, dependency graph, roadmap, tracker, work/review indexes,
+   reasoning rankings, agent prompts, traceability, and counts;
+4. perform the renderer/Nirvana integration gate before product components;
+5. keep scale/replay and final M6 acceptance in `CA-24`, independent of feature
+   implementation assertions; and
+6. repeat pack review and sealing after the exact replacement briefs settle.
+
+The former `CA-18` may remain as historical evidence only after being marked
+superseded. It is not an authorized implementation brief.
+
+The replacement CA-18 is now drafted as:
+
+- `implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
+- `implementation/wt-coordinator-automation/review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md`
+
+These drafts do not reactivate the pack. Dispatch remains blocked until all
+CA-18 through CA-24 briefs, prompts, indexes, reasoning allocations, and pack
+review are complete.
 
 ## 2. Current and target architecture
 
@@ -292,7 +323,13 @@ effect authority, and durable bounded operator sessions.
 | `CA-15` | Operator-session persistence and lifecycle | `CA-03`, `UK-02` | session store/contracts | Many sessions; one active turn each; immutable closed history; crash-safe journals |
 | `CA-16` | Session SQLite index, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
 | `CA-17` | Session routing, budgets, proposals, holds, and amendments | `CA-06`, `CA-08`–`CA-10`, `CA-15`, `CA-16` | session services/effect integration | M0/D1–D3; grants/reserves; confirmation/revalidation; scoped hold interleaving |
-| `CA-18` | Session CLI/PTY attachment and M6 acceptance | `CA-14`–`CA-17` | commands, terminal renderer, PTY/replay/scale specs | Create/attach/resume/observe; streaming/signals/accessibility; 30–10k pack scale and long-lane replay |
+| `CA-18` | Nirvana/OpenTUI feasibility and packaging gate | `RT-03`, `RT-05`, `CA-14`–`CA-17` | generic TUI adapter/architecture fixtures | Node `>=26.4.0`; experimental-FFI bootstrap; imperative core/keymap only; Nirvana/NVB/dist/native artifacts; terminal restore/security; pass/fail evidence |
+| `CA-19` | TUI shell, responsive layout, themes, and focus | `CA-18` | TUI application shell/components | Wide right inspector shell; standard/narrow layouts; resize; focus/keymap; themes; bounded animation |
+| `CA-20` | Conversation timeline, composer, history, and references | `CA-16`, `CA-19` | conversation/composer components | Virtualized paging; multiline input; paste; completion; reference pickers; scroll anchoring |
+| `CA-21` | Inspector views, command palette, and overlays | `CA-14`, `CA-17`, `CA-19` | inspector/action/overlay components | All bounded inspector states; canonical action parity; confirmation and details overlays |
+| `CA-22` | Turn streaming, notifications, concurrency, and observer UI | `CA-17`, `CA-20`, `CA-21` | turn/event reducers and attachment controller | Provisional validation; live edge; contention/wait; observer restrictions; coalesced event refresh |
+| `CA-23` | Accessibility, terminal lifecycle, recovery, and PTY matrix | `CA-18`–`CA-22` | accessibility/restoration/test adapters | No-color/high-contrast/reduced motion; signals/suspend/crash restore; emulator/Unicode/resize fixtures |
+| `CA-24` | Session command integration, scale/replay, and M6 acceptance | `CA-14`–`CA-23` | command/help integration and independent acceptance proof | Create/attach/resume/observe plus `ask`; 30–10k pack scale; long-session replay; complete M6 gate |
 
 ### CA implementation notes
 
@@ -301,8 +338,13 @@ effect authority, and durable bounded operator sessions.
 - `CA-06` proves adapter eligibility before any unattended invocation.
 - `CA-09` and `CA-10` must be accepted before enabling `CA-11`–`CA-13`.
 - `CA-15`–`CA-17` may be developed against accepted service fixtures while
-  `CA-14` is built, but all converge at `CA-18`.
-- `CA-18` must show that unrelated pack/session growth does not increase
+  `CA-14` is built; all are required before the TUI product batches.
+- `CA-18` is a Node/Nirvana/OpenTUI feasibility gate. It cannot land product
+  behavior, silently change renderer, or bypass a failed compatibility result.
+- `CA-19`–`CA-22` divide presentation by responsibility and may parallelize
+  only along the declared dependencies and disjoint files.
+- `CA-23` independently closes accessibility and terminal-restoration risk.
+- `CA-24` must show that unrelated pack/session growth does not increase
   ordinary model context and that advisory turns never hold the lane lock.
 
 Pack exit: routine coordination invokes no model; judgment is bounded and
@@ -315,7 +357,7 @@ Purpose: qualify the assembled product rather than add features.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
-| `REL-01` | Fresh-lane implementer→reviewer→accept trial | `LC-08`, `UK-05`, `CA-18` | end-to-end fixture/release evidence | Global install; init; dispatch; handoff; independent accept; publication |
+| `REL-01` | Fresh-lane implementer→reviewer→accept trial | `LC-08`, `UK-05`, `CA-24` | end-to-end fixture/release evidence | Global install; init; dispatch; handoff; independent accept; publication |
 | `REL-02` | Concurrent and multi-repository recovery trials | `REL-01` | system acceptance fixtures | Two isolated lanes; multi-repo commit set; shared-write refusal; partial push recovery |
 | `REL-03` | Security, ownership, performance, and package qualification | `REL-01`, `REL-02` | release/security/performance evidence | Traversal/config/permission suite; bounded discovery/status; task/catalog/profile escape and environment isolation; manifest/global install proof |
 | `REL-04` | Documentation consistency and release gate | `REL-01`–`REL-03` | help/docs/release notes | Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme |
@@ -369,10 +411,15 @@ but it cannot merge production integration before the owning pack is accepted.
 | 21 | `CA-13` |
 | 22 | `CA-14` |
 | 23 | `CA-18` |
-| 24 | `REL-01` |
-| 25 | `REL-02` |
-| 26 | `REL-03` |
-| 27 | `REL-04` |
+| 24 | `CA-19` |
+| 25 | `CA-20`, `CA-21` |
+| 26 | `CA-22` |
+| 27 | `CA-23` |
+| 28 | `CA-24` |
+| 29 | `REL-01` |
+| 30 | `REL-02` |
+| 31 | `REL-03` |
+| 32 | `REL-04` |
 
 This is an admissible schedule, not a requirement to fill every wave with
 parallel agents. Repository ownership, reviewer availability, endpoint
@@ -386,7 +433,8 @@ The minimum product critical path is:
 RM-01 → RM-03 → RM-06 → RM-07 → RM-08 → RM-10
   → LC-01 → LC-03 → LC-05 → CA-01 → CA-02 → CA-03 → CA-04
   → CA-05 → CA-06 → CA-07 → CA-08 → CA-09 → CA-10
-  → CA-13 → CA-14 → CA-18 → REL-01 → REL-02 → REL-03 → REL-04
+  → CA-13 → CA-14 → CA-18 → CA-19 → CA-20 → CA-22
+  → CA-23 → CA-24 → REL-01 → REL-02 → REL-03 → REL-04
 ```
 
 Runtime dependencies `RT-01`–`RT-07` join before lane operation, and upgrade
@@ -402,7 +450,7 @@ pack is accepted:
 | Surface | Owning batches |
 |---------|----------------|
 | CLI command names, global options, stdout/stderr, exit codes | `RM-01`, `RM-02`, each command batch |
-| JSON schema version 1 | `RM-02`, `RM-10`, `CA-14`, `CA-18` |
+| JSON schema version 1 | `RM-02`, `RM-10`, `CA-14`, `CA-24` |
 | `lane.json`, `install.json`, bindings and strict env/state | `RM-04`, `LC-03`, `LC-04` |
 | Membership index and secondary discovery | `RM-07`, `LC-04` |
 | Runtime/knowledge manifests and `WT_*` invocation | `RT-02`, `RT-05` |
@@ -411,7 +459,7 @@ pack is accepted:
 | Derived-store manifest, SQLite schema, semantic root, and rebuild | `DB-01`, `CA-01`–`CA-03`, `CA-16` |
 | Worker/coordinator/effect/session JSONL | `RM-05`, `CA-03`, `CA-13`, `CA-15` |
 | Routing/proposal/effect registries | `CA-05`, `CA-09`, `CA-10` |
-| Session CLI, PTY signals, presentation events | `CA-18` |
+| Session CLI, TUI layout/input/rendering, PTY signals, presentation events | `CA-18`–`CA-24` |
 | Upgrade/migration compatibility | `UK-01`–`UK-03` |
 
 Schema-compatible readers preserve unknown fields but never treat unknown
@@ -426,8 +474,8 @@ types, transitions, events, or effects as authority.
 | Runtime packaging/smoke | `RT-02`–`RT-07` | `REL-01`, `REL-03` |
 | SQLite driver/storage feasibility | `DB-01`, `CA-01`–`CA-03`, `CA-16` | `REL-03` |
 | Transaction crash/replay | `LC-03`, `UK-03`, `CA-03`, `CA-10`–`CA-13` | `REL-02`, `REL-03` |
-| PTY/accessibility | `CA-18` | `REL-01`, `REL-03` |
-| Cost and scaling | `CA-01`, `CA-02`, `CA-08`, `CA-18` | `REL-03` |
+| PTY/accessibility | `CA-18`, `CA-19`, `CA-23`, `CA-24` | `REL-01`, `REL-03` |
+| Cost and scaling | `CA-01`, `CA-02`, `CA-08`, `CA-20`, `CA-22`, `CA-24` | `REL-03` |
 | End-to-end acceptance | `REL-01`, `REL-02` | `REL-04` |
 
 Every command-owning batch updates its help fragment and the relevant
@@ -477,7 +525,7 @@ of earlier pack outputs.
 
 The implementation map is fulfilled only when:
 
-- all 53 work batches have matching independent review outcomes;
+- all 59 work batches have matching independent review outcomes;
 - all six implementation packs are accepted and sealed;
 - every cross-pack compatibility surface has reproducible golden evidence;
 - every v1 release criterion traces to an accepted batch and proof;

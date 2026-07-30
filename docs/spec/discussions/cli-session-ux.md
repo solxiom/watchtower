@@ -15,6 +15,12 @@ Related:
 The polished UX is adopted for v1 with corrected terminology and authority
 boundaries:
 
+- the v1 attachment is a full-screen TUI, not the originally proposed
+  line-oriented terminal loop;
+- its canonical wide layout uses a dominant left conversation workspace and a
+  right contextual inspector, with responsive drawer/single-pane layouts;
+- component state, panels, focus, animation, and render buffers remain
+  ephemeral presentation rather than session authority;
 - the durable human–WT object is an **operator session**, not a chat;
 - bare `wt coordinator session` creates a new session/attachment;
 - `wt coordinator session attach <id>` attaches to an existing session, while
@@ -36,8 +42,9 @@ boundaries:
 
 The normative result is
 [../cli-session.md](../cli-session.md). Examples below record the
-original proposal and may retain the earlier `chat` vocabulary; where they
-conflict, the normative operator-session and CLI-session drafts win.
+original proposal and may retain the earlier `chat`, readline, append-only, or
+future-TUI vocabulary; where they conflict, the normative operator-session and
+CLI-session drafts win.
 
 ## 1. Problem statement
 

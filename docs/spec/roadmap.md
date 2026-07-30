@@ -1,7 +1,7 @@
 # Watchtower Delivery Roadmap
 
 Status: **Planning baseline**
-Last updated: 2026-07-30
+Last updated: 2026-07-31
 
 This roadmap sequences outcomes, not commits. Each milestone should land as a
 small implementation pack with work batches, independent review batches, and
@@ -228,9 +228,9 @@ Scope:
 - prepare/attempt/verify journals for tmux launch and Git publication;
 - short-lived decision-agent invocation;
 - coordinator queue, cursor, usage, status, explain, and durable events;
-- bounded operator `ask` plus polished `session` attachments, session
-  lifecycle/history/indexes, per-turn routing, retention, and budget
-  accounting;
+- bounded operator `ask` plus a polished full-screen `session` TUI with a
+  dominant conversation workspace, right contextual inspector, responsive
+  layouts, and shared session lifecycle/history/indexes;
 - many operator sessions per lane with one active turn per session;
 - explicit create/attach/resume syntax, M0 observer mode, and fail-closed
   invocation confirmation;
@@ -259,9 +259,14 @@ Key proof:
 - stale/missing/corrupt indexes pause cycles instead of scanning pack prose;
 - long multi-turn operator sessions remain bounded, do not hold the lane
   mutation lock, and cannot mutate state without confirmed revalidation;
-- foreground attachments survive resume/detach, same-session contention,
-  streaming validation, observer restrictions, reconnection changes, and
-  accessible terminal fixtures;
+- full-screen attachments survive resume/detach, same-session contention,
+  streaming validation, observer restrictions, reconnection changes, resize,
+  focus/overlay transitions, renderer failure, and terminal restoration;
+- canonical right-inspector, responsive drawer/single-pane, themes,
+  no-color/high-contrast, reduced motion, bounded animation, virtualized
+  history, and accessible modes pass component/golden/PTY fixtures;
+- the selected generic Nirvana TUI renderer passes Node/NVB/dist/global
+  packaging, native-artifact, Unicode, performance, and restoration gates;
 - `ask --session` and attached turns build equivalent bounded working sets;
 - runtime/knowledge/pack evolution preserves historical session snapshots
   without silently clearing pins or changing lifecycle;
@@ -398,7 +403,8 @@ Candidate release: v1.x.
 - cross-workspace lane summary;
 - lead time, reject/correction count, batch throughput, and stale-lane signals;
 - retrospectives derived from durable events and accepted tracker facts;
-- local TUI consuming the stable `status --json` interface.
+- portfolio and cross-workspace views added to the existing local TUI through
+  a separately authorized registry and bounded query contract.
 
 Metrics must not rank individual agents or infer quality from token spend.
 
