@@ -1,0 +1,290 @@
+# wt-lane-lifecycle Implementation Quality And Agent Rules
+
+Status: active lane quality rules
+Date: 2026-07-30
+
+## Purpose
+
+These rules govern implementation and review work for the Watchtower v1
+lane lifecycle delivery pack.
+
+They supplement:
+
+- `docs/spec/implementation/wt-lane-lifecycle/implementation-roadmap.md`
+- `docs/spec/implementation/wt-lane-lifecycle/implementation-tracker.md`
+- `docs/spec/v1.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/v1-implementation-map.md`
+
+## Shared Quality Rules
+
+- Keep init planning as the single source of truth for preflight validation.
+- Keep pack validation in one consumer with seal reproduction.
+- Keep transactional layout as one atomic commit path; do not scatter temp-file
+  logic across commands.
+- Keep lock ordering in one foundation module respected by all mutators.
+- Keep coordinator baselines and pack index construction deterministic and
+  model-free.
+- Keep commands thin: `InitCommand`, `WatchCommand`, and `DoctorCommand`
+  validate args and delegate to foundation services.
+- Do not implement behavior in the wrong layer. Commands must not contain
+  discovery, path construction, or shell-spawning logic.
+- Do not turn `src/cli.ts` into a product host; it stays a thin Nirvana
+  outer shell.
+- Do not add npm convenience scripts in any package manifest. Use NVB task
+  surfaces for workflow automation.
+- Do not commit `.local/` artifacts.
+- Keep async contracts honest. Do not implement async public methods as
+  cosmetic wrappers over sync internals.
+- Drift classification is mechanical. No model may classify drift.
+- Doctor is read-only. No check performs repair, rebuild, or migration.
+- `src/commands/HelloCommand.ts` and all hello artifacts must be removed
+  only by LC-08, after real commands exist.
+
+## Mandatory Core Reference Anchors
+
+Implementation and review work for this lane must explicitly use these repo
+standards and source owners as acceptance anchors, not just general style
+intuition.
+
+### Repo-level guidance
+
+- `AGENTS.md`
+
+### Spec and boundary owners
+
+- `docs/spec/v1.md` — product specification, esp. §7 (filesystem), §10-11 (commands)
+- `docs/spec/v1-contracts.md` — contract closure, esp. §2 (init syntax), §3 (pack consumer), §7 (shipping policy), §11 (locking)
+- `docs/spec/v1-implementation-map.md` — esp. §6 (this pack), §10-14 (dependencies/critical path)
+- `docs/spec/architecture.md` — component boundaries, read/write flows, safety model
+- `docs/spec/schemas/v1.schema.json` — JSON Schema bundle for every public type
+
+### Source owners
+
+- `src/commands/InitCommand.ts` — init orchestration
+- `src/commands/WatchCommand.ts` — watch preflight/invocation
+- `src/commands/DoctorCommand.ts` — doctor orchestration
+- `src/foundation/init-planner.ts` — preflight plan
+- `src/foundation/pack-consumer.ts` — pack JSON Schema validation
+- `src/foundation/pack-seal.ts` — RFC 8785 seal reproduction, drift matrix
+- `src/foundation/lane-store.ts` — lane directory layout
+- `src/foundation/transactional-writer.ts` — atomic commit/rollback
+- `src/foundation/binding-mutator.ts` — lock-ordered binding writes
+- `src/foundation/membership-registrar.ts` — idempotent index registration
+- `src/foundation/coordinator-baseline.ts` — finite policy seed
+- `src/foundation/pack-index-bootstrap.ts` — sealed index construction
+- `src/foundation/doctor-registry.ts` — diagnostic check definitions
+- `src/contracts/` — public types shared across commands
+
+## Architectural Non-Negotiables
+
+These are hard acceptance rules for every lane-lifecycle batch.
+
+- Do not add product logic to `src/cli.ts`.
+- Do not duplicate discovery or path construction in commands.
+- Do not execute shell config or state in TypeScript.
+- Do not use a model for M0 operations (preflight, pack validation, drift
+  detection, lane layout, membership registration, pack index, doctor checks).
+- Do not return `null`, `false`, or empty data for an unsupported runtime
+  state. Every factory and resolution path must return a complete component
+  or a deterministic error.
+- Do not silently emulate an unsupported operation.
+- Do not scaffold or relocate the committed implementation pack in init.
+- Do not perform repair, rebuild, or migration in doctor.
+- Do not daemonize the watcher; it must run in the foreground only.
+- Do not give coordinator agents direct state or effect authority.
+- Do not use tmux scrollback prose as lifecycle authority.
+- Do not commit `.watchtower/`, `dist/`, `build/`, `node_modules/`, or
+  `.nira/local/` artifacts.
+
+## Required Ownership Shape
+
+Every accepted batch must leave these questions answerable in concrete terms.
+
+- Which exact foundation module owns the new behavior?
+- Which command front door validates/normalizes/delegates into that owner?
+- Which existing wiring path exposes the capability?
+- Which behavior remains explicitly outside that owner?
+
+Reject the batch if the answer is "several places share it", "the command does
+most of it", "the config now knows everything", or "the runtime figures it out
+later."
+
+## Front-Door Rejection Rules
+
+Reject any implementation where a command becomes the lasting home of deep
+behavior.
+
+Examples of hard reject shapes:
+
+- `InitCommand` accumulating path construction, pack parsing, or Git operations
+- `WatchCommand` owning runtime manifest validation or shell construction
+- `DoctorCommand` inlining check logic instead of delegating to the registry
+- `src/cli.ts` gaining command-specific routing or product configuration
+
+Front doors may validate, normalize shallow input, resolve collaborators,
+delegate, and expose prepared state. They must not become the main algorithm
+owner.
+
+## One-Owner Rejection Rules
+
+Reject the batch if any important truth is recomputed in multiple layers.
+
+This includes:
+
+- lane path construction and validation
+- pack acceptance, seal reproduction, and drift classification
+- lock acquisition ordering and release
+- repository binding validation and local-path canonicalization
+- membership index read/write and staleness handling
+- coordinator policy baseline seeding
+- pack index compilation and seal verification
+- watcher invocation context construction
+- doctor check definitions and result classification
+
+If commands, configs, and builders each rebuild part of the same truth
+independently, the batch is not acceptable.
+
+## Module Size And Clean-Code Rules
+
+This lane must not normalize god objects, giant files, or mixed-responsibility
+modules.
+
+Line count is a design alarm, not a license to pack unrelated behavior up to a
+limit. Count physical source lines, including comments and blank lines, for new
+files and materially rewritten files.
+
+Required size bands:
+
+- Front doors (commands), factories, registries, directors, and public
+  barrels should target 160 lines or fewer. From 161 through 220 lines,
+  the implementation agent must justify every retained responsibility and the
+  reviewer must inspect for extraction opportunities. A hand-maintained front
+  door over 220 lines is rejectable unless an existing repo-owned constraint
+  makes immediate extraction riskier and a narrowly scoped exception is
+  recorded. No such front door may exceed 300 lines.
+- Focused implementation modules should target 220 lines or fewer. From 221
+  through 300 lines, the agent must include a responsibility inventory and the
+  reviewer must independently decide whether the module still has one cohesive
+  reason to change. From 301 through 350 lines, splitting is expected and
+  acceptance requires a concrete, source-backed reason why a split would make
+  ownership less clear. Above 350 lines is a hard rejection for new or
+  materially rewritten hand-maintained implementation code.
+- Four hundred physical lines is the absolute ceiling for every hand-maintained
+  JS/TS source or spec module touched by this lane. The ceiling does not make a
+  mixed-responsibility file acceptable.
+- Split a module below those thresholds when it owns three or more independently
+  nameable concerns or combines state policy, I/O, normalization, planning,
+  error translation, or rendering.
+- Coordinators sequence focused collaborators; they do not absorb collaborator
+  algorithms. Barrels expose a local capsule; they do not launder foreign APIs.
+- Do not create generic `helpers`, `utils`, `common`, or `misc` overflow bags.
+  Use feature-local capsules with explicit owner names.
+- Record physical line counts for every new or materially rewritten file. The
+  reviewer must independently verify warning-band files and reject unjustified
+  growth in an existing oversized module.
+
+## Reasoning-Class Agreement Rules
+
+- The batch brief's declared reasoning class is the minimum floor for both
+  implementation and review agents. Review reasoning is never lower than
+  implementation reasoning.
+- The reviewer's reasoning class governs the thoroughness and independence
+  standard; use the stronger class when the batch combines implementation
+  reasoning at one level with review reasoning at another.
+
+## Reviewer Hard-Reject Checklist
+
+Before discussing polish, naming, or minor cleanup, reject if:
+
+1. Product logic was added to `src/cli.ts`.
+2. A command duplicates discovery or path construction.
+3. A read-only operation performs a hidden write or repair.
+4. Shell config or state is executed by TypeScript.
+5. A model was used for an M0 operation in this pack.
+6. The transactional writer does not roll back on a proven failure stage.
+7. Lock order is violated or undocumented.
+8. Doctor performs implicit repair, rebuild, or migration.
+9. The watcher daemonizes, background-forks, or leaks processes.
+10. Init creates destination directories in preview/dry-run mode.
+11. A `.local/`, `dist/`, `build/`, `node_modules/`, or `.watchtower/`
+    artifact is staged or committed.
+12. The hello command or any hello artifact remains after LC-08 accepts.
+
+## Mandatory Reasoning Protocol
+
+Every implementation and review agent must follow this reasoning protocol
+before editing or accepting code:
+
+1. Build a dependency and ownership map from the governing specs to the exact
+   contracts, factories, lower-layer capsules, front doors, tests, and status
+   artifacts affected by this batch.
+2. Inspect the current source and accepted predecessor-batch output. Do not
+   infer behavior from filenames, the implementation report, or the launch
+   prompt.
+3. Enumerate public invariants, invalid states, failure precedence, concurrency
+   or re-entrancy risks, compatibility constraints, and deliberately unsupported
+   behavior before choosing or evaluating a design.
+4. Use counterexamples: identify at least one plausible shortcut that would pass
+   a happy-path test while violating ownership, safety, boundedness, or public
+   result semantics, then ensure focused proof rejects it.
+5. When a spec and current source disagree, stop that line of implementation,
+   record the contradiction precisely, and resolve it through the correction
+   process. Do not silently choose the easier interpretation.
+6. Treat predecessor reports as leads, not proof. Re-open the actual changed
+   files and reproduce all acceptance-critical evidence from the current tree.
+
+## Proof Standards
+
+### Focused proof
+
+- Target the exact behavior change with one capability per spec paragraph.
+- Include negative-path, invalid-input, boundary-value, and adversarial cases.
+- Failing contracts must produce documented error codes, not stack traces.
+
+### Regression proof
+
+- Run `nvb build` and all Jasmine suites from tracked-only checkout.
+- Every previously passing test must remain passing.
+- Record test totals and any environment-pending specifications.
+
+### Architecture proof
+
+- Run architecture checks that verify component dependency direction.
+- No foundation module may import from `src/commands/`.
+- No command may import shell execution utilities except through the runtime
+  adapter.
+
+### Real-engine proof
+
+- Use temporary fixture workspaces for init, doctor, and e2e tests.
+- Transactional layout tests must prove rollback at every failure stage.
+- Watcher tests must prove foreground exec, stdio forwarding, and Ctrl-C.
+
+### Adversarial proof
+
+- Path escape, symlink traversal, and canonicalization attacks.
+- Malformed JSON inputs to pack validator.
+- Concurrent write attempts to detect lock-ordering violations.
+- Corrupted state files that doctor must detect as `fail`.
+
+## Help And Documentation Rules
+
+- Every new command must register its help fragment in `help/commands/` and
+  `help/help.json`.
+- LC-08 must remove `help/commands/hello.hlp.json` and its entry in
+  `help/help.json`.
+- Update `docs/spec/v1.md` status markers when a command transitions from
+  ❌ to ✅.
+- Help text must match the accepted command behavior exactly.
+
+## Naming And Convention Rules
+
+- Foundation module filenames use kebab-case and end with their responsibility:
+  `-planner`, `-consumer`, `-seal`, `-store`, `-writer`, `-mutator`,
+  `-registrar`, `-baseline`, `-bootstrap`, `-registry`.
+- Command class filenames use PascalCase with `Command` suffix.
+- Contract files use PascalCase matching their export name.
+- Spec files use kebab-case with `.spec.ts` suffix.
+- No file may shadow a directory (e.g., no `src/foo.ts` when `src/foo/` exists).
+- Imports use the `.js` extension per repo convention.

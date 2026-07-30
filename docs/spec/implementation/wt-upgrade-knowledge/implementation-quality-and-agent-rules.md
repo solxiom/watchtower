@@ -1,0 +1,406 @@
+# wt-upgrade-knowledge Implementation Quality And Agent Rules
+
+Status: active pack quality rules
+Date: 2026-07-30
+
+## Purpose
+
+These rules govern implementation and review work for the wt-upgrade-knowledge
+pack.
+
+They supplement:
+
+- `docs/spec/implementation/wt-upgrade-knowledge/implementation-roadmap.md`
+- `docs/spec/implementation/wt-upgrade-knowledge/implementation-tracker.md`
+- `docs/spec/v1.md`
+- `docs/spec/v1-contracts.md`
+- `docs/spec/schemas/v1.schema.json`
+
+## Shared Quality Rules
+
+- Preview is the default for `wt upgrade` and `wt skill install`. No mutation
+  occurs without explicit operator confirmation (`--apply`, `--replace`).
+- Manifest-last rule: `install.json` is written after every staged asset is
+  fsynced and checksum-verified. An interrupted upgrade before the manifest
+  write leaves the old binding authoritative.
+- Old runtime must remain invocable after a failed or interrupted upgrade.
+  The previous manifest and links stay in place until the new ones are proven.
+- Lane-owned values, operator-session journals, pins, lifecycle identities,
+  and config files are never overwritten by upgrade or migration.
+- Migration steps are pure functions from old schema version to new schema
+  version. They must not execute runtime actions, close sessions, prune content,
+  or change lifecycle states.
+- Downgrade must be explicitly requested and must fail when the target
+  runtime does not declare backward compatibility for the lane's current
+  schema version.
+- Host adapters must preview destinations before writing. Non-interactive
+  contexts require `--replace`.
+- No lane-specific state (home paths, lane IDs, tmux prefixes, repository
+  bindings) may be embedded in installed knowledge skills.
+- No false claim may be made that a host notification is configured or active.
+- Version reporting must derive all four version components from verifiable
+  sources, not from hardcoded constants.
+- Keep front doors, commands, and renderers thin. Foundation services own the
+  detailed algorithms.
+- Do not duplicate path, parser, or runtime logic in commands.
+- Do not commit `.local/` artifacts.
+
+## Mandatory Core Reference Anchors
+
+Implementation and review work for this pack must explicitly use these specs
+and source owners as acceptance anchors, not just general style intuition.
+
+### Repo-level guidance
+
+- `AGENTS.md`
+- `docs/spec/v1.md`
+- `docs/spec/architecture.md`
+
+### Spec and boundary owners
+
+- `docs/spec/v1.md` — §11.5 (upgrade command), §11.8 (skill install command),
+  §10.3 (version command), §7 (filesystem contract), §6 (ownership model),
+  §14 (safety and concurrency)
+- `docs/spec/v1-contracts.md` — §11 (locking, transactions, and recovery)
+- `docs/spec/schemas/v1.schema.json` — `upgradePlan`, `versionReport`,
+  `mutationResult`
+- `docs/spec/v1-implementation-map.md` — §7 (Pack 4 specification)
+
+### Foundation service owners
+
+- `src/foundation/upgrade-planner.ts` — compatibility matrix, classification,
+  read-only preview
+- `src/foundation/migration-registry.ts` — version-step registry, dependency
+  ordering
+- `src/foundation/migration-steps.ts` — individual migration step execution
+- `src/foundation/upgrade-apply.ts` — manifest-last atomic switch
+- `src/foundation/upgrade-recovery.ts` — crash recovery, old-runtime validation
+- `src/foundation/host-adapters.ts` — adapter factory, preview/replace/scope
+
+### Command owners
+
+- `src/commands/UpgradeCommand.ts` — user-facing upgrade orchestration
+- `src/commands/SkillInstallCommand.ts` — user-facing skill install orchestration
+- `src/commands/VersionCommand.ts` — version reporting
+
+### Build and workflow owners
+
+- `nvb.json` task surfaces — no npm script sprawl
+- `help/commands/` — static help fragments
+
+## Architectural Non-Negotiables
+
+These are hard acceptance rules for every upgrade-knowledge batch.
+
+- Do not implement upgrade planning logic inside `UpgradeCommand.ts`. The
+  command delegates to `upgrade-planner.ts`.
+- Do not combine migration steps with runtime execution or session lifecycle
+  changes.
+- Do not write `install.json` before all managed assets are staged, fsynced,
+  and checksum-verified.
+- Do not remove old runtime links before the new manifest is written and
+  verified.
+- Do not embed lane-specific state in host skill installation paths.
+- Do not claim a host notification is verified when only files were placed.
+- Do not hardcode version strings in `VersionCommand.ts`.
+- Do not implement host-adapters with knowledge of the upgrade pipeline or
+  migration registry. Host adapters are independent of upgrade mechanics.
+- Do not add foundation services to `src/cli.ts`. Commands own orchestration;
+  thin `cli.ts` stays thin.
+- Do not return `null`, `false`, or empty data for a missing required fact.
+  Every resolution path must return a complete result or a deterministic error.
+- Do not silently skip an unmanaged collision during upgrade. Stop and report.
+- Do not allow downgrade without explicit `--allow-downgrade` and schema
+  compatibility proof.
+
+## Required Ownership Shape
+
+Every accepted batch must leave these questions answerable in concrete terms.
+
+- Which exact foundation module owns the new behavior?
+- Which command class validates/normalizes/delegates into that owner?
+- Which existing wiring path exposes the capability?
+- Which behavior remains explicitly outside that owner?
+
+Reject the batch if the answer is "several places share it", "the command does
+most of it", "the config now knows everything", or "the runtime figures it out
+later."
+
+## Front-Door Rejection Rules
+
+Reject any implementation where a command class becomes the lasting home of
+deep behavior.
+
+Examples of hard reject shapes:
+
+- `UpgradeCommand` owning the compatibility-matrix comparison algorithm
+- `SkillInstallCommand` owning per-host filesystem layout logic
+- `VersionCommand` owning manifest parsing and version derivation
+- `UpgradeCommand` owning lock acquisition and recovery orchestration
+
+Commands may validate arguments, resolve foundation services, delegate, and
+render output. They must not become the main algorithm owner.
+
+## One-Owner Rejection Rules
+
+Reject the batch if any important truth is recomputed in multiple layers.
+
+This includes:
+
+- compatibility matrix computation and asset classification
+- migration step version ordering and dependency resolution
+- manifest staging order and atomic switch sequence
+- crash-recovery detection and old-manifest restoration
+- host destination-path resolution and scope filtering
+- version reporting derivation from manifest sources
+
+If a command, a foundation service, and a helper each rebuild part of the same
+truth independently, the batch is not acceptable.
+
+## Module Size And Clean-Code Rules
+
+This pack must not normalize god objects, giant files, or mixed-responsibility
+modules.
+
+Line count is a design alarm, not a license to pack unrelated behavior up to a
+limit. Count physical source lines, including comments and blank lines, for new
+files and materially rewritten files. Generated artifacts and third-party
+vendored sources are outside these targets only when their generated or
+vendored ownership is explicit and they contain no hand-maintained behavior.
+
+Required size bands:
+
+- Front doors, commands, and public barrels should target 160 lines or fewer.
+  From 161 through 220 lines, the implementation agent must justify every retained
+  responsibility and the reviewer must inspect for extraction opportunities. A
+  hand-maintained command over 220 lines is rejectable unless an existing
+  repo-owned constraint makes immediate extraction riskier and a narrowly scoped
+  exception is recorded. No such command may exceed 300 lines.
+- Focused foundation modules should target 220 lines or fewer. From 221
+  through 300 lines, the agent must include a responsibility inventory and the
+  reviewer must independently decide whether the module still has one cohesive
+  reason to change. From 301 through 350 lines, splitting is expected and
+  acceptance requires a concrete, source-backed reason why a split would make
+  ownership less clear. Above 350 lines is a hard rejection for new or
+  materially rewritten hand-maintained implementation modules.
+- Four hundred physical lines is the absolute ceiling for any hand-maintained
+  JS/TS source or spec module touched by this pack. The 400-line ceiling is not
+  an exception target: a file can and should be rejected well below it when it
+  mixes responsibilities, hides a state machine, duplicates policy, or acts as
+  an overflow container.
+- Test modules should normally stay at or under 300 lines. Larger scenario
+  matrices must be split by contract family, fixture owner, or acceptance-ID
+  range and share focused fixture builders rather than one giant test file.
+- Existing oversized files are not permission to add more behavior. If a batch
+  must touch one, it should leave the file no larger unless the added lines are
+  temporary extraction glue removed in the same batch. The report must record
+  the before/after line count and the lower-layer owner used for extraction.
+
+Responsibility gates apply independently of line count:
+
+- three or more independently nameable responsibilities in one module require
+  a split, even when the file is under 220 lines
+- compatibility matrix computation, migration step execution, and atomic
+  staging must not accumulate in one owner
+- host-adapter factory logic, per-adapter filesystem layout, and version
+  recording must not accumulate in one module
+- a class that owns manifest parsing, compatibility checking, link staging,
+  manifest writing, and crash recovery is a god object and must be rejected
+- a coordinator may sequence collaborators but must not absorb their
+  algorithms; a registry may resolve owners but must not reimplement them
+- a barrel exports the capsule surface only and must not become a forwarding
+  layer for foreign APIs
+
+Additional reject conditions:
+
+- a file mixes unrelated concerns such as manifest parsing plus asset staging
+  plus crash recovery plus version reporting
+- a new helper bag (`helpers`, `utils`, `common`, `misc`) becomes the overflow
+  owner
+- a large legacy file grows materially without extracting lower-layer ownership
+- comments are used to justify mixed responsibility instead of splitting owners
+
+Every implementation report must include line counts for all new files and
+materially rewritten files. Every review report must independently reproduce or
+verify those counts and state whether each warning-band file remains cohesive.
+Passing the line-count gate never overrides the responsibility gates above.
+
+## Agent Reasoning Classes And Batch Assignment
+
+Reasoning classes are capability requirements, not vendor or model-version
+claims. Operators should select the strongest currently available coding agent
+that reliably meets the assigned class, has enough context for the complete
+brief/spec/source set, and can execute and inspect repository tools. Named model
+examples in launch prompts are non-normative and may become stale; the `R` class
+and the work characteristics below are authoritative.
+
+- `R3` — bounded repository reasoning: a narrow adapter or reporting task with
+  explicit owners, limited state interaction, and focused proof
+- `R4` — deep repository reasoning: cross-file contracts, compatibility
+  boundaries, ownership-boundary decisions, negative-path design, and
+  independent source verification
+- `R5` — highest available reasoning: interacting state machines, crash
+  recovery, atomicity guarantees, destructive operations, multi-module
+  integration, or final evidence/closure authority
+
+The reviewer class is never lower than the implementor class. A reviewer must
+reason independently from the patch and implementation report; it is not enough
+to confirm that the implementor followed a checklist.
+
+| Batch | Implementor | Reviewer | Reason for the floor |
+|-------|-------------|----------|----------------------|
+| UK-01 | R4 | R4 | Compatibility matrix and ownership-boundary planning; cross-manifest comparison with negative-path design |
+| UK-02 | R5 | R5 | Pure version-steps with value-preservation proofs; interacting session-index and policy-baseline state machines |
+| UK-03 | R5 | R5 | Atomic staging with crash recovery at every write point; downgrade-guard state machine and destructive boundary |
+| UK-04 | R3 | R3 | Bounded host adapters with explicit preview/replace patterns; narrow filesystem operations |
+| UK-05 | R3 | R4 | Version reporting integration and conformance proof; reviewer must independently verify end-to-end fixtures |
+
+Escalate a nominal `R3` task to `R4` or `R4` to `R5` if source inspection
+reveals an undocumented state machine, concurrency, destructive data behavior,
+an ownership conflict across modules, or a required compatibility decision not
+settled by the governing specs. Do not lower a class because a prompt looks
+short or because an implementation report claims the work is straightforward.
+
+## Prompt Integrity And Non-Compression Rule
+
+Launch prompts and durable briefs are safety artifacts. Their ownership rule,
+read order, scope, mission, prohibitions, proof requirements, tracker duties,
+machine-local report instructions, correction procedure, reasoning class, and
+handoff requirements must not be removed or compressed into ambiguous shorthand.
+
+- Expansion and clarification are encouraged when they make an invariant,
+  owner, failure mode, proof obligation, or review procedure more explicit.
+- Incorrect paths or claims must be replaced with equally detailed or more
+  detailed correct content; deleting the surrounding instruction is not a fix.
+- The implementation and reviewer lanes must each stand on their own. A reviewer
+  prompt may refer to the paired work brief, but it must still state how to
+  independently inspect source, reproduce proof, reject structural defects,
+  record corrections, and update lane state.
+- Machine-specific ownership instructions in launch prompts are protected
+  operator controls. They must be retained verbatim unless the lane owner
+  explicitly replaces them with an equally explicit rule.
+- A short launch prompt is not acceptable merely because the durable brief is
+  detailed. Agents may receive one artifact without prior conversation context,
+  so each launch prompt must preserve the complete execution or review method.
+- Both the top-level `Recommended agent/model class for forwarding` section and
+  any later `Reasoning / Agent Class`, `Reasoning / Reviewer Class`, or
+  `Reviewer Class` section must remain independently complete. Do not replace
+  the primary-model, good-alternative, steering-only, prohibited-final-pass,
+  suitability, context-retention, or final-authority tiers with only an `R`
+  label and a one-line rationale. Repetition is preferable to losing forwarding
+  instructions when an operator copies only one of those sections.
+
+## Compatibility Rejection Rules
+
+Reject the batch if it introduces any of the following:
+
+- a change to lane-owned values (`lane.config.env`, `repositories.local.json`,
+  `model-plan.md`) during upgrade or migration
+- a regression in operator-session journal or pin integrity after migration
+- a version report that disagrees with the actual installed manifest
+- a hardcoded version string that diverges from `package.json` or the
+  packaged manifests
+- a silent overwrite of a lane-owned file during upgrade
+- a downgrade that proceeds without `--allow-downgrade` or incompatible
+  schema version
+- a host skill install that embeds lane paths, lane IDs, tmux prefixes, or
+  repository bindings
+- a false claim that host notification is configured or verified
+- an upgrade preview that mutates lane state (links, manifests, or config)
+
+## Proof And Evidence Requirements
+
+No batch is acceptable on narrative confidence alone.
+
+- A batch must land or update focused specs that exercise the behavior
+  introduced in that batch.
+- UK-01 tests must prove every classification outcome independently with
+  synthetic manifest fixtures.
+- UK-02 tests must prove every migration step preserves all laned-owned
+  artifacts with exact byte comparisons.
+- UK-03 tests must prove crash recovery at every staged write point with
+  real filesystem operations in temporary fixture workspaces.
+- UK-04 tests must prove every host adapter previews correctly, refuses
+  without `--replace` in non-interactive mode, and records the installed
+  version.
+- UK-05 tests must prove all four version components, two-version coexistence,
+  collision detection, and failed-migration recovery.
+- Reports must record the real commands run, the actual outcome, and any
+  honest limitation.
+- "Not run yet", "reviewer can run later", or "covered by existing behavior"
+  is not sufficient when the batch changes upgrade or migration truth.
+- Do not add npm scripts or convenience wrappers to run tests. Use existing
+  package test surfaces or NVB tasks.
+
+## Reviewer Hard-Reject Checklist
+
+Reject the batch immediately if any answer is "yes."
+
+1. Did the implementation bypass the `upgrade-planner.ts` or `migration-registry.ts` foundation services and put algorithm logic directly in a command class?
+
+2. Did a command become the main owner of compatibility checking, manifest comparison, link staging, crash recovery, or version derivation?
+
+3. Is any important truth (compatibility matrix, migration ordering, staging sequence, host destination paths) computed in more than one module or layer?
+
+4. Did the implementation guard only the final output while allowing a preview to mutate lane state or an upgrade to proceed with unverified checksums?
+
+5. Does an upgrade or migration step overwrite, delete, or alter lane-owned values, operator-session journals, pins, lifecycle identities, or config files?
+
+6. Did the implementation write `install.json` before all managed assets were staged, fsynced, and checksum-verified?
+
+7. Does a crash during or after upgrade leave the old runtime uninvocable or leave a stale manifest authoritative without a recovery path?
+
+8. Is a downgrade possible without `--allow-downgrade`, or does an incompatible downgrade succeed silently?
+
+9. Was proof omitted, deferred, mis-layered, only narrated, or run through an ad hoc script rather than the accepted test surfaces?
+
+10. Were tracker/roadmap/status docs left stale after the batch outcome?
+
+11. Did the patch introduce machine-local committed documentation such as username-specific shell instructions or local filesystem paths?
+
+12. Did the patch choose file naming or module placement contrary to the repo's TypeScript source conventions (`src/commands/`, `src/foundation/`, `src/contracts/`)?
+
+13. Did any new module exceed the pack's size/clean-code bar without a narrow, source-backed exception?
+
+14. Did the patch modify non-allowlisted package areas or add npm convenience scripts for testing or workflow?
+
+15. Does a host adapter embed lane-specific state (home paths, lane IDs, tmux prefixes, repository bindings) in installed knowledge skills, or claim host notification is active without verifying?
+
+16. Does `wt version` return a hardcoded string instead of deriving version components from `package.json`, `install.json`, and the packaged manifests?
+
+## Required Acceptance Narrative
+
+Every accepted review should state, in concrete terms:
+
+- the exact owner modules for the behavior
+- how lane-owned values were proved preserved
+- what proof was rerun independently
+- what status/spec docs were synchronized
+- any intentionally deferred question that remains deferred rather than guessed
+
+If the reviewer cannot write that summary precisely, the batch is not ready to
+accept.
+
+## Batch Hygiene Rules
+
+- Implementation agents do not commit.
+- The paired reviewer owns acceptance and commit.
+- Every batch needs a durable report in `.local/agent-reports/wt-upgrade-knowledge/`.
+- Every review batch needs a durable review report under
+  `.local/agent-reports/wt-upgrade-knowledge/reviews/`.
+
+## Documentation Rules
+
+- User-facing help fragments are not optional cleanup.
+- Internal spec/status docs must stay synchronized with acceptance state.
+- Update `docs/spec/v1.md` command-status markers when a batch is accepted.
+- Keep `docs/spec/v1-implementation-map.md` §7 pack status synchronized.
+- Update the schema bundle if a batch introduces new JSON contract fields.
+
+## Package-Script Policy Rule
+
+- This is Nirvana: use `nvb` task/group surfaces for workflow automation.
+- Do not add ad hoc npm scripts in package manifests for agent convenience,
+  temporary fixes, or one-off maintenance flows.
+- Keep package `scripts` minimal and only when there is a clear product/runtime
+  requirement.

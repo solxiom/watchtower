@@ -1,0 +1,228 @@
+# Batch REL-01 — Fresh-Lane Implementer→Reviewer→Accept Trial
+
+Status: ❌ Pending
+Phase: Release qualification
+Depends on: LC-08, UK-05, CA-18 accepted (Packs 3, 4, 5 complete); all packs 1–5 accepted
+Work ID: `REL-01`
+Governing spec: `docs/spec/v1.md` §17; `docs/spec/v1-contracts.md` §§2–8
+
+**Required implementor reasoning class:** `R5`
+**Class rationale:** cross-pack end-to-end trial spanning global install, init, discovery, status, watch, dispatch, handoff, independent accept, publication, upgrade, doctor, operator sessions, and release evidence. The full chain exercises the lane lifecycle, coordinator routing/validation/effects, operator-session lifecycle, and attachment commands from all six packs. The agent must reason across filesystem state, Git state machines, and durable event journals while producing independently reproducible evidence. No single step is individually the hardest, but the complete sequential chain requires sustained contextual reasoning and the ability to diagnose failures at any step by tracing back through accepted pack source.
+
+## Objective
+
+Globally install the `wt` package from `nvb dist`, initialize a complete implementation lane from the accepted pack 5 fixtures, dispatch work, hand off to a reviewer agent, record independent acceptance, publish acceptance commits, and produce a release evidence packet documenting every step. Prove that the assembled product completes one full managed-lane cycle without copying the runtime tree into the target project.
+
+This batch does **not** exercise concurrent lanes, multi-repository recovery, security exploits, performance scaling, or documentation audits. It establishes the baseline happy-path acceptance pipeline.
+
+## Required Work
+
+### Phase 1: Verify prerequisite pack acceptance
+
+1. Confirm packs 1–5 are independently accepted. For each pack, verify:
+   - All work and review batches are marked accepted in their respective trackers.
+   - `nvb build` exits 0.
+   - `nvb test` exits 0 with no unexpected failures.
+2. Record the exact commit hash at the current HEAD. This is the release candidate baseline.
+3. Record `nvb test` pass/fail counts for the complete test suite.
+4. Confirm `hello` scaffold is removed (LC-08 exit condition).
+
+### Phase 2: Global install trial
+
+1. Build the package: `nvb dist`.
+2. Validate the package against the manifest rules defined in `v1-contracts.md` and build validation:
+   - `dist/` contains `bin/wt.js`, `src/`, `help/`, `runtime/`, `knowledge/`, `runtime-nvb/`, `package.json`.
+   - `runtime/manifest.json` and `knowledge/manifest.json` are present and valid.
+   - Every managed asset referenced in the runtime manifest has a matching checksum.
+   - No missing, extra, non-executable, or checksum-mismatched managed assets exist.
+3. Install globally: `npm install -g ./dist`.
+4. Verify `wt` is available on PATH and `wt --version` exits 0.
+5. Verify `wt help` lists no `hello` command.
+
+### Phase 3: Lane initialization trial
+
+1. Create a temporary fixture workspace with a valid implementation pack:
+   - A Git repository with a committed implementation-pack structure.
+   - `implementation-pack.json`, `implementation-pack.lock.json`, and `pack-acceptance.json` are valid and accepted.
+   - The pack seal matches the committed file bytes.
+   - A valid `--coordinator-routing` JSON plan exists.
+2. Run `wt init <slug> --tmux-prefix=<pfx> --impl-pack=<path> --coordinator-routing=<path> --update-gitignore`.
+3. Verify the created lane:
+   - `.watchtower/lanes/<slug>/lane.json` exists with valid UUID, slug, kind, initiative, control-home repository.
+   - `.watchtower/lanes/<slug>/install.json` exists with correct cliVersion, runtimeVersion, knowledgeVersion, mode, managedAssets.
+   - `.watchtower/lanes/<slug>/repositories.local.json` exists with correct bindings.
+   - `.watchtower/lanes/<slug>/lane.config.env` exists with valid KEY=value format.
+   - `bin/` directory contains managed runtime links.
+   - `state/`, `coordinator/`, `briefs/`, `prompts/`, `reports/`, `budgets/`, `logs/` directories exist.
+   - Coordinator pack indexes, operator-session roots, amendment-request store, and hold registry are initialized.
+4. Verify no runtime tree was copied into the target project. The control home contains only the structured lane overlay.
+5. Run `wt status --json` on the bootstrapped lane. Verify:
+   - Output is valid JSON matching the `laneStatus` schema.
+   - `schemaVersion` is 1.
+   - `lane.id`, `lane.slug`, `lane.kind`, `lane.controlHome` are correct.
+   - `lifecycle.status` reflects the current state (bootstrap, then active after index activation).
+   - `health` has expected status and any warnings.
+6. Run `wt list`. Verify the new lane appears with correct slug, initiative, kind, control home.
+
+### Phase 4: Init refusal trial (negative cases)
+
+1. Attempt `wt init` with an unaccepted pack (missing `pack-acceptance.json` or verdict not `accept`). Verify refusal with exit code 3 or 4 and a clear diagnostic.
+2. Attempt `wt init` with an unsealed pack (modified `implementation-pack.lock.json` or mismatched seal). Verify refusal.
+3. Attempt `wt init` with an uncommitted pack (sealed file not tracked at HEAD). Verify refusal.
+4. Attempt `wt init` with a critically drifted pack (sealed file bytes differ from HEAD). Verify refusal.
+5. Attempt `wt init` over an existing lane directory. Verify refusal with a clear diagnostic.
+6. Attempt `wt init` without `--update-gitignore` when `.watchtower/` is not ignored. Verify preflight failure.
+
+### Phase 5: Discovery trial
+
+1. From the control home, verify `wt list` discovers the lane.
+2. From a descendant directory within the control home, verify `wt list` discovers the lane.
+3. From the lane directory itself (`.watchtower/lanes/<slug>/`), verify `wt list` discovers the lane.
+4. From a registered participating-repository path (after membership index registration), verify `wt list` discovers the lane.
+5. Create a second lane in the same control home. Verify `wt list` shows both lanes.
+6. From a directory that is not a descendant of any lane, verify `wt list` returns an empty result (not an error).
+
+### Phase 6: Watch trial
+
+1. Run `wt watch` for the initialized lane.
+2. Verify the watcher starts, emits heartbeat lines to stdout, and continues until interrupted.
+3. Send Ctrl-C (SIGINT). Verify the watcher exits cleanly and the lane state is not corrupted.
+4. Verify the watcher does not daemonize (the foreground process is the watcher).
+5. Inspect the watcher state file after exit. Verify it records the last heartbeat time.
+
+### Phase 7: Implementer→reviewer→accept cycle trial
+
+This is the core acceptance trial. It exercises the coordinator, worker dispatch,
+handoff, independent acceptance, and publication pipeline.
+
+1. **Dispatch implementer:** Using the coordinator routing policy from init:
+   - Trigger a ready-batch calculation. Verify the coordinator identifies the next working batch.
+   - Dispatch an implementer worker for that batch (in a real or simulated tmux session).
+   - Run the implementation brief. The worker produces code changes and a handoff event.
+2. **Verify coordinator behavior:**
+   - The coordinator detects the implementer `handoff` event.
+   - The ready set excludes the in-progress batch.
+   - The coordinator proposes a reviewer dispatch through a typed decision envelope.
+   - The proposal passes validation against the current routing policy.
+3. **Dispatch reviewer:**
+   - An independent reviewer session begins.
+   - The reviewer inspects the implementer's changes.
+   - The reviewer accepts the batch, producing an `accept` event with a per-repository commit set.
+4. **Verify acceptance:**
+   - The `accept` event is durably recorded in the coordinator journal.
+   - The commit set maps each writable repository to a valid, reachable commit.
+   - The commit was created after reviewer launch and was not emitted by the implementer.
+   - Per-repository push journals are created.
+5. **Publication:**
+   - Git push succeeds for each acceptance commit.
+   - The lane state advances to the next batch or to `complete` if all batches are accepted.
+   - Per-repository push journals record success.
+
+### Phase 8: Operator-session trial
+
+1. Create an operator session: `wt coordinator session create`.
+2. Verify `wt coordinator session list` shows the session with `state: open`.
+3. Send a bounded advisory question: `wt coordinator ask "What batch should we focus on next?"`.
+4. Verify the response is advisory (does not mutate lane state).
+5. Attach to the session: `wt coordinator session attach <id>`.
+6. Verify the attachment renders session context without holding the lane lock.
+7. Create a scoped hold: `wt coordinator hold place --scope=<batch-id> --expiry=5m`.
+8. Verify `wt status` reports the active hold.
+9. Release the hold: `wt coordinator hold release <hold-id>`.
+10. Confirm a proposal through `wt coordinator session apply <proposal-id>`.
+11. Verify the proposal requires revalidation before the effect executor acts.
+12. Detach from the session. Verify the session remains open.
+13. Close the session: `wt coordinator session close <id>`.
+
+### Phase 9: Doctor trial
+
+1. Run `wt doctor` on the initialized lane.
+2. Verify checks return `pass` for:
+   - control home and repository access
+   - marker/config/state schema
+   - repository ID/path/branch/worktree consistency
+   - runtime manifest, links, executability, and checksums
+   - required tools (`bash`, `git`, `tmux`, `jq`, `flock`)
+   - coordinator policy/routing compatibility
+   - operator-session policy and index consistency
+   - Git ignore coverage for `.watchtower/`
+3. Deliberately break one check (e.g., remove a managed link, corrupt `lane.json`, remove a tool from PATH). Verify `wt doctor` reports `fail` or `warn` as appropriate.
+
+### Phase 10: Upgrade trial
+
+1. Create a second runtime version (or stage a compatible newer runtime version).
+2. Run `wt upgrade --to=<version>` without `--apply`. Verify preview-only behavior:
+   - Shows changed, unchanged, preserved, migrated, and conflicted paths.
+   - Does not modify any file.
+3. Run `wt upgrade --to=<version> --apply`.
+4. Verify only manifest-owned paths are changed. Lane-owned config (`lane.config.env`, `repositories.local.json`) is preserved.
+5. Verify operator-session history (turns, journals, indexes) is preserved.
+6. Verify the old runtime remains staged and usable.
+7. Attempt downgrade without `--allow-downgrade`. Verify refusal.
+
+### Phase 11: Release evidence packet
+
+Produce a release evidence document at `.local/agent-reports/watchtower-release/REL-01-fresh-lane-trial.md` containing:
+
+- Exact `wt --version` output.
+- Exact `nvb dist` exit code and output summary.
+- Exact `npm install -g ./dist` exit code.
+- Exact `wt init` command and exit code.
+- Exact `wt status --json` output for the initialized lane.
+- Exact `wt list` output.
+- Exact `wt watch` transcript (first 5 seconds of heartbeat lines).
+- Summary of the implementer→reviewer→accept cycle with commit hashes, event types, and timestamps.
+- Exact `wt doctor` output for the healthy lane.
+- Exact `wt doctor` output for the deliberately broken fixture.
+- Exact `wt upgrade` preview and apply outputs.
+- Confirmation that no runtime tree was copied into the target project.
+- Confirmation that `.local/`, `.env`, `project/`, `.demo-state/`, and native binaries are not staged.
+- Any limitations (e.g., "tmux session not available in CI environment" with documented workaround).
+- Proposed commit message for the acceptance commit.
+
+## Expected Ownership
+
+- `spec/e2e/accept-trial.spec.ts` — end-to-end Jasmine spec exercising the full pipeline.
+- Release evidence fixtures: temporary workspace directories created and cleaned up by the spec.
+- `docs/spec/implementation/wt-v1-release/implementation-tracker.md` — updated with REL-01 status.
+- `docs/spec/implementation/wt-v1-release/implementation-roadmap.md` — updated with REL-01 status.
+- `.local/agent-reports/watchtower-release/REL-01-fresh-lane-trial.md` — release evidence packet.
+
+## Structural Constraints
+
+- E2E specs use Jasmine with temporary directories and real subprocess execution of `wt`.
+- No mock bypass of the public CLI interface. E2E specs must invoke `wt` through `child_process` or equivalent with real filesystem operations.
+- Fixture setup and teardown must clean up all created files, directories, and Git repositories.
+- Spec files must not exceed the 400-line ceiling; split by trial phase if needed.
+- No new npm convenience scripts or package dependencies.
+- No product logic changes in `src/`. This batch creates specs and evidence, not features.
+
+## Reject Conditions
+
+Reject Batch REL-01 if any of the following is true:
+
+- The global install trial does not complete.
+- `wt init` copies the runtime tree into the target project.
+- `wt init` accepts an unaccepted, unsealed, uncommitted, or critically drifted pack.
+- Lane discovery fails from any documented discovery path.
+- `wt status --json` output does not validate against the JSON Schema.
+- `wt watch` daemonizes or fails to emit heartbeat lines.
+- The implementer→reviewer→accept cycle does not complete.
+- Reviewer acceptance is not durably recorded and distinct from Git publication.
+- `wt doctor` misses a deliberately introduced violation.
+- `wt upgrade --apply` overwrites lane-owned config or operator-session history.
+- Any mock replaces the real `wt` binary or real filesystem/Git operations where the spec does not permit it.
+- The release evidence packet is missing, incomplete, or narrative-only.
+- Any build, dist, node_modules, `.nira/local`, or `.watchtower` artifact is added to Git.
+
+## Completion And Handoff
+
+Implementation is handoff-ready only after all required work, test proof, architecture checks, and the durable implementation report are complete. The implementer must not create an acceptance commit or mark the batch accepted. Only the paired reviewer may do that after independent proof.
+
+The handoff must state:
+- Exact changed files and ownership role.
+- Focused and regression commands with actual pass/fail counts.
+- The exact release evidence packet location and content summary.
+- Every negative-case result (init refusal, doctor break, upgrade guard, downgrade refusal).
+- Confirmation that `.local/`, build artifacts, and `.watchtower/` are not staged.
+- The next batch dependency: REL-02 is blocked until REL-01 is accepted.
