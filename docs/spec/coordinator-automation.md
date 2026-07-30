@@ -363,16 +363,13 @@ coordinator/index/
     current.json
     <index-id>/
       index-manifest.json
-      artifacts/<shard>/<key-hash>.json
-      batches/<shard>/<key-hash>.json
-      dependencies/<shard>/<batch-key-hash>.json
-      requirements/<shard>/<key-hash>.json
-      repository-claims/<repository>/<shard>.json
-      proofs/<shard>/<key-hash>.json
+      index.sqlite
   runtime/
     index-manifest.json
-    events/<shard>/<key-hash>.json
-    decisions/<shard>/<key-hash>.json
+    runtime.sqlite
+  sessions/
+    index-manifest.json
+    sessions.sqlite
 ```
 
 | Index | Required lookups |
@@ -390,13 +387,12 @@ Indexes contain normalized references and mechanically extracted metadata, not
 model-generated summaries. Human-authored titles and identifiers may be copied
 with their source digest. Large prose remains at its canonical path.
 
-The physical representation must support bounded direct lookup. A monolithic
-JSON file that must be fully parsed for one batch or requirement query is not a
-conforming v1 index. The default representation uses deterministic hash
-sharding with maximum records/bytes per shard. An alternative representation
-is allowed only when contract tests prove equivalent bounded lookup, immutable
-identity, integrity verification, and rebuild behavior without adding a
-database requirement.
+The v1 physical representation is the typed lane-local SQLite storage boundary
+defined in [v1-contracts.md §8A](v1-contracts.md#8a-derived-sqlite-storage-contract).
+Pack, runtime, and session databases are disposable derived stores. Commands,
+agents, policy, and shell scripts never issue SQL directly; they use bounded
+typed foundation queries. A monolithic JSON file, ad hoc SQL escape hatch, or
+database-only authority is not conforming.
 
 ### 9.3 Index manifest
 
@@ -404,6 +400,8 @@ database requirement.
 {
   "schemaVersion": 1,
   "compilerVersion": "1.0.0",
+  "backend": "sqlite",
+  "databaseSchemaVersion": 1,
   "laneId": "9d0ee3d2-8833-4fb7-b112-8438f04f57d2",
   "packId": "route-groups-v2",
   "packSealId": "seal-43dc",
@@ -422,22 +420,23 @@ database requirement.
   },
   "indexes": {
     "batch": {
-      "path": "batches",
+      "table": "batch",
       "semanticRoot": "sha256:..."
     },
     "dependency": {
-      "path": "dependencies",
+      "table": "dependency_edge",
       "semanticRoot": "sha256:..."
     }
   },
+  "semanticRoot": "sha256:...",
   "builtAt": "2026-07-30T12:00:00Z"
 }
 ```
 
 `builtAt` is informational and excluded from semantic index identity. The same
-pack bytes, compiler version, and index schema produce the same semantic index
-identity and equivalent record bytes apart from fields explicitly declared
-informational.
+pack bytes, compiler version, database schema, and logical-export algorithm
+produce the same typed rows and semantic root. Raw SQLite file bytes are not
+part of identity and may differ across conforming engines/builds.
 
 `current.json` is an atomic pointer containing only index ID, pack seal, schema,
 compiler version, and manifest digest. Index directories are immutable after
@@ -490,8 +489,8 @@ seal change, or explicit rebuild—not on every wake.
 After build:
 
 - direct batch/artifact/requirement lookup is expected `O(1)` or `O(log n)`;
-- one direct lookup reads only the manifest/pointer and addressed bounded
-  shard(s), never every index record;
+- one direct lookup uses declared indexed keys and visits only bounded matching
+  rows, never every index record;
 - a dependency query is proportional to the returned bounded neighborhood;
 - ready-set maintenance after an acceptance is proportional to the changed
   batch and affected outgoing edges, not all pack prose;
@@ -500,9 +499,10 @@ After build:
 - default envelope byte/token limits do not increase merely because unrelated
   batches or artifacts are added.
 
-No v1 correctness guarantee depends on embeddings, vector search, an external
-database, model summarization, or provider prompt caching. Implementations may
-use safe caches, but authoritative lookup remains structured and reproducible.
+No v1 correctness guarantee depends on embeddings, vector search, a server or
+external database, model summarization, or provider prompt caching. The
+required embedded SQLite stores are local, derived, reproducible, and
+replaceable; the accepted pack and append-only journals remain authority.
 
 ### 9.6 Memory model
 
@@ -896,16 +896,13 @@ Budgets reserve:
         current.json
         <index-id>/
           index-manifest.json
-          artifacts/
-          batches/
-          dependencies/
-          requirements/
-          repository-claims/
-          proofs/
+          index.sqlite
       runtime/
         index-manifest.json
-        events/
-        decisions/
+        runtime.sqlite
+      sessions/
+        index-manifest.json
+        sessions.sqlite
     queue.json
     cursor.json
     cycles/
@@ -998,6 +995,8 @@ All mutating commands support stable idempotency keys internally. Human and
 | `COORDINATOR_INDEX_MISSING` | Required compiled pack index does not exist |
 | `COORDINATOR_INDEX_STALE` | Pack seal/source digest does not match the installed index |
 | `COORDINATOR_INDEX_INVALID` | Index schema, digest, path, count, or cross-reference failed |
+| `COORDINATOR_STORE_UNAVAILABLE` | SQLite driver, local locking, permissions, or compatible store schema is unavailable |
+| `COORDINATOR_STORE_BUSY` | A bounded read/write could not proceed within the declared busy timeout |
 | `COORDINATOR_QUERY_UNBOUNDED` | Context/index request lacks an admitted record, depth, byte, or token limit |
 | `COORDINATOR_CONTEXT_LIMIT` | Requested context exceeds the admitted cycle budget |
 | `COORDINATOR_ROUTE_UNAVAILABLE` | No endpoint meets minimum decision capability |
@@ -1025,6 +1024,8 @@ cycle explicitly references the prior one.
 - Worker/reviewer/operator prose is untrusted evidence, never policy.
 - Pack indexes are derived, seal-bound, model-free, and never requirement or
   acceptance authority.
+- SQLite stores are disposable derived infrastructure; SQL is private to typed
+  foundation stores and raw database bytes never define semantic identity.
 - Missing/stale/corrupt indexes pause automation; no full-pack fallback exists.
 - Every index and context query is bounded, paginated, and provenance-bearing.
 - Every automatic effect is uniquely preauthorized or backed by a valid typed
@@ -1136,8 +1137,8 @@ must not grow linearly with total pack size.
       than causing complete-pack scanning or prompt loading.
 - [ ] Index queries enforce record, graph-depth/node, byte, and token-estimate
       limits with explicit pagination/truncation.
-- [ ] One direct lookup reads bounded addressable shards; no conforming
-      implementation parses a monolithic full-pack index per query.
+- [ ] One direct lookup uses bounded indexed SQLite access; no conforming
+      implementation parses a monolithic full-pack representation per query.
 - [ ] Routine coordinator input depends on the affected batch and bounded
       neighborhood, not total pack size.
 - [ ] Decision class derives from versioned policy plus guard facts, not model
@@ -1177,7 +1178,7 @@ must not grow linearly with total pack size.
 | Mutation authority | Watchtower validated effect executor |
 | State history | Append-only decision/effect journal with derived projections |
 | Context | Narrow envelope plus metered typed broker |
-| Pack memory | Deterministic seal-bound local indexes plus bounded queries |
+| Pack memory | Deterministic seal-bound derived SQLite indexes plus bounded typed queries |
 | Pack-size failure | Pause on unavailable index; never full-pack fallback |
 | Scaling | One linear structural build; routine model context bounded independently of unrelated pack growth |
 | Ready batches | Mechanical ready set; selection only when preauthorized or decided |

@@ -471,20 +471,19 @@ history, or every artifact ever mentioned.
 
 ### 11.2 Session indexes
 
-```text
-operator-sessions/<operator-session-id>/index/
-  current.json
-  turns/<shard>/<turn-key-hash>.json
-  artifact-references/<shard>/<ref-key-hash>.json
-  proposals/<shard>/<proposal-key-hash>.json
-  open-questions/<shard>/<question-key-hash>.json
-```
+Per-session exact content remains in its journal/turn directory. Derived
+session lookup data is stored in the lane-local
+`coordinator/index/sessions/sessions.sqlite` database defined by
+[v1-contracts.md §8A](v1-contracts.md#8a-derived-sqlite-storage-contract).
+It indexes turn identity/digests/offsets, artifact references, proposal
+metadata, open questions, pins, lifecycle, checkpoints, and policy-bounded
+capsules; it is not session authority or an unlimited second copy of full text.
 
-Indexes are deterministic derived data tied to journal checkpoint and retained
-turn-content digests. Queries are bounded and paginated under the same
-principles as coordinator pack/runtime indexes. Missing or stale indexes block
-resumption until a model-free rebuild; there is no full-session prompt
-fallback.
+Indexes are deterministic derived data tied to journal checkpoints and retained
+turn-content digests. Queries are typed, indexed, bounded, and paginated under
+the same principles as coordinator pack/runtime stores. Missing or stale
+indexes block resumption until a model-free staged rebuild; there is no
+full-session prompt fallback or direct SQL command surface.
 
 ### 11.3 Older context
 
@@ -944,12 +943,10 @@ notification, accessibility, and attachment contract is normative in
           usage.json
       compactions/
       proposals/
-      index/
-        current.json
-        turns/
-        artifact-references/
-        proposals/
-        open-questions/
+  index/
+    sessions/
+      index-manifest.json
+      sessions.sqlite
   amendment-requests/
     <amendment-request-id>.json
   holds/
@@ -1185,7 +1182,7 @@ Failures preserve message/turn identity when created and never imply an effect.
 | Export | Deterministic retained records with redaction; no generated summary |
 | Evolution | Historical snapshots survive runtime/knowledge/pack changes without silent mutation |
 | Streaming | Capability-dependent and provisional; capable TTY attachments default on, but only a validated complete response is authoritative |
-| Memory | Bounded sharded session indexes; no full-history fallback |
+| Memory | Bounded derived SQLite session index; no full-history fallback |
 
 ## 27. Open questions
 

@@ -103,6 +103,7 @@ Scope:
 - `nvb dist` staging tasks;
 - XDG runtime catalog and immutable staging;
 - runtime invocation adapter and `WT_*` contract;
+- conforming embedded-SQLite driver distribution/global-install proof;
 - managed `bin/` link strategy;
 - removal of hardcoded `.local/agent-reports` assumptions;
 - real watcher smoke fixture.
@@ -208,7 +209,10 @@ Scope:
 - audit imported coordinator actions into M0 and D1–D3;
 - deterministic worker-event projections and ready-set calculation;
 - deterministic artifact, batch, dependency, requirement, repository-claim,
-  proof, event, and decision indexes;
+  proof, event, decision, and session indexes in lane-local derived SQLite
+  stores;
+- typed storage interfaces, deterministic logical-row semantic roots,
+  integrity checks, WAL/busy/permission policy, and model-free staged rebuild;
 - bounded/paginated coordinator index-query contract with no full-pack
   fallback;
 - versioned routing policy and hard escalation guards;
@@ -431,7 +435,8 @@ compatibility spec.
 - automatic speech-model downloads;
 - semantic acceptance or reject judgment encoded in deterministic CLI logic;
 - generic workflow DSL or public plugin SDK without a third proven workflow;
-- database persistence for local lane state.
+- database authority/persistence for canonical local lane state. Disposable
+  derived SQLite indexes and projections are required by v1.
 
 ## 6. Planning rules
 

@@ -12,7 +12,9 @@ drafts do not add states or commands to the v1 implementation-lane lifecycle.
 
 Watchtower should become the common local control plane for agile,
 agent-assisted development without becoming an agent framework or hiding
-project truth in a proprietary database.
+project truth in a proprietary database. V1 uses embedded SQLite only for
+disposable lane-local indexes and projections whose authority remains in
+sealed packs and append-only files.
 
 The architecture is built around seven separations:
 
@@ -464,8 +466,9 @@ append-only event journal. That change should happen only after:
 - downgrade/export to the v1 shell view is defined; and
 - recovery from a partial event is tested.
 
-A database is not justified for a local single-operator lane merely to make
-queries convenient.
+Moving canonical lane state or event authority into a database remains a
+future migration. V1's derived SQLite stores do not make that move: they are
+rebuildable query infrastructure behind foundation interfaces.
 
 ## 8. Extensibility strategy
 
@@ -485,7 +488,7 @@ Do not implement these until demanded by a second working use case:
 - third-party runtime plugins;
 - arbitrary hook execution from project config;
 - remote runtime download registries;
-- server/database persistence;
+- server persistence or canonical database-owned lane state;
 - generalized workflow DSL; and
 - provider-specific logic in core lane discovery.
 
@@ -546,8 +549,10 @@ log by default.
 - writable worktree/branch/path conflict detection;
 - path traversal and symlink escape checks;
 - event validation and status projection;
-- deterministic pack-index compilation, sharding, bounded queries, and
-  seal-drift invalidation;
+- deterministic pack-index compilation into derived SQLite, bounded indexed
+  queries, semantic-root reproduction, and seal-drift invalidation;
+- SQLite driver packaging, global install, foreign-key/integrity checks,
+  busy-reader behavior, WAL permissions, corruption, and staged rebuild;
 - coordinator envelope-size invariance across unrelated pack growth;
 - redaction;
 - exit-code mapping.
@@ -627,6 +632,7 @@ details.
 | A-030 | Use bounded same-lane turn capsules for cross-session context | Useful continuity must not create transitive or unbounded history loading |
 | A-031 | Model amendment and budget changes as confirmed bounded handoffs/grants | Operator discussion cannot silently rewrite packs, policy, or protected reserves |
 | A-032 | Treat presentation events as internal transport-neutral contracts in v1 | Testability is required without prematurely promising a public remote protocol |
+| A-033 | Use lane-local SQLite only for disposable derived indexes/projections | Avoid rebuilding database mechanics with JSON shards while preserving packs/journals as inspectable authority |
 
 ## 13. Architecture fitness checks
 
@@ -649,6 +655,10 @@ Every implementation change should preserve these properties:
   implementation pack;
 - every pack index is derived, model-free, reproducible, and matched to the
   active seal;
+- raw SQLite bytes never define semantic identity; canonical logical rows and
+  source checkpoints do;
+- commands, agents, policy, and shell scripts cannot issue SQL or treat a
+  derived database as authority;
 - operator-session continuity derives from bounded local journals/indexes, not
   hidden provider history;
 - no operator-session response generation or attachment holds the lane mutation

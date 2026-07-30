@@ -356,6 +356,143 @@ Exit-code mapping is:
   or confirmation required;
 - 1: unexpected I/O, subprocess, or internal failure not represented above.
 
+## 8A. Derived SQLite storage contract
+
+### 8A.1 Boundary and authority
+
+Watchtower v1 requires embedded SQLite 3 lane-local stores for query-heavy
+derived indexes and projections. SQLite is an implementation substrate, not a
+new authority:
+
+```text
+sealed implementation pack + append-only durable journals
+  → deterministic compiler/projector
+  → disposable SQLite read models
+  → bounded typed queries
+```
+
+The authoritative pack, acceptance, lock, JSON/JSONL journals, lane/install
+manifests, repository bindings, lane-owned policy, and shell-compatible state
+projection remain files. No authoritative event, effect, session turn, pack
+fact, or acceptance fact may exist only in SQLite.
+
+The v1 stores are:
+
+```text
+coordinator/index/
+  pack/
+    current.json
+    <index-id>/
+      index-manifest.json
+      index.sqlite              # immutable after publication
+  runtime/
+    index-manifest.json
+    runtime.sqlite              # derived event/decision/projection index
+  sessions/
+    index-manifest.json
+    sessions.sqlite             # derived cross-session/query index
+```
+
+Per-session exact turn text remains under `operator-sessions/<id>/`; the
+session database stores identities, digests, offsets, bounded metadata,
+references, proposal/open-question projections, and optional policy-bounded
+excerpts only. It must not become an independent unlimited copy of session
+content.
+
+### 8A.2 Storage abstraction
+
+Foundation services consume typed `PackIndexStore`, `RuntimeProjectionStore`,
+and `SessionIndexStore` interfaces. Commands, coordinator policy, adapters,
+and the shell runtime never open a database or issue SQL directly. V1 supplies
+one SQLite implementation; arbitrary SQL, extension loading, user SQL hooks,
+and database paths from project configuration are forbidden.
+
+The selected Node driver is an implementation clarification recorded by the
+storage feasibility batch. It must:
+
+- support the repository's pinned Node/NVB build and global-install targets;
+- use parameterized statements and expose no extension-loading path;
+- provide transactions, foreign keys, integrity checks, busy handling, and
+  deterministic typed row access;
+- package without an undeclared system database or compiler dependency; and
+- pass the distribution, ownership, crash, and supported-platform fixtures.
+
+Failure to identify a conforming driver blocks the SQLite-owning batches and
+requires a specification amendment. It does not authorize a silent JSON-shard
+fallback.
+
+### 8A.3 Schema, identity, and publication
+
+Each database has an application schema version, compiler/projector version,
+lane ID, source identity, source checkpoints, and semantic root recorded both
+inside the database and in an adjacent
+`$defs.derivedStoreManifest`. Foreign-key enforcement is mandatory.
+
+Raw SQLite bytes, page order, journal files, vacuum results, and engine version
+are excluded from semantic identity. The semantic root is computed from a
+versioned logical export:
+
+1. enumerate the closed table registry in schema order;
+2. read rows in declared primary-key order;
+3. encode each typed row as RFC 8785 canonical JSON;
+4. hash the table name, row count, and length-delimited canonical rows; and
+5. hash the ordered table digests into one lowercase `sha256:` root.
+
+For identical accepted inputs, schema, and compiler/projector version, logical
+rows and the semantic root must be identical even when SQLite file bytes
+differ.
+
+Pack index compilation writes a new database in an adjacent staging directory,
+verifies its source digests, semantic root, foreign keys, and SQLite integrity,
+closes it with no live journal/temporary files, fsyncs it, and atomically
+publishes the immutable index directory before switching `current.json`.
+
+### 8A.4 Runtime behavior and concurrency
+
+The pack database is opened read-only after publication. Runtime and session
+databases use write-ahead logging for concurrent read-only status/query access,
+but have exactly one Watchtower writer under the existing lane lock. SQLite
+transactions strengthen local atomicity; they do not replace `flock`, journal
+fsync, effect idempotency, or the single effect authority.
+
+Shipping defaults are:
+
+- foreign keys enabled;
+- extension loading disabled;
+- a 5,000 ms busy timeout;
+- no automatic unbounded checkpoint/vacuum on a foreground read command;
+- bounded prepared statements only; and
+- owner-only database/WAL/shared-memory permissions unless a validated
+  configured execution account requires narrower read access.
+
+A busy read reports the active mutation or returns a bounded busy error; it
+does not repair, delete, or rebuild the store. Filesystems that cannot provide
+the required local locking and atomic-rename behavior fail doctor/preflight.
+Network/shared filesystems are unsupported for mutable v1 derived stores.
+
+### 8A.5 Rebuild, corruption, privacy, and upgrade
+
+Pack stores rebuild only from a valid accepted seal. Runtime and session stores
+rebuild only from verified append-only journals and retained content
+checkpoints. Rebuild writes and verifies a staged replacement, then switches it
+atomically under the lane lock. Readers see the old complete store or the new
+complete store, never a partially rebuilt database.
+
+Missing, stale, corrupt, incompatible, or checkpoint-divergent stores:
+
+- remain non-authoritative;
+- block automated cycles or session resumption that require them;
+- never trigger complete-pack/session model context or an ad hoc full scan;
+- are reported by status/doctor without read-side repair; and
+- require explicit `coordinator index build`, runtime rebuild, session rebuild,
+  init, or upgrade action.
+
+Database backup is not required for correctness because authority remains in
+pack/journal files. Upgrade uses versioned rebuild-first migrations; it never
+mutates an immutable pack database in place. Credentials, raw environment
+maps, unrestricted repository content, and unredacted unlimited session text
+are forbidden from derived stores.
+
 ## 9. Event, queue, cursor, and replay contract
 
 All JSONL records validate against `$defs.durableEvent`. The `type` registry
@@ -444,6 +581,10 @@ then switches one atomic install pointer. Old runtime binding and historical
 artifacts remain until the new pointer is verified. External effects never
 occur inside init or upgrade.
 
+SQLite transactions are nested inside the lane/projection lock scope and never
+reverse this order. Database busy handling does not grant permission to break
+or steal a lane lock.
+
 ## 12. Conformance artifacts and implementation-ready gate
 
 The schema bundle is normative and uses JSON Schema draft 2020-12. Before a
@@ -453,6 +594,10 @@ feature is called Stable, fixtures must cover:
 - every required-field/type/path/digest failure;
 - unknown-field preservation;
 - deterministic seal and semantic digest reproduction;
+- deterministic logical SQLite roots across rebuilds with non-identical
+  permitted file bytes;
+- driver packaging/global-install, foreign-key, corruption, busy-reader,
+  WAL-permission, crash, and model-free rebuild behavior;
 - every routing rule and hard guard;
 - every proposal/effect pair in valid, stale, illegal, duplicate, interrupted,
   and uncertain states;

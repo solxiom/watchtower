@@ -2,8 +2,8 @@
 
 Status: **Proposed — pack-authoring baseline**
 Target release: `1.0.0`
-Work batches: **52**
-Required review batches: **52**
+Work batches: **53**
+Required review batches: **53**
 Last updated: 2026-07-30
 
 This document maps the accepted Watchtower v1 specification into bounded
@@ -31,18 +31,36 @@ V1 is split into six independently accepted implementation packs:
 
 | Order | Pack | Milestones | Work/review pairs | Exit product |
 |------:|------|------------|------------------:|--------------|
-| 1 | `wt-read-model` | M1 | 10 | Read-only discovery, inspection, and stable output |
+| 1 | `wt-read-model` | M1 | 11 | Storage feasibility plus read-only discovery, inspection, and stable output |
 | 2 | `wt-runtime-distribution` | M2 | 7 | Complete versioned runtime/knowledge distribution |
 | 3 | `wt-lane-lifecycle` | M3–M4 | 8 | Transactional init, watch, and doctor |
 | 4 | `wt-upgrade-knowledge` | M5 | 5 | Safe upgrades and host knowledge installation |
 | 5 | `wt-coordinator-automation` | M6 | 18 | Bounded decisions, effects, sessions, and terminal UX |
 | 6 | `wt-v1-release` | M7 | 4 | End-to-end qualification and release |
-| | **Total** | | **52 work + 52 review** | |
+| | **Total** | | **53 work + 53 review** | |
 
 Each work batch has exactly one matching review batch named
 `REV-<work-batch-id>`. Corrections retain the same work/review identity and
 append a correction number; they are not preallocated as additional batches.
 Only the reviewer owns the acceptance commit.
+
+### 1.1 Storage-amendment impact
+
+Any implementation pack authored from the earlier 52-batch/hash-shard map is
+superseded and must not initialize an implementation lane. Pack authors must:
+
+1. add the `DB-01` work/review pair to `wt-read-model`;
+2. add the SQLite driver packaging dependency and proof to `RT-03`;
+3. rewrite `CA-01`, `CA-02`, `CA-03`, and `CA-16` for the derived SQLite
+   contracts;
+4. extend `REL-03` with driver/global-install, integrity, busy/WAL/permission,
+   corruption, semantic-root, and rebuild qualification;
+5. update indexes, roadmaps, trackers, difficulty rankings, traceability, and
+   counts from 52 to 53; and
+6. repeat independent pack review and seal after exact bytes are settled.
+
+Mechanical filename or prose substitution is insufficient because the storage
+failure model, proof, packaging, and semantic-identity rules changed.
 
 ## 2. Current and target architecture
 
@@ -138,11 +156,13 @@ Global hard rejects include:
 
 ## 4. Pack 1 — `wt-read-model` (M1)
 
-Purpose: establish all pure/read-only contracts before workspace mutation.
+Purpose: prove the embedded derived-storage substrate and establish all
+pure/read-only contracts before workspace mutation.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
 | `RM-01` | Contract kernel and error taxonomy | — | `src/contracts/`, contract test helpers | Versioned IDs/types; exit-code mapping; exhaustive error fixtures |
+| `DB-01` | SQLite driver, packaging, and derived-store feasibility | `RM-01` | storage interfaces, feasibility fixtures, ADR | Node/NVB/dist/global install; parameterization; FK/integrity; busy/WAL/permissions; rebuild and semantic-root proof |
 | `RM-02` | Public JSON envelopes and schema validation | `RM-01` | contracts, render/serialization foundation | Success/error envelopes; additive compatibility; no decorative JSON output |
 | `RM-03` | Canonical paths and workspace resolution | `RM-01` | path/workspace foundation | Resolution precedence; symlink/case/path-escape fixtures; missing explicit workspace |
 | `RM-04` | Strict env and lane-state parsers | `RM-01` | parser foundation | Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation |
@@ -156,13 +176,17 @@ Purpose: establish all pure/read-only contracts before workspace mutation.
 ### RM implementation notes
 
 - `RM-01` fixes domain types without depending on Nirvana rendering.
+- `DB-01` selects and proves one conforming SQLite driver. Failure blocks
+  derived-store implementation and requires a spec amendment; there is no
+  silent JSON-shard fallback.
 - `RM-02` supplies one serializer used by every later command.
 - `RM-03`–`RM-05` may proceed in parallel after `RM-01`.
 - `RM-06` is the authority for lane selection; commands may not reimplement it.
 - `RM-10` is accepted only when empty, single-lane, ambiguous, invalid,
   multi-repository, stale-index, and busy-lock fixtures all pass.
 
-Pack exit: from any relevant repository location, the CLI can identify,
+Pack exit: one driver/storage boundary is proven for the supported distribution
+targets and, from any relevant repository location, the CLI can identify,
 select, and describe managed lanes without changing any byte.
 
 ## 5. Pack 2 — `wt-runtime-distribution` (M2)
@@ -174,7 +198,7 @@ complete, immutable, auditable distribution.
 |----|------------|------------|-------------------|----------------|
 | `RT-01` | Canonical runtime and knowledge asset audit/import | `RM-01` | `runtime/`, `knowledge/`, import record | Source provenance; behavioral inventory; no omitted coordinator action/doc |
 | `RT-02` | Runtime and knowledge manifests | `RT-01` | manifests and validation contracts | Every asset/checksum/mode/action represented; missing/extra file rejection |
-| `RT-03` | NVB distribution staging | `RT-02` | `runtime-nvb/`, dist configuration | Required dist layout; executable preservation; reproducible manifest validation |
+| `RT-03` | NVB distribution staging | `RT-02`, `DB-01` | `runtime-nvb/`, dist configuration | Required dist layout including SQLite driver; executable preservation; reproducible manifest validation |
 | `RT-04` | Immutable data-root catalog and staging | `RT-02`, `RM-03` | runtime catalog foundation | XDG precedence; atomic first stage; two versions coexist; immutable version roots |
 | `RT-05` | Central runtime invocation adapter | `RT-04`, `RM-01` | runtime adapter foundation | argv-only execution; `WT_*` allowlist; cwd/account/access validation; signal/exit forwarding |
 | `RT-06` | Managed lane links and compatibility names | `RT-04`, `RT-05` | managed-asset foundation | Manifest-only ownership; link targets/checksums; collision/path-escape refusal |
@@ -225,9 +249,9 @@ effect authority, and durable bounded operator sessions.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
-| `CA-01` | Deterministic sealed-pack index compiler | `LC-02`, `LC-05` | pack index foundation | Identical semantic bytes; path/digest/cross-reference checks; linear build |
-| `CA-02` | Sharded index publication and bounded queries | `CA-01` | index store/query foundation | Direct bounded reads; limits/cursors/truncation; stale/missing/corrupt block |
-| `CA-03` | Runtime journal indexes and projections | `RM-05`, `CA-02` | runtime index/projection foundation | Checkpoints/prefix digests; incremental append; partial-tail/rebuild behavior |
+| `CA-01` | Deterministic sealed-pack SQLite compiler | `DB-01`, `LC-02`, `LC-05` | pack index foundation | Identical logical rows/semantic root; path/digest/FK checks; staged immutable publication; linear build |
+| `CA-02` | SQLite index stores and bounded typed queries | `CA-01` | index store/query foundation | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
+| `CA-03` | Runtime SQLite indexes and projections | `RM-05`, `CA-02` | runtime index/projection foundation | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
 | `CA-04` | Ready set and resource-claim projection | `RM-08`, `CA-01`, `CA-03` | scheduling projection | DAG/dependency/claim/capacity blockers; no arbitrary winner |
 | `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02` | routing foundation/knowledge projection | Every v1 rule/guard; first-match determinism; D1/C2, D2/C3, D3/C5 floors |
 | `CA-06` | Endpoint adapter eligibility and isolation | `RT-05`, `CA-05` | provider-neutral adapter layer | Unattended/advisory/skill-only classification; argv/env/cwd/output/time bounds |
@@ -240,7 +264,7 @@ effect authority, and durable bounded operator sessions.
 | `CA-13` | Coordinator queue, cursor, replay, and watcher integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator runtime | Stable priority; fsynced cursor advance; interrupted/duplicate/uncertain replay |
 | `CA-14` | Coordinator, event, and ready-set commands | `CA-01`–`CA-13` | commands/help/rendering | Index/status/context/explain/cycle/escalate/events/ready; dry-run purity |
 | `CA-15` | Operator-session persistence and lifecycle | `CA-03`, `UK-02` | session store/contracts | Many sessions; one active turn each; immutable closed history; crash-safe journals |
-| `CA-16` | Session indexes, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation | Bounded working sets; same-lane capsules; no transitive/full-history fallback |
+| `CA-16` | Session SQLite index, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
 | `CA-17` | Session routing, budgets, proposals, holds, and amendments | `CA-06`, `CA-08`–`CA-10`, `CA-15`, `CA-16` | session services/effect integration | M0/D1–D3; grants/reserves; confirmation/revalidation; scoped hold interleaving |
 | `CA-18` | Session CLI/PTY attachment and M6 acceptance | `CA-14`–`CA-17` | commands, terminal renderer, PTY/replay/scale specs | Create/attach/resume/observe; streaming/signals/accessibility; 30–10k pack scale and long-lane replay |
 
@@ -297,7 +321,7 @@ but it cannot merge production integration before the owning pack is accepted.
 | Wave | Eligible work after dependencies accept |
 |------|-----------------------------------------|
 | 1 | `RM-01` |
-| 2 | `RM-02`, `RM-03`, `RM-04`, `RM-05`, `RT-01` |
+| 2 | `DB-01`, `RM-02`, `RM-03`, `RM-04`, `RM-05`, `RT-01` |
 | 3 | `RM-06`, `RM-09`, `RT-02` |
 | 4 | `RM-07`, `RT-03`, `RT-04` |
 | 5 | `RM-08`, `RT-05` |
@@ -341,6 +365,8 @@ RM-01 → RM-03 → RM-06 → RM-07 → RM-08 → RM-10
 
 Runtime dependencies `RT-01`–`RT-07` join before lane operation, and upgrade
 dependencies `UK-01`–`UK-05` join before release qualification.
+`DB-01` joins before `RT-03` packages the driver and before `CA-01` implements
+the first production SQLite store.
 
 ## 11. Compatibility surfaces
 
@@ -356,6 +382,7 @@ pack is accepted:
 | Runtime/knowledge manifests and `WT_*` invocation | `RT-02`, `RT-05` |
 | Managed runtime script names and wake behavior | `RT-06`, `RT-07`, `LC-06` |
 | Pack manifest/acceptance/lock/seal | `LC-02`, `CA-01` |
+| Derived-store manifest, SQLite schema, semantic root, and rebuild | `DB-01`, `CA-01`–`CA-03`, `CA-16` |
 | Worker/coordinator/effect/session JSONL | `RM-05`, `CA-03`, `CA-13`, `CA-15` |
 | Routing/proposal/effect registries | `CA-05`, `CA-09`, `CA-10` |
 | Session CLI, PTY signals, presentation events | `CA-18` |
@@ -371,6 +398,7 @@ types, transitions, events, or effects as authority.
 | Unit/contract fixtures | Owning work batch | Matching review batch |
 | Filesystem and Git integration | `RM-03`–`RM-08`, `LC-02`–`LC-04` | `REL-03` |
 | Runtime packaging/smoke | `RT-02`–`RT-07` | `REL-01`, `REL-03` |
+| SQLite driver/storage feasibility | `DB-01`, `CA-01`–`CA-03`, `CA-16` | `REL-03` |
 | Transaction crash/replay | `LC-03`, `UK-03`, `CA-03`, `CA-10`–`CA-13` | `REL-02`, `REL-03` |
 | PTY/accessibility | `CA-18` | `REL-01`, `REL-03` |
 | Cost and scaling | `CA-01`, `CA-02`, `CA-08`, `CA-18` | `REL-03` |
@@ -423,7 +451,7 @@ of earlier pack outputs.
 
 The implementation map is fulfilled only when:
 
-- all 52 work batches have matching independent review outcomes;
+- all 53 work batches have matching independent review outcomes;
 - all six implementation packs are accepted and sealed;
 - every cross-pack compatibility surface has reproducible golden evidence;
 - every v1 release criterion traces to an accepted batch and proof;

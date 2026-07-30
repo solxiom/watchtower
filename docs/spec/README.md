@@ -9,7 +9,7 @@ Normative product docs for the `wt` CLI.
 | [v1.md](v1.md) | Proposed | Normative v1 product and CLI contract |
 | [architecture.md](architecture.md) | Proposed | Product boundary, domain model, components, safety, and evolution |
 | [roadmap.md](roadmap.md) | Planning | Milestones, implementation packs, release gates, and post-v1 horizons |
-| [v1-implementation-map.md](v1-implementation-map.md) | Proposed | Master 52-batch construction, dependency, ownership, and proof map |
+| [v1-implementation-map.md](v1-implementation-map.md) | Proposed | Master 53-batch construction, dependency, ownership, and proof map |
 | [pack-design-draft.md](pack-design-draft.md) | Draft | Canonical accepted-spec to implementation-pack process |
 | [allocation-planning-draft.md](allocation-planning-draft.md) | Draft | CLI/plan/model discovery plus quality-first implementation capacity allocation |
 | [coordinator-automation.md](coordinator-automation.md) | Proposed | Normative v1 pack indexing, bounded decision cycles, zero-token routing, and validated effects |
