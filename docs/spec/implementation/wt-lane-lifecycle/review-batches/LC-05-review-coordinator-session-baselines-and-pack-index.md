@@ -64,7 +64,7 @@ Implementation report: `.local/agent-reports/wt-lane-lifecycle/LC-05-coordinator
 ## Required Independent Proof
 
 1. **Shipping-policy baseline**: extract the seeded values. Compare against v1-contracts.md §7. Every value must match exactly. No invented defaults. No missing required keys. No extra keys not in the contract.
-2. **Routing policy baseline**: verify all 15 routing rules from v1-contracts.md §4 are present. Each rule must have: rule ID, capability floor, classification, and route. Verify rule order is preserved. Verify no extra rules beyond the contract.
+2. **Routing policy baseline**: verify all 16 routing rules from v1-contracts.md §4 are present. Each rule must have: rule ID, capability floor, classification, and route. Verify rule order is preserved. Verify no extra rules beyond the contract.
 3. **Operator-session policy baseline**: verify all defaults from v1-contracts.md operator-session section are present. Verify session count limits, turn budgets, and hold constraints match.
 4. **Provenance markers**: each policy file must include a `_provenance` field or equivalent marker referencing the exact spec section and version from which the policy was derived. Verify every provenance reference is correct.
 5. **Sealed pack index build**: build the pack index from a known-good pack. Verify the index seal matches the active pack seal. Verify index entries for every pack file with correct paths, digests, and byte counts.
@@ -141,7 +141,7 @@ sync status, and the acceptance or rejection decision.
 
 - All hard-reject checklist items are clear.
 - Every policy value matches the contract exactly.
-- All 15 routing rules seeded correctly.
+- All 16 routing rules seeded correctly.
 - Provenance markers reference correct spec sections.
 - Pack index seal matches active pack seal.
 - Index builds are byte-for-byte identical across rebuilds.

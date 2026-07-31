@@ -22,6 +22,13 @@ limits, and acceptance-with-follow-up are forbidden.
 Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
 Target release: `1.0.0`
 Pack ID: `CA-01` through `CA-24`
+
+> **Normative v1 amendment.** CA-05, CA-07, CA-09, CA-10, CA-13, CA-14,
+> CA-17, and CA-24 must satisfy
+> [`specification-resolution-batch-amendment.md`](specification-resolution-batch-amendment.md).
+> A normative contradiction is an impact-scoped, architect-advised resolution
+> cycle—not an ordinary reject and not permission for an advisor to mutate the
+> spec or pack.
 Work batches: **24** | Review batches: **24**
 Last updated: 2026-07-31
 
@@ -62,7 +69,7 @@ Deliver the complete coordinator-automation surface defined in
    context, and untrusted-content delimiting.
 8. Context broker and cycle budgets — allowlisted queries, provenance/redaction,
    soft/hard limits, usage quality.
-9. Typed proposals (all 11 types) and current-state validator — every proposal
+9. Typed proposals (all 14 types) and current-state validator — every proposal
    type with permitted origin/class/effect and stale/illegal/invalid handling.
 10. Atomic lane-local effect executor with single-use invocation envelopes —
     one authority, lock/revalidation/idempotency, and all-or-nothing
@@ -100,7 +107,7 @@ Deliver the complete coordinator-automation surface defined in
 | CA-02 | SQLite index stores and bounded typed queries | R5 | focused typed store/query ports |
 | CA-03 | Runtime SQLite indexes and projections | R4 | journal checkpoint and projection stores |
 | CA-04 | Ready set and resource-claim projection | R5 | `src/foundation/ReadySet.ts`, `src/foundation/ResourceClaims.ts` |
-| CA-05 | Ordered routing policy and capability floors | R4 | `src/foundation/RoutingPolicy.ts`, `src/foundation/CapabilityFloors.ts` |
+| CA-05 | Ordered routing policy, normative contradictions, and capability floors | R4 | `src/foundation/RoutingPolicy.ts`, `src/foundation/CapabilityFloors.ts` |
 | CA-06 | Endpoint adapter eligibility and isolation | R4 | common eligibility plus focused `opencode-cli` and `hermes-cli` adapters |
 | CA-07 | Immutable decision envelopes | R4 | `src/foundation/DecisionEnvelope.ts`, `src/contracts/decision.ts` |
 | CA-08 | Context broker and cycle budgets | R5 | `src/foundation/ContextBroker.ts`, `src/foundation/CycleBudget.ts` |
@@ -119,7 +126,7 @@ Deliver the complete coordinator-automation surface defined in
 | CA-21 | Inspector views, command palette, and overlays | R4 | bounded inspector/action/overlay presentation |
 | CA-22 | Turn streaming, notifications, concurrency, and observer UI | R5 | event reducer, attachment controller, bounded live refresh |
 | CA-23 | Accessibility, terminal lifecycle, recovery, and PTY matrix | R5 | restoration/security/accessibility adapters and fixtures |
-| CA-24 | Session command integration, scale/replay, and M6 acceptance | R5 | thin commands/help plus independent pack-exit proof |
+| CA-24 | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | R5 | thin commands/help plus independent pack-exit proof |
 
 ## Dependency Graph (Within Pack)
 

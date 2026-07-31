@@ -33,7 +33,8 @@ The v1 implementation-pack **consumer** contract is §3 of this document.
 
 An implementation must not silently choose between contradictory normative
 requirements. A discovered contradiction is a specification defect and blocks
-the affected feature until this precedence chain is updated.
+the affected feature until this precedence chain is updated through the
+[specification-resolution cycle](specification-resolution.md).
 
 “Proposed — implementation-ready” means product choices are closed but
 implementation and conformance tests may not yet exist. “Stable” remains
@@ -229,6 +230,7 @@ raise a class or lower thresholds, but cannot lower these floors.
 | Rule ID | Guard | Class | Permitted result |
 |---------|-------|-------|------------------|
 | `safety-integrity-v1` | Contradictory authoritative state, unauthorized-effect evidence, or journal discontinuity | `D3` plus system hold | `propose-reconciliation`, `escalate` |
+| `normative-contradiction-v1` | Conflicting accepted references or missing material normative decision | `D3` plus impact-scoped system hold | `propose-specification-resolution`, `request-pack-amendment`, `escalate` |
 | `pack-semantic-drift-v1` | Critical pack/source drift | `D3` | `request-pack-amendment`, `escalate` |
 | `review-reject-repeated-v1` | Reject for a batch with two or more prior correction openings | `D3` | reject/correction proposals, amendment, escalation |
 | `review-reject-v1` | Valid reviewer reject | `D2` | reject/correction proposals, escalation |
@@ -273,6 +275,9 @@ snapshot digest, evidence references, and exactly one type-specific body.
 | `request-reroute` | D1 | `reroute-endpoint` within active routing policy |
 | `propose-reconciliation` | D3 plus operator confirmation | bounded `reconcile-projection`; never rewrite history |
 | `request-pack-amendment` | D2 plus operator confirmation | create amendment request only |
+| `propose-specification-resolution` | D3/C5 architect advisor | advisory resolution record only; no pack mutation |
+| `admit-pack-amendment` | confirmed pack/spec-authority plus independent pack acceptance | atomic `activate-pack-revision` |
+| `resume-specification-blocked-session` | M0 after admitted revision and worktree-sync validation | bounded `resume-blocked-session` |
 | `grant-session-budget` | operator confirmation | finite grant within lane ceiling and unprotected capacity |
 | `place-hold` | operator confirmation, or M0 safety policy | create scoped expiring hold |
 | `release-hold` | operator confirmation, or M0 expiry | close hold |
@@ -284,6 +289,10 @@ escalation closure. Reconciliation, dependency/scope change, required-work
 removal, review weakening, and acceptance invalidation require the
 pack/spec-authority role recorded in local policy. No role may confirm
 arbitrary shell, path, Git ref, state-key, or Markdown mutations.
+
+An architect advisor cannot confirm or apply its own resolution. Pack-revision
+activation and same-session resumption follow `specification-resolution.md`;
+activation never performs arbitrary Git synchronization.
 
 The idempotency key is the SHA-256 semantic digest of lane ID, proposal ID,
 effect type, target identities, snapshot digest, and policy version. Local

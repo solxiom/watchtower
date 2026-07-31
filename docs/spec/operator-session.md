@@ -681,8 +681,10 @@ The closed proposal vocabulary includes `request-pack-amendment`:
 
 After operator confirmation and current-state validation, the effect executor
 records a durable amendment request plus a lane/initiative handoff event. The
-request is evidence for a future authoritative pack/spec workflow; it is not a
-pack edit, accepted scope change, new batch, or approval.
+request is evidence for the authoritative pack/spec workflow; it is not by
+itself a pack edit, accepted scope change, new batch, or approval. A request
+originating from `NORMATIVE_CONTRADICTION` continues under
+`specification-resolution.md`.
 
 Creating the request does not implicitly suspend/close the operator session,
 place a hold, or invoke an undefined pack command. If affected implementation
@@ -702,6 +704,18 @@ wt coordinator session amendment request <operator-session-id>
 The command deterministically reuses a valid retained proposal or collects
 explicit operator rationale/evidence; it does not invoke a model to invent the
 request. Actual recording follows the normal preview/confirmation/effect path.
+
+After spec-authority confirmation and independent pack acceptance:
+
+```text
+wt coordinator session amendment admit <request-id>
+  --acceptance=<pack-acceptance.json>
+  [--dry-run]
+```
+
+Admission validates and activates a superseding seal through the normal effect
+executor. Advisor prose, an unreviewed commit, or a raw pack path is never
+authority.
 
 ### 15.4 Apply command
 
@@ -792,6 +806,12 @@ Safety does not depend on model availability.
 5. otherwise leaves a durable operator-attention thread; and
 6. resolves only through a confirmed legal proposal or explicit operator
    closure with rationale.
+
+For `NORMATIVE_CONTRADICTION`, the escalation profile is
+`spec-resolution-v1`, the minimum endpoint is C5, and closure follows
+`specification-resolution.md`. Operator closure alone cannot release the
+affected hold without an admitted revision or superseding spec-authority
+disposition.
 
 Escalation is therefore an operator-session entrypoint, not a replacement for
 the session model and not merely a pause flag.

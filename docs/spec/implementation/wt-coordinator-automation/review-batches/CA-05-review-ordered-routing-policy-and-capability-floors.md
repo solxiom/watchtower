@@ -1,5 +1,7 @@
 # Review Batch CA-05 — Ordered Routing Policy and Capability Floors
 
+> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-05 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:
@@ -50,7 +52,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-05-ordere
 ## Scope Verification
 
 - [ ] `src/foundation/CapabilityFloors.ts` created with `CapabilityFloor`, `DecisionClass` enums and pure mapping functions
-- [ ] `src/foundation/RoutingPolicy.ts` created with all 15 routing rules from `v1-contracts.md §4`
+- [ ] `src/foundation/RoutingPolicy.ts` created with all 16 routing rules from `v1-contracts.md §4`
 - [ ] First-match determinism enforced
 - [ ] D1→C2, D2→C3, D3→C5 capability floors
 - [ ] Classification only — no execution, no model invocation, no state mutation
@@ -59,7 +61,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-05-ordere
 
 ## Required Independent Proof
 
-1. Independently enumerate all 15 routing rules. Verify exact order matches `v1-contracts.md §4`.
+1. Independently enumerate all 16 routing rules. Verify exact order matches `v1-contracts.md §4`.
 2. Test every guard condition with positive and negative fixtures.
 3. Prove first-match determinism: same trigger facts → same rule matched every time.
 4. Verify `M0` classification for: no new durable event, heartbeat/session change, unique preauthorized candidate, status queries, uniquely-determined blocker routes.

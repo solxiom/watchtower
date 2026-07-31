@@ -1,5 +1,11 @@
 # Batch REL-03 — Security, Ownership, Performance, And Package Qualification
 
+> Mandatory v1 qualification: independently reproduce the complete fixture in
+> [`../../wt-coordinator-automation/specification-resolution-batch-amendment.md`](../../wt-coordinator-automation/specification-resolution-batch-amendment.md).
+> This is release evidence for authority separation, scoped progress, atomic
+> activation, explicit worktree synchronization, replay, and same-session
+> resume; it is not permission to add product behavior in REL-03.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:

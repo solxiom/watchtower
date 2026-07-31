@@ -1,5 +1,7 @@
 # Review Batch CA-07 — Immutable Decision Envelopes
 
+> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-07 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:

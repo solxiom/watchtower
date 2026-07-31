@@ -314,7 +314,7 @@ speech. Doctor is read-only — no repair.
    - `pack-seal`: verify lock seal matches current pack bytes (drift detection)
 
    **Policy checks:**
-   - `routing-policy`: verify `coordinator/routing-policy.json` exists and passes schema validation; all 15 rules present
+   - `routing-policy`: verify `coordinator/routing-policy.json` exists and passes schema validation; all 16 rules present
    - `session-policy`: verify `coordinator/session-policy.json` exists and passes schema validation; all defaults present
    - `policy-provenance`: verify provenance markers reference correct spec sections
 

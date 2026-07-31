@@ -1,5 +1,7 @@
 # Review Batch CA-24 — Session Command Integration, Scale/Replay, and M6 Acceptance
 
+> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-24 ownership and full acceptance fixture.
+
 Status: ❌ Not started
 Paired work: CA-24
 Reviewer floor: `R5`; reviewer owns the Pack 5 acceptance commit.

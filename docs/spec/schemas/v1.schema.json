@@ -203,6 +203,46 @@
       },
       "additionalProperties": true
     },
+    "specificationBlocker": {
+      "type": "object",
+      "required": ["schemaVersion", "blockerId", "laneId", "packId", "packSeal", "batchId", "classification", "blockerKind", "status", "conflicts", "affectedBatchIds", "reportedAt"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "blockerId": {"$ref": "#/$defs/id"},
+        "laneId": {"$ref": "#/$defs/id"},
+        "packId": {"$ref": "#/$defs/id"},
+        "packSeal": {"$ref": "#/$defs/digest"},
+        "batchId": {"$ref": "#/$defs/id"},
+        "classification": {"const": "NORMATIVE_CONTRADICTION"},
+        "blockerKind": {"enum": ["contradiction", "missing-decision"]},
+        "status": {"enum": ["detected", "held", "advising", "proposed", "authority-review", "amendment-in-progress", "amendment-accepted", "activating", "worktree-sync-required", "revalidated", "resumed", "closed", "rejected", "superseded", "unresolved"]},
+        "conflicts": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["reference", "digest", "authorityRank"], "properties": {"reference": {"type": "string", "minLength": 1}, "digest": {"$ref": "#/$defs/digest"}, "authorityRank": {"type": "integer", "minimum": 1}, "evidenceRef": {"type": "string"}}, "additionalProperties": false}},
+        "affectedBatchIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "workerSessionId": {"$ref": "#/$defs/id"},
+        "impactDigest": {"$ref": "#/$defs/digest"},
+        "reportedAt": {"type": "string", "format": "date-time"}
+      },
+      "allOf": [{"if": {"properties": {"blockerKind": {"const": "contradiction"}}}, "then": {"properties": {"conflicts": {"minItems": 2}}}}],
+      "additionalProperties": false
+    },
+    "specificationResolution": {
+      "type": "object",
+      "required": ["schemaVersion", "resolutionId", "blockerId", "recommendedDecision", "affectedPaths", "evidenceRefs", "requiresSpecAuthority"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "resolutionId": {"$ref": "#/$defs/id"},
+        "blockerId": {"$ref": "#/$defs/id"},
+        "recommendedDecision": {"type": "string", "minLength": 1},
+        "alternatives": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "rationale": {"type": "string"},
+        "affectedPaths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/relativePath"}},
+        "affectedRequirementIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "evidenceRefs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "impactDigest": {"$ref": "#/$defs/digest"},
+        "requiresSpecAuthority": {"const": true}
+      },
+      "additionalProperties": false
+    },
     "commandResult": {
       "type": "object",
       "required": ["schemaVersion", "command", "ok", "data"],

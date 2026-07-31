@@ -1,5 +1,7 @@
 # Batch CA-13 — Coordinator Queue, Cursor, Replay, and Watcher Integration
 
+> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-13 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:

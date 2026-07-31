@@ -1,5 +1,7 @@
 # Batch CA-05 — Ordered Routing Policy and Capability Floors
 
+> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-05 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:
@@ -61,7 +63,7 @@ execute effects.
 ## Required Work
 
 1. **Read the normative routing table.** Study `v1-contracts.md §4` for the
-   complete routing rule table (15 rules from `safety-integrity-v1` through
+   complete routing rule table (16 rules from `safety-integrity-v1` through
    `no-work-v1`), routing rule order, first-match determinism, and the fixed
    capability scale (C2, C3, C5). Study `coordinator-automation.md §6` for
    decision classes and §7 for routing policy.
@@ -83,7 +85,7 @@ execute effects.
    - These are pure functions — no I/O, no state.
 
 3. **Implement `src/foundation/RoutingPolicy.ts`:**
-   - `RoutingPolicy` class that evaluates the 15 routing rules in exact order.
+   - `RoutingPolicy` class that evaluates the 16 routing rules in exact order.
    - `classifyTrigger(trigger: TriggerContext): RouteDecision` — evaluates the
      trigger facts against every rule in priority order. Returns the first
      matching rule's decision class and permitted results.
@@ -147,7 +149,7 @@ execute effects.
 
 ## Tests And Evidence
 
-- **Every routing rule:** For each of the 15 rules, construct a trigger context
+- **Every routing rule:** For each of the 16 rules, construct a trigger context
   where that rule's guard is the first to pass. Prove the correct decision class
   and permitted results.
 - **First-match determinism:** Construct a trigger that matches multiple rules.
@@ -175,7 +177,7 @@ execute effects.
 ## What Must Not Change
 
 - Do not implement effect execution or batch selection in the router.
-- Do not reorder the 15 routing rules.
+- Do not reorder the 16 routing rules.
 - Do not downgrade a required minimum capability class.
 - Do not invoke any model, LLM, or AI.
 - Do not write lane state.
@@ -197,7 +199,7 @@ execute effects.
 ## Recommended agent/model class for forwarding:
 
 **Reasoning level:** `R4` — deep code reasoning required.
-**Suitability:** 15-rule ordered routing policy with first-match determinism, capability-floor enforcement, and a strict classification-only boundary. The agent must reason about rule priority, overlapping guard conditions, and the classification-versus-execution contract boundary.
+**Suitability:** 16-rule ordered routing policy with first-match determinism, capability-floor enforcement, and a strict classification-only boundary. The agent must reason about rule priority, overlapping guard conditions, and the classification-versus-execution contract boundary.
 **Primary agents:** GPT-5.4, Claude Opus 4.1, Claude Sonnet 4.6.
 **Good alternatives:** GPT-5.2.
 **Acceptable-only-with-steering:** Composer 2.5, Cursor Auto — must be steered away from encoding judgment in rules or conflating classify with execute.
@@ -296,7 +298,7 @@ line-count check never overrides the responsibility gate.
 2. Implement `src/foundation/CapabilityFloors.ts` with all pure functions.
 3. Implement `src/foundation/RoutingPolicy.ts` with the `RoutingPolicy` class and all 15 guard functions.
 4. Ensure the router is classification-only — no effects, no models, no state writes.
-5. Create focused specs covering all 15 rules, first-match determinism, capability floors, classification-only verification, and operator routing.
+5. Create focused specs covering all 16 rules, first-match determinism, capability floors, classification-only verification, and operator routing.
 6. Produce implementation report.
 7. Update tracker.
 8. Leave handoff message.
@@ -304,7 +306,7 @@ line-count check never overrides the responsibility gate.
 ## What You Must Not Do
 
 1. Do not implement effect execution or batch dispatch.
-2. Do not reorder the 15 routing rules.
+2. Do not reorder the 16 routing rules.
 3. Do not downgrade a required capability class.
 4. Do not invoke models.
 5. Do not write lane state.

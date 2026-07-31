@@ -192,6 +192,11 @@ Rules:
 6. “Frontier,” “medium,” “cheap,” and “free” may describe endpoint economics,
    but they are not normative decision classes.
 
+A valid `NORMATIVE_CONTRADICTION` is a distinct D3 trigger, not a generic
+worker blocker. Its architect-advisory, authority, amendment, activation,
+worktree-sync, and resume lifecycle is defined in
+`specification-resolution.md`.
+
 ## 7. Routing policy
 
 The knowledge pack contains a versioned machine-readable routing policy whose
@@ -687,6 +692,9 @@ v1 proposal types are closed and versioned:
 - `request-reroute`;
 - `propose-reconciliation`;
 - `request-pack-amendment`;
+- `propose-specification-resolution`;
+- `admit-pack-amendment`;
+- `resume-specification-blocked-session`;
 - `grant-session-budget`;
 - `place-hold`;
 - `release-hold`;
@@ -697,6 +705,10 @@ mapping, fixtures, and spec update.
 
 `request-pack-amendment` is permitted only for an operator-session/amendment
 envelope and maps to a durable handoff record/event, never a pack edit.
+`propose-specification-resolution` is advisory-only. `admit-pack-amendment`
+requires recorded spec authority and independent acceptance and maps to atomic
+pack-revision activation. Resume is M0 only after the admitted revision and
+affected worktree validate.
 `grant-session-budget` is permitted only with explicit operator authority and
 maps to a finite grant within current lane-wide limits/protected reserves,
 never a permanent policy rewrite.
@@ -968,6 +980,12 @@ runtime must not mechanically rewrite arbitrary Markdown.
 | `coordinator-proposal-received` | Typed proposal bytes recorded |
 | `coordinator-proposal-rejected` | Validation failed with reason codes |
 | `coordinator-escalated` | Higher decision class/operator attention requested |
+| `specification-blocker-detected` | Normative contradiction and impact scope recorded |
+| `specification-resolution-proposed` | C5 advisor proposal recorded without authority |
+| `specification-revision-activated` | Accepted superseding seal atomically activated |
+| `worktree-specification-stale` | Assignment lacks the admitted revision |
+| `worktree-specification-synchronized` | Affected worktree passed revision validation |
+| `specification-blocked-session-resumed` | Original blocked assignment/session resumed |
 | `coordinator-effect-prepared` | Idempotent bounded effect plan journaled |
 | `coordinator-effect-attempted` | Local/external effect execution started |
 | `coordinator-effect-verified` | Effect result verified against postconditions |
@@ -990,6 +1008,7 @@ producer, policy version, and relevant artifact digests.
 | `wt coordinator explain [--cycle=<id>]` | No | Explain routing rule, guards, endpoint, proposal, and effect result |
 | `wt coordinator cycle --trigger=<event-id> [--dry-run]` | Yes unless dry-run | Route and process one idempotent cycle |
 | `wt coordinator escalate [--cycle=<id>] --reason=<text>` | Yes | Open an attention operator session and any policy-required safety hold |
+| `wt coordinator resolution show|propose|sync-check|resume ...` | Varies | Run the bounded specification-resolution lifecycle |
 | `wt coordinator ask` | Journal only | Run one bounded advisory turn |
 | `wt coordinator session` | Journal only | Create a session and foreground attachment |
 | `wt coordinator session attach <id> [--observe]` | No | Attach to an existing session without changing lifecycle |

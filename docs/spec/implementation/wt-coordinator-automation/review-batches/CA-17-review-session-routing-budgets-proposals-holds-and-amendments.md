@@ -1,5 +1,7 @@
 # Review Batch CA-17 — Session Routing, Budgets, Proposals, Holds, and Amendments
 
+> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-17 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:

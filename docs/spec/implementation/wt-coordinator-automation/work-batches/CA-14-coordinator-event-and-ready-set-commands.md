@@ -1,5 +1,7 @@
 # Batch CA-14 — Coordinator, Event, and Ready-Set Commands
 
+> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-14 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:

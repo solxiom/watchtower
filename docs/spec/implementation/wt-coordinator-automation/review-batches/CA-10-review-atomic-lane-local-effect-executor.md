@@ -1,5 +1,7 @@
 # Review Batch CA-10 — Atomic Lane-Local Effect Executor
 
+> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-10 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:

@@ -247,7 +247,7 @@ deterministic seal-bound pack index. Correct provenance. No model.
 
 1. Create `src/foundation/CoordinatorBaseline.ts`:
    - `seedRoutingBaseline(laneDir, policyHash)`:
-     - Construct routing policy with all 15 rules from v1-contracts.md §4.
+     - Construct routing policy with all 16 rules from v1-contracts.md §4.
        Each rule MUST have the exact guard description, decision class,
        and permitted results from the spec table:
        1. `safety-integrity-v1`: contradictory state/unapproved effects/
@@ -456,7 +456,7 @@ The report must include:
 - exact files created
 - coordinator-baseline public API shape (types and functions)
 - pack-index-bootstrap public API shape (types and functions)
-- complete routing policy: all 15 rules enumerated with guard/class/results
+- complete routing policy: all 16 rules enumerated with guard/class/results
 - complete session policy: all numeric defaults enumerated with exact values
 - pack index structure: batch entries, requirement entries, dependency DAG
 - proof that no model was used

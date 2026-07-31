@@ -184,7 +184,7 @@ read-only, and produces schema-compliant output:
 6. **Binding checks**: verify path existence, branch existence, worktree mode consistency, and membership index validity. Test each condition independently.
 7. **Conflict checks**: verify writable conflict detection, tmux prefix conflict detection, and path claim conflict detection.
 8. **Pack checks**: verify pack structure, pack acceptance record, and pack seal (drift detection). Test valid, missing-files, invalid-acceptance, and seal-mismatch.
-9. **Policy checks**: verify routing policy (all 15 rules), session policy (all defaults), and provenance markers. Test valid, missing, invalid-schema, and wrong-provenance.
+9. **Policy checks**: verify routing policy (all 16 rules), session policy (all defaults), and provenance markers. Test valid, missing, invalid-schema, and wrong-provenance.
 10. **Index checks**: verify pack index freshness, integrity, and schema. Test valid, stale, corrupt, and missing.
 11. **Permission checks**: verify runtime permissions (worker readability), lane permissions (operator ownership, no world-writable), and session permissions. Test correct, world-writable, and wrong-owner.
 12. **Git-ignore checks**: verify `.gitignore` presence and `/.watchtower/` coverage. Test present+coverage, missing, and missing-entry.

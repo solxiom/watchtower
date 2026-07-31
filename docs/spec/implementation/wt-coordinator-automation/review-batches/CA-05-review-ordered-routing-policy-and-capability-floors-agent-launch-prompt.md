@@ -168,7 +168,7 @@ line-count check never overrides the responsibility gate.
 
 ## Your Review Mission
 
-Independently verify the routing policy implements all 15 rules in correct order:
+Independently verify the routing policy implements all 16 rules in correct order:
 1. Enumerate all routing rules. Compare against `v1-contracts.md §4`. Verify exact order.
 2. Test every guard condition with positive and negative fixtures.
 3. Prove first-match determinism.

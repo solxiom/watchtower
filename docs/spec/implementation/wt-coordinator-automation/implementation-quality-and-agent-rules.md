@@ -249,7 +249,7 @@ to confirm that the implementor followed a checklist.
 | CA-06 | R4 | R4 | Endpoint eligibility gates; bounded adapter contract enforcement |
 | CA-07 | R4 | R4 | Decision envelope immutability; semantic digest and delimiting stability |
 | CA-08 | R5 | R5 | Context broker with usage budgets; provenance tracking across quota classes |
-| CA-09 | R5 | R5 | Typed proposal validation with all 11 types and stale/illegal/invalid paths |
+| CA-09 | R5 | R5 | Typed proposal validation with all 14 types and stale/illegal/invalid paths |
 | CA-10 | R5 | R5 | Atomic effect executor — sole authority; idempotency, lock, crash recovery |
 | CA-11 | R4 | R4 | Tmux effect adapter; external process lifecycle with bounded recovery |
 | CA-12 | R4 | R4 | Git acceptance adapter; multi-repository publication with partial recovery |

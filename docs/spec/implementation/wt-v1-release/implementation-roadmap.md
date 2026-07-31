@@ -147,6 +147,9 @@ Acceptance snapshot (target):
 
 Goal: produce traversal, config, permission, manifest, and global install
 fixture evidence; prove bounded discovery and status performance; verify
+the complete specification-resolution fixture (authority separation,
+impact-scoped continuation, atomic accepted-revision activation, explicit
+worktree synchronization, replay safety, and same-session resume); verify
 packaging integrity.
 
 Depends on: REL-01, REL-02 accepted.

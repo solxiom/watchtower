@@ -51,7 +51,7 @@ The delivery must guarantee:
 - Endpoint adapter eligibility proven before any unattended invocation.
 - Immutable decision envelopes with stable semantic digests and untrusted-content delimiting.
 - Context broker with allowlisted queries, provenance/redaction, and soft/hard limits.
-- Typed proposals (all 11 types) with current-state validation and stale/illegal/invalid handling.
+- Typed proposals (all 14 types) with current-state validation and stale/illegal/invalid handling.
 - One atomic lane-local effect executor with lock/revalidation/idempotency.
 - Tmux prepare/attempt/verify TaskHandler plus cataloged leaf, with
   unknown-launch recovery and duplicate suppression.
@@ -125,7 +125,9 @@ Acceptance snapshot (target):
 - Bounded default context with untrusted-content delimiting.
 - Allowlisted context-broker queries with provenance/redaction.
 - Soft/hard limits on input/output/broker/wall-clock per class.
-- All 11 proposal types with permitted origin/class/effect matrices.
+- All 14 proposal types with permitted origin/class/effect matrices, including
+  specification-resolution proposal, amendment admission, and blocked-session
+  resume.
 - Stale/illegal/invalid proposal handling.
 
 ### Phase 3: Effect Foundation (Batches CA-10–CA-13)
@@ -205,6 +207,11 @@ Acceptance snapshot (target):
 ### Phase 6: Pack Acceptance (Batch CA-24)
 
 M6 acceptance is gated on CA-24 proving:
+
+- the complete impact-scoped specification-resolution lifecycle in
+  `specification-resolution-batch-amendment.md`, including authority separation,
+  atomic resealed activation, explicit worktree synchronization, unaffected
+  parallel progress, and same-session resume;
 
 - Routine coordination invokes no model when preauthorized.
 - Judgment is bounded and capability-matched.

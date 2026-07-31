@@ -132,7 +132,7 @@ Repository prerequisites before item 1: `AGENTS.md`.
 2. `docs/spec/implementation/wt-coordinator-automation/work-batches/README.md`
 3. `docs/spec/implementation/wt-coordinator-automation/work-batches/00-work-batch-index.md`
 4. `docs/spec/v1.md`
-5. `docs/spec/v1-contracts.md` — especially §5 (complete proposal-and-effect registry: 11 proposal types, permitted origin/class, legal mapped effects, idempotency-key construction, confirmation requirement table)
+5. `docs/spec/v1-contracts.md` — especially §5 (complete proposal-and-effect registry: 14 proposal types, permitted origin/class, legal mapped effects, idempotency-key construction, confirmation requirement table)
 6. `docs/spec/architecture.md` — especially §4.8 (coordinator decision plane services)
 7. `docs/spec/coordinator-automation.md` — especially §11 (decision proposal schema), §12 (validation and effect execution)
 8. `docs/spec/schemas/v1.schema.json`
@@ -168,7 +168,7 @@ Repository prerequisites before item 1: `AGENTS.md`.
 Before editing or accepting code:
 
 1. Build a dependency and ownership map from the governing specs to the exact
-   11 proposal types, their permitted origins/classes, mapped effects, and the
+   14 proposal types, their permitted origins/classes, mapped effects, and the
    validation preconditions.
 2. Inspect the current source. Do not infer behavior from filenames.
 3. Enumerate public invariants: every proposal type has a specific body shape;
@@ -274,7 +274,7 @@ Implement the typed proposal system and current-state validator:
 
 - `nvb build` passes
 - `nvb test` passes
-- All 11 proposal types have valid, invalid, stale, and illegal-transition fixtures
+- All 14 proposal types have valid, invalid, stale, and illegal-transition fixtures
 - Permitted origin/class validation per proposal type
 - Stale state invalidates proposal (state changed after envelope)
 - Idempotency key prevents double-commit

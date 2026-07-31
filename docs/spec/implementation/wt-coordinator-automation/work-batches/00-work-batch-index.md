@@ -67,7 +67,7 @@ CA-22. CA-24 after CA-14—CA-23.
 | CA-06 | RT-05, CA-05 accepted | Unit + integration specs: unattended/advisory/skill-only, argv/env/cwd/output/time bounds, eligibility proof |
 | CA-07 | CA-02–CA-06 accepted | Unit specs: stable semantic digest, bounded default context, untrusted-content delimiting |
 | CA-08 | CA-02, CA-06, CA-07 accepted | Unit + integration specs: allowlisted queries, provenance/redaction, soft/hard limits, usage quality |
-| CA-09 | CA-05, CA-07, CA-08 accepted | Unit specs: all 11 proposal types, origin/class/effect matrices, stale/illegal/invalid/duplicate cases |
+| CA-09 | CA-05, CA-07, CA-08 accepted | Unit specs: all 14 proposal types, origin/class/effect matrices, stale/illegal/invalid/duplicate cases |
 | CA-10 | LC-03, CA-09 accepted | Unit + filesystem + crash specs: lock/revalidation/idempotency, all-or-nothing projections/journals |
 | CA-11 | RT-05, CA-10 accepted | Unit + runtime specs: unknown launch recovery, duplicate suppression, prepare/attempt/verify journals |
 | CA-12 | RM-08, CA-10 accepted | Unit + filesystem specs: session ownership, commit-set validation, partial push recovery |

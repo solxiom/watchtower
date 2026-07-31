@@ -77,6 +77,33 @@ working tree. The new Pack 1 seal includes the already reviewer-accepted RM-01
 pack updates and this four-file RM-02 clarification; uncommitted DB-01 work and
 local correction artifacts are excluded.
 
+## Specification-resolution lifecycle amendment
+
+Reviewed and accepted on 2026-07-31. The prior contracts could detect and hold
+on normative contradictions, but did not close the operational path from a
+blocked worker through architect advice, authoritative amendment, independent
+pack acceptance, atomic activation, worktree synchronization, and resumption.
+
+The v1 amendment now requires:
+
+- an impact-scoped `NORMATIVE_CONTRADICTION` D3/C5 hold while unrelated work
+  continues;
+- bounded C5 architect advice with proposal authority only;
+- separate spec-authority confirmation, pack authorship, and independent pack
+  review;
+- seal- and commit-bound amendment admission plus atomic active-revision
+  replacement through the sole effect executor;
+- explicit, validated worktree synchronization with no automatic rebase or
+  merge; and
+- replay-safe resumption of the same durable worker and operator session.
+
+Pack 2 policy seeding, Pack 5 implementation ownership, Pack 6 release proof,
+the implementation map, schemas, and normative product contracts were checked
+together. The exact cross-batch responsibilities and acceptance fixture are in
+`wt-coordinator-automation/specification-resolution-batch-amendment.md`. This
+amendment accepts specification and planning changes only; it does not accept
+any product implementation.
+
 ## Acceptance matrix
 
 | Gate | Verdict | Evidence |
@@ -120,10 +147,10 @@ requires a new review.
 |------|------:|------:|------|
 | `wt-read-model` | 57 | 595157 | `sha256:4697db5f28d44170ab43015f1e9cf2233bc08f54a84983e4f978b80683671c64` |
 | `wt-runtime-distribution` | 38 | 384487 | `sha256:4d5fb75baea0b67511022452a5be648f9b567b7d09c5711f7e5a7cda660e2b66` |
-| `wt-lane-lifecycle` | 42 | 564755 | `sha256:f527875c81489f77f3c50af435954beea2a919ee3bf8bc33f97eefcaa85ad87e` |
+| `wt-lane-lifecycle` | 42 | 564755 | `sha256:1dce0c77a3d0ca5c5526bc7f76c22cbf65c50df0c35927363467daf0fc4e19cd` |
 | `wt-upgrade-knowledge` | 30 | 448690 | `sha256:d98b7cbec26fcc6ef5dba41d7cbc9a40367afdd33c7de697c046b2dd622ea37c` |
-| `wt-coordinator-automation` | 113 | 1247947 | `sha256:1e1466c3ee3b5654eab4f81dba95fe140c419ac950756c7705ee35c430f9fe94` |
-| `wt-v1-release` | 26 | 399406 | `sha256:14cc47bcccbeff98350a32da5975acd9703295b76daf77896d0386ec88006f9b` |
+| `wt-coordinator-automation` | 114 | 1255621 | `sha256:075345239cb9a9759a64d7bdcfc7cc94c64ef424de121e2be91a808ac1f046d8` |
+| `wt-v1-release` | 26 | 400537 | `sha256:3601b4d68846b770cc05f2f287f65b66f4ba2218ee2522f73a49c8121471b45f` |
 
 ## Dispatch decision
 

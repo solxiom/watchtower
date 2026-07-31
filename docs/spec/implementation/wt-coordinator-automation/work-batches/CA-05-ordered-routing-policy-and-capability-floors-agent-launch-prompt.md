@@ -131,7 +131,7 @@ Repository prerequisites before item 1: `AGENTS.md`.
 2. `docs/spec/implementation/wt-coordinator-automation/work-batches/README.md`
 3. `docs/spec/implementation/wt-coordinator-automation/work-batches/00-work-batch-index.md`
 4. `docs/spec/v1.md`
-5. `docs/spec/v1-contracts.md` — especially §4 (complete routing rule table, 15 rules, first-match determinism, capability scale C2/C3/C5)
+5. `docs/spec/v1-contracts.md` — especially §4 (complete routing rule table, 16 rules, first-match determinism, capability scale C2/C3/C5)
 6. `docs/spec/architecture.md` — especially §4.8 (coordinator decision plane services)
 7. `docs/spec/coordinator-automation.md` — especially §6 (decision classes), §7 (routing policy)
 8. `docs/spec/schemas/v1.schema.json`
@@ -166,7 +166,7 @@ Repository prerequisites before item 1: `AGENTS.md`.
 Before editing or accepting code:
 
 1. Build a dependency and ownership map from the governing specs to the exact
-   15 routing rules, their guard conditions, first-match order, and capability
+   16 routing rules, their guard conditions, first-match order, and capability
    floor mappings.
 2. Inspect the current source. Do not infer behavior from filenames.
 3. Enumerate public invariants: first-match determinism; every rule produces a
@@ -230,7 +230,7 @@ Implement the v1 routing policy with capability floors:
    `classifyEndpointTier`. Pure functions — no I/O, no state.
 
 2. Create `src/foundation/RoutingPolicy.ts` with `RoutingPolicy` class.
-   Implement all 15 routing rules from `v1-contracts.md §4` in exact priority
+   Implement all 16 routing rules from `v1-contracts.md §4` in exact priority
    order. Each rule is a pure guard function. `classifyTrigger` evaluates
    trigger facts against every rule and returns the first match's decision class.
 
@@ -260,7 +260,7 @@ Implement the v1 routing policy with capability floors:
 
 - `nvb build` passes
 - `nvb test` passes
-- All 15 routing rules evaluated in correct order
+- All 16 routing rules evaluated in correct order
 - First-match determinism: same trigger → same rule matched every time
 - Every guard condition tested with positive and negative fixtures
 - Capability floors: D1→C2, D2→C3, D3→C5

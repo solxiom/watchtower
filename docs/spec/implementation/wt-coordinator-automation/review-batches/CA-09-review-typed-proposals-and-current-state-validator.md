@@ -1,5 +1,7 @@
 # Review Batch CA-09 — Typed Proposals and Current-State Validator
 
+> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-09 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:
@@ -49,7 +51,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-09-typed-
 
 ## Scope Verification
 
-- [ ] `src/contracts/proposals.ts` created with all 11 proposal types and discriminated union
+- [ ] `src/contracts/proposals.ts` created with all 14 proposal types and discriminated union
 - [ ] `src/foundation/ProposalValidator.ts` created with `ProposalValidator`
 - [ ] All 12 validation preconditions implemented
 - [ ] Permitted origin/class/effect enforcement per proposal type
@@ -59,7 +61,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-09-typed-
 
 ## Required Independent Proof
 
-1. Independently enumerate all 11 proposal types from `v1-contracts.md §5`. Verify each has a valid, invalid, stale, illegal-transition, and idempotency-conflict fixture.
+1. Independently enumerate all 14 proposal types from `v1-contracts.md §5`. Verify each has a valid, invalid, stale, illegal-transition, and idempotency-conflict fixture.
 2. Test `select-ready-batch`: valid selection from ready set, invalid batch not in ready set, stale (state changed), wrong class origin.
 3. Test `classify-reject`: valid classification, invalid classification, stale state.
 4. Test `open-correction`: valid with preserve-session, invalid target batch, stale.
@@ -76,7 +78,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-09-typed-
 ## Acceptance Gate
 
 - All hard-reject checklist items are clear.
-- All 11 proposal types have valid and invalid fixtures.
+- All 14 proposal types have valid and invalid fixtures.
 - Permitted origin/class/effect enforced.
 - Stale state invalidates proposals.
 - Idempotency keys prevent double-commit.

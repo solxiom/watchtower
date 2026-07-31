@@ -1,5 +1,7 @@
 # Batch CA-24 — Session Command Integration, Scale/Replay, and M6 Acceptance
 
+> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-24 ownership and full acceptance fixture.
+
 ## Authority And Status
 
 Governing sources: all Watchtower v1 normative specs and schemas, `AGENTS.md`,

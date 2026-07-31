@@ -312,26 +312,26 @@ effect authority, and durable bounded operator sessions.
 | `CA-02` | SQLite index stores and bounded typed queries | `CA-01` | index store/query foundation | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
 | `CA-03` | Runtime SQLite indexes and projections | `RM-05`, `CA-02` | runtime index/projection foundation | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
 | `CA-04` | Ready set and resource-claim projection | `RM-08`, `CA-01`, `CA-03` | scheduling projection | DAG/dependency/claim/capacity blockers; no arbitrary winner |
-| `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02` | routing foundation/knowledge projection | Every v1 rule/guard; first-match determinism; D1/C2, D2/C3, D3/C5 floors; economics only after hard eligibility |
+| `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02` | routing foundation/knowledge projection | Every v1 rule/guard; first-match determinism; normative contradiction after safety as D3/C5; economics only after hard eligibility |
 | `CA-06` | Endpoint adapter eligibility and isolation | `RT-05`, `CA-05` | provider-neutral layer plus focused OpenCode/Hermes adapters | Unattended/advisory/skill-only classification; argv/env/cwd/output/time bounds; required OpenCode and conditional Hermes fixtures; drift invalidation/shared pools |
-| `CA-07` | Immutable decision envelopes | `CA-02`–`CA-06` | envelope foundation | Stable semantic digest; bounded default context; untrusted-content delimiting |
+| `CA-07` | Immutable decision envelopes | `CA-02`–`CA-06` | envelope foundation | Stable semantic digest; bounded default context; contradiction/advisor evidence references and impact scope; untrusted-content delimiting |
 | `CA-08` | Context broker and cycle budgets | `CA-02`, `CA-06`, `CA-07` | broker/usage foundation | Allowlisted queries; provenance/redaction; soft/hard limits; endpoint telemetry quality and shared-pool accounting |
-| `CA-09` | Typed proposals and current-state validator | `CA-05`, `CA-07`, `CA-08` | proposal contracts/validator | Every proposal type; permitted origin/class/effect; stale/illegal/invalid cases |
-| `CA-10` | Atomic lane-local effect executor and invocation envelopes | `LC-03`, `CA-09` | effect foundation/NVB task boundary | One authority; lock/revalidation/idempotency; single-use task envelope; all-or-nothing projections/journals |
+| `CA-09` | Typed proposals and current-state validator | `CA-05`, `CA-07`, `CA-08` | proposal contracts/validator | All 14 proposal types; specification-resolution authority/seal/independence checks; stale/illegal/invalid cases |
+| `CA-10` | Atomic lane-local effect executor and invocation envelopes | `LC-03`, `CA-09` | effect foundation/NVB task boundary | One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync |
 | `CA-11` | Tmux prepare/attempt/verify effect handler | `RT-05`, `CA-10` | focused TaskHandler and tmux leaf | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
 | `CA-12` | Acceptance and Git publication handler | `RM-08`, `CA-10` | focused TaskHandler and Git leaf/verification | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
-| `CA-13` | Coordinator queue, cursor, replay, and watcher task integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator TaskHandlers | Stable priority; fsynced cursor advance; interrupted/duplicate/uncertain replay; no workflow-level shell |
-| `CA-14` | Coordinator, event, and ready-set commands | `CA-01`–`CA-13` | commands/help/rendering | Index/status/context/explain/cycle/escalate/events/ready; dry-run purity |
+| `CA-13` | Coordinator queue, cursor, replay, and watcher task integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator TaskHandlers | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
+| `CA-14` | Coordinator, event, ready-set, and resolution commands | `CA-01`–`CA-13` | commands/help/rendering | Index/status/context/explain/cycle/escalate/events/ready plus resolution show/propose/sync-check/resume; dry-run purity |
 | `CA-15` | Operator-session persistence and lifecycle | `CA-03`, `UK-02` | session store/contracts | Many sessions; one active turn each; immutable closed history; crash-safe journals |
 | `CA-16` | Session SQLite index, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
-| `CA-17` | Session routing, budgets, proposals, holds, and amendments | `CA-06`, `CA-08`–`CA-10`, `CA-15`, `CA-16` | session services/effect integration | M0/D1–D3; grants/reserves; confirmation/revalidation; scoped hold interleaving |
+| `CA-17` | Session routing, budgets, proposals, holds, and amendments | `CA-06`, `CA-08`–`CA-10`, `CA-15`, `CA-16` | session services/effect integration | M0/D1–D3; C5 architect advisory; spec-authority confirmation; amendment admission; scoped hold interleaving |
 | `CA-18` | Nirvana/OpenTUI feasibility and packaging gate | `RT-03`, `RT-05`, `CA-14`–`CA-17` | generic TUI adapter/architecture fixtures | Exact Linux x86_64/glibc and Node `>=26.4.0` baseline; experimental-FFI bootstrap; imperative core/keymap only; Nirvana/NVB/dist/native artifacts; terminal restore/security; pass/fail evidence |
 | `CA-19` | TUI shell, responsive layout, themes, and focus | `CA-18` | TUI application shell/components | Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation |
 | `CA-20` | Conversation timeline, composer, history, and references | `CA-16`, `CA-19` | conversation/composer components | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
 | `CA-21` | Inspector views, command palette, and overlays | `CA-14`, `CA-17`, `CA-19` | inspector/action/overlay components | All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays |
 | `CA-22` | Turn streaming, notifications, concurrency, and observer UI | `CA-17`, `CA-20`, `CA-21` | turn/event reducers and attachment controller | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |
 | `CA-23` | Accessibility, terminal lifecycle, recovery, and PTY matrix | `CA-18`–`CA-22` | accessibility/restoration/test adapters | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
-| `CA-24` | Session command integration, scale/replay, and M6 acceptance | `CA-14`–`CA-23` | command/help integration and independent acceptance proof | `--lane` create/attach/resume/observe plus `ask`; OpenCode/Hermes route integration; `doctor --tui`; 30–10k pack scale; complete M6 gate |
+| `CA-24` | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | `CA-14`–`CA-23` | command/help integration and independent acceptance proof | Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate |
 
 ### CA implementation notes
 
@@ -348,6 +348,8 @@ effect authority, and durable bounded operator sessions.
 - `CA-23` independently closes accessibility and terminal-restoration risk.
 - `CA-24` must show that unrelated pack/session growth does not increase
   ordinary model context and that advisory turns never hold the lane lock.
+- The normative cross-batch assignment and exact resolution fixture are in
+  `wt-coordinator-automation/specification-resolution-batch-amendment.md`.
 
 Pack exit: routine coordination invokes no model; judgment is bounded and
 capability-matched; all effects pass through one validated executor; operators
@@ -476,6 +478,7 @@ types, transitions, events, or effects as authority.
 | Runtime packaging/smoke | `RT-02`–`RT-07` | `REL-01`, `REL-03` |
 | SQLite driver/storage feasibility | `DB-01`, `CA-01`–`CA-03`, `CA-16` | `REL-03` |
 | Transaction crash/replay | `LC-03`, `UK-03`, `CA-03`, `CA-10`–`CA-13` | `REL-02`, `REL-03` |
+| Normative contradiction, architect advice, accepted amendment activation, worktree sync, and same-session resume | `CA-05`, `CA-07`, `CA-09`, `CA-10`, `CA-13`, `CA-14`, `CA-17`, `CA-24` | `REL-03` |
 | PTY/accessibility | `CA-18`, `CA-19`, `CA-23`, `CA-24` | `REL-01`, `REL-03` |
 | Cost and scaling | `CA-01`, `CA-02`, `CA-08`, `CA-20`, `CA-22`, `CA-24` | `REL-03` |
 | End-to-end acceptance | `REL-01`, `REL-02` | `REL-04` |

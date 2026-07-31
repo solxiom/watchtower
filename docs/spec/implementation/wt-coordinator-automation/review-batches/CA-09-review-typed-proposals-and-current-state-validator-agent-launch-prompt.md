@@ -100,7 +100,7 @@ source/spec names.
 ## Capability-Based Agent Selection Rule
 
 The declared `R` class is authoritative. Select a currently available agent
-capable of independently verifying all 11 proposal types, the complete validation
+capable of independently verifying all 14 proposal types, the complete validation
 precondition checklist, and that no failed proposal is partially applied.
 
 You are assigned **review batch CA-09** for the Watchtower v1
@@ -169,7 +169,7 @@ line-count check never overrides the responsibility gate.
 ## Your Review Mission
 
 Independently verify the typed proposal system:
-1. Enumerate all 11 proposal types. Verify each has valid, invalid, stale, illegal-transition, and idempotency-conflict fixtures.
+1. Enumerate all 14 proposal types. Verify each has valid, invalid, stale, illegal-transition, and idempotency-conflict fixtures.
 2. Test permitted origin/class/effect enforcement for each proposal type.
 3. Test stale state invalidation: validate, change state, re-validate → rejected.
 4. Test idempotency key: submit equivalent proposal twice → second rejected.
@@ -183,7 +183,7 @@ Independently verify the typed proposal system:
 ## Acceptance Gate
 
 - All hard-reject items clear.
-- All 11 proposal types verified.
+- All 14 proposal types verified.
 - Permitted origin/class/effect enforced.
 - Stale state invalidates.
 - Idempotency keys enforced.

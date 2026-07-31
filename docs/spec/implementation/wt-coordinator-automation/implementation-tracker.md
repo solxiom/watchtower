@@ -87,7 +87,7 @@ Batches: 24 work + 24 review
 | CA-02 | R5 | R5 | Typed SQLite stores, bounded indexed queries, stale/corrupt refusal |
 | CA-03 | R4 | R4 | Journal indexes and projections with checkpoint integrity |
 | CA-04 | R5 | R5 | DAG scheduling projection; dependency/claim/capacity blocker resolution |
-| CA-05 | R4 | R4 | Routing policy classification with first-match determinism |
+| CA-05 | R4 | R4 | Routing policy classification with first-match determinism and D3/C5 normative-contradiction handling |
 | CA-06 | R4 | R4 | Endpoint eligibility gates and adapter isolation |
 | CA-07 | R4 | R4 | Decision envelope immutability and semantic digest stability |
 | CA-08 | R5 | R5 | Context broker with usage budgets and provenance tracking |
@@ -106,7 +106,7 @@ Batches: 24 work + 24 review
 | CA-21 | R4 | R4 | Bounded query/action/confirmation presentation boundaries |
 | CA-22 | R5 | R5 | Streaming ordering/backpressure and attachment concurrency |
 | CA-23 | R5 | R5 | Terminal restoration/security/accessibility across PTY matrix |
-| CA-24 | R5 | R5 | Full command integration, scale/replay/soak, M6 authority closure |
+| CA-24 | R5 | R5 | Full command integration, specification-resolution lifecycle, scale/replay/soak, M6 authority closure |
 
 ## Proof Classes Required Per Batch
 

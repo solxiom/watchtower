@@ -1,5 +1,7 @@
 # Batch CA-09 — Typed Proposals and Current-State Validator
 
+> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-09 ownership and fixture obligations.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:
@@ -49,7 +51,7 @@ Depends on: CA-05, CA-07, CA-08 accepted
 Owned files: `src/contracts/proposals.ts`, `src/foundation/ProposalValidator.ts`
 
 **Required implementor reasoning class:** `R5`
-**Class rationale:** all 11 proposal types with validation matrices covering permitted origin/class/effect. Stale, illegal, invalid, and duplicate proposal handling. The class is a floor; escalate when source inspection exposes additional risk.
+**Class rationale:** all 14 proposal types with validation matrices covering permitted origin/class/effect. Stale, illegal, invalid, and duplicate proposal handling. The class is a floor; escalate when source inspection exposes additional risk.
 
 ## Objective
 
@@ -61,7 +63,7 @@ any effect can proceed.
 ## Required Work
 
 1. **Read the normative proposal registry.** Study `v1-contracts.md §5` for the
-   complete proposal-and-effect registry — 11 proposal types, permitted
+   complete proposal-and-effect registry — 14 proposal types, permitted
    origin/class, legal mapped effects, idempotency-key construction, and the
    confirmation requirement table. Study `v1-contracts.md §3.4` for RFC 8785
    canonicalization used in idempotency key computation.
@@ -173,7 +175,7 @@ any effect can proceed.
 
 ## Tests And Evidence
 
-- **All 11 types schema-valid:** For each proposal type, construct a minimum valid
+- **All 14 types schema-valid:** For each proposal type, construct a minimum valid
   proposal. Prove it passes schema validation.
 - **Stale snapshot:** Submit a valid proposal with an outdated `snapshotDigest`.
   Prove `PROPOSAL_STALE_SNAPSHOT`.
@@ -222,7 +224,7 @@ any effect can proceed.
 ## Recommended agent/model class for forwarding:
 
 **Reasoning level:** `R5` — highest available reasoning.
-**Suitability:** complete 11-type proposal registry, multi-dimensional validation (schema/staleness/expiry/origin/class/effect/idempotency/precondition/claim/budget/confirmation), RFC 8785 idempotency-key computation, and the definitive origin/class/effect permission matrix. The agent must hold the complete validation pipeline with all its cross-referencing rules simultaneously.
+**Suitability:** complete 14-type proposal registry, multi-dimensional validation (schema/staleness/expiry/origin/class/effect/idempotency/precondition/claim/budget/confirmation), RFC 8785 idempotency-key computation, and the definitive origin/class/effect permission matrix. The agent must hold the complete validation pipeline with all its cross-referencing rules simultaneously.
 **Primary agents:** GPT-5.4, Claude Opus 4.1.
 **Good alternatives:** Claude Sonnet 4.6, GPT-5.2.
 **Acceptable-only-with-steering:** Composer 2.5, Cursor Auto — must be steered away from missing validation dimensions or conflating proposal types.
@@ -260,7 +262,7 @@ CA-09 is R5 because the proposal validator is the last gate before the effect ex
 
 ## Mandatory Reasoning Protocol
 
-1. Map the complete origin/class/effect matrix for all 11 proposal types.
+1. Map the complete origin/class/effect matrix for all 14 proposal types.
 2. Enumerate every validation dimension and its cross-referencing dependencies.
 3. Design idempotency-key computation per RFC 8785 with all required fields.
 4. Design negative tests spanning every validation dimension for every proposal type.
@@ -315,7 +317,7 @@ line-count check never overrides the responsibility gate.
 ## Your Mission
 
 1. Read all reference documents, inspect predecessor outputs.
-2. Implement `src/contracts/proposals.ts` with all 11 proposal types, discriminated proposal bodies, effect types, origin types, and validation result types.
+2. Implement `src/contracts/proposals.ts` with all 14 proposal types, discriminated proposal bodies, effect types, origin types, and validation result types.
 3. Implement `src/foundation/ProposalValidator.ts` with complete validation pipeline, idempotency-key computation, and the origin/class/effect matrix.
 4. Create focused specs for every validation dimension and every proposal type.
 5. Produce implementation report, update tracker, leave handoff.
@@ -354,7 +356,7 @@ and ensure every edited file ends up owned by `kavan`.
 
 ## Non-Negotiable Rules
 
-- All 11 proposal types must be validatable.
+- All 14 proposal types must be validatable.
 - Every validation dimension checked for every proposal.
 - Idempotency key is RFC 8785 canonicalization of spec-defined fields.
 - No validation bypass through any code path.

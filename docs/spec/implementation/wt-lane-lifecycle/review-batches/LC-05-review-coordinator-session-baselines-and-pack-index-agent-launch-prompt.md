@@ -117,7 +117,7 @@ Repository prerequisites: `AGENTS.md`.
 3. `docs/spec/implementation/wt-lane-lifecycle/review-batches/00-review-batch-index.md`
 4. `docs/spec/implementation/wt-lane-lifecycle/work-batches/LC-05-coordinator-session-baselines-and-pack-index.md` (paired work brief)
 5. `.local/agent-reports/wt-lane-lifecycle/LC-05-coordinator-session-baselines-and-pack-index.md` (implementation report)
-6. `docs/spec/v1-contracts.md` — §7 (shipping policy), §4 (routing policy — all 15 rules), operator-session policy defaults
+6. `docs/spec/v1-contracts.md` — §7 (shipping policy), §4 (routing policy — all 16 rules), operator-session policy defaults
 7. `docs/spec/v1.md` — §9 (coordinator baselines), §10 (pack index)
 8. `docs/spec/implementation/wt-lane-lifecycle/implementation-quality-and-agent-rules.md`
 9. the actual changed source files:
@@ -175,7 +175,7 @@ Independently verify that policy baselines are correctly seeded, pack indexes
 are deterministically built, and no model or full-pack fallback exists:
 
 1. **Shipping-policy seed audit**: extract every seeded key and value from the shipping-policy baseline. Compare against v1-contracts.md §7. Every value must match exactly. Verify no extra keys. Verify no missing required keys. Document any deviation.
-2. **Routing policy seed audit**: enumerate all 15 routing rules from v1-contracts.md §4. For each rule, verify: rule ID, capability floor, classification, and route. Verify rule order matches the contract — routing is first-match, so order matters. Verify no extra rules beyond the contract.
+2. **Routing policy seed audit**: enumerate all 16 routing rules from v1-contracts.md §4. For each rule, verify: rule ID, capability floor, classification, and route. Verify rule order matches the contract — routing is first-match, so order matters. Verify no extra rules beyond the contract.
 3. **Operator-session policy seed audit**: verify all defaults from the operator-session contract are present. Verify session count limits, turn budgets, hold constraints, and timeout defaults match exactly.
 4. **Provenance marker audit**: each policy file must reference the exact spec section and version from which the policy was derived. Verify every provenance reference is correct. Verify provenance markers are structured consistently.
 5. **Pack index — seal matching**: build the pack index from a known-good pack. Verify the index seal digest matches the active pack seal. Verify every sealed file entry in the index has a correct path, digest, and byte count.
@@ -207,7 +207,7 @@ are deterministically built, and no model or full-pack fallback exists:
 The batch is accepted only when:
 - All hard-reject checklist items are clear.
 - Every policy value matches the contract exactly.
-- All 15 routing rules seeded with correct order.
+- All 16 routing rules seeded with correct order.
 - Provenance markers reference correct spec sections.
 - Pack index seal matches active seal.
 - Index builds are byte-for-byte identical across rebuilds.

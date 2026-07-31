@@ -1,5 +1,11 @@
 # Review Batch REL-03 — Security, Ownership, Performance, And Package Qualification
 
+> Mandatory v1 gate: independently reproduce the complete fixture in
+> [`../../wt-coordinator-automation/specification-resolution-batch-amendment.md`](../../wt-coordinator-automation/specification-resolution-batch-amendment.md).
+> Reject if advice can mutate normative state, an invalid/unsealed revision can
+> activate, an affected unsynchronized worktree can resume, or unrelated work
+> is unnecessarily held.
+
 ## Mandatory Governing References
 
 This draft brief is subordinate to:
