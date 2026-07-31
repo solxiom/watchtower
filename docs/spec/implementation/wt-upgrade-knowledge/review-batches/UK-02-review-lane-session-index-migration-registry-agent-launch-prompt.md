@@ -1,3 +1,23 @@
-# Agent Launch Prompt — Review Batch UK-02
+# Agent Launch Prompt — Review Batch UK-02 — Migration framework and preservation harness
 
-Independently review UK-02 — Migration framework and preservation harness. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules, UK-02-review-lane-session-index-migration-registry.md, the exact checkout and report. Own a closed MigrationRegistry, ordering/staging interface and preservation harness. Ship no fictional v2/v3 transition; actual format owners register only accepted real transitions and rebuild adapters. Reproduce Closed declared transitions only; no fictional versions; capability-owned rebuild adapters; value/history/pin/lifecycle preservation and every engineering gate. Do not repair; emit only the authorized durable verdict.
+## Mandatory direct dependencies
+
+- [Shared Upgrade and knowledge agent launch contract](../agent-launch-contract.md) — read in full; it supplies the complete independent review method and is not optional.
+- [Exact review brief](UK-02-review-lane-session-index-migration-registry.md) — read in full.
+- Accepted implementation map, normative specifications, pack quality rules, current source, accepted predecessor evidence, tracker, and exact checkout.
+
+## Complete batch-specific scope
+
+- **Title:** Migration framework and preservation harness
+- **Dependencies:** `UK-01`, `LC-05`
+- **Exclusive ownership/interface:** migration registry/staging contracts
+- **Implementer/reviewer floors:** R5 / R5
+- **Mandatory proof:** Closed declared transitions only; no fictional versions; capability-owned rebuild adapters; value/history/pin/lifecycle preservation
+- **Review report:** `.local/agent-reports/wt-upgrade-knowledge/reviews/UK-02-lane-session-index-migration-registry-review.md`
+- **Correction report pattern:** `.local/agent-reports/wt-upgrade-knowledge/reviews/corrections/UK-02-lane-session-index-migration-registry-correction-<NN>.md`
+- **Tracker:** `docs/spec/implementation/wt-upgrade-knowledge/implementation-tracker.md`
+- **Host control:** use `sudo -u kavan -i` when needed; all edits end `kavan:kavan`; never stage forbidden local/generated paths.
+
+## Batch-specific execution and handoff
+
+Apply the shared method to the exact ownership and proof above. Enumerate concrete applicable failure cases and proof commands before judging; preserve unrelated work and inspect source rather than trusting reports. Do not repair implementation. Reproduce all evidence, write the complete engineering matrix, and emit exactly one durable verdict. Only on full acceptance may the reviewer create the acceptance commit; publication remains separate.

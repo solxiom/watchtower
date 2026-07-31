@@ -1,11 +1,23 @@
-# Agent Launch Prompt — Work Batch RM-11
+# Agent Launch Prompt — Work Batch RM-11 — Repository NVB parent-chain composition
 
-Implement **RM-11 — Repository NVB parent-chain composition**. Read `AGENTS.md`, the mandatory
-engineering standard, Nirvana integration architecture, remediation amendment,
-accepted map, and `RM-11-repository-nvb-parent-chain-composition.md` in full. Dependencies: RM-01. Exclusive
-ownership: development NVB parent chain and architecture gates. Required proof: Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit.
+## Mandatory direct dependencies
 
-Inspect current source and accepted commits, preserve unrelated work, use
-Nirvana first, keep fronts thin, validate external data, and use only declared
-task/effect boundaries. Do not commit. Produce the complete report and durable
-handoff required by the brief.
+- [Shared Read model agent launch contract](../agent-launch-contract.md) — read in full; it supplies the complete implementation method and is not optional.
+- [Exact work brief](RM-11-repository-nvb-parent-chain-composition.md) — read in full.
+- Accepted implementation map, normative specifications, pack quality rules, current source, accepted predecessor evidence, tracker, and exact checkout.
+
+## Complete batch-specific scope
+
+- **Title:** Repository NVB parent-chain composition
+- **Dependencies:** `RM-01`
+- **Exclusive ownership/interface:** development NVB parent chain and architecture gates
+- **Implementer/reviewer floors:** R4 / R4
+- **Mandatory proof:** Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit
+- **Implementation report:** `.local/agent-reports/wt-read-model/RM-11-repository-nvb-parent-chain-composition.md`
+- **Correction report pattern:** `.local/agent-reports/wt-read-model/reviews/corrections/RM-11-repository-nvb-parent-chain-composition-correction-<NN>.md`
+- **Tracker:** `docs/spec/implementation/wt-read-model/implementation-tracker.md`
+- **Host control:** use `sudo -u kavan -i` when needed; all edits end `kavan:kavan`; never stage forbidden local/generated paths.
+
+## Batch-specific execution and handoff
+
+Apply the shared method to the exact ownership and proof above. Enumerate concrete applicable failure cases and proof commands before editing; preserve unrelated work and inspect source rather than trusting reports. Synchronize owned public artifacts and write exact evidence, size/cohesion inventory, ownership and Git status. Do not commit or issue a verdict. Emit durable handoff only when every gate passes; otherwise route the exact blocker/correction without abandoning this lineage.

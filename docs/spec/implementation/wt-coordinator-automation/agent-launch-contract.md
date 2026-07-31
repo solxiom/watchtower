@@ -1,92 +1,76 @@
-# Pack 5 Agent Launch Contract
+# Coordinator automation Agent Launch Contract
 
-Status: **Mandatory input for every CA work/review launch prompt**
-Date: 2026-07-31
+Status: **Mandatory direct dependency of every work and review launch prompt**
 
-This shared contract removes duplicated launch boilerplate. A launch envelope
-is incomplete unless it includes this document, the batch-specific launch
-prompt, the paired brief, and the bounded predecessor handoff named by that
-prompt. It is an execution aid, not product authority.
+This contract supplies the common standalone execution and review method. A
+prompt is dispatchable only when it links directly here and also states its
+batch-specific title, dependencies, ownership, proof, reasoning floor, report
+path, correction path, tracker responsibility, and handoff/verdict authority.
 
-## Precedence And Required Reading
+## Authority and required reading
 
-Resolve conflicts in this order and stop for amendment rather than inventing:
+Read 'AGENTS.md', 'docs/development/engineering-and-review-standard.md',
+'docs/spec/v1.md', 'docs/spec/v1-contracts.md',
+'docs/spec/nirvana-integration-architecture.md',
+'docs/spec/v1-implementation-map.md', the planning-remediation amendment, this
+pack's quality rules, the exact batch brief, accepted predecessor source and
+evidence, and the current tracker. Normative specifications and the accepted
+map override illustrative implementation names.
 
-1. `docs/spec/v1-contracts.md` and `docs/spec/schemas/v1.schema.json`
-2. `docs/spec/v1.md`
-3. scoped normative specs including `nirvana-integration-architecture.md`,
-   `coordinator-automation.md`, `operator-session.md`, and `cli-session.md`
-4. `docs/spec/architecture.md`
-5. `docs/development/engineering-and-review-standard.md`
-6. `AGENTS.md`
-7. accepted implementation map, pack rules, paired brief, and launch prompt
+## Mandatory implementation method
 
-Read the engineering standard, Nirvana integration architecture, paired brief,
-`tui-interface-contracts.md` for CA-18–CA-24, and this contract in full.
-Inspect actual source and accepted predecessor evidence; filenames and reports
-are not substitutes for code/evidence.
+1. Confirm the exact checkout/worktree, branch/commit, accepted dependencies,
+   current seal revision, resource claims, and batch scope before editing.
+2. Build an ownership/dependency map from normative contracts to exact public
+   types, focused foundation owners, thin command/TaskHandler fronts, tests,
+   help/schema/manifests, reports, and tracker rows.
+3. Inspect pinned Nirvana packages and comparable Nira usage. Record selected
+   APIs and every specific 'NIRVANA_API_GAP'; do not build local infrastructure
+   when a conforming pinned API exists.
+4. Enumerate invariants, invalid states, failure precedence, path/trust input,
+   stale/corrupt state, replay/idempotency, concurrency/re-entrancy, unsupported
+   behavior, and one plausible shortcut that focused proof must reject.
+5. Parse external data as 'unknown' into closed contracts. Broad 'any',
+   trust-boundary casts/non-null assertions, mutable globals, hidden repair,
+   command-local policy/effects, and full-pack/history fallbacks are rejected.
+6. Keep 'src/cli.ts', commands, and TaskHandlers thin. Route substantial
+   deterministic work through the immutable packaged NVB catalog and
+   'LaneTaskRunner'; mutation uses current-state validation and the sole effect
+   executor. Never edit a participating repository's 'nvb.json'.
+7. Split responsibilities before warning thresholds. Report physical file,
+   function, and constructor counts plus cohesion inventories required by the
+   mandatory engineering matrix.
+8. Run batch-specific unit/integration/adversarial proof, 'nvb build',
+   'nvb test', and dist/relocation/native/PTY/replay proof whenever the owned
+   boundary requires it. Record exact commands, versions, totals, outcomes,
+   skips, environmental limits, and final Git status.
+9. Synchronize every owned public contract, help fragment/registry, schema,
+   manifest, generated aggregate, normative document, report, and tracker row.
+   Never stage '.local', 'build', 'dist', dependencies, or lane runtime.
+10. The implementer does not commit or issue a verdict. Emit the durable
+    handoff only after every gate passes; otherwise remain in the preserved
+    session and report the precise blocker.
 
-## Reasoning And Allocation
+## Mandatory independent review method
 
-The prompt's `R` class is a capability floor. Select a currently available
-endpoint/account using the accepted allocation plan and declared capabilities;
-do not hard-code a vendor/model name into the pack. A weaker or steering-only
-agent may explore but may not issue the final implementation/review judgment.
-If the agent cannot retain the bounded required packet or independently run the
-proof, escalate the endpoint or split only on brief-owned boundaries.
+1. Verify reviewer independence, exact tested checkout/commit, handoff event,
+   report path, diff scope, ownership, and accepted predecessor evidence.
+2. Reconstruct behavior from source/spec/artifacts rather than trusting the
+   implementation report. Re-run every acceptance-critical command and add
+   independent negative/counterexample cases.
+3. Audit scope, layering, Nirvana-first use, NVB/task/facade boundaries,
+   size/cohesion, contracts/failure behavior, state/effect/security, tests and
+   packaging, help/schema/spec/tracker synchronization, ownership, and hygiene.
+4. Any failed mandatory gate requires 'reject'. Do not repair product work.
+   Write the exact correction surface and keep the same implementer/reviewer
+   lineage available.
+5. Emit exactly one durable 'accept', 'reject', or 'skip'. Only a reviewer may
+   create the acceptance commit after all gates pass; publication remains a
+   separate coordinator effect.
 
-Before editing:
+## Reasoning and context integrity
 
-1. make a task plan;
-2. map governing requirements to exact owners/tests;
-3. inspect dependencies and existing responsibilities;
-4. complete the Nirvana API audit;
-5. enumerate failure, recovery, security, authority, and size risks; and
-6. stop if an accepted predecessor contract is missing or incompatible.
-
-## Nirvana, NVB, And Architecture
-
-- Use thin Nirvana command front doors and focused capabilities.
-- Record inspected pinned Nirvana symbols/comparable Nira usage and every real
-  `NIRVANA_API_GAP`.
-- `LaneTaskRunner` is the sole internal NVB boundary; packaged tasks are
-  allowlisted and project `nvb.json` is never modified/trusted.
-- Shell is only a manifest-declared leaf where no conforming API exists.
-- No direct raw subprocess, workflow shell, generic helper bag, local
-  ANSI/layout framework, foreign API laundering, or product logic in
-  `src/cli.ts`.
-- Apply exact project module/function/constructor limits and dependency gates.
-- Public names, errors, JSON, events, and schemas remain registry-owned.
-- UI/cache/tmux/model prose never becomes authority; all effects use CA-10.
-
-## Work-Agent Rules
-
-The work agent implements only the paired brief, adds required tests/docs, and
-writes exactly one `.local/agent-reports/coordinator-automation/<batch>.md`
-report. It must include studied sources, files, interfaces, Nirvana audit,
-categorized line counts, proof commands/results, ownership, final status, and
-reviewer handoff. It does not commit or stage `.local/`.
-
-Minimum checks are `nvb build`, `nvb test`, architecture gates, exact
-batch-specific proof, `git diff --check`, ownership, and staged-artifact audit.
-Run dist/global-install/PTY/scale checks only when required by the brief.
-
-## Review-Agent Rules
-
-The reviewer is independent and treats the implementation report as claims.
-Review in the mandatory order and reproduce every critical proof. The report
-must include the engineering-standard PASS/FAIL matrix. Any FAIL rejects; known
-violations cannot be accepted with follow-up.
-
-On rejection, write a numbered correction brief and do not commit acceptance.
-On acceptance, update required status docs and create the acceptance commit
-containing eligible changes only. Never stage `.local/`.
-
-## User, Ownership, And Artifacts
-
-If not running as `kavan`, use `sudo -u kavan -i` for commands. Every edited
-file ends owned by `kavan:kavan`. Never commit `build/`, `dist/`,
-`node_modules/`, `.nira/local/`, `.watchtower/`, or `.local/`.
-
-End with a precise handoff: accepted interfaces/bounds, unresolved corrections,
-proof locations, and the next batch newly unblocked.
+The declared batch class is a floor for both execution and review. The selected
+agent must retain this complete contract, the batch brief, governing specs,
+current source, predecessor evidence, and proof output in context. Do not
+compress away safety instructions or replace proof with narrative confidence.

@@ -1,4 +1,17 @@
-# UK-04 Review: Codex, Cursor, And Claude Knowledge Installers — Review Brief
+# Review Batch UK-04 — Codex, Cursor, and Claude knowledge installers
+
+## Synchronized batch execution matrix
+
+- **Accepted-map title:** Codex, Cursor, and Claude knowledge installers
+- **Dependencies:** `RT-01`, `RT-02`
+- **Exclusive ownership/interface:** host adapters and skill command
+- **Implementer/reviewer floor:** R3 / R3
+- **Mandatory batch proof:** Preview/replace/scope behavior; version record; no false notification claim
+- **Implementation report:** `.local/agent-reports/wt-upgrade-knowledge/UK-04-codex-cursor-and-claude-knowledge-installers.md`
+- **Review report:** `.local/agent-reports/wt-upgrade-knowledge/reviews/UK-04-codex-cursor-and-claude-knowledge-installers-review.md`
+- **Correction report:** `.local/agent-reports/wt-upgrade-knowledge/reviews/corrections/UK-04-codex-cursor-and-claude-knowledge-installers-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 ## Mandatory Governing References
 
@@ -222,3 +235,23 @@ your review exposes private operator paths to every host that reads the skill.
 Write a complete independent review report at `.local/agent-reports/wt-upgrade-knowledge/reviews/UK-04-review-codex-cursor-and-claude-knowledge-installers.md`
 containing: per-adapter verification results, lane-state search methodology
 and results, scope-filter verification, and final verdict.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **host adapters and skill command**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-upgrade-knowledge/reviews/UK-04-codex-cursor-and-claude-knowledge-installers-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`RT-01`, `RT-02`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Preview/replace/scope behavior; version record; no false notification claim**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **host adapters and skill command** and **Preview/replace/scope behavior; version record; no false notification claim**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-upgrade-knowledge/reviews/corrections/UK-04-codex-cursor-and-claude-knowledge-installers-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-upgrade-knowledge/reviews/UK-04-codex-cursor-and-claude-knowledge-installers-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

@@ -172,17 +172,27 @@ each pack directory. These digests are candidate inputs to the independent
 `planning-remediation-pack-review.md` gate; they become active only through an
 exact-commit `ACCEPT_PACKS` verdict and coordinator activation effect.
 
+Reproduce the table from the repository root with:
+
+```sh
+node docs/spec/implementation/pack-seal.mjs
+```
+
+The committed generator sorts UTF-8 pack-relative paths bytewise and writes
+actual NUL (`0x00`) separators and LF (`0x0a`) record terminators. Literal
+backslash escape text is not part of the canonical byte stream.
+
 | Pack | Files | Bytes | Candidate seal |
 |------|------:|------:|----------------|
-| `wt-read-model` | 73 | 531221 | `sha256:5b5f558345813f3143b954f47f5845daa2a754b62e7ab052f2fec758f47947ec` |
-| `wt-runtime-distribution` | 50 | 197889 | `sha256:0a6e6f6eb6288b26b160c50a6ef9b7970e1583f60e5355f9da17485365be0308` |
-| `wt-lane-lifecycle` | 50 | 243808 | `sha256:3edd55e7b523fe00a80f6865de5d76ba318c81391daf8c2866ca4b33c672308d` |
-| `wt-upgrade-knowledge` | 30 | 330819 | `sha256:ed8dfcf494c57e443dbcc8bd649ec9700bf3093cf7b13941750434e5bd3ef577` |
-| `wt-coordinator-automation` | 142 | 864258 | `sha256:18bc2dcb4015c4da0ad7c0b85b1adea7f6246dda133280546c692588149940bd` |
-| `wt-v1-release` | 26 | 196416 | `sha256:3ea238eae61053f057cad8fa9f3eb60a9f117e0e2534bf1c33edd2d6e61acda2` |
+| `wt-read-model` | 74 | 383047 | `sha256:edda503676629d4b3b8a03f6f9be400249528c136b6061ee0a823b4b4c26d2f0` |
+| `wt-runtime-distribution` | 51 | 263107 | `sha256:4af1f3f3249cf9bfcba70db9ecbbdbb0255b35475638abcf6b609cd6e6ee618c` |
+| `wt-lane-lifecycle` | 51 | 273190 | `sha256:34890f04f78eb78ec3d3a0fb38a49a81fb1faf7f075d1d625336b3bf7c6d236d` |
+| `wt-upgrade-knowledge` | 31 | 248526 | `sha256:3d2d396d86f4954fabfe684a1a1f9858261555d6f22e8469bc57dd548c582e6a` |
+| `wt-coordinator-automation` | 142 | 940747 | `sha256:b9529806b859ae12091509ce94dc398d1b269b6b2f553299f42763cffc70223c` |
+| `wt-v1-release` | 27 | 158139 | `sha256:efc9695d25dc833f1ce1e7ad8dd28da3b2165a4b6dc23f6086753831adc00a15` |
 
 Candidate structural projection: 74 work briefs, 74 work prompts, 74 paired
-review briefs, 74 review prompts, and 549 resolvable local Markdown links in
+review briefs, 74 review prompts, and 987 resolvable local Markdown links in
 the implementation-pack tree. The exact independent pack review must
 reproduce—not trust—these values.
 

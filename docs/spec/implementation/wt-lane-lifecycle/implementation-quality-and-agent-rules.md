@@ -339,3 +339,25 @@ before editing or accepting code:
 - Spec files use kebab-case with `.spec.ts` suffix.
 - No file may shadow a directory (e.g., no `src/foo.ts` when `src/foo/` exists).
 - Imports use the `.js` extension per repo convention.
+
+## Synchronized 74-batch reasoning authority
+
+This table is the authoritative assignment floor and supersedes earlier illustrative ranking prose.
+
+| Batch | Implementer | Reviewer | Basis |
+|---|---|---|---|
+| LC-01 | R4 | R4 | Exact syntax; no destination creation in preview; prefix/scope/routing validation |
+| LC-02 | R5 | R5 | JSON Schema; RFC 8785 seal reproduction; Git/file-set/drift reason matrix |
+| LC-03 | R5 | R5 | Adjacent staging; atomic commit point; failure at every write/fsync/rename stage |
+| LC-04 | R5 | R5 | Lock order; conditional Git-ignore rollback; post-commit idempotent registration |
+| LC-05 | R4 | R4 | Finite policies; installed-knowledge provenance; no Markdown restatement or model |
+| LC-06 | R4 | R4 | Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization |
+| LC-07 | R4 | R4 | Pass/warn/fail/skip; marker/config/binding/permission/Git-ignore checks; read-only |
+| LC-08 | R5 | R5 | Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely |
+| LC-09 | R5 | R5 | Seal-bound compile/verify/atomic activation; no duplicate compiler or JSON authority |
+| LC-10 | R5 | R5 | Tool/account/runtime/index checks; exact pass/fail/skip; no global registry or repair |
+
+
+## Shared Launch Envelope Authorization
+
+Every active work and review prompt has `../agent-launch-contract.md` as a mandatory direct dependency. The launcher must co-deliver that contract, the batch-specific prompt, and paired brief as one self-contained envelope. This is the only permitted deduplication of launch method. A prompt may be concise only when it directly names the contract and still states the exact batch ID/title, dependencies, ownership, proof, implementer/reviewer reasoning floors, report/correction paths, checkout/ownership controls, role authority, and durable handoff or verdict. Missing or stale envelope members reject dispatch; links alone never replace batch-specific scope.

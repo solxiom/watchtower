@@ -226,10 +226,6 @@ to confirm that the implementor followed a checklist.
 
 | Batch | Implementor | Reviewer | Reason for the floor |
 |-------|-------------|----------|----------------------|
-| REL-01 | R5 | R5 | Cross-pack end-to-end trial: global install, init, dispatch, handoff, independent accept, publication. Involves filesystem/Git state machines, the full lane lifecycle, coordinator routing/validation/effects, operator sessions, and release evidence. |
-| REL-02 | R5 | R5 | Concurrent lane isolation, multi-repository commit verification, partial push recovery, and idempotency replay. Involves lock ordering, shared-write conflict detection, per-repository acceptance/push journal integrity, and lane-state recovery. |
-| REL-03 | R5 | R5 | Security, ownership, performance, and packaging evidence. Involves path traversal fixtures, config shell-injection corpus, multi-account permissions, manifest/checksum integrity at build and install time, synthetic scaling benchmarks, and model-invocation auditing. |
-| REL-04 | R3 | R4 | Documentation consistency audit and release gate. Narrow readability and traceability work with explicit owners. Reviewer requires cross-document judgment and acceptance-criterion traceability verification. |
 
 Escalate a nominal `R3` or `R4` task to `R5` if source inspection reveals an
 undocumented state machine, concurrency, destructive data behavior, an
@@ -337,3 +333,19 @@ accept.
   temporary fixes, or one-off maintenance flows.
 - Keep package `scripts` minimal and only when there is a clear product/runtime
   requirement.
+
+## Synchronized 74-batch reasoning authority
+
+This table is the authoritative assignment floor and supersedes earlier illustrative ranking prose.
+
+| Batch | Implementer | Reviewer | Basis |
+|---|---|---|---|
+| REL-01 | R5 | R5 | Global install; init; dispatch; handoff; independent accept; publication |
+| REL-02 | R5 | R5 | Two isolated lanes; multi-repo commit set; shared-write refusal; partial push recovery |
+| REL-03 | R5 | R5 | Traversal/config/permission suite; bounded discovery/status; manifest/global install proof; real OpenCode and conditional Hermes adapter matrix |
+| REL-04 | R3 | R4 | Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme |
+
+
+## Shared Launch Envelope Authorization
+
+Every active work and review prompt has `../agent-launch-contract.md` as a mandatory direct dependency. The launcher must co-deliver that contract, the batch-specific prompt, and paired brief as one self-contained envelope. This is the only permitted deduplication of launch method. A prompt may be concise only when it directly names the contract and still states the exact batch ID/title, dependencies, ownership, proof, implementer/reviewer reasoning floors, report/correction paths, checkout/ownership controls, role authority, and durable handoff or verdict. Missing or stale envelope members reject dispatch; links alone never replace batch-specific scope.

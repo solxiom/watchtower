@@ -1,16 +1,17 @@
-# Batch CA-19 — TUI Shell, Responsive Layout, Themes, and Focus
+# Batch CA-19 — TUI shell, responsive layout, themes, and focus
 
-## Authority And Status
+## Synchronized batch execution matrix
 
-Governing sources: `AGENTS.md`,
-`docs/development/engineering-and-review-standard.md`,
-`docs/spec/v1-contracts.md`, `docs/spec/v1.md`,
-`docs/spec/nirvana-integration-architecture.md`, `docs/spec/architecture.md`,
-`docs/spec/v1-implementation-map.md`, `docs/spec/cli-session.md`,
-`docs/spec/tui-operational-experience.md`, and the pack quality rules. Stop for
-amendment on conflict or unresolved behavior.
-Required interfaces are normative in this pack's
-`tui-interface-contracts.md §CA-19 Shell Contract`.
+- **Accepted-map title:** TUI shell, responsive layout, themes, and focus
+- **Dependencies:** `CA-18`
+- **Exclusive ownership/interface:** TUI application shell/components
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-19-tui-shell-responsive-layout-themes-and-focus.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-19-tui-shell-responsive-layout-themes-and-focus-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-19-tui-shell-responsive-layout-themes-and-focus-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Not started
 Depends on: CA-18 accepted with a `PASS` verdict
@@ -125,3 +126,22 @@ acceptance.
 Use `../review-batches/CA-19-review-tui-shell-responsive-layout-themes-and-focus.md`.
 The reviewer independently regenerates breakpoint, focus, theme, dependency,
 structure, and test evidence; the implementation report is not proof.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **TUI application shell/components**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-19-tui-shell-responsive-layout-themes-and-focus.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`CA-18`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **TUI application shell/components** and **Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-coordinator-automation/CA-19-tui-shell-responsive-layout-themes-and-focus.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

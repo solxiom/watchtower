@@ -271,11 +271,6 @@ to confirm that the implementor followed a checklist.
 
 | Batch | Implementor | Reviewer | Reason for the floor |
 |-------|-------------|----------|----------------------|
-| UK-01 | R4 | R4 | Compatibility matrix and ownership-boundary planning; cross-manifest comparison with negative-path design |
-| UK-02 | R5 | R5 | Pure version-steps with value-preservation proofs; interacting session-index and policy-baseline state machines |
-| UK-03 | R5 | R5 | Atomic staging with crash recovery at every write point; downgrade-guard state machine and destructive boundary |
-| UK-04 | R3 | R3 | Bounded host adapters with explicit preview/replace patterns; narrow filesystem operations |
-| UK-05 | R3 | R4 | Version reporting integration and conformance proof; reviewer must independently verify end-to-end fixtures |
 
 Escalate a nominal `R3` task to `R4` or `R4` to `R5` if source inspection
 reveals an undocumented state machine, concurrency, destructive data behavior,
@@ -426,3 +421,20 @@ accept.
   temporary fixes, or one-off maintenance flows.
 - Keep package `scripts` minimal and only when there is a clear product/runtime
   requirement.
+
+## Synchronized 74-batch reasoning authority
+
+This table is the authoritative assignment floor and supersedes earlier illustrative ranking prose.
+
+| Batch | Implementer | Reviewer | Basis |
+|---|---|---|---|
+| UK-01 | R4 | R4 | Runtime/knowledge/schema matrix; changed/preserved/conflict classification |
+| UK-02 | R5 | R5 | Closed declared transitions only; no fictional versions; capability-owned rebuild adapters; value/history/pin/lifecycle preservation |
+| UK-03 | R5 | R5 | Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade |
+| UK-04 | R3 | R3 | Preview/replace/scope behavior; version record; no false notification claim |
+| UK-05 | R3 | R4 | CLI/runtime/knowledge/schema report; two-version fixtures; collision and failed migration |
+
+
+## Shared Launch Envelope Authorization
+
+Every active work and review prompt has `../agent-launch-contract.md` as a mandatory direct dependency. The launcher must co-deliver that contract, the batch-specific prompt, and paired brief as one self-contained envelope. This is the only permitted deduplication of launch method. A prompt may be concise only when it directly names the contract and still states the exact batch ID/title, dependencies, ownership, proof, implementer/reviewer reasoning floors, report/correction paths, checkout/ownership controls, role authority, and durable handoff or verdict. Missing or stale envelope members reject dispatch; links alone never replace batch-specific scope.

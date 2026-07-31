@@ -1,3 +1,23 @@
-# Agent Launch Prompt — Work Batch RT-02
+# Agent Launch Prompt — Work Batch RT-02 — Runtime and knowledge manifests
 
-Implement RT-02 — Runtime and knowledge manifests. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules and RT-02-runtime-and-knowledge-manifests.md in full. Dependencies: RT-01, RM-11. Own runtime/knowledge manifest contracts, policy provenance and validators. Task catalogs, profiles, aggregates and handlers belong to RT-09/RT-10. Preserve unrelated work, inspect source rather than trusting reports, satisfy Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection, do not commit, and emit only the complete report plus durable handoff.
+## Mandatory direct dependencies
+
+- [Shared Runtime distribution agent launch contract](../agent-launch-contract.md) — read in full; it supplies the complete implementation method and is not optional.
+- [Exact work brief](RT-02-runtime-and-knowledge-manifests.md) — read in full.
+- Accepted implementation map, normative specifications, pack quality rules, current source, accepted predecessor evidence, tracker, and exact checkout.
+
+## Complete batch-specific scope
+
+- **Title:** Runtime and knowledge manifests
+- **Dependencies:** `RT-01`, `RM-11`
+- **Exclusive ownership/interface:** runtime/knowledge manifest contracts and validators
+- **Implementer/reviewer floors:** R4 / R4
+- **Mandatory proof:** Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection
+- **Implementation report:** `.local/agent-reports/wt-runtime-distribution/RT-02-runtime-and-knowledge-manifests.md`
+- **Correction report pattern:** `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-02-runtime-and-knowledge-manifests-correction-<NN>.md`
+- **Tracker:** `docs/spec/implementation/wt-runtime-distribution/implementation-tracker.md`
+- **Host control:** use `sudo -u kavan -i` when needed; all edits end `kavan:kavan`; never stage forbidden local/generated paths.
+
+## Batch-specific execution and handoff
+
+Apply the shared method to the exact ownership and proof above. Enumerate concrete applicable failure cases and proof commands before editing; preserve unrelated work and inspect source rather than trusting reports. Synchronize owned public artifacts and write exact evidence, size/cohesion inventory, ownership and Git status. Do not commit or issue a verdict. Emit durable handoff only when every gate passes; otherwise route the exact blocker/correction without abandoning this lineage.
