@@ -1,9 +1,8 @@
 # wt-runtime-distribution Implementation Quality And Agent Rules
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** `../planning-remediation-amendment.md` supersedes any
+> conflicting batch contract and the former pack seal. No untouched batch may
+> start until synchronized artifacts are independently accepted and resealed.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -290,13 +289,6 @@ to confirm that the implementor followed a checklist.
 
 | Batch | Implementor | Reviewer | Reason for the floor |
 |-------|-------------|----------|----------------------|
-| RT-01 | R4 | R4 | Deep asset audit with provenance and behavioral inventory |
-| RT-02 | R4 | R4 | Manifest schemas with checksum enforcement and closed types |
-| RT-03 | R3 | R3 | Bounded NVB build configuration with explicit owners |
-| RT-04 | R4 | R4 | Immutable catalog with atomic staging and XDG precedence |
-| RT-05 | R5 | R5 | Runtime adapter with security boundaries, allowlisting, and signal/exit forwarding |
-| RT-06 | R4 | R4 | Managed links with collision safety and path-escape refusal |
-| RT-07 | R3 | R3 | Integration smoke testing with explicit fixtures |
 
 Escalate a nominal `R3` or `R4` task to `R5` if source inspection reveals an
 undocumented state machine, concurrency, destructive data behavior, an
@@ -484,3 +476,25 @@ accept.
   fragments/handlers and regenerate the catalog. Repository development
   workflows use the actual `nvb.json`/handler surface. Do not use `nira.json`
   as an invented task registry.
+
+## Synchronized 74-batch reasoning authority
+
+This table is the authoritative assignment floor and supersedes earlier illustrative ranking prose.
+
+| Batch | Implementer | Reviewer | Basis |
+|---|---|---|---|
+| RT-01 | R4 | R4 | Source provenance; no omitted action/doc; every script classified as TaskHandler, leaf, temporary wrapper, or removal |
+| RT-02 | R4 | R4 | Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection |
+| RT-03 | R3 | R3 | Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback |
+| RT-04 | R4 | R4 | XDG precedence; atomic first stage; two versions coexist; immutable version roots |
+| RT-05 | R5 | R5 | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
+| RT-06 | R4 | R4 | Manifest-only ownership; task catalog/profile pin; project nvb.json unchanged; link targets/checksums; collision/path-escape refusal |
+| RT-07 | R3 | R3 | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |
+| RT-08 | R5 | R5 | Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink |
+| RT-09 | R5 | R5 | Duplicate/dangling/stale rejection; profile cannot add code/tasks; deterministic aggregate |
+| RT-10 | R4 | R4 | Public TaskHandler API; schema-valid input/result/events; no product policy or future capability stubs |
+
+
+## Shared Launch Envelope Authorization
+
+Every active work and review prompt has `../agent-launch-contract.md` as a mandatory direct dependency. The launcher must co-deliver that contract, the batch-specific prompt, and paired brief as one self-contained envelope. This is the only permitted deduplication of launch method. A prompt may be concise only when it directly names the contract and still states the exact batch ID/title, dependencies, ownership, proof, implementer/reviewer reasoning floors, report/correction paths, checkout/ownership controls, role authority, and durable handoff or verdict. Missing or stale envelope members reject dispatch; links alone never replace batch-specific scope.

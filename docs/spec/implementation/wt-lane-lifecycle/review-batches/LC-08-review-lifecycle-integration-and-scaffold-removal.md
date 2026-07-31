@@ -1,173 +1,87 @@
-# Review Batch LC-08 — Lifecycle Integration and Scaffold Removal
+# Review Batch LC-08 — Lifecycle integration and scaffold removal
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
+- **Accepted-map title:** Lifecycle integration and scaffold removal
+- **Dependencies:** `LC-10`, `RM-10`, `RM-12`
+- **Exclusive ownership/interface:** end-to-end specs, help registry
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely
+- **Implementation report:** `.local/agent-reports/wt-lane-lifecycle/LC-08-lifecycle-integration-and-scaffold-removal.md`
+- **Review report:** `.local/agent-reports/wt-lane-lifecycle/reviews/LC-08-lifecycle-integration-and-scaffold-removal-review.md`
+- **Correction report:** `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-08-lifecycle-integration-and-scaffold-removal-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/LC-08-lifecycle-integration-and-scaffold-removal.md
+Dependencies: LC-10, RM-10, RM-12
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: end-to-end specs, help registry. Own lifecycle end-to-end fixtures, help integration and safe scaffold removal. Consume LC-10, RM-10 and RM-12; do not implement doctor providers or read commands.
 
-## Mandatory Cross-Cutting Acceptance
+Independently reproduce Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
 
-Status: ⏳ Awaiting review
-Reasoning: `R4`
-Paired work brief: `work-batches/LC-08-lifecycle-integration-and-scaffold-removal.md`
-Implementation report: `.local/agent-reports/wt-lane-lifecycle/LC-08-lifecycle-integration-and-scaffold-removal.md`
+## Synchronized executable contract
 
-## Scope Verification
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-- [ ] `spec/e2e/lifecycle.spec.ts` created with end-to-end fixture: init→status→watch/doctor→rollback
-- [ ] `src/commands/HelloCommand.ts` deleted
-- [ ] `help/commands/hello.hlp.json` deleted
-- [ ] `spec/commands/HelloCommand.spec.ts` deleted (if present)
-- [ ] Hello-related runtime-nvb tasks removed (if present)
-- [ ] `src/commands/index.ts` updated — HelloCommand import and registration removed
-- [ ] `help/help.json` updated — hello entry removed
-- [ ] `help/commands/README.md` updated — hello section removed (if present)
-- [ ] Zero hello references in `src/`, `help/`, `spec/`, `runtime-nvb/`
-- [ ] `nvb build` passes after scaffold removal
-- [ ] All Jasmine suites pass after scaffold removal
-- [ ] No product logic in `src/cli.ts`
+- Exact map title: **Lifecycle integration and scaffold removal**
+- Accepted dependencies: `LC-10`, `RM-10`, `RM-12`
+- Exclusive owner: end-to-end specs, help registry
+- Required proof claim: Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-lane-lifecycle/reviews/LC-08-lifecycle-integration-and-scaffold-removal-review.md`
+- Correction report pattern: `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-08-lifecycle-integration-and-scaffold-removal-correction-<NN>.md`
 
-## Required Independent Proof
+### Interface and failure-order contract
 
-1. **End-to-end fixture — init**: run the lifecycle spec. Verify init creates the expected lane directory layout. Verify `lane.json`, `install.json`, and `lane.config.env` are present and valid. Verify all v1.md §7.2 subdirectories exist.
-2. **End-to-end fixture — status**: run status on the created lane. Verify output shows the correct lane slug, UUID, initiative, and status.
-3. **End-to-end fixture — watch**: start watch in test mode, verify preflight passes and no exit codes 3/4/5. Observe process startup, send SIGINT, verify clean exit. Verify no orphaned processes.
-4. **End-to-end fixture — doctor**: run doctor on the created lane. Verify exit code 0 (no failures). Verify at least control-home, tools, config, markers, and permissions checks appear in output with pass status.
-5. **Rollback proof — invalid init**: run init with an invalid slug (e.g., `"INVALID!!!"` or too long). Verify non-zero exit code. Verify no `.watchtower/lanes/{invalid-slug}/` directory exists. Verify `.watchtower/` is either absent or contains only valid lane directories.
-6. **Rollback proof — missing arg init**: run init with missing required argument (e.g., no slug). Verify non-zero exit code. Verify no residual state.
-7. **Rollback proof — partial failure**: if the transaction fails partway through init (simulated), verify rollback. Verify no partial lane directory remains.
-8. **Scaffold removal — file audit**: search for `HelloCommand` or any variant in `src/`. Verify zero results.
-9. **Scaffold removal — help audit**: search for `hello` in `help/`. Verify zero results (or only historical documentation references).
-10. **Scaffold removal — spec audit**: search for `hello` in `spec/`. Verify zero results (or only documentation references).
-11. **Scaffold removal — runtime-nvb audit**: search for `hello` in `runtime-nvb/`. Verify zero results.
-12. **Scaffold removal — index integrity**: verify `help/help.json` contains no hello entry. Verify `src/commands/index.ts` contains no HelloCommand import or registration.
-13. **Build verification**: run `nvb build`. Verify zero errors. Verify no build failures from missing hello module references.
-14. **Test verification**: run `nvb test`. Verify all tests pass. Verify no test failures from missing hello test dependencies.
-15. **Final audit**: run `grep -ril "hello" src/ help/ spec/ runtime-nvb/`. Verify zero results (excluding this review document and historical spec references in `docs/spec/` that intentionally mention hello scaffold).
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **end-to-end specs, help registry**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-## Required Reasoning Posture
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-The reviewer must independently verify that the end-to-end lifecycle works as a
-complete chain. Rerun the fixture from a clean environment. Do not trust the
-implementation report's claim that scaffold removal is complete — independently
-search for every hello reference. The removal must be exhaustive; a single
-remaining `HelloCommand` reference in any code file is grounds for rejection.
-Verify that `nvb build` and `nvb test` pass after removal with no workarounds
-or suppressed errors.
+### Selected adversarial matrix
 
-## Structural And Module-Size Acceptance
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-Line count is a design alarm, never permission to accumulate unrelated work.
-Count physical lines, including comments and blanks, in new and materially
-rewritten hand-maintained files. Generated artifacts are excluded only when
-their generator ownership is explicit and they contain no hand-maintained
-behavior.
+### Reproducible proof and reporting
 
-Use the exact project-wide matrix:
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-| Category | Preferred maximum | Warning band | Hard reject |
-| --- | ---: | ---: | ---: |
-| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
-| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
-| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
-| Contract/type-only module | 240 | 241–320 | over 400 |
-| Test/spec module | 300 | 301–420 | over 500 |
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
-target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
-a responsibility inventory and explicit reviewer judgment.
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-Every module has one primary responsibility and one cohesive reason to change.
-Commands and TaskHandlers validate, normalize, delegate, and map results.
-Orchestrators sequence collaborators without absorbing their algorithms.
-Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
-not accumulate in one owner. Three independently nameable responsibilities
-require a split even below a preferred maximum.
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
 
-Class-owning TypeScript modules use PascalCase filenames; function/value modules
-use lowerCamelCase. New source filenames do not use dashes or underscores.
-Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+## Batch-specific interface and negative-case contract
 
-Any size exception must be approved before implementation and name the exact
-file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
-Existing oversized files are not precedent: when touched they become smaller,
-split, or remain line-count neutral under an approved extraction plan.
+The exclusive owned interface set is **end-to-end specs, help registry**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-lane-lifecycle/reviews/LC-08-lifecycle-integration-and-scaffold-removal-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-The implementation report records categorized line counts for every new or
-materially rewritten file plus warning-band functions/constructors. The
-reviewer reproduces those counts and independently judges cohesion. Passing a
-line-count check never overrides the responsibility gate.
+Accepted predecessor input is exactly **`LC-10`, `RM-10`, `RM-12`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely**.
 
-# Agent Launch Prompt — Work Batch RT-05
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-## Required Review Packet
+Concrete negative proof selected for **end-to-end specs, help registry** and **Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely**:
 
-The review report must include: independently rerun proof commands and outcomes,
-end-to-end fixture execution output (init, status, watch, doctor sections),
-rollback proof execution output, scaffold removal audit (every deleted file,
-every modified reference, zero-hello-reference search results), `nvb build`
-output, `nvb test` output, structural verification results, line-count
-verification, tracker/roadmap sync status, and the acceptance or rejection decision.
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-## Acceptance Gate
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-- All hard-reject checklist items are clear.
-- End-to-end fixture passes: init→status→watch/doctor chain works.
-- Rollback proof: failed init leaves no residual state.
-- All hello artifacts deleted.
-- Zero hello references in `src/`, `help/`, `spec/`, `runtime-nvb/`.
-- `help/help.json` and `src/commands/index.ts` cleaned correctly.
-- `nvb build` passes with zero errors.
-- `nvb test` passes with zero failures.
-- Tracker and roadmap updated — Lane lifecycle pack marked complete or pending only LC-08 review.
-- No `.local/` artifacts staged.
-
-## Reject Conditions
-
-- End-to-end fixture fails any step.
-- Rollback leaves residual state.
-- Any hello artifact remaining in codebase.
-- Any `HelloCommand` import or reference remaining.
-- `nvb build` failure after removal.
-- `nvb test` failure after removal.
-- Partial scaffold removal (some files deleted, others remaining).
-- Real command or foundation module accidentally removed.
-- `help/help.json` or `src/commands/index.ts` missing a real command after edits.
-- Stale tracker/roadmap.
-- Committed `.local/` artifacts.
-- Implementation agent committed changes.
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-08-lifecycle-integration-and-scaffold-removal-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-lane-lifecycle/reviews/LC-08-lifecycle-integration-and-scaffold-removal-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

@@ -1,107 +1,41 @@
-# Work Batch Index — wt-coordinator-automation
+# Coordinator automation — Work Batch Index
 
-> **Accepted repack (2026-07-31).** Entries CA-18 through CA-24 replace the
-> historical monolithic CA-18 and are authorized under their recorded
-> dependencies and paired review gates.
+Status: **74-batch remediation synchronization candidate**
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+| Batch | Work brief | Launch prompt | Depends on | Wave |
+|---|---|---|---|---:|
+| CA-01 | [brief](CA-01-deterministic-sealed-pack-sqlite-compiler.md) | [prompt](CA-01-deterministic-sealed-pack-sqlite-compiler-agent-launch-prompt.md) | `DB-01`, `LC-02`, `LC-03` | 9 |
+| CA-02 | [brief](CA-02-sqlite-index-stores-and-bounded-typed-queries.md) | [prompt](CA-02-sqlite-index-stores-and-bounded-typed-queries-agent-launch-prompt.md) | `CA-01` | 10 |
+| CA-03 | [brief](CA-03-runtime-sqlite-indexes-and-projections.md) | [prompt](CA-03-runtime-sqlite-indexes-and-projections-agent-launch-prompt.md) | `RM-05`, `CA-02` | 11 |
+| CA-04 | [brief](CA-04-ready-set-and-resource-claim-projection.md) | [prompt](CA-04-ready-set-and-resource-claim-projection-agent-launch-prompt.md) | `RM-08`, `CA-01`, `CA-03` | 12 |
+| CA-05 | [brief](CA-05-ordered-routing-policy-and-capability-floors.md) | [prompt](CA-05-ordered-routing-policy-and-capability-floors-agent-launch-prompt.md) | `CA-04`, `RT-02`, `LC-05` | 13 |
+| CA-06 | [brief](CA-06-endpoint-adapter-eligibility-and-isolation.md) | [prompt](CA-06-endpoint-adapter-eligibility-and-isolation-agent-launch-prompt.md) | `RT-05`, `CA-05` | 14 |
+| CA-07 | [brief](CA-07-immutable-decision-envelopes.md) | [prompt](CA-07-immutable-decision-envelopes-agent-launch-prompt.md) | `CA-02`–`CA-06` | 15 |
+| CA-08 | [brief](CA-08-context-broker-and-cycle-budgets.md) | [prompt](CA-08-context-broker-and-cycle-budgets-agent-launch-prompt.md) | `CA-02`, `CA-06`, `CA-07` | 16 |
+| CA-09 | [brief](CA-09-typed-proposals-and-current-state-validator.md) | [prompt](CA-09-typed-proposals-and-current-state-validator-agent-launch-prompt.md) | `CA-05`, `CA-07`, `CA-08` | 17 |
+| CA-10 | [brief](CA-10-atomic-lane-local-effect-executor.md) | [prompt](CA-10-atomic-lane-local-effect-executor-agent-launch-prompt.md) | `LC-03`, `CA-09` | 18 |
+| CA-11 | [brief](CA-11-tmux-prepare-attempt-verify-effect-adapter.md) | [prompt](CA-11-tmux-prepare-attempt-verify-effect-adapter-agent-launch-prompt.md) | `RT-05`, `CA-10` | 19 |
+| CA-12 | [brief](CA-12-acceptance-and-git-publication-adapter.md) | [prompt](CA-12-acceptance-and-git-publication-adapter-agent-launch-prompt.md) | `RM-08`, `CA-10` | 19 |
+| CA-13 | [brief](CA-13-coordinator-queue-cursor-replay-and-watcher-integration.md) | [prompt](CA-13-coordinator-queue-cursor-replay-and-watcher-integration-agent-launch-prompt.md) | `CA-03`, `CA-05`, `CA-10`–`CA-12` | 20 |
+| CA-14 | [brief](CA-14-coordinator-event-and-ready-set-commands.md) | [prompt](CA-14-coordinator-event-and-ready-set-commands-agent-launch-prompt.md) | `CA-01`–`CA-13` | 21 |
+| CA-15 | [brief](CA-15-operator-session-persistence-and-lifecycle.md) | [prompt](CA-15-operator-session-persistence-and-lifecycle-agent-launch-prompt.md) | `CA-03`, `UK-02` | 12 |
+| CA-16 | [brief](CA-16-session-sqlite-index-references-pins-and-compaction.md) | [prompt](CA-16-session-sqlite-index-references-pins-and-compaction-agent-launch-prompt.md) | `CA-02`, `CA-15` | 13 |
+| CA-17 | [brief](CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | [prompt](CA-17-session-routing-budgets-proposals-holds-and-amendments-agent-launch-prompt.md) | `CA-06`, `CA-08`, `CA-15`, `CA-16` | 17 |
+| CA-18 | [brief](CA-18-nirvana-opentui-feasibility-and-packaging-gate.md) | [prompt](CA-18-nirvana-opentui-feasibility-and-packaging-gate-agent-launch-prompt.md) | `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29` | 23 |
+| CA-19 | [brief](CA-19-tui-shell-responsive-layout-themes-and-focus.md) | [prompt](CA-19-tui-shell-responsive-layout-themes-and-focus-agent-launch-prompt.md) | `CA-18` | 24 |
+| CA-20 | [brief](CA-20-conversation-timeline-composer-history-and-references.md) | [prompt](CA-20-conversation-timeline-composer-history-and-references-agent-launch-prompt.md) | `CA-16`, `CA-19` | 25 |
+| CA-21 | [brief](CA-21-inspector-command-palette-and-overlays.md) | [prompt](CA-21-inspector-command-palette-and-overlays-agent-launch-prompt.md) | `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27` | 25 |
+| CA-22 | [brief](CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md) | [prompt](CA-22-turn-streaming-notifications-concurrency-and-observer-ui-agent-launch-prompt.md) | `CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27` | 26 |
+| CA-23 | [brief](CA-23-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | [prompt](CA-23-accessibility-terminal-lifecycle-recovery-and-pty-matrix-agent-launch-prompt.md) | `CA-18`–`CA-22` | 27 |
+| CA-24 | [brief](CA-24-session-command-integration-scale-replay-and-m6-acceptance.md) | [prompt](CA-24-session-command-integration-scale-replay-and-m6-acceptance-agent-launch-prompt.md) | `CA-14`–`CA-23`, `CA-25`–`CA-31` | 29 |
+| CA-25 | [brief](CA-25-cycle-escalation-and-specification-resolution-commands.md) | [prompt](CA-25-cycle-escalation-and-specification-resolution-commands-agent-launch-prompt.md) | `CA-13`, `CA-14`, `CA-17`, `CA-26`–`CA-29` | 22 |
+| CA-26 | [brief](CA-26-session-proposals-confirmation-revalidation-and-apply.md) | [prompt](CA-26-session-proposals-confirmation-revalidation-and-apply-agent-launch-prompt.md) | `CA-09`, `CA-10`, `CA-15`–`CA-17` | 19 |
+| CA-27 | [brief](CA-27-scoped-holds-amendment-requests-and-amendment-admission.md) | [prompt](CA-27-scoped-holds-amendment-requests-and-amendment-admission-agent-launch-prompt.md) | `CA-09`, `CA-10`, `CA-15`–`CA-17` | 19 |
+| CA-28 | [brief](CA-28-opencode-decision-endpoint-adapter.md) | [prompt](CA-28-opencode-decision-endpoint-adapter-agent-launch-prompt.md) | `CA-06`, `RT-05` | 15 |
+| CA-29 | [brief](CA-29-hermes-decision-endpoint-adapter.md) | [prompt](CA-29-hermes-decision-endpoint-adapter-agent-launch-prompt.md) | `CA-06`, `RT-05` | 15 |
+| CA-30 | [brief](CA-30-pack-index-build-and-runtime-index-rebuild-command.md) | [prompt](CA-30-pack-index-build-and-runtime-index-rebuild-command-agent-launch-prompt.md) | `CA-01`, `CA-10`, `CA-13`, `CA-14`, `RT-05`, `RT-09` | 22 |
+| CA-31 | [brief](CA-31-coordinator-session-and-tui-doctor-providers.md) | [prompt](CA-31-coordinator-session-and-tui-doctor-providers-agent-launch-prompt.md) | `LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23` | 28 |
 
-All implementation/review work uses thin Nirvana command front doors,
-capability-owned foundation modules, the immutable packaged NVB task catalog,
-`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
-Nirvana storage adapters, and manifest-declared shell leaves only. Project
-`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
-limits, and acceptance-with-follow-up are forbidden.
-
-Status: **accepted bootstrap index**
-Date: 2026-07-31
-
-CA-01: ❌ Not started
-CA-02: ❌ Not started
-CA-03: ❌ Not started
-CA-04: ❌ Not started
-CA-05: ❌ Not started
-CA-06: ❌ Not started
-CA-07: ❌ Not started
-CA-08: ❌ Not started
-CA-09: ❌ Not started
-CA-10: ❌ Not started
-CA-11: ❌ Not started
-CA-12: ❌ Not started
-CA-13: ❌ Not started
-CA-14: ❌ Not started
-CA-15: ❌ Not started
-CA-16: ❌ Not started
-CA-17: ❌ Not started
-CA-18: ❌ Not started
-CA-19: ❌ Not started
-CA-20: ❌ Not started
-CA-21: ❌ Not started
-CA-22: ❌ Not started
-CA-23: ❌ Not started
-CA-24: ❌ Not started
-
-## Batch Order And Dependency Summary
-
-Batches must be executed in dependency order. The pack-level dependency graph
-in `../README.md` governs: CA-01 through CA-04 in order, CA-05 through CA-10
-sequentially (CA-05 depends on CA-04 and RT-02; CA-06 on RT-05 and CA-05;
-CA-07 on CA-02—CA-06; CA-08 on CA-02/CA-06/CA-07; CA-09 on CA-05/CA-07/CA-08;
-CA-10 on LC-03 and CA-09). CA-11 and CA-12 in parallel after CA-10. CA-13 after
-CA-03/CA-05/CA-10—CA-12. CA-14 after CA-01—CA-13. CA-15 after CA-03 and UK-02.
-CA-16 after CA-02/CA-15. CA-17 after CA-06/CA-08—CA-10/CA-15/CA-16. CA-18 after
-RT-03/RT-05/CA-14—CA-17. CA-19 after CA-18. CA-20 after CA-16/CA-19. CA-21
-after CA-14/CA-17/CA-19. CA-22 after CA-17/CA-20/CA-21. CA-23 after CA-18—
-CA-22. CA-24 after CA-14—CA-23.
-
-| Batch | Depends on | Primary proof system |
-|-------|------------|---------------------|
-| CA-01 | LC-02, LC-05 accepted | Unit specs: identical-byte compilation, seal verification, cross-reference checks, linear build |
-| CA-02 | CA-01 accepted | Unit + filesystem specs: bounded reads, limits/cursors, truncation, corrupt/missing/stale block handling |
-| CA-03 | RM-05, CA-02 accepted | Unit + filesystem specs: checkpoints, prefix digests, incremental append, partial-tail/rebuild |
-| CA-04 | RM-08, CA-01, CA-03 accepted | Unit + integration specs: DAG/dependency/claim/capacity blockers, ready-set correctness, no-arbitrary-winner |
-| CA-05 | CA-04, RT-02 accepted | Unit specs: every v1 rule/guard, first-match determinism, D1/C2/D2/C3/D3/C5 floors, classification-only |
-| CA-06 | RT-05, CA-05 accepted | Unit + integration specs: unattended/advisory/skill-only, argv/env/cwd/output/time bounds, eligibility proof |
-| CA-07 | CA-02–CA-06 accepted | Unit specs: stable semantic digest, bounded default context, untrusted-content delimiting |
-| CA-08 | CA-02, CA-06, CA-07 accepted | Unit + integration specs: allowlisted queries, provenance/redaction, soft/hard limits, usage quality |
-| CA-09 | CA-05, CA-07, CA-08 accepted | Unit specs: all 14 proposal types, origin/class/effect matrices, stale/illegal/invalid/duplicate cases |
-| CA-10 | LC-03, CA-09 accepted | Unit + filesystem + crash specs: lock/revalidation/idempotency, all-or-nothing projections/journals |
-| CA-11 | RT-05, CA-10 accepted | Unit + runtime specs: unknown launch recovery, duplicate suppression, prepare/attempt/verify journals |
-| CA-12 | RM-08, CA-10 accepted | Unit + filesystem specs: session ownership, commit-set validation, partial push recovery |
-| CA-13 | CA-03, CA-05, CA-10–CA-12 accepted | Unit + replay specs: stable priority, fsynced cursor, interrupted/duplicate/uncertain replay |
-| CA-14 | CA-01–CA-13 accepted fixtures | Integration + command specs: every command form, dry-run purity, human/JSON output, help fragments |
-| CA-15 | CA-03, UK-02 accepted | Unit + filesystem specs: lifecycle state machine, crash-safe journals, immutable closed history |
-| CA-16 | CA-02, CA-15 accepted | Unit specs: bounded working sets, same-lane capsules, compaction, non-transitive references |
-| CA-17 | CA-06, CA-08–CA-10, CA-15, CA-16 accepted | Unit + integration specs: M0/D1–D3 routing, grants/reserves, confirmation/revalidation, hold interleaving |
-| CA-18 | RT-03, RT-05, CA-14–CA-17 accepted | Node/OpenTUI/Nirvana feasibility; FFI bootstrap, native packaging, restoration, security |
-| CA-19 | CA-18 accepted `PASS` | Shell/layout/focus/theme component and resize proofs |
-| CA-20 | CA-16, CA-19 accepted | Virtualization/input/history/reference boundedness and security |
-| CA-21 | CA-14, CA-17, CA-19 accepted | Nine inspector views, action parity, overlays, confirmation authority |
-| CA-22 | CA-17, CA-20, CA-21 accepted | Streaming/order/backpressure, contention/wait, notifications, observer limits |
-| CA-23 | CA-18–CA-22 accepted | Restoration/signals/security/accessibility platform PTY matrix |
-| CA-24 | CA-14–CA-23 accepted | Commands/global install; 30–10k scale; long-session replay; M6 exit |
-
-## Proof Expectations
-
-| Batch range | Required proof posture |
-|-------------|----------------------|
-| CA-01–CA-04 | Entirely model-free. Unit specs for identical compilation, bounded reads, corruption handling, DAG projection. Filesystem integration for append/rebuild. No model invocation through any code path. |
-| CA-05–CA-09 | Unit specs covering every v1 rule, guard, eligibility gate, envelope property, budget limit, and validation case. Classification-only proof for CA-05 (no effect side effects). Adapter eligibility proof for CA-06 (boundary enforcement). |
-| CA-10–CA-13 | Unit + crash-replay specs for idempotency, lock contention, interrupted writes, and incomplete external effects. Real filesystem for journal append/fsync. External-effect prepare/attempt/verify journaling. |
-| CA-14 | Integration + command specs for every form (human/JSON, success/error/empty, dry-run). Help fragment audit. No coordinator logic in command classes. |
-| CA-15–CA-17 | Unit specs for lifecycle state machine, crash-safe journals, bounded working sets, budget accounting, hold interleaving. Integration specs for multi-session concurrency. |
-| CA-18 | Feasibility/package fixture only: runtime flags, adapter capability, native artifacts, global install, security, restoration, non-TUI isolation. |
-| CA-19–CA-22 | Pure reducers/components plus bounded integration for layout, input, inspectors, live turns, concurrency, and observers. |
-| CA-23 | Independent lifecycle, hostile-content, accessibility, emulator, tmux, signal, suspend, and packaged PTY qualification. |
-| CA-24 | Every public command and complete scale/replay/performance/global-install/authority proof; final M6 gate. |
-
-## Shared Proof Rule
-
-Never use one engine's proof to satisfy another engine's acceptance requirement.
-Every acceptance scenario ID requires independent evidence.
-Implementation agents must name the exact spec files, test commands, and
-expected outcomes for their batch. Reviewers must independently regenerate
-evidence rather than trusting the implementation report.
+The explicit implementation-map DAG is the sole dispatch authority. A batch
+requires accepted predecessors, a complete synchronized quartet, a current
+seal, eligible resources, and no applicable hold.

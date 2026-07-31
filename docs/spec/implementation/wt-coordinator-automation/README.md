@@ -1,224 +1,41 @@
-# wt-coordinator-automation — Implementation Pack 5
+# Coordinator automation Implementation Pack
 
-> **Accepted repack (2026-07-31).** CA-18 through CA-24 replace the superseded
-> monolithic session-attachment batch. The bootstrap pack review accepted and
-> sealed the replacement briefs, prompts, indexes, and dependencies.
+Status: **Synchronized remediation candidate; dispatch requires ACCEPT_PACKS and activation**
 
-The superseded monolithic CA-18 brief/prompt pair is retained only under
-`historical/monolithic-ca18/`; active indexes never reference it.
+This pack is one part of the accepted 74-batch/33-wave architecture. The explicit batch DAG is the sole scheduler; pack numbering adds no hidden dependency.
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+| Batch | Capability | Work | Review | State |
+|---|---|---|---|---|
+| CA-01 | Deterministic sealed-pack SQLite compiler | [work](work-batches/CA-01-deterministic-sealed-pack-sqlite-compiler.md) | [review](review-batches/CA-01-review-deterministic-sealed-pack-sqlite-compiler.md) | ❌ Pending |
+| CA-02 | SQLite index stores and bounded typed queries | [work](work-batches/CA-02-sqlite-index-stores-and-bounded-typed-queries.md) | [review](review-batches/CA-02-review-sqlite-index-stores-and-bounded-typed-queries.md) | ❌ Pending |
+| CA-03 | Runtime SQLite indexes and projections | [work](work-batches/CA-03-runtime-sqlite-indexes-and-projections.md) | [review](review-batches/CA-03-review-runtime-sqlite-indexes-and-projections.md) | ❌ Pending |
+| CA-04 | Ready set and resource-claim projection | [work](work-batches/CA-04-ready-set-and-resource-claim-projection.md) | [review](review-batches/CA-04-review-ready-set-and-resource-claim-projection.md) | ❌ Pending |
+| CA-05 | Ordered routing policy and capability floors | [work](work-batches/CA-05-ordered-routing-policy-and-capability-floors.md) | [review](review-batches/CA-05-review-ordered-routing-policy-and-capability-floors.md) | ❌ Pending |
+| CA-06 | Provider-neutral endpoint eligibility and isolation core | [work](work-batches/CA-06-endpoint-adapter-eligibility-and-isolation.md) | [review](review-batches/CA-06-review-endpoint-adapter-eligibility-and-isolation.md) | ❌ Pending |
+| CA-07 | Immutable decision envelopes | [work](work-batches/CA-07-immutable-decision-envelopes.md) | [review](review-batches/CA-07-review-immutable-decision-envelopes.md) | ❌ Pending |
+| CA-08 | Context broker and cycle budgets | [work](work-batches/CA-08-context-broker-and-cycle-budgets.md) | [review](review-batches/CA-08-review-context-broker-and-cycle-budgets.md) | ❌ Pending |
+| CA-09 | Typed proposals and current-state validator | [work](work-batches/CA-09-typed-proposals-and-current-state-validator.md) | [review](review-batches/CA-09-review-typed-proposals-and-current-state-validator.md) | ❌ Pending |
+| CA-10 | Atomic lane-local effect executor and invocation envelopes | [work](work-batches/CA-10-atomic-lane-local-effect-executor.md) | [review](review-batches/CA-10-review-atomic-lane-local-effect-executor.md) | ❌ Pending |
+| CA-11 | Tmux prepare/attempt/verify effect handler | [work](work-batches/CA-11-tmux-prepare-attempt-verify-effect-adapter.md) | [review](review-batches/CA-11-review-tmux-prepare-attempt-verify-effect-adapter.md) | ❌ Pending |
+| CA-12 | Acceptance and Git publication handler | [work](work-batches/CA-12-acceptance-and-git-publication-adapter.md) | [review](review-batches/CA-12-review-acceptance-and-git-publication-adapter.md) | ❌ Pending |
+| CA-13 | Coordinator queue, cursor, replay, and watcher task integration | [work](work-batches/CA-13-coordinator-queue-cursor-replay-and-watcher-integration.md) | [review](review-batches/CA-13-review-coordinator-queue-cursor-replay-and-watcher-integration.md) | ❌ Pending |
+| CA-14 | Read-only coordinator, index, event, and ready-set commands | [work](work-batches/CA-14-coordinator-event-and-ready-set-commands.md) | [review](review-batches/CA-14-review-coordinator-event-and-ready-set-commands.md) | ❌ Pending |
+| CA-15 | Operator-session persistence and lifecycle | [work](work-batches/CA-15-operator-session-persistence-and-lifecycle.md) | [review](review-batches/CA-15-review-operator-session-persistence-and-lifecycle.md) | ❌ Pending |
+| CA-16 | Session SQLite index, references, pins, and compaction | [work](work-batches/CA-16-session-sqlite-index-references-pins-and-compaction.md) | [review](review-batches/CA-16-review-session-sqlite-index-references-pins-and-compaction.md) | ❌ Pending |
+| CA-17 | Session routing and budgets | [work](work-batches/CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | [review](review-batches/CA-17-review-session-routing-budgets-proposals-holds-and-amendments.md) | ❌ Pending |
+| CA-18 | Accepted OpenTUI evidence promotion and packaging gate | [work](work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md) | [review](review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md) | ❌ Pending |
+| CA-19 | TUI shell, responsive layout, themes, and focus | [work](work-batches/CA-19-tui-shell-responsive-layout-themes-and-focus.md) | [review](review-batches/CA-19-review-tui-shell-responsive-layout-themes-and-focus.md) | ❌ Pending |
+| CA-20 | Conversation timeline, composer, history, and references | [work](work-batches/CA-20-conversation-timeline-composer-history-and-references.md) | [review](review-batches/CA-20-review-conversation-timeline-composer-history-and-references.md) | ❌ Pending |
+| CA-21 | Inspector views, command palette, and overlays | [work](work-batches/CA-21-inspector-command-palette-and-overlays.md) | [review](review-batches/CA-21-review-inspector-command-palette-and-overlays.md) | ❌ Pending |
+| CA-22 | Turn streaming, notifications, concurrency, and observer UI | [work](work-batches/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md) | [review](review-batches/CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui.md) | ❌ Pending |
+| CA-23 | Accessibility, terminal lifecycle, recovery, and PTY matrix | [work](work-batches/CA-23-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | [review](review-batches/CA-23-review-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | ❌ Pending |
+| CA-24 | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | [work](work-batches/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md) | [review](review-batches/CA-24-review-session-command-integration-scale-replay-and-m6-acceptance.md) | ❌ Pending |
+| CA-25 | Cycle, escalation, and specification-resolution commands | [work](work-batches/CA-25-cycle-escalation-and-specification-resolution-commands.md) | [review](review-batches/CA-25-review-cycle-escalation-and-specification-resolution-commands.md) | ❌ Pending |
+| CA-26 | Session proposals, confirmation, revalidation, and apply | [work](work-batches/CA-26-session-proposals-confirmation-revalidation-and-apply.md) | [review](review-batches/CA-26-review-session-proposals-confirmation-revalidation-and-apply.md) | ❌ Pending |
+| CA-27 | Scoped holds, amendment requests, and amendment admission | [work](work-batches/CA-27-scoped-holds-amendment-requests-and-amendment-admission.md) | [review](review-batches/CA-27-review-scoped-holds-amendment-requests-and-amendment-admission.md) | ❌ Pending |
+| CA-28 | OpenCode decision-endpoint adapter | [work](work-batches/CA-28-opencode-decision-endpoint-adapter.md) | [review](review-batches/CA-28-review-opencode-decision-endpoint-adapter.md) | ❌ Pending |
+| CA-29 | Hermes decision-endpoint adapter | [work](work-batches/CA-29-hermes-decision-endpoint-adapter.md) | [review](review-batches/CA-29-review-hermes-decision-endpoint-adapter.md) | ❌ Pending |
+| CA-30 | Pack-index build and runtime-index rebuild command | [work](work-batches/CA-30-pack-index-build-and-runtime-index-rebuild-command.md) | [review](review-batches/CA-30-review-pack-index-build-and-runtime-index-rebuild-command.md) | ❌ Pending |
+| CA-31 | Coordinator, session, and TUI doctor providers | [work](work-batches/CA-31-coordinator-session-and-tui-doctor-providers.md) | [review](review-batches/CA-31-review-coordinator-session-and-tui-doctor-providers.md) | ❌ Pending |
 
-All implementation/review work uses thin Nirvana command front doors,
-capability-owned foundation modules, the immutable packaged NVB task catalog,
-`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
-Nirvana storage adapters, and manifest-declared shell leaves only. Project
-`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
-limits, and acceptance-with-follow-up are forbidden.
-
-Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
-Target release: `1.0.0`
-Pack ID: `CA-01` through `CA-24`
-
-> **Normative v1 amendment.** CA-05, CA-07, CA-09, CA-10, CA-13, CA-14,
-> CA-17, and CA-24 must satisfy
-> [`specification-resolution-batch-amendment.md`](specification-resolution-batch-amendment.md).
-> A normative contradiction is an impact-scoped, architect-advised resolution
-> cycle—not an ordinary reject and not permission for an advisor to mutate the
-> spec or pack.
-Work batches: **24** | Review batches: **24**
-Last updated: 2026-07-31
-
-## Purpose
-
-This is implementation pack 5 of 6 for the Watchtower v1 CLI. It implements
-zero-token mechanical routing, bounded decision cycles, one effect authority,
-and durable bounded operator sessions.
-
-Pack 5 is the largest implementation pack and the definitive automation surface
-for the Watchtower coordinator plane. Every coordinator cycle, decision, effect,
-and operator-session turn passes through the foundations, contracts, commands,
-and adapters defined here. No model is invoked unless explicitly routed through a
-validated bounded decision cycle; no effect occurs except through the sole
-effect executor; no operator session holds the lane mutation lock.
-
-## Mission
-
-Deliver the complete coordinator-automation surface defined in
-[coordinator-automation.md](../../coordinator-automation.md),
-[operator-session.md](../../operator-session.md), and
-[cli-session.md](../../cli-session.md), implementing:
-
-1. Deterministic seal-bound pack indexes that keep routine coordinator context
-   bounded independently of unrelated implementation-pack growth.
-2. Derived SQLite index stores with typed bounded reads, limits, cursors,
-   truncation, and stale/missing/corrupt-store refusal.
-3. Runtime SQLite indexes and projections with journal checkpoints, prefix
-   digests, one-writer/WAL-reader discipline, incremental append, and
-   partial-tail/staged-rebuild behavior.
-4. Ready-set and resource-claim projection — DAG/dependency/claim/capacity
-   blockers without arbitrary winner selection.
-5. Ordered routing policy and capability floors — every v1 rule/guard,
-   first-match determinism, D1/C2, D2/C3, D3/C5 floors.
-6. Endpoint adapter eligibility and isolation — unattended/advisory/skill-only
-   classification with argv/env/cwd/output/time bounds.
-7. Immutable decision envelopes with stable semantic digests, bounded default
-   context, and untrusted-content delimiting.
-8. Context broker and cycle budgets — allowlisted queries, provenance/redaction,
-   soft/hard limits, usage quality.
-9. Typed proposals (all 14 types) and current-state validator — every proposal
-   type with permitted origin/class/effect and stale/illegal/invalid handling.
-10. Atomic lane-local effect executor with single-use invocation envelopes —
-    one authority, lock/revalidation/idempotency, and all-or-nothing
-    projections/journals.
-11. Tmux prepare/attempt/verify TaskHandler plus cataloged tmux leaf, with
-    unknown-launch recovery, duplicate suppression, and no arbitrary
-    task/kill/shell.
-12. Acceptance and Git publication TaskHandler plus bounded Git leaf/API
-    adapter — reviewer-session ownership, commit-set validation, Nirvana Git API
-    audit, and partial-push recovery.
-13. Coordinator queue, cursor, replay, and watcher TaskHandler integration —
-    stable priority, fsynced cursor advance, interrupted/duplicate/uncertain
-    replay, and no workflow-level shell.
-14. Coordinator, event, and ready-set commands with index/status/context/
-    explain/cycle/escalate/events/ready and dry-run purity.
-15. Operator-session persistence and lifecycle — many sessions per lane, one
-    active turn each, immutable closed history, crash-safe journals.
-16. Session indexes, references, pins, and compaction — bounded working sets,
-    same-lane capsules, no transitive/full-history fallback.
-17. Session routing, budgets, proposals, holds, and amendments — M0/D1–D3
-    routing, grants/reserves, confirmation/revalidation, scoped hold interleaving.
-18. Nirvana/OpenTUI feasibility and packaging gate.
-19. TUI shell, responsive layout, themes, and focus.
-20. Conversation timeline, composer, history, and references.
-21. Inspector views, command palette, and overlays.
-22. Turn streaming, notifications, concurrency, and observer UI.
-23. Accessibility, terminal lifecycle, recovery, and PTY qualification.
-24. Session command integration, scale/replay, and M6 acceptance.
-
-## Pack Scope
-
-| Batch ID | Name | Reasoning | Primary ownership |
-|----------|------|-----------|-------------------|
-| CA-01 | Deterministic sealed-pack SQLite compiler | R5 | focused `PackIndexCompiler` and SQLite publication capsule |
-| CA-02 | SQLite index stores and bounded typed queries | R5 | focused typed store/query ports |
-| CA-03 | Runtime SQLite indexes and projections | R4 | journal checkpoint and projection stores |
-| CA-04 | Ready set and resource-claim projection | R5 | `src/foundation/ReadySet.ts`, `src/foundation/ResourceClaims.ts` |
-| CA-05 | Ordered routing policy, normative contradictions, and capability floors | R4 | `src/foundation/RoutingPolicy.ts`, `src/foundation/CapabilityFloors.ts` |
-| CA-06 | Endpoint adapter eligibility and isolation | R4 | common eligibility plus focused `opencode-cli` and `hermes-cli` adapters |
-| CA-07 | Immutable decision envelopes | R4 | `src/foundation/DecisionEnvelope.ts`, `src/contracts/decision.ts` |
-| CA-08 | Context broker and cycle budgets | R5 | `src/foundation/ContextBroker.ts`, `src/foundation/CycleBudget.ts` |
-| CA-09 | Typed proposals and current-state validator | R5 | `src/contracts/proposals.ts`, `src/foundation/ProposalValidator.ts` |
-| CA-10 | Atomic effect executor and invocation envelopes | R5 | effect executor, envelope validator, packaged task boundary |
-| CA-11 | Tmux effect TaskHandler and leaf | R4 | focused handler plus cataloged tmux leaf |
-| CA-12 | Acceptance and Git publication handler | R4 | focused handler plus audited Git API/leaf |
-| CA-13 | Queue, replay, and watcher task integration | R5 | queue/replay services and focused TaskHandlers |
-| CA-14 | Coordinator, event, and ready-set commands | R4 | one command class and help fragment per subcommand |
-| CA-15 | Operator-session persistence and lifecycle | R4 | `src/foundation/SessionStore.ts`, `src/foundation/SessionLifecycle.ts` |
-| CA-16 | Session indexes, references, pins, and compaction | R5 | `src/foundation/SessionIndexes.ts`, `src/foundation/SessionCompaction.ts` |
-| CA-17 | Session routing, budgets, proposals, holds, and amendments | R5 | `src/foundation/SessionRouting.ts`, `src/foundation/SessionBudgets.ts`, `src/foundation/SessionHolds.ts` |
-| CA-18 | Nirvana/OpenTUI feasibility and packaging gate | R4 | disposable qualification fixture, bootstrap/native/package evidence |
-| CA-19 | TUI shell, responsive layout, themes, and focus | R4 | shell/layout/focus/action/theme presentation capability |
-| CA-20 | Conversation timeline, composer, history, and references | R5 | bounded timeline/input/history/reference presentation |
-| CA-21 | Inspector views, command palette, and overlays | R4 | bounded inspector/action/overlay presentation |
-| CA-22 | Turn streaming, notifications, concurrency, and observer UI | R5 | event reducer, attachment controller, bounded live refresh |
-| CA-23 | Accessibility, terminal lifecycle, recovery, and PTY matrix | R5 | restoration/security/accessibility adapters and fixtures |
-| CA-24 | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | R5 | thin commands/help plus independent pack-exit proof |
-
-## Dependency Graph (Within Pack)
-
-```text
-CA-01 → … → CA-13 → CA-14 ───────────────┐
-CA-15 → CA-16 → CA-17 ───────────────────┤
-RT-03 + RT-05 ───────────────────────────┤
-                                         ▼
-CA-18 → CA-19 ─┬→ CA-20 ────────────────┐
-               └→ CA-21 ────────────────┤
-CA-17 ─────────────────────→ CA-22 ◄─────┘
-CA-18…CA-22 ────────────────→ CA-23
-CA-14…CA-23 ────────────────→ CA-24 → Pack 5/M6
-```
-
-## Cross-Pack Dependencies
-
-| Depends on | Batch | Required acceptance |
-|------------|-------|---------------------|
-| Pack 1 (wt-read-model) | RM-05, RM-08 | Worker-event JSONL parser, repository bindings |
-| Pack 2 (wt-runtime-distribution) | RT-02, RT-05 | Runtime/knowledge manifests, central invocation adapter |
-| Pack 3 (wt-lane-lifecycle) | LC-02, LC-03, LC-05 | Pack acceptance/seal, transactional lane layout, coordinator baselines |
-| Pack 4 (wt-upgrade-knowledge) | UK-02 | Lane/session/index migration registry |
-
-## Normative Authority
-
-The following documents are normative for this pack. Conflicts are resolved
-in the contract-closure precedence order established by
-[v1-contracts.md §1](../../v1-contracts.md#1-normative-precedence-and-release-boundary):
-
-1. [v1-contracts.md](../../v1-contracts.md) and [schemas/v1.schema.json](../../schemas/v1.schema.json)
-2. [v1.md](../../v1.md)
-3. [coordinator-automation.md](../../coordinator-automation.md), [operator-session.md](../../operator-session.md), [cli-session.md](../../cli-session.md)
-4. [architecture.md](../../architecture.md)
-5. Versioned runtime and knowledge manifests
-
-## Start Here
-
-Read in this order:
-
-1. `AGENTS.md` (repository root)
-2. `../../../v1.md` — product specification
-3. `../../../v1-contracts.md` — contract closure
-4. `../../../architecture.md` — architecture baseline
-5. `../../../coordinator-automation.md` — normative coordinator spec
-6. `../../../operator-session.md` — normative operator-session spec
-7. `../../../cli-session.md` — normative terminal attachment spec
-8. `../../../schemas/v1.schema.json` — JSON Schema bundle
-9. `../../../v1-implementation-map.md` — master construction plan §8, §10–14
-10. `implementation-roadmap.md` — pack roadmap
-11. `implementation-tracker.md` — pack tracker
-12. `implementation-quality-and-agent-rules.md` — quality rules and reviewer checklist
-13. `agent-launch-contract.md` — shared mandatory launch contract
-14. `tui-batch-traceability.md` — CA-18–CA-24 requirement/proof ownership
-15. `tui-interface-contracts.md` — framework-neutral CA-18–CA-24 interfaces
-16. `batch-reasoning-difficulty-ranking.md` — reasoning difficulty ranking
-17. `work-batches/00-work-batch-index.md` — work batch index
-18. `review-batches/00-review-batch-index.md` — review batch index
-
-Then read the specific paired work/review batch brief and the real source
-owners you will inspect or change.
-
-## Pack Exit
-
-From the accepted Pack 5, routine coordination invokes no model when a
-unique preauthorized effect is provable; judgment is bounded and
-capability-matched; all effects pass through one validated executor;
-operators have durable bounded sessions without acquiring mutation
-authority; and the terminal attachment stays responsive, accessible, and
-bounded independently of unrelated pack/session growth.
-
-## Non-Negotiable Rules
-
-- `CA-01`–`CA-04` are entirely model-free.
-- `CA-05` classifies; it does not execute.
-- `CA-06` proves adapter eligibility before invocation and supplies the concrete
-  OpenCode plus conditionally qualified Hermes adapters without leaking their
-  mechanics into provider-neutral policy.
-- `CA-09` and `CA-10` must be accepted before enabling `CA-11`–`CA-13`.
-- `CA-15`–`CA-17` may be developed against accepted service fixtures while
-  `CA-14` is built; all are required before `CA-18`.
-- `CA-18` is a pass/fail feasibility gate and ships no session product.
-- `CA-19`–`CA-22` split presentation ownership; `CA-23` independently closes
-  terminal/accessibility risk.
-- `CA-24` must show that unrelated pack/session growth does not increase
-  ordinary model context and that advisory turns never hold the lane lock.
-- No model is invoked for M0 operations.
-- Coordinator agents cannot directly mutate authoritative state.
-- Every effect passes through exactly one validated executor.
-- Operator sessions and attachments are not mutation authorities.
-- Stale/missing/corrupt pack indexes block automated cycles; never fall back
-  to full-pack scanning or model summarization.
-- `.local/` artifacts are never staged or committed.
-- Implementation agents do not commit; the paired reviewer owns acceptance
-  and commit.
+All batches follow [the mandatory engineering standard](../../../development/engineering-and-review-standard.md), [Nirvana integration architecture](../../nirvana-integration-architecture.md), and this pack's quality rules.

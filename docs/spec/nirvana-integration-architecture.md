@@ -175,6 +175,29 @@ task IDs; it contains no executable code and cannot add or override a handler.
 Upgrade creates a new immutable runtime/catalog and explicitly rebinds the lane.
 It never edits a participating project's NVB configuration.
 
+### 3.4 Package dependency closure
+
+The repository's `nira.json` pins the development ecosystem, but those
+component symlinks are not distributable package evidence. Watchtower records
+an exact Nirvana dependency closure in its distribution manifest. Direct dist
+dependencies use exact versions; unused ecosystem components are omitted.
+
+Before the Nirvana release channel is populated, bootstrap qualification packs
+the selected ecosystem components into immutable npm artifacts, records their
+names, versions, source digests, artifact digests, and transitive Nirvana
+edges, and installs them with the Watchtower tarball into a fresh prefix. The
+fixture disables source-worktree and ecosystem-symlink fallback. Final release
+qualification repeats the proof against the declared registry or signed
+release bundle. An E404, unresolved local `file:` edge, wildcard dependency,
+or successful install that links back to the source tree is a failed closure,
+not a relocated install.
+
+Repository-development NVB composition uses the pinned parent-config mechanism
+demonstrated by Nira. The root `nvb.json` remains a thin child over
+capability-owned parent-chain fragments. Product runtime tasks remain separate
+under `runtime-nvb/`; this development composition does not authorize
+Watchtower to inspect or modify a participating repository's NVB config.
+
 ## 4. Layer and facade map
 
 ### 4.1 CLI and presentation
@@ -514,6 +537,8 @@ An NVB-owning batch is accepted only when it proves:
 - logger/event output is redacted and non-authoritative;
 - project `nvb.json` and source trees are unchanged;
 - relocated global install and two-version lane fixtures pass; and
+- the exact Nirvana dependency closure resolves without source or ecosystem
+  symlink fallback; and
 - shell retained by the batch is a justified, cataloged leaf adapter.
 
 Reviewers hard-reject:

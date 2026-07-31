@@ -1,214 +1,105 @@
-# Batch REL-04 — Documentation Consistency And Release Gate
+# Batch REL-04 — Documentation consistency and release gate
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+- **Accepted-map title:** Documentation consistency and release gate
+- **Dependencies:** `REL-01`–`REL-03`
+- **Exclusive ownership/interface:** help/docs/release notes
+- **Implementer/reviewer floor:** R3 / R4
+- **Mandatory batch proof:** Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme
+- **Implementation report:** `.local/agent-reports/watchtower-release/REL-04-documentation-consistency-and-release-gate.md`
+- **Review report:** `.local/agent-reports/watchtower-release/reviews/REL-04-documentation-consistency-and-release-gate-review.md`
+- **Correction report:** `.local/agent-reports/watchtower-release/reviews/corrections/REL-04-documentation-consistency-and-release-gate-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Phase: Release qualification
-Depends on: REL-01, REL-02, REL-03 accepted
-Work ID: `REL-04`
-Governing spec: `docs/spec/v1.md` §17; `docs/spec/v1-contracts.md` §8
+Depends on: REL-01–REL-03
 
-**Required implementor reasoning class:** `R3`
-**Class rationale:** audit-only batch with bounded traceability and readability work. Every v1 acceptance criterion must be traced to its owning batch and current evidence location. Every shipped command must have a matching help fragment. Product docs must agree with actual behavior on every shipped command. The `hello` scaffold must be removed. No build, dist, or local artifact may be committed. The work is comparison and cross-reference, not implementation or adversarial testing. Reviewer requires R4 for independent cross-document judgment and acceptance-criterion traceability verification.
+## Governing authority
 
-## Objective
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-Audit the assembled product's documentation consistency and produce the final release gate verdict. Map every §17 acceptance criterion to its owning batch and current evidence location. Verify every shipped command has a help fragment that matches its actual behavior. Verify product specs agree with shipped behavior. Verify no scaffold, generated, or local artifacts are committed. Record the final release verdict.
+## Objective, exact boundary and interfaces
 
-This batch does **not** create missing help fragments, spec sections, or documentation. It identifies discrepancies as findings. Resolution of missing artifacts belongs to the owning prior pack.
+Exclusive map ownership: help/docs/release notes.
 
-## Required Work
+Own documentation consistency and final release gate over all 74 accepted batches, exact seals/help/specs/version/readme and absence of scaffold/generated/local artifacts.
 
-### Phase 1: Read and understand the product surface
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-1. `docs/spec/v1.md` §10.3 — the complete v1 command table.
-2. `docs/spec/v1.md` §17 — the release acceptance criteria checklist.
-3. `docs/spec/v1-contracts.md` §8 — the public command and JSON contract.
-4. `docs/spec/architecture.md` §4.2 — command architecture.
-5. `help/help.json` — the help registry mapping commands to help fragments.
-6. Every `help/commands/*.hlp.json` file.
-7. Every `src/commands/*Command.ts` file.
-8. The accepted pack 1–5 trackers and implementation reports.
-9. The REL-01 through REL-03 evidence reports.
+## Required implementation and proof
 
-### Phase 2: Requirement traceability audit
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-Using the traceability table in `implementation-tracker.md` as a starting point:
+## Hard exclusions and handoff
 
-1. For each of the 32 release acceptance criteria in `v1.md §17`:
-   - Identify the owning batch (which pack and work batch created the feature).
-   - Identify the current evidence location (spec file, e2e trial report, release evidence packet).
-   - Verify the evidence is current (produced by the most recent accepted batch that touches the criterion).
-   - Record the traceability result: `traced`, `stale`, `missing`, or `disputed`.
-2. Any criterion that cannot be traced to current evidence is a finding. Record the criterion, the expected owning batch, and the nature of the gap.
-3. Any criterion whose evidence relies solely on narrative (no repro command or fixture) is a finding. Record it.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-### Phase 3: Help fragment audit
 
-1. Extract the list of shipped commands from `help/help.json` and the command table in `v1.md` §10.3.
-2. For each shipped command:
-   - Verify a help fragment exists in `help/commands/<command>.hlp.json`.
-   - Parse the help fragment and verify it describes the actual command behavior:
-     - Command name, arguments, options, and flags match the command class in `src/commands/`.
-     - Required vs optional arguments are correct.
-     - Exit codes are documented where meaningful.
-   - Verify no undocumented flags exist (flags present in the command class but not in the help fragment).
-3. Identify any help fragment that exists for a command not shipped (preserved scaffold). Record as finding.
-4. Identify any shipped command that lacks a help fragment. Record as finding.
-5. Verify `hello` command and `help/commands/hello.hlp.json` are removed. Record.
+## Synchronized executable contract
 
-### Phase 4: Product doc audit
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-1. Read `docs/spec/v1.md` and compare against actual behavior for every v1 command:
-   - Command syntax matches.
-   - Options and flags match.
-   - Exit behavior matches.
-   - JSON output schema matches (where applicable).
-2. Read `docs/spec/architecture.md` and verify:
-   - Component descriptions match the current source tree structure.
-   - Flows (read-only, mutation, runtime execution, coordinator cycle, operator session) match the accepted source.
-   - No claims about behavior that has changed since the spec was last updated.
-3. Read `docs/spec/v1-contracts.md` and verify:
-   - Exit code mapping matches the current source.
-   - Public JSON schemas match the current output.
-   - Routing policy, proposal/effect registry match the accepted coordinator source.
-4. Record every discrepancy as a finding with the doc section, expected behavior, actual behavior, and severity.
+- Exact map title: **Documentation consistency and release gate**
+- Accepted dependencies: `REL-01`–`REL-03`
+- Exclusive owner: help/docs/release notes
+- Required proof claim: Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme
+- Reasoning floor: implementer **R3**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/watchtower-release/REL-04-documentation-consistency-and-release-gate.md`
+- Correction report pattern: `.local/agent-reports/watchtower-release/reviews/corrections/REL-04-documentation-consistency-and-release-gate-correction-<NN>.md`
 
-### Phase 5: Scaffold audit
+### Interface and failure-order contract
 
-1. Search the source tree for any remaining `hello` artifacts:
-   ```bash
-   rg -l "hello" src/ help/ spec/ --include '*.ts' --include '*.json' --include '*.hlp.json'
-   ```
-   Classify each match: scaffold artifact, legitimate use of "hello" in different context, or false positive.
-2. Verify `src/commands/HelloCommand.ts` does not exist.
-3. Verify `help/commands/hello.hlp.json` does not exist.
-4. Verify `spec/` does not contain a `hello.spec.ts`.
-5. Record findings.
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **help/docs/release notes**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-### Phase 6: Committed artifact audit
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-1. List all files tracked by Git:
-   ```bash
-   git ls-files
-   ```
-2. Filter for prohibited artifact categories:
-   - `build/` directory contents.
-   - `dist/` directory contents.
-   - `node_modules/` directory contents.
-   - `.nira/local/` directory contents.
-   - `.watchtower/` directory contents (any committed lane runtime).
-   - `.local/` directory contents (agent reports, implementation reports).
-   - Any binary file, `.env` file, or generated output file.
-3. Any match is a finding. Record the file path and the violation category.
-4. Verify `.gitignore` covers `build/`, `dist/`, `node_modules/`, `.nira/local/`, `.watchtower/`, and `.local/`.
+### Selected adversarial matrix
 
-### Phase 7: Package version and README consistency
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-1. Verify `package.json` version is `1.0.0` and matches the release target.
-2. Verify the `bin` field in `package.json` maps `wt` to the correct entry point.
-3. Read `README.md` (if one exists). Verify it accurately describes:
-   - What Watchtower is.
-   - How to install it globally.
-   - The basic commands.
-   - No claims about features that are not shipped in v1.
-4. Record discrepancies as findings.
+### Reproducible proof and reporting
 
-### Phase 8: Release verdict
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-1. Compile all findings from Phases 2–7 into a single release verdict document.
-2. For each finding, classify:
-   - `BLOCKING` — prevents v1 release (e.g., committed dist artifact, missing help for a shipped command, a release acceptance criterion with no evidence).
-   - `NON-BLOCKING` — should be fixed but does not prevent release (e.g., minor doc wording discrepancy, a stale but non-misleading claim).
-3. The final verdict is:
-   - `ACCEPT` if zero BLOCKING findings exist.
-   - `REJECT` if any BLOCKING finding exists, with the enumerated unresolved criteria.
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-### Phase 9: Create audit report
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-Write the complete audit report to `.local/agent-reports/watchtower-release/REL-04-documentation-release-gate.md` containing:
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
 
-- Requirement traceability matrix with status per criterion.
-- Help fragment audit results per command.
-- Product doc audit findings per document.
-- Scaffold audit results.
-- Committed artifact audit results.
-- Package version/README findings.
-- Final verdict with blocking/non-blocking classification.
-- Proposed release commit message.
+## Batch-specific interface and negative-case contract
 
-### Batch REL-04 required proof
+The exclusive owned interface set is **help/docs/release notes**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/watchtower-release/REL-04-documentation-consistency-and-release-gate.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-- Every §17 release acceptance criterion traced to owning batch and current evidence.
-- Every shipped command has a registered help fragment matching actual behavior.
-- Product docs agree with shipped behavior on every command.
-- `hello` scaffold is fully removed.
-- No build, dist, node_modules, `.nira/local`, `.watchtower`, or `.local` artifact is committed.
-- Package version, bin entry, and README are consistent.
-- Final release verdict is recorded.
+Accepted predecessor input is exactly **`REL-01`–`REL-03`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme**.
 
-## Expected Ownership
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-- `.local/agent-reports/watchtower-release/REL-04-documentation-release-gate.md` — the complete audit report.
-- `docs/spec/implementation/wt-v1-release/implementation-tracker.md` — updated with REL-04 status.
-- `docs/spec/implementation/wt-v1-release/implementation-roadmap.md` — updated with REL-04 status.
-- `docs/spec/v1-implementation-map.md` — updated with final pack 6 status.
-- No new committed source files. This is an audit; it produces a local evidence report.
+Concrete negative proof selected for **help/docs/release notes** and **Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme**:
 
-## Structural Constraints
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-- This batch creates no new committed source files beyond tracker updates.
-- The audit report is a machine-local artifact (`.local/`), not committed.
-- Findings must refer to exact file paths, line numbers, and versioned spec sections.
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-## Reject Conditions
-
-- The batch retroactively creates missing help fragments, spec sections, or documentation.
-- A BLOCKING finding is suppressed or downgraded without documented rationale.
-- The audit report makes claims about behavior without reproducing or citing evidence.
-- The `hello` scaffold remains in the committed tree after this batch.
-- A committed artifact from the prohibited categories is left unrecorded.
-
-## Completion And Handoff
-
-This is the final batch of the v1 release pack and the final batch of the Watchtower v1 implementation. The reviewer verifies the audit independently and either accepts (creating the final release gate commit) or rejects with enumerated unresolved criteria. No batch follows REL-04.
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/watchtower-release/REL-04-documentation-consistency-and-release-gate.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

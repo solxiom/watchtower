@@ -1,285 +1,105 @@
-# Work Batch LC-05 — Coordinator/Session Baselines and Initial Pack Index
+# Batch LC-05 — Coordinator and session policy baselines
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+- **Accepted-map title:** Coordinator and session policy baselines
+- **Dependencies:** `LC-02`, `LC-03`, `RT-02`
+- **Exclusive ownership/interface:** verified policy materialization and empty durable roots
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Finite policies; installed-knowledge provenance; no Markdown restatement or model
+- **Implementation report:** `.local/agent-reports/wt-lane-lifecycle/LC-05-coordinator-session-baselines-and-pack-index.md`
+- **Review report:** `.local/agent-reports/wt-lane-lifecycle/reviews/LC-05-coordinator-session-baselines-and-pack-index-review.md`
+- **Correction report:** `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-05-coordinator-session-baselines-and-pack-index-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Implementation reasoning: R5
-Review reasoning: R5
 Depends on: LC-02, LC-03, RT-02
-Workload: large
 
-## Scope
+## Governing authority
 
-Seed finite coordinator routing policies and operator-session policies from the
-shipping-policy baseline. Bootstrap the deterministic, model-free, seal-bound
-pack index from the accepted implementation pack. Seed correct provenance on
-every policy default. This batch owns the coordinator baseline and pack index
-bootstrap foundation.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Specification References
+## Objective, exact boundary and interfaces
 
-| Reference | Section | Topic |
-|-----------|---------|-------|
-| v1-contracts.md | §7 | Shipping policy baseline: exact default values for D1/D2/D3, operator-session defaults, retention, hold expiry |
-| v1-contracts.md | §4 | Routing policy and capability floors: every rule/guard, decision class routing |
-| v1-contracts.md | §3.4 | Seal and canonicalization for pack index digest binding |
-| v1.md | §7.2 | coordinator/ layout: routing, cycles, journals, projections, operator-sessions, amendment-requests, holds |
-| v1.md | §11.1 | Init step 11-13: validate coordinator routing, resolve session policy, build pack indexes |
-| schemas/v1.schema.json | `$defs.implementationPack` | Pack structure for index compilation |
+Exclusive map ownership: verified policy materialization and empty durable roots.
 
-## Owned Files
+Own verified installed routing/session policy materialization and empty durable coordinator/session roots. Do not compile, write or define any pack index; CA-01 compiles and LC-09 activates it.
 
-### New foundation modules
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-- `src/foundation/CoordinatorBaseline.ts` — seed finite routing policies,
-  operator-session policies, and all shipping defaults with correct provenance
-  references to v1-contracts.md §4 and §7
-- `src/foundation/PackIndexBootstrap.ts` — deterministic compilation of
-  batch metadata, dependency graph, requirement traceability, and cross-reference
-  entries into a seal-bound index; no model, no full-pack fallback
+## Required implementation and proof
 
-## Dependencies
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Finite policies; installed-knowledge provenance; no Markdown restatement or model.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-### From this pack
+## Hard exclusions and handoff
 
-- **LC-02** (pack validation and seal): uses the sealed pack's manifest,
-  lock file, and acceptance data to construct the index. Verifies the index
-  digest matches the active `packSealId`.
-- **LC-03** (lane layout): writes baselines and index files into the
-  committed lane directory under `coordinator/` and related paths.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-### From pack 2 (wt-runtime-distribution)
 
-- **RT-02** (runtime manifests): validates that the selected runtime/knowledge
-  versions are compatible with the coordinator policy defaults seeded.
+## Synchronized executable contract
 
-## Required Interfaces
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-### CoordinatorBaseline
+- Exact map title: **Coordinator and session policy baselines**
+- Accepted dependencies: `LC-02`, `LC-03`, `RT-02`
+- Exclusive owner: verified policy materialization and empty durable roots
+- Required proof claim: Finite policies; installed-knowledge provenance; no Markdown restatement or model
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-lane-lifecycle/LC-05-coordinator-session-baselines-and-pack-index.md`
+- Correction report pattern: `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-05-coordinator-session-baselines-and-pack-index-correction-<NN>.md`
 
-```typescript
-interface RoutingPolicyBaseline {
-  schemaVersion: 1;
-  provenance: "v1-contracts.md §4";
-  provenanceDigest: string;
-  rules: RoutingRule[];
-}
+### Interface and failure-order contract
 
-interface RoutingRule {
-  ruleId: string;
-  guard: string;
-  class: DecisionClass;
-  permittedResults: string[];
-}
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **verified policy materialization and empty durable roots**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-type DecisionClass = "M0" | "D1" | "D2" | "D3";
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-interface SessionPolicyBaseline {
-  schemaVersion: 1;
-  provenance: "v1-contracts.md §7";
-  provenanceDigest: string;
-  tokenLimits: TokenLimitDefaults;
-  sessionDefaults: SessionDefaults;
-  holds: HoldDefaults;
-  retention: RetentionDefaults;
-  escalation: EscalationReserve;
-}
+### Selected adversarial matrix
 
-interface TokenLimitDefaults {
-  d1: { inputSoft: number; inputHard: number; outputHard: number; brokerRequests: number; wallClockSec: number; };
-  d2: { inputSoft: number; inputHard: number; outputHard: number; brokerRequests: number; wallClockSec: number; };
-  d3: { inputSoft: number; inputHard: number; outputHard: number; brokerRequests: number; wallClockSec: number; };
-}
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-function seedRoutingBaseline(laneDir: string, policyHash: string): Promise<void>;
-function seedSessionBaseline(laneDir: string, policyHash: string): Promise<void>;
-function computePolicyProvenanceDigest(specContent: string): Promise<string>;
+### Reproducible proof and reporting
+
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
+
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
 ```
 
-### PackIndexBootstrap
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-```typescript
-interface PackIndex {
-  schemaVersion: 1;
-  sealId: string;
-  packId: string;
-  compiledAt: string;
-  batches: BatchIndexEntry[];
-  requirements: RequirementIndexEntry[];
-  dependencies: DependencyGraph;
-  crossReferences: CrossReference[];
-}
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
 
-interface BatchIndexEntry {
-  id: string;
-  title: string;
-  dependsOn: string[];
-  primaryRepository: string;
-  reasoning: string;
-  workload: string;
-  proofClasses: string[];
-}
+## Batch-specific interface and negative-case contract
 
-function buildPackIndex(packRoot: string, sealId: string): Promise<PackIndex>;
-function writePackIndex(laneDir: string, index: PackIndex): Promise<void>;
-function verifyPackIndex(index: PackIndex, sealId: string): boolean;
-```
+The exclusive owned interface set is **verified policy materialization and empty durable roots**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-lane-lifecycle/LC-05-coordinator-session-baselines-and-pack-index.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-## Implementation Steps
+Accepted predecessor input is exactly **`LC-02`, `LC-03`, `RT-02`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Finite policies; installed-knowledge provenance; no Markdown restatement or model**.
 
-1. **Create `src/foundation/CoordinatorBaseline.ts`**
-   - `seedRoutingBaseline(laneDir, policyHash)`:
-     - Construct `RoutingPolicyBaseline` with every rule from v1-contracts.md §4:
-       - `safety-integrity-v1` → D3 plus system hold
-       - `pack-semantic-drift-v1` → D3
-       - `review-reject-repeated-v1` → D3
-       - `review-reject-v1` → D2
-       - `worker-blocked-unique-v1` → M0
-       - `worker-blocked-v1` → D2
-       - `review-accept-v1` → M0
-       - `ready-unique-v1` → M0
-       - `ready-ambiguous-critical-v1` → D2
-       - `ready-ambiguous-v1` → D1
-       - `projection-query-v1` → M0
-       - `operator-complex-v1` → D3
-       - `operator-bounded-v1` → D1
-       - `operator-default-v1` → D2
-       - `no-work-v1` → M0
-     - Write to `{laneDir}/coordinator/routing-policy.json` (temp → fsync → rename)
-     - Provenance marker: `"v1-contracts.md §4"`
-   - `seedSessionBaseline(laneDir, policyHash)`:
-     - Construct `SessionPolicyBaseline` with every default from v1-contracts.md §7:
-       - D1: input 12,000/24,000, output 2,000, broker 4, wall 120s
-       - D2: input 20,000/40,000, output 4,000, broker 8, wall 300s
-       - D3: input 40,000/80,000, output 8,000, broker 16, wall 600s
-       - Session per-turn: 40,000 input, 4,000 output
-       - Session limits: 50 turns, 500,000 tokens, 32 MiB text, 16 open
-         sessions, 2 concurrent turns
-       - Lane-wide: 2,000,000 tokens, 20% escalation reserve
-       - Working set: 8 recent turns, 16 pins, 4 capsules, 64 KiB/capsule,
-         8 broker requests, 256 KiB/turn
-       - Retention: 30 days closed, 256 MiB lane storage
-       - Hold expiry: 60 minutes default, max 24 hours
-     - Write to `{laneDir}/coordinator/session-policy.json` (temp → fsync → rename)
-     - Provenance marker: `"v1-contracts.md §7"`
-   - `computePolicyProvenanceDigest(specContent)`: compute SHA-256 of the
-     specification text to bind policy to spec version
-   - Also seed empty: cycle journal file, projections directory,
-     operator-session journal/index roots, amendment-request store,
-     hold registry
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-2. **Create `src/foundation/PackIndexBootstrap.ts`**
-   - `buildPackIndex(packRoot, sealId)`:
-     - Read `implementation-pack.json` from pack root
-     - Extract every batch entry: id, title, dependsOn, primaryRepository,
-       reasoning, workload, proofClasses
-     - Extract every requirement entry: id, repository, source, workBatches,
-       reviewBatches
-     - Build dependency graph (DAG) from `dependsOn` arrays
-     - Build cross-references: requirement → batch, batch → requirement
-     - Compile into `PackIndex` with sealId matching
-     - This is purely mechanical, deterministic, model-free
-     - Do NOT read full-pack prose; only structural JSON fields
-   - `writePackIndex(laneDir, index)`:
-     - Write to `{laneDir}/coordinator/pack-index.json` (temp → fsync → rename)
-   - `verifyPackIndex(index, sealId)`: check that index.sealId matches the
-     given sealId. Returns false on mismatch. This ensures the index is
-     bound to the accepted pack seal.
-   - No full-pack fallback path. If the seal doesn't match, the index is
-     not written and an error is returned.
+Concrete negative proof selected for **verified policy materialization and empty durable roots** and **Finite policies; installed-knowledge provenance; no Markdown restatement or model**:
 
-3. **Write focused specs**
-   - `spec/foundation/coordinator-baseline.spec.ts`: routing policy contains
-     all 15 rules with correct guards/classes/results; session policy contains
-     all default values exactly; provenance markers present; provenance
-     digest matches spec content; files written to correct coordinator/ paths;
-     empty journals/stores/registries created
-   - `spec/foundation/pack-index-bootstrap.spec.ts`: index built from valid
-     pack; batch entries complete; requirement entries complete; dependency
-     graph correct; seal verification passes; seal mismatch detected;
-     deterministic (same input → same index); no full-pack prose read; no
-     model invocation
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-## Exclusions
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-- No watcher command logic — belongs to LC-06
-- No doctor check definitions — belongs to LC-07
-- No coordinator cycle execution — belongs to pack 5 (CA-*)
-
-## Required Proof
-
-### Focused
-- Routing baseline contains all 15 rules from v1-contracts.md §4
-- Each rule has correct guard description, decision class, and permitted results
-- Session baseline contains exact defaults from v1-contracts.md §7
-- All token limits, session limits, retention, and hold values match spec
-- Provenance markers reference correct spec sections
-- Empty journals/stores/registries exist under correct paths
-- Pack index built deterministically
-- Pack index contains all batch metadata
-- Pack index contains requirement-to-batch traceability
-- Dependency graph built correctly from `dependsOn`
-- Seal verification: matches active seal → passes; mismatch → fails
-- No full-pack prose read during index construction
-- No model invocation anywhere
-
-### Regression
-- `nvb build` passes
-
-### Architecture
-- Coordinator baseline does not import from commands
-- Pack index bootstrap only reads JSON schema fields, not prose
-
-## Help and Documentation
-
-- No CLI-facing surface; foundation-only batch
-- Update `docs/spec/v1-contracts.md` §4 or §7 if policy values discovered
-  to be inconsistent with spec
-
-## Handoff Notes
-
-After acceptance, `CoordinatorBaseline.ts` and `PackIndexBootstrap.ts` are
-the sole owners of policy seeding and index construction. LC-06 (watch)
-reads the routing policy and pack index from coordinator/ to validate
-preflight. LC-07 (doctor) reads all baselines and index files for integrity
-and freshness checks.
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-lane-lifecycle/LC-05-coordinator-session-baselines-and-pack-index.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

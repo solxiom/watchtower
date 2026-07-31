@@ -1,109 +1,99 @@
-# Batch CA-22 — Turn Streaming, Notifications, Concurrency, and Observer UI
+# Batch CA-22 — Turn streaming, notifications, concurrency, and observer UI
 
-## Authority And Status
+## Synchronized batch execution matrix
 
-Governing sources: `AGENTS.md`, the mandatory engineering standard,
-`v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
-`architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, `tui-operational-experience.md`, and pack quality rules.
-Required interfaces are normative in this pack's
-`tui-interface-contracts.md §CA-22 Live Attachment Contract`.
+- **Accepted-map title:** Turn streaming, notifications, concurrency, and observer UI
+- **Dependencies:** `CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27`
+- **Exclusive ownership/interface:** turn/event reducers and attachment controller
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-22-turn-streaming-notifications-concurrency-and-observer-ui-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-22-turn-streaming-notifications-concurrency-and-observer-ui-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ❌ Not started
-Depends on: CA-17, CA-20, and CA-21 accepted
-Unblocks: CA-23 and CA-24
-Reasoning floor: implementor `R5`; reviewer `R5`
+Status: ❌ Pending
+Depends on: CA-17, CA-20, CA-21, CA-26, CA-27
 
-## Objective
+## Governing authority
 
-Connect the TUI to bounded operator-turn presentation: preflight, normalized
-provisional streaming, validated replacement, notifications, same-session turn
-contention, explicit waiting, observer restrictions, and attachment-local
-refresh without creating a daemon, IPC authority, or unbounded queue.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Owned Capabilities
+## Objective, exact boundary and interfaces
 
-- attachment lifecycle/controller integration with session services
-- validated presentation-event reducer and immutable TUI view-model store
-- provisional turn accumulator and frame-coalesced render scheduling
-- notification/checkpoint refresh controller
-- same-session contention/wait and observer presentation states
+Exclusive map ownership: turn/event reducers and attachment controller.
 
-Exact owned production modules:
+Own turn/event reducers and attachment controller: provisional validation, live edge, stale-confirmation invalidation, contention/wait, observer restrictions and bounded refresh.
 
-- `src/contracts/tuiEvents.ts`
-- `src/presentation/tui/TuiAttachmentController.ts`
-- `src/presentation/tui/PresentationEventReducer.ts`
-- `src/presentation/tui/TuiViewModelStore.ts`
-- `src/presentation/tui/ProvisionalTurnAccumulator.ts`
-- `src/presentation/tui/NotificationRefreshController.ts`
-- `src/presentation/tui/TuiRenderScheduler.ts`
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-Exact focused specs mirror those modules under `spec/basic/tui/`; concurrency,
-observer, and checkpoint integration belongs in
-`spec/integration/tui/TuiAttachmentConcurrencySpec.ts`.
+## Required implementation and proof
 
-## Required Interfaces And Work
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-1. Consume typed events and normalized provider chunks only. Components never
-   parse provider-native output or infer durable truth from provisional text.
-2. Implement preflight visibility/confirmation, invocation start, provisional
-   output, schema validation, atomic validated replacement, stale/failure/
-   interrupted terminal states, usage quality, and proposal availability.
-3. Bound chunk accumulation, render coalescing, notification queues, refresh
-   concurrency, and view-model caches. Decorative frames may drop; product
-   events, ordering, validation, interruption, and durable checkpoints may not.
-4. Preserve timeline live edge or a stable reading anchor. While scrolled away,
-   show bounded new-output indication without moving the operator.
-5. Enforce one active turn per session. Default contention fails; explicit wait
-   follows the durable result without another invocation or held lock/
-   reservation.
-6. Observer attachments consume durable validated checkpoints and M0 queries
-   only. They cannot submit natural language, confirm/apply, place/release
-   holds, receive cross-process provisional chunks, or invoke endpoints.
-7. Derive lane notifications mechanically. Refresh never changes focus,
-   composer, scroll anchor, or active confirmation and never advances authority
-   cursors. Foreground watch/poll ends with attachment and has a correctness-
-   preserving checkpoint fallback.
-8. Reduce simultaneous conditions through the canonical P0–P5 order. Any
-   relevant durable revision invalidates an open confirmation immediately;
-   proposal/session/turn conflicts become terminal or locked states and are
-   never retried or resolved by last-writer-wins behavior.
+## Hard exclusions and handoff
 
-## Exclusions
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-- No daemon, socket, remote protocol, attachment IPC, provider-side persistent
-  chat, second session lock, lane lock during generation, or effect authority.
-- No terminal signal/restoration ownership (CA-23) or public command wiring and
-  final scale acceptance (CA-24).
 
-## Required Proof
+## Synchronized executable contract
 
-- Buffered and streaming adapters; malformed/failing streams; provisional-to-
-  validated replacement; interruption; usage quality; proposal rendering.
-- Burst/backpressure tests proving finite queues and ordered durable events.
-- Live-edge/away-from-edge anchoring under stream, page prepend, resize, and
-  notification.
-- Same-session race, fail, wait, detach, and recovery with no duplicate turn,
-  held lane lock, or leaked endpoint reservation.
-- Observer allow/deny matrix and proof of no endpoint/provisional IPC.
-- Notification coalescing, confirmation deferral, hidden-view suppression, and
-  checkpoint correctness.
-- Cross-attachment apply/reject/expire, close/suspend/prune, authorization
-  loss, active-turn ownership, and unrelated-update races prove stale actions
-  cannot execute and input/anchor survive unrelated changes.
-- `nvb build`, `nvb test`, architecture gates, line counts, and Nirvana audit.
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-## Documentation And Report
+- Exact map title: **Turn streaming, notifications, concurrency, and observer UI**
+- Accepted dependencies: `CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27`
+- Exclusive owner: turn/event reducers and attachment controller
+- Required proof claim: Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh
+- Reasoning floor: implementer **R5**, independent reviewer **R5**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-coordinator-automation/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-22-turn-streaming-notifications-concurrency-and-observer-ui-correction-<NN>.md`
 
-Write
-`.local/agent-reports/coordinator-automation/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`
-with reducer/event contracts, all queue bounds, race traces, observer matrix,
-files, line counts, and CA-23/CA-24 handoff. Do not commit.
+### Interface and failure-order contract
 
-## Independent Review
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **turn/event reducers and attachment controller**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-Use
-`../review-batches/CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui.md`.
-The reviewer independently regenerates ordering, bounds, races, observer/
-notification authority, structure, and test evidence.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
+
+### Selected adversarial matrix
+
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+
+### Reproducible proof and reporting
+
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
+
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
+
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
+
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **turn/event reducers and attachment controller**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **turn/event reducers and attachment controller** and **Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-coordinator-automation/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

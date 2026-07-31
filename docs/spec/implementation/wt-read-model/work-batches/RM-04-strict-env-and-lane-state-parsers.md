@@ -1,48 +1,19 @@
-# Batch RM-04 — Strict Env And Lane-State Parsers
+# Batch RM-04 — Strict env and lane-state parsers
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
+- **Accepted-map title:** Strict env and lane-state parsers
+- **Dependencies:** `RM-01`
+- **Exclusive ownership/interface:** parser foundation
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation
+- **Implementation report:** `.local/agent-reports/wt-read-model/RM-04-strict-env-and-lane-state-parsers.md`
+- **Review report:** `.local/agent-reports/wt-read-model/reviews/RM-04-strict-env-and-lane-state-parsers-review.md`
+- **Correction report:** `.local/agent-reports/wt-read-model/reviews/corrections/RM-04-strict-env-and-lane-state-parsers-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
-
-Status: ✅ Accepted after correction 02
+Status: ❌ Pending
 Phase: Parser foundation
 Depends on: RM-01 accepted
 
@@ -59,12 +30,12 @@ preserve unknown keys. Malicious shell corpus must never execute.
 1. Create `src/foundation/scalarLineParser.ts`: shared parser utilities — line-splitting,
    comment stripping, blank-line detection, scalar-value classification
    (unquoted, single-quoted, double-quoted).
-2. Create `src/foundation/envParser.ts`: strict non-executing env-file scanner.
+2. Create `src/foundation/EnvParser.ts`: strict non-executing env-file scanner.
    Accept: blank lines, `#` comments, `KEY=value` with unquoted,
    single-quoted, or double-quoted scalar values. Reject with line-number
    diagnostics: command substitution, variable expansion, shell operators,
    unclosed quotes, non-scalar values.
-3. Create `src/foundation/stateParser.ts`: lane-state file parser. Parse
+3. Create `src/foundation/StateParser.ts`: lane-state file parser. Parse
    `state/coordinator-lane-state.txt` as `KEY=value` records. Normalize known
    keys (`lane_status`) into status projection. Preserve unknown keys in
    diagnostics map. Report contradictory state as `unknown`/`invalid`.
@@ -74,7 +45,7 @@ preserve unknown keys. Malicious shell corpus must never execute.
 
 ## Expected Ownership
 
-- `src/foundation/scalarLineParser.ts`, `src/foundation/envParser.ts`, `src/foundation/stateRecordParser.ts`, `src/foundation/laneLifecycle.ts`, `src/foundation/stateParser.ts`
+- `src/foundation/scalarLineParser.ts`, `src/foundation/EnvParser.ts`, `src/foundation/StateParser.ts`
 - Respective focused specs.
 
 ## Tests And Evidence
@@ -161,3 +132,21 @@ git status, `.local/` not staged.
 The strict parsers are accepted. RM-06 consumes state parsing for lane status.
 RM-09 consumes env parsing for config display. No downstream batch may
 `source` or `eval` lane config or state.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **parser foundation**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-read-model/RM-04-strict-env-and-lane-state-parsers.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`RM-01`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **parser foundation** and **Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-read-model/RM-04-strict-env-and-lane-state-parsers.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

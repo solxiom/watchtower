@@ -1,14 +1,28 @@
 # Watchtower v1 Bootstrap Implementation-Pack Acceptance
 
-Verdict: **ACCEPT**
+Verdict: **ACCEPTED — ACTIVE 74-BATCH DISPATCH AUTHORITY**
 
-Status: **Implementation-ready — dispatch authorized by dependency order**
+Status: **Historical 59-batch acceptance superseded; synchronized 74-batch revision accepted and activated**
 
 Reviewed: 2026-07-31
 
 Reviewer role: Watchtower specification architect
 
 Review session: `wt-spec-architecture-2026-07-31`
+
+## Supersession notice
+
+The audit recorded in `planning-remediation-amendment.md` found critical
+planning, dependency, packaging-proof, and batch-boundary defects that the
+original review missed. Its 59-batch seals remain below only as historical
+evidence and do not authorize dispatch. Exact synchronized revision
+`f02517c4df43c969ad670049be2825d08da69f82` closed those findings and received
+independent `ACCEPT_PACKS` in
+`.local/agent-reports/watchtower-v1/coordinator/planning-remediation-pack-review-f02517c.md`.
+The activation merge preserves the reviewed bytes and all six seals. RM-01,
+DB-01, and RM-04 retain their independent product outcomes; RM-02 remains
+parked only until accepted RM-13 and RT-08 plus explicit worktree
+synchronization.
 
 ## Scope and bootstrap boundary
 
@@ -20,8 +34,8 @@ structured `implementation-pack.json`, `pack-acceptance.json`, and
 
 The accepted product specifications, `AGENTS.md`, the mandatory engineering
 and review standard, the Nirvana integration architecture, all pack-level
-documents, all 59 work/review brief pairs, and all 118 launch prompts were in
-scope.
+documents, all 74 work/review brief pairs, and all 148 launch prompts were in
+scope for the active synchronized review.
 
 ## Findings closed during review
 
@@ -108,7 +122,7 @@ any product implementation.
 
 | Gate | Verdict | Evidence |
 |------|---------|----------|
-| Specification and batch scope | PASS | Accepted v1 documents; 59 mapped work batches and 59 matching review batches. |
+| Specification and batch scope | PASS | Accepted v1 documents; 74 mapped work batches and 74 matching review batches. |
 | Layering and responsibilities | PASS | Pack rules consistently require thin commands, capability-owned foundation modules, named adapters, and one effect authority. |
 | Nirvana-first API use | PASS | Global engineering policy and pack launch contracts require a per-batch Nirvana API audit and explicit `NIRVANA_API_GAP`. |
 | NVB task-runtime and facade boundaries | PASS | `LaneTaskRunner` is the sole internal NVB boundary; project-root tasks, arbitrary task selection, and workflow shell are hard rejects. |
@@ -120,10 +134,9 @@ any product implementation.
 
 ## Structural proof
 
-- Batch pairing: **59 work briefs, 59 review briefs**.
-- Launch coverage: **59 work prompts, 59 review prompts**.
-- Local Markdown-link audit: **301 active implementation documents, zero
-  missing local targets**.
+- Batch pairing: **74 work briefs, 74 review briefs**.
+- Launch coverage: **74 work prompts, 74 review prompts**.
+- Local Markdown-link audit: **987 local links, zero missing targets**.
 - Schema syntax: `docs/spec/schemas/v1.schema.json` parses as JSON.
 - Stale active gates: no active reference to a 53-batch completion gate,
   18-batch Pack 5 exit, or CA-18 release dependency remains.
@@ -152,9 +165,44 @@ requires a new review.
 | `wt-coordinator-automation` | 114 | 1255621 | `sha256:075345239cb9a9759a64d7bdcfc7cc94c64ef424de121e2be91a808ac1f046d8` |
 | `wt-v1-release` | 26 | 400537 | `sha256:3601b4d68846b770cc05f2f287f65b66f4ba2218ee2522f73a49c8121471b45f` |
 
-## Dispatch decision
+## Active synchronized 74-batch seals
 
-The specification and bootstrap implementation packs are accepted and ready
-for implementation. Dispatch starts with `RM-01`. No later batch may bypass
-the dependencies and independent implementation-review gates in
+The historical seals above are non-dispatchable. The synchronized revision
+uses the same canonical record algorithm and includes every regular file under
+each pack directory. The independent exact-commit review reproduced these
+digests with the committed tool and a separate real-NUL implementation before
+issuing `ACCEPT_PACKS`; the activation merge retains the reviewed pack bytes.
+
+Reproduce the table from the repository root with:
+
+```sh
+node docs/spec/implementation/pack-seal.mjs
+```
+
+The committed generator sorts UTF-8 pack-relative paths bytewise and writes
+actual NUL (`0x00`) separators and LF (`0x0a`) record terminators. Literal
+backslash escape text is not part of the canonical byte stream.
+
+| Pack | Files | Bytes | Active seal |
+|------|------:|------:|----------------|
+| `wt-read-model` | 74 | 383047 | `sha256:edda503676629d4b3b8a03f6f9be400249528c136b6061ee0a823b4b4c26d2f0` |
+| `wt-runtime-distribution` | 51 | 263107 | `sha256:4af1f3f3249cf9bfcba70db9ecbbdbb0255b35475638abcf6b609cd6e6ee618c` |
+| `wt-lane-lifecycle` | 51 | 273190 | `sha256:34890f04f78eb78ec3d3a0fb38a49a81fb1faf7f075d1d625336b3bf7c6d236d` |
+| `wt-upgrade-knowledge` | 31 | 248526 | `sha256:3d2d396d86f4954fabfe684a1a1f9858261555d6f22e8469bc57dd548c582e6a` |
+| `wt-coordinator-automation` | 142 | 940747 | `sha256:b9529806b859ae12091509ce94dc398d1b269b6b2f553299f42763cffc70223c` |
+| `wt-v1-release` | 27 | 158139 | `sha256:efc9695d25dc833f1ce1e7ad8dd28da3b2165a4b6dc23f6086753831adc00a15` |
+
+Active structural projection: 74 work briefs, 74 work prompts, 74 paired
+review briefs, 74 review prompts, and 987 resolvable local Markdown links in
+the implementation-pack tree. The exact independent pack review must
+reproduce—not trust—these values.
+
+## Activation decision and remaining dependency hold
+
+The former 59-batch authority is superseded. The synchronized 74-batch revision
+is active, so dependency-eligible RM-13 and RT-08 may dispatch in isolated,
+claim-disjoint worktrees at their R5 floors. RM-02 itself remains parked until
+both are independently accepted and its preserved worktree passes explicit
+synchronization. No batch may bypass the accepted dependencies, resource
+claims, reasoning floors, or independent implementation-review gates in
 `docs/spec/v1-implementation-map.md`.

@@ -1,330 +1,105 @@
-# Work Batch LC-07 — Comprehensive Doctor Registry
+# Batch LC-07 — Doctor kernel and lane-local checks
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+- **Accepted-map title:** Doctor kernel and lane-local checks
+- **Dependencies:** `LC-04`, `LC-05`, `RM-09`
+- **Exclusive ownership/interface:** immutable check composition, command/help, lane checks
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Pass/warn/fail/skip; marker/config/binding/permission/Git-ignore checks; read-only
+- **Implementation report:** `.local/agent-reports/wt-lane-lifecycle/LC-07-comprehensive-doctor-registry.md`
+- **Review report:** `.local/agent-reports/wt-lane-lifecycle/reviews/LC-07-comprehensive-doctor-registry-review.md`
+- **Correction report:** `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-07-comprehensive-doctor-registry-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Implementation reasoning: R4
-Review reasoning: R5
-Depends on: LC-04, LC-05, LC-06, RM-09
-Workload: large
+Depends on: LC-04, LC-05, RM-09
 
-## Scope
+## Governing authority
 
-Implement a comprehensive diagnostic check registry and the `wt doctor` command.
-Each check returns `pass`, `warn`, `fail`, or `skip`. Categories include tools,
-accounts, pack structure/policy/index, permissions, repository bindings,
-concurrent conflicts, and Git-ignore coverage. Doctor is read-only in v1.
-This batch owns the doctor foundation and the DoctorCommand.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Specification References
+## Objective, exact boundary and interfaces
 
-| Reference | Section | Topic |
-|-----------|---------|-------|
-| v1.md | §11.7 | Doctor command: grouped checks, pass/warn/fail/skip, exit codes (0/4), read-only |
-| v1.md | §7.1 | Data-root permissions, worker account checks |
-| v1.md | §14 | Doctor must detect missing deps, broken links, unsafe config, missing pack structure |
-| v1.md | §8 | Config strict subset validation |
-| v1-contracts.md | §8 | Doctor report schema: `doctorReport` with checks array |
-| schemas/v1.schema.json | `$defs.doctorReport` | Required `checks` array with `{id, status}` |
+Exclusive map ownership: immutable check composition, command/help, lane checks.
 
-## Owned Files
+Own DoctorKernel, DoctorCommand/help and immutable injected lane-local providers for marker/config/binding/permission/Git-ignore checks. No mutable/global/module-load registry and no runtime/account/watcher/index/coordinator/session/TUI providers.
 
-### New foundation module
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-- `src/foundation/DoctorRegistry.ts` — composable diagnostic check
-  definitions; each check is a function returning `pass|warn|fail|skip`;
-  grouped by category
+## Required implementation and proof
 
-### New command
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Pass/warn/fail/skip; marker/config/binding/permission/Git-ignore checks; read-only.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-- `src/commands/DoctorCommand.ts` — resolves lane, runs all registered checks,
-  renders grouped results, assigns exit code
+## Hard exclusions and handoff
 
-## Dependencies
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-### From this pack
 
-- **LC-04** (bindings/registration): doctor checks repository binding
-  consistency, membership index staleness
-- **LC-05** (coordinator baselines): doctor checks policy presence, schema
-  validity, index freshness/integrity
-- **LC-06** (watch command): doctor checks watcher liveness (heartbeat)
+## Synchronized executable contract
 
-### From pack 1 (wt-read-model)
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-- **RM-09** (observations): tmux, watcher, heartbeat observations for
-  doctor diagnostics
+- Exact map title: **Doctor kernel and lane-local checks**
+- Accepted dependencies: `LC-04`, `LC-05`, `RM-09`
+- Exclusive owner: immutable check composition, command/help, lane checks
+- Required proof claim: Pass/warn/fail/skip; marker/config/binding/permission/Git-ignore checks; read-only
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-lane-lifecycle/LC-07-comprehensive-doctor-registry.md`
+- Correction report pattern: `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-07-comprehensive-doctor-registry-correction-<NN>.md`
 
-## Required Interfaces
+### Interface and failure-order contract
 
-### DoctorRegistry
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **immutable check composition, command/help, lane checks**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-```typescript
-type CheckStatus = "pass" | "warn" | "fail" | "skip";
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-interface DoctorCheck {
-  id: string;
-  category: DoctorCategory;
-  description: string;
-  run(lane: ResolvedLane, context: DoctorContext): Promise<CheckResult>;
-}
+### Selected adversarial matrix
 
-interface CheckResult {
-  status: CheckStatus;
-  message?: string;
-  details?: Record<string, any>;
-}
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-interface DoctorReport {
-  checks: CheckResult[];
-  summary: { pass: number; warn: number; fail: number; skip: number; };
-  exitCode: number;  // 0 on pass/warn, 4 on fail
-}
+### Reproducible proof and reporting
 
-type DoctorCategory =
-  | "control-home"
-  | "tools"
-  | "accounts"
-  | "config"
-  | "markers"
-  | "bindings"
-  | "conflicts"
-  | "pack"
-  | "policy"
-  | "index"
-  | "permissions"
-  | "gitignore"
-  | "runtime"
-  | "watcher"
-  | "speech";
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-function registerCheck(check: DoctorCheck): void;
-function getAllChecks(): DoctorCheck[];
-function runAllChecks(lane: ResolvedLane, context: DoctorContext): Promise<DoctorReport>;
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
 ```
 
-## Implementation Steps
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-1. **Create `src/foundation/DoctorRegistry.ts`**
-   - `DoctorCheck` interface: `{id, category, description, run}`
-   - `registerCheck(check)`: add to global registry
-   - `getAllChecks()`: return all registered checks
-   - `runAllChecks(lane, context)`: iterate all checks, collect results,
-     compute summary and exit code
-   - Checks must be registered at module load time (each check module
-     calls `registerCheck`)
-   - Each check is a focused, deterministic, read-only function
-   - Checks never perform repair, rebuild, or migration
-   - Checks never write to any filesystem path
-   - Checks never use a model
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
 
-   **Check categories and implementations:**
+## Batch-specific interface and negative-case contract
 
-   **Control-home checks:**
-   - `home-access`: verify control home path exists, is directory, is readable
-   - `lane-dir-access`: verify `.watchtower/lanes/{slug}/` exists, is readable
-   - `lane-marker`: verify `lane.json` exists, is valid JSON, matches schema
+The exclusive owned interface set is **immutable check composition, command/help, lane checks**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-lane-lifecycle/LC-07-comprehensive-doctor-registry.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-   **Tool checks:**
-   - `bash-available`: `bash --version` → pass/fail
-   - `git-available`: `git --version` → pass/fail
-   - `tmux-available`: `tmux -V` → pass/fail
-   - `jq-available`: `jq --version` → pass/fail (warn on absent, not fail)
-   - `flock-available`: `flock --version` → pass/warn
-   - `rg-available`: `rg --version` → pass/warn
+Accepted predecessor input is exactly **`LC-04`, `LC-05`, `RM-09`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Pass/warn/fail/skip; marker/config/binding/permission/Git-ignore checks; read-only**.
 
-   **Account checks:**
-   - `operator-account`: verify current OS account matches configured operator
-   - `worker-accounts`: verify configured worker accounts exist, can resolve
-     CLIs, can access runtime store (traverse + execute, not write)
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-   **Config checks:**
-   - `config-parse`: parse `lane.config.env` with strict parser, reject
-     shell-injected content
-   - `config-schema`: verify all required keys present
-   - `config-redaction`: verify no secret keys exposed (if verbose,
-     warn on tokens/secrets in config)
+Concrete negative proof selected for **immutable check composition, command/help, lane checks** and **Pass/warn/fail/skip; marker/config/binding/permission/Git-ignore checks; read-only**:
 
-   **Marker checks:**
-   - `marker-schema`: validate `lane.json` against JSON Schema
-   - `install-schema`: validate `install.json` against JSON Schema
-   - `bindings-schema`: validate `repositories.local.json` against schema
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-   **Binding checks:**
-   - `binding-paths`: verify all local binding paths exist and are directories
-   - `binding-branches`: verify declared branches exist in each repo
-   - `binding-worktrees`: verify worktree mode consistency (dedicated vs shared)
-   - `membership-index`: verify membership index has valid entries for all
-     bindings; report stale entries
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-   **Conflict checks:**
-   - `writable-conflicts`: detect active lanes sharing writable worktrees
-     (fail on unsanctioned shared-write)
-   - `tmux-prefix-conflicts`: detect overlapping tmux prefix usage between lanes
-   - `path-claim-conflicts`: detect overlapping exclusive-write path claims
-
-   **Pack checks:**
-   - `pack-structure`: verify committed pack has required files
-     (implementation-pack.json, lock, acceptance, traceability, etc.)
-   - `pack-acceptance`: verify acceptance record is valid
-   - `pack-seal`: verify lock seal matches current pack bytes (drift detection)
-
-   **Policy checks:**
-   - `routing-policy`: verify `coordinator/routing-policy.json` exists and
-     passes schema validation; all 15 rules present
-   - `session-policy`: verify `coordinator/session-policy.json` exists and
-     passes schema validation; all defaults present
-   - `policy-provenance`: verify provenance markers reference correct spec
-     sections
-
-   **Index checks:**
-   - `pack-index-fresh`: verify `coordinator/pack-index.json` exists
-   - `pack-index-integrity`: verify index seal matches active pack seal
-   - `pack-index-schema`: verify index passes schema validation
-
-   **Permission checks:**
-   - `runtime-permissions`: verify runtime assets are readable/executable
-     by configured worker accounts; writable only by operator
-   - `lane-permissions`: verify lane files owned by operator; no world-writable
-   - `session-permissions`: verify operator-session files only readable by
-     operator; retention-coupled UI-cache permissions
-
-   **Git-ignore checks:**
-   - `gitignore-present`: verify `.gitignore` exists at control home
-   - `gitignore-coverage`: verify `/.watchtower/` is gitignored
-
-   **Runtime checks:**
-   - `runtime-installed`: verify pinned runtime is staged in data-root
-   - `runtime-manifest`: verify runtime manifest is valid
-   - `runtime-checksums`: verify managed asset checksums match
-   - `runtime-links`: verify `bin/` links point to valid runtime assets
-   - `knowledge-installed`: verify knowledge pack is staged
-
-   **Watcher checks:**
-   - `watcher-heartbeat`: check watcher heartbeat/lock for liveness
-   - `watcher-state`: check watcher state is valid JSON
-
-   **Speech checks (optional, warn-only):**
-   - `speech-stack`: check Piper or equivalent speech stack availability
-     (skip if not configured, warn if configured but missing)
-
-2. **Create `src/commands/DoctorCommand.ts`**
-   - Extend BaseCommand; name `"doctor"`; group `"lane"`
-   - Parse `--lane`, `--workspace`
-   - Resolve lane via RM-03 and RM-06
-   - Run all registered checks via `runAllChecks`
-   - Render results grouped by category:
-     - Green `pass`: check passed
-     - Yellow `warn`: non-critical issue detected
-     - Red `fail`: critical issue detected
-     - Dim `skip`: check not applicable
-   - Print summary: pass/warn/fail/skip counts
-   - Exit 0 on all pass/warn (no failures)
-   - Exit 4 on any fail
-   - `--json` mode: output `doctorReport` schema (one JSON value with
-     checks array and each check's `{id, status}` plus optional `message`/`details`)
-   - `--verbose` mode: include details in human and JSON output
-
-3. **Write help/commands/doctor.hlp.json**
-   - Describe check categories and meanings
-   - Document pass/warn/fail/skip semantics
-   - Document exit code rules (0 vs 4)
-
-4. **Register in help/help.json**
-
-5. **Write focused specs**
-   - `spec/foundation/doctor-registry.spec.ts`: every check category
-     represented, each check produces valid result, pass on known-good
-     fixture, fail on known-bad fixture, warn on borderline fixture,
-     skip on inapplicable fixture, read-only guarantee (no filesystem writes)
-   - `spec/commands/DoctorCommand.spec.ts`: lane resolution, check execution,
-     grouped output, summary rendering, JSON output format, exit codes
-
-## Exclusions
-
-- No repair, rebuild, or migration — doctor is read-only
-- No implicit repair of stale membership index
-- No watcher management (restart, stop)
-- No model use for diagnostic classification
-
-## Required Proof
-
-### Focused
-- Every check category has at least one check registered
-- Each check produces correct status on known-good fixture (pass)
-- Each check produces correct status on known-bad fixture (fail)
-- Tool checks: tool present → pass, missing → fail/warn as appropriate
-- Account checks: correct account → pass, missing → fail, unconfigured → skip
-- Config checks: valid config → pass, shell-injected → fail
-- Marker checks: valid JSON → pass, invalid → fail, missing → fail
-- Binding checks: existing paths → pass, missing paths → fail
-- Conflict checks: no conflict → pass, detected → fail/warn
-- Pack checks: complete pack → pass, missing files → fail
-- Policy checks: complete policies → pass, missing → fail
-- Index checks: fresh matching → pass, stale → fail, corrupt → fail
-- Permission checks: correct → pass, world-writable → fail
-- Git-ignore checks: present → pass, missing → fail
-- Runtime checks: all present → pass, missing links → fail
-- Watcher checks: running → pass, not running → warn
-- Doctor is read-only: mock filesystem, verify no write calls
-- JSON output matches `doctorReport` schema
-- Exit code 0 on all pass/warn, exit code 4 on any fail
-
-### Regression
-- `nvb build` passes
-
-### Architecture
-- Doctor checks do not mutate state
-- DoctorCommand delegates entirely to doctor-registry
-
-## Help and Documentation
-
-- Create `help/commands/doctor.hlp.json`
-- Register in `help/help.json`
-
-## Handoff Notes
-
-After acceptance, `DoctorRegistry.ts` is the shared diagnostic layer.
-LC-08 (integration) runs `wt doctor` in the end-to-end fixture. Future
-batches from pack 5 (CA-*) may extend the registry with coordinator-
-specific checks.
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-lane-lifecycle/LC-07-comprehensive-doctor-registry.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

@@ -1,152 +1,103 @@
-# Batch CA-24 — Session Command Integration, Scale/Replay, and M6 Acceptance
+# Batch CA-24 — Session command integration, specification-resolution proof, scale/replay, and M6 acceptance
 
-> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-24 ownership and full acceptance fixture.
+## Synchronized batch execution matrix
 
-## Authority And Status
+- **Accepted-map title:** Session command integration, specification-resolution proof, scale/replay, and M6 acceptance
+- **Dependencies:** `CA-14`–`CA-23`, `CA-25`–`CA-31`
+- **Exclusive ownership/interface:** command/help integration and independent acceptance proof
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-24-session-command-integration-scale-replay-and-m6-acceptance-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-24-session-command-integration-scale-replay-and-m6-acceptance-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Governing sources: all Watchtower v1 normative specs and schemas, `AGENTS.md`,
-the mandatory engineering standard, the implementation map, accepted CA-01
-through CA-23 evidence, and pack quality rules. No pack-local text may relax a
-governing contract.
-Required interfaces are normative in this pack's
-`tui-interface-contracts.md §CA-24 Composition And Command Contract`.
+Status: ❌ Pending
+Depends on: CA-14–CA-23, CA-25–CA-31
 
-Status: ❌ Not started
-Depends on: CA-14 through CA-23 accepted
-Unblocks: Pack 5/M6 acceptance and REL-01
-Reasoning floor: implementor `R5`; reviewer `R5`
+## Governing authority
 
-## Objective
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-Integrate the accepted session/TUI capabilities into thin public commands and
-help, then independently prove the complete Pack 5 exit contract at realistic
-pack/session scale. This batch adds no new coordinator, session, or TUI policy.
-The entry, diagnostics, and operational acceptance contract is
-`docs/spec/tui-operational-experience.md`.
+## Objective, exact boundary and interfaces
 
-## Owned Capabilities
+Exclusive map ownership: command/help integration and independent acceptance proof.
 
-- thin `wt coordinator ask` and `session` command/front-door integration
-- create/attach/observe entry wiring and lifecycle-command parity
-- command help fragments, registry, examples, JSON/human compatibility updates
-- end-to-end Pack 5 fixtures, scale/replay harnesses, and M6 evidence
-- v1 command-status and pack completion documentation after acceptance
-- thin `wt doctor --tui` and explicit redacted support-report integration
+Own session command/help integration and independent M6 acceptance, including the complete contradiction-to-resume fixture and 30-10k scale/replay proof. Consume CA-25 through CA-31; do not implement their capabilities.
 
-Exact owned integration modules:
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-- `src/foundation/OperatorTuiFactory.ts`
-- `src/foundation/TuiProcessBootstrap.ts`
-- `src/commands/CoordinatorAskCommand.ts`
-- `src/commands/CoordinatorSessionCommand.ts`
-- `src/commands/CoordinatorSessionAttachCommand.ts`
-- `src/commands/CoordinatorSessionListCommand.ts`
-- `src/commands/CoordinatorSessionShowCommand.ts`
-- `src/commands/CoordinatorSessionHistoryCommand.ts`
-- `src/commands/CoordinatorSessionSuspendCommand.ts`
-- `src/commands/CoordinatorSessionResumeCommand.ts`
-- `src/commands/CoordinatorSessionCloseCommand.ts`
-- `src/commands/CoordinatorSessionForkCommand.ts`
-- `src/commands/CoordinatorSessionPinCommand.ts`
-- `src/commands/CoordinatorSessionUnpinCommand.ts`
-- `src/commands/CoordinatorSessionCompactCommand.ts`
-- `src/commands/CoordinatorSessionExportCommand.ts`
-- `src/commands/CoordinatorSessionPruneCommand.ts`
-- `src/commands/CoordinatorSessionAmendmentCommand.ts`
-- `src/commands/CoordinatorSessionBudgetCommand.ts`
-- `src/commands/CoordinatorSessionApplyCommand.ts`
-- `src/commands/CoordinatorHoldPlaceCommand.ts`
-- `src/commands/CoordinatorHoldReleaseCommand.ts`
-- `src/commands/CoordinatorHoldListCommand.ts`
+## Required implementation and proof
 
-Each command owns one corresponding lower-kebab help fragment under
-`help/commands/` and one matching command spec under `spec/basic/commands/`.
-CA-24 may update `help/help.json`, public command/schema registries, and v1
-status docs only for these accepted surfaces. Scale/PTY integration fixtures
-are owned under `spec/integration/coordinatorSession/`.
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-## Required Interfaces And Work
+## Hard exclusions and handoff
 
-1. Commands validate/normalize, call one focused application capability, and
-   map typed results through shared presentation. Keep `src/cli.ts` thin.
-2. Wire bare session create+attach, attach without lifecycle mutation, resume
-   as lifecycle-only, observe as M0-only, detach without close, and every
-   operator-session lifecycle/history/proposal/hold/budget command already
-   specified.
-3. Preserve `ask`, human/JSON output, redirected-output behavior, ordinary
-   commands, and explicit noninteractive authorization. TUI commands require a
-   suitable TTY and fail with actionable fallback guidance.
-4. Reconcile help, schemas, examples, completion/action registries, error/exit
-   mappings, and `v1.md` status only for actually accepted behavior.
-5. Exercise fresh and existing lanes, many sessions per lane, concurrent
-   attachments, restart/replay, partial/interrupted turns, holds/proposals, and
-   renderer failure through real packaged/global-install entry paths.
-6. Prove 30/300/3,000/10,000-batch packs with a fixed affected dependency
-   neighborhood; unrelated pack growth must not increase ordinary model
-   context. Prove long-session/session-count growth with bounded query,
-   viewport, working-set, and replay costs.
-7. Run the `cli-session.md §14.6` responsiveness and two-hour soak obligations
-   on a declared reference profile. Record rather than hide variance.
-8. Prove routine M0 coordination invokes no model, capability floors never
-   downgrade, every effect uses CA-10, advisory generation holds no lane lock,
-   no full-pack/full-history fallback exists, and one repo/many lanes plus one
-   lane/many repos remain isolated.
-9. Wire explicit `--lane`, deterministic zero/one/many-lane entry, in-TUI
-   session/lane switching, `doctor --tui`, and explicit support-report output.
-   No session is created before lane selection and report generation is the
-   only new diagnostic write.
-10. Exercise real decision routing through the required `opencode-cli` adapter
-    and, when installed, `hermes-cli`. Prove capability-first/economics-second
-    selection, shared-pool accounting, stale-catalog invalidation, bounded
-    result handling, cancellation, and fallback only to another already
-    qualified endpoint. Hermes absence is recorded as an explicit skip.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-## Exclusions
 
-- No feature redesign, renderer substitution, new effect path, new public
-  protocol, daemon, remote UI, or acceptance based only on implementor claims.
-- No weakening a failed lower-batch gate to make end-to-end tests pass.
+## Synchronized executable contract
 
-## Required Proof
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-- Every public command: success/error/empty, human/JSON where applicable,
-  redirected input/output, TTY refusal, help, and completion parity.
-- Create/attach/resume/observe/detach semantics and many-session cardinality.
-- Explicit/zero/one/many-lane entry, switching guards, no unintended creation,
-  and non-interactive ambiguity refusal.
-- Pack scale, long-session replay, model-context byte/token envelopes, SQLite
-  query plans/bounds, viewport memory, startup/input/view latency, idle CPU,
-  steady memory, and two-hour soak.
-- Crash/restart, duplicate/interrupted event replay, simultaneous attachments,
-  explicit waits, renderer loss, stale proposals, and hold interleaving.
-- Global-install tests for every RT-03 target and accepted CA-18 native matrix.
-- Read-only TUI doctor checks and owner-only redacted report content/overwrite
-  behavior, including proof that drafts, conversations, credentials,
-  environment values, and journals are absent.
-- Trace every operational matrix tuple and visual-catalog state to independent
-  reproducible acceptance evidence.
-- Complete authority audit: model-free M0, no direct mutations, one executor,
-  no lane lock during model generation, no project `nvb.json`, no unbounded
-  fallback.
-- Concrete endpoint matrix: OpenCode qualified end to end; Hermes qualified
-  when installed; no secret output; no stale profile reuse; no shared-quota
-  overcount; no cost-based capability downgrade.
-- `nvb build`, `nvb test`, `nvb dist`, architecture gates, line counts,
-  documentation consistency, and clean artifact/ownership checks.
+- Exact map title: **Session command integration, specification-resolution proof, scale/replay, and M6 acceptance**
+- Accepted dependencies: `CA-14`–`CA-23`, `CA-25`–`CA-31`
+- Exclusive owner: command/help integration and independent acceptance proof
+- Required proof claim: Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate
+- Reasoning floor: implementer **R5**, independent reviewer **R5**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-coordinator-automation/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-24-session-command-integration-scale-replay-and-m6-acceptance-correction-<NN>.md`
 
-## Documentation And Report
+### Interface and failure-order contract
 
-Write
-`.local/agent-reports/coordinator-automation/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`
-with exact commands, environments, fixtures, measurements, context envelopes,
-authority audit, docs changed, line counts, and unresolved failures. Do not
-commit. Only the independent CA-24 reviewer may accept the batch and authorize
-Pack 5/M6 completion.
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **command/help integration and independent acceptance proof**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-## Independent Review
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-Use
-`../review-batches/CA-24-review-session-command-integration-scale-replay-and-m6-acceptance.md`.
-The reviewer reruns every command, scale, replay, performance, platform,
-authority, structure, documentation, and package proof from independent
-fixtures. Lower-batch reports are claims, not closure evidence.
+### Selected adversarial matrix
+
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+### Reproducible proof and reporting
+
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
+
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
+
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
+
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **command/help integration and independent acceptance proof**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`CA-14`–`CA-23`, `CA-25`–`CA-31`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **command/help integration and independent acceptance proof** and **Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-coordinator-automation/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

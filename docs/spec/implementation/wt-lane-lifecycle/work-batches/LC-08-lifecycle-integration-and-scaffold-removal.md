@@ -1,217 +1,107 @@
-# Work Batch LC-08 — Lifecycle Integration and Scaffold Removal
+# Batch LC-08 — Lifecycle integration and scaffold removal
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+- **Accepted-map title:** Lifecycle integration and scaffold removal
+- **Dependencies:** `LC-10`, `RM-10`, `RM-12`
+- **Exclusive ownership/interface:** end-to-end specs, help registry
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely
+- **Implementation report:** `.local/agent-reports/wt-lane-lifecycle/LC-08-lifecycle-integration-and-scaffold-removal.md`
+- **Review report:** `.local/agent-reports/wt-lane-lifecycle/reviews/LC-08-lifecycle-integration-and-scaffold-removal-review.md`
+- **Correction report:** `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-08-lifecycle-integration-and-scaffold-removal-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Implementation reasoning: R3
-Review reasoning: R4
-Depends on: LC-07, RM-10
-Workload: medium
+Depends on: LC-10, RM-10, RM-12
 
-## Scope
+## Governing authority
 
-Create an init→status→watch/doctor end-to-end fixture that proves the complete
-lane lifecycle works. Prove rollback works (init then destroy cleanly). Remove
-all hello scaffold artifacts: delete `src/commands/HelloCommand.ts`, remove
-from command index, remove hello help fragment, remove hello test. Ensure
-`nvb build` passes after removal. Verify no hello references remain in the
-codebase.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Specification References
+## Objective, exact boundary and interfaces
 
-| Reference | Section | Topic |
-|-----------|---------|-------|
-| v1.md | §7 | Lane layout and manifests — verify init creates expected structure |
-| v1.md | §8 | Config strict subset — verify config is written correctly |
-| v1.md | §11.1 | Init command — verify init behavior |
-| v1.md | §11.3 | Status command — verify status reads created lane |
-| v1.md | §11.4 | Watch command — verify watch preflight and exec |
-| v1.md | §11.7 | Doctor command — verify doctor runs on created lane |
-| v1.md | §15 | Rollback and recovery — verify init→destroy leaves no residual state |
-| v1-contracts.md | §8 | Exit codes for init, status, watch, doctor |
-| architecture.md | §6.3 | Runtime execution flow — watch integration proof |
+Exclusive map ownership: end-to-end specs, help registry.
 
-## Owned Files
+Own lifecycle end-to-end fixtures, help integration and safe scaffold removal. Consume LC-10, RM-10 and RM-12; do not implement doctor providers or read commands.
 
-### New specification
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-- `spec/e2e/lifecycle.spec.ts` — end-to-end fixture: init→status→watch/doctor→rollback
+## Required implementation and proof
 
-### Files to modify
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-- `src/commands/index.ts` — remove `HelloCommand` import and registration
-- `help/help.json` — remove hello entry
+## Hard exclusions and handoff
 
-### Files to delete
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-- `src/commands/HelloCommand.ts` — scaffold command
-- `help/commands/hello.hlp.json` — scaffold help fragment
-- `spec/commands/HelloCommand.spec.ts` — scaffold test (if present)
 
-## Dependencies
+## Synchronized executable contract
 
-### From this pack
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-- **LC-07** (doctor): doctor must be functional for end-to-end fixture
-- **LC-06** (watch): watch preflight must work for watch portion of fixture
-- **LC-05** (coordinator baselines): policies and index must seed correctly
-- **LC-04** (bindings/registration): bindings must be written during init
-- **LC-03** (lane store): transactional layout must work end-to-end
-- **LC-02** (pack validation): pack must validate during init
-- **LC-01** (init planner): init preflight must work
+- Exact map title: **Lifecycle integration and scaffold removal**
+- Accepted dependencies: `LC-10`, `RM-10`, `RM-12`
+- Exclusive owner: end-to-end specs, help registry
+- Required proof claim: Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-lane-lifecycle/LC-08-lifecycle-integration-and-scaffold-removal.md`
+- Correction report pattern: `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-08-lifecycle-integration-and-scaffold-removal-correction-<NN>.md`
 
-### From pack 1 (wt-read-model)
+### Interface and failure-order contract
 
-- **RM-10** (status command): status must be functional for status portion of fixture
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **end-to-end specs, help registry**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-## Implementation Steps
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-1. **Create `spec/e2e/lifecycle.spec.ts`**
-   - Create a temporary control home and workspace directory
-   - Run `wt init` with valid arguments (slug, prefix, scope, routing, workspace)
-   - Verify lane directory layout matches expected structure
-   - Verify `lane.json` exists and passes schema validation
-   - Verify `install.json` exists and passes schema validation
-   - Verify `lane.config.env` exists with correct keys
-   - Run `wt status` and verify output shows the created lane
-   - Run `wt watch` in a way that allows test observation:
-     - Start watch briefly, verify it execs without preflight errors
-     - Terminate with SIGINT, verify clean exit
-     - Verify no orphaned processes
-   - Run `wt doctor` and verify:
-     - Returns exit code 0 (no failures)
-     - All expected check categories present
-     - Lane checks pass
-   - **Rollback proof:**
-     - Run `wt init` with invalid arguments (e.g., invalid slug, missing pack)
-     - Verify exit code indicates failure
-     - Verify no lane directory was created (no residual state)
-     - Verify no `.watchtower/` directory was left in an inconsistent state
-   - Clean up temporary directories
+### Selected adversarial matrix
 
-2. **Delete scaffold artifacts**
-   - Delete `src/commands/HelloCommand.ts`
-   - Delete `help/commands/hello.hlp.json`
-   - Delete `spec/commands/HelloCommand.spec.ts` (if present)
-   - Delete any hello-related runtime-nvb tasks (if present)
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-3. **Update `src/commands/index.ts`**
-   - Remove `import HelloCommand from "./HelloCommand";`
-   - Remove `HelloCommand` from the command registration array or map
+### Reproducible proof and reporting
 
-4. **Update `help/help.json`**
-   - Remove the hello entry
-   - Verify no dangling references
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-5. **Audit for remaining hello references**
-   - Search entire codebase for `hello` (case-insensitive) in source, help, spec, and config files
-   - Remove any remaining hello references:
-     - `help/commands/README.md` — remove hello section if present
-     - `runtime-nvb/` — remove hello runtime tasks if present
-     - `docs/spec/` — update any doc references to hello
-   - Verify no directory contains hello artifacts
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-6. **Verify build passes**
-   - Run `nvb build` — must pass with zero errors
-   - Run all Jasmine tests — must pass with zero failures
-   - Run `git status --short` — no unexpected artifacts
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-## Exclusions
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
 
-- No init implementation changes — init is owned by LC-01/LC-03
-- No doctor implementation changes — doctor is owned by LC-07
-- No watch implementation changes — watch is owned by LC-06
-- No status implementation changes — status is owned by RM-10
-- No removal of any real command or foundation module
-- No removal of anything beyond hello scaffold artifacts
+## Batch-specific interface and negative-case contract
 
-## Required Proof
+The exclusive owned interface set is **end-to-end specs, help registry**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-lane-lifecycle/LC-08-lifecycle-integration-and-scaffold-removal.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-### Focused
-- End-to-end fixture: init creates a valid lane
-- End-to-end fixture: status reads the created lane correctly
-- End-to-end fixture: watch preflight passes on created lane
-- End-to-end fixture: doctor returns pass/warn (no failures) on created lane
-- Rollback proof: failed init leaves no residual state
-- Rollback proof: init fails atomically (no partial directory)
-- Rollback proof: destroy removes all lane artifacts cleanly
-- `src/commands/HelloCommand.ts` deleted
-- `help/commands/hello.hlp.json` deleted
-- Hello entry removed from `help/help.json`
-- Hello entry removed from `src/commands/index.ts`
-- No `hello` string references in `src/`, `help/`, `spec/`, `runtime-nvb/` files
-- (outside of intentional documentation references)
+Accepted predecessor input is exactly **`LC-10`, `RM-10`, `RM-12`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely**.
 
-### Regression
-- `nvb build` passes after scaffold removal
-- All Jasmine suites pass
-- No test failures caused by missing hello artifacts
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-### Architecture
-- No product logic in `src/cli.ts`
-- Command index cleanly composed
-- Help registry cleanly composed
+Concrete negative proof selected for **end-to-end specs, help registry** and **Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely**:
 
-## Required Review Packet
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-The implementation report must include:
-- End-to-end fixture execution output (init, status, watch, doctor)
-- Rollback proof execution output
-- List of every deleted hello artifact with file paths
-- Audit results: zero hello references remaining in codebase
-- `nvb build` output proving build passes
-- Jasmine test output proving all tests pass
-- Final `git status --short` showing only this batch's changes
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-## Help and Documentation
-
-- Remove hello help fragment: `help/commands/hello.hlp.json`
-- Update `help/help.json`: remove hello entry
-- Update `help/commands/README.md` if it references hello
-
-## Handoff Notes
-
-After acceptance, the Watchtower codebase contains zero scaffold/hello artifacts.
-The end-to-end lifecycle fixture proves init→status→watch/doctor works as a
-complete chain. Pack 4 (wt-upgrade-knowledge) and Pack 5 (wt-coordinator-automation)
-build on the proven lifecycle foundation.
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-lane-lifecycle/LC-08-lifecycle-integration-and-scaffold-removal.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

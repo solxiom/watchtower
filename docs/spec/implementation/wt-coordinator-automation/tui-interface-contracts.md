@@ -1,4 +1,4 @@
-# CA-18–CA-24 TUI Interface Contracts
+# CA-18–CA-24 TUI Interface Contracts With Accepted Session Services
 
 Status: **Accepted bootstrap implementation contract**
 Date: 2026-07-31
@@ -8,7 +8,7 @@ public reason/event/schema identifiers remain owned by v1 contracts and must be
 reconciled before code is accepted. All collections, text, pages, queues, and
 caches carry policy-defined finite limits.
 
-## CA-18 Qualification Handoff
+## CA-18 Accepted-Evidence Promotion Handoff
 
 ```ts
 interface TuiFeasibilityDecision {
@@ -102,6 +102,8 @@ bounded natural-language turn, or a refusal; it never invokes either.
 
 ## CA-21 Inspector And Action Contract
 
+CA-21 consumes CA-26 confirmation/apply and CA-27 hold/amendment services; it owns no direct effect, proposal, hold, or amendment authority.
+
 ```ts
 type InspectorViewId =
   | 'sessions' | 'lane' | 'batches' | 'agents' | 'budgets'
@@ -183,6 +185,8 @@ Restoration is idempotent. Emergency restoration accepts no lane/session input
 and writes no product state.
 
 ## CA-24 Composition And Command Contract
+
+CA-24 consumes CA-25 through CA-31 and independently qualifies their composition; it does not reimplement cycle, proposal, hold, provider-adapter, index-command, or doctor-provider behavior.
 
 ```ts
 interface OperatorTuiFactory {

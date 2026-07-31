@@ -1,4 +1,17 @@
-# UK-03: Atomic Upgrade Apply, Recovery, And Downgrade Guard — Work Brief
+# Batch UK-03 — Atomic upgrade apply, recovery, and downgrade guard
+
+## Synchronized batch execution matrix
+
+- **Accepted-map title:** Atomic upgrade apply, recovery, and downgrade guard
+- **Dependencies:** `UK-02`, `RT-04`, `RT-06`
+- **Exclusive ownership/interface:** install pointer/store
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade
+- **Implementation report:** `.local/agent-reports/wt-upgrade-knowledge/UK-03-atomic-upgrade-apply-recovery-and-downgrade-guard.md`
+- **Review report:** `.local/agent-reports/wt-upgrade-knowledge/reviews/UK-03-atomic-upgrade-apply-recovery-and-downgrade-guard-review.md`
+- **Correction report:** `.local/agent-reports/wt-upgrade-knowledge/reviews/corrections/UK-03-atomic-upgrade-apply-recovery-and-downgrade-guard-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 ## Mandatory Governing References
 
@@ -465,3 +478,23 @@ behaviors, and the exact test commands.
 
 If you are not already running as `kavan`, use `sudo -u kavan -i` for commands
 and ensure every edited file ends up owned by `kavan`.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **install pointer/store**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-upgrade-knowledge/UK-03-atomic-upgrade-apply-recovery-and-downgrade-guard.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`UK-02`, `RT-04`, `RT-06`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **install pointer/store** and **Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-upgrade-knowledge/UK-03-atomic-upgrade-apply-recovery-and-downgrade-guard.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

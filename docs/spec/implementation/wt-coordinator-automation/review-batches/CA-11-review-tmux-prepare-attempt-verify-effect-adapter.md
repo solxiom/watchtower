@@ -1,46 +1,17 @@
-# Review Batch CA-11 — Tmux Prepare/Attempt/Verify Effect Adapter
+# Review Batch CA-11 — Tmux prepare/attempt/verify effect handler
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+- **Accepted-map title:** Tmux prepare/attempt/verify effect handler
+- **Dependencies:** `RT-05`, `CA-10`
+- **Exclusive ownership/interface:** focused TaskHandler and tmux leaf
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-11-tmux-prepare-attempt-verify-effect-adapter.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-11-tmux-prepare-attempt-verify-effect-adapter-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-11-tmux-prepare-attempt-verify-effect-adapter-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Not started
 Paired work batch: CA-11
@@ -82,7 +53,7 @@ target/environment/path selection, or authority/journal policy in the handler.
   the full prepare→attempt→verify chain. Prove each succeeds with valid inputs.
 - **Forbidden-command block:** For every forbidden command listed above,
   independently prove rejection occurs before `LeafRuntimeInvoker` is invoked.
-  Verify zero network or process calls for forbidden commands.
+  Verify zero network or process contributes through the explicit composition rootfor forbidden commands.
 - **Sanitization edge cases:** Test every shell metacharacter individually and
   in combination. Test Unicode, null bytes, ANSI escapes, and unusual whitespace.
 - **Idempotent duplicate:** Execute a tmux effect, verify it succeeds. Execute
@@ -110,7 +81,7 @@ The reviewer must independently reason through every crash point in the
 prepare→attempt→verify→journal chain. The reviewer must identify every
 character class that could reach `LeafRuntimeInvoker` through the sanitizer
 and prove each is rejected. The reviewer must prove that no sequence of
-adapter calls can produce an arbitrary shell command or arbitrary tmux kill.
+adapter contributes through the explicit composition rootcan produce an arbitrary shell command or arbitrary tmux kill.
 
 ## Structural And Module-Size Acceptance
 
@@ -198,3 +169,23 @@ Reject immediately if:
 - Any file exceeds the structural ceiling without documented reviewer acceptance.
 - Any error code, command set, or sanitization behavior diverges from spec
   without a recorded specification amendment.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **focused TaskHandler and tmux leaf**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/reviews/CA-11-tmux-prepare-attempt-verify-effect-adapter-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`RT-05`, `CA-10`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **focused TaskHandler and tmux leaf** and **Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-11-tmux-prepare-attempt-verify-effect-adapter-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-coordinator-automation/reviews/CA-11-tmux-prepare-attempt-verify-effect-adapter-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

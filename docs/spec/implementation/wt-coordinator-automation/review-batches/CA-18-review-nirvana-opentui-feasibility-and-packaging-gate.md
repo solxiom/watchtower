@@ -1,228 +1,83 @@
-# Review Batch CA-18 — Nirvana/OpenTUI Feasibility and Packaging Gate
+# Review Batch CA-18 — Accepted OpenTUI evidence promotion and packaging gate
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This review is subordinate to:
+- **Accepted-map title:** Accepted OpenTUI evidence promotion and packaging gate
+- **Dependencies:** `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`
+- **Exclusive ownership/interface:** generic TUI adapter/architecture fixtures
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-18-nirvana-opentui-feasibility-and-packaging-gate-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-18-nirvana-opentui-feasibility-and-packaging-gate-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- `docs/spec/tui-operational-experience.md`
-- this pack's `tui-interface-contracts.md`
-- `docs/spec/implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md
+Dependencies: RT-03, RT-05, CA-14–CA-17, CA-25, CA-28, CA-29
 
-Status: ❌ Not started — accepted bootstrap review brief
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: generic TUI adapter/architecture fixtures. Own promotion and bounded revalidation of accepted TUI-EXP-01 against the exact current packaged target. Do not reselect the renderer or repeat/build a disposable feasibility experiment.
 
-Paired work batch: CA-18
+Independently reproduce Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-Reviewer owns the acceptance verdict and must be independent of the implementor.
 
-**Required reviewer reasoning class:** `R4`
+## Synchronized executable contract
 
-## Review Objective
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-Treat `docs/spec/tui-operational-experience.md §2` as the exact platform,
-invocation, promotion, and fail-closed contract. Evidence from one tuple cannot
-be generalized to another.
+- Exact map title: **Accepted OpenTUI evidence promotion and packaging gate**
+- Accepted dependencies: `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`
+- Exclusive owner: generic TUI adapter/architecture fixtures
+- Required proof claim: Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-coordinator-automation/reviews/CA-18-nirvana-opentui-feasibility-and-packaging-gate-review.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-18-nirvana-opentui-feasibility-and-packaging-gate-correction-<NN>.md`
 
-Independently determine whether imperative OpenTUI on Node `>=26.4.0`, including
-its experimental FFI requirement, is a safe and distributable Watchtower v1
-TUI foundation that does not compromise Nirvana architecture or ordinary CLI
-behavior.
+### Interface and failure-order contract
 
-The reviewer returns exactly one verdict:
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **generic TUI adapter/architecture fixtures**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-- `ACCEPT` — every mandatory result is reproduced;
-- `REJECT` — one or more correctable requirements fail; or
-- `SPEC_BLOCKED` — a governing platform, packaging, runtime, or security
-  decision cannot be satisfied without changing the spec.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-There is no conditional acceptance.
+### Selected adversarial matrix
 
-## Scope And Architecture Verification
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-Verify:
+### Reproducible proof and reporting
 
-1. the work is a bounded feasibility fixture, not an operator-session
-   implementation;
-2. no public command behavior or real lane mutation was introduced;
-3. `src/cli.ts` did not gain renderer, FFI, bootstrap, packaging, or lifecycle
-   logic;
-4. the implementation uses plain TypeScript with only imperative
-   `@opentui/core` and framework-neutral `@opentui/keymap`;
-5. React, Solid, Ink, JSX/TSX, Babel, OpenTUI framework bindings, and a second
-   frontend build pipeline are absent;
-6. direct Node platform APIs are confined to capability-named adapters backed
-   by a complete `NIRVANA_API_GAP`;
-7. no project `nvb.json` was modified; and
-8. no generated or local runtime artifact is staged.
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-Inspect both declared and transitive dependencies, source imports, TypeScript
-configuration, build configuration, lifecycle scripts, and lockfile changes.
-A package-name grep alone is not sufficient evidence.
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-## Required Independent Reproduction
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-### 1. Runtime and flag behavior
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
 
-Independently run the required matrix with Node `26.4.0` and one later
-supported version. Verify:
+## Batch-specific interface and negative-case contract
 
-- the TUI diagnostic is bounded and actionable without
-  `--experimental-ffi`;
-- permission-model behavior correctly accounts for `--allow-ffi`;
-- the chosen bootstrap preserves arguments, environment, current directory,
-  standard streams, TTY identity, signals, and exit status;
-- recursion or re-exec loops are impossible; and
-- ordinary non-TUI commands do not initialize the renderer.
+The exclusive owned interface set is **generic TUI adapter/architecture fixtures**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/reviews/CA-18-nirvana-opentui-feasibility-and-packaging-gate-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-If the selected design enables FFI for the entire CLI process, require an
-explicit, evidence-backed justification that narrower designs failed. Reject
-convenience as the sole reason.
+Accepted predecessor input is exactly **`RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment**.
 
-### 2. Nirvana regression audit
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-Reinspect the pinned Nirvana/Nira evidence rather than accepting the
-implementor's inventory. Independently verify:
+Concrete negative proof selected for **generic TUI adapter/architecture fixtures** and **Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment**:
 
-- CLI parsing and help remain conforming;
-- `nvb build`, `nvb test`, and `nvb dist` succeed;
-- the dist bin resolves correctly;
-- the global CLI works outside the repository; and
-- any direct Node API has a real, narrowly stated Nirvana gap.
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-Reject a generic process, subprocess, terminal, or platform utility introduced
-as a shortcut.
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-### 3. Renderer capability
-
-In a real PTY and tmux, reproduce:
-
-- renderer start and clean stop;
-- wide left-conversation/right-inspector layout;
-- standard and narrow reflow;
-- resize behavior;
-- focus movement and key bindings;
-- multiline editing;
-- bounded scrolling;
-- overlay behavior;
-- synthetic streaming;
-- reduced-motion handling;
-- Unicode and sanitized hostile text; and
-- terminal restoration after normal exit, startup/render failure, `SIGINT`,
-  `SIGTERM`, and suspend/resume where supported.
-
-Visual plausibility is insufficient. Capture deterministic state or terminal
-fixtures where possible and document the remaining human-observation checks.
-
-### 4. Packaging and native artifacts
-
-From a clean checkout and an isolated test home:
-
-1. install dependencies from the lockfile;
-2. run build, test, and dist;
-3. inspect the produced package contents;
-4. globally install the package from outside the repository;
-5. run representative ordinary commands and the TUI fixture; and
-6. reproduce missing/corrupt/wrong-target native artifact failures.
-
-For every RT-03 release target, verify the declared OpenTUI native package,
-CPU/libc constraints, integrity identity, and installation behavior. Confirm an
-ordinary supported install and run needs no Zig compiler. Reject undeclared
-runtime download or source-tree fallback.
-
-### 5. Security boundary
-
-Independently trace every value reaching FFI. Prove:
-
-- only the manifest-verified OpenTUI library is opened;
-- no operator, lane, environment, plugin, or config value selects a library
-  path, symbol, ABI signature, or arbitrary FFI call;
-- FFI has presentation authority only;
-- untrusted terminal content is sanitized;
-- secrets do not appear in output or captured evidence; and
-- renderer failure cannot reach lane mutation or bypass the effect executor.
-
-### 6. Performance and structure
-
-Reproduce startup latency, idle CPU, memory, and render/resize responsiveness.
-Compare representative ordinary command startup with and without the TUI
-dependency present. Investigate material regressions rather than accepting an
-unexplained threshold.
-
-Reproduce categorized physical line counts and responsibility inventories under
-the mandatory engineering standard. Working spike code is not exempt from hard
-ceilings or generic-helper rejection.
-
-## Required Review Packet
-
-The review report at
-`.local/agent-reports/coordinator-automation/reviews/CA-18-nirvana-opentui-feasibility-and-packaging-gate-review.md`
-must include:
-
-1. final verdict and blocking findings;
-2. independent command/test transcripts;
-3. dependency and prohibited-framework audit;
-4. Nirvana API/gap audit;
-5. bootstrap reproduction;
-6. platform and native-artifact matrix;
-7. PTY/tmux/lifecycle results;
-8. security data-flow review;
-9. independent performance measurements;
-10. structural counts and ownership judgment; and
-11. whether CA-19 is authorized.
-
-## Acceptance Conditions
-
-Accept only if:
-
-- every required platform and Node version passes;
-- the chosen bootstrap is bounded, loop-safe, and preserves CLI semantics;
-- non-TUI commands remain renderer-independent;
-- Nirvana/NVB/build/dist/global-install behavior has no unresolved regression;
-- the plain-TypeScript imperative renderer proves the required capabilities;
-- the dependency and build graph contains no prohibited framework stack;
-- native artifacts are deterministic, complete, and fail safely;
-- terminal restoration passes every supported lifecycle case;
-- FFI is closed to untrusted selection and presentation-only;
-- structural gates pass; and
-- the implementor's `PASS` verdict is independently reproducible.
-
-## Immediate Reject Conditions
-
-Reject if:
-
-- OpenTUI or FFI is loaded by ordinary commands without accepted necessity;
-- the selected launcher loses arguments, environment, streams, TTY, signals,
-  or exit codes, or can loop;
-- a prohibited framework/toolchain enters the dependency or build graph;
-- `src/cli.ts` becomes the TUI/bootstrap implementation owner;
-- a direct Node API lacks a demonstrated Nirvana gap and narrow adapter;
-- a required platform has no deterministic native artifact;
-- install or runtime depends on an undeclared download, source tree, or Zig
-  compiler;
-- terminal state remains damaged after a tested exit path;
-- untrusted data may choose any FFI library/symbol/signature;
-- the spike mutates a real lane or gains effect authority;
-- build or tests fail;
-- generated/local artifacts are staged; or
-- a hard structural gate fails.
-
-## Verdict Handoff
-
-On `ACCEPT`, record the exact versions, bootstrap boundary, adapter contract,
-platform matrix, native manifest rules, lifecycle contract, and performance
-baseline that CA-19 must follow.
-
-On `REJECT`, issue a bounded correction brief and require full re-review of
-affected evidence.
-
-On `SPEC_BLOCKED`, name the governing decision and affected release target.
-Do not select a fallback renderer or silently narrow v1 scope.
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-18-nirvana-opentui-feasibility-and-packaging-gate-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-coordinator-automation/reviews/CA-18-nirvana-opentui-feasibility-and-packaging-gate-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

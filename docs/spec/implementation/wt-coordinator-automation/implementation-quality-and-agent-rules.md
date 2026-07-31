@@ -1,9 +1,8 @@
 # wt-coordinator-automation Implementation Quality And Agent Rules
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** `../planning-remediation-amendment.md` supersedes any
+> conflicting batch contract and the former pack seal. No untouched batch may
+> start until synchronized artifacts are independently accepted and resealed.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -241,30 +240,6 @@ to confirm that the implementor followed a checklist.
 
 | Batch | Implementor | Reviewer | Reason for the floor |
 |-------|------------|----------|----------------------|
-| CA-01 | R5 | R5 | Deterministic SQLite compiler; identical logical rows and semantic root |
-| CA-02 | R5 | R5 | Typed SQLite stores, bounded queries, and stale/corrupt refusal |
-| CA-03 | R4 | R4 | Journal indexes and projections; checkpoint integrity is bounded |
-| CA-04 | R5 | R5 | DAG scheduling projection; dependency/claim/capacity blocker resolution |
-| CA-05 | R4 | R4 | Routing policy classification; first-match determinism is straightforward |
-| CA-06 | R4 | R4 | Endpoint eligibility gates; bounded adapter contract enforcement |
-| CA-07 | R4 | R4 | Decision envelope immutability; semantic digest and delimiting stability |
-| CA-08 | R5 | R5 | Context broker with usage budgets; provenance tracking across quota classes |
-| CA-09 | R5 | R5 | Typed proposal validation with all 14 types and stale/illegal/invalid paths |
-| CA-10 | R5 | R5 | Atomic effect executor — sole authority; idempotency, lock, crash recovery |
-| CA-11 | R4 | R4 | Tmux effect adapter; external process lifecycle with bounded recovery |
-| CA-12 | R4 | R4 | Git acceptance adapter; multi-repository publication with partial recovery |
-| CA-13 | R5 | R5 | Coordinator queue with replay; concurrent cycle safety and cursor integrity |
-| CA-14 | R4 | R4 | Command integration; thin orchestration over accepted service fixtures |
-| CA-15 | R4 | R4 | Operator-session persistence; state-machine integrity is bounded |
-| CA-16 | R5 | R5 | Session memory bounds; compaction correctness, transitive reference proof |
-| CA-17 | R5 | R5 | Session routing/budgets/holds; interleaving with automation safety |
-| CA-18 | R4 | R4 | Experimental FFI/native packaging and Nirvana compatibility gate |
-| CA-19 | R4 | R4 | Responsive shell, focus/keymap, theme, preference, adapter boundaries |
-| CA-20 | R5 | R5 | Virtualized memory bounds, retention, completion races, reference security |
-| CA-21 | R4 | R4 | Bounded inspector queries, shared actions, confirmation authority |
-| CA-22 | R5 | R5 | Stream ordering/backpressure, contention/wait, observer concurrency |
-| CA-23 | R5 | R5 | Restoration, terminal security, accessibility across platform PTY matrix |
-| CA-24 | R5 | R5 | Commands plus final scale/replay/soak and M6 authority closure |
 
 Escalate a nominal `R4` task to `R5` if source inspection reveals an undocumented
 state machine, concurrency, destructive data behavior, an ownership conflict
@@ -314,7 +289,7 @@ No batch is acceptable on narrative confidence alone.
   dry-run purity, human/JSON output, and error cases.
 - Session batches (CA-15–CA-17) must prove lifecycle state machine transitions,
   bounded memory, budget accounting, and hold interleaving.
-- CA-18 qualifies renderer/runtime/package feasibility; CA-19–CA-23 prove their
+- CA-18 promotes and revalidates accepted renderer/runtime/package evidence; CA-19–CA-23 prove their
   bounded TUI responsibilities; CA-24 independently reproduces 30–10k pack
   scale, long-session replay, and final M6 closure.
 - Reports must record the real commands run, the actual outcome, and any honest
@@ -400,3 +375,46 @@ If the reviewer cannot write that summary precisely, the batch is not ready to a
   temporary fixes, or one-off maintenance flows.
 - If a new workflow is needed, add it to the package-local `nvb.json` task
   surface instead of expanding `package.json` scripts.
+
+## Synchronized 74-batch reasoning authority
+
+This table is the authoritative assignment floor and supersedes earlier illustrative ranking prose.
+
+| Batch | Implementer | Reviewer | Basis |
+|---|---|---|---|
+| CA-01 | R5 | R5 | Identical logical rows/semantic root; path/digest/FK checks; staged immutable publication; linear build |
+| CA-02 | R5 | R5 | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
+| CA-03 | R4 | R4 | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
+| CA-04 | R5 | R5 | DAG/dependency/claim/capacity blockers; no arbitrary winner |
+| CA-05 | R4 | R4 | Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility |
+| CA-06 | R4 | R4 | Unattended/advisory/skill-only classification; hard eligibility; drift invalidation/shared pools; no concrete CLI adapter |
+| CA-07 | R4 | R4 | Stable semantic digest; bounded default context; contradiction/advisor evidence references and impact scope; untrusted-content delimiting |
+| CA-08 | R5 | R5 | Allowlisted queries; provenance/redaction; soft/hard limits; endpoint telemetry quality and shared-pool accounting |
+| CA-09 | R5 | R5 | All 14 proposal types; specification-resolution authority/seal/independence checks; stale/illegal/invalid cases |
+| CA-10 | R5 | R5 | One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync |
+| CA-11 | R4 | R4 | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
+| CA-12 | R4 | R4 | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
+| CA-13 | R5 | R5 | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
+| CA-14 | R4 | R4 | Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity |
+| CA-15 | R4 | R4 | Many sessions; one active turn each; immutable closed history; crash-safe journals |
+| CA-16 | R5 | R5 | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
+| CA-17 | R5 | R5 | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
+| CA-18 | R4 | R4 | Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment |
+| CA-19 | R4 | R4 | Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation |
+| CA-20 | R5 | R5 | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
+| CA-21 | R4 | R4 | All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays |
+| CA-22 | R5 | R5 | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |
+| CA-23 | R5 | R5 | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
+| CA-24 | R5 | R5 | Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate |
+| CA-25 | R5 | R5 | Cycle/escalate/resolution dry-run purity; normal validator/executor only; no command-local authority |
+| CA-26 | R5 | R5 | Explicit confirmation; current-state validation; stale/illegal refusal; sole executor handoff |
+| CA-27 | R5 | R5 | Impact-scoped expiry/interleaving; authority/independence/seal checks; no implicit pack edit |
+| CA-28 | R4 | R4 | Required unattended conformance; bounded argv/env/cwd/result; fresh catalog/model fingerprint |
+| CA-29 | R4 | R4 | Same conformance when installed; explicit healthy not-installed outcome |
+| CA-30 | R5 | R5 | index build [--runtime]; dry-run purity; staged compile/rebuild; current-state validation; no command-local mutation |
+| CA-31 | R5 | R5 | Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior |
+
+
+## Shared Launch Envelope Authorization
+
+Every active work and review prompt has `../agent-launch-contract.md` as a mandatory direct dependency. The launcher must co-deliver that contract, the batch-specific prompt, and paired brief as one self-contained envelope. This is the only permitted deduplication of launch method. A prompt may be concise only when it directly names the contract and still states the exact batch ID/title, dependencies, ownership, proof, implementer/reviewer reasoning floors, report/correction paths, checkout/ownership controls, role authority, and durable handoff or verdict. Missing or stale envelope members reject dispatch; links alone never replace batch-specific scope.

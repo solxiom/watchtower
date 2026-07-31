@@ -1,100 +1,85 @@
-# Review Batch CA-05 — Ordered Routing Policy and Capability Floors
+# Review Batch CA-05 — Ordered routing policy and capability floors
 
-> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-05 ownership and fixture obligations.
+## Synchronized batch execution matrix
 
-## Mandatory Governing References
+- **Accepted-map title:** Ordered routing policy and capability floors
+- **Dependencies:** `CA-04`, `RT-02`, `LC-05`
+- **Exclusive ownership/interface:** routing foundation/verified lane-policy projection
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-05-ordered-routing-policy-and-capability-floors.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-05-ordered-routing-policy-and-capability-floors-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-05-ordered-routing-policy-and-capability-floors-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-This draft brief is subordinate to:
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/CA-05-ordered-routing-policy-and-capability-floors.md
+Dependencies: CA-04, RT-02, LC-05
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: routing foundation/verified lane-policy projection. Own ordered route classification over the verified LC-05 materialized policy and RT-02 manifest provenance. Never hardcode or restate normative policy in TypeScript.
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Independently reproduce Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-## Mandatory Cross-Cutting Acceptance
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+## Synchronized executable contract
 
-Status: ⏳ Awaiting review
-Reasoning: `R4`
-Paired work brief: `work-batches/CA-05-ordered-routing-policy-and-capability-floors.md`
-Implementation report: `.local/agent-reports/coordinator-automation/CA-05-ordered-routing-policy-and-capability-floors.md`
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-## Scope Verification
+- Exact map title: **Ordered routing policy and capability floors**
+- Accepted dependencies: `CA-04`, `RT-02`, `LC-05`
+- Exclusive owner: routing foundation/verified lane-policy projection
+- Required proof claim: Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-coordinator-automation/reviews/CA-05-ordered-routing-policy-and-capability-floors-review.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-05-ordered-routing-policy-and-capability-floors-correction-<NN>.md`
 
-- [ ] `src/foundation/CapabilityFloors.ts` created with `CapabilityFloor`, `DecisionClass` enums and pure mapping functions
-- [ ] `src/foundation/RoutingPolicy.ts` created with all 16 routing rules from `v1-contracts.md §4`
-- [ ] First-match determinism enforced
-- [ ] D1→C2, D2→C3, D3→C5 capability floors
-- [ ] Classification only — no execution, no model invocation, no state mutation
-- [ ] Operator escalation cannot downgrade below knowledge-pack minimum
-- [ ] Economic ordering occurs only after capability/access/freshness/reserve constraints
+### Interface and failure-order contract
 
-## Required Independent Proof
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **routing foundation/verified lane-policy projection**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-1. Independently enumerate all 16 routing rules. Verify exact order matches `v1-contracts.md §4`.
-2. Test every guard condition with positive and negative fixtures.
-3. Prove first-match determinism: same trigger facts → same rule matched every time.
-4. Verify `M0` classification for: no new durable event, heartbeat/session change, unique preauthorized candidate, status queries, uniquely-determined blocker routes.
-5. Verify `D1` classification for: several ready candidates without total priority.
-6. Verify `D2` classification for: reviewer REJECT, ambiguous worker BLOCKED.
-7. Verify `D3` classification for: state contradiction, repeated reject above threshold, pack/source drift.
-8. Verify capability floors: D1 requires C2, D2 requires C3, D3 requires C5.
-9. Verify escalation cannot downgrade below knowledge-pack minimum.
-10. Verify invalid/out-of-schema trigger escalates, never coerced into lower-risk shape.
-11. Run `nvb build` and `nvb test`. Record output.
-12. Verify no model invocation through any routing code path.
-13. Verify `git log` shows the implementation agent did not commit.
-14. Verify free-capable preference among eligible peers and refusal to select a
-    cheaper endpoint that fails any hard constraint.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-## Acceptance Gate
+### Selected adversarial matrix
 
-- All hard-reject checklist items are clear.
-- All 15 rules evaluated in correct priority order.
-- First-match determinism proven.
-- Every guard condition tested.
-- Capability floors enforced correctly.
-- Cost preference cannot weaken eligibility or capability floors.
-- Classification only — no mutation.
-- `nvb build` and `nvb test` pass.
-- Tracker and roadmap updated.
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-## Reject Conditions
+### Reproducible proof and reporting
 
-- Rule order differs from `v1-contracts.md §4`.
-- First-match not deterministic.
-- Capability floor silently downgraded.
-- M0 route invokes a model.
-- Effect execution or state mutation in routing code.
-- Stale tracker/roadmap.
-- Implementation agent committed changes.
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
+
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
+
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
+
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **routing foundation/verified lane-policy projection**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/reviews/CA-05-ordered-routing-policy-and-capability-floors-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`CA-04`, `RT-02`, `LC-05`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **routing foundation/verified lane-policy projection** and **Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-05-ordered-routing-policy-and-capability-floors-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-coordinator-automation/reviews/CA-05-ordered-routing-policy-and-capability-floors-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

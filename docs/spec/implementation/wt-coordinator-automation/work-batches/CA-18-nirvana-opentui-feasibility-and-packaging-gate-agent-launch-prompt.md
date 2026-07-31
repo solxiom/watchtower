@@ -1,22 +1,23 @@
-# Agent Launch Prompt — Work Batch CA-18
+# Agent Launch Prompt — Work Batch CA-18 — Accepted OpenTUI evidence promotion and packaging gate
 
-Include and obey `../agent-launch-contract.md`.
+## Mandatory direct dependencies
 
-Reasoning floor: `R4`
-Paired brief: `CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
-Required predecessors: accepted RT-03, RT-05, CA-14–CA-17 reports
+- [Shared Coordinator automation agent launch contract](../agent-launch-contract.md) — read in full; it supplies the complete implementation method and is not optional.
+- [Exact work brief](CA-18-nirvana-opentui-feasibility-and-packaging-gate.md) — read in full.
+- Accepted implementation map, normative specifications, pack quality rules, current source, accepted predecessor evidence, tracker, and exact checkout.
 
-Mission: execute only the bounded Node/Nirvana/OpenTUI feasibility fixture and
-return `PASS`, `FAIL`, or `SPEC_BLOCKED`. Compare FFI bootstrap strategies,
-prove framework-free imperative core/keymap capability, native packaging,
-global install, terminal restoration, security, and non-TUI command isolation.
+## Complete batch-specific scope
 
-Do not implement operator-session product behavior, mutate a real lane, add
-public commands, select a fallback renderer, or treat a local-machine pass as
-the release matrix. Declare disposable fixture paths before editing.
+- **Title:** Accepted OpenTUI evidence promotion and packaging gate
+- **Dependencies:** `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`
+- **Exclusive ownership/interface:** generic TUI adapter/architecture fixtures
+- **Implementer/reviewer floors:** R4 / R4
+- **Mandatory proof:** Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
+- **Correction report pattern:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-18-nirvana-opentui-feasibility-and-packaging-gate-correction-<NN>.md`
+- **Tracker:** `docs/spec/implementation/wt-coordinator-automation/implementation-tracker.md`
+- **Host control:** use `sudo -u kavan -i` when needed; all edits end `kavan:kavan`; never stage forbidden local/generated paths.
 
-Report:
-`.local/agent-reports/coordinator-automation/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`.
-Hand off exact pinned versions, bootstrap, adapter, platform matrix, artifact
-rules, lifecycle contract, performance baseline, and verdict. Only `PASS`
-unblocks CA-19.
+## Batch-specific execution and handoff
+
+Apply the shared method to the exact ownership and proof above. Enumerate concrete applicable failure cases and proof commands before editing; preserve unrelated work and inspect source rather than trusting reports. Synchronize owned public artifacts and write exact evidence, size/cohesion inventory, ownership and Git status. Do not commit or issue a verdict. Emit durable handoff only when every gate passes; otherwise route the exact blocker/correction without abandoning this lineage.

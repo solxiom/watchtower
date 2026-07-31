@@ -1,282 +1,105 @@
-# Batch CA-14 — Coordinator, Event, and Ready-Set Commands
+# Batch CA-14 — Read-only coordinator, index, event, and ready-set commands
 
-> Mandatory v1 scope: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-14 ownership and fixture obligations.
+## Synchronized batch execution matrix
 
-## Mandatory Governing References
+- **Accepted-map title:** Read-only coordinator, index, event, and ready-set commands
+- **Dependencies:** `CA-01`–`CA-13`
+- **Exclusive ownership/interface:** commands/help/rendering
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-14-coordinator-event-and-ready-set-commands.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-14-coordinator-event-and-ready-set-commands-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-14-coordinator-event-and-ready-set-commands-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-This draft brief is subordinate to:
+Status: ❌ Pending
+Depends on: CA-01–CA-13
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+## Governing authority
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Mandatory Cross-Cutting Acceptance
+## Objective, exact boundary and interfaces
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+Exclusive map ownership: commands/help/rendering.
 
-Status: ❌ Not started
-Pack: wt-coordinator-automation (Pack 5)
-Phase: Commands and rendering
-Depends on: CA-01 through CA-13 accepted
-Owned files: commands in `src/commands/`, help fragments in `help/commands/`, `help/help.json`
+Own read-only index status/verify/explain, coordinator status/context/explain, event and ready-set command/help/rendering. Index build belongs CA-30; cycle/escalation/resolution belongs CA-25.
 
-**Required implementor reasoning class:** `R4`
-**Class rationale:** command surface for the full coordinator automation system, with human/JSON output parity, dry-run purity, help registration, and integration of all predecessor foundation modules. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-## Objective
+## Required implementation and proof
 
-Implement the `wt coordinator` command group — index, status, context, explain,
-cycle, escalate, events, and ready commands. All commands must support dry-run
-(`--dry-run`) and pure mode where applicable. Human-readable and `--json` output
-derive from the same contracts. Every command is registered in `help/help.json`
-with a complete help fragment.
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-## Required Work
+## Hard exclusions and handoff
 
-1. **Read the normative CLI contract.** Study `coordinator-automation.md §19`
-   for the complete CLI command table. Study accepted CA-01 through CA-13 for
-   the foundation modules each command must consume. Study accepted RM-02 for
-   the JSON envelope contract.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-2. **Implement coordinator index commands:**
-   - `wt coordinator index build [--runtime]` — compiles the sealed-pack index
-     (or rebuilds runtime indexes from append-only journals with `--runtime`).
-     Depends on CA-01 pack-index compiler. `--dry-run` validates without writing.
-   - `wt coordinator index status` — reports pack index freshness, digests,
-     counts, compiler compatibility. Read-only. `--json` returns structured data.
-   - `wt coordinator index verify` — verifies index integrity (digests, paths,
-     cross-references, counts). Read-only. `--json` returns verification results.
-   - `wt coordinator index explain <batch-or-requirement>` — shows bounded index
-     references and provenance without loading canonical prose. Read-only.
-     Depends on CA-02 bounded queries.
 
-3. **Implement coordinator status and context commands:**
-   - `wt coordinator status` — shows queue, active cycle, routing, budget, and
-     last outcome. Read-only. Derives from CA-13 queue and CA-05 routing.
-   - `wt coordinator context --class=<D1|D2|D3> --trigger=<event-id>` —
-     previews the decision envelope and size estimates. Read-only. Depends on
-     CA-07 envelope construction and CA-08 budget estimates. `--dry-run` is
-     the default (this command is always read-only).
-   - `wt coordinator explain [--cycle=<id>]` — explains the routing rule,
-     guards, endpoint, proposal, and effect result for a completed or active
-     cycle. Read-only. Depends on CA-05 routing, CA-07 envelopes, and CA-10
-     effect journals.
+## Synchronized executable contract
 
-4. **Implement coordinator cycle and escalate commands:**
-   - `wt coordinator cycle --trigger=<event-id> [--dry-run]` — routes and
-     processes one idempotent cycle. Depends on CA-05 routing, CA-06 adapter
-     eligibility, CA-07 envelopes, CA-08 context broker, CA-09 validator,
-     CA-10 executor, and CA-13 queue/cursor. `--dry-run` routes and builds
-     the envelope but does not invoke an endpoint or execute effects.
-   - `wt coordinator escalate [--cycle=<id>] --reason=<text>` — opens an
-     attention operator session and any policy-required safety hold. Depends
-     on CA-15 session creation (for the escalation session entry). Records
-     `coordinator-escalated` event. `--dry-run` shows the escalation plan
-     without creating a session or hold.
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-5. **Implement events commands:**
-   - `wt events tail [--since=<cursor>]` — reads validated durable events
-     from the coordinator and effect journals. Read-only. Depends on CA-03
-     runtime indexes. `--json` returns an events array with continuation
-     cursor.
-   - `wt events latest [--batch=<id>]` — shows the latest relevant event
-     projection for a batch or the whole lane. Read-only. Depends on CA-03
-     runtime projections.
+- Exact map title: **Read-only coordinator, index, event, and ready-set commands**
+- Accepted dependencies: `CA-01`–`CA-13`
+- Exclusive owner: commands/help/rendering
+- Required proof claim: Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-coordinator-automation/CA-14-coordinator-event-and-ready-set-commands.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-14-coordinator-event-and-ready-set-commands-correction-<NN>.md`
 
-6. **Implement batch-ready command:**
-   - `wt batch ready` — calculates ready candidates and blocking reasons.
-     Read-only. Depends on CA-04 ready-set projection. `--json` returns
-     structured ready/blocked arrays.
+### Interface and failure-order contract
 
-7. **Help registration:**
-   - Register every command in `help/help.json` under the appropriate group
-     (`coordinator`, `events`, `batch`).
-   - Create help fragments in `help/commands/` for every command:
-     `coordinator-index-build.hlp.json`, `coordinator-index-status.hlp.json`,
-     `coordinator-index-verify.hlp.json`, `coordinator-index-explain.hlp.json`,
-     `coordinator-status.hlp.json`, `coordinator-context.hlp.json`,
-     `coordinator-explain.hlp.json`, `coordinator-cycle.hlp.json`,
-     `coordinator-escalate.hlp.json`, `events-tail.hlp.json`,
-     `events-latest.hlp.json`, `batch-ready.hlp.json`.
-   - Help fragments include command syntax, options, examples, and the
-     `--dry-run` and `--json` flags where applicable.
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **commands/help/rendering**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-8. **Output contracts:**
-   - Human output: tables, status lines, and bounded prose using shared
-     rendering utilities.
-   - `--json` output: typed JSON envelopes matching the contracts in
-     RM-02. Human and JSON output derive from the same underlying data
-     — no separate rendering paths that drift.
-   - `--dry-run` output: previews exactly what WOULD happen (effects,
-     mutations, external invocations) without executing any of them.
-   - Dry-run never invokes a model, an endpoint, a Git push, a tmux command,
-     or any external process. It must complete entirely deterministically.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-9. **Command class pattern:**
-   - Each command extends `BaseCommand` and follows the existing pattern
-     in `src/commands/`.
-   - No product logic in `src/cli.ts` — it routes to the command class.
-   - Commands delegate to foundation modules, never duplicate path discovery,
-     config reading, or effect execution.
+### Selected adversarial matrix
 
-## Expected Ownership
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-- `src/commands/CoordinatorIndexBuildCommand.ts` through
-  `src/commands/BatchReadyCommand.ts` — one file per command, following the
-  existing command pattern.
-- `help/commands/` — one help fragment per command.
-- `help/help.json` — updated with all new commands.
-- No command may own business logic that belongs in a foundation module.
+### Reproducible proof and reporting
 
-## Tests And Evidence
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-- **Every command with valid args:** Prove each command runs with valid
-  arguments and produces correct output (human and `--json`).
-- **Every command with invalid args:** Prove each command fails with a clear
-  error and correct exit code for: missing required args, invalid class values,
-  unknown event IDs, missing indexes, and stale indexes.
-- **Dry-run purity:** For every mutating command (`index build`, `cycle`,
-  `escalate`), prove `--dry-run` produces a preview without executing any
-  external process, writing any file, or invoking any model.
-- **Human/JSON parity:** For every read-only command, prove the `--json` output
-  contains the same semantic information as the human output. No information
-  is only available in one format.
-- **Help completeness:** Verify every command is in `help/help.json` and has a
-  valid help fragment. Verify `wt help <command>` works for every command.
-- **Index commands:** Prove `index status` reports correct freshness and counts.
-  Prove `index verify` detects corruption, missing files, and stale indexes.
-  Prove `index explain` returns bounded references without loading prose.
-- **Status command:** Prove `status` shows queue state, active cycle (if any),
-  routing info, and budget.
-- **Context command:** Prove `context` previews the envelope with size estimates
-  and does not invoke a model.
-- **Explain command:** Prove `explain` shows the routing decision, guard inputs,
-  and effect outcome for a given cycle.
-- **Cycle command:** Prove `cycle` with `--dry-run` shows the complete planned
-  processing without execution. Prove `cycle` without `--dry-run` processes a
-  real cycle (when infrastructure is available).
-- **Escalate command:** Prove `escalate` with `--dry-run` shows the escalation
-  plan. Prove `escalate` creates a session and optional hold when executed.
-- **Events commands:** Prove `events tail` paginates and `events latest` shows
-  the correct projection.
-- **Ready command:** Prove `batch ready` calculates correct ready candidates
-  and blocking reasons.
-- **Model-free proof:** No command invokes a model independently of the
-  coordinator cycle pipeline (only `cycle` may route to an endpoint, and only
-  when not in `--dry-run` mode).
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-## What Must Not Change
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-- Do not add product logic to `src/cli.ts`.
-- Do not modify any CA-01 through CA-13 foundation module.
-- Do not duplicate path discovery, config parsing, or effect logic in commands.
-- Do not change the existing command pattern or BaseCommand contract.
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
 
-## Review Procedure Highlights
+## Batch-specific interface and negative-case contract
 
-1. Independently run every command with valid and invalid arguments.
-2. Prove `--dry-run` purity for every mutating command.
-3. Prove human/JSON parity for every read-only command.
-4. Verify help registration completeness.
-5. Verify all commands delegate to foundation, never reimplement.
+The exclusive owned interface set is **commands/help/rendering**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-14-coordinator-event-and-ready-set-commands.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
----
+Accepted predecessor input is exactly **`CA-01`–`CA-13`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity**.
 
-## Required Reasoning Posture
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-The command layer is the public surface for the entire coordinator automation
-system. It must correctly integrate CA-01 through CA-13 without duplicating
-their logic, leaking abstractions, or creating alternative execution paths.
-The implementor must reason about every command's dependency chain and every
-dry-run guarantee.
+Concrete negative proof selected for **commands/help/rendering** and **Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity**:
 
-## Structural And Module-Size Acceptance
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-Line count is a design alarm, never permission to accumulate unrelated work.
-Count physical lines, including comments and blanks, in new and materially
-rewritten hand-maintained files. Generated artifacts are excluded only when
-their generator ownership is explicit and they contain no hand-maintained
-behavior.
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-Use the exact project-wide matrix:
-
-| Category | Preferred maximum | Warning band | Hard reject |
-| --- | ---: | ---: | ---: |
-| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
-| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
-| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
-| Contract/type-only module | 240 | 241–320 | over 400 |
-| Test/spec module | 300 | 301–420 | over 500 |
-
-Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
-target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
-a responsibility inventory and explicit reviewer judgment.
-
-Every module has one primary responsibility and one cohesive reason to change.
-Commands and TaskHandlers validate, normalize, delegate, and map results.
-Orchestrators sequence collaborators without absorbing their algorithms.
-Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
-not accumulate in one owner. Three independently nameable responsibilities
-require a split even below a preferred maximum.
-
-Class-owning TypeScript modules use PascalCase filenames; function/value modules
-use lowerCamelCase. New source filenames do not use dashes or underscores.
-Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
-
-Any size exception must be approved before implementation and name the exact
-file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
-Existing oversized files are not precedent: when touched they become smaller,
-split, or remain line-count neutral under an approved extraction plan.
-
-The implementation report records categorized line counts for every new or
-materially rewritten file plus warning-band functions/constructors. The
-reviewer reproduces those counts and independently judges cohesion. Passing a
-line-count check never overrides the responsibility gate.
-
-# Agent Launch Prompt — Work Batch RT-05
-
-## Required Review Packet
-
-1. Implementation report in `.local/agent-reports/coordinator-automation/`.
-2. All `nvb build` and `nvb test` output.
-3. Command execution output (human and `--json`) for every command.
-4. Dry-run purity evidence for every mutating command.
-5. Help registry completeness verification.
-
-## Completion And Handoff
-
-- Implementation report, updated tracker/roadmap.
-- CA-15 through CA-17 add session services, CA-21 consumes bounded command/
-  query authority, and CA-24 owns session command integration.
-- Leave the exact command list, their help fragments, and their foundation
-  module dependencies for the next agent.
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-coordinator-automation/CA-14-coordinator-event-and-ready-set-commands.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

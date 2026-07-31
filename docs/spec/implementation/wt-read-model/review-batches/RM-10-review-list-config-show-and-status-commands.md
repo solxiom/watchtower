@@ -1,166 +1,83 @@
-# Review Batch RM-10 — `list`, `config show`, And `status` Commands
+# Review Batch RM-10 — `list` and `config show`
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
+- **Accepted-map title:** `list` and `config show`
+- **Dependencies:** `RM-02`, `RM-06`–`RM-08`
+- **Exclusive ownership/interface:** commands, help, identity/config integration specs
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** Human/JSON parity; ambiguity behavior; redaction; read-only proof
+- **Implementation report:** `.local/agent-reports/wt-read-model/RM-10-list-config-show-and-status-commands.md`
+- **Review report:** `.local/agent-reports/wt-read-model/reviews/RM-10-list-config-show-and-status-commands-review.md`
+- **Correction report:** `.local/agent-reports/wt-read-model/reviews/corrections/RM-10-list-config-show-and-status-commands-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/RM-10-list-config-show-and-status-commands.md
+Dependencies: RM-02, RM-06–RM-08
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: commands, help, identity/config integration specs. Own ListCommand, ConfigCommand, their thin foundations/help/specs, redaction and identity/config projections. Status is excluded and owned by RM-12.
 
-## Mandatory Cross-Cutting Acceptance
+Independently reproduce Human/JSON parity; ambiguity behavior; redaction; read-only proof; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
 
-Status: ⏳ Awaiting review
-Reasoning: `R5`
-Paired work brief: `work-batches/RM-10-list-config-show-and-status-commands.md`
-Implementation report: `.local/agent-reports/wt-read-model/RM-10-list-config-show-and-status-commands.md`
+## Synchronized executable contract
 
-## Scope Verification
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-- [ ] `src/commands/ListCommand.ts`, `src/commands/ConfigShowCommand.ts`, `src/commands/StatusCommand.ts`
-- [ ] `help/commands/list.hlp.json`, `help/commands/config-show.hlp.json`, `help/commands/status.hlp.json`
-- [ ] Integration specs for all three commands
+- Exact map title: **`list` and `config show`**
+- Accepted dependencies: `RM-02`, `RM-06`–`RM-08`
+- Exclusive owner: commands, help, identity/config integration specs
+- Required proof claim: Human/JSON parity; ambiguity behavior; redaction; read-only proof
+- Reasoning floor: implementer **R5**, independent reviewer **R5**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-read-model/reviews/RM-10-list-config-show-and-status-commands-review.md`
+- Correction report pattern: `.local/agent-reports/wt-read-model/reviews/corrections/RM-10-list-config-show-and-status-commands-correction-<NN>.md`
 
-## Required Independent Proof
+### Interface and failure-order contract
 
-1. **Human/JSON parity — list**: Run `wt list` in human mode and `--json` mode. Verify both outputs derive from identical data. Human output must include lane ID, slug, initiative, kind, control home, repository count, lane status, active batch, runtime version, and conflict state. JSON output must validate against `$defs.laneListPage` in `v1.schema.json`.
-2. **Human/JSON parity — config show**: Run `wt config show` in human mode and `--json` mode. Verify both outputs derive from identical data. JSON output must validate against `$defs.resolvedConfig` in `v1.schema.json`.
-3. **Human/JSON parity — status**: Run `wt status` in human mode and `--json` mode. Verify both outputs derive from identical data. JSON output must validate against `$defs.laneStatus` in `v1.schema.json`. Verify the health field is one of `ok`, `attention`, `complete`, or `invalid`.
-4. **Redaction proof**: Set up a config with keys containing `TOKEN`, `SECRET`, `PASSWORD`, `KEY`, or `CREDENTIAL`. Verify values are redacted in both human and JSON output. Confirm redacted keys are identified in JSON output.
-5. **Empty fixture**: With no relevant lanes, `wt list` must return an empty array in JSON mode and a clear "no lanes" message in human mode. `wt status` and `wt config show` must return not-found errors (exit code 3).
-6. **Single-lane fixture**: With exactly one relevant lane, all three commands succeed and produce correct output.
-7. **Ambiguous fixture**: With multiple lanes without disambiguation, all three commands must fail with an ambiguity error (exit code 3) showing candidate lane IDs, slugs, and control homes.
-8. **Invalid fixture**: With a lane containing a malformed `lane.json` (missing schemaVersion, bad structure), commands targeting that lane must fail with an invalid error (exit code 2).
-9. **Multi-repository fixture**: With a lane bound to multiple repositories, verify `status` displays all bindings (logical ID, local path, branch, access, worktree mode) and `config show` displays resolution sources for each.
-10. **Stale-index fixture**: With stale membership-index entries (paths no longer valid), verify `status` reports warnings without repair.
-11. **Busy-lock fixture**: With a lock file present in the lane directory, verify `status` reports that a mutation is active without attempting to acquire or remove the lock.
-12. **Read-only hash proof**: For each command, compute a SHA-256 hash of the lane directory before and after execution. Verify the hashes are identical (zero bytes written).
-13. **Help fragments**: Verify `help/commands/list.hlp.json`, `help/commands/config-show.hlp.json`, and `help/commands/status.hlp.json` are present and registered in `help/help.json`. Run `wt help list`, `wt help config show`, and `wt help status`. Verify output matches command behavior.
-14. **No foundation reimplementation**: Audit each command source file. Verify each delegates to foundation services for discovery, selection, parsing, serialization, bindings, conflicts, and observations. No duplicate discovery or path logic must exist in command classes.
-15. Run `nvb build` and `nvb test` independently.
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **commands, help, identity/config integration specs**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-## Required Reasoning Posture
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-The reviewer must reason from the governing specifications and current source,
-not from the implementation report alone. This batch is the integration point
-for all nine foundation services. Every fixture class must be independently
-reproduced. The read-only hash proof must be recomputed rather than accepted
-from the report. Human/JSON parity must be verified by comparing output from
-both modes, not by reading the implementation.
+### Selected adversarial matrix
 
-## Structural And Module-Size Acceptance
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-Line count is a design alarm, never permission to accumulate unrelated work.
-Count physical lines, including comments and blanks, in new and materially
-rewritten hand-maintained files. Generated artifacts are excluded only when
-their generator ownership is explicit and they contain no hand-maintained
-behavior.
+### Reproducible proof and reporting
 
-Use the exact project-wide matrix:
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-| Category | Preferred maximum | Warning band | Hard reject |
-| --- | ---: | ---: | ---: |
-| CLI command, NVB TaskHandler/front door, registry, renderer, public barrel | 120 | 121–160 | over 180 |
-| Orchestrator, controller, coordinator, presenter | 140 | 141–180 | over 200 |
-| Foundation service, planner, validator, adapter, store | 200 | 201–260 | over 300 |
-| Contract/type-only module | 240 | 241–320 | over 400 |
-| Test/spec module | 300 | 301–420 | over 500 |
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-Functions target 40 lines, warn at 41–60, and reject above 80. Constructors
-target 25 lines, warn at 26–40, and reject above 50. Warning-band owners require
-a responsibility inventory and explicit reviewer judgment.
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-Every module has one primary responsibility and one cohesive reason to change.
-Commands and TaskHandlers validate, normalize, delegate, and map results.
-Orchestrators sequence collaborators without absorbing their algorithms.
-Storage, validation, rendering, subprocess/leaf I/O, and state-machine policy do
-not accumulate in one owner. Three independently nameable responsibilities
-require a split even below a preferred maximum.
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
 
-Class-owning TypeScript modules use PascalCase filenames; function/value modules
-use lowerCamelCase. New source filenames do not use dashes or underscores.
-Generic `helpers`, `utils`, `common`, and `misc` overflow bags are rejected.
+## Batch-specific interface and negative-case contract
 
-Any size exception must be approved before implementation and name the exact
-file, proposed maximum, cohesion reason, reviewer, and expiry/follow-up batch.
-Existing oversized files are not precedent: when touched they become smaller,
-split, or remain line-count neutral under an approved extraction plan.
+The exclusive owned interface set is **commands, help, identity/config integration specs**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-read-model/reviews/RM-10-list-config-show-and-status-commands-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-The implementation report records categorized line counts for every new or
-materially rewritten file plus warning-band functions/constructors. The
-reviewer reproduces those counts and independently judges cohesion. Passing a
-line-count check never overrides the responsibility gate.
+Accepted predecessor input is exactly **`RM-02`, `RM-06`–`RM-08`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Human/JSON parity; ambiguity behavior; redaction; read-only proof**.
 
-# Agent Launch Prompt — Work Batch RT-05
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-## Required Review Packet
+Concrete negative proof selected for **commands, help, identity/config integration specs** and **Human/JSON parity; ambiguity behavior; redaction; read-only proof**:
 
-The review report must include: independently rerun proof commands and outcomes
-for all 15 proof items, structural verification results, line-count verification,
-read-only hash proof (before/after hashes for each command), human/JSON parity
-comparison, tracker/roadmap sync status, and the acceptance or rejection decision.
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-## Acceptance Gate
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-The batch is accepted only when:
-
-- All 7 fixture classes pass for all three commands.
-- Human and JSON output derive from identical data for every command.
-- Redaction works in both output modes for all sensitive key patterns.
-- JSON output validates against `v1.schema.json` for each command's schema
-  definition.
-- The read-only hash proof confirms zero bytes written for every command.
-- Help fragments match command behavior and are registered in `help/help.json`.
-- No command reimplements foundation logic.
-- All hard-reject checklist items are clear.
-- `nvb build` and `nvb test` pass independently.
-- Tracker and roadmap are updated.
-- `docs/spec/v1.md` command status table is updated (list, config show, status
-  marked ✅).
-- No `.local/` artifacts are staged.
-- The implementation agent did not commit.
-
-## Reject Conditions
-
-- Any fixture class fails for any command.
-- Human and JSON output diverge.
-- Sensitive keys are not redacted.
-- JSON output does not validate against `v1.schema.json`.
-- Any command writes bytes to the lane directory.
-- A command reimplements foundation logic.
-- Help fragments are missing, unregistered, or do not match command behavior.
-- Stale tracker/roadmap or `v1.md` status table.
-- Committed `.local/` artifacts.
-- Implementation agent committed changes.
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-read-model/reviews/corrections/RM-10-list-config-show-and-status-commands-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-read-model/reviews/RM-10-list-config-show-and-status-commands-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

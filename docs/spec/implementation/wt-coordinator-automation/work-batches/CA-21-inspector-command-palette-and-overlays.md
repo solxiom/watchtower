@@ -1,111 +1,105 @@
-# Batch CA-21 — Inspector Views, Command Palette, and Overlays
+# Batch CA-21 — Inspector views, command palette, and overlays
 
-## Authority And Status
+## Synchronized batch execution matrix
 
-Governing sources: `AGENTS.md`, the mandatory engineering standard,
-`v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
-`architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, `tui-operational-experience.md`, and pack quality rules.
-Required interfaces are normative in this pack's
-`tui-interface-contracts.md §CA-21 Inspector And Action Contract`.
+- **Accepted-map title:** Inspector views, command palette, and overlays
+- **Dependencies:** `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27`
+- **Exclusive ownership/interface:** inspector/action/overlay components
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-21-inspector-command-palette-and-overlays-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-21-inspector-command-palette-and-overlays-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ❌ Not started
-Depends on: CA-14, CA-17, and CA-19 accepted
-Unblocks: CA-22
-Reasoning floor: implementor `R4`; reviewer `R4`
+Status: ❌ Pending
+Depends on: CA-14, CA-17, CA-19, CA-26, CA-27
 
-## Objective
+## Governing authority
 
-Implement bounded contextual inspection and discoverable actions: the closed
-nine-view inspector registry, command palette, pickers, help/details/settings,
-and fail-closed confirmation overlays over shared Watchtower query and command
-authority.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Owned Capabilities
+## Objective, exact boundary and interfaces
 
-- inspector registry and sessions/lane/batches/agents/budgets/holds/proposals/
-  events/context view presenters
-- bounded inspector-query controller with cancellation/revision handling
-- central command palette over the CA-19 action registry
-- overlay models for picker, help, details, settings, and confirmation
-- typed action dispatch from UI intention to shared application capability
-- projection-only agent/allocation inspector, bounded global search/attention,
-  and TUI diagnostic result presentation
+Exclusive map ownership: inspector/action/overlay components.
 
-Exact owned production modules:
+Own inspector/action/overlay UI over accepted read projections, CA-26 confirmation and CA-27 hold/amendment services. No direct effect or policy authority.
 
-- `src/contracts/tuiInspector.ts`
-- `src/presentation/tui/InspectorRegistry.ts`
-- `src/presentation/tui/InspectorQueryController.ts`
-- `src/presentation/tui/Inspector.ts`
-- `src/presentation/tui/CommandPalette.ts`
-- `src/presentation/tui/OverlayController.ts`
-- `src/presentation/tui/ConfirmationOverlay.ts`
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-The nine view presenters are cohesive modules under
-`src/presentation/tui/inspectorViews/`, one named `<View>InspectorView.ts` per
-closed registry entry. Exact focused specs mirror those names under
-`spec/basic/tui/`; confirmation integration is
-`spec/integration/tui/ConfirmationOverlaySpec.ts`.
+## Required implementation and proof
 
-## Required Interfaces And Work
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-1. Consume CA-14 bounded commands/queries, CA-17 session proposal/hold/budget
-   capabilities, and CA-19 shell/action/overlay ports. Do not duplicate them.
-2. Implement every `cli-session.md §5.2` view with loading, empty, stale,
-   truncated, unavailable, and error states. Every page has finite limits and
-   stable cursors/revisions; unavailable indexes fail closed.
-3. Selection may navigate retained content, open bounded details, insert an
-   authorized reference, or invoke a registered action. Selection alone never
-   mutates state or invokes a model.
-4. Palette and slash surfaces share one closed action registry and availability
-   policy. Display mutation class, confirmation, observer eligibility, disabled
-   reason, and current key binding.
-5. Confirmation overlays show exact proposed action/effect, target, snapshot,
-   risk, staleness, and choices. Focus is trapped; escape/cancel applies no
-   effect. Confirmation delegates to CA-17 and never executes directly.
-6. Prevent hidden-view polling, unbounded fan-out, stale result replacement,
-   secret exposure, and action bypass through mouse or palette routes.
-7. The agents view consumes only approved inventory/allocation/capacity
-   projections and represents unknown, stale, estimated, and unavailable data
-   exactly; refresh delegates to the authorized model-free capability.
-8. Implement index-bounded global search and ordered P1–P4 attention
-   navigation. Diagnostic surfaces render stable redacted `doctor --tui`
-   results but do not own checks, reports, repair, or filesystem discovery.
+## Hard exclusions and handoff
 
-## Exclusions
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-- No inspector model summarization, journal/full-pack scanning, direct store or
-  provider imports, shell command palette, arbitrary `wt` command execution, or
-  alternate effect path.
-- No streaming/concurrent refresh policy (CA-22), terminal lifecycle/security
-  qualification (CA-23), or command-class/help integration (CA-24).
 
-## Required Proof
+## Synchronized executable contract
 
-- All nine views across all seven data states with page/cursor/truncation
-  assertions and zero-model proof.
-- Query cancellation and stale-revision races; hidden views do not poll.
-- Palette discoverability, search bounds, action parity, disabled reasons,
-  observer filtering, focus trap/restoration, and keyboard/mouse parity.
-- Agent/allocation source-boundary, freshness, charging/telemetry-quality, and
-  unavailable-state proof; no host, credential, network, or provider scan.
-- Search/attention/diagnostic fixtures prove bounds, ordering, redaction, and
-  zero model use.
-- Confirmation accept/cancel/stale/illegal/expired cases prove CA-17
-  revalidation and CA-10 effect authority remain mandatory.
-- Adversarial labels/metadata are sanitized and secrets redacted.
-- `nvb build`, `nvb test`, architecture gates, line counts, and Nirvana audit.
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-## Documentation And Report
+- Exact map title: **Inspector views, command palette, and overlays**
+- Accepted dependencies: `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27`
+- Exclusive owner: inspector/action/overlay components
+- Required proof claim: All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-21-inspector-command-palette-and-overlays-correction-<NN>.md`
 
-No public command change is expected. Write
-`.local/agent-reports/coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`
-with registry/action matrices, bounded-query proof, confirmation traces, files,
-line counts, and CA-22 handoff. Do not commit.
+### Interface and failure-order contract
 
-## Independent Review
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **inspector/action/overlay components**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-Use `../review-batches/CA-21-review-inspector-command-palette-and-overlays.md`.
-The reviewer independently regenerates all view states, bounds, action parity,
-confirmation authority, security, structure, and tests.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
+
+### Selected adversarial matrix
+
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves every read-only, preview, audit, query, and diagnostic path performs no repair or authoritative mutation;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+### Reproducible proof and reporting
+
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
+
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
+
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
+
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **inspector/action/overlay components**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **inspector/action/overlay components** and **All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- a before/after byte inventory proves read-only, preview, audit, query, and diagnostic paths perform no repair or authoritative mutation;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

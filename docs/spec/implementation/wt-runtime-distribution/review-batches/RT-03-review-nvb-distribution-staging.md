@@ -1,125 +1,85 @@
-# Review Batch RT-03 — NVB Distribution Staging
+# Review Batch RT-03 — Packaged runtime and distribution staging
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
+- **Accepted-map title:** Packaged runtime and distribution staging
+- **Dependencies:** `RT-02`, `RT-08`–`RT-10`, `DB-01`
+- **Exclusive ownership/interface:** dist configuration and packaged aggregate validation
+- **Implementer/reviewer floor:** R3 / R3
+- **Mandatory batch proof:** Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback
+- **Implementation report:** `.local/agent-reports/wt-runtime-distribution/RT-03-nvb-distribution-staging.md`
+- **Review report:** `.local/agent-reports/wt-runtime-distribution/reviews/RT-03-nvb-distribution-staging-review.md`
+- **Correction report:** `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-03-nvb-distribution-staging-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- `docs/spec/tui-operational-experience.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/RT-03-nvb-distribution-staging.md
+Dependencies: RT-02, RT-08–RT-10, DB-01
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: dist configuration and packaged aggregate validation. Own dist staging and packaged aggregate validation. Consume exact RT-08 artifacts, RT-09 catalogs/profiles, RT-10 baseline handlers and DB-01 native closure; never use source links.
 
-## Mandatory Cross-Cutting Acceptance
+Independently reproduce Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
 
-Status: ❌ Pending
-Reviews work batch: RT-03
-Depends on: RT-03 implementation complete, implementation report written
+## Synchronized executable contract
 
-**Required reviewer reasoning class:** `R3`
-**Class rationale:** bounded build-automation validation with explicit output verification. The class is a floor.
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-## Scope Verification
+- Exact map title: **Packaged runtime and distribution staging**
+- Accepted dependencies: `RT-02`, `RT-08`–`RT-10`, `DB-01`
+- Exclusive owner: dist configuration and packaged aggregate validation
+- Required proof claim: Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback
+- Reasoning floor: implementer **R3**, independent reviewer **R3**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-runtime-distribution/reviews/RT-03-nvb-distribution-staging-review.md`
+- Correction report pattern: `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-03-nvb-distribution-staging-correction-<NN>.md`
 
-Apply `docs/spec/tui-operational-experience.md §2`: target tuples remain exact,
-checksum-pinned manifest records and no optional native/TUI target is promoted
-from evidence gathered on a different OS/architecture/libc/Node tuple.
+### Interface and failure-order contract
 
-Confirm that the packaged Watchtower NVB runtime contains generated validated
-config/catalog aggregates, focused pinned-public-API TaskHandlers, structured
-event/result contracts, runtime and knowledge assets, and the
-DB-01-selected driver. Confirm repository NVB build/dist tasks produce a
-complete reproducible `dist/` tree. `LaneTaskRunner` and managed-link logic
-remain outside this batch.
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **dist configuration and packaged aggregate validation**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-## Required Independent Proof
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-1. Run `nvb dist` from a clean state. Inspect the `dist/` tree structure.
-2. Compare `dist/runtime/` contents with RT-01 inventory and RT-02 manifest
-   types — every inventoried script must be present.
-3. Compare `dist/knowledge/` contents — every inventoried doc must be present.
-4. Inspect every `runtime-nvb/catalog/` fragment and handler. Verify each
-   handler extends the pinned public `TaskHandler` export, owns one mechanical
-   capability, and contains no product policy, terminal rendering, or mutation
-   authority.
-5. Rebuild `runtime-nvb.json` and `task-catalog.json`; verify exact agreement
-   with fragments/handlers and rejection of duplicate IDs, missing handlers,
-   unknown actions, stale generated aggregates, and mismatched input/result
-   schemas.
-6. Verify packaged `runtime-nvb.json`, compiled module, task catalog, handlers,
-   and manifest are complete and load from the relocated `dist/` tree.
-7. Run `wt:runtime:validate` independently. Assert exit 0 on correct dist.
-8. Independently test each rejection path:
-   - remove a file from `dist/runtime/coordinator/` → validation fails
-   - add an extra file to `dist/runtime/` → validation fails
-   - modify a runtime script's content → checksum mismatch
-   - remove execute bit from an `executable: true` script → mode mismatch
-9. Verify executable bits on runtime scripts: `stat -c '%a'` shows 755 or
-   higher owner-execute.
-10. Prove reproducible builds: run `nvb dist` twice, compute SHA-256 of every
-   `dist/` file, assert identical.
-11. Verify the DB-01-selected driver resolves in a clean global install on the
-    current target and inspect CI/artifact proof for every additional supported
-    target. Reject a claim that one host proves another ABI/platform.
-12. Verify the repository's real `nvb.json`/handler conventions were used,
-    `nira.json` remains ecosystem metadata, and no invented `dist.nvb` exists.
-13. Confirm `nvb build` still compiles TypeScript.
-14. Confirm no npm convenience scripts were added.
-15. Run architecture, naming, size, and ownership checks.
+### Selected adversarial matrix
 
-## Acceptance Gate
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-Accept only if `dist/` matches the full packaged task-runtime layout, generated
-aggregates match reviewed fragments, every focused handler uses the pinned
-public API and structured contracts, runtime/knowledge/driver assets are
-complete, validation rejects all tampering, target claims have real evidence,
-executable bits and reproducibility hold, and no invented NVB format, npm
-shortcut, `LaneTaskRunner`, or managed-link scope entered the batch.
+### Reproducible proof and reporting
 
-## Rejection Correction Brief Rule
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-- `docs/spec/implementation/wt-runtime-distribution/review-batches/corrections/RT-03-correction-<N>.md`
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-## Required Disk Report
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-- `.local/agent-reports/wt-runtime-distribution/reviews/RT-03-nvb-distribution-staging-review.md`
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
 
-If accepted, create the acceptance commit.
+## Batch-specific interface and negative-case contract
 
-## User / Ownership Rule
+The exclusive owned interface set is **dist configuration and packaged aggregate validation**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-runtime-distribution/reviews/RT-03-nvb-distribution-staging-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-If you are not already running as `kavan`, use `sudo -u kavan -i` for commands
-and ensure every edited file ends up owned by `kavan`.
+Accepted predecessor input is exactly **`RT-02`, `RT-08`–`RT-10`, `DB-01`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback**.
 
-## Always plan and make task lists
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **dist configuration and packaged aggregate validation** and **Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-03-nvb-distribution-staging-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-runtime-distribution/reviews/RT-03-nvb-distribution-staging-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

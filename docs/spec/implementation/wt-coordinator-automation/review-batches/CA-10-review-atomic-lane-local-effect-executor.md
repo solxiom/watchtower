@@ -1,112 +1,85 @@
-# Review Batch CA-10 — Atomic Lane-Local Effect Executor
+# Review Batch CA-10 — Atomic lane-local effect executor and invocation envelopes
 
-> Mandatory v1 gate: [`../specification-resolution-batch-amendment.md`](../specification-resolution-batch-amendment.md), CA-10 ownership and fixture obligations.
+## Synchronized batch execution matrix
 
-## Mandatory Governing References
+- **Accepted-map title:** Atomic lane-local effect executor and invocation envelopes
+- **Dependencies:** `LC-03`, `CA-09`
+- **Exclusive ownership/interface:** effect foundation/NVB task boundary
+- **Implementer/reviewer floor:** R5 / R5
+- **Mandatory batch proof:** One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-10-atomic-lane-local-effect-executor.md`
+- **Review report:** `.local/agent-reports/wt-coordinator-automation/reviews/CA-10-atomic-lane-local-effect-executor-review.md`
+- **Correction report:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-10-atomic-lane-local-effect-executor-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-This draft brief is subordinate to:
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/CA-10-atomic-lane-local-effect-executor.md
+Dependencies: LC-03, CA-09
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: effect foundation/NVB task boundary. Own the sole EffectExecutor and invocation envelope with JsonValue/closed pre/postconditions, lock/revalidation/idempotency and atomic pack activation. No command/model alternate mutation or automatic Git synchronization.
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Independently reproduce One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-## Mandatory Cross-Cutting Acceptance
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+## Synchronized executable contract
 
-Status: ⏳ Awaiting review
-Reasoning: `R5`
-Paired work brief: `work-batches/CA-10-atomic-lane-local-effect-executor.md`
-Implementation report: `.local/agent-reports/coordinator-automation/CA-10-atomic-lane-local-effect-executor.md`
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-## Scope Verification
+- Exact map title: **Atomic lane-local effect executor and invocation envelopes**
+- Accepted dependencies: `LC-03`, `CA-09`
+- Exclusive owner: effect foundation/NVB task boundary
+- Required proof claim: One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync
+- Reasoning floor: implementer **R5**, independent reviewer **R5**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-coordinator-automation/reviews/CA-10-atomic-lane-local-effect-executor-review.md`
+- Correction report pattern: `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-10-atomic-lane-local-effect-executor-correction-<NN>.md`
 
-- [ ] `src/foundation/EffectPlan.ts` created with `EffectPlanner`
-- [ ] `src/foundation/EffectExecutor.ts` created with `EffectExecutor`
-- [ ] Complete effect registry matching `v1-contracts.md §5`
-- [ ] Lock acquisition before any mutation
-- [ ] Current-state revalidation before commit
-- [ ] Idempotency key verification
-- [ ] All-or-nothing execution with rollback on partial failure
-- [ ] External effects use prepare/attempt/verify journal states
-- [ ] Effect preview without mutation
-- [ ] No raw mutation commands exposed through public CLI
+### Interface and failure-order contract
 
-## Mandatory Task-Boundary Proof
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **effect foundation/NVB task boundary**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-Independently verify that mutating packaged TaskHandlers are reachable only from
-the sole executor through a CA-10 single-use invocation envelope. Reproduce
-forged, expired, reused, wrong-action/effect, stale-snapshot, tampered, and
-concurrent-double-consumption failures. Verify the envelope contains no
-arbitrary task/config/module/path/command/environment and structured NVB
-events/results remain attempt evidence rather than authority or journal truth.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-## Required Independent Proof
+### Selected adversarial matrix
 
-1. Test lock acquisition: two concurrent effect attempts → second is blocked until first completes.
-2. Test lock release: after completion or rollback, lock is released.
-3. Test current-state revalidation: validate proposal, change lane state externally, attempt effect → rejected.
-4. Test idempotency key: execute effect with key X, retry with same key X → rejected.
-5. Test all-or-nothing: execute effect plan with 3 effects; fail the 2nd → all lane-local effects rolled back, external effects not attempted.
-6. Test lane-local atomic commit: all effects succeed → projections and journals updated atomically.
-7. Test external-effect journal: tmux launch effect → prepare recorded, attempt recorded, verify recorded. Verify recovery reads journal rather than repeating unknown effect.
-8. Test crash recovery: simulate crash during effect execution → restart → recovery reads journal and determines next safe action.
-9. Test effect preview: `previewEffectPlan` produces correct human-readable output without any mutation.
-10. Verify the public CLI has no `wt state set` or arbitrary mutation commands.
-11. Run `nvb build` and `nvb test`. Record output.
-12. Verify `git log` shows the implementation agent did not commit.
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- duplicate, replay, stale-current-state, concurrent-writer, interrupted-effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-## Acceptance Gate
+### Reproducible proof and reporting
 
-- All hard-reject checklist items are clear.
-- Exactly one effect authority for a lane (lock enforces).
-- Current-state revalidation blocks stale effects.
-- Idempotency keys prevent duplicate execution.
-- All-or-nothing: partial failure → complete lane-local rollback.
-- External effects have prepare/attempt/verify journals.
-- Crash recovery reads journal, never repeats unknown effects.
-- No raw mutation commands in public CLI.
-- `nvb build` and `nvb test` pass.
-- Tracker and roadmap updated.
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-## Reject Conditions
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-- Concurrent mutation allowed (lock bypass).
-- Stale state not detected before commit.
-- Idempotency key not enforced.
-- Partial failure leaves lane-local state partially mutated.
-- External effect executed without prepare/attempt/verify journal.
-- Crash recovery repeats an unknown effect.
-- Raw mutation command exposed in CLI.
-- Stale tracker/roadmap.
-- Implementation agent committed changes.
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
+
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
+
+## Batch-specific interface and negative-case contract
+
+The exclusive owned interface set is **effect foundation/NVB task boundary**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/reviews/CA-10-atomic-lane-local-effect-executor-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
+
+Accepted predecessor input is exactly **`LC-03`, `CA-09`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **effect foundation/NVB task boundary** and **One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- replay, stale-current-state, concurrent writer, interrupted effect, and before/after-commit failure points prove idempotency or deterministic refusal;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-10-atomic-lane-local-effect-executor-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-coordinator-automation/reviews/CA-10-atomic-lane-local-effect-executor-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

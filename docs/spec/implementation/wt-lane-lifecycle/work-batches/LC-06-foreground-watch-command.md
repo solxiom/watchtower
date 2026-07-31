@@ -1,228 +1,103 @@
-# Work Batch LC-06 — Foreground Watch Command
+# Batch LC-06 — Foreground `watch` command
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+- **Accepted-map title:** Foreground `watch` command
+- **Dependencies:** `LC-09`, `RT-07`
+- **Exclusive ownership/interface:** watch command/runtime adapter
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization
+- **Implementation report:** `.local/agent-reports/wt-lane-lifecycle/LC-06-foreground-watch-command.md`
+- **Review report:** `.local/agent-reports/wt-lane-lifecycle/reviews/LC-06-foreground-watch-command-review.md`
+- **Correction report:** `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-06-foreground-watch-command-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Implementation reasoning: R4
-Review reasoning: R4
-Depends on: LC-05, RT-07
-Workload: medium
+Depends on: LC-09, RT-07
 
-## Scope
+## Governing authority
 
-Implement the `wt watch` command. Preflight the lane, export the runtime
-invocation context, and run the manifest-selected bundled watcher through the
-proven foreground lifecycle boundary. Stdout/stderr passthrough. Ctrl-C
-terminates the foreground process group. No daemonization. The command remains
-a thin front door; a focused foundation service owns preflight and foreground
-process lifecycle.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Specification References
+## Objective, exact boundary and interfaces
 
-| Reference | Section | Topic |
-|-----------|---------|-------|
-| v1.md | §11.4 | Watch command behavior: validates lane, exports env, execs watcher, no daemonize |
-| v1.md | §12 | Runtime invocation contract: WT_* environment variables |
-| v1.md | §14 | Watcher must not daemonize, use model for idle polling, or infer lifecycle from tmux prose |
-| v1-contracts.md | §8 | Watch rejects --json |
-| architecture.md | §4.5 | Lane task runtime and leaf adapter |
-| architecture.md | §6.3 | Runtime execution flow |
-| nirvana-integration-architecture.md | §§4.5, 4.7, 9 | Task runner, leaf boundary, foreground-watcher exception, and shell migration |
+Exclusive map ownership: watch command/runtime adapter.
 
-## Owned Files
+Own WatchCommand and foreground exec/preflight integration. Consume the LC-09 activated index and RT-07 runtime; no daemon, repair or duplicate index logic.
 
-### New command
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-- `src/commands/WatchCommand.ts` — validates lane, exports invocation context,
-  delegates to the foreground service, and maps typed results
-- `src/foundation/ForegroundWatcher.ts` — owns manifest/profile resolution,
-  preflight planning, sanitized environment construction, stdio/signal/exit
-  semantics, and the proven foreground runtime path
+## Required implementation and proof
 
-## Dependencies
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-### From this pack
+## Hard exclusions and handoff
 
-- **LC-05** (coordinator baselines and pack index): watch preflight reads
-  routing-policy.json and pack-index.json to validate lane readiness.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.
 
-### From pack 2 (wt-runtime-distribution)
 
-- **RT-07** (watcher and runtime smoke): the watcher binary is packaged and
-  verified. WatchCommand validates the watcher exists and is executable.
+## Synchronized executable contract
 
-## Required Interfaces
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-### WatchCommand
+- Exact map title: **Foreground `watch` command**
+- Accepted dependencies: `LC-09`, `RT-07`
+- Exclusive owner: watch command/runtime adapter
+- Required proof claim: Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact implementation report: `.local/agent-reports/wt-lane-lifecycle/LC-06-foreground-watch-command.md`
+- Correction report pattern: `.local/agent-reports/wt-lane-lifecycle/reviews/corrections/LC-06-foreground-watch-command-correction-<NN>.md`
 
-```typescript
-export default class WatchCommand extends BaseCommand implements Command {
-  name: "watch";
-  group: "lane";
-  // Parses --lane, --workspace; delegates one request to ForegroundWatcher;
-  // maps the typed result to terminal output and exit status.
-}
+### Interface and failure-order contract
+
+Before editing, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **watch command/runtime adapter**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
+
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
+
+### Selected adversarial matrix
+
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+### Reproducible proof and reporting
+
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
+
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
 ```
 
-## Implementation Steps
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-1. **Create `src/commands/WatchCommand.ts`**
-   - Extend BaseCommand; name `"watch"`; group `"lane"`
-   - Parse global options: `--lane`, `--workspace`
-   - Reject `--json` (watch is a foreground runtime attachment)
-   - Preflight:
-     - Resolve workspace via RM-03
-     - Discover and select lane via RM-06 (or explicit --lane)
-     - Validate lane exists and has valid `lane.json` and `install.json`
-     - Validate runtime version in install.json is staged via RT-04 catalog
-     - Validate coordinator baselines exist (routing-policy.json,
-       pack-index.json) via LC-05 output
-     - Validate pack index matches active seal
-     - Check for active watcher already running (via heartbeat/lock)
-   - Construct invocation context:
-     - Build `WT_*` environment variables per v1.md §12:
-       - `WT_WORKSPACE` — control home path
-       - `WT_LANE_ID` — lane UUID
-       - `WT_INITIATIVE_ID` — initiative ID
-       - `WT_LANE_SLUG` — lane slug
-       - `WT_LANE_DIR` — `.watchtower/lanes/{slug}`
-       - `WT_HOME_REPOSITORY_ID` — control home repo ID
-       - `WT_REPOSITORIES_FILE` — path to `repositories.local.json`
-       - `WT_ACTIVE_REPOSITORY_ID` — control home repo (watcher default)
-       - `WT_RUNTIME_ROOT` — stage runtime root
-       - `WT_RUNTIME_VERSION` — pinned runtime version
-       - `WT_KNOWLEDGE_ROOT` — knowledge pack root
-     - Resolve the watcher action and entrypoint from the checksum-verified
-       runtime catalog plus the lane-pinned task profile. Never hardcode a
-       filename, assume the entrypoint is shell, or consult project `nvb.json`.
-     - Verify the declared entrypoint exists, is a regular executable managed
-       asset, and matches its manifest checksum.
-   - Exec watcher:
-     - Use `ForegroundWatcher` and RT-05's proven foreground invocation
-       capability. If RT-05 proves NVB foreground stdin/signal semantics, use
-       the exact catalog action through `LaneTaskRunner`; otherwise keep the
-       foreground watcher on its manifest-declared compatibility path through
-       the narrow Nirvana `cmd`-based central adapter allowed by
-       `nirvana-integration-architecture.md §9`.
-     - Construct an explicit environment allowlist. Never merge or forward all
-       of `process.env`; parent secrets and undeclared keys must not reach the
-       watcher or diagnostics.
-     - Inherit stdin, stdout, stderr
-     - Forward signals: SIGINT (Ctrl-C) → terminate foreground process group
-     - Forward SIGTERM → terminate foreground process group
-     - Preserve exit code
-   - Handle errors:
-     - Missing lane → exit 3
-     - Missing watcher → exit 4
-     - Corrupt checksum → exit 4
-     - Runtime not staged → exit 4
-     - Watcher already running → exit 5
-     - Stale pack index → exit 4
+Do not commit and do not issue a verdict. Update the pack tracker only to a truthful handoff/correction state, leave unrelated batches unchanged, and emit exactly one replay-safe handoff after every gate passes. On correction, retain the same batch lineage, address the numbered correction brief, rerun all impacted gates plus the original acceptance proof, and issue a fresh handoff.
 
-2. **Create help/commands/watch.hlp.json**
-   - Describe watch command, syntax, preflight steps
-   - Document signal behavior: Ctrl-C terminates, stdout/stderr passthrough
-   - Document that --json is rejected
+## Batch-specific interface and negative-case contract
 
-3. **Register in help/help.json**
+The exclusive owned interface set is **watch command/runtime adapter**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-lane-lifecycle/LC-06-foreground-watch-command.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-4. **Write focused specs**
-   - `spec/commands/WatchCommand.spec.ts`: lane selection, preflight
-     delegation, result mapping, and error cases
-   - `spec/foundation/ForegroundWatcher.spec.ts`: manifest/profile resolution,
-     checksum validation, environment isolation, stdio, signal forwarding,
-     exit propagation, and RT-05 boundary selection; use a fixture executable
-     declared by the runtime manifest
+Accepted predecessor input is exactly **`LC-09`, `RT-07`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization**.
 
-## Exclusions
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 
-- No watcher-loop logic in the command or foundation service; the selected
-  packaged entrypoint owns that behavior
-- No daemonization or background process management
-- No coordinator cycle execution
-- No doctor checks (doctor validates the watcher, not the command)
+Concrete negative proof selected for **watch command/runtime adapter** and **Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization**:
 
-## Required Proof
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-### Focused
-- Command parses `--lane` and `--workspace`
-- Command rejects `--json`
-- Preflight validates lane existence
-- Preflight validates watcher binary existence
-- Preflight validates watcher checksum
-- Env export contains all required `WT_*` variables
-- Env values match actual lane data
-- Watcher exec inherits stdio
-- Ctrl-C terminates the foreground process
-- Exit code propagated from watcher
-- Missing lane → exit 3
-- Missing watcher → exit 4
-- Stale pack index → exit 4
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
 
-### Regression
-- `nvb build` passes
-
-### Architecture
-- WatchCommand delegates to `ForegroundWatcher`
-- `ForegroundWatcher` uses the RT-05 foreground boundary and uses
-  `LaneTaskRunner` for bounded sub-operations where the accepted API preserves
-  foreground semantics
-- WatchCommand does not construct shell strings
-- WatchCommand does not contain product logic
-
-### Adversarial
-- Watcher binary replaced with non-executable file
-- Watcher binary checksum mismatch
-- Lane deleted between preflight and exec
-- Signal forwarding during watcher startup
-
-## Help and Documentation
-
-- Create `help/commands/watch.hlp.json`
-- Register in `help/help.json`
-
-## Handoff Notes
-
-After acceptance, WatchCommand is the single entry point for `wt watch`.
-LC-07 (doctor) may check watcher health (presence, heartbeat) but does not
-start or stop the watcher.
+Do not commit or issue a verdict. Only after every gate passes, write `.local/agent-reports/wt-lane-lifecycle/LC-06-foreground-watch-command.md`, truthfully record this batch's handoff readiness without changing unrelated tracker rows, and emit exactly one replay-safe handoff. A correction retains lineage and reruns both impacted and original acceptance proof.

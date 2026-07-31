@@ -1,110 +1,83 @@
-# Review Batch RT-02 — Runtime and Knowledge Manifests
+# Review Batch RT-02 — Runtime and knowledge manifests
 
-## Mandatory Governing References
+## Synchronized batch execution matrix
 
-This draft brief is subordinate to:
+- **Accepted-map title:** Runtime and knowledge manifests
+- **Dependencies:** `RT-01`, `RM-11`
+- **Exclusive ownership/interface:** runtime/knowledge manifest contracts and validators
+- **Implementer/reviewer floor:** R4 / R4
+- **Mandatory batch proof:** Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection
+- **Implementation report:** `.local/agent-reports/wt-runtime-distribution/RT-02-runtime-and-knowledge-manifests.md`
+- **Review report:** `.local/agent-reports/wt-runtime-distribution/reviews/RT-02-runtime-and-knowledge-manifests-review.md`
+- **Correction report:** `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-02-runtime-and-knowledge-manifests-correction-<NN>.md`
+- **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
+- **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/RT-02-runtime-and-knowledge-manifests.md
+Dependencies: RT-01, RM-11
 
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: runtime/knowledge manifest contracts and validators. Own runtime/knowledge manifest contracts, policy provenance and validators. Task catalogs, profiles, aggregates and handlers belong to RT-09/RT-10.
 
-## Mandatory Cross-Cutting Acceptance
+Independently reproduce Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.
 
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
 
-Status: ❌ Pending
-Reviews work batch: RT-02
-Depends on: RT-02 implementation complete, implementation report written
+## Synchronized executable contract
 
-**Required reviewer reasoning class:** `R4`
-**Class rationale:** independent verification of closed type contracts and every rejection path. Manifest types are consumed by every later batch. The class is a floor.
+This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
-## Scope Verification
+- Exact map title: **Runtime and knowledge manifests**
+- Accepted dependencies: `RT-01`, `RM-11`
+- Exclusive owner: runtime/knowledge manifest contracts and validators
+- Required proof claim: Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection
+- Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
+- Exact review report: `.local/agent-reports/wt-runtime-distribution/reviews/RT-02-runtime-and-knowledge-manifests-review.md`
+- Correction report pattern: `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-02-runtime-and-knowledge-manifests-correction-<NN>.md`
 
-Confirm that this batch defined closed, versioned runtime, knowledge,
-packaged-NVB manifest/catalog, and lane-profile contracts; reviewable capability
-fragments; and deterministic aggregate generation/validation. It must reject
-missing/extra/mode/checksum errors, duplicate or stale aggregates, dangling
-handlers/leaves, and profiles that add tasks/code or escape immutable targets.
-No TaskHandler implementation, package staging, runner, or managed link entered.
+### Interface and failure-order contract
 
-## Required Independent Proof
+Before judgment, produce a source-backed ownership map naming the exact existing and proposed modules, public symbols, schema/help/task IDs, tests, and predecessor handoff interfaces inside **runtime/knowledge manifest contracts and validators**. A generic helper, command-local algorithm, duplicated registry, shell workflow, or adjacent batch capability is a scope failure. External bytes and process output enter as `unknown`, validate into closed contracts, and receive stable reason codes.
 
-1. Compare `RuntimeManifestV1` and `KnowledgeManifestV1` types with the v1 spec
-   requirements in `docs/spec/v1.md` §15. Every required field must be present.
-2. Independently run JSON Schema validation of the manifest types against
-   `docs/spec/schemas/v1.schema.json`.
-3. Run the manifest validator against a synthetic valid manifest with matching
-   files. Assert `valid: true` and zero errors.
-4. Independently test each rejection path:
-   - missing file in directory → `MISSING_ASSET`
-   - extra file in directory not in manifest → `EXTRA_ASSET`
-   - checksum mismatch → `CHECKSUM_MISMATCH`
-   - executable bit wrong → `MODE_MISMATCH`
-   - unknown `schemaVersion` → `UNKNOWN_SCHEMA_VERSION`
-5. Verify executable/task/profile records reject unknown fields unless the
-   governing schema explicitly marks a metadata extension point.
-6. Verify every RT-01 inventoried asset is representable in the manifest types.
-7. Independently regenerate `runtime-nvb.json` and `task-catalog.json` from
-   shuffled fragment enumeration and prove identical canonical output.
-8. Test duplicate action/task/group/handler IDs, dangling references, missing
-   declared files, schema incompatibility, and stale checked-in aggregates.
-9. Verify every RT-01 migration class has the correct catalog treatment.
-10. Attempt to make a profile add a task/handler/code/path, override a checksum,
-    select an unknown action, or escape config/module targets; require rejection.
-11. Run architecture, naming, size, and no-handler/no-staging scope checks.
+The required order is: validate syntax and schema; resolve canonical identity and accepted predecessor versions; check authorization, claims, capabilities, and current-state fences; prepare a side-effect-free plan; acquire the specified lock only for the bounded effect; apply once through the accepted owner; verify durable output; then publish the durable event. Every failure before the commit point leaves authoritative bytes unchanged. Every uncertain or post-commit failure is verified from durable state before retry.
 
-## Acceptance Gate
+### Selected adversarial matrix
 
-Accept only if every manifest/catalog/profile type is closed and complete,
-generated aggregates are deterministic and current, all asset and catalog
-rejection paths are proven, profiles can only narrow known actions inside the
-immutable runtime target, all RT-01 classifications are represented, and no
-handler/staging/runner/managed-link scope entered.
+- malformed, missing, extra, and unsupported external values produce the exact typed reason code and never partially succeed;
+- missing, stale, corrupt, or incompatible predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are exercised where the owned boundary touches files or installed bytes;
+- isolated/relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
 
-## Rejection Correction Brief Rule
+### Reproducible proof and reporting
 
-- `docs/spec/implementation/wt-runtime-distribution/review-batches/corrections/RT-02-correction-<N>.md`
+Run the narrowest focused specs first, then the repository gates below from the exact assigned checkout. A command may be marked not applicable only with source-backed explanation in the report.
 
-## Required Disk Report
+```sh
+git status --short
+git diff --check
+nvb build
+nvb test
+nvb dist
+```
 
-- `.local/agent-reports/wt-runtime-distribution/reviews/RT-02-runtime-and-knowledge-manifests-review.md`
+Record exact commands, exit status, relevant counts, changed-file responsibility/line inventory, Nirvana symbols and comparable Nira call sites inspected, each real `NIRVANA_API_GAP`, package/relocation evidence when applicable, and `kavan:kavan` ownership. Never stage generated build/dist/local artifacts.
 
-If accepted, create the acceptance commit.
+Inspect the actual diff and source independently; the implementation report is evidence to challenge, not authority. Reproduce the focused and adversarial proofs in mandatory review order and include the complete engineering-standard PASS/FAIL matrix. Do not repair. Any failed row produces one durable `reject`, the numbered correction report above, and an impact-scoped tracker state that preserves unrelated ready work. Only a fully clean review may produce one `accept` and the acceptance commit; publication remains separate.
 
-## User / Ownership Rule
+## Batch-specific interface and negative-case contract
 
-If you are not already running as `kavan`, use `sudo -u kavan -i` for commands
-and ensure every edited file ends up owned by `kavan`.
+The exclusive owned interface set is **runtime/knowledge manifest contracts and validators**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-runtime-distribution/reviews/RT-02-runtime-and-knowledge-manifests-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-## Always plan and make task lists
+Accepted predecessor input is exactly **`RT-01`, `RM-11`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection**.
+
+Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
+
+Concrete negative proof selected for **runtime/knowledge manifest contracts and validators** and **Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection**:
+
+- malformed, missing, extra, duplicate, and unsupported values produce the exact typed reason and never partially succeed;
+- missing, stale, corrupt, incompatible, or unaccepted predecessor evidence fails closed before owned output or authoritative state changes;
+- canonical-path, traversal, symlink, permission, checksum, relocation, and partial-artifact cases are proved at every owned filesystem or installed-byte boundary;
+- isolated and relocated execution proves argv, cwd, environment, signal, exit, and unavailable-tool behavior without source-tree or ambient-config fallback;
+
+Run focused unit/integration/adversarial specs first, then `git diff --check`, `nvb build`, `nvb test`, and `nvb dist` plus isolated/relocated execution whenever package or runtime bytes are involved. The report includes exact commands and outcomes, changed-file responsibility and line inventory, Nirvana/Nira symbols inspected and each precise `NIRVANA_API_GAP`, ownership, Git hygiene, and the complete engineering-standard matrix.
+
+Review source, diff, tests, artifacts, and durable evidence independently; never repair. Any failed row writes `.local/agent-reports/wt-runtime-distribution/reviews/corrections/RT-02-runtime-and-knowledge-manifests-correction-<NN>.md` and exactly one reject while preserving unrelated ready work. Only an all-pass result writes `.local/agent-reports/wt-runtime-distribution/reviews/RT-02-runtime-and-knowledge-manifests-review.md`, emits one accept, and permits the reviewer-owned acceptance commit.

@@ -1,9 +1,8 @@
 # Watchtower v1 Read Model Implementation Quality And Agent Rules
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** `../planning-remediation-amendment.md` supersedes any
+> conflicting batch contract and the former pack seal. No untouched batch may
+> start until synchronized artifacts are independently accepted and resealed.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -85,10 +84,8 @@ intuition.
 - `src/foundation/workspaceResolver.ts` — workspace and control-home resolution
 - `src/foundation/dataHomeResolver.ts` — XDG data-home resolution
 - `src/foundation/scalarLineParser.ts` — shared parser utilities
-- `src/foundation/envParser.ts` — strict env-file parser
-- `src/foundation/stateRecordParser.ts` — lane-state record parser
-- `src/foundation/laneLifecycle.ts` — lane lifecycle policy
-- `src/foundation/stateParser.ts` — lane-state read-model orchestration
+- `src/foundation/EnvParser.ts` — strict env-file parser
+- `src/foundation/StateParser.ts` — lane-state parser
 - `src/foundation/JsonlParser.ts` — JSONL event parser
 - `src/foundation/laneDiscovery.ts` — home-lane discovery
 - `src/foundation/LaneSelector.ts` — deterministic lane selection
@@ -280,16 +277,6 @@ to confirm that the implementor followed a checklist.
 
 | Batch | Implementor | Reviewer | Reason for the floor |
 |-------|-------------|----------|----------------------|
-| RM-01 | R4 | R4 | Type system foundation, error taxonomy determines every downstream exit code |
-| RM-02 | R4 | R4 | JSON contract and schema validation; additive compatibility requires boundary reasoning |
-| RM-03 | R4 | R4 | Path resolution with symlink/case/path-escape security boundaries |
-| RM-04 | R4 | R4 | Strict parsers with shell safety; malicious input corpus must never execute |
-| RM-05 | R4 | R4 | Event parsing with malformation handling, role/event compatibility matrices |
-| RM-06 | R5 | R5 | Discovery with complete ambiguity matrix and symlink/case safety across descendant walks |
-| RM-07 | R4 | R4 | Membership with staleness detection; advisory reads with no-repair proof |
-| RM-08 | R4 | R4 | Bindings with conflict detection; claim overlap matrix requires boundary reasoning |
-| RM-09 | R3 | R3 | Observation mechanics; no lifecycle authority or state mutation |
-| RM-10 | R5 | R5 | Command integration across all foundation services; full matrix proof across 7 fixture classes |
 
 Escalate a nominal `R3` or `R4` task to `R5` if source inspection reveals an
 undocumented state machine, concurrency, destructive data behavior, an
@@ -441,3 +428,29 @@ accept.
   requirement.
 - If a new workflow is needed, add it to the package-local `nvb.json` task
   surface instead of expanding `package.json` scripts.
+
+## Synchronized 74-batch reasoning authority
+
+This table is the authoritative assignment floor and supersedes earlier illustrative ranking prose.
+
+| Batch | Implementer | Reviewer | Basis |
+|---|---|---|---|
+| RM-01 | R4 | R4 | Versioned IDs/types; exit-code mapping; exhaustive error fixtures; automated engineering-standard hard rejects |
+| DB-01 | R5 | R5 | Node/NVB/dist/global install; parameterization; FK/integrity; busy/WAL/permissions; rebuild and semantic-root proof |
+| RM-02 | R4 | R4 | Success/error envelopes; additive compatibility; no decorative JSON output; staged-schema and isolated-install proof |
+| RM-03 | R4 | R4 | Resolution precedence; symlink/case/path-escape fixtures; missing explicit workspace |
+| RM-04 | R4 | R4 | Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation |
+| RM-05 | R4 | R4 | Role/event compatibility; malformed/partial-line handling; bounded latest lookup |
+| RM-06 | R5 | R5 | Descendant/lane-dir discovery; UUID/slug precedence; complete ambiguity matrix |
+| RM-07 | R4 | R4 | Advisory validation; stale entries ignored/reported; reads never repair |
+| RM-08 | R4 | R4 | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
+| RM-09 | R3 | R3 | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
+| RM-10 | R5 | R5 | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
+| RM-11 | R4 | R4 | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
+| RM-12 | R5 | R5 | Stable status schema; complete health/warning matrix; full read-only hash proof |
+| RM-13 | R5 | R5 | Duplicate $defs, unresolved $ref, root-conflict rejection; byte-identical regeneration |
+
+
+## Shared Launch Envelope Authorization
+
+Every active work and review prompt has `../agent-launch-contract.md` as a mandatory direct dependency. The launcher must co-deliver that contract, the batch-specific prompt, and paired brief as one self-contained envelope. This is the only permitted deduplication of launch method. A prompt may be concise only when it directly names the contract and still states the exact batch ID/title, dependencies, ownership, proof, implementer/reviewer reasoning floors, report/correction paths, checkout/ownership controls, role authority, and durable handoff or verdict. Missing or stale envelope members reject dispatch; links alone never replace batch-specific scope.

@@ -1,15 +1,23 @@
-# Agent Launch Prompt — Work Batch CA-21
+# Agent Launch Prompt — Work Batch CA-21 — Inspector views, command palette, and overlays
 
-Include and obey `../agent-launch-contract.md`.
+## Mandatory direct dependencies
 
-Reasoning floor: `R4`
-Paired brief: `CA-21-inspector-command-palette-and-overlays.md`
-Required predecessors: accepted CA-14, CA-17, and CA-19
+- [Shared Coordinator automation agent launch contract](../agent-launch-contract.md) — read in full; it supplies the complete implementation method and is not optional.
+- [Exact work brief](CA-21-inspector-command-palette-and-overlays.md) — read in full.
+- Accepted implementation map, normative specifications, pack quality rules, current source, accepted predecessor evidence, tracker, and exact checkout.
 
-Mission: implement only the nine bounded inspector views, palette over the
-closed action registry, and picker/help/details/settings/confirmation overlays.
-Reuse shared commands and CA-17 confirmation; selection alone is inert.
+## Complete batch-specific scope
 
-Report:
-`.local/agent-reports/coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`.
-Hand off exact view/query/action/overlay contracts to CA-22.
+- **Title:** Inspector views, command palette, and overlays
+- **Dependencies:** `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27`
+- **Exclusive ownership/interface:** inspector/action/overlay components
+- **Implementer/reviewer floors:** R4 / R4
+- **Mandatory proof:** All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays
+- **Implementation report:** `.local/agent-reports/wt-coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`
+- **Correction report pattern:** `.local/agent-reports/wt-coordinator-automation/reviews/corrections/CA-21-inspector-command-palette-and-overlays-correction-<NN>.md`
+- **Tracker:** `docs/spec/implementation/wt-coordinator-automation/implementation-tracker.md`
+- **Host control:** use `sudo -u kavan -i` when needed; all edits end `kavan:kavan`; never stage forbidden local/generated paths.
+
+## Batch-specific execution and handoff
+
+Apply the shared method to the exact ownership and proof above. Enumerate concrete applicable failure cases and proof commands before editing; preserve unrelated work and inspect source rather than trusting reports. Synchronize owned public artifacts and write exact evidence, size/cohesion inventory, ownership and Git status. Do not commit or issue a verdict. Emit durable handoff only when every gate passes; otherwise route the exact blocker/correction without abandoning this lineage.
