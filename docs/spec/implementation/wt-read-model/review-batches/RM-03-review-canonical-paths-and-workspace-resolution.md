@@ -13,7 +13,11 @@
 - **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ⏳ Awaiting review
+Status: ✅ Accepted after correction 03
+Review outcome: complete independent acceptance matrix passed, including the
+single-owner lexical policy, exact contained-link and managed-component
+regressions, clean build/188-spec suite, and all prior zero-write proofs
+Correction: `corrections/RM-03-correction-03.md`
 Reasoning: `R4`
 Paired work brief: `work-batches/RM-03-canonical-paths-and-workspace-resolution.md`
 Implementation report: `.local/agent-reports/wt-read-model/RM-03-canonical-paths-and-workspace-resolution.md`
