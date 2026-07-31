@@ -1,9 +1,8 @@
 # wt-lane-lifecycle — Implementation Pack 3
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** This pack is being amended under
+> `../planning-remediation-amendment.md`; its former seal is superseded and no
+> untouched batch is dispatchable pending independent review and reseal.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -12,7 +11,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
+Status: **Remediation candidate — dispatch suspended**
 Date: 2026-07-30
 Owner: Watchtower v1
 Pack ID: wt-lane-lifecycle
@@ -57,7 +56,7 @@ owners you will inspect or change.
 
 ## Prompt-Pack Maturity Guarantees
 
-The 8 implementation batches and 8 paired review batches have a common
+The amended 10 implementation batches and 10 paired review batches have a common
 execution floor. Every durable brief and launch prompt must preserve, in
 addition to its batch-specific scope:
 

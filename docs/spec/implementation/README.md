@@ -1,10 +1,9 @@
 # Watchtower v1 — Implementation Packs
 
-> **Accepted bootstrap pack set.** These packs govern construction of
-> Watchtower itself before `wt init` exists. Their exact per-pack bytes are
-> accepted and sealed by `pack-acceptance-review.md`; product-created lanes
-> must use the structured manifest, acceptance, and lock contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** The former 59-batch bootstrap acceptance is superseded by
+> `planning-remediation-amendment.md`. The amended 71-batch pack set is an
+> architect-authored candidate and is not dispatchable until independent
+> review, artifact synchronization, and resealing complete.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -13,8 +12,9 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Accepted and sealed — implementation dispatch authorized**
-Acceptance instrument: `pack-acceptance-review.md`
+Status: **Dispatch suspended — remediation candidate pending independent acceptance**
+Superseded acceptance instrument: `pack-acceptance-review.md`
+Remediation authority: `planning-remediation-amendment.md`
 Date: 2026-07-31
 
 ## Lane Purpose
@@ -54,13 +54,13 @@ the product specification.
 
 | Order | Pack | Milestones | Work/review pairs | Directory |
 |------:|------|------------|------------------:|-----------|
-| 1 | `wt-read-model` | M1 | 11 | `wt-read-model/` |
-| 2 | `wt-runtime-distribution` | M2 | 7 | `wt-runtime-distribution/` |
-| 3 | `wt-lane-lifecycle` | M3–M4 | 8 | `wt-lane-lifecycle/` |
+| 1 | `wt-read-model` | M1 | 13 | `wt-read-model/` |
+| 2 | `wt-runtime-distribution` | M2 | 10 | `wt-runtime-distribution/` |
+| 3 | `wt-lane-lifecycle` | M3–M4 | 10 | `wt-lane-lifecycle/` |
 | 4 | `wt-upgrade-knowledge` | M5 | 5 | `wt-upgrade-knowledge/` |
-| 5 | `wt-coordinator-automation` | M6 | 24 | `wt-coordinator-automation/` |
+| 5 | `wt-coordinator-automation` | M6 | 29 | `wt-coordinator-automation/` |
 | 6 | `wt-v1-release` | M7 | 4 | `wt-v1-release/` |
-| | **Total** | | **59 work + 59 review** | |
+| | **Total** | | **71 work + 71 review** | |
 
 ## Pack Acceptance Order
 
@@ -152,7 +152,7 @@ memory, and release qualification respectively.
 ## Completion Meaning
 
 The implementation delivery is complete only when:
-- all 59 work batches have matching independent review outcomes
+- all 71 work batches have matching independent review outcomes
 - all six bootstrap implementation packs remain seal-valid
 - every cross-pack compatibility surface has reproducible golden evidence
 - every v1 release criterion traces to an accepted batch and proof

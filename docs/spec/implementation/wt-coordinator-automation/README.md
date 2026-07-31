@@ -7,10 +7,9 @@
 The superseded monolithic CA-18 brief/prompt pair is retained only under
 `historical/monolithic-ca18/`; active indexes never reference it.
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** This pack is being amended under
+> `../planning-remediation-amendment.md`; its former seal is superseded and no
+> untouched batch is dispatchable pending independent review and reseal.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -19,9 +18,9 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
+Status: **Remediation candidate — dispatch suspended**
 Target release: `1.0.0`
-Pack ID: `CA-01` through `CA-24`
+Pack ID: `CA-01` through `CA-29`
 
 > **Normative v1 amendment.** CA-05, CA-07, CA-09, CA-10, CA-13, CA-14,
 > CA-17, and CA-24 must satisfy
@@ -29,7 +28,7 @@ Pack ID: `CA-01` through `CA-24`
 > A normative contradiction is an impact-scoped, architect-advised resolution
 > cycle—not an ordinary reject and not permission for an advisor to mutate the
 > spec or pack.
-Work batches: **24** | Review batches: **24**
+Work batches: **29** | Review batches: **29**
 Last updated: 2026-07-31
 
 ## Purpose

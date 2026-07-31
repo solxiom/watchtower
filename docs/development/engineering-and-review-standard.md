@@ -160,6 +160,14 @@ Additional structural limits:
 - do not evade limits with minification, compressed statements, giant inline
   object literals, embedded scripts, or generated strings.
 
+Shared registries and schema bundles must have an accepted composition owner
+before growth reaches a warning threshold. Repository-development NVB uses the
+pinned Nirvana parent-config mechanism and capability-owned fragments. Large
+JSON Schema or task-catalog aggregates may be excluded from hand-maintained
+limits only when an NVB-owned deterministic generator rejects duplicate IDs,
+unresolved references, and stale output and proves byte-for-byte regeneration;
+the fragments and generator remain subject to normal limits.
+
 An exception must be approved before implementation and record the exact file,
 temporary maximum, reason, reviewer, and expiry/removal batch. Retroactive
 waivers are invalid. When touching legacy code already above a threshold, the
@@ -324,6 +332,14 @@ Every review report must include this matrix with evidence:
 
 Any `FAIL` means **REJECT**. There is no “accept with follow-up” for a known
 violation.
+
+Before an untouched implementation-pack batch is dispatched, its admission
+review must also prove that all named dependencies exist and are accepted, no
+required collaborator is owned by a later batch, shared registries have an
+accepted composition path, external proof sources are available, and the
+batch can receive one verdict without coupling an independently correctable
+sibling capability. A failure here is a planning/specification blocker; do not
+launch an implementer merely to discover it as an implementation rejection.
 
 ### 12.1 Mandatory hard rejects
 

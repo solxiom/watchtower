@@ -1,9 +1,8 @@
 # Watchtower v1 Release — Implementation Pack 6
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** Release qualification is being amended under
+> `../planning-remediation-amendment.md`; this pack's former seal is superseded
+> and no untouched batch is dispatchable pending independent review and reseal.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -12,7 +11,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
+Status: **Remediation candidate — dispatch suspended**
 Target release: `1.0.0`
 Pack order: 6 of 6
 Work/review pairs: 4

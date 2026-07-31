@@ -1,9 +1,8 @@
 # Watchtower v1 Release Implementation Quality And Agent Rules
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+> **Dispatch hold.** `../planning-remediation-amendment.md` supersedes any
+> conflicting batch contract and the former pack seal. No untouched batch may
+> start until synchronized artifacts are independently accepted and resealed.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,

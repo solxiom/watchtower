@@ -1,14 +1,26 @@
 # Watchtower v1 Bootstrap Implementation-Pack Acceptance
 
-Verdict: **ACCEPT**
+Verdict: **SUPERSEDED — NOT AN ACTIVE DISPATCH AUTHORITY**
 
-Status: **Implementation-ready — dispatch authorized by dependency order**
+Status: **Dispatch suspended pending independent acceptance of the planning remediation**
 
 Reviewed: 2026-07-31
 
 Reviewer role: Watchtower specification architect
 
 Review session: `wt-spec-architecture-2026-07-31`
+
+## Supersession notice
+
+The audit recorded in `planning-remediation-amendment.md` found critical
+planning, dependency, packaging-proof, and batch-boundary defects that this
+review missed. Its 59-batch seals are retained below only as historical
+evidence of the exact bytes previously reviewed. They do not authorize new
+dispatch, cannot be reused for the amended file set, and must not be presented
+as current acceptance. RM-01 and DB-01 retain their independent accepted
+outcomes; RM-02 remains parked. All other untouched dispatch waits for an
+independent reviewer to accept the synchronized 71-batch artifacts and publish
+new seals.
 
 ## Scope and bootstrap boundary
 
