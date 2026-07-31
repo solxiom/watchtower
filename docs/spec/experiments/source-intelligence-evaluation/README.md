@@ -19,6 +19,10 @@ maintaining exact worktree isolation and bounded context.
 | [SRC-EXP-02-agent-launch-prompt.md](SRC-EXP-02-agent-launch-prompt.md) | Bounded corrected experiment-agent handoff |
 | [SRC-EXP-02-review.md](SRC-EXP-02-review.md) | Independent readiness, evidence, scoring, and verdict protocol |
 | [SRC-EXP-02-review-agent-launch-prompt.md](SRC-EXP-02-review-agent-launch-prompt.md) | Independent corrected-experiment reviewer handoff |
+| [SRC-EXP-03-host-route-readiness.md](SRC-EXP-03-host-route-readiness.md) | Low-cost readiness bakeoff for installed host-native structural retrieval routes |
+| [SRC-EXP-03-agent-launch-prompt.md](SRC-EXP-03-agent-launch-prompt.md) | Bounded route-inventory and canary runner handoff |
+| [SRC-EXP-03-review.md](SRC-EXP-03-review.md) | Independent route-readiness evidence and verdict protocol |
+| [SRC-EXP-03-review-agent-launch-prompt.md](SRC-EXP-03-review-agent-launch-prompt.md) | Independent SRC-EXP-03 reviewer handoff |
 
 Each disposable fixture belongs outside the Watchtower repository. SRC-EXP-01
 remains preserved at `/home/kavan/Projects/watchtower-source-intelligence-spike`

@@ -405,6 +405,10 @@ readiness. No source-intelligence implementation pack may begin until a new
 candidate passes the corrected readiness gate and returns independently
 accepted `ADOPT_BASELINE` or `ADOPT_LIMITED` evidence.
 
+The immediate next gate is SRC-EXP-03 installed-host route readiness. It may
+qualify a host route for later comparison but cannot itself authorize a source-
+intelligence implementation pack.
+
 - implement the provider-neutral capability defined in
   [source-intelligence-draft.md](source-intelligence-draft.md);
 - exact committed snapshots plus worktree-specific dirty overlays;

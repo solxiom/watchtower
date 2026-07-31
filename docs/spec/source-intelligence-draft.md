@@ -835,6 +835,12 @@ provider-neutral capability. Re-evaluating the rejected SRC-EXP-02 integration
 requires a new experiment ID and materially new provider, host integration, or
 tool-transport evidence.
 
+Before another full provider comparison, SRC-EXP-03 evaluates already installed
+host-native structural routes using one bounded canary per eligible route. It
+does not install an index provider or rank hosts by token consumption. Only an
+independently accepted `ROUTE_READY` scope may advance to another comparative
+quality/cost experiment.
+
 ## 19. Testing strategy
 
 Required future proof includes:
