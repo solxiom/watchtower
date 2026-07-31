@@ -55,7 +55,9 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-06-endpoi
 - [ ] Adapter classification: unattended, advisory-confirmed, skill-only
 - [ ] Adapters default to skill-only until proven
 - [ ] Classification is pure (no I/O, no state)
-- [ ] No concrete provider adapters implemented — interface only
+- [ ] Concrete `opencode-cli` and `hermes-cli` adapters remain behind the common interface
+- [ ] OpenCode required conformance and Hermes conditional conformance pass
+- [ ] Catalog/executable drift invalidates eligibility; shared pools are not duplicated
 
 ## Required Independent Proof
 
@@ -69,6 +71,11 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-06-endpoi
 8. Run `nvb build` and `nvb test`. Record output.
 9. Verify no model invocation through any adapter code path.
 10. Verify `git log` shows the implementation agent did not commit.
+11. Run the OpenCode adapter fixture through detection, invocation, malformed
+    result, timeout/cancellation, write-denial, redaction, and catalog-drift cases.
+12. Verify Hermes absence is an explicit skip and an installed fixture cannot
+    be selected before passing the same applicable checks.
+13. Verify aliases sharing one entitlement resolve to one `capacityPoolId`.
 
 ## Acceptance Gate
 
@@ -76,7 +83,8 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-06-endpoi
 - All 10 eligibility requirements independently verifiable.
 - Adapters default to skill-only.
 - Eligibility checker is pure.
-- No concrete provider logic leaked into interface.
+- OpenCode and Hermes specifics remain isolated from the common interface.
+- OpenCode passes batch conformance fixtures; Hermes is conditionally qualified.
 - `nvb build` and `nvb test` pass.
 - Tracker and roadmap updated.
 
@@ -85,6 +93,8 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-06-endpoi
 - Missing or untestable eligibility requirement.
 - Adapter defaults to unattended without proof.
 - Eligibility checker performs I/O or process execution.
-- Concrete provider logic (Codex, Cursor, Claude specifics) in the interface layer.
+- Concrete provider logic in the common interface or eligibility checker.
+- Missing OpenCode adapter proof, or treating an installed unqualified Hermes
+  adapter as eligible.
 - Stale tracker/roadmap.
 - Implementation agent committed changes.

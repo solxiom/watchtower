@@ -121,6 +121,10 @@ budgets with soft/hard limits and usage-quality tracking.
      for a cycle.
    - `UsageRecord` type with input/output/broker/wall-clock dimensions plus
      `provenanceChain` — the complete provenance of every broker response.
+   - Usage records also carry endpoint ID, adapter ID, route/model fingerprint,
+     `capacityPoolId`, charging class, and telemetry quality. Accounting debits
+     a shared pool once even when multiple CLI aliases expose it; unknown
+     provider usage remains `unknown` rather than inferred as free.
    - The broker never loads full pack content, full journal content, or raw
      lane state. Every response is derived from bounded index queries.
 
@@ -171,6 +175,9 @@ budgets with soft/hard limits and usage-quality tracking.
 - **Boundedness:** Prove that no broker query loads full pack or journal content.
 - **Index unavailable:** When the pack index is stale, prove broker fails with
   `BROKER_INDEX_UNAVAILABLE`.
+- **Economic telemetry integrity:** Prove aliases sharing a capacity pool do
+  not duplicate quota or usage, and `free-entitlement` is recorded only from a
+  fresh approved observation without changing capability eligibility.
 
 ## What Must Not Change
 

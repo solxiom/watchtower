@@ -294,7 +294,16 @@ Create `spec/security/sqlite-driver-qualification.spec.ts`:
 2. For each supported host adapter (Codex, Cursor, Claude), run `wt skill install <host>`. Verify preview, version recording, and no lane-specific state embedding.
 3. Test `--replace` for explicit overwrite.
 
-### Phase 10 — Release Evidence
+### Phase 10 — Decision-Endpoint Adapter Qualification
+
+From the global install, qualify a real compatible `opencode-cli` endpoint for
+bounded invocation, cancellation, write denial, result validation, redaction,
+catalog drift, capability-first selection, and shared-pool accounting. Detect
+Hermes: absence is an explicit skip; an installed `hermes-cli` must pass the
+same applicable checks before selection. Negative fakes may supplement but not
+replace the real OpenCode proof.
+
+### Phase 11 — Release Evidence
 
 Write to `.local/agent-reports/watchtower-release/REL-03-security-performance-qualification.md` containing:
 
@@ -307,6 +316,8 @@ Write to `.local/agent-reports/watchtower-release/REL-03-security-performance-qu
 - Boundedness measurements: wall time and output size table at each scale.
 - Model-free audit: per-operation result with source-path evidence.
 - Skill install: per-host result or limitation.
+- Decision adapters: real OpenCode result; Hermes result/explicit skip;
+  catalog-drift, redaction, cancellation, shared-pool, and selection evidence.
 - Environmental information: CPU, memory, Node version, OS.
 
 ## What You Must Not Do
@@ -330,6 +341,9 @@ Before finishing, verify and report:
 - Boundedness: actual wall-time and output-size measurements at 30, 300, 3,000, and 10,000 batch scales, or at minimum two scales if synthetic generation is limited.
 - Model-free audit: every mechanical coordination operation verified through source-path audit or invocation counter.
 - Skill install: per-host proof or documented limitation.
+- Decision adapters: real OpenCode qualification and conditional Hermes proof;
+  no stale capability reuse, secret leakage, shared-pool overcount, or
+  cost-based capability downgrade.
 - Final git status: no build/dist/node_modules/.nira/local/.watchtower artifacts staged.
 
 ## User / Ownership Rule

@@ -57,6 +57,8 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-08-contex
 - [ ] Provenance and redaction applied to all responses
 - [ ] Budget per-cycle isolation
 - [ ] Broker does not kill processes
+- [ ] Usage carries endpoint/adapter/fingerprint/pool/charging-class quality
+- [ ] Shared endpoint aliases cannot duplicate capacity or usage
 
 ## Required Independent Proof
 
@@ -71,6 +73,8 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-08-contex
 9. Verify the broker does not kill a process when hard limits are reached — only blocks further context.
 10. Run `nvb build` and `nvb test`. Record output.
 11. Verify `git log` shows the implementation agent did not commit.
+12. Verify shared-pool accounting is single-debit and stale/unknown economic
+    telemetry is never presented as fresh or free.
 
 ## Acceptance Gate
 
@@ -80,6 +84,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-08-contex
 - Soft-limit warnings; hard-limit blocking.
 - Budget per-cycle isolation.
 - Provenance and redaction applied.
+- Economic telemetry preserves quality and shared-pool identity.
 - `nvb build` and `nvb test` pass.
 - Tracker and roadmap updated.
 

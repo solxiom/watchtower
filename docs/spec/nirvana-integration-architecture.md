@@ -356,6 +356,16 @@ Use Nirvana `cmd` for external processes and inspect Nirvana Git APIs before
 creating Git wrappers. Commands and handlers pass an executable plus argv and a
 sanitized environment.
 
+Concrete `opencode-cli` and `hermes-cli` decision adapters use this same named
+process boundary; commands never invoke either CLI directly. Their focused
+modules own only detection, version/fingerprint capture, argv/env/cwd assembly,
+bounded envelope/result transport, cancellation, catalog parsing, and
+redaction. Provider routes/models remain serializable endpoint facts consumed
+by provider-neutral eligibility, routing, budgeting, and reservation services.
+No workflow shell, arbitrary executable path, or adapter-supplied environment
+map is accepted. Hermes not being installed is a normal conditional-capability
+result; OpenCode release qualification remains mandatory.
+
 Shell files are permitted only as cataloged leaf executables when:
 
 - the external tool is naturally shell-oriented or compatibility requires an

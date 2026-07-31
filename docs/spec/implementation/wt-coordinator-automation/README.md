@@ -101,7 +101,7 @@ Deliver the complete coordinator-automation surface defined in
 | CA-03 | Runtime SQLite indexes and projections | R4 | journal checkpoint and projection stores |
 | CA-04 | Ready set and resource-claim projection | R5 | `src/foundation/ReadySet.ts`, `src/foundation/ResourceClaims.ts` |
 | CA-05 | Ordered routing policy and capability floors | R4 | `src/foundation/RoutingPolicy.ts`, `src/foundation/CapabilityFloors.ts` |
-| CA-06 | Endpoint adapter eligibility and isolation | R4 | `src/foundation/EndpointAdapter.ts`, `src/foundation/EndpointEligibility.ts` |
+| CA-06 | Endpoint adapter eligibility and isolation | R4 | common eligibility plus focused `opencode-cli` and `hermes-cli` adapters |
 | CA-07 | Immutable decision envelopes | R4 | `src/foundation/DecisionEnvelope.ts`, `src/contracts/decision.ts` |
 | CA-08 | Context broker and cycle budgets | R5 | `src/foundation/ContextBroker.ts`, `src/foundation/CycleBudget.ts` |
 | CA-09 | Typed proposals and current-state validator | R5 | `src/contracts/proposals.ts`, `src/foundation/ProposalValidator.ts` |
@@ -195,7 +195,9 @@ bounded independently of unrelated pack/session growth.
 
 - `CA-01`–`CA-04` are entirely model-free.
 - `CA-05` classifies; it does not execute.
-- `CA-06` proves adapter eligibility before any unattended invocation.
+- `CA-06` proves adapter eligibility before invocation and supplies the concrete
+  OpenCode plus conditionally qualified Hermes adapters without leaking their
+  mechanics into provider-neutral policy.
 - `CA-09` and `CA-10` must be accepted before enabling `CA-11`–`CA-13`.
 - `CA-15`–`CA-17` may be developed against accepted service fixtures while
   `CA-14` is built; all are required before `CA-18`.

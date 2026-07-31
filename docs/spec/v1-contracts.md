@@ -315,6 +315,33 @@ is `reported`, `estimated`, or `unknown`.
 Adapter capability, not host brand, determines eligibility. No v1 feature may
 claim unattended support for a host until its conformance fixture passes.
 
+V1 ships two concrete decision-endpoint adapters behind this provider-neutral
+contract:
+
+- `opencode-cli` is required. Release acceptance requires a compatible
+  installed OpenCode executable to pass detection, bounded invocation, result,
+  cancellation, write-denial, redaction, catalog-freshness, and telemetry
+  fixtures. A provider route or model exposed by OpenCode is not supported
+  merely because it appears in a catalog; each usable endpoint still needs a
+  current capability profile and project-eligibility evidence.
+- `hermes-cli` is conditionally qualified. The adapter ships in v1 and `doctor`
+  detects it, but absence of Hermes is an explicit non-failing `not-installed`
+  result. When present and selected, it must pass the same applicable
+  conformance checks before advisory or unattended use.
+
+These adapters are unrelated to the Codex/Cursor/Claude knowledge-install
+targets unless a separate skill-install contract names them. Adapter and model
+names never determine capability. Endpoint selection first enforces decision
+class, access, freshness, independence, bounds, and protected reserves; only
+then may it prefer a `free-entitlement` or otherwise lower-cost route.
+
+Every endpoint records an executable fingerprint, adapter version, route,
+catalog observation, model identity/configuration, capability-evidence version,
+and `capacityPoolId`. A change to any capability-bearing fingerprint makes the
+endpoint ineligible until rediscovery and requalification. Aliases exposed
+through OpenCode, Hermes, or another adapter that consume the same entitlement
+share one capacity pool and are never counted as independent capacity.
+
 ## 7. Shipping policy baseline
 
 The following defaults are materialized at init and may be tightened by the

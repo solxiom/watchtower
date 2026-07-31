@@ -218,7 +218,27 @@ Create `spec/security/sqlite-driver-qualification.spec.ts`. Test the SQLite driv
    ```
 4. If a host is not available in the test environment, document the limitation and verify the adapter code exists and is structurally correct.
 
-### Phase 11: Create specs
+### Phase 11: Decision-endpoint adapter qualification
+
+1. From the globally installed package, qualify `opencode-cli` against a
+   compatible installed executable. Prove version/path pinning, argv-only
+   launch, explicit cwd/env, bounded envelope/result channels, timeout and
+   process-group cancellation, write denial, redaction, and no credential
+   persistence.
+2. Discover route/model observations without scraping human TUI output. Prove
+   a catalog/executable/adapter/model fingerprint change invalidates prior
+   capability evidence and blocks selection pending requalification.
+3. Prove capability/access/freshness/independence/reserve constraints precede
+   economic preference. A free-capable endpoint may win only among eligible
+   peers; unknown charging telemetry is never treated as free.
+4. Prove routes sharing one entitlement through OpenCode, Hermes, or another
+   adapter use one `capacityPoolId` and one debit/reservation.
+5. Detect `hermes-cli`. Absence is an explicit non-failing skip. If installed,
+   it must pass the same applicable qualification before selection.
+6. Controlled fake executables may exercise negative cases, but they do not
+   replace the required real compatible OpenCode global-install proof.
+
+### Phase 12: Create specs
 
 Create the following spec files under `spec/security/` and `spec/performance/`:
 
@@ -230,6 +250,7 @@ Create the following spec files under `spec/security/` and `spec/performance/`:
 - `spec/performance/bounded-discovery.spec.ts`
 - `spec/performance/bounded-status.spec.ts`
 - `spec/performance/model-invocation-audit.spec.ts`
+- `spec/integration/endpoint-adapter-qualification.spec.ts`
 
 Each spec must:
 - Follow existing Jasmine conventions.
@@ -253,6 +274,9 @@ Each spec must:
 - Boundedness proven with actual wall-time/output-size measurements at 30/300/3,000/10,000 batch scales.
 - Zero model invocations for all enumerated mechanical coordination operations.
 - Skill install succeeds for Codex, Cursor, Claude (or limitations documented).
+- A real compatible OpenCode installation passes the endpoint qualification
+  matrix; Hermes passes when installed or records an explicit skip; catalog
+  drift, shared-pool overcount, secret leakage, and cost-based downgrade fail.
 
 ## Structural Constraints
 
@@ -272,6 +296,7 @@ Each spec must:
 - `spec/performance/bounded-discovery.spec.ts`
 - `spec/performance/bounded-status.spec.ts`
 - `spec/performance/model-invocation-audit.spec.ts`
+- `spec/integration/endpoint-adapter-qualification.spec.ts`
 - `.local/agent-reports/watchtower-release/REL-03-security-performance-qualification.md`
 - Updated trackers and roadmap.
 

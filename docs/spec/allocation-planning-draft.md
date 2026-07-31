@@ -498,6 +498,13 @@ planning, and reservation contracts stay provider-neutral. A new CLI such as
 Hermes or OpenCode becomes compatible by supplying this adapter contract; it
 does not require a new lane kind or planner.
 
+V1 concretely ships `opencode-cli` and `hermes-cli` adapters. OpenCode is a
+required release-qualified adapter. Hermes is conditionally qualified: its
+absence is reported as `not-installed`, while an installed Hermes executable
+must pass the applicable adapter conformance suite before selection. This
+shipping commitment does not hardcode any provider plan or model catalog and
+does not make either CLI a knowledge-install target.
+
 #### Compatibility tiers
 
 Watchtower reports one support tier per tool/route:
@@ -586,6 +593,12 @@ evidenced capability first and its cost class later.
 Capability profiles are versioned by adapter, route, model, effort, and
 catalog observation. A material model alias or provider-side behavior change
 stales the old profile instead of silently inheriting it.
+
+The catalog observation includes a stable digest over the capability-bearing
+route/model/configuration facts. A changed digest, executable fingerprint, or
+adapter version removes the endpoint from candidate pools until rediscovery,
+approval where required, project checking, and capability requalification
+complete. The former profile remains audit history, not active evidence.
 
 ### 8.6 Project eligibility checks
 

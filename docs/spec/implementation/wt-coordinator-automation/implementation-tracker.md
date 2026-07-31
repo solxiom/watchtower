@@ -30,7 +30,7 @@ Batches: 24 work + 24 review
 | CA-03 | Index foundation | [work](work-batches/CA-03-runtime-sqlite-indexes-and-projections.md) | [review](review-batches/CA-03-review-runtime-sqlite-indexes-and-projections.md) | ❌ Not started |
 | CA-04 | Index foundation | [work](work-batches/CA-04-ready-set-and-resource-claim-projection.md) | [review](review-batches/CA-04-review-ready-set-and-resource-claim-projection.md) | ❌ Not started |
 | CA-05 | Routing/decision | [work](work-batches/CA-05-ordered-routing-policy-and-capability-floors.md) | [review](review-batches/CA-05-review-ordered-routing-policy-and-capability-floors.md) | ❌ Not started |
-| CA-06 | Routing/decision | [work](work-batches/CA-06-endpoint-adapter-eligibility-and-isolation.md) | [review](review-batches/CA-06-review-endpoint-adapter-eligibility-and-isolation.md) | ❌ Not started |
+| CA-06 | Routing/decision | [work](work-batches/CA-06-endpoint-adapter-eligibility-and-isolation.md) | [review](review-batches/CA-06-review-endpoint-adapter-eligibility-and-isolation.md) | ❌ Not started — includes OpenCode and conditional Hermes adapters |
 | CA-07 | Routing/decision | [work](work-batches/CA-07-immutable-decision-envelopes.md) | [review](review-batches/CA-07-review-immutable-decision-envelopes.md) | ❌ Not started |
 | CA-08 | Routing/decision | [work](work-batches/CA-08-context-broker-and-cycle-budgets.md) | [review](review-batches/CA-08-review-context-broker-and-cycle-budgets.md) | ❌ Not started |
 | CA-09 | Routing/decision | [work](work-batches/CA-09-typed-proposals-and-current-state-validator.md) | [review](review-batches/CA-09-review-typed-proposals-and-current-state-validator.md) | ❌ Not started |
@@ -117,7 +117,7 @@ Batches: 24 work + 24 review
 | Runtime packaging/smoke | CA-11, CA-13, CA-18, CA-23, CA-24 |
 | Transaction crash/replay | CA-03, CA-10–CA-13 |
 | PTY/accessibility | CA-18, CA-19, CA-23, CA-24 |
-| Cost and scaling | CA-01, CA-02, CA-08, CA-20, CA-22, CA-24 |
+| Cost, endpoint economics, and scaling | CA-01, CA-02, CA-05, CA-06, CA-08, CA-20, CA-22, CA-24 |
 | End-to-end acceptance | CA-24 |
 
 ## Mandatory Status-Doc Sync

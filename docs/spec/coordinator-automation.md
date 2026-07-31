@@ -620,6 +620,20 @@ The CLI can enforce bytes and its declared token estimate before invocation.
 Host-internal billing is `reported`, `estimated`, or `unknown`, never presented
 as an exact CLI-enforced fact when the host does not expose it.
 
+The v1 endpoint registry includes the concrete `opencode-cli` adapter and the
+conditionally available `hermes-cli` adapter. They expose provider routes and
+models as discovered endpoint facts, not as hardcoded capability rankings.
+The router filters candidates in this order: conformance and project access,
+fresh capability evidence for the decision class, review-independence and
+reserve constraints, then economic preference. A free-capable endpoint may win
+only inside that surviving set. Routes sharing a `capacityPoolId` debit the
+same reservation and usage record even when reached through different CLIs.
+
+An executable, adapter, route-catalog, model-alias, model-configuration, or
+capability-check fingerprint change stales the endpoint immediately. The
+coordinator pauses or uses another already-qualified endpoint; it never carries
+forward the old reasoning class or silently substitutes the changed model.
+
 At a soft limit, the cycle warns and requires justification for more context.
 At a hard limit, no further broker context is returned and the agent must
 propose a bounded result or escalation. Watchtower does not kill a process in a

@@ -247,7 +247,9 @@ Implement the context broker and cycle budgets:
 
 3. Budget tracking: input/output token estimation hooks (host-dependent),
    broker-request counting, wall-clock elapsed tracking. Usage quality:
-   `reported`, `estimated`, or `unknown`.
+   `reported`, `estimated`, or `unknown`. Records preserve endpoint/adapter,
+   route-model fingerprint, charging class, and `capacityPoolId`; aliases sharing
+   a pool debit it once and unknown usage is never inferred as free.
 
 4. The agent does not receive unrestricted filesystem tools for authoritative
    coordinator context.
@@ -276,6 +278,8 @@ Implement the context broker and cycle budgets:
 - Hard-limit blocking: no context returned, budget-exceeded recorded
 - Provenance and redaction applied to all responses
 - Budget per-cycle isolation: two concurrent cycles have independent budgets
+- Shared-pool aliases produce one debit and stale/unknown telemetry cannot be
+  presented as fresh or free
 - Model-free architecture check passes
 - exact proof commands used
 - final `git status --short`

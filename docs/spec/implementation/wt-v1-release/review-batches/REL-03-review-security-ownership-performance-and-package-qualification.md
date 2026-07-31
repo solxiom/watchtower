@@ -86,6 +86,12 @@ Confirm that the implementation produced:
 8. **Boundedness measurement:** Independently run `wt list` and `wt status --json` at two or more synthetic pack scales. Record actual wall time and output size. Verify wall time does not grow linearly with pack size.
 9. **Model-free audit:** Independently verify at least one mechanical coordination operation (e.g., ready-set calculation, heartbeat emission, session presence check) has no model invocation in its source path. Audit the source file to confirm no adapter import or invocation endpoint exists.
 10. **Skill install:** Independently run `wt skill install <host>` for at least one supported host. Verify preview output, version recording, and no lane-specific state in the installed output.
+11. **Decision adapters:** From the global install, independently qualify a
+    real compatible `opencode-cli` route. Reproduce bounded invocation,
+    malformed result, timeout/cancellation, write-denial, redaction,
+    catalog-fingerprint invalidation, capability-first selection, and
+    single-debit shared-pool cases. If Hermes is installed, repeat applicable
+    checks; otherwise verify the explicit non-failing skip.
 
 ### Flow pass
 
@@ -202,6 +208,9 @@ Accept only if all of the following are true:
 - Boundedness is proven with actual wall-time and output-size measurements at multiple pack scales.
 - Every mechanical coordination operation is proven model-free with source-path evidence.
 - Skill install succeeds for supported hosts (or limitations documented).
+- OpenCode decision-endpoint qualification passes on a real compatible install;
+  Hermes is qualified when present or explicitly skipped when absent; no stale
+  capability, secret leakage, shared-pool overcount, or economic downgrade.
 - No product features were added.
 - `nvb check:architecture` exits 0.
 - No build, dist, node_modules, `.nira/local`, or `.watchtower/` artifact is committed.

@@ -114,9 +114,13 @@ Acceptance snapshot (target):
 
 - Every v1 routing rule and guard with first-match determinism.
 - D1/C2, D2/C3, D3/C5 capability floors enforced.
+- Capability/access/freshness/independence/reserve constraints precede cost;
+  free-capable routes win only among eligible peers.
 - Classification only; no execution by the router.
 - Unattended/advisory/skill-only adapter classification.
 - Argv/env/cwd/output/time bounds proven before any unattended invocation.
+- Concrete `opencode-cli` batch conformance and conditional `hermes-cli`
+  qualification, with catalog-drift invalidation and shared-pool identity.
 - Immutable decision envelopes with stable semantic digests.
 - Bounded default context with untrusted-content delimiting.
 - Allowlisted context-broker queries with provenance/redaction.
@@ -209,6 +213,8 @@ M6 acceptance is gated on CA-24 proving:
 - Unrelated pack/session growth does not increase ordinary model context.
 - Advisory turns never hold the lane lock.
 - Session/ask commands and help match accepted services/TUI.
+- OpenCode routes work end to end; Hermes routes do so when installed; adapter
+  aliases cannot duplicate quota and economics cannot downgrade capability.
 - 30–10k pack and long-session replay/soak remain bounded.
 
 ## Sequencing Rule

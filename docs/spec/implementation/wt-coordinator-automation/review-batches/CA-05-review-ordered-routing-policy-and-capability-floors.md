@@ -55,6 +55,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-05-ordere
 - [ ] D1→C2, D2→C3, D3→C5 capability floors
 - [ ] Classification only — no execution, no model invocation, no state mutation
 - [ ] Operator escalation cannot downgrade below knowledge-pack minimum
+- [ ] Economic ordering occurs only after capability/access/freshness/reserve constraints
 
 ## Required Independent Proof
 
@@ -71,6 +72,8 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-05-ordere
 11. Run `nvb build` and `nvb test`. Record output.
 12. Verify no model invocation through any routing code path.
 13. Verify `git log` shows the implementation agent did not commit.
+14. Verify free-capable preference among eligible peers and refusal to select a
+    cheaper endpoint that fails any hard constraint.
 
 ## Acceptance Gate
 
@@ -79,6 +82,7 @@ Implementation report: `.local/agent-reports/coordinator-automation/CA-05-ordere
 - First-match determinism proven.
 - Every guard condition tested.
 - Capability floors enforced correctly.
+- Cost preference cannot weaken eligibility or capability floors.
 - Classification only — no mutation.
 - `nvb build` and `nvb test` pass.
 - Tracker and roadmap updated.

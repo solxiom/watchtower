@@ -93,6 +93,11 @@ are owned under `spec/integration/coordinatorSession/`.
    session/lane switching, `doctor --tui`, and explicit support-report output.
    No session is created before lane selection and report generation is the
    only new diagnostic write.
+10. Exercise real decision routing through the required `opencode-cli` adapter
+    and, when installed, `hermes-cli`. Prove capability-first/economics-second
+    selection, shared-pool accounting, stale-catalog invalidation, bounded
+    result handling, cancellation, and fallback only to another already
+    qualified endpoint. Hermes absence is recorded as an explicit skip.
 
 ## Exclusions
 
@@ -121,6 +126,9 @@ are owned under `spec/integration/coordinatorSession/`.
 - Complete authority audit: model-free M0, no direct mutations, one executor,
   no lane lock during model generation, no project `nvb.json`, no unbounded
   fallback.
+- Concrete endpoint matrix: OpenCode qualified end to end; Hermes qualified
+  when installed; no secret output; no stale profile reuse; no shared-quota
+  overcount; no cost-based capability downgrade.
 - `nvb build`, `nvb test`, `nvb dist`, architecture gates, line counts,
   documentation consistency, and clean artifact/ownership checks.
 

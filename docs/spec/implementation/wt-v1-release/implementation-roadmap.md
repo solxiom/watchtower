@@ -173,6 +173,10 @@ Required proof:
   wall time as unrelated pack size grows from 30 to 10,000 batches
 - idle polls, heartbeats, event filtering, session checks, and ready-set
   calculation invoke no model
+- globally installed `opencode-cli` passes the concrete decision-adapter matrix;
+  Hermes passes when installed or records an explicit non-failing skip
+- catalog drift invalidates prior capability, shared capacity is single-counted,
+  and economic preference cannot weaken capability or reserve constraints
 
 Acceptance snapshot (target):
 - all traversal, config, and permission negative fixtures pass
@@ -184,6 +188,8 @@ Acceptance snapshot (target):
   scaling fixtures
 - model invocation count is zero for every mechanical coordination operation
   enumerated in the spec
+- endpoint adapter qualification passes for real OpenCode and conditional
+  Hermes, including stale-catalog, redaction, cancellation, and shared-pool cases
 
 ### REL-04: Documentation consistency and release gate
 

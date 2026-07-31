@@ -75,6 +75,11 @@ execute effects.
      verifies an endpoint meets or exceeds the minimum capability floor.
    - `classifyEndpointTier(endpoint: EndpointDescriptor): CapabilityFloor` —
      derives the capability tier an endpoint can serve.
+   - `rankEligibleEndpoints(endpoints, constraints): EndpointDescriptor[]` —
+     deterministically orders only endpoints that already satisfy capability,
+     project-access, freshness, independence, bounds, and reserve constraints;
+     within that set, prefer `free-entitlement`, then lower expected cost, then
+     the stable endpoint ID. Never treat price or model name as capability.
    - These are pure functions — no I/O, no state.
 
 3. **Implement `src/foundation/RoutingPolicy.ts`:**
@@ -154,6 +159,10 @@ execute effects.
   with the correct permitted result.
 - **Capability floors:** Prove D1→C2, D2→C3, D3→C5. Prove M0 has no floor.
   Prove `validateEndpointCapability` correctly compares tiers.
+- **Economics after eligibility:** Prove a free but under-capability, stale,
+  inaccessible, reserve-violating, or non-independent endpoint never displaces
+  an eligible route; prove a free-capable endpoint wins deterministically when
+  all hard constraints are equal.
 - **Classification-only proof:** Verify the router writes no files, invokes no
   subprocess, and invokes no model. Static or runtime proof.
 - **No-arbitrary-winner integration:** When `classifyTrigger` receives an

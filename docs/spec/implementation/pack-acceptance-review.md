@@ -35,6 +35,28 @@ scope.
 
 No open critical, major, or minor finding remains.
 
+## V1 endpoint-adapter amendment review
+
+Reviewed and accepted on 2026-07-31. The amendment closes a planning gap in
+which the allocation spec described OpenCode/Hermes discovery and dynamic
+free-capable routing while CA-06 prohibited concrete adapters.
+
+- OpenCode is now a required concrete v1 decision-endpoint adapter and must
+  pass batch, end-to-end, and global-install qualification.
+- Hermes ships behind the same contract and is qualified when installed;
+  absence is an explicit non-failing skip, never a false support claim.
+- Hard capability, access, freshness, independence, bounds, and reserve checks
+  precede economics. Free-capable preference cannot lower quality.
+- Executable/catalog/model/capability fingerprints invalidate stale evidence,
+  and aliases sharing an entitlement use one capacity pool.
+- Knowledge installation remains the Codex/Cursor/Claude surface; decision
+  endpoint support is a separate contract.
+
+The amendment changes Pack 5 and Pack 6 only. Their briefs, independent review
+gates, roadmaps, trackers, implementation map, release criteria, and normative
+contracts were rechecked together. No implementation source was reviewed or
+accepted by this amendment, and RM-01 remains governed by its own active review.
+
 ## Acceptance matrix
 
 | Gate | Verdict | Evidence |
@@ -80,8 +102,8 @@ requires a new review.
 | `wt-runtime-distribution` | 38 | 384487 | `sha256:4d5fb75baea0b67511022452a5be648f9b567b7d09c5711f7e5a7cda660e2b66` |
 | `wt-lane-lifecycle` | 42 | 564755 | `sha256:f527875c81489f77f3c50af435954beea2a919ee3bf8bc33f97eefcaa85ad87e` |
 | `wt-upgrade-knowledge` | 30 | 448690 | `sha256:d98b7cbec26fcc6ef5dba41d7cbc9a40367afdd33c7de697c046b2dd622ea37c` |
-| `wt-coordinator-automation` | 113 | 1240068 | `sha256:d9396750b03084304eb08cabe5a3d7a4c65f055cbce043885ec61877d6e65c27` |
-| `wt-v1-release` | 26 | 395888 | `sha256:0c5bcaa6466c8559b1ccba97e5e26f8992070754b86243462590538900bb197f` |
+| `wt-coordinator-automation` | 113 | 1247947 | `sha256:1e1466c3ee3b5654eab4f81dba95fe140c419ac950756c7705ee35c430f9fe94` |
+| `wt-v1-release` | 26 | 399406 | `sha256:14cc47bcccbeff98350a32da5975acd9703295b76daf77896d0386ec88006f9b` |
 
 ## Dispatch decision
 

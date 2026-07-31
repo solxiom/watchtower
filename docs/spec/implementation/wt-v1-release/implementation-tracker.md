@@ -48,7 +48,7 @@ limits, and acceptance-with-follow-up are forbidden.
 |-------|-------|--------|------------|
 | REL-01 | Release qualification | ❌ Pending | Fresh-lane implementer→reviewer→accept trial. Depends on LC-08, UK-05, CA-24 accepted. |
 | REL-02 | Release qualification | ❌ Pending | Concurrent and multi-repository recovery trials. Depends on REL-01 accepted. |
-| REL-03 | Release qualification | ❌ Pending | Security, ownership, performance, and package qualification. Depends on REL-01, REL-02 accepted. |
+| REL-03 | Release qualification | ❌ Pending | Security, ownership, performance, package, and decision-endpoint qualification. Depends on REL-01, REL-02 accepted. |
 | REL-04 | Release qualification | ❌ Pending | Documentation consistency and release gate. Depends on REL-01–03 accepted. |
 
 ## Batch Proof Summary
@@ -57,7 +57,7 @@ limits, and acceptance-with-follow-up are forbidden.
 |-------|-----------------------|
 | REL-01 | Global install from `nvb dist`; `wt init` full cycle with real filesystem; `wt watch` heartbeat/Ctrl-C; `wt status --json` schema compliance; `wt doctor` pass/warn/fail/skip; one implementer→reviewer→accept cycle with real Git commits and independent reviewer session; `wt upgrade --apply` with managed-path-only changes and old-runtime retention; release evidence packet |
 | REL-02 | Two isolated lanes on one repository; multi-repo commit set with per-repository acceptance; shared-write worktree conflict refusal; partial Git push recovery with push journals; duplicate-cycle idempotency replay; copied-template lane ignored; multi-lane ambiguity candidate output |
-| REL-03 | Path-traversal refusal across symlinks/lane-dir/bindings/runtime-store; strict-env parser rejects shell injection/substitution/expansion; `wt doctor` account-access checks for multi-account fixtures; packaged manifest completeness with checksum mismatch negative cases; global install integrity; status/list boundedness across 30→10,000 batch packs; zero model invocations for mechanical coordination |
+| REL-03 | Path-traversal refusal across symlinks/lane-dir/bindings/runtime-store; strict-env and permission fixtures; package/global-install integrity; 30→10,000 boundedness; zero-model mechanical audit; real OpenCode and conditional Hermes endpoint qualification with stale-catalog/shared-pool/capability-first proof |
 | REL-04 | Every §17 criterion traced to owning batch and proof; every shipped command has registered help fragment; help fragments match current behavior; `v1.md`/`architecture.md`/`v1-contracts.md` agree with shipped behavior; `hello` scaffold removed; no build/dist/node_modules/.nira/local/.watchtower committed; final release verdict recorded |
 
 ## Dependency And Gate Summary

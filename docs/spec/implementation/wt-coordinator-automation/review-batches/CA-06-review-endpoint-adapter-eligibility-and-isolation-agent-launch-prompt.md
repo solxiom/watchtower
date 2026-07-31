@@ -183,7 +183,8 @@ Independently verify the endpoint adapter layer:
 - All 10 eligibility requirements verified.
 - Default to skill-only.
 - Pure classification.
-- No concrete provider logic.
+- No concrete provider logic in the common interface or eligibility checker;
+  OpenCode/Hermes mechanics remain confined to their focused adapters.
 - Build and tests pass.
 - Implementation agent did not commit.
 

@@ -35,6 +35,11 @@ evidence; absence from a lower report is not permission to omit it.
 - Audit every authority path: M0 uses no model; floors never downgrade; all
   effects use CA-10; generation/wait holds no lane lock; observers cannot
   mutate; project `nvb.json` is untouched.
+- Independently run a bounded decision cycle through `opencode-cli`; rerun via
+  `hermes-cli` when installed and record absence as an explicit skip otherwise.
+  Prove changed catalog/model fingerprints invalidate eligibility, aliases
+  share one pool, and economics never crosses a capability/access/reserve/
+  independence constraint.
 - Run clean `nvb build`, `nvb test`, `nvb dist`, all RT-03 global-install
   targets, architecture/security gates, link/docs consistency, line counts,
   staged-artifact and ownership checks.

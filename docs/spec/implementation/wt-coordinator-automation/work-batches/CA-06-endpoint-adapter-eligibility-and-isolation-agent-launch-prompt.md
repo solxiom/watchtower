@@ -119,9 +119,9 @@ verification, and isolation boundaries, and run the required proof.
 You are assigned **implementation work batch CA-06** for the Watchtower v1
 wt-coordinator-automation delivery lane.
 
-This batch builds the provider-neutral endpoint adapter layer that classifies
-every adapter as unattended, advisory-confirmed, or skill-only, and proves
-adapter eligibility before any unattended invocation.
+This batch builds the provider-neutral endpoint adapter layer plus the concrete
+v1 `opencode-cli` and `hermes-cli` adapters, and proves classification and
+eligibility before invocation.
 
 ## Read In This Order
 
@@ -223,7 +223,7 @@ line-count check never overrides the responsibility gate.
 
 ## Your Mission
 
-Build the provider-neutral endpoint adapter layer:
+Build the provider-neutral endpoint adapter layer and its v1 concrete adapters:
 
 1. Create `src/foundation/EndpointAdapter.ts` with the `EndpointAdapter`
    interface — `adapterId`, `hostBrand`, `classification`, `installKnowledge`,
@@ -242,16 +242,27 @@ Build the provider-neutral endpoint adapter layer:
 3. Classification is mandatory before any unattended invocation. Adapters
    default to skill-only unless proven eligible.
 
-4. Write focused Jasmine specs covering: every adapter classification,
+4. Implement focused `opencode-cli` and `hermes-cli` adapters. OpenCode must
+   support required release qualification. Hermes absence is an explicit
+   non-failing result; an installed Hermes route remains ineligible until its
+   applicable conformance checks pass. Invalidate eligibility after executable,
+   adapter, catalog, model, or capability-evidence fingerprint changes.
+
+5. Preserve `capacityPoolId` across aliases that consume the same entitlement
+   and keep knowledge-install targets separate from decision adapters.
+
+6. Write focused Jasmine specs covering: every adapter classification,
    eligibility pass/fail for all 10 requirements, unattended vs
    advisory-confirmed vs skill-only classification, misclassified adapter
-   blocking, and adapter isolation proof.
+   blocking, adapter isolation, OpenCode conformance, Hermes conditional
+   qualification, stale-catalog refusal, and shared-pool identity.
 
 ## What You Must Not Do
 
 - Do not invoke any model, LLM, or AI.
-- Do not implement concrete adapters for specific providers (Codex, Cursor,
-  Claude) — define the interface and eligibility checker only.
+- Do not implement Codex, Cursor, or Claude decision adapters. Implement the
+  required OpenCode and conditionally qualified Hermes adapters behind the
+  provider-neutral interface; provider details must not leak into core policy.
 - Do not modify RT-05 runtime invoker or CA-05 routing policy types.
 - Do not modify `src/cli.ts` or any command file.
 - Do not commit.

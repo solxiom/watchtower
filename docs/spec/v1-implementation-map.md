@@ -312,10 +312,10 @@ effect authority, and durable bounded operator sessions.
 | `CA-02` | SQLite index stores and bounded typed queries | `CA-01` | index store/query foundation | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
 | `CA-03` | Runtime SQLite indexes and projections | `RM-05`, `CA-02` | runtime index/projection foundation | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
 | `CA-04` | Ready set and resource-claim projection | `RM-08`, `CA-01`, `CA-03` | scheduling projection | DAG/dependency/claim/capacity blockers; no arbitrary winner |
-| `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02` | routing foundation/knowledge projection | Every v1 rule/guard; first-match determinism; D1/C2, D2/C3, D3/C5 floors |
-| `CA-06` | Endpoint adapter eligibility and isolation | `RT-05`, `CA-05` | provider-neutral adapter layer | Unattended/advisory/skill-only classification; argv/env/cwd/output/time bounds |
+| `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02` | routing foundation/knowledge projection | Every v1 rule/guard; first-match determinism; D1/C2, D2/C3, D3/C5 floors; economics only after hard eligibility |
+| `CA-06` | Endpoint adapter eligibility and isolation | `RT-05`, `CA-05` | provider-neutral layer plus focused OpenCode/Hermes adapters | Unattended/advisory/skill-only classification; argv/env/cwd/output/time bounds; required OpenCode and conditional Hermes fixtures; drift invalidation/shared pools |
 | `CA-07` | Immutable decision envelopes | `CA-02`–`CA-06` | envelope foundation | Stable semantic digest; bounded default context; untrusted-content delimiting |
-| `CA-08` | Context broker and cycle budgets | `CA-02`, `CA-06`, `CA-07` | broker/usage foundation | Allowlisted queries; provenance/redaction; soft/hard limits; usage quality |
+| `CA-08` | Context broker and cycle budgets | `CA-02`, `CA-06`, `CA-07` | broker/usage foundation | Allowlisted queries; provenance/redaction; soft/hard limits; endpoint telemetry quality and shared-pool accounting |
 | `CA-09` | Typed proposals and current-state validator | `CA-05`, `CA-07`, `CA-08` | proposal contracts/validator | Every proposal type; permitted origin/class/effect; stale/illegal/invalid cases |
 | `CA-10` | Atomic lane-local effect executor and invocation envelopes | `LC-03`, `CA-09` | effect foundation/NVB task boundary | One authority; lock/revalidation/idempotency; single-use task envelope; all-or-nothing projections/journals |
 | `CA-11` | Tmux prepare/attempt/verify effect handler | `RT-05`, `CA-10` | focused TaskHandler and tmux leaf | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
@@ -331,7 +331,7 @@ effect authority, and durable bounded operator sessions.
 | `CA-21` | Inspector views, command palette, and overlays | `CA-14`, `CA-17`, `CA-19` | inspector/action/overlay components | All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays |
 | `CA-22` | Turn streaming, notifications, concurrency, and observer UI | `CA-17`, `CA-20`, `CA-21` | turn/event reducers and attachment controller | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |
 | `CA-23` | Accessibility, terminal lifecycle, recovery, and PTY matrix | `CA-18`–`CA-22` | accessibility/restoration/test adapters | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
-| `CA-24` | Session command integration, scale/replay, and M6 acceptance | `CA-14`–`CA-23` | command/help integration and independent acceptance proof | `--lane` create/attach/resume/observe plus `ask`; `doctor --tui` and redacted report; zero/one/many-lane entry; 30–10k pack scale; long-session replay; complete M6 gate |
+| `CA-24` | Session command integration, scale/replay, and M6 acceptance | `CA-14`–`CA-23` | command/help integration and independent acceptance proof | `--lane` create/attach/resume/observe plus `ask`; OpenCode/Hermes route integration; `doctor --tui`; 30–10k pack scale; complete M6 gate |
 
 ### CA implementation notes
 
@@ -361,7 +361,7 @@ Purpose: qualify the assembled product rather than add features.
 |----|------------|------------|-------------------|----------------|
 | `REL-01` | Fresh-lane implementer→reviewer→accept trial | `LC-08`, `UK-05`, `CA-24` | end-to-end fixture/release evidence | Global install; init; dispatch; handoff; independent accept; publication |
 | `REL-02` | Concurrent and multi-repository recovery trials | `REL-01` | system acceptance fixtures | Two isolated lanes; multi-repo commit set; shared-write refusal; partial push recovery |
-| `REL-03` | Security, ownership, performance, and package qualification | `REL-01`, `REL-02` | release/security/performance evidence | Traversal/config/permission suite; bounded discovery/status; task/catalog/profile escape and environment isolation; manifest/global install proof |
+| `REL-03` | Security, ownership, performance, package, and endpoint qualification | `REL-01`, `REL-02` | release/security/performance evidence | Traversal/config/permission suite; bounded discovery/status; manifest/global install proof; real OpenCode and conditional Hermes adapter matrix |
 | `REL-04` | Documentation consistency and release gate | `REL-01`–`REL-03` | help/docs/release notes | Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme |
 
 Pack exit: every release criterion in [v1.md §17](v1.md#17-release-acceptance)

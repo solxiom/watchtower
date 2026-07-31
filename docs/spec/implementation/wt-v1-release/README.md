@@ -29,7 +29,8 @@ The pack owns:
 
 - end-to-end fresh-lane implementer→reviewer→accept trial (REL-01)
 - concurrent and multi-repository recovery trials (REL-02)
-- security, ownership, performance, and package qualification (REL-03)
+- security, ownership, performance, package, and concrete OpenCode/conditional
+  Hermes decision-endpoint qualification (REL-03)
 - documentation consistency and release gate (REL-04)
 
 ## Start Here

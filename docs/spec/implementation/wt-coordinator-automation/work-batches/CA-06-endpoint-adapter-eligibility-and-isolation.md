@@ -53,10 +53,11 @@ Owned files: `src/foundation/EndpointAdapter.ts`, `src/foundation/EndpointEligib
 
 ## Objective
 
-Build the provider-neutral endpoint adapter layer that classifies every adapter
-as unattended, advisory-confirmed, or skill-only, and proves adapter eligibility
-before any unattended invocation. Isolate adapters so a misclassified adapter
-cannot reach the decision envelope or effect executor.
+Build the provider-neutral endpoint adapter layer and the concrete v1
+`opencode-cli` and `hermes-cli` adapters. Classify every adapter as unattended,
+advisory-confirmed, or skill-only and prove eligibility before invocation.
+Isolate adapters so a misclassified adapter cannot reach the decision envelope
+or effect executor.
 
 ## Required Work
 
@@ -70,7 +71,7 @@ cannot reach the decision envelope or effect executor.
    - `EndpointAdapter` interface — the provider-neutral contract every adapter
      must implement:
      - `adapterId: string` — unique adapter identity.
-     - `hostBrand: string` — Codex, Cursor, Claude, or generic.
+     - `hostBrand: string` — provider-neutral CLI family identifier.
      - `classification: AdapterClassification` — `unattended`, `advisory-confirmed`, `skill-only`.
      - `installKnowledge(targetPath: string): Promise<void>` — install knowledge pack.
      - `invokeAdvisory(envelope: DecisionEnvelope): Promise<DecisionProposal>` — advisory invocation.
@@ -120,9 +121,27 @@ cannot reach the decision envelope or effect executor.
    - An adapter classified as `skill-only` must be rejected if any code path
      attempts to use it for a decision cycle.
    - An adapter classified as `advisory-confirmed` requires an explicit
-     operator confirmation token before each invocation.
+   operator confirmation token before each invocation.
 
-5. **Error taxonomy:**
+5. **Concrete v1 adapters:**
+   - Implement `OpenCodeEndpointAdapter` with adapter ID `opencode-cli`.
+     Detection, version compatibility, argv/env/cwd construction, immutable
+     envelope delivery, one-result parsing, cancellation, bounds, redaction,
+     route/model catalog observations, charging class, catalog digest, and
+     capacity-pool identity must use the common adapter contract.
+   - Implement `HermesEndpointAdapter` with adapter ID `hermes-cli`. Hermes is
+     conditionally available: `not-installed` is a healthy discovery outcome,
+     but an installed adapter may not be selected until the applicable
+     conformance checks pass.
+   - Neither adapter hardcodes provider model capability from names, pricing,
+     or marketing tiers. A catalog/executable/adapter fingerprint change stales
+     the endpoint's capability evidence and blocks selection until refreshed.
+   - Routes exposed through different adapters but backed by the same declared
+     entitlement use the same `capacityPoolId`.
+   - Knowledge installation remains a separate contract; these endpoint
+     adapters do not expand `wt skill install` targets.
+
+6. **Error taxonomy:**
    - `ADAPTER_NOT_FOUND` — requested adapter ID not registered.
    - `ADAPTER_ELIGIBILITY_FAILED` — adapter failed one or more eligibility checks.
    - `ADAPTER_CLASSIFICATION_REQUIRED` — adapter not yet classified.
@@ -139,6 +158,8 @@ cannot reach the decision envelope or effect executor.
   `AdapterClassification` type, and all adapter type definitions.
 - `src/foundation/EndpointEligibility.ts` — owns eligibility proof, classification,
   invocation-bounds enforcement, and result-channel validation.
+- Focused OpenCode and Hermes adapter modules own only their CLI-specific
+  discovery, launch, parsing, and redaction mechanics.
 - No other module duplicates adapter classification, eligibility checking, or
   invocation-bound enforcement.
 
@@ -163,12 +184,22 @@ cannot reach the decision envelope or effect executor.
   classification.
 - **Host-brand independence:** Classify a generic adapter vs a branded one. Prove
   classification depends on capability, not host brand.
+- **OpenCode conformance:** Against a compatible installed fixture, prove safe
+  discovery and bounded schema-valid invocation, plus negative version,
+  malformed-output, timeout, cancellation, write, secret-redaction, and stale
+  catalog cases.
+- **Hermes conditional conformance:** Prove absence reports `not-installed`
+  without blocking release; when a compatible fixture is present, rerun the
+  applicable OpenCode-grade checks before eligibility.
+- **Shared-pool and drift:** Prove aliases cannot duplicate capacity and a
+  changed executable/catalog/model fingerprint invalidates prior eligibility.
 
 ## What Must Not Change
 
 - Do not modify RT-05's `LaneTaskRunner`, TaskHandler, or leaf boundaries.
-- Do not implement any concrete Codex, Cursor, or Claude adapter — the adapter
-  layer is provider-neutral.
+- Do not implement concrete Codex, Cursor, or Claude decision adapters in this
+  batch. OpenCode and Hermes provider-specific mechanics stay in their focused
+  adapters and must not leak into the common interface or eligibility checker.
 - Do not execute any adapter against real lane state during eligibility checking.
 - Do not encode host-brand-specific logic in the eligibility checker.
 - Do not invoke any model, LLM, or AI for eligibility checking.

@@ -238,7 +238,11 @@ Implement the v1 routing policy with capability floors:
 
 4. Classification only — no execution, no model invocation, no state mutation.
 
-5. Write focused Jasmine specs covering: every rule order, first-match
+5. Deterministically rank only hard-eligible endpoints: capability, access,
+   freshness, independence, bounds, and reserves first; then free-entitlement,
+   expected cost, and stable endpoint ID. Price/model name never raises capability.
+
+6. Write focused Jasmine specs covering: every rule order, first-match
    determinism, every trigger/guard combination, capability-floor enforcement,
    D1→C2/D2→C3/D3→C5 mappings, M0 for no-event/idle-poll, operator escalation
    cannot downgrade below knowledge-pack minimum, and invalid/out-of-schema
@@ -262,6 +266,8 @@ Implement the v1 routing policy with capability floors:
 - Capability floors: D1→C2, D2→C3, D3→C5
 - M0 classification for no-event, heartbeat-only, and uniquely-preauthorized triggers
 - Operator escalation cannot downgrade below knowledge-pack minimum
+- A free-capable eligible peer is preferred, while a cheaper endpoint failing
+  any hard constraint is excluded
 - Invalid/out-of-schema trigger escalates, never coerced
 - Model-free architecture check passes
 - exact proof commands used
