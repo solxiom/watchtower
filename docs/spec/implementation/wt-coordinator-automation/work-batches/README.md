@@ -14,13 +14,13 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **active implementation brief pack**
-Date: 2026-07-30
+Status: **repacked draft implementation brief pack**
+Date: 2026-07-31
 
 ## Purpose
 
 This directory contains the implementation-side briefs for the
-`wt-coordinator-automation` pack — 18 work batches (CA-01 through CA-18).
+`wt-coordinator-automation` pack — 24 work batches (CA-01 through CA-24).
 
 Each batch includes:
 
@@ -29,7 +29,8 @@ Each batch includes:
 
 ## Execution Authority
 
-This directory is the executable implementation brief pack for 18 batches
+After independent pack review and sealing, this directory is the executable
+implementation brief pack for 24 batches
 forming the complete coordinator automation surface. The canonical scope
 document `docs/spec/v1-implementation-map.md` §8 owns detailed requirements.
 Normative behavior is owned by:
@@ -51,6 +52,7 @@ implementation and review.
 - Before any batch work, read the repo-level mandatory material named in
   `AGENTS.md`.
 - Read the pack roadmap, tracker, and quality rules first.
+- Include `../agent-launch-contract.md` in every launch envelope.
 - Read `docs/spec/implementation/wt-coordinator-automation/README.md` for the
   pack-level owner map and dependency graph.
 - Read the normative spec documents referenced by the batch before editing
@@ -93,8 +95,9 @@ implementation and review.
 - CA-06 must prove adapter eligibility before any unattended invocation.
 - CA-09 and CA-10 must be accepted before enabling CA-11 through CA-13.
 - CA-15 through CA-17 may be developed against accepted service fixtures while
-  CA-14 is built, but all converge at CA-18.
-- CA-18 must show that unrelated pack/session growth does not increase ordinary
+  CA-14 is built; CA-18 requires all four accepted.
+- CA-18 gates OpenTUI feasibility; CA-19–CA-23 own bounded TUI delivery.
+- CA-24 must show that unrelated pack/session growth does not increase ordinary
   model context and that advisory turns never hold the lane lock.
 
 ## Shared Proof Rule

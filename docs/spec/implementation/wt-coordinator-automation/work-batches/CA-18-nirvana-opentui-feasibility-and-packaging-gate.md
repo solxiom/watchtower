@@ -13,6 +13,7 @@ This draft brief is subordinate to:
 - `docs/spec/v1-implementation-map.md`
 - `docs/spec/operator-session.md`
 - `docs/spec/cli-session.md`
+- this pack's `tui-interface-contracts.md`
 - this pack's `implementation-quality-and-agent-rules.md`
 
 The engineering and Nirvana/NVB architecture standards always apply. If this
@@ -36,8 +37,8 @@ decision is a specification blocker, not implementor discretion.
 - Apply the exact module/function/constructor limits and reviewer matrix from
   the mandatory engineering standard.
 
-Status: ❌ Not started — draft replacement; the enclosing pack remains
-superseded until CA-18 through CA-24 are completely repacked
+Status: ❌ Not started — repacked draft; dispatch requires independent pack
+review and sealing
 
 Pack: wt-coordinator-automation (Pack 5)
 
@@ -47,11 +48,20 @@ Depends on: RT-03, RT-05, CA-14, CA-15, CA-16, and CA-17 accepted
 
 Unblocks: CA-19 only after independent acceptance
 
-Owned production files: none by default
+Owned production files: `package.json`, `package-lock.json`, and only the
+runtime/native manifest fields in `nira.json` and
+`runtime-nvb/nvb-manifest.json` required to pin and distribute the accepted
+engine. No product TypeScript owner is permitted.
 
-Permitted spike ownership: a bounded, explicitly disposable feasibility
-fixture and its tests; exact paths must be declared in the implementation
-report before editing
+Owned feasibility files:
+
+- `spec/feasibility/opentui/OpenTuiFeasibilitySpec.ts`
+- `spec/support/opentui/OpenTuiFeasibilityHarness.ts`
+- `spec/support/opentui/FfiBootstrapHarness.ts`
+- `spec/support/opentui/OpenTuiPtyHarness.ts`
+
+If repository inspection proves one of these paths incompatible with the test
+runner, stop and amend this brief before choosing another ownership shape.
 
 **Required implementor reasoning class:** `R4`
 

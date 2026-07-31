@@ -1,6 +1,6 @@
-# Review Batch CA-18 — Session CLI/PTY Attachment and M6 Acceptance
+# Historical Review Batch CA-18 — Session CLI/PTY Attachment and M6 Acceptance
 
-> **Superseded on 2026-07-31. Do not review or accept.** The full-screen TUI
+> **Archived outside active batch directories. Do not review or accept.** The full-screen TUI
 > amendment decomposes this scope into `CA-18` through `CA-24` in
 > `docs/spec/v1-implementation-map.md §8`. This historical brief is not review
 > authority.

@@ -13,11 +13,12 @@ This review is subordinate to:
 - `docs/spec/v1-implementation-map.md`
 - `docs/spec/operator-session.md`
 - `docs/spec/cli-session.md`
+- this pack's `tui-interface-contracts.md`
 - `docs/spec/implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
 - this pack's `implementation-quality-and-agent-rules.md`
 
-Status: ❌ Not started — draft replacement; it is not dispatch authority until
-the CA-18 through CA-24 repack is complete
+Status: ❌ Not started — repacked draft; it is not acceptance authority until
+independent pack review and sealing
 
 Paired work batch: CA-18
 

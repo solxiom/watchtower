@@ -338,5 +338,6 @@ When you work always plan and make task lists and todos!
 
 Record the exact command list, the foundation module each command delegates to,
 the help fragment inventory, and the dry-run/JSON parity proof results. Note that
-CA-15 through CA-18 will add session commands using the same patterns. Confirm
-that every predecessor foundation module is correctly consumed.
+CA-15 through CA-17 add session services, CA-21 consumes bounded query/action
+patterns, and CA-24 owns session command integration. Confirm every predecessor
+foundation module is correctly consumed.

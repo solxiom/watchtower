@@ -1,11 +1,8 @@
 # Work Batch Index — wt-coordinator-automation
 
-> **Superseded for repacking on 2026-07-31.** The old `CA-18` entry is not
-> implementation authority; use the `CA-18`–`CA-24` map in
-> `docs/spec/v1-implementation-map.md` when regenerating this index.
-> The replacement
-> [CA-18 feasibility brief](CA-18-nirvana-opentui-feasibility-and-packaging-gate.md)
-> is a repack-staging draft only; this index remains superseded.
+> **Repacked draft (2026-07-31).** Entries CA-18 through CA-24 replace the
+> historical monolithic CA-18. Dispatch remains blocked until independent pack
+> review and sealing.
 
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
@@ -21,8 +18,8 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **active index**
-Date: 2026-07-30
+Status: **repacked draft index**
+Date: 2026-07-31
 
 CA-01: ❌ Not started
 CA-02: ❌ Not started
@@ -42,6 +39,12 @@ CA-15: ❌ Not started
 CA-16: ❌ Not started
 CA-17: ❌ Not started
 CA-18: ❌ Not started
+CA-19: ❌ Not started
+CA-20: ❌ Not started
+CA-21: ❌ Not started
+CA-22: ❌ Not started
+CA-23: ❌ Not started
+CA-24: ❌ Not started
 
 ## Batch Order And Dependency Summary
 
@@ -52,7 +55,9 @@ CA-07 on CA-02—CA-06; CA-08 on CA-02/CA-06/CA-07; CA-09 on CA-05/CA-07/CA-08;
 CA-10 on LC-03 and CA-09). CA-11 and CA-12 in parallel after CA-10. CA-13 after
 CA-03/CA-05/CA-10—CA-12. CA-14 after CA-01—CA-13. CA-15 after CA-03 and UK-02.
 CA-16 after CA-02/CA-15. CA-17 after CA-06/CA-08—CA-10/CA-15/CA-16. CA-18 after
-CA-14—CA-17.
+RT-03/RT-05/CA-14—CA-17. CA-19 after CA-18. CA-20 after CA-16/CA-19. CA-21
+after CA-14/CA-17/CA-19. CA-22 after CA-17/CA-20/CA-21. CA-23 after CA-18—
+CA-22. CA-24 after CA-14—CA-23.
 
 | Batch | Depends on | Primary proof system |
 |-------|------------|---------------------|
@@ -73,7 +78,13 @@ CA-14—CA-17.
 | CA-15 | CA-03, UK-02 accepted | Unit + filesystem specs: lifecycle state machine, crash-safe journals, immutable closed history |
 | CA-16 | CA-02, CA-15 accepted | Unit specs: bounded working sets, same-lane capsules, compaction, non-transitive references |
 | CA-17 | CA-06, CA-08–CA-10, CA-15, CA-16 accepted | Unit + integration specs: M0/D1–D3 routing, grants/reserves, confirmation/revalidation, hold interleaving |
-| CA-18 | CA-14–CA-17 accepted | Integration + scale specs: create/attach/resume/observe, streaming/signals/accessibility, 30–10k scale, long-lane replay |
+| CA-18 | RT-03, RT-05, CA-14–CA-17 accepted | Node/OpenTUI/Nirvana feasibility; FFI bootstrap, native packaging, restoration, security |
+| CA-19 | CA-18 accepted `PASS` | Shell/layout/focus/theme component and resize proofs |
+| CA-20 | CA-16, CA-19 accepted | Virtualization/input/history/reference boundedness and security |
+| CA-21 | CA-14, CA-17, CA-19 accepted | Nine inspector views, action parity, overlays, confirmation authority |
+| CA-22 | CA-17, CA-20, CA-21 accepted | Streaming/order/backpressure, contention/wait, notifications, observer limits |
+| CA-23 | CA-18–CA-22 accepted | Restoration/signals/security/accessibility platform PTY matrix |
+| CA-24 | CA-14–CA-23 accepted | Commands/global install; 30–10k scale; long-session replay; M6 exit |
 
 ## Proof Expectations
 
@@ -84,7 +95,10 @@ CA-14—CA-17.
 | CA-10–CA-13 | Unit + crash-replay specs for idempotency, lock contention, interrupted writes, and incomplete external effects. Real filesystem for journal append/fsync. External-effect prepare/attempt/verify journaling. |
 | CA-14 | Integration + command specs for every form (human/JSON, success/error/empty, dry-run). Help fragment audit. No coordinator logic in command classes. |
 | CA-15–CA-17 | Unit specs for lifecycle state machine, crash-safe journals, bounded working sets, budget accounting, hold interleaving. Integration specs for multi-session concurrency. |
-| CA-18 | Integration specs for PTY attachment create/attach/resume/observe. Scale specs for 30/300/3,000/10,000-batch packs with fixed dependency neighborhoods. Long-lane replay with session count growth. Accessibility proof. Streaming/signal behavior. |
+| CA-18 | Feasibility/package fixture only: runtime flags, adapter capability, native artifacts, global install, security, restoration, non-TUI isolation. |
+| CA-19–CA-22 | Pure reducers/components plus bounded integration for layout, input, inspectors, live turns, concurrency, and observers. |
+| CA-23 | Independent lifecycle, hostile-content, accessibility, emulator, tmux, signal, suspend, and packaged PTY qualification. |
+| CA-24 | Every public command and complete scale/replay/performance/global-install/authority proof; final M6 gate. |
 
 ## Shared Proof Rule
 

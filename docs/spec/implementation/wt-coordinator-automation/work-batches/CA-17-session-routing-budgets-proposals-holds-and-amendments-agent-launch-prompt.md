@@ -362,5 +362,6 @@ When you work always plan and make task lists and todos!
 Record the exact M0 query registry, the classification decision tree, the
 budget dimension list and reserve-protection rules, the proposal state machine
 and CA-09/CA-10 integration contract, the hold scope types and blocking rules,
-and the amendment-request format. Note that CA-18 will build session CLI/PTY
-commands consuming all of these services.
+and the amendment-request format. Note that CA-18 is the renderer feasibility
+gate, CA-21/CA-22 consume these services in the TUI, and CA-24 owns session
+command integration.

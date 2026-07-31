@@ -1,15 +1,12 @@
 # wt-coordinator-automation — Implementation Pack 5
 
-> **Superseded for repacking (2026-07-31).** The full-screen v1 TUI amendment
-> replaces monolithic `CA-18` with `CA-18` through `CA-24`. This 18-batch draft
-> must not be reviewed, sealed, or used to initialize a lane. Re-author it from
-> `docs/spec/v1-implementation-map.md §1.2` and `§8`.
->
-> Repack staging has begun with the replacement
-> [CA-18 work brief](work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md)
-> and
-> [CA-18 review brief](review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md).
-> Those drafts do not reactivate this pack.
+> **Repacked draft (2026-07-31).** CA-18 through CA-24 now replace the
+> superseded monolithic session-attachment batch. This pack is internally
+> author-complete but remains unsealed and cannot initialize a lane until an
+> independent pack review accepts its exact bytes.
+
+The superseded monolithic CA-18 brief/prompt pair is retained only under
+`historical/monolithic-ca18/`; active indexes never reference it.
 
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
@@ -25,10 +22,10 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Superseded — full-screen TUI repack required**
+Status: **Repacked draft — independent pack review and seal required**
 Target release: `1.0.0`
-Pack ID: `CA-01` through `CA-18`
-Work batches: **18** | Review batches: **18**
+Pack ID: `CA-01` through `CA-24`
+Work batches: **24** | Review batches: **24**
 Last updated: 2026-07-31
 
 ## Purpose
@@ -90,9 +87,13 @@ Deliver the complete coordinator-automation surface defined in
     same-lane capsules, no transitive/full-history fallback.
 17. Session routing, budgets, proposals, holds, and amendments — M0/D1–D3
     routing, grants/reserves, confirmation/revalidation, scoped hold interleaving.
-18. Session CLI/PTY attachment and M6 acceptance — create/attach/resume/observe,
-    streaming/signals/accessibility, 30–10k pack scale and long-lane replay
-    proof.
+18. Nirvana/OpenTUI feasibility and packaging gate.
+19. TUI shell, responsive layout, themes, and focus.
+20. Conversation timeline, composer, history, and references.
+21. Inspector views, command palette, and overlays.
+22. Turn streaming, notifications, concurrency, and observer UI.
+23. Accessibility, terminal lifecycle, recovery, and PTY qualification.
+24. Session command integration, scale/replay, and M6 acceptance.
 
 ## Pack Scope
 
@@ -115,24 +116,26 @@ Deliver the complete coordinator-automation surface defined in
 | CA-15 | Operator-session persistence and lifecycle | R4 | `src/foundation/SessionStore.ts`, `src/foundation/SessionLifecycle.ts` |
 | CA-16 | Session indexes, references, pins, and compaction | R5 | `src/foundation/SessionIndexes.ts`, `src/foundation/SessionCompaction.ts` |
 | CA-17 | Session routing, budgets, proposals, holds, and amendments | R5 | `src/foundation/SessionRouting.ts`, `src/foundation/SessionBudgets.ts`, `src/foundation/SessionHolds.ts` |
-| CA-18 | Session CLI/PTY attachment and M6 acceptance | R5 | one command class per subcommand, focused terminal renderer/attachment services, help |
+| CA-18 | Nirvana/OpenTUI feasibility and packaging gate | R4 | disposable qualification fixture, bootstrap/native/package evidence |
+| CA-19 | TUI shell, responsive layout, themes, and focus | R4 | shell/layout/focus/action/theme presentation capability |
+| CA-20 | Conversation timeline, composer, history, and references | R5 | bounded timeline/input/history/reference presentation |
+| CA-21 | Inspector views, command palette, and overlays | R4 | bounded inspector/action/overlay presentation |
+| CA-22 | Turn streaming, notifications, concurrency, and observer UI | R5 | event reducer, attachment controller, bounded live refresh |
+| CA-23 | Accessibility, terminal lifecycle, recovery, and PTY matrix | R5 | restoration/security/accessibility adapters and fixtures |
+| CA-24 | Session command integration, scale/replay, and M6 acceptance | R5 | thin commands/help plus independent pack-exit proof |
 
 ## Dependency Graph (Within Pack)
 
-```
-CA-01 ──► CA-02 ──► CA-03 ──► CA-04 ──► CA-05 ──► CA-06 ──► CA-07 ──► CA-08 ──► CA-09 ──► CA-10
-                                    │                                              │                   │
-                                    │                                              │                   ├──► CA-11
-                                    │                                              │                   ├──► CA-12
-                                    │                                              │                   └──► CA-13
-                                    │                                              │                         │
-                                    │                                              │                         ▼
-                                    │                                              └──► CA-14 ◄─────────────┘
-                                    │                                                       │
-                                    └──► CA-15 ──► CA-16 ──► CA-17 ◄────────────────────────┘
-                                                                   │
-                                                                   ▼
-                                                                 CA-18
+```text
+CA-01 → … → CA-13 → CA-14 ───────────────┐
+CA-15 → CA-16 → CA-17 ───────────────────┤
+RT-03 + RT-05 ───────────────────────────┤
+                                         ▼
+CA-18 → CA-19 ─┬→ CA-20 ────────────────┐
+               └→ CA-21 ────────────────┤
+CA-17 ─────────────────────→ CA-22 ◄─────┘
+CA-18…CA-22 ────────────────→ CA-23
+CA-14…CA-23 ────────────────→ CA-24 → Pack 5/M6
 ```
 
 ## Cross-Pack Dependencies
@@ -172,9 +175,12 @@ Read in this order:
 10. `implementation-roadmap.md` — pack roadmap
 11. `implementation-tracker.md` — pack tracker
 12. `implementation-quality-and-agent-rules.md` — quality rules and reviewer checklist
-13. `batch-reasoning-difficulty-ranking.md` — reasoning difficulty ranking
-14. `work-batches/00-work-batch-index.md` — work batch index
-15. `review-batches/00-review-batch-index.md` — review batch index
+13. `agent-launch-contract.md` — shared mandatory launch contract
+14. `tui-batch-traceability.md` — CA-18–CA-24 requirement/proof ownership
+15. `tui-interface-contracts.md` — framework-neutral CA-18–CA-24 interfaces
+16. `batch-reasoning-difficulty-ranking.md` — reasoning difficulty ranking
+17. `work-batches/00-work-batch-index.md` — work batch index
+18. `review-batches/00-review-batch-index.md` — review batch index
 
 Then read the specific paired work/review batch brief and the real source
 owners you will inspect or change.
@@ -195,8 +201,11 @@ bounded independently of unrelated pack/session growth.
 - `CA-06` proves adapter eligibility before any unattended invocation.
 - `CA-09` and `CA-10` must be accepted before enabling `CA-11`–`CA-13`.
 - `CA-15`–`CA-17` may be developed against accepted service fixtures while
-  `CA-14` is built, but all converge at `CA-18`.
-- `CA-18` must show that unrelated pack/session growth does not increase
+  `CA-14` is built; all are required before `CA-18`.
+- `CA-18` is a pass/fail feasibility gate and ships no session product.
+- `CA-19`–`CA-22` split presentation ownership; `CA-23` independently closes
+  terminal/accessibility risk.
+- `CA-24` must show that unrelated pack/session growth does not increase
   ordinary model context and that advisory turns never hold the lane lock.
 - No model is invoked for M0 operations.
 - Coordinator agents cannot directly mutate authoritative state.

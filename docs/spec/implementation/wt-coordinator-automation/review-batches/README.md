@@ -14,13 +14,13 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: active review brief pack
-Date: 2026-07-30
+Status: repacked draft review brief pack
+Date: 2026-07-31
 
 ## Purpose
 
 This directory contains the reviewer-side acceptance briefs for the Watchtower v1
-coordinator-automation delivery pack — 18 batches forming the M6 coordinator
+coordinator-automation delivery pack — 24 batches forming the M6 coordinator
 automation foundation.
 
 Each review batch includes:
@@ -30,8 +30,9 @@ Each review batch includes:
 
 ## Acceptance Authority
 
-This directory is the only executable acceptance brief pack for the 18
-wt-coordinator-automation batches (CA-01 through CA-18). Reviewers rerun proofs,
+After independent pack review and sealing, this directory is the executable
+acceptance brief pack for the 24 wt-coordinator-automation batches (CA-01
+through CA-24). Reviewers rerun proofs,
 inspect source independently, and are the acceptance authority. The
 implementation agent does not commit; the reviewer owns the acceptance decision
 and the commit.
@@ -41,6 +42,7 @@ and the commit.
 - Before any batch review, read the repo-level mandatory material named in
   `AGENTS.md`.
 - Read the lane roadmap, tracker, and quality rules first.
+- Include `../agent-launch-contract.md` in every review launch envelope.
 - Read `docs/spec/implementation/wt-coordinator-automation/README.md` for the
   lane-level owner map.
 - Read the paired implementation work brief and the implementation report.

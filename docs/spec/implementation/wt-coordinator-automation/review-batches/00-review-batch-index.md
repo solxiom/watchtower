@@ -1,11 +1,8 @@
 # Review Batch Index — Watchtower v1 Coordinator Automation
 
-> **Superseded for repacking on 2026-07-31.** The old `CA-18` review is not
-> acceptance authority; use the `CA-18`–`CA-24` map in
-> `docs/spec/v1-implementation-map.md` when regenerating this index.
-> The replacement
-> [CA-18 review brief](CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md)
-> is a repack-staging draft only; this index remains superseded.
+> **Repacked draft (2026-07-31).** Reviews CA-18 through CA-24 replace the
+> historical monolithic CA-18 review. Acceptance remains blocked until
+> independent pack review and sealing.
 
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
@@ -21,8 +18,8 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: active index
-Date: 2026-07-30
+Status: repacked draft index
+Date: 2026-07-31
 
 ## Review Order
 
@@ -49,7 +46,13 @@ is complete and the implementation report is written.
 | CA-15 | CA-15 | Verify many sessions; one active turn each; immutable closed history; crash-safe journals |
 | CA-16 | CA-16 | Verify session SQLite index; bounded metadata/excerpts; same-lane capsules; no full-history fallback |
 | CA-17 | CA-17 | Verify session routing/budgets/proposals/holds/amendments; M0/D1–D3 grants/reserves; confirmation/revalidation; scoped hold interleaving |
-| CA-18 | CA-18 | Verify session CLI/PTY attachment; create/attach/resume/observe; streaming/signals/accessibility; 30–10k pack scale and long-lane replay |
+| CA-18 | CA-18 | Independently qualify Node/OpenTUI/Nirvana, FFI bootstrap, native distribution, restoration, security, and non-TUI isolation |
+| CA-19 | CA-19 | Independently verify responsive shell, resize state, focus/keymap, themes/preferences, adapter isolation |
+| CA-20 | CA-20 | Independently verify virtualized bounded timeline, composer/slash/history/reference correctness and security |
+| CA-21 | CA-21 | Independently verify nine bounded inspector views, action parity, overlays, and confirmation authority |
+| CA-22 | CA-22 | Independently verify stream validation/bounds, contention/wait, notification correctness, and observer denial |
+| CA-23 | CA-23 | Independently capture restoration, signals/suspend, hostile-content, accessibility, and PTY/emulator matrix |
+| CA-24 | CA-24 | Independently reproduce commands, global install, 30–10k context invariance, long-session replay, soak, and M6 authority |
 
 ## Shared Review Rule
 
@@ -69,7 +72,8 @@ A review batch is accepted only when:
 2. No hard-reject checklist item is flagged.
 3. Status docs (`implementation-tracker.md`, `implementation-roadmap.md`) are
    updated for the batch outcome.
-4. The corrected `v1.md` command status table is updated (CA-14, CA-18 only).
+4. The corrected `v1.md` command status table is updated only by its owning
+   command batches (CA-14 and CA-24).
 5. All files are owned by `kavan:kavan`.
 6. No `.local/` artifacts are staged.
 7. The reviewer creates the acceptance commit.
@@ -89,4 +93,8 @@ Review batches follow the same dependency order as work batches:
 - CA-09 depends on CA-05, CA-07, CA-08 accepted.
 - CA-10 depends on LC-03, CA-09 accepted.
 - CA-11 through CA-17 depend on earlier CAs as pipeline allows.
-- CA-18 depends on CA-14 through CA-17 accepted.
+- CA-18 depends on RT-03, RT-05, and CA-14 through CA-17 accepted.
+- CA-19 depends on CA-18 accepted with `PASS`.
+- CA-20 and CA-21 follow their declared parallel dependency branches.
+- CA-22 joins CA-20/CA-21; CA-23 qualifies CA-18–CA-22.
+- CA-24 depends on CA-14 through CA-23 and is the sole Pack 5 exit review.

@@ -1,4 +1,7 @@
-# Agent Launch Prompt — Review Batch CA-18
+# Historical Agent Launch Prompt — Review Batch CA-18
+
+> **Archived outside active batch directories. Do not dispatch or accept.** Use the
+> replacement CA-18 through CA-24 prompts and briefs in this directory.
 
 ## Governing Contract And Precedence — Mandatory
 

@@ -15,7 +15,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 limits, and acceptance-with-follow-up are forbidden.
 
 Status: **active pack quality rules**
-Date: 2026-07-30
+Date: 2026-07-31
 
 ## Purpose
 
@@ -260,7 +260,13 @@ to confirm that the implementor followed a checklist.
 | CA-15 | R4 | R4 | Operator-session persistence; state-machine integrity is bounded |
 | CA-16 | R5 | R5 | Session memory bounds; compaction correctness, transitive reference proof |
 | CA-17 | R5 | R5 | Session routing/budgets/holds; interleaving with automation safety |
-| CA-18 | R5 | R5 | PTY attachment, replay, 30–10k scale proof; end-to-end boundedness |
+| CA-18 | R4 | R4 | Experimental FFI/native packaging and Nirvana compatibility gate |
+| CA-19 | R4 | R4 | Responsive shell, focus/keymap, theme, preference, adapter boundaries |
+| CA-20 | R5 | R5 | Virtualized memory bounds, retention, completion races, reference security |
+| CA-21 | R4 | R4 | Bounded inspector queries, shared actions, confirmation authority |
+| CA-22 | R5 | R5 | Stream ordering/backpressure, contention/wait, observer concurrency |
+| CA-23 | R5 | R5 | Restoration, terminal security, accessibility across platform PTY matrix |
+| CA-24 | R5 | R5 | Commands plus final scale/replay/soak and M6 authority closure |
 
 Escalate a nominal `R4` task to `R5` if source inspection reveals an undocumented
 state machine, concurrency, destructive data behavior, an ownership conflict
@@ -270,31 +276,29 @@ implementation report claims the work is straightforward.
 
 ## Prompt Integrity And Non-Compression Rule
 
-Launch prompts and durable briefs are safety artifacts. Their ownership rule,
-read order, scope, mission, prohibitions, proof requirements, tracker duties,
-machine-local report instructions, correction procedure, reasoning class, and
-handoff requirements must not be removed or compressed into ambiguous shorthand.
+Launch prompts and durable briefs are safety artifacts. The mandatory shared
+`agent-launch-contract.md`, batch prompt, paired brief, and bounded predecessor
+handoff together form one launch envelope. An orchestrator must deliver all
+four; a prompt copied without the shared contract is invalid.
 
 - Expansion and clarification are encouraged when they make an invariant,
   owner, failure mode, proof obligation, or review procedure more explicit.
 - Incorrect paths or claims must be replaced with equally detailed or more
   detailed correct content; deleting the surrounding instruction is not a fix.
-- The implementation and reviewer lanes must each stand on their own. A reviewer
-  prompt may refer to the paired work brief, but it must still state how to
-  independently inspect source, reproduce proof, reject structural defects,
-  record corrections, and update pack state.
+- Work and review lanes remain independent. The shared contract states common
+  method once; each prompt and brief state the batch-specific mission, scope,
+  proof, report, rejection, and handoff.
 - Machine-specific ownership instructions in launch prompts are protected
   operator controls. They must be retained verbatim unless the pack owner
   explicitly replaces them with an equally explicit rule.
-- A short launch prompt is not acceptable merely because the durable brief is
-  detailed. Agents may receive one artifact without prior conversation context,
-  so each launch prompt must preserve the complete execution or review method.
-- Both the top-level `Recommended agent/model class for forwarding` section and
-  any later `Reasoning / Agent Class` section must remain independently complete.
-  Do not replace the primary-model, good-alternative, steering-only,
-  prohibited-final-pass, suitability, context-retention, or final-authority tiers
-  with only an `R` label and a one-line rationale. Repetition is preferable to
-  losing forwarding instructions when an operator copies only one of those sections.
+- Sealed context indexes treat the shared contract as a required direct
+  dependency and fail compilation if it is absent or digest-mismatched.
+- Agent selection is capability/allocation based. Prompts declare an `R` floor;
+  the current allocation plan selects available endpoints/accounts. Static
+  vendor/model recommendations are non-authoritative and must not be copied
+  through every prompt.
+- Bounded deduplication is preferred to repeated boilerplate because it reduces
+  pack size and coordinator context without weakening a single invariant.
 
 ## Proof And Evidence Requirements
 
@@ -312,8 +316,9 @@ No batch is acceptable on narrative confidence alone.
   dry-run purity, human/JSON output, and error cases.
 - Session batches (CA-15–CA-17) must prove lifecycle state machine transitions,
   bounded memory, budget accounting, and hold interleaving.
-- CA-18 must independently reproduce the 30–10k pack scale proof and long-lane
-  replay proof.
+- CA-18 qualifies renderer/runtime/package feasibility; CA-19–CA-23 prove their
+  bounded TUI responsibilities; CA-24 independently reproduces 30–10k pack
+  scale, long-session replay, and final M6 closure.
 - Reports must record the real commands run, the actual outcome, and any honest
   limitation.
 - "Not run yet", "reviewer can run later", or "covered by existing behavior" is

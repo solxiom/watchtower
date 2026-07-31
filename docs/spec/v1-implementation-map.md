@@ -93,9 +93,9 @@ The replacement CA-18 is now drafted as:
 - `implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
 - `implementation/wt-coordinator-automation/review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md`
 
-These drafts do not reactivate the pack. Dispatch remains blocked until all
-CA-18 through CA-24 briefs, prompts, indexes, reasoning allocations, and pack
-review are complete.
+The CA-18 through CA-24 briefs, prompts, indexes, and reasoning allocations are
+now repacked. Dispatch remains blocked until an independent pack review accepts
+their exact cross-references/counts and the resulting pack is sealed.
 
 ## 2. Current and target architecture
 

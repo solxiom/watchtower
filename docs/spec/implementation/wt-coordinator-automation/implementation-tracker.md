@@ -1,8 +1,8 @@
 # wt-coordinator-automation Implementation Tracker
 
-> **Superseded for repacking on 2026-07-31.** The 18-batch matrix does not
-> include the required full-screen TUI decomposition. Do not dispatch from this
-> tracker until it is regenerated from `docs/spec/v1-implementation-map.md`.
+> **Repacked draft (2026-07-31).** The 24-batch matrix includes the full-screen
+> TUI decomposition. It remains non-dispatchable until independent pack review
+> and sealing.
 
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
@@ -18,10 +18,10 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Superseded — full-screen TUI repack required**
-Date: 2026-07-30
+Status: **Repacked draft — independent pack review and seal required**
+Date: 2026-07-31
 Pack: 5 of 6 — `wt-coordinator-automation`
-Batches: 18 work + 18 review
+Batches: 24 work + 24 review
 
 ## Batch Status Matrix
 
@@ -44,7 +44,13 @@ Batches: 18 work + 18 review
 | CA-15 | Commands/sessions | [work](work-batches/CA-15-operator-session-persistence-and-lifecycle.md) | [review](review-batches/CA-15-review-operator-session-persistence-and-lifecycle.md) | ❌ Not started |
 | CA-16 | Commands/sessions | [work](work-batches/CA-16-session-sqlite-index-references-pins-and-compaction.md) | [review](review-batches/CA-16-review-session-sqlite-index-references-pins-and-compaction.md) | ❌ Not started |
 | CA-17 | Commands/sessions | [work](work-batches/CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | [review](review-batches/CA-17-review-session-routing-budgets-proposals-holds-and-amendments.md) | ❌ Not started |
-| CA-18 | Commands/sessions | [work](work-batches/CA-18-session-cli-pty-attachment-and-m6-acceptance.md) | [review](review-batches/CA-18-review-session-cli-pty-attachment-and-m6-acceptance.md) | ❌ Not started |
+| CA-18 | TUI qualification | [work](work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md) | [review](review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md) | ❌ Not started |
+| CA-19 | TUI presentation | [work](work-batches/CA-19-tui-shell-responsive-layout-themes-and-focus.md) | [review](review-batches/CA-19-review-tui-shell-responsive-layout-themes-and-focus.md) | ❌ Not started |
+| CA-20 | TUI presentation | [work](work-batches/CA-20-conversation-timeline-composer-history-and-references.md) | [review](review-batches/CA-20-review-conversation-timeline-composer-history-and-references.md) | ❌ Not started |
+| CA-21 | TUI presentation | [work](work-batches/CA-21-inspector-command-palette-and-overlays.md) | [review](review-batches/CA-21-review-inspector-command-palette-and-overlays.md) | ❌ Not started |
+| CA-22 | TUI integration | [work](work-batches/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md) | [review](review-batches/CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui.md) | ❌ Not started |
+| CA-23 | TUI qualification | [work](work-batches/CA-23-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | [review](review-batches/CA-23-review-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | ❌ Not started |
+| CA-24 | Commands/M6 | [work](work-batches/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md) | [review](review-batches/CA-24-review-session-command-integration-scale-replay-and-m6-acceptance.md) | ❌ Not started |
 
 ## Batch Dependencies
 
@@ -67,7 +73,13 @@ Batches: 18 work + 18 review
 | CA-15 | CA-03 | UK-02 | CA-04 through CA-14 |
 | CA-16 | CA-02, CA-15 | — | CA-14 |
 | CA-17 | CA-06, CA-08, CA-09, CA-10, CA-15, CA-16 | — | CA-14 |
-| CA-18 | CA-14, CA-15, CA-16, CA-17 | — | — |
+| CA-18 | CA-14, CA-15, CA-16, CA-17 | RT-03, RT-05 | — |
+| CA-19 | CA-18 | — | — |
+| CA-20 | CA-16, CA-19 | — | CA-21 |
+| CA-21 | CA-14, CA-17, CA-19 | — | CA-20 |
+| CA-22 | CA-17, CA-20, CA-21 | — | — |
+| CA-23 | CA-18 through CA-22 | — | — |
+| CA-24 | CA-14 through CA-23 | — | — |
 
 ## Reasoning Class Assignment
 
@@ -90,7 +102,13 @@ Batches: 18 work + 18 review
 | CA-15 | R4 | R4 | Operator-session persistence and lifecycle state machine |
 | CA-16 | R5 | R5 | Session memory bounds — compaction, capsule, transitive reference proof |
 | CA-17 | R5 | R5 | Session routing, budgets, holds — interleaving with automation safety |
-| CA-18 | R5 | R5 | PTY attachment, replay, scale proof — end-to-end boundedness verification |
+| CA-18 | R4 | R4 | Experimental FFI/native packaging and Nirvana compatibility gate |
+| CA-19 | R4 | R4 | Responsive shell/focus/theme ownership and adapter isolation |
+| CA-20 | R5 | R5 | Virtualization, retention, reference/path security, bounded memory |
+| CA-21 | R4 | R4 | Bounded query/action/confirmation presentation boundaries |
+| CA-22 | R5 | R5 | Streaming ordering/backpressure and attachment concurrency |
+| CA-23 | R5 | R5 | Terminal restoration/security/accessibility across PTY matrix |
+| CA-24 | R5 | R5 | Full command integration, scale/replay/soak, M6 authority closure |
 
 ## Proof Classes Required Per Batch
 
@@ -98,11 +116,11 @@ Batches: 18 work + 18 review
 |-------------|---------------------|
 | Unit/contract fixtures | All |
 | Filesystem integration | CA-01–CA-04, CA-10–CA-13, CA-15 |
-| Runtime packaging/smoke | CA-11, CA-13 |
+| Runtime packaging/smoke | CA-11, CA-13, CA-18, CA-23, CA-24 |
 | Transaction crash/replay | CA-03, CA-10–CA-13 |
-| PTY/accessibility | CA-18 |
-| Cost and scaling | CA-01, CA-02, CA-08, CA-18 |
-| End-to-end acceptance | CA-18 |
+| PTY/accessibility | CA-18, CA-19, CA-23, CA-24 |
+| Cost and scaling | CA-01, CA-02, CA-08, CA-20, CA-22, CA-24 |
+| End-to-end acceptance | CA-24 |
 
 ## Mandatory Status-Doc Sync
 

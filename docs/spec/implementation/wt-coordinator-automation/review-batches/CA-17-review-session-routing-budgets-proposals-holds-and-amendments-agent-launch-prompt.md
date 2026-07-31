@@ -316,4 +316,5 @@ CA-17: Session routing, budgets, proposals, holds, and amendments accepted
 Record the acceptance outcome, verified M0 query registry, D3 guard-override
 evidence, budget reserve-protection proof, proposal pipeline integration audit,
 hold scope/expiry verification, and amendment-request non-intrusiveness results.
-Confirm that CA-18 may now build session CLI/PTY commands on this foundation.
+Confirm that CA-18 may perform renderer qualification and that CA-21/CA-22/
+CA-24 may later consume the accepted session-service contracts.

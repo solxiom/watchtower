@@ -274,7 +274,7 @@ line-count check never overrides the responsibility gate.
 ## Completion And Handoff
 
 - Implementation report, updated tracker/roadmap.
-- CA-15 through CA-18 will add session commands on top of this command
-  foundation (using the same patterns).
+- CA-15 through CA-17 add session services, CA-21 consumes bounded command/
+  query authority, and CA-24 owns session command integration.
 - Leave the exact command list, their help fragments, and their foundation
   module dependencies for the next agent.

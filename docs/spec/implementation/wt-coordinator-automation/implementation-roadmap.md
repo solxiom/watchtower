@@ -1,9 +1,8 @@
 # wt-coordinator-automation Implementation Roadmap
 
-> **Superseded for repacking on 2026-07-31.** Its monolithic `CA-18` plan is
-> replaced by `CA-18` through `CA-24` in
-> `docs/spec/v1-implementation-map.md §1.2` and `§8`. Do not use this roadmap
-> for dispatch until it is regenerated.
+> **Repacked draft (2026-07-31).** CA-18 through CA-24 replace the historical
+> monolithic attachment batch. Do not dispatch until independent pack review
+> and sealing.
 
 > **Draft pack-authoring artifact.** This document is not a seal, acceptance
 > record, or authority to initialize a lane. Before pack acceptance, reconcile
@@ -19,11 +18,11 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Proposed — pack authored, awaiting lane initialization**
-Date: 2026-07-30
+Status: **Repacked draft — independent pack review and seal required**
+Date: 2026-07-31
 Pack: 5 of 6 — `wt-coordinator-automation`
 Milestone: M6
-Work/review pairs: 18
+Work/review pairs: 24
 
 Parent documents:
 
@@ -66,7 +65,8 @@ The delivery must guarantee:
 - Durable operator-session persistence with many sessions per lane and crash-safe journals.
 - Session indexes, references, pins, and compaction with bounded working sets.
 - Session routing, budgets, proposals, holds, and amendments at M0/D1–D3.
-- Session CLI/PTY attachment proving 30–10k pack scale and bounded model context.
+- Qualified full-screen TUI plus CA-24 command integration, 30–10k scale,
+  long-session replay, and bounded model context.
 
 ## Delivery Phases
 
@@ -152,10 +152,10 @@ Acceptance snapshot (target):
 - Fsynced cursor advance.
 - Interrupted/duplicate/uncertain replay handling.
 
-### Phase 4: Command Integration and Operator Sessions (Batches CA-14–CA-18)
+### Phase 4: Commands and Operator-Session Services (Batches CA-14–CA-17)
 
 Goal: deliver the coordinator and session command groups, durable operator
-sessions, bounded session memory, and the polished terminal attachment.
+sessions, bounded session memory, and accepted services for a later TUI.
 
 Batches:
 
@@ -163,7 +163,6 @@ Batches:
 - CA-15 — Operator-session persistence and lifecycle
 - CA-16 — Session indexes, references, pins, and compaction
 - CA-17 — Session routing, budgets, proposals, holds, and amendments
-- CA-18 — Session CLI/PTY attachment and M6 acceptance
 
 Status: ❌ Not started
 
@@ -179,13 +178,31 @@ Acceptance snapshot (target):
 - Finite budget grants within lane-wide limits and protected reserves.
 - Confirmation/revalidation before effect application.
 - Scoped hold interleaving without blocking unrelated automation.
-- Create/attach/resume/observe session commands.
-- Streaming/signals/accessibility for terminal attachment.
-- 30–10k pack scale proof with bounded model context.
+- Bounded service and query interfaces ready for TUI composition.
 
-### Phase 5: Pack Acceptance
+### Phase 5: Full-Screen TUI Delivery (Batches CA-18–CA-23)
 
-M6 acceptance is gated on CA-18 proving:
+Batches:
+
+- CA-18 — Nirvana/OpenTUI feasibility and packaging gate
+- CA-19 — TUI shell, responsive layout, themes, and focus
+- CA-20 — Conversation timeline, composer, history, and references
+- CA-21 — Inspector views, command palette, and overlays
+- CA-22 — Turn streaming, notifications, concurrency, and observer UI
+- CA-23 — Accessibility, terminal lifecycle, recovery, and PTY matrix
+
+Status: ❌ Not started
+
+Acceptance snapshot (target):
+
+- Framework-free OpenTUI passes Node/Nirvana/native qualification.
+- Responsive shell, bounded conversation/input, nine model-free inspector
+  views, shared actions/confirmation, and ordered bounded live updates.
+- Terminal restoration, security, accessibility, and PTY matrix accepted.
+
+### Phase 6: Pack Acceptance (Batch CA-24)
+
+M6 acceptance is gated on CA-24 proving:
 
 - Routine coordination invokes no model when preauthorized.
 - Judgment is bounded and capability-matched.
@@ -193,6 +210,8 @@ M6 acceptance is gated on CA-18 proving:
 - Operators have durable bounded sessions without mutation authority.
 - Unrelated pack/session growth does not increase ordinary model context.
 - Advisory turns never hold the lane lock.
+- Session/ask commands and help match accepted services/TUI.
+- 30–10k pack and long-session replay/soak remain bounded.
 
 ## Sequencing Rule
 
@@ -209,7 +228,12 @@ M6 acceptance is gated on CA-18 proving:
 - CA-15 depends on CA-03 and UK-02.
 - CA-16 depends on CA-02 and CA-15.
 - CA-17 depends on CA-06, CA-08 through CA-10, CA-15, and CA-16.
-- CA-18 depends on CA-14 through CA-17.
+- CA-18 depends on RT-03, RT-05, and CA-14 through CA-17.
+- CA-19 depends on CA-18 `PASS`.
+- CA-20 depends on CA-16/CA-19; CA-21 on CA-14/CA-17/CA-19.
+- CA-22 depends on CA-17/CA-20/CA-21.
+- CA-23 depends on CA-18 through CA-22.
+- CA-24 depends on CA-14 through CA-23.
 
 No routing batch may begin before the index foundation gate is accepted.
 No effect batch may begin before the proposal validator is accepted.
@@ -235,7 +259,13 @@ No session attachment may begin before all session services are accepted.
 15. Establish operator-session persistence and lifecycle (CA-15)
 16. Build session indexes, references, pins, and compaction (CA-16)
 17. Implement session routing, budgets, proposals, holds, and amendments (CA-17)
-18. Build session CLI/PTY attachment and prove M6 acceptance (CA-18)
+18. Qualify Nirvana/OpenTUI, FFI bootstrap, and native packaging (CA-18)
+19. Build the responsive shell, themes, focus, and keymap (CA-19)
+20. Build bounded conversation, composer, history, and references (CA-20)
+21. Build bounded inspector views, palette, and overlays (CA-21)
+22. Integrate streaming, notifications, contention, and observers (CA-22)
+23. Qualify accessibility, restoration, security, and PTY matrix (CA-23)
+24. Integrate commands and independently prove scale/replay/M6 (CA-24)
 
 ## Parallel Development Options
 
@@ -244,7 +274,8 @@ No session attachment may begin before all session services are accepted.
 - CA-16 may begin after CA-02 and CA-15 accept.
 - CA-17 may begin after its dependencies accept (CA-06, CA-08–CA-10, CA-15, CA-16).
 - CA-14 and CA-15–CA-17 may be developed against accepted service fixtures.
-- All converge at CA-18 for terminal attachment integration and M6 proof.
+- CA-20 and CA-21 may run in parallel after CA-19 and their dependencies.
+- CA-18 gates every product TUI batch; CA-24 is the sole M6 exit.
 
 ## Rejected Shortcuts
 
@@ -260,7 +291,7 @@ This roadmap rejects:
 - Letting session advice change lane state without separate confirmation/revalidation.
 - Using a cheap model to decide which more expensive model should answer a question.
 - Loading full session history or full pack content into any model context.
-- Deferring pack-scale proof (CA-18 M6 gate) to a later pack or release phase.
+- Deferring pack-scale proof (CA-24 M6 gate) to a later pack or release phase.
 
 ## Durable Artifact Rules
 

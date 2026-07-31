@@ -298,5 +298,5 @@ CA-14: Coordinator, event, and ready-set commands accepted
 
 Record the acceptance outcome, the complete command-coverage matrix, dry-run
 purity evidence per command, human/JSON parity results, help registry
-verification, and any limitations noted. Confirm that CA-15 through CA-18
-may now add session commands on this foundation.
+verification, and any limitations noted. Confirm that CA-15 through CA-17,
+CA-21, and CA-24 may consume the accepted command/query foundation.

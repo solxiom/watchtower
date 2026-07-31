@@ -15,12 +15,12 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 limits, and acceptance-with-follow-up are forbidden.
 
 Status: **agent-assignment and supervision guide**
-Date: 2026-07-30
-Scope: reasoning difficulty across the 18 CA work batches in Pack 5
+Date: 2026-07-31
+Scope: reasoning difficulty across the 24 CA work batches in Pack 5
 
 ## Purpose
 
-This document ranks the 18 Pack 5 batches from hardest to easiest in terms of
+This document ranks the 24 Pack 5 batches from hardest to easiest in terms of
 agent reasoning requirements. It is an agent-assignment and supervision guide.
 It does not replace:
 
@@ -52,9 +52,10 @@ Reasoning difficulty and workload are not the same.
 
 - CA-10 is difficult because it is the sole effect executor — one authority with
   lock/revalidation/idempotency and all-or-nothing projections.
-- CA-18 has the largest workload because it integrates all prior services and
-  proves 30–10k pack scale, but its reasoning is integration/boundedness
-  verification, not novel algorithm design.
+- CA-24 has the largest workload because it integrates all prior services and
+  independently proves 30–10k pack scale and long-session behavior.
+- CA-18 crosses experimental FFI/native packaging boundaries but is a bounded
+  feasibility gate, not product integration or M6 acceptance.
 - CA-01 is difficult because deterministic identical-semantic-byte compilation
   leaves no room for implementation variance or accidental difference.
 - CA-14 has a large command surface but its reasoning is thin orchestration over
@@ -85,49 +86,50 @@ The ranking weighs the following factors.
 |------|-------|---------------|-----------------------------|-------------------------|-------------------------|
 | 1 | CA-10 | Highest R5 | Sole effect executor with idempotency, lock, crash recovery | Must be the ONLY authority for all lane-state mutations; lock/revalidation/idempotency must hold across concurrent cycles, interrupted writes, and incomplete external effects; all-or-nothing projections/journals | Creating a second mutation path, missing crash-recovery idempotency, or conflating external-effect prepare with internal commit |
 | 2 | CA-13 | R5 | Coordinator queue with replay, cursor, and watcher integration | Fsynced cursor advance, stable priority ordering across safety/escalation/sequence/event-ID dimensions, interrupted/duplicate/uncertain replay from decision/effect journals; must not replay already-completed idempotent effects | Advancing cursor before effect terminal event is durably written, replaying completed effects, or losing queue ordering on crash |
-| 3 | CA-18 | R5 | PTY attachment, full scale proof, M6 acceptance | Must integrate all prior 17 batch services, prove 30–10k pack boundedness, long-lane replay, streaming/signals/accessibility; must show unrelated pack/session growth does not increase model context; no other batch carries the pack-acceptance gate | Accepting without independent scale proof, skipping accessibility requirements, or conflating attachment state with session durability |
-| 4 | CA-04 | R5 | Ready-set DAG and resource-claim projection | DAG/dependency/claim/capacity blockers must be computed deterministically from pack index + events + claims; no arbitrary winner; multiple-equally-valid-candidate detection must not silently resolve ties | Using filesystem order as implicit tie-break, incorrect dependency resolution, or conflating optimistic-read claims with exclusive-write blockers |
-| 5 | CA-09 | R5 | All 11 proposal types with full validation | Every proposal type, origin, class, and effect must be validated against current state and policy; stale/illegal/invalid/duplicate/uncertain cases must each fail deterministically; idempotency keys must correctly reference snapshot digest | Missing a stale-state revalidation path, allowing an agent-origin mismatch, or silent acceptance of an unknown proposal type |
-| 6 | CA-17 | R5 | Session routing, budgets, proposals, holds interleaving | M0/D1–D3 routing for session turns; finite grants within lane-wide ceilings and protected reserves; scoped holds that block specific future effects without blocking unrelated automation; confirmation/revalidation before effect execution | Holding the lane lock during model response, allowing budget overrun, or letting holds block unrelated automation |
-| 7 | CA-08 | R5 | Context broker with usage budgets and provenance | Allowlisted queries must be metered, provenance-tracked, redacted; soft/hard limits on input/output/broker/wall-clock per decision class; usage quality must be tracked without becoming a second budget authority | Skipping provenance on a query path, conflating soft and hard limit behavior, or leaking untrusted agent content through broker queries |
-| 8 | CA-16 | R5 | Session memory bounds — compaction, capsules, transitive reference proof | Bounded working sets must not grow with session turn count; same-lane turn capsules must be non-transitive; compaction must produce source-turn-referencing summaries without inventing content; no full-history fallback | Creating transitive reference chains through capsules, compacting without source references, or loading full session text into any working set |
-| 9 | CA-02 | R5 | SQLite stores with corruption-safe bounded typed queries | Indexed reads with limits/cursors/truncation; stale/missing/corrupt-store detection; no direct SQL outside the owning store capsule; no full-pack or JSON-shard fallback | Serving truncated data as complete, silently opening a corrupt/stale store, or letting query services bypass typed store methods |
-| 10 | CA-01 | R5 | Deterministic sealed-pack SQLite compiler | Identical logical rows and semantic root from identical sealed input; path/digest/FK/cross-reference checks; staged immutable publication and linear build; SQLite file bytes are not compared as authority | Introducing non-deterministic logical ordering, omitting cross-reference validation, or deriving the semantic root from SQLite page bytes |
-| 11 | CA-17 | Upper R4 (review half: R5) | Session routing/budgets/holds at the integration boundary | See Rank 6 — this batch additionally verifies that session budgets, routing, proposals, and holds interact correctly under concurrent automated cycles and operator turns | — |
-| 12 | CA-14 | R4 | Command integration across 13 prior service batches | Index/status/context/explain/cycle/escalate/events/ready commands; must render human/JSON output; dry-run purity; every error/empty/invalid path; help fragments | Putting coordinator logic in command classes, reimplementing routing, or missing a required command flag/output format |
-| 13 | CA-07 | R4 | Immutable decision envelopes | Stable semantic digest; bounded default context; untrusted-content delimiting; must survive cycle replay and produce identical bytes | Digest instability across inputs, leaking raw untrusted content without delimiting, or embedding mutable references |
-| 14 | CA-06 | R4 | Endpoint adapter eligibility and isolation | Unattended/advisory/skill-only classification; argv/env/cwd/output/time bounds must be proven before ANY unattended invocation; adapter capability (not host brand) determines eligibility | Classifying an adapter as unattended without boundary proof, or allowing skill-only adapters into decision cycles |
-| 15 | CA-05 | R4 | Ordered routing policy and capability floors | Every v1 rule/guard; first-match determinism; D1/C2, D2/C3, D3/C5 floor enforcement; classifies but does NOT execute; must not silently downgrade a required decision class | Encoding judgment in the router, reordering rules, or allowing a lower-capability endpoint for a higher-class decision |
-| 16 | CA-15 | R4 | Operator-session persistence and lifecycle | Many sessions per lane; one active turn each; immutable closed history; crash-safe journals; state machine with open/suspended/closed transitions | Losing journal durability on crash, allowing concurrent turns in one session, or reopening a closed session |
-| 17 | CA-11 | R4 | Tmux effect adapter | Unknown launch recovery; duplicate suppression; prepare/attempt/verify journaling; no arbitrary kill/shell | Killing tmux sessions outside the adapter contract, suppressing duplicate detection, or using shell evaluation |
-| 18 | CA-12 | R4 | Git acceptance adapter | Reviewer-session ownership verification; commit-set validation; partial push recovery; must not conflate semantic acceptance with publication success | Pushing without session-ownership verification, treating push failure as acceptance revocation, or silently substituting commit hashes |
-| 19 | CA-18 | R5 (review: R5) | PTY attachment and M6 acceptance re-reviewed | See Rank 3 — the review additionally requires independent scale-proof reproduction of all 30–10k and long-lane boundedness claims | — |
-| 20 | CA-03 | R4 | Journal indexes and projections | Checkpoints/prefix digests; incremental append; partial-tail/rebuild behavior; must handle truncated journals | Computing incorrect prefix digest after partial append, or failing to detect a truncated tail |
-
-(CA-17 and CA-18 each appear twice: once for implementation reasoning, once for review reasoning.)
+| 3 | CA-24 | R5 | Final command integration and M6 closure | Independently proves 30–10k context invariance, long-session replay/soak, global install, and every authority invariant | Treating lower reports as proof or accepting unbounded growth |
+| 4 | CA-23 | R5 | Terminal restoration, security, and accessibility matrix | Signals/suspend/crash across platforms plus hostile terminal content and accessible semantics | Leaving terminal damage or an injection path |
+| 5 | CA-22 | R5 | Streaming and attachment concurrency | Ordered bounded provisional data, contention/wait, notifications, and observer denial | Duplicate turns, unbounded queues, or locks across model work |
+| 6 | CA-04 | R5 | Ready-set DAG and claims | Deterministic blocker/claim/capacity projection without arbitrary winners | Hidden tie-break or incorrect blocker |
+| 7 | CA-09 | R5 | Proposal validation | Complete type/origin/class/effect and stale/illegal/idempotency matrix | Missing a stale or illegal path |
+| 8 | CA-17 | R5 | Session routing/budgets/holds | Interleaves finite budgets, holds, proposals, and automation safely | Reserve leak, under-routing, or effect bypass |
+| 9 | CA-20 | R5 | Bounded timeline/input/reference security | Virtualization, retention coupling, revision races, and path authorization | Full-history growth or reference escape |
+| 10 | CA-08 | R5 | Context broker budgets/provenance | Metered allowlisted context with hard limits and redaction | Unbounded or unprovenanced context |
+| 11 | CA-16 | R5 | Session memory/compaction | Non-transitive capsules and bounded working sets | Transitive/full-history fallback |
+| 12 | CA-02 | R5 | Corruption-safe typed SQLite reads | Bounded cursors and stale/corrupt refusal | Serving partial/stale data |
+| 13 | CA-01 | R5 | Deterministic sealed-pack compiler | Stable logical rows/root and staged publication | Nondeterministic identity |
+| 14 | CA-18 | R4 | FFI/native/Nirvana feasibility | Cross-platform bootstrap, packaging, security, and restoration evidence | Assuming a local pass or leaking FFI to ordinary commands |
+| 15 | CA-14 | R4 | Coordinator command integration | Thin human/JSON/help surface over accepted services | Product logic in commands |
+| 16 | CA-21 | R4 | Inspector/action/confirmation UI | Nine bounded model-free views and shared effect authority | Query scan or confirmation bypass |
+| 17 | CA-19 | R4 | Responsive shell/focus/themes | Adapter-isolated layout, focus, keymap, preference behavior | UI god object or lost state on resize |
+| 18 | CA-07 | R4 | Immutable envelopes | Stable digest and bounded untrusted content | Mutable or unstable envelope |
+| 19 | CA-06 | R4 | Endpoint eligibility | Capability proof and invocation isolation | Ineligible unattended endpoint |
+| 20 | CA-05 | R4 | Routing floors | Ordered deterministic classification without execution | Under-routing or semantic judgment |
+| 21 | CA-15 | R4 | Session lifecycle | Crash-safe many-session state machine | Concurrent turn or reopened close |
+| 22 | CA-11 | R4 | Tmux adapter | Prepare/attempt/verify and unknown recovery | Arbitrary kill/shell |
+| 23 | CA-12 | R4 | Git publication adapter | Ownership/commit-set/partial-push separation | Acceptance/publication conflation |
+| 24 | CA-03 | R4 | Journal projections | Incremental checkpoint/prefix integrity | Incorrect partial-tail recovery |
 
 ## Recommended Agent Allocation
 
 | Ranking band | Batches | Recommended posture |
 |--------------|---------|---------------------|
-| Ranks 1–3 / upper `R5` | CA-10, CA-13, CA-18 | Use the strongest available agent with demonstrated state-machine, concurrency, idempotency, and crash-recovery reasoning. Require a detailed pre-edit model of every state transition, failure path, and recovery rule. Reviewer must also meet the `R5` bar independently. |
-| Ranks 4–10 / `R5` | CA-04, CA-09, CA-17, CA-08, CA-16, CA-02, CA-01 | Use a strong repository-aware agent with index/hash-chain, graph-algorithm, validation-matrix, or budget-accounting reasoning. Do not forward these as routine service work. |
-| Ranks 12–18 / `R4` | CA-14, CA-07, CA-06, CA-05, CA-15, CA-11, CA-12 | Use a strong framework agent with demonstrated ownership, compatibility, and boundary-enforcement reasoning. Do not forward these as thin wrapper or documentation tasks. |
-| Rank 20 / `R4` | CA-03 | Use a careful incremental-state agent with digest and append-semantics reasoning. |
+| Ranks 1–5 / highest `R5` | CA-10, CA-13, CA-24, CA-23, CA-22 | Strongest current endpoints with state-machine, concurrency, recovery, and closure evidence capability |
+| Ranks 6–13 / `R5` | CA-04, CA-09, CA-17, CA-20, CA-08, CA-16, CA-02, CA-01 | Strong repository-aware endpoints matched to graph, validation, budget, security, or index reasoning |
+| Ranks 14–24 / `R4` | CA-18, CA-14, CA-21, CA-19, CA-07, CA-06, CA-05, CA-15, CA-11, CA-12, CA-03 | Deep compatibility/ownership agents with independent negative-path proof |
 
 ## Why The Levels Are Not One-To-One With Rank
 
 The repository reasoning scale is intentionally coarse.
 
-- CA-10, CA-13, and CA-18 are the highest `R5` because they involve sole authority,
-  crash recovery, concurrent cycle safety, or full-scale integration proof.
-- CA-01, CA-02, CA-04, CA-08, CA-09, CA-16, and CA-17 are `R5` because they involve
+- CA-10, CA-13, CA-22, CA-23, and CA-24 are the highest `R5` because they
+  involve sole authority, concurrency/recovery, terminal safety, or closure.
+- CA-01, CA-02, CA-04, CA-08, CA-09, CA-16, CA-17, and CA-20 are `R5` because they involve
   hash-chain/index integrity, DAG computation, validation matrix completeness,
   budget accounting, or compaction correctness. Calling them `R4` to create more
   label variety would understate their risk.
 - Batches in the `R4` band still introduce new runtime truth (routing rules, adapter
-  eligibility, envelope immutability, tmux recovery, Git partial push, session
-  lifecycle). They are not safe to assign to a low-reasoning model.
+  eligibility, FFI compatibility, presentation authority, envelope immutability,
+  tmux recovery, Git partial push, or session lifecycle).
 - No CA batch falls at `R3`. Every CA batch either introduces a new ownership
   algorithm with correctness risks (R4) or involves interacting state machines,
   graph/index integrity, or crash-recovery reasoning (R5).
@@ -138,16 +140,10 @@ The repository reasoning scale is intentionally coarse.
 
 Implementation remains governed by the dependency graph in the README and roadmap:
 
-```
-CA-01 → CA-02 → CA-03 → CA-04 → CA-05 → CA-06 → CA-07 → CA-08 → CA-09 → CA-10
-                                                                          ├──► CA-11
-                                                                          ├──► CA-12
-                                                                          └──► CA-13 → CA-14
-                                                                                     │
-CA-15 → CA-16 → CA-17 ◄──────────────────────────────────────────────────────────────┘
-                 │
-                 ▼
-               CA-18
+```text
+CA-01 → … → CA-14 ─┐
+CA-15 → CA-17 ─────┴→ CA-18 → CA-19 ┬→ CA-20 ─┐
+                                     └→ CA-21 ─┴→ CA-22 → CA-23 → CA-24
 ```
 
 The rank measures reasoning difficulty only.

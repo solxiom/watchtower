@@ -313,7 +313,8 @@ line-count check never overrides the responsibility gate.
 ## Completion And Handoff
 
 - Implementation report, updated tracker/roadmap.
-- CA-17 will consume the session index for session routing, budgets, and
-  proposals. CA-18 will use the index for session CLI commands.
+- CA-17 consumes the session index for routing, budgets, and proposals; CA-20
+  consumes it for bounded conversation/history/references; CA-24 owns final
+  session command integration.
 - Leave the exact SQLite schema, typed query signatures, capsule format, and
   compaction rules for the next agent.

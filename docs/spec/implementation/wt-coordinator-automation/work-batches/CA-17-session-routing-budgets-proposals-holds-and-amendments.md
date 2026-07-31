@@ -358,7 +358,8 @@ line-count check never overrides the responsibility gate.
 ## Completion And Handoff
 
 - Implementation report, updated tracker/roadmap.
-- CA-18 will build session CLI/PTY commands on top of these session services.
+- CA-18 may qualify the renderer after these services accept; CA-21/CA-22
+  consume them in the TUI, and CA-24 owns session command integration.
 - Leave the exact M0 query registry, classification rule set, budget dimension
   list, grant rules, hold scope types, proposal state machine, and amendment
   request format for the next agent.
