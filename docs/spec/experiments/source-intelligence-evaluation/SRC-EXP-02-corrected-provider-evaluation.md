@@ -1,10 +1,12 @@
 # SRC-EXP-02 — Corrected Provider Readiness and Comparative Evaluation
 
-Status: **Ready for independent preparation and disposable execution; not product implementation**
+Status: **Completed — independently reviewed `REJECT_PROVIDER`; not product implementation**
 
 Governing design: [source-intelligence-draft.md](../../source-intelligence-draft.md)
 
 Predecessor: [SRC-EXP-01 outcome](SRC-EXP-01-outcome.md)
+
+Accepted result: [SRC-EXP-02 outcome](SRC-EXP-02-outcome.md)
 
 ## 1. Decision question
 

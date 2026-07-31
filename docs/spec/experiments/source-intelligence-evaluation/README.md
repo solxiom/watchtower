@@ -14,6 +14,7 @@ maintaining exact worktree isolation and bounded context.
 | [SRC-EXP-01-review-agent-launch-prompt.md](SRC-EXP-01-review-agent-launch-prompt.md) | Independent reviewer handoff |
 | [SRC-EXP-01-outcome.md](SRC-EXP-01-outcome.md) | Accepted blocked outcome and limitations carried into the correction |
 | [SRC-EXP-02-corrected-provider-evaluation.md](SRC-EXP-02-corrected-provider-evaluation.md) | Hard-gated provider-readiness and corrected comparative protocol |
+| [SRC-EXP-02-outcome.md](SRC-EXP-02-outcome.md) | Independently reviewed provider-readiness rejection and future constraint |
 | [SRC-EXP-02-preparer-launch-prompt.md](SRC-EXP-02-preparer-launch-prompt.md) | Independent prompt, schedule, hidden-evidence, and digest-commitment handoff |
 | [SRC-EXP-02-agent-launch-prompt.md](SRC-EXP-02-agent-launch-prompt.md) | Bounded corrected experiment-agent handoff |
 | [SRC-EXP-02-review.md](SRC-EXP-02-review.md) | Independent readiness, evidence, scoring, and verdict protocol |

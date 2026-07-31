@@ -399,9 +399,11 @@ silently downgrades below a pack capability floor to make a plan fit.
 
 Candidate release: v1.4.
 
-Research gate: SRC-EXP-01 concluded `RESEARCH_BLOCKED`. No source-intelligence
-implementation pack may begin until SRC-EXP-02 passes provider readiness and
-returns independently accepted `ADOPT_BASELINE` or `ADOPT_LIMITED` evidence.
+Research gate: SRC-EXP-01 concluded `RESEARCH_BLOCKED`; SRC-EXP-02 independently
+rejected the evaluated Serena 0.1.4/Hermes 0.18.2 integration at provider
+readiness. No source-intelligence implementation pack may begin until a new
+candidate passes the corrected readiness gate and returns independently
+accepted `ADOPT_BASELINE` or `ADOPT_LIMITED` evidence.
 
 - implement the provider-neutral capability defined in
   [source-intelligence-draft.md](source-intelligence-draft.md);

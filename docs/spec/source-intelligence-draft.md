@@ -811,9 +811,14 @@ schema was not captured, native T7 failed its evidence floor, and overlapping
 runs invalidated latency comparison. The accepted record is
 [SRC-EXP-01-outcome.md](experiments/source-intelligence-evaluation/SRC-EXP-01-outcome.md).
 
-The next evaluation is
-[SRC-EXP-02](experiments/source-intelligence-evaluation/SRC-EXP-02-corrected-provider-evaluation.md).
-It has two irreversible stages:
+SRC-EXP-02 then completed with the independently reviewed verdict
+`REJECT_PROVIDER` for Serena 0.1.4 through Hermes Agent 0.18.2 on the recorded
+route. Direct semantic canaries passed, but the exact outbound model request
+contained no tools, made no provider call, and returned no canary. Serena also
+wrote cache files inside sealed disposable worktrees. The accepted record is
+[SRC-EXP-02-outcome.md](experiments/source-intelligence-evaluation/SRC-EXP-02-outcome.md).
+
+Future provider evaluations retain SRC-EXP-02's two irreversible stages:
 
 1. `PROVIDER_READINESS` proves a schema-valid direct semantic canary, exact
    provider tools visible to the outbound model request, a successful
@@ -824,9 +829,11 @@ It has two irreversible stages:
    counterbalanced fresh contexts and the precommitted hidden rubric.
 
 A failed or incomplete readiness gate cannot be converted into indexed task
-results, savings, or adoption evidence. `REJECT_PROVIDER` in SRC-EXP-02 is a
-provider-specific instance of this draft's `REJECT`; it does not reject the
-provider-neutral capability.
+results, savings, or adoption evidence. `REJECT_PROVIDER` is a provider/host-
+integration-specific instance of this draft's `REJECT`; it does not reject the
+provider-neutral capability. Re-evaluating the rejected SRC-EXP-02 integration
+requires a new experiment ID and materially new provider, host integration, or
+tool-transport evidence.
 
 ## 19. Testing strategy
 
@@ -904,8 +911,8 @@ These require experiment evidence or a dedicated implementation pack; an
 implementer must not decide them implicitly:
 
 1. Which S1/S2 provider and versions satisfy the first accepted language and
-   distribution matrix? Serena 0.1.4 remains unproven after SRC-EXP-01 and may
-   be considered only through the corrected readiness gate.
+   distribution matrix? Serena 0.1.4 through the evaluated Hermes 0.18.2 route
+   is rejected by SRC-EXP-02; no candidate is currently accepted.
 2. Is the minimum shipped provider embedded, packaged as an audited leaf, or a
    separately installed approved capability?
 3. Which languages are release-required beyond the initial Nirvana
