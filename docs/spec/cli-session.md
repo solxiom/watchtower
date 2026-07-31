@@ -3,6 +3,10 @@
 Status: **Proposed — implementation-ready**
 Target release: `1.0.0`
 CLI group: `wt coordinator session`
+
+Operational support, entry selection, priority, draft recovery, conflict,
+diagnostic, search, migration, and visual-acceptance rules are normative in
+[tui-operational-experience.md](tui-operational-experience.md).
 Last updated: 2026-07-31
 
 This document is normative for the full-screen terminal user interface (TUI)
@@ -121,6 +125,7 @@ and budgets remain attributable and bounded.
 
 ```text
 wt coordinator session
+  [--lane=<slug-or-uuid>]
   [--topic=<text>]
   [--policy-profile=<id>]
   [--tag=<tag>...]
@@ -128,6 +133,7 @@ wt coordinator session
   [--entry-density=<compact|full|minimal>]
 
 wt coordinator session attach <operator-session-id>
+  [--lane=<slug-or-uuid>]
   [--observe]
   [--stream|--no-stream]
   [--wait-for-active-turn]
@@ -135,6 +141,9 @@ wt coordinator session attach <operator-session-id>
 ```
 
 - Bare `session` creates a new open operator session and attaches.
+- Lane selection completes before creation or attachment. An interactive
+  multi-lane context uses the bounded model-free picker defined in
+  `tui-operational-experience.md`; non-interactive ambiguity fails closed.
 - `session attach <id>` validates the selected lane and session, loads its
   bounded current projection from verified indexes, and attaches without
   appending a turn or changing lifecycle state.
@@ -924,7 +933,7 @@ Supported preference classes include streaming, entry density, preflight
 visibility, `confirmBeforeInvoke: off|d3|d2-d3|all`, footer density,
 notification classes, theme, no-color, high contrast, reduced motion,
 accessible rendering, inspector visibility/side/width/last view, keymap,
-conversation density, and bounded history-cache limits.
+conversation density, bounded history-cache limits, and `draftRecovery`.
 
 Preferences cannot change decision-class floors, endpoint eligibility,
 budgets, retention authority, the lane-policy confirmation minimum, hold
@@ -961,6 +970,8 @@ Contract and PTY fixtures cover:
 - reference-profile startup/input/view-switch latency, frame throttling,
   bounded queues, viewport-proportional history rendering, and two-hour soak;
 - new, attached, resumed, suspended, closed, forked, and pruned sessions;
+- zero/one/multiple-lane entry, explicit `--lane`, first-run, session/lane
+  switching, recovered drafts, and draft/privacy coupling;
 - multiple sessions for one lane and concurrent attachments;
 - observer attachments permit only M0 reads and never relay provisional chunks;
 - same-session turn contention and explicit waiting;
@@ -978,11 +989,13 @@ Contract and PTY fixtures cover:
 - exact slash parsing, typo failure, `//` escape, and embedded slash prose;
 - no-color, screen-reader, narrow-terminal, and redirected-output behavior;
 - history-cache retention coupling and restrictive permissions;
+- preference migration, corrupt/newer cache fallback, and bounded backup
+  retention without loss of authoritative state;
 - attachment restart with continuity reconstructed only from journals/indexes;
 - renderer initialization/native-artifact failure with no terminal damage and
   an actionable `ask` fallback;
 - packaged/global-install PTY smoke tests for every supported runtime target;
-  and
+- semantic visual-catalog fixtures and the exact promoted platform/PTY matrix;
 - deterministic bounded change projection on reconnection.
 
 Pure state-machine/reducer tests, component tests over a fake renderer, golden
@@ -997,6 +1010,8 @@ restoration.
 - [ ] Bare `wt coordinator session` creates a durable operator session;
       `session attach <id>` attaches and `session resume <id>` only changes
       suspended lifecycle state.
+- [ ] Explicit, zero-lane, single-lane, and ambiguous multi-lane entry follows
+      the model-free selection rules without creating an unintended session.
 - [ ] `session` and `session attach` open a full-screen TUI with a dominant
       conversation workspace and right-side inspector in the canonical wide
       layout.
@@ -1027,6 +1042,8 @@ restoration.
 - [ ] Notifications invoke no model and do not interrupt active typing or
       confirmation.
 - [ ] Reconnection shows a bounded deterministic change projection.
+- [ ] Recovered drafts, stale confirmations, concurrent attachment changes,
+      and preference/cache upgrades follow the operational-experience contract.
 - [ ] Slash-command typos cannot fall through to a paid natural-language turn.
 - [ ] No-color and accessible append-only output retain all semantic
       information.

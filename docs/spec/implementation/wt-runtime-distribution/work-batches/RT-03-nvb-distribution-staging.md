@@ -15,6 +15,7 @@ This draft brief is subordinate to:
 - `docs/spec/coordinator-automation.md`
 - `docs/spec/operator-session.md`
 - `docs/spec/cli-session.md`
+- `docs/spec/tui-operational-experience.md`
 - this pack's `implementation-quality-and-agent-rules.md`
 
 Only the references relevant to the batch's accepted scope need drive its
@@ -147,6 +148,10 @@ non-executable, stale-aggregate, or checksum-mismatched assets.
   additional supported target; no cross-platform claim is made from one host.
 - Prove the distribution manifest includes the selected driver version,
   required artifacts, checksums, and ABI/platform mapping from DB-01.
+- Define target tuples independently of optional UI capabilities. No OpenTUI
+  native target is promoted unless CA-18/CA-23/CA-24 can prove the exact
+  Node/OS/architecture/libc/artifact tuple required by
+  `tui-operational-experience.md`; unpromoted tuples retain the non-TUI CLI.
 - Prove two consecutive `nvb dist` runs produce identical `dist/` trees (SHA-256
   comparison of all files)
 - Prove `nvb build` still compiles the TypeScript source

@@ -6,7 +6,8 @@ Reviewer floor: `R4`; reviewer owns acceptance commit.
 
 Read the paired brief, `AGENTS.md`, mandatory engineering standard, v1
 contracts/spec, Nirvana integration architecture, implementation map,
-`cli-session.md`, accepted CA-18 report, and pack rules. Independently verify
+`cli-session.md`, `tui-operational-experience.md`, accepted CA-18 report, and
+pack rules. Independently verify
 scope, layering, Nirvana audit, structural limits, tests, docs, ownership, and
 artifact hygiene; include the engineering-standard acceptance matrix.
 Verify every owned module implements only `tui-interface-contracts.md §CA-19`.
@@ -23,6 +24,10 @@ Verify every owned module implements only `tui-interface-contracts.md §CA-19`.
   stable IDs, and bounded animation/frame scheduling.
 - Reproduce dark/light/system, capability degradation, no-color, high contrast,
   reduced motion, and invalid transactional preference behavior.
+- Reproduce zero/one/many-lane entry and colliding P0–P5 states; prove no
+  pre-selection session/model use, focus theft, or stale lower-priority cover.
+- Reproduce old/new/corrupt preference and cache migration/fallback with
+  bounded backups and no authoritative-state loss.
 - Trace component dependencies: bounded view models only; no store, SQL,
   provider, effect, NVB, subprocess, or policy import.
 - Run `nvb build`, `nvb test`, architecture gates, and independent line counts.

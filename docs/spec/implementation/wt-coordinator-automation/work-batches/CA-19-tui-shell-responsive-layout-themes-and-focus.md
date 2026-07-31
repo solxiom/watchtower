@@ -6,8 +6,9 @@ Governing sources: `AGENTS.md`,
 `docs/development/engineering-and-review-standard.md`,
 `docs/spec/v1-contracts.md`, `docs/spec/v1.md`,
 `docs/spec/nirvana-integration-architecture.md`, `docs/spec/architecture.md`,
-`docs/spec/v1-implementation-map.md`, `docs/spec/cli-session.md`, and the pack
-quality rules. Stop for amendment on conflict or unresolved behavior.
+`docs/spec/v1-implementation-map.md`, `docs/spec/cli-session.md`,
+`docs/spec/tui-operational-experience.md`, and the pack quality rules. Stop for
+amendment on conflict or unresolved behavior.
 Required interfaces are normative in this pack's
 `tui-interface-contracts.md §CA-19 Shell Contract`.
 
@@ -32,6 +33,7 @@ features belong to later batches.
 - `TuiFocusManager` and central `TuiActionRegistry`/keymap
 - `TuiThemeResolver` and semantic design tokens
 - bounded display-preference parsing for layout, theme, motion, and keymap
+- model-free lane-entry picker and canonical P0–P5 attention reduction
 - shell components: header, conversation slot, inspector slot, overlay host,
   toast region, status footer, and resize-required surface
 
@@ -74,6 +76,10 @@ directory or put presentation behavior in `src/foundation/`.
    defaults with diagnostics. Preferences never alter policy or authority.
 7. Coalesce decorative layout/animation frames without discarding input or
    product events. Hidden/inactive UI does not animate.
+8. Implement zero/one/many-lane entry presentation without creating a session
+   before selection, plus deterministic P0–P5 priority/focus behavior.
+9. Version and transactionally migrate preferences; preserve unknown keys,
+   use bounded owner-only backups, and treat derived UI caches as disposable.
 
 ## Exclusions
 
@@ -96,6 +102,10 @@ directory or put presentation behavior in `src/foundation/`.
   reduced motion; animation frame/backpressure bounds.
 - Invalid/partial preference fixtures prove atomic safe-default behavior and
   no authority changes.
+- Lane-entry and P0–P5 collision fixtures prove deterministic ordering, no
+  model use, no unintended session, and no focus-stealing notification.
+- Older/newer/corrupt preference and cache fixtures prove transactional
+  fallback without loss of authoritative state.
 - Dependency audit proves components consume only bounded view models and the
   accepted adapter.
 - `nvb build`, `nvb test`, architecture gates, categorized line counts, and

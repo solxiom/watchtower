@@ -13,6 +13,7 @@ This review is subordinate to:
 - `docs/spec/v1-implementation-map.md`
 - `docs/spec/operator-session.md`
 - `docs/spec/cli-session.md`
+- `docs/spec/tui-operational-experience.md`
 - this pack's `tui-interface-contracts.md`
 - `docs/spec/implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
 - this pack's `implementation-quality-and-agent-rules.md`
@@ -27,6 +28,10 @@ Reviewer owns the acceptance verdict and must be independent of the implementor.
 **Required reviewer reasoning class:** `R4`
 
 ## Review Objective
+
+Treat `docs/spec/tui-operational-experience.md §2` as the exact platform,
+invocation, promotion, and fail-closed contract. Evidence from one tuple cannot
+be generalized to another.
 
 Independently determine whether imperative OpenTUI on Node `>=26.4.0`, including
 its experimental FFI requirement, is a safe and distributable Watchtower v1

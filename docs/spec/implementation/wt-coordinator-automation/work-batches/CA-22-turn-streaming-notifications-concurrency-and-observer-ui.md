@@ -5,7 +5,7 @@
 Governing sources: `AGENTS.md`, the mandatory engineering standard,
 `v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
 `architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, and pack quality rules.
+`cli-session.md`, `tui-operational-experience.md`, and pack quality rules.
 Required interfaces are normative in this pack's
 `tui-interface-contracts.md §CA-22 Live Attachment Contract`.
 
@@ -65,6 +65,10 @@ observer, and checkpoint integration belongs in
    composer, scroll anchor, or active confirmation and never advances authority
    cursors. Foreground watch/poll ends with attachment and has a correctness-
    preserving checkpoint fallback.
+8. Reduce simultaneous conditions through the canonical P0–P5 order. Any
+   relevant durable revision invalidates an open confirmation immediately;
+   proposal/session/turn conflicts become terminal or locked states and are
+   never retried or resolved by last-writer-wins behavior.
 
 ## Exclusions
 
@@ -85,6 +89,9 @@ observer, and checkpoint integration belongs in
 - Observer allow/deny matrix and proof of no endpoint/provisional IPC.
 - Notification coalescing, confirmation deferral, hidden-view suppression, and
   checkpoint correctness.
+- Cross-attachment apply/reject/expire, close/suspend/prune, authorization
+  loss, active-turn ownership, and unrelated-update races prove stale actions
+  cannot execute and input/anchor survive unrelated changes.
 - `nvb build`, `nvb test`, architecture gates, line counts, and Nirvana audit.
 
 ## Documentation And Report

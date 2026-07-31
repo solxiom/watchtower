@@ -5,7 +5,8 @@
 Governing sources: `AGENTS.md`, the mandatory engineering standard,
 `v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
 `architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, accepted CA-18 evidence, and pack quality rules.
+`cli-session.md`, `tui-operational-experience.md`, accepted CA-18 evidence, and
+pack quality rules.
 Required interfaces are normative in this pack's
 `tui-interface-contracts.md §CA-23 Terminal Safety Contract`.
 
@@ -28,6 +29,7 @@ operation, emulator/Unicode compatibility, and deterministic PTY qualification.
 - accessible linear/announcement presenter and semantic-state assertions
 - PTY/emulator, signal, Unicode, resize, failure, and recovery fixtures
 - lifecycle/restoration conformance matrix
+- semantic visual-state catalog and preference/cache migration qualification
 
 Exact owned production modules:
 
@@ -57,6 +59,11 @@ restoration or sanitization owner is permitted.
    highlighting, or hyperlinks. Accessible mode uses linear focus, restrained
    redraw, region titles, static progress, and append-only announcements.
 6. Reconcile CA-18's platform/emulator matrix; do not silently reduce it.
+7. Qualify the exact required local/tmux/direct-SSH/SSH+tmux target matrix and
+   prove unpromoted tuples fail safely while preserving non-TUI commands.
+8. Exercise every operational visual-catalog state and preference/cache
+   migration/fallback path through semantic, keyboard, accessibility, and
+   terminal-restoration assertions; pixel snapshots alone are insufficient.
 
 ## Exclusions
 
@@ -75,6 +82,8 @@ restoration or sanitization owner is permitted.
   repeated resize, and all required emulators/platforms.
 - Keyboard-only, monochrome, no-color, high-contrast, reduced-motion, and
   accessible announcement golden/semantic tests.
+- Every `tui-operational-experience.md §11` catalog state at declared
+  wide/standard/narrow dimensions, including conflict and recovery states.
 - Renderer/native failure leaves `ask` and noninteractive CLI usable.
 - `nvb build`, `nvb test`, packaged PTY smoke where required, architecture
   gates, line counts, and Nirvana audit.

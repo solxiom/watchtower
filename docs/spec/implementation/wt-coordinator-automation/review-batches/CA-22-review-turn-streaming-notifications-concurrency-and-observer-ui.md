@@ -12,6 +12,10 @@ Verify the exact file and interface surface in the paired brief and
 
 ## Independent Proof
 
+- Apply `tui-operational-experience.md §§4 and 6`. Reproduce P0–P5 collisions
+  and cross-attachment apply/reject/expire, lifecycle, authorization, and turn
+  races; no stale action may execute and unrelated updates preserve input.
+
 - Reproduce buffered/streaming/malformed/failing/interrupted turns and atomic
   provisional-to-validated replacement with usage/staleness/proposal states.
 - Burst chunks and notifications; verify finite accumulators/queues/caches,

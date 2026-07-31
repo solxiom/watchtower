@@ -19,6 +19,8 @@ Reasoning floor: implementor `R5`; reviewer `R5`
 Integrate the accepted session/TUI capabilities into thin public commands and
 help, then independently prove the complete Pack 5 exit contract at realistic
 pack/session scale. This batch adds no new coordinator, session, or TUI policy.
+The entry, diagnostics, and operational acceptance contract is
+`docs/spec/tui-operational-experience.md`.
 
 ## Owned Capabilities
 
@@ -27,6 +29,7 @@ pack/session scale. This batch adds no new coordinator, session, or TUI policy.
 - command help fragments, registry, examples, JSON/human compatibility updates
 - end-to-end Pack 5 fixtures, scale/replay harnesses, and M6 evidence
 - v1 command-status and pack completion documentation after acceptance
+- thin `wt doctor --tui` and explicit redacted support-report integration
 
 Exact owned integration modules:
 
@@ -86,6 +89,10 @@ are owned under `spec/integration/coordinatorSession/`.
    downgrade, every effect uses CA-10, advisory generation holds no lane lock,
    no full-pack/full-history fallback exists, and one repo/many lanes plus one
    lane/many repos remain isolated.
+9. Wire explicit `--lane`, deterministic zero/one/many-lane entry, in-TUI
+   session/lane switching, `doctor --tui`, and explicit support-report output.
+   No session is created before lane selection and report generation is the
+   only new diagnostic write.
 
 ## Exclusions
 
@@ -98,12 +105,19 @@ are owned under `spec/integration/coordinatorSession/`.
 - Every public command: success/error/empty, human/JSON where applicable,
   redirected input/output, TTY refusal, help, and completion parity.
 - Create/attach/resume/observe/detach semantics and many-session cardinality.
+- Explicit/zero/one/many-lane entry, switching guards, no unintended creation,
+  and non-interactive ambiguity refusal.
 - Pack scale, long-session replay, model-context byte/token envelopes, SQLite
   query plans/bounds, viewport memory, startup/input/view latency, idle CPU,
   steady memory, and two-hour soak.
 - Crash/restart, duplicate/interrupted event replay, simultaneous attachments,
   explicit waits, renderer loss, stale proposals, and hold interleaving.
 - Global-install tests for every RT-03 target and accepted CA-18 native matrix.
+- Read-only TUI doctor checks and owner-only redacted report content/overwrite
+  behavior, including proof that drafts, conversations, credentials,
+  environment values, and journals are absent.
+- Trace every operational matrix tuple and visual-catalog state to independent
+  reproducible acceptance evidence.
 - Complete authority audit: model-free M0, no direct mutations, one executor,
   no lane lock during model generation, no project `nvb.json`, no unbounded
   fallback.

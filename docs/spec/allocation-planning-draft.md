@@ -1043,6 +1043,16 @@ provider UI text are observations, not event authority.
 
 ## 18. Proposed CLI contract
 
+The v1 TUI `agents` inspector is a read-only projection consumer of these
+commands and artifacts; it is not another discovery adapter. It shows approved
+non-secret aliases, capabilities, compatibility/charging class, telemetry
+quality, evidence and snapshot age, availability, reservations, assignments,
+and health. Unknown, stale, estimated, and unavailable values remain explicit.
+Its refresh action may invoke only the normal authorized model-free discovery
+or snapshot path and cannot expand scope, approve inventory, activate a plan,
+or inspect credentials. Before this phase is available, the inspector presents
+a documented unavailable/empty state and never substitutes host scanning.
+
 | Command | Purpose |
 |---------|---------|
 | `wt allocation discover [--adapter=<id>] [--user=<id>]` | Probe only the allowlisted discovery scope and write an inventory proposal |

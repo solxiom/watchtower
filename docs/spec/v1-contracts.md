@@ -20,7 +20,9 @@ For Watchtower v1, conflicts are resolved in this order:
 3. [nirvana-integration-architecture.md](nirvana-integration-architecture.md),
    [coordinator-automation.md](coordinator-automation.md),
    [operator-session.md](operator-session.md), and
-   [cli-session.md](cli-session.md), within their stated scopes;
+   [cli-session.md](cli-session.md), and
+   [tui-operational-experience.md](tui-operational-experience.md), within their
+   stated scopes;
 4. [architecture.md](architecture.md); and
 5. the versioned runtime and knowledge manifests shipped by the same release.
 
@@ -42,6 +44,13 @@ reserved for implemented, passing behavior.
 Watchtower v1 requires official Node.js `>=26.4.0`. The package `engines`
 contract, development/runtime validation, distribution metadata, doctor, and
 global-install fixtures must agree with that floor.
+
+The required full-screen release tuple is Linux x86_64 with glibc on the
+runtime manifest's tested Node range, exercised through local PTY, tmux,
+direct SSH PTY, and SSH inside tmux. Other OS/architecture/libc/Node tuples are
+unsupported for the TUI until promoted through the exact evidence and manifest
+rules in `tui-operational-experience.md §2`; ordinary non-TUI commands remain
+available on otherwise supported runtime targets.
 
 The full-screen operator-session engine is:
 

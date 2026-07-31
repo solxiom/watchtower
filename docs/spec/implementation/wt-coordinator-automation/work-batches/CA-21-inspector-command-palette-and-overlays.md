@@ -5,7 +5,7 @@
 Governing sources: `AGENTS.md`, the mandatory engineering standard,
 `v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
 `architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, and pack quality rules.
+`cli-session.md`, `tui-operational-experience.md`, and pack quality rules.
 Required interfaces are normative in this pack's
 `tui-interface-contracts.md §CA-21 Inspector And Action Contract`.
 
@@ -29,6 +29,8 @@ authority.
 - central command palette over the CA-19 action registry
 - overlay models for picker, help, details, settings, and confirmation
 - typed action dispatch from UI intention to shared application capability
+- projection-only agent/allocation inspector, bounded global search/attention,
+  and TUI diagnostic result presentation
 
 Exact owned production modules:
 
@@ -64,6 +66,12 @@ closed registry entry. Exact focused specs mirror those names under
    effect. Confirmation delegates to CA-17 and never executes directly.
 6. Prevent hidden-view polling, unbounded fan-out, stale result replacement,
    secret exposure, and action bypass through mouse or palette routes.
+7. The agents view consumes only approved inventory/allocation/capacity
+   projections and represents unknown, stale, estimated, and unavailable data
+   exactly; refresh delegates to the authorized model-free capability.
+8. Implement index-bounded global search and ordered P1–P4 attention
+   navigation. Diagnostic surfaces render stable redacted `doctor --tui`
+   results but do not own checks, reports, repair, or filesystem discovery.
 
 ## Exclusions
 
@@ -80,6 +88,10 @@ closed registry entry. Exact focused specs mirror those names under
 - Query cancellation and stale-revision races; hidden views do not poll.
 - Palette discoverability, search bounds, action parity, disabled reasons,
   observer filtering, focus trap/restoration, and keyboard/mouse parity.
+- Agent/allocation source-boundary, freshness, charging/telemetry-quality, and
+  unavailable-state proof; no host, credential, network, or provider scan.
+- Search/attention/diagnostic fixtures prove bounds, ordering, redaction, and
+  zero model use.
 - Confirmation accept/cancel/stale/illegal/expired cases prove CA-17
   revalidation and CA-10 effect authority remain mandatory.
 - Adversarial labels/metadata are sanitized and secrets redacted.

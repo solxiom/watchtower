@@ -10,12 +10,14 @@ Normative product docs for the `wt` CLI.
 | [architecture.md](architecture.md) | Proposed | Product boundary, domain model, components, safety, and evolution |
 | [nirvana-integration-architecture.md](nirvana-integration-architecture.md) | Proposed | Normative Nirvana facade, packaged NVB task-runtime, lane-profile, and shell-leaf architecture |
 | [roadmap.md](roadmap.md) | Planning | Milestones, implementation packs, release gates, and post-v1 horizons |
-| [v1-implementation-map.md](v1-implementation-map.md) | Proposed | Master 53-batch construction, dependency, ownership, and proof map |
+| [v1-implementation-map.md](v1-implementation-map.md) | Proposed | Master 59-batch construction, dependency, ownership, and proof map |
 | [pack-design-draft.md](pack-design-draft.md) | Draft | Canonical accepted-spec to implementation-pack process |
 | [allocation-planning-draft.md](allocation-planning-draft.md) | Draft | CLI/plan/model discovery plus quality-first implementation capacity allocation |
 | [coordinator-automation.md](coordinator-automation.md) | Proposed | Normative v1 pack indexing, bounded decision cycles, zero-token routing, and validated effects |
 | [operator-session.md](operator-session.md) | Proposed | Normative v1 bounded multi-turn operator session and confirmed-effect boundary |
 | [cli-session.md](cli-session.md) | Proposed | Normative v1 full-screen operator-session TUI, right inspector, interaction, rendering, streaming, and accessibility |
+| [tui-operational-experience.md](tui-operational-experience.md) | Proposed | Normative v1 TUI support matrix, entry selection, failures, recovery, conflicts, diagnostics, search, upgrades, and visual acceptance |
+| [experiments/opentui-nirvana-smoke/](experiments/opentui-nirvana-smoke/) | Experiment | Disposable pre-lane Nirvana/NVB/OpenTUI/FFI distribution smoke and independent review |
 | [discussions/lane-directory-path.md](discussions/lane-directory-path.md) | Resolved | `.watchtower/lanes/<slug>/` execution-overlay decision |
 | [discussions/impl-pack-location.md](discussions/impl-pack-location.md) | Resolved | Committed design pack plus local execution-overlay decision |
 | [discussions/coordinator-cost-and-automation.md](discussions/coordinator-cost-and-automation.md) | Resolved | Coordinator cost, context, tiering, and automation proposal with corrections |

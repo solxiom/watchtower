@@ -13,6 +13,7 @@ This draft brief is subordinate to:
 - `docs/spec/v1-implementation-map.md`
 - `docs/spec/operator-session.md`
 - `docs/spec/cli-session.md`
+- `docs/spec/tui-operational-experience.md`
 - this pack's `tui-interface-contracts.md`
 - this pack's `implementation-quality-and-agent-rules.md`
 
@@ -20,6 +21,16 @@ The engineering and Nirvana/NVB architecture standards always apply. If this
 brief conflicts with a governing source, follow the governing source and amend
 the brief. An unresolved release-platform, packaging, security, or runtime
 decision is a specification blocker, not implementor discretion.
+
+Accepted `TUI-EXP-01` evidence may inform bootstrap hypotheses, dependency
+inventory, and risk prioritization. It is never predecessor acceptance:
+CA-18 independently reruns the real Watchtower/package/platform matrix and
+remains blocked on its declared dependencies.
+
+The minimum PASS target is the exact Linux x86_64/glibc, manifest-tested Node
+`>=26.4.0`, local/tmux/direct-SSH/SSH+tmux baseline in
+`tui-operational-experience.md §2`. Every observed tuple and capability is
+recorded; evidence from one tuple never promotes another.
 
 ## Mandatory Cross-Cutting Acceptance
 

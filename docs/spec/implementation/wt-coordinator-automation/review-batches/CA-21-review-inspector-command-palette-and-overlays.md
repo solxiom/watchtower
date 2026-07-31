@@ -12,6 +12,10 @@ Verify the exact file and interface surface in the paired brief and
 
 ## Independent Proof
 
+- Apply `tui-operational-experience.md §§7–9`: agents consume approved
+  projections only; unknown/stale/estimated values stay explicit; search and
+  attention are bounded/model-free; diagnostics remain redacted and read-only.
+
 - Reproduce all nine inspector views in loading, empty, stale, truncated,
   unavailable, error, and populated states with stable cursors/revisions.
 - Prove every view is bounded and model-free, hidden views do not poll, stale

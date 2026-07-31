@@ -816,12 +816,14 @@ wt coordinator ask [<question>]
   [--stream]
 
 wt coordinator session
+  [--lane=<slug-or-uuid>]
   [--topic=<text>]
   [--policy-profile=<id>]
   [--tag=<tag>...]
   [--stream|--no-stream]
 
 wt coordinator session attach <operator-session-id>
+  [--lane=<slug-or-uuid>]
   [--observe]
   [--stream|--no-stream]
   [--wait-for-active-turn]
@@ -833,6 +835,11 @@ a new open operator session and attaches. `session attach` binds to an existing
 open session without changing lifecycle state. `session resume` remains only
 the explicit `suspended → open` lifecycle transition. An unrecognized
 positional token is never guessed to be a session ID.
+
+Lane resolution completes before session creation or attachment. Explicit,
+zero-lane, single-lane, interactive multi-lane, and non-interactive ambiguous
+cases follow `tui-operational-experience.md §3`; the picker is model-free and
+cannot create state merely by displaying candidates.
 
 `ask --session=<id>` uses exactly the same lifecycle validation,
 operator-session turn lock, bounded working set, pins, unresolved

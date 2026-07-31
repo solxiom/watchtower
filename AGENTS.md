@@ -143,7 +143,9 @@ Do not encode semantic coordinator judgment in CLI code. Mechanical routing,
 typed proposal validation, and bounded effects follow
 `docs/spec/coordinator-automation.md`.
 Operator-session semantics follow `docs/spec/operator-session.md`;
-foreground UI attachments follow `docs/spec/cli-session.md`.
+foreground UI attachments follow `docs/spec/cli-session.md`; supported
+environments, entry, recovery, diagnostics, conflicts, bounded search, and UI
+compatibility follow `docs/spec/tui-operational-experience.md`.
 
 ## Spec workflow
 

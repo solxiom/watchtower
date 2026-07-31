@@ -5,7 +5,7 @@
 Governing sources: `AGENTS.md`, the mandatory engineering standard,
 `v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
 `architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, and pack quality rules.
+`cli-session.md`, `tui-operational-experience.md`, and pack quality rules.
 Required interfaces are normative in this pack's
 `tui-interface-contracts.md §CA-20 Conversation Contract`.
 
@@ -29,6 +29,7 @@ session history or creating another durable memory.
 - bounded history and optional retention-coupled local cache adapter
 - cancellable completion and reference-picker controllers
 - authorized reference insertion and paste-capsule presentation
+- bounded owner-only composer draft recovery and index-bounded timeline search
 
 Exact owned production modules:
 
@@ -70,6 +71,11 @@ No unnamed helper or alternative owner may be added without amending the brief.
    before journaling or model use.
 8. Couple any optional editor cache to owner-only permissions and the exact
    retention/prune/privacy rules. It is finite and never authoritative.
+9. Implement the exact draft identity, 32 KiB/20-draft/seven-day bounds,
+   restore choice, durable-append deletion point, quarantine, and privacy
+   coupling in `tui-operational-experience.md §5`.
+10. Search only validated paged indexes with visible scope, revision,
+    staleness, truncation, and finite query/result/time/excerpt limits.
 
 ## Exclusions
 
@@ -85,6 +91,10 @@ No unnamed helper or alternative owner may be added without amending the brief.
   resize/reflow; stable anchor; viewport-proportional memory.
 - Multiline editing, selection, Unicode/combining text, paste boundaries,
   submit/newline, history search, and cache prune/privacy coupling.
+- Crash/restart/durable-append races, recovery keep/discard, expiry, identity
+  mismatch, limit pressure, and proof drafts never enter journal/model context.
+- Timeline search proves index-only access, cancellation, bounds, and no model
+  or raw-journal/full-pack fallback.
 - Slash classification matrix proving zero model use for commands/errors.
 - Completion cancellation/revision races and every authorized/denied reference
   type, including path traversal, symlink, secret, ambiguity, and size attacks.

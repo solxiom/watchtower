@@ -10,6 +10,8 @@ lower reports guide reproduction but are not accepted facts. Include the full
 engineering acceptance matrix.
 Verify the exact command/file and interface surface in the paired brief and
 `tui-interface-contracts.md §CA-24`.
+Trace every requirement in `tui-operational-experience.md` to independent
+evidence; absence from a lower report is not permission to omit it.
 
 ## Independent Pack-Exit Proof
 
@@ -17,6 +19,9 @@ Verify the exact command/file and interface surface in the paired brief and
   TTY/refusal, redirected, human/JSON, help, completion, and global install.
 - Verify create, attach, lifecycle resume, observe, detach, close, many-session,
   concurrent attachment, wait, restart, and recovery semantics.
+- Reproduce explicit/zero/one/many-lane entry and switching guards, proving no
+  unintended creation, plus `doctor --tui` and redacted report content,
+  permissions, overwrite, and non-mutation behavior.
 - Independently generate 30/300/3,000/10,000-batch sealed fixtures with fixed
   affected neighborhoods. Record exact model envelope bytes/tokens and prove
   unrelated growth does not increase routine context.
@@ -33,6 +38,8 @@ Verify the exact command/file and interface surface in the paired brief and
 - Run clean `nvb build`, `nvb test`, `nvb dist`, all RT-03 global-install
   targets, architecture/security gates, link/docs consistency, line counts,
   staged-artifact and ownership checks.
+- Reconcile every promoted target tuple and visual-catalog state against a
+  reproducible evidence index, including search/draft/conflict/migration cases.
 
 Reject on any unreproduced lower-batch claim, context/queue/memory growth beyond
 declared bounds, missing target, command/help/schema drift, alternate authority,

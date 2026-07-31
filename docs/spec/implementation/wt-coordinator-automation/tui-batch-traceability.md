@@ -11,17 +11,22 @@ responsibility. It does not authorize dispatch or replace the briefs.
 | --- | --- | --- | --- |
 | Node `>=26.4.0`, FFI bootstrap, OpenTUI/Nirvana compatibility | CA-18 | REV-CA-18 | CA-24 consumes accepted matrix |
 | Native artifacts, dist/global install, non-TUI isolation | CA-18 | REV-CA-18 | CA-24 repeats release paths |
+| Exact target promotion and local/tmux/SSH invocation matrix | RT-03, CA-18 | REV-CA-18, REV-CA-23 | CA-24 evidence index |
+| Zero/one/many-lane entry and first-run state | CA-19 | REV-CA-19 | CA-24 command proof |
 | Canonical shell, right inspector, responsive breakpoints | CA-19 | REV-CA-19 | CA-24 end-to-end |
-| Focus, action/keymap, themes, preferences, bounded motion | CA-19 | REV-CA-19 | CA-23 accessibility; CA-24 |
+| Focus, P0–P5 attention, action/keymap, themes, preferences, bounded motion | CA-19 | REV-CA-19 | CA-23 accessibility; CA-24 |
 | Virtualized conversation, anchor, bounded rendering memory | CA-20 | REV-CA-20 | CA-24 scale/soak |
-| Composer, slash parsing, history, completion, references | CA-20 | REV-CA-20 | CA-24 command/end-to-end |
-| Nine bounded model-free inspector views | CA-21 | REV-CA-21 | CA-24 end-to-end |
+| Composer, draft recovery, slash parsing, history, completion, references | CA-20 | REV-CA-20 | CA-24 command/end-to-end |
+| Bounded timeline/global search and attention navigation | CA-20, CA-21 | REV-CA-20, REV-CA-21 | CA-24 scale/model-free proof |
+| Nine bounded model-free inspector views and allocation source boundary | CA-21 | REV-CA-21 | CA-24 end-to-end |
 | Palette/action parity and confirmation overlays | CA-21 | REV-CA-21 | CA-24 authority audit |
 | Provisional streaming and validated replacement | CA-22 | REV-CA-22 | CA-24 replay/soak |
-| Notifications, contention/wait, observer UI | CA-22 | REV-CA-22 | CA-24 concurrency |
+| Notifications, stale invalidation, cross-attachment contention/wait, observer UI | CA-22 | REV-CA-22 | CA-24 concurrency |
 | Signals, suspend/resume, idempotent restoration | CA-23 | REV-CA-23 | CA-24 packaged smoke |
 | Terminal injection/bidi/clipboard/title/hyperlink security | CA-23 | REV-CA-23 | CA-24 security gate |
 | No-color, high contrast, reduced motion, accessible mode | CA-23 | REV-CA-23 | CA-24 end-to-end |
+| Preference/cache migrations and semantic visual-state catalog | CA-19, CA-23 | REV-CA-19, REV-CA-23 | CA-24 evidence index |
+| TUI doctor and explicit redacted support report | CA-21, CA-24 | REV-CA-21, REV-CA-24 | REV-CA-24 |
 | Session/ask/lifecycle command and help integration | CA-24 | REV-CA-24 | REV-CA-24 |
 | 30/300/3,000/10,000 context invariance | CA-24 | REV-CA-24 | REV-CA-24 |
 | Long-session/session-count replay and bounded memory | CA-24 | REV-CA-24 | REV-CA-24 |
@@ -44,6 +49,11 @@ responsibility. It does not authorize dispatch or replace the briefs.
 | `cli-session.md §14.6` performance/resources | CA-19–CA-24, closed by CA-24 |
 | `cli-session.md §15` preferences | CA-19, CA-20 |
 | `cli-session.md §16–§17` testing/acceptance | CA-18–CA-24 |
+| `tui-operational-experience.md §2` platform/support | RT-03, CA-18, CA-23, CA-24 |
+| `tui-operational-experience.md §§3–4` entry/attention | CA-19, CA-22, CA-24 |
+| `tui-operational-experience.md §§5–6` drafts/conflicts | CA-20, CA-22, CA-24 |
+| `tui-operational-experience.md §§7–9` inspector/doctor/search | CA-20, CA-21, CA-24 |
+| `tui-operational-experience.md §§10–11` compatibility/visual catalog | CA-19, CA-23, CA-24 |
 
 ## Repack Completion Checklist
 

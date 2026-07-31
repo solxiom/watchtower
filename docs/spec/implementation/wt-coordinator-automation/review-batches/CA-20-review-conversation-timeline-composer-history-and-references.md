@@ -12,6 +12,12 @@ Verify the exact file and interface surface in the paired brief and
 
 ## Independent Proof
 
+- Treat `tui-operational-experience.md §§5 and 9` as normative. Reproduce every
+  draft bound, keep/discard/expiry/quarantine/privacy path, append race, and
+  prove no implicit journal/model inclusion.
+- Prove timeline search is revision-tagged, finite, index-only, model-free, and
+  has no raw-journal/full-pack fallback.
+
 - Reproduce empty/small/large/compacted timelines, bidirectional paging,
   prepend/reflow/resize anchoring, and viewport-plus-overscan memory bounds.
 - Prove no full-history, raw-journal, SQLite, or transitive-reference fallback.

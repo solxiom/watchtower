@@ -15,6 +15,7 @@ This draft brief is subordinate to:
 - `docs/spec/coordinator-automation.md`
 - `docs/spec/operator-session.md`
 - `docs/spec/cli-session.md`
+- `docs/spec/tui-operational-experience.md`
 - this pack's `implementation-quality-and-agent-rules.md`
 
 Only the references relevant to the batch's accepted scope need drive its
@@ -50,6 +51,10 @@ Depends on: RT-03 implementation complete, implementation report written
 **Class rationale:** bounded build-automation validation with explicit output verification. The class is a floor.
 
 ## Scope Verification
+
+Apply `docs/spec/tui-operational-experience.md §2`: target tuples remain exact,
+checksum-pinned manifest records and no optional native/TUI target is promoted
+from evidence gathered on a different OS/architecture/libc/Node tuple.
 
 Confirm that the packaged Watchtower NVB runtime contains generated validated
 config/catalog aggregates, focused pinned-public-API TaskHandlers, structured

@@ -4,8 +4,9 @@ Status: ❌ Not started
 Paired work: CA-23
 Reviewer floor: `R5`; reviewer owns acceptance commit.
 
-Read the paired brief, all governing sources, and accepted CA-18 platform
-evidence. Apply the engineering review matrix and independently reproduce
+Read the paired brief, all governing sources including
+`tui-operational-experience.md`, and accepted CA-18 platform evidence. Apply
+the engineering review matrix and independently reproduce
 terminal safety; visual inspection alone is insufficient.
 Verify the exact file and interface surface in the paired brief and
 `tui-interface-contracts.md §CA-23`.
@@ -27,6 +28,9 @@ Verify the exact file and interface surface in the paired brief and
   repeated resize.
 - Prove renderer/native failure restores the terminal and leaves `ask` and
   ordinary CLI usable.
+- Reproduce every exact promoted local/tmux/direct-SSH/SSH+tmux tuple and every
+  semantic visual-catalog state; verify preference/cache migration and safe
+  failure on unpromoted tuples. Pixel snapshots are not acceptance proof.
 - Run build/test, required packaged PTY smoke, architecture gates, and
   independent size/Nirvana audits.
 
