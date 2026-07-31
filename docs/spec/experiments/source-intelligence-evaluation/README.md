@@ -1,6 +1,6 @@
 # Source Intelligence Evaluation
 
-Status: **Disposable pre-lane experiment — not product implementation**
+Status: **Active disposable research sequence — not product implementation**
 
 This experiment evaluates whether a provider-neutral source-intelligence
 capability can improve quality-preserving cost per accepted Nirvana task while
@@ -12,9 +12,17 @@ maintaining exact worktree isolation and bounded context.
 | [SRC-EXP-01-agent-launch-prompt.md](SRC-EXP-01-agent-launch-prompt.md) | Bounded experiment-agent handoff |
 | [SRC-EXP-01-review.md](SRC-EXP-01-review.md) | Independent evidence and verdict protocol |
 | [SRC-EXP-01-review-agent-launch-prompt.md](SRC-EXP-01-review-agent-launch-prompt.md) | Independent reviewer handoff |
+| [SRC-EXP-01-outcome.md](SRC-EXP-01-outcome.md) | Accepted blocked outcome and limitations carried into the correction |
+| [SRC-EXP-02-corrected-provider-evaluation.md](SRC-EXP-02-corrected-provider-evaluation.md) | Hard-gated provider-readiness and corrected comparative protocol |
+| [SRC-EXP-02-preparer-launch-prompt.md](SRC-EXP-02-preparer-launch-prompt.md) | Independent prompt, schedule, hidden-evidence, and digest-commitment handoff |
+| [SRC-EXP-02-agent-launch-prompt.md](SRC-EXP-02-agent-launch-prompt.md) | Bounded corrected experiment-agent handoff |
+| [SRC-EXP-02-review.md](SRC-EXP-02-review.md) | Independent readiness, evidence, scoring, and verdict protocol |
+| [SRC-EXP-02-review-agent-launch-prompt.md](SRC-EXP-02-review-agent-launch-prompt.md) | Independent corrected-experiment reviewer handoff |
 
-The disposable fixture belongs outside the Watchtower repository at
-`/home/kavan/Projects/watchtower-source-intelligence-spike`. No spike code,
-provider cache, index, dependency, benchmark repository, or result corpus may
-be copied into Watchtower. Only reports under Watchtower `.local/` are local
-handoff evidence; accepted product decisions require a later spec amendment.
+Each disposable fixture belongs outside the Watchtower repository. SRC-EXP-01
+remains preserved at `/home/kavan/Projects/watchtower-source-intelligence-spike`
+until explicitly pruned. SRC-EXP-02 uses a separate fixture root and may not
+alter or reuse the retained evidence as mutable state. No spike code, provider
+cache, index, dependency, benchmark repository, or result corpus may be copied
+into Watchtower. Only reports under Watchtower `.local/` are local handoff
+evidence; accepted product decisions require a later spec amendment.

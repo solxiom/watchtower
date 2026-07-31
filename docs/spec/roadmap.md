@@ -399,6 +399,10 @@ silently downgrades below a pack capability floor to make a plan fit.
 
 Candidate release: v1.4.
 
+Research gate: SRC-EXP-01 concluded `RESEARCH_BLOCKED`. No source-intelligence
+implementation pack may begin until SRC-EXP-02 passes provider readiness and
+returns independently accepted `ADOPT_BASELINE` or `ADOPT_LIMITED` evidence.
+
 - implement the provider-neutral capability defined in
   [source-intelligence-draft.md](source-intelligence-draft.md);
 - exact committed snapshots plus worktree-specific dirty overlays;

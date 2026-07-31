@@ -800,6 +800,34 @@ Retrieval-token reduction alone cannot produce adoption. A quality regression,
 cross-worktree leak, hidden network/source transfer, unbounded service, or
 failure to identify dirty-state staleness is a rejection.
 
+### 18.5 Experiment record and correction gate
+
+SRC-EXP-01 completed with the independently reviewed verdict
+`RESEARCH_BLOCKED`. It produced a useful but not fully accepted native
+baseline, proved model-free fixture isolation checks, and produced no valid
+S1/S2 model outcome. The model made zero provider calls, the direct TypeScript
+semantic backend failed during dependency setup, the exact model-visible tool
+schema was not captured, native T7 failed its evidence floor, and overlapping
+runs invalidated latency comparison. The accepted record is
+[SRC-EXP-01-outcome.md](experiments/source-intelligence-evaluation/SRC-EXP-01-outcome.md).
+
+The next evaluation is
+[SRC-EXP-02](experiments/source-intelligence-evaluation/SRC-EXP-02-corrected-provider-evaluation.md).
+It has two irreversible stages:
+
+1. `PROVIDER_READINESS` proves a schema-valid direct semantic canary, exact
+   provider tools visible to the outbound model request, a successful
+   model-mediated canary tool call, provider lifecycle/side-effect behavior,
+   and clean termination.
+2. `COMPARATIVE_EVALUATION` may start only from a complete readiness
+   attestation. It reruns all native and indexed tasks sequentially under
+   counterbalanced fresh contexts and the precommitted hidden rubric.
+
+A failed or incomplete readiness gate cannot be converted into indexed task
+results, savings, or adoption evidence. `REJECT_PROVIDER` in SRC-EXP-02 is a
+provider-specific instance of this draft's `REJECT`; it does not reject the
+provider-neutral capability.
+
 ## 19. Testing strategy
 
 Required future proof includes:
@@ -876,7 +904,8 @@ These require experiment evidence or a dedicated implementation pack; an
 implementer must not decide them implicitly:
 
 1. Which S1/S2 provider and versions satisfy the first accepted language and
-   distribution matrix?
+   distribution matrix? Serena 0.1.4 remains unproven after SRC-EXP-01 and may
+   be considered only through the corrected readiness gate.
 2. Is the minimum shipped provider embedded, packaged as an audited leaf, or a
    separately installed approved capability?
 3. Which languages are release-required beyond the initial Nirvana

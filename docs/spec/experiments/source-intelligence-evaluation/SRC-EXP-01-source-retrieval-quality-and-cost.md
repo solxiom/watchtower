@@ -1,8 +1,12 @@
 # SRC-EXP-01 — Source Retrieval Quality and Cost Evaluation
 
-Status: **Ready for disposable execution; not product or batch acceptance**
+Status: **Completed — independently reviewed `RESEARCH_BLOCKED`; not product or batch acceptance**
 
 Governing design: [source-intelligence-draft.md](../../source-intelligence-draft.md)
+
+The accepted outcome and the constraints carried forward are recorded in
+[SRC-EXP-01-outcome.md](SRC-EXP-01-outcome.md). The retained raw reports remain
+ignored local evidence and are not copied into this specification tree.
 
 ## 1. Question
 
