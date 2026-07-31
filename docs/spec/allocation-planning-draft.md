@@ -476,6 +476,7 @@ Each supported CLI family has a versioned adapter. An adapter may implement:
 | `capacity` | Non-consuming quota, reset, availability, and concurrency observations |
 | `projectCheck` | Repository, worktree, runtime, proof-tool, and required-feature access |
 | `launchDescriptor` | Non-secret runtime data needed to invoke an approved endpoint |
+| `sourceIntelligence` | Native/CLI/MCP source-query transports, accepted result/capsule forms, and tool-schema overhead |
 | `redact` | Adapter-specific removal of account and authentication material from observations |
 
 Every operation declares whether it is:
@@ -595,6 +596,9 @@ checking:
 - each repository binding and declared read/write mode;
 - dedicated-worktree and branch access;
 - required build, test, browser, MCP, or proof tools;
+- required source-intelligence transport/capability when a pack marks capsule
+  access required, including whether host-native retrieval avoids duplicated
+  inline context;
 - network or data-residency policy;
 - host feature requirements;
 - safe launch as the declared OS user; and
@@ -628,6 +632,12 @@ merely to “use every agent,” maximize plan consumption, or equalize token
 spend. Some endpoints should remain unused because they add switching cost,
 share the same quota, lack independent review value, or are weaker for the
 current pack.
+
+Source-index support is an eligibility/efficiency fact, not a reasoning-class
+proxy. The planner may avoid duplicating inline source for an endpoint with an
+accepted compatible query route, but cannot prefer a weaker endpoint merely
+because it has native indexing or penalize a capable endpoint because it uses
+bounded CLI source reads instead.
 
 ## 9. Endpoint eligibility
 

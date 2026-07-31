@@ -395,7 +395,32 @@ An implementation lane created from a sealed pack starts
 `allocation-required`. Infeasibility is an explicit result; Watchtower never
 silently downgrades below a pack capability floor to make a plan fit.
 
-### Horizon D — Agile workflow views
+### Horizon D — Source intelligence and reusable retrieval
+
+Candidate release: v1.4.
+
+- implement the provider-neutral capability defined in
+  [source-intelligence-draft.md](source-intelligence-draft.md);
+- exact committed snapshots plus worktree-specific dirty overlays;
+- local reusable S0 file and S1 syntax indexes, gated by a disposable
+  quality/cost evaluation;
+- optional audited LSP/Serena-style semantic, structural graph, Sourcegraph,
+  and similarity providers without making MCP or embeddings core;
+- closed bounded `wt source` queries with provenance, freshness, coverage,
+  pagination, redaction, and no unbounded fallback;
+- batch/turn/assignment source capsules tied to repository bindings and current
+  source views;
+- independent reviewer regeneration and current-source verification;
+- endpoint-native/Watchtower/MCP retrieval deduplication; and
+- source inspector/search only through an explicit future TUI registry
+  amendment.
+
+The index remains disposable evidence. Git/source, accepted specifications,
+implementation packs, tests, and reviewer verdicts retain authority. Adoption
+is based on quality-preserving cost per accepted outcome, not retrieval-token
+claims alone.
+
+### Horizon E — Agile workflow views
 
 Candidate release: v1.x.
 
@@ -408,7 +433,7 @@ Candidate release: v1.x.
 
 Metrics must not rank individual agents or infer quality from token spend.
 
-### Horizon E — Additional lane kinds
+### Horizon F — Additional lane kinds
 
 Candidate release: v2.
 
@@ -422,7 +447,7 @@ beyond `implementation` and `pack-design` before exposing a public lane engine:
 
 Only then consider a public lane-kind interface or plugin SDK.
 
-### Horizon F — Structured runtime state
+### Horizon G — Structured runtime state
 
 Candidate release: v2.
 

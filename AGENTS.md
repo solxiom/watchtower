@@ -146,6 +146,9 @@ Operator-session semantics follow `docs/spec/operator-session.md`;
 foreground UI attachments follow `docs/spec/cli-session.md`; supported
 environments, entry, recovery, diagnostics, conflicts, bounded search, and UI
 compatibility follow `docs/spec/tui-operational-experience.md`.
+Future provider-neutral repository indexing and bounded source retrieval follow
+`docs/spec/source-intelligence-draft.md`; source indexes remain derived evidence
+and separate from the v1 seal-bound coordinator pack index.
 
 ## Spec workflow
 

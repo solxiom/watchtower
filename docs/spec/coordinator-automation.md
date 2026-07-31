@@ -561,6 +561,14 @@ D3 may request a wider affected subgraph, but every request remains explicitly
 bounded, metered, paginated, and auditable. “Complex” does not authorize loading
 the full lane by default.
 
+The future repository source-intelligence index in
+[source-intelligence-draft.md](source-intelligence-draft.md) is a separate
+derived capability, not an extension of this pack index. Routine v1 envelopes
+receive no source index. A later accepted routing amendment may permit an exact
+bounded source-view query for source-drift, dependency-impact, or
+cross-repository D2/D3 judgment; its result remains evidence and cannot
+authorize an effect or replace current-source/reviewer verification.
+
 ## 10. Context broker and budgets
 
 ### 10.1 Brokered context
