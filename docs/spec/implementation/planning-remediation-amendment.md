@@ -262,14 +262,21 @@ launched.
 
 ## 6. Activation and review
 
-This amendment requires:
+Remediation uses two independent gates:
 
-1. synchronized normative specification and all affected pack artifacts;
-2. schema syntax, local Markdown-link, batch-pair, prompt-pair, dependency-DAG,
-   stale-reference, and bootstrap-seal proof;
-3. independent review using the mandatory engineering matrix;
-4. new seals for every changed pack and the root pack set; and
-5. coordinator activation only after the accepted amendment commit is present
-   in each active worktree through explicit synchronization.
+1. **Design gate.** An independent reviewer applies
+   `planning-remediation-review.md` to the amendment, normative changes,
+   corrected inventory, dependency graph, and ownership boundaries. An
+   `ACCEPT_DESIGN` verdict authorizes pack synchronization only. It does not
+   authorize product-batch dispatch or activate new seals.
+2. **Pack gate.** After design acceptance, every affected work brief, review
+   brief, launch prompt, index, roadmap, tracker, ranking, traceability record,
+   and release gate is synchronized. A different independent review pass then
+   proves schema syntax, local Markdown links, exact batch/prompt pairing,
+   acyclic dependencies, stale-reference absence, and candidate bootstrap
+   seals. Only `ACCEPT_PACKS` publishes new seals and may lift the dispatch
+   hold.
 
-The author of this amendment cannot provide its independent acceptance.
+Coordinator activation occurs only after the accepted pack-gate commit is
+present in every active worktree through explicit synchronization. The author
+of this amendment cannot provide either independent acceptance verdict.
