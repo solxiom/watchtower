@@ -13,7 +13,7 @@ This pack is one part of the accepted 74-batch/33-wave architecture. The explici
 | RT-05 | `LaneTaskRunner` and leaf invocation adapter | [work](work-batches/RT-05-central-runtime-invocation-adapter.md) | [review](review-batches/RT-05-review-central-runtime-invocation-adapter.md) | ❌ Pending |
 | RT-06 | Managed lane links, task profiles, and compatibility names | [work](work-batches/RT-06-managed-lane-links-and-compatibility-names.md) | [review](review-batches/RT-06-review-managed-lane-links-and-compatibility-names.md) | ❌ Pending |
 | RT-07 | Packaged watcher and task-runtime smoke proof | [work](work-batches/RT-07-packaged-watcher-and-runtime-smoke-proof.md) | [review](review-batches/RT-07-review-packaged-watcher-and-runtime-smoke-proof.md) | ❌ Pending |
-| RT-08 | Nirvana dependency closure and isolated install harness | [work](work-batches/RT-08-nirvana-dependency-closure-and-isolated-install-harness.md) | [review](review-batches/RT-08-review-nirvana-dependency-closure-and-isolated-install-harness.md) | ❌ Pending |
+| RT-08 | Nirvana dependency closure and isolated install harness | [work](work-batches/RT-08-nirvana-dependency-closure-and-isolated-install-harness.md) | [review](review-batches/RT-08-review-nirvana-dependency-closure-and-isolated-install-harness.md) | ✅ Accepted |
 | RT-09 | Task catalog, lane profile, and aggregate contracts | [work](work-batches/RT-09-task-catalog-lane-profile-and-aggregate-contracts.md) | [review](review-batches/RT-09-review-task-catalog-lane-profile-and-aggregate-contracts.md) | ❌ Pending |
 | RT-10 | Baseline packaged TaskHandlers | [work](work-batches/RT-10-baseline-packaged-taskhandlers.md) | [review](review-batches/RT-10-review-baseline-packaged-taskhandlers.md) | ❌ Pending |
 

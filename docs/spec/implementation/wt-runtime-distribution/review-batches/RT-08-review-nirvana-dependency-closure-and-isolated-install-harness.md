@@ -13,7 +13,8 @@
 - **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ⏳ Awaiting independent review
+Status: ✅ Accepted
+Review outcome: all mandatory proof and engineering gates independently reproduced
 Paired work brief: `work-batches/RT-08-nirvana-dependency-closure-and-isolated-install-harness.md`
 Depends on accepted evidence from: RM-01
 

@@ -14,11 +14,12 @@
   "author": "",
   "license": "SEE LICENSE IN LICENSE.txt",
   "dependencies": {
-    "@nirvana/base": "*",
-    "@nirvana/b-core": "*",
-    "@nirvana/builder": "*",
-    "@nirvana/commons": "*",
-    "@nirvana/framework": "*"
+    "@nirvana/base": "1.0.0",
+    "@nirvana/b-core": "1.0.0",
+    "@nirvana/builder": "1.0.0",
+    "@nirvana/commons": "1.0.0",
+    "@nirvana/framework": "1.0.0",
+    "json5": "2.2.3"
   },
   "devDependencies": {
     "@types/jasmine": "^4.3.1",

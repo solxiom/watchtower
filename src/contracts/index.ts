@@ -15,6 +15,21 @@ export {
     exitCodeFor
 } from './exitCodes.js';
 export type {ExitCode} from './exitCodes.js';
+export {
+    NIRVANA_CLOSURE_REASONS,
+    NirvanaClosureError
+} from './nirvanaClosure.js';
+export type {
+    NirvanaClosureArtifact,
+    NirvanaClosureDependency,
+    NirvanaClosureFailure,
+    NirvanaClosurePackage,
+    NirvanaClosureReason,
+    NirvanaClosureResult,
+    NirvanaClosureSource,
+    NirvanaClosureSuccess,
+    NirvanaDependencyClosureManifest
+} from './nirvanaClosure.js';
 export type {
     AccessMode,
     ClaimMode,

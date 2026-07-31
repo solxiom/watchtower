@@ -11,7 +11,7 @@ Status: **Synchronized remediation candidate**
 | RT-05 | `LaneTaskRunner` and leaf invocation adapter | ❌ Pending | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
 | RT-06 | Managed lane links, task profiles, and compatibility names | ❌ Pending | Manifest-only ownership; task catalog/profile pin; project `nvb.json` unchanged; link targets/checksums; collision/path-escape refusal |
 | RT-07 | Packaged watcher and task-runtime smoke proof | ❌ Pending | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |
-| RT-08 | Nirvana dependency closure and isolated install harness | ❌ Pending | Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink |
+| RT-08 | Nirvana dependency closure and isolated install harness | ✅ Accepted | Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink |
 | RT-09 | Task catalog, lane profile, and aggregate contracts | ❌ Pending | Duplicate/dangling/stale rejection; profile cannot add code/tasks; deterministic aggregate |
 | RT-10 | Baseline packaged TaskHandlers | ❌ Pending | Public TaskHandler API; schema-valid input/result/events; no product policy or future capability stubs |
 

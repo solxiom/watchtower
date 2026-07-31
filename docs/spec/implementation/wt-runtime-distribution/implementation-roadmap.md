@@ -11,7 +11,7 @@ Status: **Synchronized remediation candidate**
 | 6 | RT-05 | `LaneTaskRunner` and leaf invocation adapter | `RT-03`, `RT-04`, `RT-09` | task/runtime adapters foundation |
 | 7 | RT-06 | Managed lane links, task profiles, and compatibility names | `RT-04`, `RT-05` | managed-asset/task-profile foundation |
 | 8 | RT-07 | Packaged watcher and task-runtime smoke proof | `RT-03`, `RT-05`, `RT-06` | integration fixtures |
-| 2 | RT-08 | Nirvana dependency closure and isolated install harness | `RM-01` | exact dependency manifest, packed-artifact fixture, install verifier |
+| 2 | RT-08 | Nirvana dependency closure and isolated install harness (✅ accepted) | `RM-01` | exact dependency manifest, packed-artifact fixture, install verifier |
 | 3 | RT-09 | Task catalog, lane profile, and aggregate contracts | `RT-01`, `RM-11` | capability fragments, aggregate generator, catalog/profile contracts |
 | 4 | RT-10 | Baseline packaged TaskHandlers | `RT-09` | runtime validation/staging/smoke handlers only |
 

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "watchtower-nirvana-closure/v1",
+  "ecosystem": {
+    "version": "1.0.0-alpha",
+    "versionsRoot": "~/.nirvana/ecosystem/versions",
+    "manifestSha256": "sha256:d8903544c028455aa7788df04391dc678cb644f6928f0daf2b77ac5f93a8eccf"
+  },
+  "registry": {
+    "external": "https://registry.npmjs.org/",
+    "nirvana": "packed-artifacts"
+  },
+  "watchtower": {
+    "name": "watchtower",
+    "version": "0.1.0",
+    "dependencies": [
+      {"name": "@nirvana/b-core", "version": "1.0.0"},
+      {"name": "@nirvana/base", "version": "1.0.0"},
+      {"name": "@nirvana/builder", "version": "1.0.0"},
+      {"name": "@nirvana/commons", "version": "1.0.0"},
+      {"name": "@nirvana/framework", "version": "1.0.0"}
+    ]
+  },
+  "packages": [
+    {
+      "kind": "nirvana",
+      "name": "@nirvana/b-core",
+      "version": "1.0.0",
+      "artifact": {"file": "nirvana-b-core-1.0.0.tgz", "sha256": "sha256:fe91259268591835a681a71413c7fa46847425a79db7e0a300121a2428152856"},
+      "source": {"path": "components/b-core", "sha256": "sha256:982aef087d627ccce06b4436af0fa884e2f68b57bea727dc0966c107435e9687"},
+      "dependencies": [{"name": "@nirvana/base", "version": "1.0.0"}]
+    },
+    {
+      "kind": "nirvana",
+      "name": "@nirvana/base",
+      "version": "1.0.0",
+      "artifact": {"file": "nirvana-base-1.0.0.tgz", "sha256": "sha256:d57b132911bbeb5608dffad5f49cfb4a90ffd044d9faa2df3609ea13448ccd55"},
+      "source": {"path": "components/base", "sha256": "sha256:f707243f6015b5973aa0d942515b847b0c31cbb15987dfbd68fdc4ac003fcfa3"},
+      "dependencies": []
+    },
+    {
+      "kind": "nirvana",
+      "name": "@nirvana/builder",
+      "version": "1.0.0",
+      "artifact": {"file": "nirvana-builder-1.0.0.tgz", "sha256": "sha256:2b89661c9383cd506086ae935a7556381073670a5a438211aeb023a2ec1fcd2f"},
+      "source": {"path": "components/builder", "sha256": "sha256:0c1ff338c0f005ad1b21faad2a976469de2b28cdd9da60844bc985a86feed5c8"},
+      "dependencies": [
+        {"name": "@nirvana/b-core", "version": "1.0.0"},
+        {"name": "@nirvana/t-cache", "version": "1.0.0"}
+      ]
+    },
+    {
+      "kind": "nirvana",
+      "name": "@nirvana/commons",
+      "version": "1.0.0",
+      "artifact": {"file": "nirvana-commons-1.0.0.tgz", "sha256": "sha256:dec1a8b301bd5037606b935e5b28426959890cfb4adb1e331d16ea6217fa65d3"},
+      "source": {"path": "components/commons", "sha256": "sha256:28973ecae15eaa44b6c3c101114e458e99df78d60e9b609e50591df361158515"},
+      "dependencies": [
+        {"name": "@nirvana/base", "version": "1.0.0"},
+        {"name": "@nirvana/builder", "version": "1.0.0"}
+      ]
+    },
+    {
+      "kind": "nirvana",
+      "name": "@nirvana/framework",
+      "version": "1.0.0",
+      "artifact": {"file": "nirvana-framework-1.0.0.tgz", "sha256": "sha256:75670bb234fd61dbedbabe71370d37c15fcfacce7e7d11e2bfd6091e9efb0a7b"},
+      "source": {"path": "components/framework", "sha256": "sha256:540b6e1bf767b16435169913c47474dbd8008d0ab89f2aed5d581527cab84df8"},
+      "dependencies": [
+        {"name": "@nirvana/base", "version": "1.0.0"},
+        {"name": "@nirvana/builder", "version": "1.0.0"},
+        {"name": "@nirvana/commons", "version": "1.0.0"},
+        {"name": "renatus", "version": "1.1.0"}
+      ]
+    },
+    {
+      "kind": "nirvana",
+      "name": "@nirvana/t-cache",
+      "version": "1.0.0",
+      "artifact": {"file": "nirvana-t-cache-1.0.0.tgz", "sha256": "sha256:1c948cc899cbdd4ec74a9a12626ba869f575ee45162ecf8b76327a394e88726f"},
+      "source": {"path": "components/t-cache", "sha256": "sha256:9c03bbad05e39dabc6aa32f0b55bb514b33d73998ca7279a989498f4e4c45aea"},
+      "dependencies": [{"name": "@nirvana/base", "version": "1.0.0"}]
+    },
+    {
+      "kind": "vendor",
+      "name": "renatus",
+      "version": "1.1.0",
+      "artifact": {"file": "renatus-1.1.0.tgz", "sha256": "sha256:dde7b28310810bc48301d5a1d9d880dabcfd4a8c40c7810c0704461287c42609"},
+      "source": {"path": "vendor/renatus", "sha256": "sha256:5a0eae6a28147fa1e3b9f2f0e1dfb9da100ec850a9e1cb7c420e5558abd54157"},
+      "dependencies": []
+    }
+  ]
+}
