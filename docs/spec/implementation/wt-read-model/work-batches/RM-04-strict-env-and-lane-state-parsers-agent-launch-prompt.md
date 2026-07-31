@@ -124,8 +124,10 @@ Repository prerequisites: `AGENTS.md`.
 9. `docs/spec/implementation/wt-read-model/implementation-quality-and-agent-rules.md`
 10. the canonical source owners:
     - `src/foundation/scalarLineParser.ts` (create)
-    - `src/foundation/EnvParser.ts` (create)
-    - `src/foundation/StateParser.ts` (create)
+    - `src/foundation/envParser.ts` (create)
+    - `src/foundation/stateRecordParser.ts` (create)
+    - `src/foundation/laneLifecycle.ts` (create)
+    - `src/foundation/stateParser.ts` (create)
 
 ## Reasoning / Agent Class
 
@@ -209,12 +211,12 @@ Implement strict env and lane-state parsers:
    - `isCommentLine(line: string): boolean` — detect `#`-prefixed comment lines (after trimming).
    - `classifyScalarValue(value: string): 'unquoted' | 'single-quoted' | 'double-quoted' | 'invalid'` — classify a value by quoting style; reject unclosed quotes.
    - `parseKeyValue(line: string): { key: string; value: string; quoting: 'unquoted' | 'single-quoted' | 'double-quoted' } | null` — parse `KEY=value`, return null for non-kv lines.
-2. Create `src/foundation/EnvParser.ts`:
+2. Create `src/foundation/envParser.ts`:
    - `parseEnvConfig(content: string): EnvConfigResult` — parse a complete env file. Return parsed keys as `Record<string, string>` and any warnings with line numbers.
    - The parser must reject: command substitution `$(...)` and backticks, variable expansion `${...}` and `$VAR`, shell operators (`&&`, `||`, `|`, `;`, `&`, `<`, `>`, `>>`), executable statements, unclosed quotes.
    - The parser must accept: blank lines, `#` comment lines, `KEY=value` with unquoted, single-quoted, or double-quoted scalar values.
    - `redactSensitiveKeys(config: Record<string, string>): { redacted: Record<string, string>; redactedKeys: string[] }` — redact values whose keys match `TOKEN`, `SECRET`, `PASSWORD`, `KEY`, or `CREDENTIAL`.
-3. Create `src/foundation/StateParser.ts`:
+3. Create `src/foundation/stateRecordParser.ts`, `src/foundation/laneLifecycle.ts`, and `src/foundation/stateParser.ts`:
    - `parseLaneState(content: string): LaneStateResult` — parse a lane-state file as `KEY=value` records.
    - `normalizeLaneStatus(rawState: Record<string, string>): LaneLifecycle` — normalize known `lane_status` into `bootstrap` | `active` | `paused` | `complete` | `unknown`.
    - `detectContradictions(state: Record<string, string>, lifecycle: LaneLifecycle): string[]` — detect contradictory state (e.g., `complete` + active batch).

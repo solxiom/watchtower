@@ -42,16 +42,19 @@ governing sources leave a product decision unresolved.
   with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
   illustrative name does not silently create a public identifier.
 
-Status: ⏳ Awaiting review
+Status: ✅ Accepted after correction 02
 Reasoning: `R4`
 Paired work brief: `work-batches/RM-04-strict-env-and-lane-state-parsers.md`
 Implementation report: `.local/agent-reports/wt-read-model/RM-04-strict-env-and-lane-state-parsers.md`
+Correction: `corrections/RM-04-correction-02.md`
 
 ## Scope Verification
 
 - [ ] `src/foundation/scalarLineParser.ts` with shared parser utilities
-- [ ] `src/foundation/EnvParser.ts` with strict non-executing scanner and redaction
-- [ ] `src/foundation/StateParser.ts` with state parser and status normalization
+- [ ] `src/foundation/envParser.ts` with strict non-executing scanner and redaction
+- [ ] `src/foundation/stateRecordParser.ts` with state record ingestion and duplicate policy
+- [ ] `src/foundation/laneLifecycle.ts` with status normalization and contradiction policy
+- [ ] `src/foundation/stateParser.ts` with state read-model orchestration
 - [ ] No shell execution of config text anywhere
 
 ## Required Independent Proof

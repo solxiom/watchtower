@@ -2,6 +2,7 @@ import type {
     LaneManifestV1,
     LaneLifecycle,
     LaneStatusV1,
+    ParserDiagnosticCode,
     ResolvedLane,
     WorkerEventV1,
     WorkspaceContext
@@ -54,6 +55,8 @@ const workerEvent: WorkerEventV1 = {
     payload: {role: 'implementer', batch: 'RM-01', session: 'session:1'}
 };
 
+const parserDiagnosticCode: ParserDiagnosticCode = 'unsafe-shell-syntax';
+
 describe('Watchtower v1 domain types', function () {
     it('models every RM-01 domain contract at valid and boundary values', function () {
         const workspace: WorkspaceContext = {cwd: '/', workspace: '/', resolution: 'current-directory'};
@@ -64,6 +67,7 @@ describe('Watchtower v1 domain types', function () {
         expect(workspace.resolution).toBe('current-directory');
         expect(workerEvent.sequence).toBe(0);
         expect(workerEvent.causationId).toBeNull();
+        expect(parserDiagnosticCode).toBe('unsafe-shell-syntax');
         expect(extendedManifest.futureExtension).toBeTrue();
         expect(extendedEvent.futureExtension).toBeTrue();
     });
@@ -79,10 +83,13 @@ describe('Watchtower v1 domain types', function () {
         const invalidRole: WorkerEventV1 = {...workerEvent, payload: {...workerEvent.payload, role: 'operator'}};
         // @ts-expect-error Durable event envelope requires a numeric sequence.
         const invalidSequence: WorkerEventV1 = {...workerEvent, sequence: 'zero'};
+        // @ts-expect-error Parser diagnostics use a closed parser-local vocabulary.
+        const invalidParserDiagnosticCode: ParserDiagnosticCode = 'unregistered-parser-code';
         expect(invalidClaim).toBeDefined();
         expect(invalidLifecycle).toBeDefined();
         expect(invalidEvent).toBeDefined();
         expect(invalidRole).toBeDefined();
         expect(invalidSequence).toBeDefined();
+        expect(invalidParserDiagnosticCode).toBeDefined();
     });
 });

@@ -12,8 +12,8 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: ⏳ Awaiting implementation (M1 — Read-only discovery, inspection, and stable output)
-Date: 2026-07-30
+Status: ✅ RM-04 accepted after correction 02 (M1 — Read-only discovery, inspection, and stable output)
+Date: 2026-08-01
 Owner areas: `src/contracts/`, `src/foundation/`, `src/commands/`, `help/commands/`
 
 Parent documents:
@@ -107,7 +107,7 @@ Batches:
 - DB-01 — SQLite driver, packaging, and derived-store feasibility (✅ accepted after correction 04; strict lock/sentinel validation and all preserved storage proofs independently passed)
 - RM-02 — Public JSON envelopes and schema validation
 - RM-03 — Canonical paths and workspace resolution
-- RM-04 — Strict env and lane-state parsers
+- RM-04 — Strict env and lane-state parsers (✅ accepted after correction 02)
 - RM-05 — Durable worker-event JSONL parser
 
 Status: ⏳

@@ -42,7 +42,7 @@ governing sources leave a product decision unresolved.
   with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
   illustrative name does not silently create a public identifier.
 
-Status: ❌ Pending
+Status: ✅ Accepted after correction 02
 Phase: Parser foundation
 Depends on: RM-01 accepted
 
@@ -59,12 +59,12 @@ preserve unknown keys. Malicious shell corpus must never execute.
 1. Create `src/foundation/scalarLineParser.ts`: shared parser utilities — line-splitting,
    comment stripping, blank-line detection, scalar-value classification
    (unquoted, single-quoted, double-quoted).
-2. Create `src/foundation/EnvParser.ts`: strict non-executing env-file scanner.
+2. Create `src/foundation/envParser.ts`: strict non-executing env-file scanner.
    Accept: blank lines, `#` comments, `KEY=value` with unquoted,
    single-quoted, or double-quoted scalar values. Reject with line-number
    diagnostics: command substitution, variable expansion, shell operators,
    unclosed quotes, non-scalar values.
-3. Create `src/foundation/StateParser.ts`: lane-state file parser. Parse
+3. Create `src/foundation/stateParser.ts`: lane-state file parser. Parse
    `state/coordinator-lane-state.txt` as `KEY=value` records. Normalize known
    keys (`lane_status`) into status projection. Preserve unknown keys in
    diagnostics map. Report contradictory state as `unknown`/`invalid`.
@@ -74,7 +74,7 @@ preserve unknown keys. Malicious shell corpus must never execute.
 
 ## Expected Ownership
 
-- `src/foundation/scalarLineParser.ts`, `src/foundation/EnvParser.ts`, `src/foundation/StateParser.ts`
+- `src/foundation/scalarLineParser.ts`, `src/foundation/envParser.ts`, `src/foundation/stateRecordParser.ts`, `src/foundation/laneLifecycle.ts`, `src/foundation/stateParser.ts`
 - Respective focused specs.
 
 ## Tests And Evidence

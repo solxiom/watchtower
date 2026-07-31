@@ -98,7 +98,7 @@ implementation and acceptance agents.
 | DB-01 | Storage feasibility | [work](work-batches/DB-01-sqlite-driver-packaging-and-derived-store-feasibility.md) | [review](review-batches/DB-01-review-sqlite-driver-packaging-and-derived-store-feasibility.md) | ⏳ Awaiting implementation |
 | RM-02 | Contract foundation | [work](work-batches/RM-02-json-envelopes-and-schema-validation.md) | [review](review-batches/RM-02-review-json-envelopes-and-schema-validation.md) | ⏳ Awaiting implementation |
 | RM-03 | Path resolution | [work](work-batches/RM-03-canonical-paths-and-workspace-resolution.md) | [review](review-batches/RM-03-review-canonical-paths-and-workspace-resolution.md) | ⏳ Awaiting implementation |
-| RM-04 | Parser foundation | [work](work-batches/RM-04-strict-env-and-lane-state-parsers.md) | [review](review-batches/RM-04-review-strict-env-and-lane-state-parsers.md) | ⏳ Awaiting implementation |
+| RM-04 | Parser foundation | [work](work-batches/RM-04-strict-env-and-lane-state-parsers.md) | [review](review-batches/RM-04-review-strict-env-and-lane-state-parsers.md) | ✅ Accepted after correction 02 |
 | RM-05 | Event contracts | [work](work-batches/RM-05-durable-worker-event-jsonl-parser.md) | [review](review-batches/RM-05-review-durable-worker-event-jsonl-parser.md) | ⏳ Awaiting implementation |
 | RM-06 | Discovery | [work](work-batches/RM-06-home-lane-discovery-and-selection.md) | [review](review-batches/RM-06-review-home-lane-discovery-and-selection.md) | ⏳ Awaiting implementation |
 | RM-07 | Membership | [work](work-batches/RM-07-membership-index-and-secondary-discovery.md) | [review](review-batches/RM-07-review-membership-index-and-secondary-discovery.md) | ⏳ Awaiting implementation |
@@ -218,10 +218,13 @@ This lane should be read with an explicit owner map in mind.
 ### Parser owners
 
 - `src/foundation/scalarLineParser.ts` — shared parser utilities and validation primitives
-- `src/foundation/EnvParser.ts` — strict non-executing env-file parser,
+- `src/foundation/envParser.ts` — strict non-executing env-file parser,
   redaction hooks
-- `src/foundation/StateParser.ts` — lane-state file parser, status projection,
-  unknown-key preservation
+- `src/foundation/stateRecordParser.ts` — safe state-record ingestion and
+  duplicate handling
+- `src/foundation/laneLifecycle.ts` — lifecycle normalization and
+  contradiction policy
+- `src/foundation/stateParser.ts` — lane-state read-model orchestration
 
 ### Event parsing owners
 

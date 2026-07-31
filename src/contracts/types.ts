@@ -11,6 +11,43 @@ export type WorktreeMode = 'dedicated' | 'shared';
 export type WorkerEventRole = 'implementer' | 'reviewer';
 export type WorkerEventType = 'handoff' | 'blocked' | 'accept' | 'reject';
 export type WorkspaceResolution = 'explicit' | 'git' | 'ancestor' | 'current-directory';
+/** Closed, parser-local diagnostic vocabulary; these are not command error codes. */
+export type ParserDiagnosticCode =
+    | 'contradictory-lane-state'
+    | 'duplicate-key'
+    | 'invalid-lane-status'
+    | 'invalid-scalar'
+    | 'invalid-state-scalar'
+    | 'unknown-key'
+    | 'unsafe-shell-syntax';
+
+/** A safe, source-oriented diagnostic emitted while reading lane text files. */
+export interface ParseDiagnostic {
+    line: number;
+    code: ParserDiagnosticCode;
+    message: string;
+    key?: string;
+}
+
+/** Result of parsing the strict, non-executing lane configuration subset. */
+export interface EnvConfigResult {
+    config: Record<string, string>;
+    errors: ParseDiagnostic[];
+    warnings: ParseDiagnostic[];
+    unknownKeys: Record<string, string>;
+    valid: boolean;
+}
+
+/** Read projection produced from the shell-compatible lane-state file. */
+export interface LaneStateResult {
+    state: Record<string, string>;
+    lifecycle: ReadModelLaneLifecycle;
+    contradictions: string[];
+    errors: ParseDiagnostic[];
+    warnings: ParseDiagnostic[];
+    unknownKeys: Record<string, string>;
+    valid: boolean;
+}
 
 export interface LaneRef {
     laneId: string;

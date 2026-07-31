@@ -12,8 +12,8 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-**Status:** ⏳ RM-01 accepted; dependent foundation batches available — M1 read-model pack
-**Last Updated:** 2026-07-31
+**Status:** ✅ RM-04 accepted after correction 02 — M1 read-model pack
+**Last Updated:** 2026-08-01
 **Scope:** Watchtower v1 read-only foundation — contracts, parsers, discovery, membership, bindings, observations, and commands
 
 ## Implementation-Pack Readiness
@@ -61,7 +61,7 @@ limits, and acceptance-with-follow-up are forbidden.
 | DB-01 | Storage feasibility | ✅ Done | Commons `SqliteService` / `better-sqlite3@13.0.1`, typed private SQL capsule, full §8A feasibility matrix, writer/publication exclusion, PID-reuse-safe lock identity, and strict lock/sentinel validation independently accepted after correction 04; 44/44 adversarial runs and 158 specs passed |
 | RM-02 | Contract foundation | ❌ Pending | JSON envelopes and schema validation |
 | RM-03 | Path resolution | ❌ Pending | Canonical paths and workspace resolution |
-| RM-04 | Parser foundation | ❌ Pending | Strict env and lane-state parsers |
+| RM-04 | Parser foundation | ✅ Done | Strict scalar grammar, NUL rejection, duplicate-safe lane lifecycle projection, closed diagnostics, and canonical/worktree NVB proof independently accepted after correction 02 |
 | RM-05 | Event contracts | ❌ Pending | Durable worker-event JSONL parser |
 | RM-06 | Discovery | ❌ Pending | Home-lane discovery and selection |
 | RM-07 | Membership | ❌ Pending | Membership index and secondary discovery |

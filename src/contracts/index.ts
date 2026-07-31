@@ -18,6 +18,7 @@ export type {ExitCode} from './exitCodes.js';
 export type {
     AccessMode,
     ClaimMode,
+    EnvConfigResult,
     HealthStatus,
     HealthSummary,
     ImplementationPackRef,
@@ -26,6 +27,9 @@ export type {
     LaneManifestV1,
     LaneRef,
     LaneRelationSet,
+    LaneStateResult,
+    ParseDiagnostic,
+    ParserDiagnosticCode,
     ReadModelLaneLifecycle,
     LaneStatusLane,
     LaneStatusV1,

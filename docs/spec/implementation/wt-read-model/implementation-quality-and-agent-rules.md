@@ -85,8 +85,10 @@ intuition.
 - `src/foundation/workspaceResolver.ts` — workspace and control-home resolution
 - `src/foundation/dataHomeResolver.ts` — XDG data-home resolution
 - `src/foundation/scalarLineParser.ts` — shared parser utilities
-- `src/foundation/EnvParser.ts` — strict env-file parser
-- `src/foundation/StateParser.ts` — lane-state parser
+- `src/foundation/envParser.ts` — strict env-file parser
+- `src/foundation/stateRecordParser.ts` — lane-state record parser
+- `src/foundation/laneLifecycle.ts` — lane lifecycle policy
+- `src/foundation/stateParser.ts` — lane-state read-model orchestration
 - `src/foundation/JsonlParser.ts` — JSONL event parser
 - `src/foundation/laneDiscovery.ts` — home-lane discovery
 - `src/foundation/LaneSelector.ts` — deterministic lane selection
