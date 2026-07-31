@@ -69,12 +69,13 @@ Node permission model additionally requires an explicit, least-privilege
 implicitly. FFI is presentation infrastructure only and grants no lane,
 session, task, model, filesystem, subprocess, or effect authority.
 
-`CA-18` is a blocking feasibility and packaging gate, not permission to assume
-compatibility. It must prove that the flag, OpenTUI imports, native artifact,
-bootstrap strategy, and renderer lifecycle do not regress Nirvana commands,
-NVB tasks, tests, distribution, or ordinary non-TUI execution. Failure stops
-the TUI path and requires a specification amendment; it does not silently
-select another renderer.
+TUI-EXP-01 settled proof-of-concept engine suitability. `CA-18` remains the
+blocking production compatibility and packaging gate: it must prove that the
+flag, OpenTUI imports, native artifact, bootstrap strategy, and renderer
+lifecycle do not regress Nirvana commands, NVB tasks, tests, distribution, or
+ordinary non-TUI execution. Failure stops the TUI implementation path and
+requires an explicit specification decision; it does not silently select
+another renderer or trigger another disposable-spike correction loop.
 
 ## 2. Fixed v1 lifecycle and initialization syntax
 

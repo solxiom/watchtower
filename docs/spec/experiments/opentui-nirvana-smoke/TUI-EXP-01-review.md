@@ -1,7 +1,12 @@
 # TUI-EXP-01 Independent Review
 
-Status: **Not started**
+Status: **Completed — formal REJECT preserved; experiment closed**
 Reviewer floor: `R4`
+
+The final review found strong positive technical evidence but rejected the
+submission under the all-gates protocol. The product consequence is recorded
+separately in [TUI-EXP-01-outcome.md](TUI-EXP-01-outcome.md). No further review
+or correction cycle is authorized for this disposable experiment.
 
 The reviewer must be different from the executor and must independently inspect
 the sandbox, dependency graph, distribution, terminal behavior, and evidence.

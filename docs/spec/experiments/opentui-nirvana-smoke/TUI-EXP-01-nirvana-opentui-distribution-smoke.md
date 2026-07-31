@@ -2,9 +2,13 @@
 
 ## 1. Status And Authority
 
-Status: **Ready for isolated execution**
+Status: **Closed — see accepted product outcome**
 Type: disposable architecture experiment
 Reasoning floor: executor `R4`; reviewer `R4`
+
+The historical protocol produced a formal compliance `REJECT`, while the
+technical proof of concept passed. The controlling product interpretation is
+[TUI-EXP-01-outcome.md](TUI-EXP-01-outcome.md). Do not resume this experiment.
 
 This experiment is non-normative evidence. It cannot:
 

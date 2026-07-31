@@ -67,9 +67,10 @@ An unsupported or failed target:
    `wt coordinator ask`; and
 4. never downloads, compiles, repairs, or replaces native artifacts implicitly.
 
-The disposable OpenTUI/Nirvana experiment may provide evidence and reveal
-specification defects. It does not promote a target, satisfy an implementation
-batch, or weaken the independent v1 acceptance gates.
+The closed OpenTUI/Nirvana experiment established proof-of-concept engine
+suitability and revealed production-qualification risks. It does not promote a
+target, satisfy an implementation batch, or weaken the independent v1
+acceptance gates.
 
 ## 3. Lane and session entry
 

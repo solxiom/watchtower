@@ -843,7 +843,9 @@ the TUI additionally requires an explicit least-privilege `--allow-ffi`.
 Neither flag grants product authority, and ordinary commands must not import or
 initialize the OpenTUI native renderer merely because it is packaged.
 
-Adoption remains blocked on the `CA-18` feasibility gate proving:
+TUI-EXP-01 established proof-of-concept suitability for the selected engine.
+Production delivery remains blocked on the `CA-18` qualification gate proving
+against the real Watchtower package:
 
 1. Node 26.4+ runtime compatibility without migrating the CLI to Bun;
 2. ESM, TypeScript build, `nvb dist`, and relocated global-install behavior;

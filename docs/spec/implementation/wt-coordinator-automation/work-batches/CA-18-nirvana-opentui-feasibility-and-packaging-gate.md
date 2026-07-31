@@ -22,10 +22,12 @@ brief conflicts with a governing source, follow the governing source and amend
 the brief. An unresolved release-platform, packaging, security, or runtime
 decision is a specification blocker, not implementor discretion.
 
-Accepted `TUI-EXP-01` evidence may inform bootstrap hypotheses, dependency
-inventory, and risk prioritization. It is never predecessor acceptance:
-CA-18 independently reruns the real Watchtower/package/platform matrix and
-remains blocked on its declared dependencies.
+The accepted TUI-EXP-01 product outcome establishes technical proof-of-concept
+suitability and may inform bootstrap hypotheses, dependency inventory, and risk
+prioritization. Its formal compliance rejection is preserved. It is never
+predecessor acceptance: CA-18 independently qualifies the real
+Watchtower/package/platform matrix and remains blocked on its declared
+dependencies; it does not continue or repair the disposable spike.
 
 The minimum PASS target is the exact Linux x86_64/glibc, manifest-tested Node
 `>=26.4.0`, local/tmux/direct-SSH/SSH+tmux baseline in
