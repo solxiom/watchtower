@@ -23,6 +23,9 @@ maintaining exact worktree isolation and bounded context.
 | [SRC-EXP-03-agent-launch-prompt.md](SRC-EXP-03-agent-launch-prompt.md) | Bounded route-inventory and canary runner handoff |
 | [SRC-EXP-03-review.md](SRC-EXP-03-review.md) | Independent route-readiness evidence and verdict protocol |
 | [SRC-EXP-03-review-agent-launch-prompt.md](SRC-EXP-03-review-agent-launch-prompt.md) | Independent SRC-EXP-03 reviewer handoff |
+| [SRC-EXP-03-R1-correction.md](SRC-EXP-03-R1-correction.md) | Corrected rerun after incomplete OpenCode execution and omitted Claude inventory |
+| [SRC-EXP-03-R1-agent-launch-prompt.md](SRC-EXP-03-R1-agent-launch-prompt.md) | Corrected OpenCode-then-Claude readiness runner handoff |
+| [SRC-EXP-03-R1-review-agent-launch-prompt.md](SRC-EXP-03-R1-review-agent-launch-prompt.md) | Independent corrected-rerun reviewer handoff |
 
 Each disposable fixture belongs outside the Watchtower repository. SRC-EXP-01
 remains preserved at `/home/kavan/Projects/watchtower-source-intelligence-spike`

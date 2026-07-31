@@ -2,6 +2,10 @@
 
 Status: **Ready for disposable execution; not product implementation**
 
+The first execution stopped incomplete after candidate freeze and omitted an
+installed Claude structural route. It is not accepted evidence. The corrected
+rerun is [SRC-EXP-03-R1](SRC-EXP-03-R1-correction.md).
+
 Governing design: [source-intelligence-draft.md](../../source-intelligence-draft.md)
 
 Predecessor: [SRC-EXP-02 outcome](SRC-EXP-02-outcome.md)
