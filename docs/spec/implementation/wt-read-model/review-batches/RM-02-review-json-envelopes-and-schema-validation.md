@@ -64,6 +64,15 @@ Implementation report: `.local/agent-reports/wt-read-model/RM-02-json-envelopes-
 4. Verify serializer does not define domain types or error codes.
 5. Trace every output path; confirm no raw JSON emissions bypass the serializer.
 6. Run `nvb build` and `nvb test` independently.
+7. Prove the staged schema crosses a validated `unknown` boundary: wrong
+   identity, missing definitions, malformed JSON, and unreadable bytes fail
+   closed without casts or non-null assertions.
+8. Reproduce RT-08's fresh-prefix packed-artifact fixture. Do not treat an
+   undeclared npm-registry E404 as absence of the pinned ecosystem and do not
+   require RM-02 to publish or vendor Nirvana packages.
+9. Confirm RM-02 does not modify root `nvb.json` or hand-edit RM-13's generated
+   aggregate, and independently audit every direct filesystem use against the
+   documented `NIRVANA_API_GAP`.
 
 ## Required Reasoning Posture
 
@@ -115,7 +124,7 @@ materially rewritten file plus warning-band functions/constructors. The
 reviewer reproduces those counts and independently judges cohesion. Passing a
 line-count check never overrides the responsibility gate.
 
-# Agent Launch Prompt — Work Batch RT-05
+## Required Review Packet
 
 ## Acceptance Gate
 

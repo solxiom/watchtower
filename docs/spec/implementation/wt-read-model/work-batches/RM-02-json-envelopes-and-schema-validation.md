@@ -44,7 +44,7 @@ governing sources leave a product decision unresolved.
 
 Status: ❌ Pending
 Phase: Contract foundation
-Depends on: RM-01 accepted
+Depends on: RM-01, RM-13, and RT-08 accepted
 
 **Required implementor reasoning class:** `R4`
 **Class rationale:** JSON contract and schema validation with additive compatibility; wrong envelope shape silently breaks every downstream command's JSON output.
@@ -63,6 +63,10 @@ later command.
 2. Implement schema validation against the bundled v1.schema.json. Validate
    envelope shapes before emitting them and return the stable typed contract
    error on invalid shapes; malformed external input must not panic the process.
+   Load only the RM-13 generated aggregate through an explicitly validated
+   runtime-asset boundary. Parse bytes as `unknown`, validate schema identity
+   and required definitions, and return a typed failure; unchecked casts and
+   non-null assertions at this boundary are forbidden.
 3. Create `src/foundation/ResultRenderer.ts` with functions for human and
    JSON rendering modes. `--json` must produce exactly one JSON value on stdout
    with no decorative text, ANSI, emojis, or progress indicators.
@@ -75,6 +79,14 @@ later command.
    rejected at validation time.
 5. Write focused specs proving round-trip serialization of every envelope
    variant, `--json` output purity, and additive-field compatibility.
+6. Consume RT-08's exact packed-artifact fixture for isolated relocation proof.
+   Do not query an undeclared public registry, vendor Nirvana, or make RM-02
+   responsible for the later global release-channel contract.
+7. Stage schema assets through RM-13's accepted composition/task boundary. Do
+   not add tasks to the oversized root `nvb.json` or recreate its registry.
+8. Document any direct filesystem boundary as a precise `NIRVANA_API_GAP`,
+   including inspected pinned APIs, the CLI-safe bootstrap limitation, typed
+   failures, containment, and focused tests.
 
 ## Expected Ownership
 
@@ -88,17 +100,25 @@ later command.
 - Round-trip tests for `commandResult` and `commandError` envelopes.
 - Schema validation tests: valid envelopes pass; invalid shapes return the
   stable typed contract failure without process panic.
+- Trust-boundary tests: malformed JSON, wrong schema identity, missing `$defs`,
+  missing envelope definitions, and unreadable staged assets fail with stable
+  reasons and without unchecked assertions.
 - Purity tests: `--json` output contains exactly one JSON value, no decorations.
 - Additive-field compatibility: a new optional nested field in an explicitly
   extensible `data` payload and in `error.details` validates; an unknown
   top-level envelope/error property is rejected.
 - `nvb build` and `nvb test` pass.
+- RT-08 fresh-prefix packed-artifact installation and relocated schema smoke
+  pass without source, workspace, ecosystem-link, or public-registry fallback.
 
 ## What Must Not Change
 
 - Do not define domain types in the serializer; type-check against contracts.
 - Do not add decorative text, ANSI, or emojis to any output path.
-- Do not change the schema bundle or introduce new required fields.
+- Do not hand-edit the RM-13 generated schema aggregate or introduce new
+  required fields.
+- Do not touch the root `nvb.json`; RM-13 owns schema composition and RM-11 owns
+  repository-development task decomposition.
 
 ## Review Procedure Highlights
 
@@ -165,7 +185,7 @@ materially rewritten file plus warning-band functions/constructors. The
 reviewer reproduces those counts and independently judges cohesion. Passing a
 line-count check never overrides the responsibility gate.
 
-# Agent Launch Prompt — Work Batch RT-05
+## Required Review Packet
 
 ## Required Review Packet
 
@@ -177,5 +197,5 @@ staged.
 ## Completion And Handoff
 
 The serializer is accepted and every later command emits valid JSON envelopes
-through it. RM-10 consumes this serializer for all three commands. No command
-may emit raw JSON outside this serializer.
+through it. RM-10 consumes it for `list` and `config show`; RM-12 consumes it
+for `status`. No command may emit raw JSON outside this serializer.

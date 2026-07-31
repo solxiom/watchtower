@@ -35,6 +35,24 @@ consumes accepted predecessors without absorbing adjacent capabilities.
    relocation proof applicable to this capability.
 5. Synchronize owned contracts, help, schemas, manifests, aggregates, and docs.
 
+### Required interfaces and files
+
+- Replace the hand-maintained aggregate at `docs/spec/schemas/v1.schema.json`
+  with capability-owned fragments under `docs/spec/schemas/v1/`; fragments are
+  authoritative and the aggregate is generated.
+- Add a focused schema-composition handler under `runtime-nvb/handlers/` and a
+  capability-owned runtime task fragment. The root `nvb.json` may only invoke
+  the accepted parent-chain task and must not grow a second task registry.
+- Expose one deterministic composer contract that accepts validated fragment
+  bytes and returns canonical aggregate bytes plus a semantic digest. File IO
+  and NVB orchestration stay outside the pure composition core.
+- Reject duplicate `$defs`, unresolved or escaping `$ref` values, conflicting
+  `$schema`/`$id`/root metadata, duplicate fragment identities, circular
+  fragment inclusion, and stale checked-in aggregate bytes.
+- Preserve every existing public definition and byte-stably order root keys,
+  fragments, and `$defs`. Prove a second run is identical and `git diff` is
+  empty after regeneration.
+
 ## Mandatory proof
 
 - Duplicate $defs, unresolved $ref, root-conflict rejection; byte-identical regeneration.

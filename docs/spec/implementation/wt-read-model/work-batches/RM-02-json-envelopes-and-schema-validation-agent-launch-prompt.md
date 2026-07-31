@@ -107,6 +107,15 @@ without replacing evidence with narrative confidence.
 You are assigned **implementation work batch RM-02** for the Watchtower v1
 wt-read-model delivery lane.
 
+This is correction 02 under the accepted planning remediation. Do not resume
+unless RM-13 and RT-08 are independently accepted and the coordinator has
+synchronized this preserved worktree to the activated pack revision. Consume
+RM-13's generated-schema boundary and RT-08's exact packed-artifact fixture.
+The former npm public-registry E404 is not a dependency-source decision and
+must not be routed to the human. Close the unchecked schema trust boundary,
+remove RM-02 changes to root `nvb.json`, document the filesystem API gap, and
+replace the stale implementation report with exact current evidence.
+
 This batch defines success/error JSON envelopes, implements schema validation,
 and ensures additive compatibility and no decorative JSON output — the
 serializer used by every later command.

@@ -105,6 +105,13 @@ capable of independently verifying JSON envelope contracts.
 You are assigned **review batch RM-02** for the Watchtower v1 wt-read-model
 delivery lane. You are the independent acceptance authority.
 
+This is the independent correction-02 review after accepted RM-13 and RT-08.
+Treat the former npm public-registry E404 as a wrong-channel harness result,
+not a missing-dependency verdict. Independently reproduce RT-08's exact
+artifact fixture and verify RM-02 closes its schema trust boundary, removes
+root `nvb.json` growth, documents any filesystem API gap, and supplies a fresh
+truthful report. Do not waive any remaining engineering gate.
+
 ## Read In This Order
 
 Repository prerequisites: `AGENTS.md`.

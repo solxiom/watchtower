@@ -35,6 +35,28 @@ consumes accepted predecessors without absorbing adjacent capabilities.
    relocation proof applicable to this capability.
 5. Synchronize owned contracts, help, schemas, manifests, aggregates, and docs.
 
+### Required interfaces and files
+
+- Add an exact Nirvana dependency-closure manifest and validator owned by the
+  distribution tooling. Each entry records package name, exact package
+  version, packed-artifact SHA-256, source-component SHA-256, dependencies, and
+  the selected ecosystem version/root provenance.
+- Resolve development inputs from the exact ecosystem selected by `nira.json`.
+  On this machine the reference fixture is installed `1.0.0-alpha`; the
+  mechanism must remain portable to another valid versions root.
+- Derive the complete transitive `@nirvana/*` closure. Reject wildcard ranges,
+  missing components, name/version mismatches, duplicate identities, local or
+  workspace paths, source links, ecosystem links in the installed fixture,
+  undeclared registry fallback, and digest drift.
+- Pack every selected component, install only those artifacts plus Watchtower
+  into a fresh prefix with source/worktree resolution disabled, and execute a
+  relocated CLI/schema smoke. An npm public-registry E404 is evidence of a
+  wrong undeclared channel, not evidence that the pinned installed ecosystem
+  is absent.
+- Expose the accepted fixture and manifest to RM-02 and RT-03. RT-08 does not
+  publish Nirvana packages, invent registry availability, or own final release
+  qualification.
+
 ## Mandatory proof
 
 - Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink.
