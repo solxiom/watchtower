@@ -20,7 +20,7 @@ limits, and acceptance-with-follow-up are forbidden.
 
 Status: **Remediation candidate — dispatch suspended**
 Target release: `1.0.0`
-Pack ID: `CA-01` through `CA-29`
+Pack ID: `CA-01` through `CA-31`
 
 > **Normative v1 amendment.** CA-05, CA-07, CA-09, CA-10, CA-13, CA-14,
 > CA-17, and CA-24 must satisfy
@@ -28,7 +28,7 @@ Pack ID: `CA-01` through `CA-29`
 > A normative contradiction is an impact-scoped, architect-advised resolution
 > cycle—not an ordinary reject and not permission for an advisor to mutate the
 > spec or pack.
-Work batches: **29** | Review batches: **29**
+Work batches: **31** | Review batches: **31**
 Last updated: 2026-07-31
 
 ## Purpose

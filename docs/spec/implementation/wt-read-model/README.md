@@ -56,7 +56,7 @@ and the real source owners you will inspect or change.
 
 ## Prompt-Pack Maturity Guarantees
 
-The amended 13 implementation batches and 13 paired review batches have a common
+The amended 14 implementation batches and 14 paired review batches have a common
 execution floor. Every durable brief and launch prompt must preserve, in
 addition to its batch-specific scope:
 

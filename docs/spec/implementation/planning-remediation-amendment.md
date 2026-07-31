@@ -4,6 +4,9 @@ Status: **Proposed by specification authority — dispatch hold active pending i
 
 Date: 2026-07-31
 
+Revision: **Design correction 01 after independent `REJECT_DESIGN` of
+`9317513`**
+
 This amendment repairs implementation-pack defects exposed by repeated review
 rejections in RM-01, DB-01, and RM-02 and by a complete pre-dispatch audit of
 all 59 original work/review pairs. It changes planning and specification only;
@@ -44,6 +47,13 @@ The original bootstrap acceptance missed the following blocking defects:
 10. Several batches combined independently reviewable commands, adapters,
     policies, or state machines under one final verdict, causing corrections
     to expose unrelated mandatory gates serially.
+
+Independent design review then found and this revision corrects six additional
+planning blockers: CA-24's self-inclusive dependency range; missing ownership
+for `coordinator index build`; coupled NVB/schema composition; contradictory
+pack-versus-batch scheduling authority; missing coordinator/session/TUI doctor
+provider ownership; and CA-05's missing dependency on LC-05 policy
+materialization.
 
 ## 2. Mandatory design corrections
 
@@ -133,27 +143,28 @@ feasibility conclusion.
 
 ## 3. Corrected batch inventory
 
-The amended lane has 71 work/review pairs:
+The amended lane has 74 work/review pairs:
 
 | Pack | Previous | Amended | Added batches |
 |---|---:|---:|---|
-| `wt-read-model` | 11 | 13 | RM-11, RM-12 |
+| `wt-read-model` | 11 | 14 | RM-11, RM-12, RM-13 |
 | `wt-runtime-distribution` | 7 | 10 | RT-08, RT-09, RT-10 |
 | `wt-lane-lifecycle` | 8 | 10 | LC-09, LC-10 |
 | `wt-upgrade-knowledge` | 5 | 5 | none; UK-02 is corrected |
-| `wt-coordinator-automation` | 24 | 29 | CA-25 through CA-29 |
+| `wt-coordinator-automation` | 24 | 31 | CA-25 through CA-31 |
 | `wt-v1-release` | 4 | 4 | none |
 
 ### 3.1 New and narrowed Pack 1 batches
 
-- **RM-11 — Repository NVB and schema composition foundations.** Implements
-  the Nirvana parent-config development catalog, deterministic schema-fragment
-  composition, stale-aggregate gates, and no product behavior.
+- **RM-11 — Repository NVB parent-chain composition.** Implements only the
+  Nirvana parent-config development catalog and its architecture gates.
+- **RM-13 — Deterministic JSON Schema composition.** Independently owns schema
+  fragments, aggregate generation, and stale-aggregate rejection.
 - **RM-10 — List and config-show commands.** Retains the two bounded identity
   and configuration views.
 - **RM-12 — Status command and read-only integration.** Owns the broad status
   projection, stable JSON, warning matrix, and before/after hash proof.
-- RM-02 depends on RM-11 and RT-08 before correction 02 may resume.
+- RM-02 depends on RM-13 and RT-08 before correction 02 may resume.
 
 ### 3.2 New and narrowed Pack 2 batches
 
@@ -181,8 +192,9 @@ The amended lane has 71 work/review pairs:
   check composition plus marker/config/binding/permission/Git-ignore checks.
 - **LC-10 — Runtime, account, watcher, and index doctor providers.** Owns
   external-tool and packaged-runtime probes and their integration into the
-  doctor kernel. Coordinator/session/TUI providers remain with CA-24 and
-  release qualification because their capabilities do not yet exist.
+  doctor kernel. Coordinator/session/TUI providers are implemented by CA-31
+  after their capabilities exist; CA-24 integrates their command/TUI surfaces,
+  and release qualification only reproduces their behavior.
 
 ### 3.4 Corrected Pack 4 batch
 
@@ -207,13 +219,19 @@ The amended lane has 71 work/review pairs:
   the CA-09/CA-10 effect bridge.
 - **CA-27 — Scoped holds, amendment requests, and amendment admission.** Owns
   impact-scoped blocking and specification-resolution session handoff.
+- **CA-30 — Pack-index build and runtime-index rebuild command.** Owns the
+  public `wt coordinator index build [--runtime]` facade, help/schema/tests,
+  validated proposal/effect path, and allowlisted packaged NVB task.
+- **CA-31 — Coordinator, session, and TUI doctor providers.** Owns the remaining
+  immutable injected providers after their capabilities exist. Release batches
+  qualify them but implement no provider behavior.
 
 ## 4. Corrected dependency edges
 
 The following edges are mandatory:
 
 ```text
-RM-11 -> RM-02
+RM-13 -> RM-02
 RT-08 -> RM-02
 RT-01 -> RT-02, RT-09
 RT-09 -> RT-10
@@ -225,6 +243,7 @@ CA-01 + LC-05 -> LC-09
 LC-09 + RT-07 -> LC-06
 LC-07 + LC-09 + LC-06 + RT-07 -> LC-10
 LC-10 + RM-10 + RM-12 -> LC-08
+CA-04 + RT-02 + LC-05 -> CA-05
 RT-05 + CA-05 -> CA-06
 CA-06 + RT-05 -> CA-28, CA-29
 CA-06 + CA-08 + CA-15 + CA-16 -> CA-17
@@ -232,11 +251,14 @@ CA-09 + CA-10 + CA-15 + CA-16 + CA-17 -> CA-26
 CA-09 + CA-10 + CA-15 + CA-16 + CA-17 -> CA-27
 CA-01..CA-13 -> CA-14
 CA-13 + CA-14 + CA-17 + CA-26 + CA-27 + CA-28 + CA-29 -> CA-25
-CA-14..CA-29 -> CA-24
+CA-01 + CA-10 + CA-13 + CA-14 + RT-05 + RT-09 -> CA-30
+LC-07 + CA-13 + CA-16 + CA-19..CA-23 -> CA-31
+CA-14..CA-23 + CA-25..CA-31 -> CA-24
 ```
 
-Ranges mean every applicable batch, not a shortcut around explicit pack
-manifest edges. The implementation map remains the dispatch authority.
+Ranges mean every included batch and never include the dependent batch itself.
+The explicit implementation-map batch DAG is the sole dispatch authority;
+pack numbering and pack-exit verdicts add no undeclared scheduling edges.
 
 ## 5. Batch-admission gate
 

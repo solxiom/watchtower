@@ -19,7 +19,7 @@ evidence of the exact bytes previously reviewed. They do not authorize new
 dispatch, cannot be reused for the amended file set, and must not be presented
 as current acceptance. RM-01 and DB-01 retain their independent accepted
 outcomes; RM-02 remains parked. All other untouched dispatch waits for an
-independent reviewer to accept the synchronized 71-batch artifacts and publish
+independent reviewer to accept the synchronized 74-batch artifacts and publish
 new seals.
 
 ## Scope and bootstrap boundary

@@ -2,8 +2,8 @@
 
 Status: **Remediation candidate — dispatch suspended pending independent acceptance**
 Target release: `1.0.0`
-Work batches: **71**
-Required review batches: **71**
+Work batches: **74**
+Required review batches: **74**
 Last updated: 2026-07-31
 
 This document maps the Watchtower v1 specification into bounded implementation
@@ -38,13 +38,13 @@ V1 is split into six independently accepted implementation packs:
 
 | Order | Pack | Milestones | Work/review pairs | Exit product |
 |------:|------|------------|------------------:|--------------|
-| 1 | `wt-read-model` | M1 | 13 | Storage feasibility plus read-only discovery, inspection, and stable output |
+| 1 | `wt-read-model` | M1 | 14 | Storage feasibility plus read-only discovery, inspection, and stable output |
 | 2 | `wt-runtime-distribution` | M2 | 10 | Complete versioned runtime/knowledge distribution |
 | 3 | `wt-lane-lifecycle` | M3–M4 | 10 | Transactional init, watch, and doctor |
 | 4 | `wt-upgrade-knowledge` | M5 | 5 | Safe upgrades and host knowledge installation |
-| 5 | `wt-coordinator-automation` | M6 | 29 | Bounded decisions, effects, sessions, and full-screen terminal UX |
+| 5 | `wt-coordinator-automation` | M6 | 31 | Bounded decisions, effects, sessions, and full-screen terminal UX |
 | 6 | `wt-v1-release` | M7 | 4 | End-to-end qualification and release |
-| | **Total** | | **71 work + 71 review** | |
+| | **Total** | | **74 work + 74 review** | |
 
 Each work batch has exactly one matching review batch named
 `REV-<work-batch-id>`. Corrections retain the same work/review identity and
@@ -221,7 +221,7 @@ pure/read-only contracts before workspace mutation.
 |----|------------|------------|-------------------|----------------|
 | `RM-01` | Contract kernel, error taxonomy, and source architecture gates | — | `src/contracts/`, contract and architecture test helpers | Versioned IDs/types; exit-code mapping; exhaustive error fixtures; automated engineering-standard hard rejects |
 | `DB-01` | SQLite driver, packaging, and derived-store feasibility | `RM-01` | storage interfaces, feasibility fixtures, ADR | Node/NVB/dist/global install; parameterization; FK/integrity; busy/WAL/permissions; rebuild and semantic-root proof |
-| `RM-02` | Public JSON envelopes and schema validation | `RM-01`, `RM-11`, `RT-08` | contracts, render/serialization foundation | Success/error envelopes; additive compatibility; no decorative JSON output; staged-schema and isolated-install proof |
+| `RM-02` | Public JSON envelopes and schema validation | `RM-01`, `RM-13`, `RT-08` | contracts, render/serialization foundation | Success/error envelopes; additive compatibility; no decorative JSON output; staged-schema and isolated-install proof |
 | `RM-03` | Canonical paths and workspace resolution | `RM-01` | path/workspace foundation | Resolution precedence; symlink/case/path-escape fixtures; missing explicit workspace |
 | `RM-04` | Strict env and lane-state parsers | `RM-01` | parser foundation | Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation |
 | `RM-05` | Durable worker-event JSONL parser | `RM-01` | event contracts/foundation | Role/event compatibility; malformed/partial-line handling; bounded latest lookup |
@@ -230,8 +230,9 @@ pure/read-only contracts before workspace mutation.
 | `RM-08` | Repository bindings and writable conflict inspection | `RM-03`, `RM-07` | repository/conflict foundation | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
 | `RM-09` | Tmux, watcher, heartbeat, and worker observations | `RM-04`, `RM-05` | observation foundation | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
 | `RM-10` | `list` and `config show` | `RM-02`, `RM-06`–`RM-08` | commands, help, identity/config integration specs | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
-| `RM-11` | Repository NVB and schema composition foundations | `RM-01` | development NVB parent chain, schema fragments/composer, architecture gates | Effective-task equivalence; duplicate/cycle/stale rejection; byte-identical schema regeneration |
+| `RM-11` | Repository NVB parent-chain composition | `RM-01` | development NVB parent chain and architecture gates | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
 | `RM-12` | `status` command and read-only integration | `RM-02`, `RM-06`–`RM-11` | status projection, command/help, integration specs | Stable status schema; complete health/warning matrix; full read-only hash proof |
+| `RM-13` | Deterministic JSON Schema composition | `RM-01` | schema fragments, composer, aggregate stale gate | Duplicate `$defs`, unresolved `$ref`, root-conflict rejection; byte-identical regeneration |
 
 ### RM implementation notes
 
@@ -242,8 +243,9 @@ pure/read-only contracts before workspace mutation.
 - `DB-01` selects and proves one conforming SQLite driver. Failure blocks
   derived-store implementation and requires a spec amendment; there is no
   silent JSON-shard fallback.
-- `RM-11` removes shared-registry debt before `RM-02` stages the schema; `RT-08`
-  supplies its truthful isolated-install fixture.
+- `RM-11` removes repository NVB registry debt. `RM-13` independently removes
+  schema-registry debt before `RM-02` stages the schema; `RT-08` supplies its
+  truthful isolated-install fixture.
 - `RM-02` supplies one serializer used by every later command.
 - `RM-03`–`RM-05` may proceed in parallel after `RM-01`.
 - `RM-06` is the authority for lane selection; commands may not reimplement it.
@@ -324,7 +326,7 @@ effect authority, and durable bounded operator sessions.
 | `CA-02` | SQLite index stores and bounded typed queries | `CA-01` | index store/query foundation | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
 | `CA-03` | Runtime SQLite indexes and projections | `RM-05`, `CA-02` | runtime index/projection foundation | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
 | `CA-04` | Ready set and resource-claim projection | `RM-08`, `CA-01`, `CA-03` | scheduling projection | DAG/dependency/claim/capacity blockers; no arbitrary winner |
-| `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02` | routing foundation/knowledge projection | Every v1 rule/guard; first-match determinism; normative contradiction after safety as D3/C5; economics only after hard eligibility |
+| `CA-05` | Ordered routing policy and capability floors | `CA-04`, `RT-02`, `LC-05` | routing foundation/verified lane-policy projection | Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility |
 | `CA-06` | Provider-neutral endpoint eligibility and isolation core | `RT-05`, `CA-05` | provider-neutral contracts, eligibility, fingerprints, pools | Unattended/advisory/skill-only classification; hard eligibility; drift invalidation/shared pools; no concrete CLI adapter |
 | `CA-07` | Immutable decision envelopes | `CA-02`–`CA-06` | envelope foundation | Stable semantic digest; bounded default context; contradiction/advisor evidence references and impact scope; untrusted-content delimiting |
 | `CA-08` | Context broker and cycle budgets | `CA-02`, `CA-06`, `CA-07` | broker/usage foundation | Allowlisted queries; provenance/redaction; soft/hard limits; endpoint telemetry quality and shared-pool accounting |
@@ -343,12 +345,14 @@ effect authority, and durable bounded operator sessions.
 | `CA-21` | Inspector views, command palette, and overlays | `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27` | inspector/action/overlay components | All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays |
 | `CA-22` | Turn streaming, notifications, concurrency, and observer UI | `CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27` | turn/event reducers and attachment controller | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |
 | `CA-23` | Accessibility, terminal lifecycle, recovery, and PTY matrix | `CA-18`–`CA-22` | accessibility/restoration/test adapters | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
-| `CA-24` | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | `CA-14`–`CA-29` | command/help integration and independent acceptance proof | Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate |
+| `CA-24` | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | `CA-14`–`CA-23`, `CA-25`–`CA-31` | command/help integration and independent acceptance proof | Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate |
 | `CA-25` | Cycle, escalation, and specification-resolution commands | `CA-13`, `CA-14`, `CA-17`, `CA-26`–`CA-29` | mutating command/help integration over accepted services | Cycle/escalate/resolution dry-run purity; normal validator/executor only; no command-local authority |
 | `CA-26` | Session proposals, confirmation, revalidation, and apply | `CA-09`, `CA-10`, `CA-15`–`CA-17` | proposal lifecycle/effect bridge | Explicit confirmation; current-state validation; stale/illegal refusal; sole executor handoff |
 | `CA-27` | Scoped holds, amendment requests, and amendment admission | `CA-09`, `CA-10`, `CA-15`–`CA-17` | hold/amendment services | Impact-scoped expiry/interleaving; authority/independence/seal checks; no implicit pack edit |
 | `CA-28` | OpenCode decision-endpoint adapter | `CA-06`, `RT-05` | focused OpenCode CLI adapter | Required unattended conformance; bounded argv/env/cwd/result; fresh catalog/model fingerprint |
 | `CA-29` | Hermes decision-endpoint adapter | `CA-06`, `RT-05` | focused Hermes CLI adapter | Same conformance when installed; explicit healthy `not-installed` outcome |
+| `CA-30` | Pack-index build and runtime-index rebuild command | `CA-01`, `CA-10`, `CA-13`, `CA-14`, `RT-05`, `RT-09` | public command/help, proposal/effect integration, allowlisted NVB task | `index build [--runtime]`; dry-run purity; staged compile/rebuild; current-state validation; no command-local mutation |
+| `CA-31` | Coordinator, session, and TUI doctor providers | `LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23` | immutable injected diagnostic providers | Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior |
 
 ### CA implementation notes
 
@@ -359,6 +363,10 @@ effect authority, and durable bounded operator sessions.
 - `CA-09` and `CA-10` must be accepted before enabling `CA-11`–`CA-13`.
 - `CA-14` is read-only. `CA-25` owns cycle, escalation, and resolution commands
   only after CA-26/CA-27 and the endpoint adapters exist.
+- `CA-30` exclusively owns the mutating public index build/rebuild facade and
+  reaches storage only through the accepted proposal/effect/NVB boundaries.
+- `CA-31` implements the remaining doctor providers; Pack 6 only qualifies
+  them and adds no provider behavior.
 - `CA-17`, `CA-26`, and `CA-27` separate routing/budget, proposal/effect, and
   hold/amendment verdict boundaries.
 - `CA-18` promotes the accepted TUI-EXP-01 result against the current package.
@@ -405,16 +413,18 @@ wt-read-model ───────────────┐
                                             wt-v1-release
 ```
 
-Pack acceptance is the default cross-pack dependency. A later pack may begin
-fixture-only preparation against an accepted interface from an earlier batch,
-but it cannot merge production integration before the owning pack is accepted.
+The explicit batch dependency DAG is the sole scheduling authority. A batch
+from a numerically later pack may implement, review, and merge after every
+declared predecessor batch is independently accepted; blanket pack order adds
+no hidden edge. Pack acceptance remains an exit verdict, not a prerequisite
+unless a batch row names it explicitly.
 
 ### 10.2 Safe parallel waves
 
 | Wave | Eligible work after dependencies accept |
 |------|-----------------------------------------|
 | 1 | `RM-01` |
-| 2 | `DB-01`, `RM-03`, `RM-04`, `RM-05`, `RM-11`, `RT-01`, `RT-08` |
+| 2 | `DB-01`, `RM-03`, `RM-04`, `RM-05`, `RM-11`, `RM-13`, `RT-01`, `RT-08` |
 | 3 | `RM-02`, `RM-06`, `RT-02`, `RT-09` |
 | 4 | `RM-07`, `RM-09`, `RT-04`, `RT-10`, `UK-04` |
 | 5 | `RM-08`, `RT-03` |
@@ -434,17 +444,18 @@ but it cannot merge production integration before the owning pack is accepted.
 | 19 | `CA-11`, `CA-12`, `CA-26`, `CA-27` |
 | 20 | `CA-13` |
 | 21 | `CA-14` |
-| 22 | `CA-25` |
+| 22 | `CA-25`, `CA-30` |
 | 23 | `CA-18` |
 | 24 | `CA-19` |
 | 25 | `CA-20`, `CA-21` |
 | 26 | `CA-22` |
 | 27 | `CA-23` |
-| 28 | `CA-24` |
-| 29 | `REL-01` |
-| 30 | `REL-02` |
-| 31 | `REL-03` |
-| 32 | `REL-04` |
+| 28 | `CA-31` |
+| 29 | `CA-24` |
+| 30 | `REL-01` |
+| 31 | `REL-02` |
+| 32 | `REL-03` |
+| 33 | `REL-04` |
 
 This is an admissible schedule, not a requirement to fill every wave with
 parallel agents. Repository ownership, reviewer availability, endpoint
@@ -460,7 +471,7 @@ RM-01 → RM-11 → RT-09 → RT-10 → RT-03 → RT-05 → RT-06
   → CA-02 → CA-03 → CA-04
   → CA-05 → CA-06 → CA-07 → CA-08 → CA-09 → CA-10
   → CA-13 → CA-14 → CA-25 → CA-18 → CA-19 → CA-20 → CA-22
-  → CA-23 → CA-24 → REL-01 → REL-02 → REL-03 → REL-04
+  → CA-23 → CA-31 → CA-24 → REL-01 → REL-02 → REL-03 → REL-04
 ```
 
 Runtime dependencies `RT-01`–`RT-10` join before lane operation, and upgrade
@@ -476,7 +487,7 @@ pack is accepted:
 | Surface | Owning batches |
 |---------|----------------|
 | CLI command names, global options, stdout/stderr, exit codes | `RM-01`, `RM-02`, each command batch |
-| JSON schema version 1 | `RM-02`, `RM-11`, `RM-12`, `CA-14`, `CA-24` |
+| JSON schema version 1 | `RM-02`, `RM-13`, `RM-12`, `CA-14`, `CA-24` |
 | `lane.json`, `install.json`, bindings and strict env/state | `RM-04`, `LC-03`, `LC-04` |
 | Membership index and secondary discovery | `RM-07`, `LC-04` |
 | Runtime/knowledge/task manifests, dependency closure, and `WT_*` invocation | `RT-02`, `RT-08`, `RT-09`, `RT-05` |
@@ -485,7 +496,7 @@ pack is accepted:
 | Derived-store manifest, SQLite schema, semantic root, and rebuild | `DB-01`, `CA-01`–`CA-03`, `CA-16` |
 | Worker/coordinator/effect/session JSONL | `RM-05`, `CA-03`, `CA-13`, `CA-15` |
 | Routing/proposal/effect registries | `CA-05`, `CA-09`, `CA-10`, `CA-26`, `CA-27` |
-| Session CLI, TUI layout/input/rendering, PTY signals, presentation events | `CA-18`–`CA-24` |
+| Session CLI, TUI layout/input/rendering, PTY signals, presentation events | `CA-18`–`CA-24`, `CA-31` |
 | Upgrade/migration compatibility | `UK-01`–`UK-03` |
 
 Schema-compatible readers preserve unknown fields but never treat unknown
@@ -552,7 +563,7 @@ of earlier pack outputs.
 
 The implementation map is fulfilled only when:
 
-- all 71 work batches have matching independent review outcomes;
+- all 74 work batches have matching independent review outcomes;
 - all six implementation packs are accepted and sealed;
 - every cross-pack compatibility surface has reproducible golden evidence;
 - every v1 release criterion traces to an accepted batch and proof;

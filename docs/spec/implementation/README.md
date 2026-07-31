@@ -1,7 +1,7 @@
 # Watchtower v1 — Implementation Packs
 
 > **Dispatch hold.** The former 59-batch bootstrap acceptance is superseded by
-> `planning-remediation-amendment.md`. The amended 71-batch pack set is an
+> `planning-remediation-amendment.md`. The amended 74-batch pack set is an
 > architect-authored candidate and is not dispatchable until independent
 > review, artifact synchronization, and resealing complete.
 
@@ -54,13 +54,13 @@ the product specification.
 
 | Order | Pack | Milestones | Work/review pairs | Directory |
 |------:|------|------------|------------------:|-----------|
-| 1 | `wt-read-model` | M1 | 13 | `wt-read-model/` |
+| 1 | `wt-read-model` | M1 | 14 | `wt-read-model/` |
 | 2 | `wt-runtime-distribution` | M2 | 10 | `wt-runtime-distribution/` |
 | 3 | `wt-lane-lifecycle` | M3–M4 | 10 | `wt-lane-lifecycle/` |
 | 4 | `wt-upgrade-knowledge` | M5 | 5 | `wt-upgrade-knowledge/` |
-| 5 | `wt-coordinator-automation` | M6 | 29 | `wt-coordinator-automation/` |
+| 5 | `wt-coordinator-automation` | M6 | 31 | `wt-coordinator-automation/` |
 | 6 | `wt-v1-release` | M7 | 4 | `wt-v1-release/` |
-| | **Total** | | **71 work + 71 review** | |
+| | **Total** | | **74 work + 74 review** | |
 
 ## Pack Acceptance Order
 
@@ -152,7 +152,7 @@ memory, and release qualification respectively.
 ## Completion Meaning
 
 The implementation delivery is complete only when:
-- all 71 work batches have matching independent review outcomes
+- all 74 work batches have matching independent review outcomes
 - all six bootstrap implementation packs remain seal-valid
 - every cross-pack compatibility surface has reproducible golden evidence
 - every v1 release criterion traces to an accepted batch and proof

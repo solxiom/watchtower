@@ -56,7 +56,7 @@ The reviewer must independently prove or reject each item:
 
 Exactly one verdict is allowed:
 
-- `ACCEPT_DESIGN` — the corrected 71-batch architecture and normative changes
+- `ACCEPT_DESIGN` — the corrected 74-batch architecture and normative changes
   are sound enough to authorize detailed pack synchronization;
 - `REJECT_DESIGN` — the report names every blocking defect and the exact
   governing evidence; or
