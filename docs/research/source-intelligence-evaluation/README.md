@@ -1,10 +1,13 @@
 # Source Intelligence Evaluation
 
-Status: **Active disposable research sequence — not product implementation**
+Status: **Closed historical research — rejected product direction**
 
 This experiment evaluates whether a provider-neutral source-intelligence
 capability can improve quality-preserving cost per accepted Nirvana task while
 maintaining exact worktree isolation and bounded context.
+
+The research sequence is closed. Its protocols and outcomes are retained for
+audit only and must not be resumed or treated as implementation authority.
 
 | Artifact | Purpose |
 |----------|---------|

@@ -395,42 +395,7 @@ An implementation lane created from a sealed pack starts
 `allocation-required`. Infeasibility is an explicit result; Watchtower never
 silently downgrades below a pack capability floor to make a plan fit.
 
-### Horizon D — Source intelligence and reusable retrieval
-
-Candidate release: v1.4.
-
-Research gate: SRC-EXP-01 concluded `RESEARCH_BLOCKED`; SRC-EXP-02 independently
-rejected the evaluated Serena 0.1.4/Hermes 0.18.2 integration at provider
-readiness. No source-intelligence implementation pack may begin until a new
-candidate passes the corrected readiness gate and returns independently
-accepted `ADOPT_BASELINE` or `ADOPT_LIMITED` evidence.
-
-The immediate next gate is SRC-EXP-03 installed-host route readiness. It may
-qualify a host route for later comparison but cannot itself authorize a source-
-intelligence implementation pack.
-
-- implement the provider-neutral capability defined in
-  [source-intelligence-draft.md](source-intelligence-draft.md);
-- exact committed snapshots plus worktree-specific dirty overlays;
-- local reusable S0 file and S1 syntax indexes, gated by a disposable
-  quality/cost evaluation;
-- optional audited LSP/Serena-style semantic, structural graph, Sourcegraph,
-  and similarity providers without making MCP or embeddings core;
-- closed bounded `wt source` queries with provenance, freshness, coverage,
-  pagination, redaction, and no unbounded fallback;
-- batch/turn/assignment source capsules tied to repository bindings and current
-  source views;
-- independent reviewer regeneration and current-source verification;
-- endpoint-native/Watchtower/MCP retrieval deduplication; and
-- source inspector/search only through an explicit future TUI registry
-  amendment.
-
-The index remains disposable evidence. Git/source, accepted specifications,
-implementation packs, tests, and reviewer verdicts retain authority. Adoption
-is based on quality-preserving cost per accepted outcome, not retrieval-token
-claims alone.
-
-### Horizon E — Agile workflow views
+### Horizon D — Agile workflow views
 
 Candidate release: v1.x.
 
@@ -443,7 +408,7 @@ Candidate release: v1.x.
 
 Metrics must not rank individual agents or infer quality from token spend.
 
-### Horizon F — Additional lane kinds
+### Horizon E — Additional lane kinds
 
 Candidate release: v2.
 
@@ -457,7 +422,7 @@ beyond `implementation` and `pack-design` before exposing a public lane engine:
 
 Only then consider a public lane-kind interface or plugin SDK.
 
-### Horizon G — Structured runtime state
+### Horizon F — Structured runtime state
 
 Candidate release: v2.
 
@@ -478,6 +443,8 @@ compatibility spec.
 - arbitrary project-defined executable hooks;
 - automatic credential/account provisioning;
 - automatic account rotation to evade provider limits;
+- Watchtower-owned repository source indexing, source-retrieval brokers,
+  provider catalogs, source capsules, or `wt source` commands;
 - automatic speech-model downloads;
 - semantic acceptance or reject judgment encoded in deterministic CLI logic;
 - generic workflow DSL or public plugin SDK without a third proven workflow;

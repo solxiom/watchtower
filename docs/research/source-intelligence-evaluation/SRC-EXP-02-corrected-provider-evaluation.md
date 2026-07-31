@@ -2,7 +2,7 @@
 
 Status: **Completed — independently reviewed `REJECT_PROVIDER`; not product implementation**
 
-Governing design: [source-intelligence-draft.md](../../source-intelligence-draft.md)
+Governing design: [source-intelligence-draft.md](../source-intelligence-rejected.md)
 
 Predecessor: [SRC-EXP-01 outcome](SRC-EXP-01-outcome.md)
 

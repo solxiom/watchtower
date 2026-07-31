@@ -315,25 +315,6 @@ The router may derive a uniquely preauthorized M0 transition, but it does not
 encode semantic reject, scope, or reconciliation judgment. Decision agents
 cannot write authoritative state.
 
-### 4.9 Source intelligence services
-
-The separately delivered source-intelligence capability is defined in
-[source-intelligence-draft.md](source-intelligence-draft.md). It does not merge
-with the v1 coordinator pack index:
-
-| Service | Responsibility |
-|---------|----------------|
-| `SourceRepositoryRegistry` | Map authorized logical repositories to machine-local Git/worktree identities without repository writes |
-| `SourceViewResolver` | Pin exact committed snapshots and worktree-specific dirty overlays |
-| `SourceProviderCatalog` | Load approved capability/trust declarations for replaceable index engines |
-| `SourceIndexCatalog` | Stage, verify, publish, lease, and retire immutable derived views |
-| `SourceIntelligenceBroker` | Authorize closed bounded queries and normalize provenance/coverage/usage |
-| `SourceCapsuleBuilder` | Construct batch/turn/assignment-scoped source evidence within fixed budgets |
-| `SourceIntelligenceUsage` | Measure provider overhead and cost per accepted outcome without ranking agents |
-
-Git/source remains authority. Pack, session, and source stores stay separate;
-none exposes SQL or provider-native query languages to commands or agents.
-
 ## 5. Physical deployment
 
 ### 5.1 Package
@@ -370,14 +351,6 @@ discovery proposals and model catalogs, point-in-time snapshots, and an atomic
 cross-lane reservation ledger. Discovery scans only operator-allowlisted
 hosts, execution users, adapters, transports, and project roots. This data is
 local scheduling evidence, not credential or provider quota authority.
-
-Source intelligence adds owner-controlled derived data under
-`<watchtower-data-root>/source-intelligence/`. Provider indexes over committed
-snapshots may be content-reused only across exactly matching authorized
-repository, policy, provider, and execution-user scopes. Dirty overlays remain
-worktree-specific.
-Lane-local state stores only policy, pinned view IDs, capsule manifests, and
-usage/events. Participating repositories receive no Watchtower index files.
 
 ### 5.3 Control home and participating repositories
 
@@ -524,8 +497,6 @@ rebuildable query infrastructure behind foundation interfaces.
 - stable JSON output;
 - lane task runner and leaf invocation boundaries;
 - pack validators that can be added without owning project prose.
-- provider-neutral source-intelligence adapters and query capabilities that do
-  not become repository or workflow authority.
 
 ### 8.2 Deferred extension points
 
@@ -684,9 +655,6 @@ details.
 | A-035 | Put reusable input/layout/rendering mechanics behind a Nirvana TUI capability | Watchtower components must not become a private ANSI, layout, keymap, or animation framework |
 | A-036 | Keep `ask`, JSON, and ordinary commands first-class beside the TUI | Interactive presentation and automation have different consumers but share product authority |
 | A-037 | Use imperative OpenTUI core/keymap under Node 26.4+ behind Nirvana, with no React/Solid/JSX stack | Match the required TUI quality while preserving plain-TypeScript Nirvana architecture and one build system |
-| A-038 | Make source intelligence a provider-neutral derived capability, separate from the coordinator pack index | Reuse bounded code retrieval across agents without making an index, provider, or MCP transport authoritative |
-| A-039 | Identify source by immutable commit snapshot plus worktree-specific dirty overlay | Concurrent lanes must never receive another worktree's uncommitted code |
-| A-040 | Adopt source providers by quality-preserving cost per accepted outcome | Token/tool-call reduction alone can conceal missed references and lower-quality work |
 
 ## 13. Architecture fitness checks
 
@@ -711,8 +679,6 @@ Every implementation change should preserve these properties:
   is provable;
 - routine coordinator queries are bounded and do not scan or preload the full
   implementation pack;
-- source intelligence, when enabled, pins exact views, remains separately
-  derived, and never substitutes another lane/worktree or an unbounded scan;
 - every pack index is derived, model-free, reproducible, and matched to the
   active seal;
 - raw SQLite bytes never define semantic identity; canonical logical rows and

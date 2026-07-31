@@ -382,8 +382,6 @@ for every pure function would add complexity and latency. Use this ownership:
 | Render human/JSON output | Yes | No | No |
 | Validate proposal/policy/preconditions | Yes | No | No |
 | Build/rebuild derived indexes | Plan/validate | Yes | Store adapter |
-| Build/rebuild source-intelligence views | Plan/authorize/verify | Yes | Audited parser/LSP/search provider adapter |
-| Query source intelligence | Yes, through bounded broker | No | Provider adapter behind broker only |
 | Validate/stage runtime assets | Plan/verify | Yes | Storage adapter |
 | Transactional lane initialization | Plan/authorize/commit verification | Yes, bounded steps | Durable storage adapter |
 | Upgrade/migrate managed assets | Plan/authorize/verify | Yes | Storage adapter |
@@ -392,10 +390,6 @@ for every pure function would add complexity and latency. Use this ownership:
 | Apply an approved effect | Sole effect executor | Yes, capability-gated | Git/tmux/agent/file leaf |
 | Development build/test/dist | No product service | Repository NVB | Built-in handlers |
 | Foreground watcher/session UI | Product lifecycle owner | Only after PTY/signal proof | tmux/agent leaf as required |
-
-The two source-intelligence rows govern the future capability's Nirvana/NVB
-shape only; they do not add source commands, tasks, dependencies, or providers
-to the v1 release/catalog.
 
 ## 6. Task catalog shape
 
@@ -415,15 +409,6 @@ The exact v1 catalog lands in `RT-02`, but it follows these namespaces:
 Task names are internal and may not be supplied by users or decision agents.
 Public commands map to stable Watchtower action IDs, and the catalog maps those
 actions to task IDs.
-
-A future source-intelligence implementation pack may add a versioned
-`wt:source:*` namespace; it is not part of the exact v1 catalog above and does
-not authorize project task discovery or source mutation. Substantial staged
-index builds use focused NVB handlers; provider processes are audited
-capability-named leaf adapters invoked with argv, sanitized environments, exact
-authorized roots, and finite resources. Pure bounded queries use the
-application broker directly and never expose raw provider languages, SQLite,
-or arbitrary filesystem access.
 
 ## 7. Mutation invocation protocol
 

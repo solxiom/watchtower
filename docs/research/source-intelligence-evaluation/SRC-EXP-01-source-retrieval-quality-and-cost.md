@@ -2,7 +2,7 @@
 
 Status: **Completed — independently reviewed `RESEARCH_BLOCKED`; not product or batch acceptance**
 
-Governing design: [source-intelligence-draft.md](../../source-intelligence-draft.md)
+Governing design: [source-intelligence-draft.md](../source-intelligence-rejected.md)
 
 The accepted outcome and the constraints carried forward are recorded in
 [SRC-EXP-01-outcome.md](SRC-EXP-01-outcome.md). The retained raw reports remain

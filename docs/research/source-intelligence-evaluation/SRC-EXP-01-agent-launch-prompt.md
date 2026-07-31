@@ -4,8 +4,8 @@ Read completely:
 
 1. `AGENTS.md`;
 2. `docs/development/engineering-and-review-standard.md`;
-3. `docs/spec/source-intelligence-draft.md`; and
-4. `docs/spec/experiments/source-intelligence-evaluation/SRC-EXP-01-source-retrieval-quality-and-cost.md`.
+3. `docs/research/source-intelligence-rejected.md`; and
+4. `docs/research/source-intelligence-evaluation/SRC-EXP-01-source-retrieval-quality-and-cost.md`.
 
 Execute only the disposable source-retrieval evaluation. This is not
 Watchtower implementation.

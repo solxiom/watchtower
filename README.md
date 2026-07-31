@@ -43,6 +43,9 @@ the v1 bounded multi-turn operator interface is defined in the
 [operator-session specification](docs/spec/operator-session.md), and its polished
 foreground terminal contract is defined in the
 [CLI session specification](docs/spec/cli-session.md).
+Rejected and inconclusive product investigations are retained separately in
+the [research archive](docs/research/README.md) and are not implementation
+authority.
 
 ## Quick start (development)
 
@@ -83,6 +86,7 @@ help/                  static help fragments
 runtime-nvb/           NVB tasks shipped inside dist/
 config/                default JSON5 config
 docs/spec/             product specification
+docs/research/         rejected/inconclusive historical research
 spec/                  Jasmine tests
 nvb.json               build / test / dist pipeline
 nira.json              Nira CLI project marker

@@ -4,9 +4,9 @@ Read completely:
 
 1. `AGENTS.md`;
 2. `docs/development/engineering-and-review-standard.md`;
-3. `docs/spec/source-intelligence-draft.md`;
-4. `docs/spec/experiments/source-intelligence-evaluation/SRC-EXP-01-outcome.md`;
-5. `docs/spec/experiments/source-intelligence-evaluation/SRC-EXP-02-corrected-provider-evaluation.md`.
+3. `docs/research/source-intelligence-rejected.md`;
+4. `docs/research/source-intelligence-evaluation/SRC-EXP-01-outcome.md`;
+5. `docs/research/source-intelligence-evaluation/SRC-EXP-02-corrected-provider-evaluation.md`.
 
 Execute only SRC-EXP-02 in the new disposable fixture. This is research, not
 Watchtower implementation.

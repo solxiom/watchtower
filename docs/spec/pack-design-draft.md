@@ -822,12 +822,10 @@ Each assignment receives the smallest sufficient context set:
 Context packets record included paths and baseline digests. They do not copy
 large canonical documents into new committed prompt files.
 
-When [source-intelligence-draft.md](source-intelligence-draft.md) is available,
-`relevant source map/evidence` means an exact bounded source-capsule manifest
-or explicit logical source references—not an index dump or automatic repository
-summary. The assignment records source view IDs, provider coverage, truncation,
-and current-source verification obligations. Native source reading remains
-available when the index is absent, ambiguous, outdated, or insufficient.
+Source exploration uses the assigned agent host's authorized project tools.
+Any source evidence returned to the lane is bounded to explicit logical paths,
+symbols, commits, and verification obligations; host caches or indexes never
+become pack artifacts, lane state, or completeness authority.
 
 ## 18. Durable event contract
 
@@ -1028,12 +1026,6 @@ Handoff also invokes the deterministic v1 coordinator pack-index compiler.
 The derived index stays in the implementation lane's local `coordinator/`
 subtree and is tied to the pack seal. Build or verification failure aborts
 handoff transactionally; it never causes a full-pack runtime fallback.
-
-An allocation/source-intelligence-enabled handoff may also register logical
-`sourceHints`, baseline commit/tree IDs, and requested capsule policy. It does
-not copy an index, seal provider database bytes, enable a network provider, or
-index dirty worktrees automatically. Source activation/provider approval stays
-an explicit machine-local operator decision.
 
 ## 20. Pack reviewer protocol
 

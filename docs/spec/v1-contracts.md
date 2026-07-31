@@ -26,10 +26,9 @@ For Watchtower v1, conflicts are resolved in this order:
 4. [architecture.md](architecture.md); and
 5. the versioned runtime and knowledge manifests shipped by the same release.
 
-The roadmap and `discussions/` are informative. `pack-design-draft.md`,
-`allocation-planning-draft.md`, and `source-intelligence-draft.md` specify
-future producers, planning, and derived source-retrieval capabilities. They do
-not change the v1 implementation-lane CLI or lifecycle.
+The roadmap and `discussions/` are informative. `pack-design-draft.md` and
+`allocation-planning-draft.md` specify future producers and planning
+capabilities. They do not change the v1 implementation-lane CLI or lifecycle.
 The v1 implementation-pack **consumer** contract is §3 of this document.
 
 An implementation must not silently choose between contradictory normative

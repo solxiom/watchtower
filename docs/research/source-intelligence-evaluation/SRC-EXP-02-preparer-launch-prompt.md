@@ -2,9 +2,9 @@
 
 Read completely:
 
-1. `docs/spec/source-intelligence-draft.md`;
-2. `docs/spec/experiments/source-intelligence-evaluation/SRC-EXP-01-outcome.md`;
-3. `docs/spec/experiments/source-intelligence-evaluation/SRC-EXP-02-corrected-provider-evaluation.md`.
+1. `docs/research/source-intelligence-rejected.md`;
+2. `docs/research/source-intelligence-evaluation/SRC-EXP-01-outcome.md`;
+3. `docs/research/source-intelligence-evaluation/SRC-EXP-02-corrected-provider-evaluation.md`.
 
 Act only as the independent preparer. Do not run a model comparison, install a
 provider, score outputs, edit product/spec files, or commit.

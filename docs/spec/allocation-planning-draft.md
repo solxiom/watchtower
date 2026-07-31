@@ -596,9 +596,8 @@ checking:
 - each repository binding and declared read/write mode;
 - dedicated-worktree and branch access;
 - required build, test, browser, MCP, or proof tools;
-- required source-intelligence transport/capability when a pack marks capsule
-  access required, including whether host-native retrieval avoids duplicated
-  inline context;
+- required host-native source-reading and proof tools declared by the work,
+  without treating a host cache/index as Watchtower capability or authority;
 - network or data-residency policy;
 - host feature requirements;
 - safe launch as the declared OS user; and

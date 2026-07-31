@@ -1,6 +1,11 @@
-# Watchtower Source Intelligence
+# Watchtower Source Intelligence — Rejected Research
 
-Status: **Draft — separate product capability lane; not part of the current v1 command surface**
+Status: **Rejected and archived — not a Watchtower product capability**
+
+This document is preserved as historical research only. The accepted product
+decision is recorded in [README.md](README.md): agent-host source retrieval may
+be used externally, but Watchtower does not own indexes, providers, brokers,
+capsules, or `wt source` commands.
 
 Proposed CLI group: `wt source`
 
@@ -809,14 +814,14 @@ S1/S2 model outcome. The model made zero provider calls, the direct TypeScript
 semantic backend failed during dependency setup, the exact model-visible tool
 schema was not captured, native T7 failed its evidence floor, and overlapping
 runs invalidated latency comparison. The accepted record is
-[SRC-EXP-01-outcome.md](experiments/source-intelligence-evaluation/SRC-EXP-01-outcome.md).
+[SRC-EXP-01-outcome.md](source-intelligence-evaluation/SRC-EXP-01-outcome.md).
 
 SRC-EXP-02 then completed with the independently reviewed verdict
 `REJECT_PROVIDER` for Serena 0.1.4 through Hermes Agent 0.18.2 on the recorded
 route. Direct semantic canaries passed, but the exact outbound model request
 contained no tools, made no provider call, and returned no canary. Serena also
 wrote cache files inside sealed disposable worktrees. The accepted record is
-[SRC-EXP-02-outcome.md](experiments/source-intelligence-evaluation/SRC-EXP-02-outcome.md).
+[SRC-EXP-02-outcome.md](source-intelligence-evaluation/SRC-EXP-02-outcome.md).
 
 Future provider evaluations retain SRC-EXP-02's two irreversible stages:
 
