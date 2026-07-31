@@ -218,8 +218,12 @@ Implement the JSON serializer and result renderer:
    - When `--json` is true, stdout must contain exactly one JSON value with no ANSI codes, emojis, progress indicators, or decorative text.
 3. Write focused Jasmine specs:
    - Round-trip serialization: construct every variant, serialize, parse, verify shape.
-   - Schema validation: valid envelopes pass, invalid shapes (missing required field, wrong type, extra forbidden field) panic.
-   - Additive compatibility: an envelope with an extra optional field validates.
+   - Schema validation: valid envelopes pass; invalid shapes (missing required
+     field, wrong type, extra forbidden field) return the stable typed contract
+     failure without panicking the process.
+   - Additive compatibility: optional nested fields validate inside an
+     extensible object carried by `data` and inside `error.details`; unknown
+     properties on the closed top-level envelopes or nested `error` fail.
    - `--json` purity: output contains no ANSI codes, no decorative text, exactly one JSON value.
    - `--no-color` removes ANSI codes from human output.
 
@@ -236,7 +240,8 @@ Implement the JSON serializer and result renderer:
 - Round-trip tests for `commandResult` and `commandError`
 - Schema validation tests: valid passes, invalid panics
 - `--json` purity: no ANSI, no decoration, one JSON value
-- Additive-field compatibility: extra optional field validates
+- Additive compatibility follows the schema: nested extension locations pass,
+  closed envelope/error objects reject unknown fields
 - `nvb build` and `nvb test` pass
 - final `git status --short`
 

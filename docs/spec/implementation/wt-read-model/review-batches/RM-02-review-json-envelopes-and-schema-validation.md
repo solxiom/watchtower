@@ -58,7 +58,9 @@ Implementation report: `.local/agent-reports/wt-read-model/RM-02-json-envelopes-
 
 1. Round-trip test every envelope variant through schema validation.
 2. Verify `--json` produces exactly one JSON value on stdout, no ANSI, no decorations, no emojis, no progress indicators.
-3. Prove additive compatibility: envelope with extra optional field validates successfully.
+3. Prove the exact additive-compatibility boundary: optional nested fields in
+   an explicitly extensible `data` payload and `error.details` validate;
+   unknown top-level `commandResult`/`commandError` or `error` properties fail.
 4. Verify serializer does not define domain types or error codes.
 5. Trace every output path; confirm no raw JSON emissions bypass the serializer.
 6. Run `nvb build` and `nvb test` independently.
@@ -120,7 +122,7 @@ line-count check never overrides the responsibility gate.
 - All hard-reject checklist items clear.
 - Envelope validation passes for all variants.
 - `--json` purity confirmed.
-- Additive compatibility proved.
+- Schema-permitted nested compatibility and closed-envelope rejection proved.
 - Build and tests pass independently.
 
 ## Reject Conditions

@@ -57,6 +57,26 @@ gates, roadmaps, trackers, implementation map, release criteria, and normative
 contracts were rechecked together. No implementation source was reviewed or
 accepted by this amendment, and RM-01 remains governed by its own active review.
 
+## RM-02 closed-envelope clarification
+
+Reviewed and accepted on 2026-07-31. The RM-02 work/review briefs incorrectly
+requested an extra optional top-level command-envelope field even though the
+normative schema deliberately sets `additionalProperties: false` on
+`commandResult`, `commandError`, and the nested `error` object.
+
+The correction preserves the schema and narrows the compatibility proof to
+locations the schema explicitly permits: extensible objects carried by `data`,
+`error.details`, and referenced payload definitions with
+`additionalProperties: true`. Unknown properties on closed envelope/error
+objects must fail with the stable typed contract error; malformed external
+input must not panic the process. No product implementation is accepted by this
+clarification.
+
+Pack 1 was re-reviewed from the staged Git candidate, not the dirty DB-01
+working tree. The new Pack 1 seal includes the already reviewer-accepted RM-01
+pack updates and this four-file RM-02 clarification; uncommitted DB-01 work and
+local correction artifacts are excluded.
+
 ## Acceptance matrix
 
 | Gate | Verdict | Evidence |
@@ -98,7 +118,7 @@ requires a new review.
 
 | Pack | Files | Bytes | Seal |
 |------|------:|------:|------|
-| `wt-read-model` | 54 | 581281 | `sha256:d62567be8d49bae1654dddef87055bd6064cb7022542ca27d369f9840548f5c1` |
+| `wt-read-model` | 57 | 595157 | `sha256:4697db5f28d44170ab43015f1e9cf2233bc08f54a84983e4f978b80683671c64` |
 | `wt-runtime-distribution` | 38 | 384487 | `sha256:4d5fb75baea0b67511022452a5be648f9b567b7d09c5711f7e5a7cda660e2b66` |
 | `wt-lane-lifecycle` | 42 | 564755 | `sha256:f527875c81489f77f3c50af435954beea2a919ee3bf8bc33f97eefcaa85ad87e` |
 | `wt-upgrade-knowledge` | 30 | 448690 | `sha256:d98b7cbec26fcc6ef5dba41d7cbc9a40367afdd33c7de697c046b2dd622ea37c` |

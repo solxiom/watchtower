@@ -174,7 +174,10 @@ Independently verify the JSON envelope serializer and result renderer:
    where the schema explicitly permits them.
 3. **`--json` purity**: Invoke `renderResult` with `{ json: true }`. Assert output is exactly one JSON string, no ANSI codes, no emojis, no progress indicators. Parse the output to confirm valid JSON.
 4. **Human output**: Invoke with `{ json: false }`. Assert human-readable format, `--no-color` removes ANSI.
-5. **Additive compatibility**: Add an extra optional field to a `commandResult`. Verify it serializes and validates.
+5. **Additive compatibility**: Add optional nested fields inside an extensible
+   object carried by `commandResult.data` and inside `commandError.error.details`;
+   verify they serialize and validate. Add unknown properties to the top-level
+   envelopes and nested `error`; verify the closed objects reject them.
 6. **Layer integrity**: Verify serializer does not define domain types; it type-checks against contracts.
 7. **Hard-reject checklist**: Run the 16-item checklist.
 8. **Build and test**: Rerun `nvb build` and `nvb test`.
@@ -190,7 +193,7 @@ Independently verify the JSON envelope serializer and result renderer:
 - Rerun `nvb build` and `nvb test`.
 - Round-trip test every envelope variant with schema validation.
 - `--json` purity test.
-- Additive compatibility test.
+- Schema-permitted nested compatibility plus closed-envelope rejection tests.
 
 ## Acceptance Gate / Rejection Correction Brief Rule / User Rule / Trackers
 

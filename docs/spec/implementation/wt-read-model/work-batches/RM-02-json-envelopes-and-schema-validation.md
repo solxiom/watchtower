@@ -61,12 +61,18 @@ later command.
    `commandResult` (success) and `commandError` (failure) JSON envelopes
    that conform to `v1.schema.json` definitions.
 2. Implement schema validation against the bundled v1.schema.json. Validate
-   envelope shapes before emitting them; panic on invalid shapes.
+   envelope shapes before emitting them and return the stable typed contract
+   error on invalid shapes; malformed external input must not panic the process.
 3. Create `src/foundation/ResultRenderer.ts` with functions for human and
    JSON rendering modes. `--json` must produce exactly one JSON value on stdout
    with no decorative text, ANSI, emojis, or progress indicators.
-4. Ensure additive compatibility: new optional fields may be added within
-   schema version 1; removed or retyped fields are rejected at validation time.
+4. Ensure schema-governed additive compatibility. The top-level
+   `commandResult`, `commandError`, and nested `error` objects are closed and
+   reject unknown properties. New optional fields validate only inside
+   locations whose active schema explicitly permits them, including an object
+   carried by `data`, `error.details`, or a referenced payload definition with
+   `additionalProperties: true`. Removed, retyped, or forbidden fields are
+   rejected at validation time.
 5. Write focused specs proving round-trip serialization of every envelope
    variant, `--json` output purity, and additive-field compatibility.
 
@@ -80,9 +86,12 @@ later command.
 ## Tests And Evidence
 
 - Round-trip tests for `commandResult` and `commandError` envelopes.
-- Schema validation tests: valid envelopes pass, invalid shapes panic.
+- Schema validation tests: valid envelopes pass; invalid shapes return the
+  stable typed contract failure without process panic.
 - Purity tests: `--json` output contains exactly one JSON value, no decorations.
-- Additive-field compatibility: new optional fields do not break validation.
+- Additive-field compatibility: a new optional nested field in an explicitly
+  extensible `data` payload and in `error.details` validates; an unknown
+  top-level envelope/error property is rejected.
 - `nvb build` and `nvb test` pass.
 
 ## What Must Not Change
@@ -96,7 +105,9 @@ later command.
 1. Verify every serialized envelope validates against `v1.schema.json`.
 2. Confirm `--json` output has exactly one JSON value and no decorative text.
 3. Trace every output path to confirm no bypass of the serializer.
-4. Test with new optional fields added to verify additive compatibility.
+4. Test optional nested fields in schema-permitted extension locations and
+   unknown fields in closed envelope/error objects to prove both sides of the
+   compatibility boundary.
 
 ## Required Reasoning Posture
 
