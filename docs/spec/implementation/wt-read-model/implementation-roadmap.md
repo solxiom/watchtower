@@ -103,7 +103,7 @@ Goal:
 
 Batches:
 
-- RM-01 — Contract kernel and error taxonomy
+- RM-01 — Contract kernel and error taxonomy (✅ accepted)
 - DB-01 — SQLite driver, packaging, and derived-store feasibility
 - RM-02 — Public JSON envelopes and schema validation
 - RM-03 — Canonical paths and workspace resolution

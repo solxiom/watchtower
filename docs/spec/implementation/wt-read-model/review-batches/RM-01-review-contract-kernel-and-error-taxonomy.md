@@ -42,7 +42,8 @@ governing sources leave a product decision unresolved.
   with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
   illustrative name does not silently create a public identifier.
 
-Status: ⏳ Awaiting review
+Status: ✅ Accepted
+Review outcome: correction 03 independently verified and accepted
 Reasoning: `R4`
 Paired work brief: `work-batches/RM-01-contract-kernel-and-error-taxonomy.md`
 Implementation report: `.local/agent-reports/wt-read-model/RM-01-contract-kernel-and-error-taxonomy.md`

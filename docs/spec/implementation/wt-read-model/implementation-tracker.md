@@ -12,8 +12,8 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-**Status:** ⏳ Awaiting implementation — M1 read-model pack
-**Last Updated:** 2026-07-30
+**Status:** ⏳ RM-01 accepted; dependent foundation batches available — M1 read-model pack
+**Last Updated:** 2026-07-31
 **Scope:** Watchtower v1 read-only foundation — contracts, parsers, discovery, membership, bindings, observations, and commands
 
 ## Implementation-Pack Readiness
@@ -57,7 +57,7 @@ limits, and acceptance-with-follow-up are forbidden.
 
 | Batch | Phase | Status | Short note |
 |-------|-------|--------|------------|
-| RM-01 | Contract foundation | ❌ Pending | Contract kernel and error taxonomy |
+| RM-01 | Contract foundation | ✅ Done | Contract kernel and all three corrections independently accepted |
 | DB-01 | Storage feasibility | ❌ Pending | SQLite driver, packaging, and derived-store feasibility |
 | RM-02 | Contract foundation | ❌ Pending | JSON envelopes and schema validation |
 | RM-03 | Path resolution | ❌ Pending | Canonical paths and workspace resolution |
@@ -73,7 +73,7 @@ limits, and acceptance-with-follow-up are forbidden.
 
 | Batch | Minimum proof posture |
 |-------|-----------------------|
-| RM-01 | Type-level fixtures for every error code and exit-code mapping; versioned IDs for every domain type; exhaustive error fixtures including unknown, boundary, and malformed cases; proof that no exit code is reused or unmapped |
+| RM-01 | Type-level fixtures for every error code and exit-code mapping; versioned IDs for every domain type; exhaustive error fixtures including unknown, boundary, and malformed cases; proof that no error code is unmapped or multiply mapped |
 | DB-01 | Driver selection ADR documenting viable candidates, reproduced evidence, selected package/version, failure model, supported targets, and no-JSON-shard-fallback rule; global install proof (`nvb dist && npm install -g ./dist`); parameterized typed operations; FK enforcement; WAL; busy timeout; permissions; integrity/corruption; staged rebuild; semantic-root reproduction; crash safety |
 | RM-02 | Schema validation of success/error envelopes against v1.schema.json; round-trip serialization of every `commandResult` and `commandError` variant; proof that `--json` produces no decorative text on stdout; additive-field compatibility proof within schema version 1 |
 | RM-03 | Fixture-proven resolution precedence for `WATCHTOWER_DATA_HOME`, XDG fallback, explicit `--workspace`, git toplevel, and ancestor walk; symlink/case/path-escape rejection fixtures covering `..`, symlink loops, null bytes, and control characters; missing workspace error fixtures |
@@ -122,11 +122,12 @@ RM-03  RM-04  RM-05
 
 ## Current Honest Next Step
 
-- **Current lane head:** Pack authoring — work and review briefs plus launch
-  prompts are being created. No batch has yet been implemented.
-- **RM-01:** The contract kernel is the first implementation batch. It must
-  establish versioned domain types, all error codes with exit-code mappings,
-  and exhaustive error fixtures before any other batch begins.
+- **Current lane head:** RM-01 is independently accepted. DB-01 and RM-02
+  through RM-05 may now proceed under their dependency and review gates.
+- **RM-01:** The accepted kernel has 23 exhaustively mapped codes, immutable
+  registries and error values, bounded safe error context, corrected persisted
+  lifecycle/claim vocabulary, durable worker-event envelopes, precise negative
+  fixtures, and an automated mutable-global architecture regression.
 - **DB-01:** The SQLite driver selection and storage feasibility batch. It
   gates the entire derived-store path; failure requires a spec amendment.
   Depends on RM-01 accepted.
