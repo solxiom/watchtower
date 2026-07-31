@@ -1,46 +1,19 @@
-# Review Batch Index — wt-runtime-distribution
+# Runtime distribution — Review Batch Index
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+Status: **74-batch remediation synchronization candidate**
 
-All implementation/review work uses thin Nirvana command front doors,
-capability-owned foundation modules, the immutable packaged NVB task catalog,
-`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
-Nirvana storage adapters, and manifest-declared shell leaves only. Project
-`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
-limits, and acceptance-with-follow-up are forbidden.
+| Batch | Review brief | Launch prompt | Paired work | Required proof |
+|---|---|---|---|---|
+| RT-01 | [review](RT-01-review-runtime-and-knowledge-asset-audit-import.md) | [prompt](RT-01-review-runtime-and-knowledge-asset-audit-import-agent-launch-prompt.md) | [work](../work-batches/RT-01-runtime-and-knowledge-asset-audit-import.md) | Source provenance; no omitted action/doc; every script classified as TaskHandler, leaf, temporary wrapper, or removal |
+| RT-02 | [review](RT-02-review-runtime-and-knowledge-manifests.md) | [prompt](RT-02-review-runtime-and-knowledge-manifests-agent-launch-prompt.md) | [work](../work-batches/RT-02-runtime-and-knowledge-manifests.md) | Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection |
+| RT-03 | [review](RT-03-review-nvb-distribution-staging.md) | [prompt](RT-03-review-nvb-distribution-staging-agent-launch-prompt.md) | [work](../work-batches/RT-03-nvb-distribution-staging.md) | Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback |
+| RT-04 | [review](RT-04-review-immutable-data-root-catalog-and-staging.md) | [prompt](RT-04-review-immutable-data-root-catalog-and-staging-agent-launch-prompt.md) | [work](../work-batches/RT-04-immutable-data-root-catalog-and-staging.md) | XDG precedence; atomic first stage; two versions coexist; immutable version roots |
+| RT-05 | [review](RT-05-review-central-runtime-invocation-adapter.md) | [prompt](RT-05-review-central-runtime-invocation-adapter-agent-launch-prompt.md) | [work](../work-batches/RT-05-central-runtime-invocation-adapter.md) | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
+| RT-06 | [review](RT-06-review-managed-lane-links-and-compatibility-names.md) | [prompt](RT-06-review-managed-lane-links-and-compatibility-names-agent-launch-prompt.md) | [work](../work-batches/RT-06-managed-lane-links-and-compatibility-names.md) | Manifest-only ownership; task catalog/profile pin; project `nvb.json` unchanged; link targets/checksums; collision/path-escape refusal |
+| RT-07 | [review](RT-07-review-packaged-watcher-and-runtime-smoke-proof.md) | [prompt](RT-07-review-packaged-watcher-and-runtime-smoke-proof-agent-launch-prompt.md) | [work](../work-batches/RT-07-packaged-watcher-and-runtime-smoke-proof.md) | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |
+| RT-08 | [review](RT-08-review-nirvana-dependency-closure-and-isolated-install-harness.md) | [prompt](RT-08-review-nirvana-dependency-closure-and-isolated-install-harness-agent-launch-prompt.md) | [work](../work-batches/RT-08-nirvana-dependency-closure-and-isolated-install-harness.md) | Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink |
+| RT-09 | [review](RT-09-review-task-catalog-lane-profile-and-aggregate-contracts.md) | [prompt](RT-09-review-task-catalog-lane-profile-and-aggregate-contracts-agent-launch-prompt.md) | [work](../work-batches/RT-09-task-catalog-lane-profile-and-aggregate-contracts.md) | Duplicate/dangling/stale rejection; profile cannot add code/tasks; deterministic aggregate |
+| RT-10 | [review](RT-10-review-baseline-packaged-taskhandlers.md) | [prompt](RT-10-review-baseline-packaged-taskhandlers-agent-launch-prompt.md) | [work](../work-batches/RT-10-baseline-packaged-taskhandlers.md) | Public TaskHandler API; schema-valid input/result/events; no product policy or future capability stubs |
 
-Status: active index
-Date: 2026-07-30
-
-All 7 review batches are pending. No batch has started. RT-01 review cannot
-begin before the RT-01 implementation batch is complete and its implementation
-report is written.
-
-## Review Order
-
-Review batches must be executed in numerical order, matching the work batch
-sequence. A review batch may not begin before the paired implementation batch
-is complete and the implementation report is written.
-
-| Review batch | Reviews work batch | Reviewer minimum proof |
-|-------------|-------------------|----------------------|
-| RT-01 | RT-01 | Independently enumerate every inherited shell script and knowledge doc; verify SHA-256 digests; cross-reference behavioral inventory against coordinator-automation.md; verify no omissions |
-| RT-02 | RT-02 | Verify every manifest rejection path independently; run JSON Schema validation; check every RT-01 inventoried asset is representable; verify unknown schema versions fail closed |
-| RT-03 | RT-03 | Run `nvb dist` independently; compare `dist/` tree against spec and RT-02 types; verify reproducible builds; introduce intentional manifest defects and verify rejection; check executable bits |
-| RT-04 | RT-04 | Independently stage runtime versions; verify XDG precedence; simulate kill-during-staging for atomicity; prove immutability after commit; prove version coexistence |
-| RT-05 | RT-05 | Mock subprocess layer and assert every safety invariant; verify no shell-mode spawn; verify no `process.env` leak; verify every rejection path; verify signal forwarding; verify verbose output safety |
-| RT-06 | RT-06 | Independently attempt every rejection path; verify checksum validation; verify collision refusal; verify escape rejection; verify compatibility name resolution; verify manifest-only ownership |
-| RT-07 | RT-07 | Run smoke test from clean state; verify relocated package (not source tree); verify wake stdout, signal forwarding, worker account enforcement; verify cleanup leaves no artifacts |
-
-## Shared Review Rule
-
-The reviewer must independently regenerate evidence. Implementation report
-conclusions are not accepted facts. Every reviewer must run the exact test
-commands named by the batch and record the output, not narrate the outcome.
-
-Acceptance commits must include all accepted non-`.local` changes with a
-descriptive commit message. Rejections must produce a numbered correction
-brief under `corrections/` with exact required fixes.
+Each reviewer is independent, reproduces the mandatory engineering matrix, and
+alone emits the durable verdict and acceptance commit. Publication is separate.

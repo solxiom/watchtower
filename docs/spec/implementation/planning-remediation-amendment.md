@@ -1,6 +1,6 @@
 # Watchtower v1 Implementation-Pack Planning Remediation
 
-Status: **Proposed by specification authority — dispatch hold active pending independent acceptance and reseal**
+Status: **Design independently accepted — synchronized packs pending ACCEPT_PACKS and reseal**
 
 Date: 2026-07-31
 

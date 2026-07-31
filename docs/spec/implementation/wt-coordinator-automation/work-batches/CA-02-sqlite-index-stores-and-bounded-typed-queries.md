@@ -143,7 +143,7 @@ scans without a covering index.
      - Grep for `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` — these must
        appear ONLY inside `src/foundation/IndexStore.ts`, never in
        `IndexQuery.ts` or any consumer module.
-     - `IndexQuery` calls typed methods on `IndexStore`, which internally
+     - `IndexQuery` contributes through the explicit composition roottyped methods on `IndexStore`, which internally
        translates to parameterized SQL. The query layer composes typed calls,
        never SQL strings.
 

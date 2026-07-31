@@ -82,7 +82,7 @@ target/environment/path selection, or authority/journal policy in the handler.
   the full prepare→attempt→verify chain. Prove each succeeds with valid inputs.
 - **Forbidden-command block:** For every forbidden command listed above,
   independently prove rejection occurs before `LeafRuntimeInvoker` is invoked.
-  Verify zero network or process calls for forbidden commands.
+  Verify zero network or process contributes through the explicit composition rootfor forbidden commands.
 - **Sanitization edge cases:** Test every shell metacharacter individually and
   in combination. Test Unicode, null bytes, ANSI escapes, and unusual whitespace.
 - **Idempotent duplicate:** Execute a tmux effect, verify it succeeds. Execute
@@ -110,7 +110,7 @@ The reviewer must independently reason through every crash point in the
 prepare→attempt→verify→journal chain. The reviewer must identify every
 character class that could reach `LeafRuntimeInvoker` through the sanitizer
 and prove each is rejected. The reviewer must prove that no sequence of
-adapter calls can produce an arbitrary shell command or arbitrary tmux kill.
+adapter contributes through the explicit composition rootcan produce an arbitrary shell command or arbitrary tmux kill.
 
 ## Structural And Module-Size Acceptance
 

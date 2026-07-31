@@ -1,13 +1,3 @@
 # Agent Launch Prompt — Review Batch CA-21
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R4`
-Paired review: `CA-21-review-inspector-command-palette-and-overlays.md`
-
-Independently reproduce every view/state/bound, stale-query races, model-free
-behavior, action parity, observer filtering, focus trapping, confirmation
-revalidation/effect authority, security, structure, and tests.
-
-Report:
-`.local/agent-reports/coordinator-automation/reviews/CA-21-inspector-command-palette-and-overlays-review.md`.
+Independently review CA-21 — Inspector views, command palette, and overlays. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules, CA-21-review-inspector-command-palette-and-overlays.md, the exact checkout and report. Own inspector/action/overlay UI over accepted read projections, CA-26 confirmation and CA-27 hold/amendment services. No direct effect or policy authority. Reproduce All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays and every engineering gate. Do not repair; emit only the authorized durable verdict.

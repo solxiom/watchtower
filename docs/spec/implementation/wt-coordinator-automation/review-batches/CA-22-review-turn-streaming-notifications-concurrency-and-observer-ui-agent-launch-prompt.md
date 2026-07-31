@@ -1,13 +1,3 @@
 # Agent Launch Prompt — Review Batch CA-22
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R5`
-Paired review: `CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui.md`
-
-Independently reproduce stream validation/order/backpressure, anchor behavior,
-attachment races, explicit wait, observer deny matrix, notification checkpoint
-correctness, absence of daemon/IPC/locks, structure, and tests.
-
-Report:
-`.local/agent-reports/coordinator-automation/reviews/CA-22-turn-streaming-notifications-concurrency-and-observer-ui-review.md`.
+Independently review CA-22 — Turn streaming, notifications, concurrency, and observer UI. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules, CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui.md, the exact checkout and report. Own turn/event reducers and attachment controller: provisional validation, live edge, stale-confirmation invalidation, contention/wait, observer restrictions and bounded refresh. Reproduce Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh and every engineering gate. Do not repair; emit only the authorized durable verdict.

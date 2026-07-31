@@ -1,19 +1,3 @@
 # Agent Launch Prompt — Work Batch CA-24
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R5`
-Paired brief: `CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`
-Required predecessors: accepted CA-14 through CA-23
-
-Mission: wire thin session/ask command and help surfaces, then produce complete
-M6 scale/replay/performance/global-install evidence. Add no new policy. Prove
-30–10k pack boundedness, long-session boundedness, model-free M0, one effect
-authority, no lane lock during generation, and all command semantics. Prove a
-real bounded OpenCode decision route, conditional Hermes qualification,
-capability-first economic selection, catalog-drift refusal, and shared-pool
-single accounting exactly as required by the paired brief.
-
-Report:
-`.local/agent-reports/coordinator-automation/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md`.
-Only independent CA-24 review may accept Pack 5 and unblock REL-01.
+Implement CA-24 — Session command integration, specification-resolution proof, scale/replay, and M6 acceptance. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules and CA-24-session-command-integration-scale-replay-and-m6-acceptance.md in full. Dependencies: CA-14–CA-23, CA-25–CA-31. Own session command/help integration and independent M6 acceptance, including the complete contradiction-to-resume fixture and 30-10k scale/replay proof. Consume CA-25 through CA-31; do not implement their capabilities. Preserve unrelated work, inspect source rather than trusting reports, satisfy Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate, do not commit, and emit only the complete report plus durable handoff.

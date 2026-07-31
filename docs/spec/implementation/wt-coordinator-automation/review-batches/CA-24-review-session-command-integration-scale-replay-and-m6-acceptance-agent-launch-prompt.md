@@ -1,15 +1,3 @@
 # Agent Launch Prompt — Review Batch CA-24
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R5`
-Paired review: `CA-24-review-session-command-integration-scale-replay-and-m6-acceptance.md`
-
-Mission: independently reproduce every public command and Pack 5 exit claim,
-including 30–10k context invariance, long-session/replay bounds, two-hour soak,
-all RT-03 targets, crash/concurrency/authority paths, build/test/dist, docs,
-ownership, and artifact hygiene. Any known failure rejects; no follow-up waiver.
-
-Report:
-`.local/agent-reports/coordinator-automation/reviews/CA-24-session-command-integration-scale-replay-and-m6-acceptance-review.md`.
-Only `ACCEPT` authorizes the Pack 5 acceptance commit and REL-01.
+Independently review CA-24 — Session command integration, specification-resolution proof, scale/replay, and M6 acceptance. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules, CA-24-review-session-command-integration-scale-replay-and-m6-acceptance.md, the exact checkout and report. Own session command/help integration and independent M6 acceptance, including the complete contradiction-to-resume fixture and 30-10k scale/replay proof. Consume CA-25 through CA-31; do not implement their capabilities. Reproduce Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate and every engineering gate. Do not repair; emit only the authorized durable verdict.

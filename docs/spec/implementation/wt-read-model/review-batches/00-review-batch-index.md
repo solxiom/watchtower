@@ -1,72 +1,23 @@
-# Review Batch Index — Watchtower v1 Read Model
+# Read model — Review Batch Index
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+Status: **74-batch remediation synchronization candidate**
 
-All implementation/review work uses thin Nirvana command front doors,
-capability-owned foundation modules, the immutable packaged NVB task catalog,
-`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
-Nirvana storage adapters, and manifest-declared shell leaves only. Project
-`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
-limits, and acceptance-with-follow-up are forbidden.
+| Batch | Review brief | Launch prompt | Paired work | Required proof |
+|---|---|---|---|---|
+| RM-01 | [review](RM-01-review-contract-kernel-and-error-taxonomy.md) | [prompt](RM-01-review-contract-kernel-and-error-taxonomy-agent-launch-prompt.md) | [work](../work-batches/RM-01-contract-kernel-and-error-taxonomy.md) | Versioned IDs/types; exit-code mapping; exhaustive error fixtures; automated engineering-standard hard rejects |
+| DB-01 | [review](DB-01-review-sqlite-driver-packaging-and-derived-store-feasibility.md) | [prompt](DB-01-review-sqlite-driver-packaging-and-derived-store-feasibility-agent-launch-prompt.md) | [work](../work-batches/DB-01-sqlite-driver-packaging-and-derived-store-feasibility.md) | Node/NVB/dist/global install; parameterization; FK/integrity; busy/WAL/permissions; rebuild and semantic-root proof |
+| RM-02 | [review](RM-02-review-json-envelopes-and-schema-validation.md) | [prompt](RM-02-review-json-envelopes-and-schema-validation-agent-launch-prompt.md) | [work](../work-batches/RM-02-json-envelopes-and-schema-validation.md) | Success/error envelopes; additive compatibility; no decorative JSON output; staged-schema and isolated-install proof |
+| RM-03 | [review](RM-03-review-canonical-paths-and-workspace-resolution.md) | [prompt](RM-03-review-canonical-paths-and-workspace-resolution-agent-launch-prompt.md) | [work](../work-batches/RM-03-canonical-paths-and-workspace-resolution.md) | Resolution precedence; symlink/case/path-escape fixtures; missing explicit workspace |
+| RM-04 | [review](RM-04-review-strict-env-and-lane-state-parsers.md) | [prompt](RM-04-review-strict-env-and-lane-state-parsers-agent-launch-prompt.md) | [work](../work-batches/RM-04-strict-env-and-lane-state-parsers.md) | Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation |
+| RM-05 | [review](RM-05-review-durable-worker-event-jsonl-parser.md) | [prompt](RM-05-review-durable-worker-event-jsonl-parser-agent-launch-prompt.md) | [work](../work-batches/RM-05-durable-worker-event-jsonl-parser.md) | Role/event compatibility; malformed/partial-line handling; bounded latest lookup |
+| RM-06 | [review](RM-06-review-home-lane-discovery-and-selection.md) | [prompt](RM-06-review-home-lane-discovery-and-selection-agent-launch-prompt.md) | [work](../work-batches/RM-06-home-lane-discovery-and-selection.md) | Descendant/lane-dir discovery; UUID/slug precedence; complete ambiguity matrix |
+| RM-07 | [review](RM-07-review-membership-index-and-secondary-discovery.md) | [prompt](RM-07-review-membership-index-and-secondary-discovery-agent-launch-prompt.md) | [work](../work-batches/RM-07-membership-index-and-secondary-discovery.md) | Advisory validation; stale entries ignored/reported; reads never repair |
+| RM-08 | [review](RM-08-review-repository-bindings-and-conflict-inspection.md) | [prompt](RM-08-review-repository-bindings-and-conflict-inspection-agent-launch-prompt.md) | [work](../work-batches/RM-08-repository-bindings-and-conflict-inspection.md) | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
+| RM-09 | [review](RM-09-review-tmux-watcher-heartbeat-and-worker-observations.md) | [prompt](RM-09-review-tmux-watcher-heartbeat-and-worker-observations-agent-launch-prompt.md) | [work](../work-batches/RM-09-tmux-watcher-heartbeat-and-worker-observations.md) | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
+| RM-10 | [review](RM-10-review-list-config-show-and-status-commands.md) | [prompt](RM-10-review-list-config-show-and-status-commands-agent-launch-prompt.md) | [work](../work-batches/RM-10-list-config-show-and-status-commands.md) | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
+| RM-11 | [review](RM-11-review-repository-nvb-parent-chain-composition.md) | [prompt](RM-11-review-repository-nvb-parent-chain-composition-agent-launch-prompt.md) | [work](../work-batches/RM-11-repository-nvb-parent-chain-composition.md) | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
+| RM-12 | [review](RM-12-review-status-command-and-read-only-integration.md) | [prompt](RM-12-review-status-command-and-read-only-integration-agent-launch-prompt.md) | [work](../work-batches/RM-12-status-command-and-read-only-integration.md) | Stable status schema; complete health/warning matrix; full read-only hash proof |
+| RM-13 | [review](RM-13-review-deterministic-json-schema-composition.md) | [prompt](RM-13-review-deterministic-json-schema-composition-agent-launch-prompt.md) | [work](../work-batches/RM-13-deterministic-json-schema-composition.md) | Duplicate `$defs`, unresolved `$ref`, root-conflict rejection; byte-identical regeneration |
 
-Status: active index
-Date: 2026-07-30
-
-## Review Order
-
-Review batches must be executed in numerical order, matching the work batch
-sequence. A review batch may not begin before the paired implementation batch
-is complete and the implementation report is written.
-
-| Review batch | Reviews work batch | Reviewer minimum proof |
-|-------------|-------------------|----------------------|
-| RM-01 | RM-01 | Enumerate every error code; verify exit-code mappings (1-5); confirm no unmapped or reused codes; validate every domain type against v1.schema.json; exhaustively test error fixtures; verify `src/contracts/index.ts` exports all symbols |
-| DB-01 | DB-01 | Independently verify evidence-based driver selection against the ADR; rerun every feasibility fixture (global install, FK enforcement, WAL mode, busy-timeout, permissions, integrity, corruption detection, staged rebuild, semantic-root reproduction, crash safety); audit focused SQLite/store ports for raw SQL, path, extension, and driver leaks; verify SqliteConfig defaults match v1-contracts.md §8A.4; confirm no derived indexes implemented; verify ADR documents no-JSON-shard-fallback rule; prove global install resolves the selected driver correctly |
-| RM-02 | RM-02 | Round-trip test every envelope variant through schema validation; verify `--json` produces one value with no ANSI/decorations; prove additive compatibility (optional field addition does not break); confirm serializer does not define domain types; trace every output path |
-| RM-03 | RM-03 | Trace every resolution path through precedence chain; verify every path-escape class is rejected; confirm missing workspace is error not creation; verify canonicalization before comparison; test symlink/case safety |
-| RM-04 | RM-04 | Independently run 30+ malicious-shell corpus; verify zero executions; trace known-key preservation; test unknown-key handling; verify contradictory state detection; confirm every rejection has line-number diagnostics |
-| RM-05 | RM-05 | Derive the complete event-type/role compatibility matrix from the accepted schema/contracts and verify every valid combination; test bad JSON, partial line, unknown type, role/type mismatch, and missing fields; confirm bounded latest-N ordering; prove malformed records do not drop valid ones; test empty and malformed-only files |
-| RM-06 | RM-06 | Enumerate every ambiguity matrix cell for focused tests; verify UUID, slug, cwd-descendant, single-deduction, zero-lane, multi-lane, invalid-lane.json, missing-schemaVersion; test symlink resolution during walk; confirm no interactive picker |
-| RM-07 | RM-07 | Verify every stale-entry class (PATH_MISSING, LANE_JSON_MISSING, BINDING_MISMATCH) is detected; prove index file unchanged after every read; test mixed valid+stale index; confirm missing index returns empty; verify secondary discovery |
-| RM-08 | RM-08 | Verify canonical binding computation for valid and missing repositories; test branch/access/worktree validation; prove all three conflict classes (SHARED_WRITE, PATH_CONFLICT, BRANCH_CONFLICT) are detected; confirm dedicated is default; verify no false positives |
-| RM-09 | RM-09 | Test tmux session reading with mock binary; verify heartbeat classification (fresh/stale/absent) with configurable threshold; test worker presence from parsed events; run no-mutation proof (zero new/modified files in state dir) |
-| RM-10 | RM-10 | Independently run all 7 fixture classes for each command; verify human/JSON parity; confirm redaction in both modes; validate JSON output against v1.schema.json; run read-only hash proof (compute SHA-256 before/after, assert identical); confirm no foundation logic duplicated in commands; verify help fragments match command behavior |
-
-## Shared Review Rule
-
-The reviewer must independently regenerate evidence. Implementation report
-conclusions are not accepted facts. Every reviewer must run the exact test
-commands named by the batch and record the output, not narrate the outcome.
-
-Acceptance commits must include all accepted non-`.local` changes with a
-descriptive commit message. Rejections must produce a numbered correction
-brief under `corrections/` with exact required fixes.
-
-## Batch Acceptance Criteria
-
-A review batch is accepted only when:
-
-1. All minimum proof obligations (above) are independently reproduced and pass.
-2. No hard-reject checklist item is flagged.
-3. Status docs (`implementation-tracker.md`, `implementation-roadmap.md`) are
-   updated for the batch outcome.
-4. The corrected `v1.md` command status table is updated (RM-10 only).
-5. All files are owned by `kavan:kavan`.
-6. No `.local/` artifacts are staged.
-7. The reviewer creates the acceptance commit.
-
-## Dependency Order
-
-Review batches follow the same dependency order as work batches:
-
-- RM-01 must be reviewed first.
-- DB-01 depends on RM-01 being accepted.
-- RM-02 through RM-05 may be reviewed in parallel after RM-01 accepted.
-- RM-06 depends on RM-03 and RM-04 being accepted.
-- RM-07 depends on RM-03 and RM-06 accepted.
-- RM-08 depends on RM-03 and RM-07 accepted.
-- RM-09 depends on RM-04 and RM-05 accepted.
-- RM-10 depends on RM-02, RM-06 through RM-09 accepted.
+Each reviewer is independent, reproduces the mandatory engineering matrix, and
+alone emits the durable verdict and acceptance commit. Publication is separate.

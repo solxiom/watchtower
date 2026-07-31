@@ -184,7 +184,7 @@ correct:
    (`kill-session`, `kill-window`, `kill-pane`, `run-shell`, `shell`,
    `pipe-pane`, `source-file`, and raw `eval`/`if-shell` patterns), prove the
    adapter rejects before any runtime invocation. Verify zero process spawns or
-   network calls for forbidden commands.
+   network contributes through the explicit composition rootfor forbidden commands.
 3. **Sanitization audit:** Test every shell metacharacter (`;`, `|`, `$`,
    `` ` ``, `\`, `(`, `)`, `{`, `}`, `<`, `>`, `&`, `*`, `?`, `~`, `!`) and
    path-like values (`/`, `..`) individually. Test Unicode, null bytes, ANSI

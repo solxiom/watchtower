@@ -1,46 +1,13 @@
-# Review Batch Index — Watchtower v1 Release
+# V1 release — Review Batch Index
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+Status: **74-batch remediation synchronization candidate**
 
-All implementation/review work uses thin Nirvana command front doors,
-capability-owned foundation modules, the immutable packaged NVB task catalog,
-`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
-Nirvana storage adapters, and manifest-declared shell leaves only. Project
-`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
-limits, and acceptance-with-follow-up are forbidden.
+| Batch | Review brief | Launch prompt | Paired work | Required proof |
+|---|---|---|---|---|
+| REL-01 | [review](REL-01-review-fresh-lane-implementer-reviewer-accept-trial.md) | [prompt](REL-01-review-fresh-lane-implementer-reviewer-accept-trial-agent-launch-prompt.md) | [work](../work-batches/REL-01-fresh-lane-implementer-reviewer-accept-trial.md) | Global install; init; dispatch; handoff; independent accept; publication |
+| REL-02 | [review](REL-02-review-concurrent-and-multi-repository-recovery-trials.md) | [prompt](REL-02-review-concurrent-and-multi-repository-recovery-trials-agent-launch-prompt.md) | [work](../work-batches/REL-02-concurrent-and-multi-repository-recovery-trials.md) | Two isolated lanes; multi-repo commit set; shared-write refusal; partial push recovery |
+| REL-03 | [review](REL-03-review-security-ownership-performance-and-package-qualification.md) | [prompt](REL-03-review-security-ownership-performance-and-package-qualification-agent-launch-prompt.md) | [work](../work-batches/REL-03-security-ownership-performance-and-package-qualification.md) | Traversal/config/permission suite; bounded discovery/status; manifest/global install proof; real OpenCode and conditional Hermes adapter matrix |
+| REL-04 | [review](REL-04-review-documentation-consistency-and-release-gate.md) | [prompt](REL-04-review-documentation-consistency-and-release-gate-agent-launch-prompt.md) | [work](../work-batches/REL-04-documentation-consistency-and-release-gate.md) | Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme |
 
-Status: active index
-Date: 2026-07-30
-
-## Review Order
-
-Review batches must be executed in numerical order, matching the work batch
-sequence. A review batch may not begin before the paired implementation batch
-is complete and the implementation report is written.
-
-| Review batch | Reviews work batch | Reviewer minimum proof |
-|-------------|-------------------|----------------------|
-| REL-01 | REL-01 | Independently reproduce the full pipeline: `nvb dist` → global install → `wt init` → `wt status --json` → `wt list` → `wt watch` → implementer→reviewer→accept cycle → `wt doctor` → `wt upgrade`. Verify lane discovery from all documented paths. Verify init refusal negative cases. Verify no runtime tree copy. Verify release evidence packet is complete and commands are documented with actual output. |
-| REL-02 | REL-02 | Independently reproduce concurrent lane isolation: two lanes on one repository with distinct IDs/slugs/state/locks, independent status, no state collision. Reproduce ambiguous selection with actionable candidates. Reproduce shared-write refusal with diagnostic naming the conflicting lane. Reproduce multi-repo commit verification with per-repository acceptance commits. Reproduce partial push recovery: one push succeeds, one fails, semantic acceptance preserved, retry recovers without new acceptance commit, push journals correctly updated. Reproduce idempotency replay: duplicate key returns recorded outcome without repeating external effect. Reproduce copied-template ignorance: pre-Watchtower directories not discovered, not inspected, not modified. |
-| REL-03 | REL-03 | Independently reproduce at minimum: one path-traversal negative case per security boundary (lane directory, repository binding, runtime store, within-lane) with independently crafted malicious inputs. One config-injection negative case per class (command substitution, shell operators, variable expansion) with the strict-env parser. One permission boundary check (worker deny-write to runtime store or lane config). One manifest-integrity negative case (checksum mismatch fails build). One global-install integrity verification (staged runtime matches dist manifest). SQLite driver qualification: driver integrity (native binary checksum matches manifest), global-install proof (driver loads from globally installed package outside dev tree), WAL-mode verification and concurrent-read busy-handler test, corruption detection (truncated database and random-bytes file both refused), semantic-root rebuild (rebuild from empty produces identical logical rows and schema version), permission boundary proof (worker SELECT succeeds, worker write refused through connection-level SQLITE_OPEN_READONLY). One boundedness measurement (wall time and output size at two pack scales). One model-free audit result (source-path evidence for a mechanical coordination operation). Verify security claims have exploit fixtures, not just algorithm descriptions. Verify performance measurements are actual numbers. |
-| REL-04 | REL-04 | Independently re-verify every finding in the audit report by reading the referenced help fragments, command source, spec docs, and Git-tracked files. Form independent judgment about each finding's classification (BLOCKING vs NON-BLOCKING). Verify at least 8 of 32 §17 criteria independently. Verify at least 5 help fragments independently. Verify at least 3 commands from spec docs independently. Independently confirm scaffold removal, committed artifact cleanliness, and package version consistency. Do not accept the audit report's conclusions without re-reading the referenced documents. The reviewer's acceptance of REL-04 is the final v1 release gate commit. |
-
-## Shared Review Rule
-
-The reviewer must independently regenerate evidence. Implementation report
-conclusions are not accepted facts. Every reviewer must run the exact test
-commands named by the batch and record the output, not narrate the outcome.
-
-Acceptance commits must include all accepted non-`.local` changes with a
-descriptive commit message. Rejections must produce a numbered correction
-brief under `corrections/` with exact required fixes.
-
-## Release Gate Rule
-
-The REL-04 review is the final gate. If the REL-04 reviewer rejects, no
-release commit may be created until all BLOCKING findings are resolved by
-the owning prior packs. The reviewer's acceptance of REL-04 is the v1
-release gate commit.
+Each reviewer is independent, reproduces the mandatory engineering matrix, and
+alone emits the durable verdict and acceptance commit. Publication is separate.

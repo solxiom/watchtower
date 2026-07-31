@@ -1,16 +1,3 @@
 # Agent Launch Prompt — Review Batch CA-18
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R4`
-Paired review: `CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md`
-Inputs: paired work brief/report, accepted RT-03/RT-05/CA-14–CA-17 evidence
-
-Mission: independently reproduce runtime flags, Nirvana/NVB behavior, bootstrap
-semantics, renderer capability, native distribution/global install, PTY/tmux
-restoration, security, prohibited-framework absence, and performance. Return
-`ACCEPT`, `REJECT`, or `SPEC_BLOCKED`; there is no conditional acceptance.
-
-Report:
-`.local/agent-reports/coordinator-automation/reviews/CA-18-nirvana-opentui-feasibility-and-packaging-gate-review.md`.
-Only an independently reproducible `ACCEPT` authorizes CA-19.
+Independently review CA-18 — Accepted OpenTUI evidence promotion and packaging gate. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules, CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md, the exact checkout and report. Own promotion and bounded revalidation of accepted TUI-EXP-01 against the exact current packaged target. Do not reselect the renderer or repeat/build a disposable feasibility experiment. Reproduce Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment and every engineering gate. Do not repair; emit only the authorized durable verdict.

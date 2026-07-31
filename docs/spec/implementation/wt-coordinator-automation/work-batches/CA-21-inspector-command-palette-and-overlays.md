@@ -1,111 +1,29 @@
-# Batch CA-21 — Inspector Views, Command Palette, and Overlays
+# Batch CA-21 — Inspector views, command palette, and overlays
 
-## Authority And Status
+Status: ❌ Pending
+Depends on: CA-14, CA-17, CA-19, CA-26, CA-27
 
-Governing sources: `AGENTS.md`, the mandatory engineering standard,
-`v1-contracts.md`, `v1.md`, `nirvana-integration-architecture.md`,
-`architecture.md`, `v1-implementation-map.md`, `operator-session.md`,
-`cli-session.md`, `tui-operational-experience.md`, and pack quality rules.
-Required interfaces are normative in this pack's
-`tui-interface-contracts.md §CA-21 Inspector And Action Contract`.
+## Governing authority
 
-Status: ❌ Not started
-Depends on: CA-14, CA-17, and CA-19 accepted
-Unblocks: CA-22
-Reasoning floor: implementor `R4`; reviewer `R4`
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Objective
+## Objective, exact boundary and interfaces
 
-Implement bounded contextual inspection and discoverable actions: the closed
-nine-view inspector registry, command palette, pickers, help/details/settings,
-and fail-closed confirmation overlays over shared Watchtower query and command
-authority.
+Exclusive map ownership: inspector/action/overlay components.
 
-## Owned Capabilities
+Own inspector/action/overlay UI over accepted read projections, CA-26 confirmation and CA-27 hold/amendment services. No direct effect or policy authority.
 
-- inspector registry and sessions/lane/batches/agents/budgets/holds/proposals/
-  events/context view presenters
-- bounded inspector-query controller with cancellation/revision handling
-- central command palette over the CA-19 action registry
-- overlay models for picker, help, details, settings, and confirmation
-- typed action dispatch from UI intention to shared application capability
-- projection-only agent/allocation inspector, bounded global search/attention,
-  and TUI diagnostic result presentation
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-Exact owned production modules:
+## Required implementation and proof
 
-- `src/contracts/tuiInspector.ts`
-- `src/presentation/tui/InspectorRegistry.ts`
-- `src/presentation/tui/InspectorQueryController.ts`
-- `src/presentation/tui/Inspector.ts`
-- `src/presentation/tui/CommandPalette.ts`
-- `src/presentation/tui/OverlayController.ts`
-- `src/presentation/tui/ConfirmationOverlay.ts`
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-The nine view presenters are cohesive modules under
-`src/presentation/tui/inspectorViews/`, one named `<View>InspectorView.ts` per
-closed registry entry. Exact focused specs mirror those names under
-`spec/basic/tui/`; confirmation integration is
-`spec/integration/tui/ConfirmationOverlaySpec.ts`.
+## Hard exclusions and handoff
 
-## Required Interfaces And Work
-
-1. Consume CA-14 bounded commands/queries, CA-17 session proposal/hold/budget
-   capabilities, and CA-19 shell/action/overlay ports. Do not duplicate them.
-2. Implement every `cli-session.md §5.2` view with loading, empty, stale,
-   truncated, unavailable, and error states. Every page has finite limits and
-   stable cursors/revisions; unavailable indexes fail closed.
-3. Selection may navigate retained content, open bounded details, insert an
-   authorized reference, or invoke a registered action. Selection alone never
-   mutates state or invokes a model.
-4. Palette and slash surfaces share one closed action registry and availability
-   policy. Display mutation class, confirmation, observer eligibility, disabled
-   reason, and current key binding.
-5. Confirmation overlays show exact proposed action/effect, target, snapshot,
-   risk, staleness, and choices. Focus is trapped; escape/cancel applies no
-   effect. Confirmation delegates to CA-17 and never executes directly.
-6. Prevent hidden-view polling, unbounded fan-out, stale result replacement,
-   secret exposure, and action bypass through mouse or palette routes.
-7. The agents view consumes only approved inventory/allocation/capacity
-   projections and represents unknown, stale, estimated, and unavailable data
-   exactly; refresh delegates to the authorized model-free capability.
-8. Implement index-bounded global search and ordered P1–P4 attention
-   navigation. Diagnostic surfaces render stable redacted `doctor --tui`
-   results but do not own checks, reports, repair, or filesystem discovery.
-
-## Exclusions
-
-- No inspector model summarization, journal/full-pack scanning, direct store or
-  provider imports, shell command palette, arbitrary `wt` command execution, or
-  alternate effect path.
-- No streaming/concurrent refresh policy (CA-22), terminal lifecycle/security
-  qualification (CA-23), or command-class/help integration (CA-24).
-
-## Required Proof
-
-- All nine views across all seven data states with page/cursor/truncation
-  assertions and zero-model proof.
-- Query cancellation and stale-revision races; hidden views do not poll.
-- Palette discoverability, search bounds, action parity, disabled reasons,
-  observer filtering, focus trap/restoration, and keyboard/mouse parity.
-- Agent/allocation source-boundary, freshness, charging/telemetry-quality, and
-  unavailable-state proof; no host, credential, network, or provider scan.
-- Search/attention/diagnostic fixtures prove bounds, ordering, redaction, and
-  zero model use.
-- Confirmation accept/cancel/stale/illegal/expired cases prove CA-17
-  revalidation and CA-10 effect authority remain mandatory.
-- Adversarial labels/metadata are sanitized and secrets redacted.
-- `nvb build`, `nvb test`, architecture gates, line counts, and Nirvana audit.
-
-## Documentation And Report
-
-No public command change is expected. Write
-`.local/agent-reports/coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`
-with registry/action matrices, bounded-query proof, confirmation traces, files,
-line counts, and CA-22 handoff. Do not commit.
-
-## Independent Review
-
-Use `../review-batches/CA-21-review-inspector-command-palette-and-overlays.md`.
-The reviewer independently regenerates all view states, bounds, action parity,
-confirmation authority, security, structure, and tests.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.

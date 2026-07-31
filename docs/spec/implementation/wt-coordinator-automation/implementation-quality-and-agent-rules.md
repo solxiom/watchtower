@@ -313,7 +313,7 @@ No batch is acceptable on narrative confidence alone.
   dry-run purity, human/JSON output, and error cases.
 - Session batches (CA-15–CA-17) must prove lifecycle state machine transitions,
   bounded memory, budget accounting, and hold interleaving.
-- CA-18 qualifies renderer/runtime/package feasibility; CA-19–CA-23 prove their
+- CA-18 promotes and revalidates accepted renderer/runtime/package evidence; CA-19–CA-23 prove their
   bounded TUI responsibilities; CA-24 independently reproduces 30–10k pack
   scale, long-session replay, and final M6 closure.
 - Reports must record the real commands run, the actual outcome, and any honest

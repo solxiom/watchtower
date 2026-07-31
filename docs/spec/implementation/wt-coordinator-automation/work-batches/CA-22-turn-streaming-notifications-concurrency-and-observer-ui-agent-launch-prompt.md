@@ -1,16 +1,3 @@
 # Agent Launch Prompt — Work Batch CA-22
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R5`
-Paired brief: `CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`
-Required predecessors: accepted CA-17, CA-20, and CA-21
-
-Mission: implement typed turn reduction, bounded provisional streaming,
-validated replacement, notifications, live-edge anchoring, same-session
-contention/wait, and M0-only observers. No daemon, provisional IPC, duplicate
-turn, unbounded queue, or lock across model work.
-
-Report:
-`.local/agent-reports/coordinator-automation/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md`.
-Hand off lifecycle states and every queue/cache bound to CA-23/CA-24.
+Implement CA-22 — Turn streaming, notifications, concurrency, and observer UI. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules and CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md in full. Dependencies: CA-17, CA-20, CA-21, CA-26, CA-27. Own turn/event reducers and attachment controller: provisional validation, live edge, stale-confirmation invalidation, contention/wait, observer restrictions and bounded refresh. Preserve unrelated work, inspect source rather than trusting reports, satisfy Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh, do not commit, and emit only the complete report plus durable handoff.

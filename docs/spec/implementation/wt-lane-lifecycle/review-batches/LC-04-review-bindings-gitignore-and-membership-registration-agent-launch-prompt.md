@@ -174,7 +174,7 @@ line-count check never overrides the responsibility gate.
 Independently verify that binding mutation and membership registration are
 safe, correct, and respect lock ordering:
 
-1. **Lock order audit**: trace every code path in `BindingMutator.ts`. Verify locks are acquired in the exact order: data-root catalog/membership-index lock → lane lock → session lock → projection/index publication lock. Prove no code path inverts this order. Instrument or trace the calls to confirm the sequence.
+1. **Lock order audit**: trace every code path in `BindingMutator.ts`. Verify locks are acquired in the exact order: data-root catalog/membership-index lock → lane lock → session lock → projection/index publication lock. Prove no code path inverts this order. Instrument or trace the contributes through the explicit composition rootto confirm the sequence.
 2. **Binding schema validation**: validate valid and invalid binding fixtures. Verify: valid passes, missing required fields rejected, invalid paths rejected, duplicate repository IDs rejected.
 3. **`.gitignore` atomic update**: verify the original `.gitignore` content is preserved. Verify the new watchdog entry is added without disturbing existing content. Verify the replace uses atomic rename (write to temp, rename over original). Verify no partial `.gitignore` state is observable.
 4. **Original digest preservation**: verify SHA-256 of original `.gitignore` is computed and stored. Verify the stored digest matches independent computation.

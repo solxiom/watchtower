@@ -80,7 +80,7 @@ intuition.
 - `src/foundation/BindingMutator.ts` — lock-ordered binding writes
 - `src/foundation/MembershipRegistrar.ts` — idempotent index registration
 - `src/foundation/CoordinatorBaseline.ts` — finite policy seed
-- `src/foundation/PackIndexBootstrap.ts` — sealed index construction
+- `src/foundation/InitialPackIndexActivation.ts` — adapter over accepted CA-01 compiler
 - `src/foundation/DoctorRegistry.ts` — diagnostic check definitions
 - `src/contracts/` — public types shared across commands
 

@@ -1,15 +1,3 @@
 # Agent Launch Prompt — Work Batch CA-21
 
-Include and obey `../agent-launch-contract.md`.
-
-Reasoning floor: `R4`
-Paired brief: `CA-21-inspector-command-palette-and-overlays.md`
-Required predecessors: accepted CA-14, CA-17, and CA-19
-
-Mission: implement only the nine bounded inspector views, palette over the
-closed action registry, and picker/help/details/settings/confirmation overlays.
-Reuse shared commands and CA-17 confirmation; selection alone is inert.
-
-Report:
-`.local/agent-reports/coordinator-automation/CA-21-inspector-command-palette-and-overlays.md`.
-Hand off exact view/query/action/overlay contracts to CA-22.
+Implement CA-21 — Inspector views, command palette, and overlays. Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules and CA-21-inspector-command-palette-and-overlays.md in full. Dependencies: CA-14, CA-17, CA-19, CA-26, CA-27. Own inspector/action/overlay UI over accepted read projections, CA-26 confirmation and CA-27 hold/amendment services. No direct effect or policy authority. Preserve unrelated work, inspect source rather than trusting reports, satisfy All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays, do not commit, and emit only the complete report plus durable handoff.

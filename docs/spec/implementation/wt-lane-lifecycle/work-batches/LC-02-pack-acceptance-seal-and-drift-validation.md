@@ -1,263 +1,29 @@
-# Work Batch LC-02 — Pack Acceptance, Seal, and Drift Validation
-
-## Mandatory Governing References
-
-This draft brief is subordinate to:
-
-- `AGENTS.md`
-- `docs/development/engineering-and-review-standard.md`
-- `docs/spec/v1-contracts.md`
-- `docs/spec/schemas/v1.schema.json`
-- `docs/spec/v1.md`
-- `docs/spec/nirvana-integration-architecture.md`
-- `docs/spec/architecture.md`
-- `docs/spec/v1-implementation-map.md`
-- `docs/spec/coordinator-automation.md`
-- `docs/spec/operator-session.md`
-- `docs/spec/cli-session.md`
-- this pack's `implementation-quality-and-agent-rules.md`
-
-Only the references relevant to the batch's accepted scope need drive its
-product logic, but the engineering and Nirvana/NVB architecture standards
-always apply. If this brief names a stale path, title, size threshold, or
-mechanism, follow the governing source and correct the brief/report rather than
-implementing the stale claim. Stop for a specification amendment when the
-governing sources leave a product decision unresolved.
-
-## Mandatory Cross-Cutting Acceptance
-
-- Include a Nirvana API usage audit with inspected packages/symbols, comparable
-  Nira usage, selected APIs, and any proven `NIRVANA_API_GAP`.
-- Keep commands as thin Nirvana front doors and place behavior in
-  capability-oriented foundation owners.
-- Use the packaged immutable NVB task catalog for substantial mechanical
-  workflows. `LaneTaskRunner` is the sole task invocation boundary; project
-  `nvb.json` files are never modified or trusted as Watchtower authority.
-- Retain shell only as a manifest-declared leaf adapter. Workflow-level shell,
-  arbitrary task selection, and direct raw subprocess use are hard rejects.
-- Apply the exact module/function/constructor limits and reviewer matrix from
-  the mandatory engineering standard. A pack-local statement cannot relax
-  those limits.
-- Reconcile every reason code, exit mapping, event name, and schema identifier
-  with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
-  illustrative name does not silently create a public identifier.
+# Batch LC-02 — Pack acceptance, seal, and drift validation
 
 Status: ❌ Pending
-Implementation reasoning: R5
-Review reasoning: R5
 Depends on: RM-01, RM-08
-Workload: large
 
-## Scope
+## Governing authority
 
-Validate implementation packs against the JSON Schema bundle. Reproduce
-signed seals using RFC 8785 canonicalization. Classify drift between the
-committed pack and the working tree using the drift reason matrix.
-This batch owns the pack consumer foundation: `PackConsumer.ts` and
-`PackSeal.ts`.
+Read in full: AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Normative specs and the accepted map override this execution brief.
 
-## Specification References
+## Objective, exact boundary and interfaces
 
-| Reference | Section | Topic |
-|-----------|---------|-------|
-| v1-contracts.md | §3 | Implementation-pack consumer contract (required files, paths, acceptance, seal, drift) |
-| schemas/v1.schema.json | `$defs.implementationPack`, `$defs.implementationPackLock`, `$defs.packAcceptance`, `$defs.sealedFile` | JSON Schema validations |
-| v1-contracts.md | §3.4 | Seal and canonicalization: RFC 8785, digest format, seal structure |
-| v1-contracts.md | §3.5 | Committed and drift rules: six drift codes, source-baseline behavior |
-| v1-contracts.md | §3.2 | Paths and file set: UTF-8, `/` separators, no `.`/`..`, not absolute, resolve beneath declared repo |
-| v1.md | §7.3 | Lane marker schema (pack path references must match) |
+Exclusive map ownership: pack consumer foundation.
 
-## Owned Files
+Own PackAcceptanceValidator and seal/drift contracts. Parse external documents as unknown into closed JsonValue contracts; no broad any and no index compilation.
 
-### New foundation modules
+Expose closed typed contracts through the capability public barrel; name focused modules after the capability, keep commands/TaskHandlers thin, and inject all effectful/nondeterministic collaborators. External data enters as unknown and validates into JsonValue or a closed discriminated union.
 
-- `src/foundation/PackConsumer.ts` — JSON Schema validation for
-  `implementation-pack.json`, `implementation-pack.lock.json`,
-  `pack-acceptance.json`; file-set validation; acceptance verification
-- `src/foundation/PackSeal.ts` — RFC 8785 canonicalization, semantic
-  digest computation, seal reproduction, drift classification matrix
+## Required implementation and proof
 
-## Dependencies
+1. Inspect accepted predecessor code/evidence and pinned Nirvana/Nira APIs. Report selected APIs and every proven NIRVANA_API_GAP.
+2. Implement only the stated boundary with explicit invalid-state and failure ordering. Use the immutable packaged NVB catalog through LaneTaskRunner for substantial deterministic work and the sole EffectExecutor for mutation.
+3. Add focused unit, integration, adversarial, stale/corrupt, replay/concurrency, read-only/atomic and relocation proof applicable to the boundary.
+4. Synchronize owned contracts, help, schema, manifests, generated aggregates and normative docs.
+5. Independently reproducible acceptance claim: JSON Schema; RFC 8785 seal reproduction; Git/file-set/drift reason matrix.
+6. Run focused tests plus nvb build/test and dist/relocation proof whenever runtime/package bytes change. Record exact output, size/cohesion inventory, engineering matrix, ownership and Git hygiene.
 
-### From pack 1 (wt-read-model)
+## Hard exclusions and handoff
 
-- **RM-01** (contracts): error taxonomy, versioned IDs/types. Pack validation
-  errors must produce recognized error codes.
-- **RM-08** (repository conflicts): writable claim inspection. Drift detection
-  uses RM-08 to determine whether changed paths intersect writable batch claims.
-
-## Required Interfaces
-
-### PackConsumer
-
-```typescript
-interface PackValidationResult {
-  manifest: ImplementationPack;
-  valid: boolean;
-  errors: PackValidationError[];
-}
-
-interface PackAcceptanceStatus {
-  accepted: boolean;
-  acceptance: PackAcceptance;
-  errors: PackAcceptanceError[];
-}
-
-interface PackFileSet {
-  files: string[];          // sorted union of regular files below pack root
-  invalidPaths: string[];   // symlinks, devices, sockets, untracked, ignored
-  errors: PackFileSetError[];
-}
-
-function validatePackManifest(root: string): Promise<PackValidationResult>;
-function validatePackAcceptance(root: string, gitDir: string): Promise<PackAcceptanceStatus>;
-function validatePackFileSet(root: string, gitDir: string): Promise<PackFileSet>;
-function verifyPackLock(root: string): Promise<LockVerificationResult>;
-```
-
-### PackSeal
-
-```typescript
-interface SealInput {
-  schemaVersion: 1;
-  packId: string;
-  manifestDigest: string;     // sha256:<64 hex>
-  acceptanceDigest: string;    // sha256:<64 hex>
-  sourceBaselines: Record<string, any>;
-  files: SealedFile[];         // sorted by path
-}
-
-interface SealedFile {
-  path: string;
-  sha256: string;
-  bytes: number;
-}
-
-interface DriftCheck {
-  code: DriftCode;
-  details: string[];
-}
-
-type DriftCode =
-  | "PACK_BYTES_CHANGED"
-  | "PACK_FILESET_CHANGED"
-  | "ACCEPTED_INPUT_CHANGED"
-  | "SOURCE_BASELINE_CRITICAL"
-  | "SOURCE_BASELINE_UNRELATED"
-  | "SOURCE_BASELINE_UNAVAILABLE";
-
-function computeSeal(input: SealInput): Promise<string>;       // sha256:<64 hex>
-function canonicalizeSealInput(input: SealInput): Promise<Buffer>;
-function checkDrift(root: string, lock: ImplementationPackLock, conflicts: ConflictInspector): Promise<DriftCheck[]>;
-function computeFileDigest(path: string): Promise<string>;
-```
-
-## Implementation Steps
-
-1. **Create `src/foundation/PackConsumer.ts`**
-   - Import JSON Schema validator (ajv or equivalent already in deps)
-   - Load `docs/spec/schemas/v1.schema.json` and compile validators for:
-     - `$defs.implementationPack` — validate `implementation-pack.json`
-     - `$defs.implementationPackLock` — validate `implementation-pack.lock.json`
-     - `$defs.packAcceptance` — validate `pack-acceptance.json`
-     - `$defs.sealedFile` — validate individual file entries
-   - `validatePackManifest(root)`: read `implementation-pack.json`, validate against
-     schema, check required fields, check repository IDs exist, check batch IDs
-     are unique, check requirement-to-batch coverage
-   - `validatePackAcceptance(root, gitDir)`: read `pack-acceptance.json`, validate
-     schema, verify verdict is `"accept"`, verify all critical findings are closed
-     or superseded, verify `reviewedCommit` is reachable from HEAD and contains
-     the candidate sealed files other than the later acceptance record and
-     lock, verify the acceptance publication commit descends from it, and
-     verify the reviewer session differs from the pack-author session identity
-   - `validatePackFileSet(root, gitDir)`: enumerate all regular files below pack
-     root (excluding `implementation-pack.lock.json`), verify no symlinks/devices/
-     sockets/untracked/ignored files, verify paths match v1-contracts.md §3.2 rules
-   - `verifyPackLock(root)`: validate lock schema, verify every sealed file
-     exists and has matching digest, verify lock seal matches recomputed seal
-
-2. **Create `src/foundation/PackSeal.ts`**
-   - Implement RFC 8785 JSON Canonicalization Scheme:
-     - Sort object keys by code-point order
-     - Serialize numbers without exponential notation
-     - Normalize Unicode escape sequences
-     - Strip insignificant whitespace
-   - `canonicalizeSealInput(input)`: produce canonical UTF-8 bytes of
-     `{schemaVersion, packId, manifestDigest, acceptanceDigest, sourceBaselines, files}`
-   - `computeSeal(input)`: SHA-256 hash of canonical bytes, return as `sha256:<hex>`
-   - `computeFileDigest(path)`: SHA-256 of raw file bytes
-   - `checkDrift(root, lock, conflicts)`: compare current working-tree state
-     against locked/committed state, classify each deviation:
-     - Compare every sealed file's current bytes against lock digest
-     - Verify sealed file set matches current file set (no additions, removals,
-       untracked, ignored, or symlinked files)
-     - Verify accepted input digests match current HEAD blob digests
-     - For changed tracked paths outside pack: check via RM-08 whether they
-       intersect a writable batch claim (`SOURCE_BASELINE_CRITICAL`) or not
-       (`SOURCE_BASELINE_UNRELATED`)
-     - For unavailable sources: fail unless repository is read-only and
-       proof is optional (`SOURCE_BASELINE_UNAVAILABLE`)
-   - No model for drift classification: all six codes are purely mechanical
-
-3. **Write focused specs**
-   - `spec/foundation/pack-consumer.spec.ts`: valid/invalid manifest fixtures,
-     valid/invalid acceptance fixtures, valid/invalid lock fixtures,
-     missing-field detection, schema violation error codes,
-     file-set validation with symlink/device/socket/untracked fixtures
-   - `spec/foundation/pack-seal.spec.ts`: RFC 8785 canonicalization against
-     known-good fixtures, seal reproduction, seal mismatch detection,
-     drift code matrix (all six codes with representative fixtures),
-     file digest computation, source-baseline classification
-
-## Exclusions
-
-- No lane directory creation — belongs to LC-03
-- No pack index construction — belongs to LC-05
-- No coordinator/session policy seeding — belongs to LC-05
-- No mutation of any filesystem path — read-only validation
-
-## Required Proof
-
-### Focused
-- `implementation-pack.json` schema validation: valid passes, invalid rejects with
-  specific required-field errors
-- `implementation-pack.lock.json` schema validation: valid passes, invalid rejects
-- `pack-acceptance.json` schema validation: valid passes, invalid rejects;
-  non-accept verdict rejected; open critical findings rejected
-- File-set validation: normal passes, symlink rejected, device rejected,
-  socket rejected, untracked file rejected, ignored file rejected
-- RFC 8785 canonicalization: matches known-good test vectors
-- Seal reproduction: matches known-good seal for a given fixture
-- Seal mismatch: lock with modified file entry does not match
-- Drift codes: each of the six codes produced for a representative fixture
-- Lock verification: missing file detected, digest mismatch detected,
-  extra file detected
-
-### Regression
-- `nvb build` passes
-
-### Architecture
-- No model invocation for drift classification
-- Pack validation modules import only from RM-01 (contracts) and RM-08 (conflicts)
-
-### Adversarial
-- Tampered lock file (modified digest)
-- Truncated lock file
-- Lock referencing files outside pack root
-- Lock with duplicate file paths
-- Manifest with duplicate batch IDs
-- Manifest with missing requirement coverage
-- Non-UTF-8 paths
-
-## Help and Documentation
-
-- No CLI-facing surface; foundation-only batch
-- Update `docs/spec/v1-contracts.md` or `v1-implementation-map.md` if
-  implementation reveals a gap in the drift matrix
-
-## Handoff Notes
-
-After acceptance, `PackConsumer.ts` and `PackSeal.ts` are the sole owners of
-pack validation and seal logic. LC-03 calls pack consumer to verify the
-referenced pack during init. LC-05 calls pack seal to verify the active
-packSealId during index construction.
+No product logic in src/cli.ts; no participating-repository nvb.json edits; no broad any, trust-boundary cast/non-null assertion, mutable global registry, workflow shell, arbitrary task, hidden repair, full-pack/history fallback, duplicated policy or foreign batch authority. Implementers do not commit or issue verdicts. Emit durable handoff only after every gate passes.

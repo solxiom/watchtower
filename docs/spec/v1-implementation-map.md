@@ -1,13 +1,13 @@
 # Watchtower v1 — Implementation Map
 
-Status: **Remediation candidate — dispatch suspended pending independent acceptance**
+Status: **Design accepted — synchronized pack candidate pending ACCEPT_PACKS**
 Target release: `1.0.0`
 Work batches: **74**
 Required review batches: **74**
 Last updated: 2026-07-31
 
 This document maps the Watchtower v1 specification into bounded implementation
-work. The current amendment is authored but not independently accepted; see
+work. The corrected design was independently accepted at 5fc12b4; synchronized packs still require ACCEPT_PACKS; see
 `implementation/planning-remediation-amendment.md`. It is the master
 construction plan from which six implementation packs are authored. It is not
 itself an implementation-pack manifest, runtime tracker, acceptance record, or

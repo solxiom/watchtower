@@ -275,6 +275,6 @@ function rollbackStaging(stagingDir: string): Promise<void>;
 ## Handoff Notes
 
 After acceptance, `LaneStore.ts` and `TransactionalWriter.ts` are the sole
-owners of lane materialization. LC-04 calls the lane store to know which paths
-exist before binding repositories. LC-05 calls the lane store to know the lane
+owners of lane materialization. LC-04 contributes through the explicit composition rootthe lane store to know which paths
+exist before binding repositories. LC-05 contributes through the explicit composition rootthe lane store to know the lane
 directory structure before seeding baselines.

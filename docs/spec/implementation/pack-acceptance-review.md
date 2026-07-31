@@ -2,7 +2,7 @@
 
 Verdict: **SUPERSEDED — NOT AN ACTIVE DISPATCH AUTHORITY**
 
-Status: **Dispatch suspended pending independent acceptance of the planning remediation**
+Status: **Historical 59-batch acceptance superseded; synchronized 74-batch candidate pending ACCEPT_PACKS**
 
 Reviewed: 2026-07-31
 
@@ -164,9 +164,34 @@ requires a new review.
 | `wt-coordinator-automation` | 114 | 1255621 | `sha256:075345239cb9a9759a64d7bdcfc7cc94c64ef424de121e2be91a808ac1f046d8` |
 | `wt-v1-release` | 26 | 400537 | `sha256:3601b4d68846b770cc05f2f287f65b66f4ba2218ee2522f73a49c8121471b45f` |
 
-## Dispatch decision
+## Synchronized 74-batch candidate seals
 
-The specification and bootstrap implementation packs are accepted and ready
-for implementation. Dispatch starts with `RM-01`. No later batch may bypass
-the dependencies and independent implementation-review gates in
-`docs/spec/v1-implementation-map.md`.
+The historical seals above are non-dispatchable. The synchronized candidate
+uses the same canonical record algorithm and includes every regular file under
+each pack directory. These digests are candidate inputs to the independent
+`planning-remediation-pack-review.md` gate; they become active only through an
+exact-commit `ACCEPT_PACKS` verdict and coordinator activation effect.
+
+| Pack | Files | Bytes | Candidate seal |
+|------|------:|------:|----------------|
+| `wt-read-model` | 73 | 531221 | `sha256:5b5f558345813f3143b954f47f5845daa2a754b62e7ab052f2fec758f47947ec` |
+| `wt-runtime-distribution` | 50 | 197889 | `sha256:0a6e6f6eb6288b26b160c50a6ef9b7970e1583f60e5355f9da17485365be0308` |
+| `wt-lane-lifecycle` | 50 | 243808 | `sha256:3edd55e7b523fe00a80f6865de5d76ba318c81391daf8c2866ca4b33c672308d` |
+| `wt-upgrade-knowledge` | 30 | 330819 | `sha256:ed8dfcf494c57e443dbcc8bd649ec9700bf3093cf7b13941750434e5bd3ef577` |
+| `wt-coordinator-automation` | 142 | 864258 | `sha256:18bc2dcb4015c4da0ad7c0b85b1adea7f6246dda133280546c692588149940bd` |
+| `wt-v1-release` | 26 | 196416 | `sha256:3ea238eae61053f057cad8fa9f3eb60a9f117e0e2534bf1c33edd2d6e61acda2` |
+
+Candidate structural projection: 74 work briefs, 74 work prompts, 74 paired
+review briefs, 74 review prompts, and 549 resolvable local Markdown links in
+the implementation-pack tree. The exact independent pack review must
+reproduce—not trust—these values.
+
+## Historical dispatch decision and current hold
+
+The former decision to dispatch the 59-batch set is superseded. RM-01 and
+DB-01 retain their independent product acceptance, and the three explicitly
+admitted lines retain their impact-scoped authority. No untouched 74-batch
+contract—including RM-13 or RT-08—may dispatch until the candidate receives
+`ACCEPT_PACKS` and is atomically activated. After activation, no batch may
+bypass the explicit dependencies and independent implementation-review gates
+in `docs/spec/v1-implementation-map.md`.

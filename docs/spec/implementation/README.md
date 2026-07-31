@@ -12,7 +12,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Dispatch suspended — remediation candidate pending independent acceptance**
+Status: **Design accepted — synchronized pack candidate pending ACCEPT_PACKS**
 Superseded acceptance instrument: `pack-acceptance-review.md`
 Remediation authority: `planning-remediation-amendment.md`
 Date: 2026-07-31

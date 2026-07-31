@@ -1,42 +1,9 @@
-# Review Batch CA-22 — Turn Streaming, Notifications, Concurrency, and Observer UI
+# Review Batch CA-22 — Turn streaming, notifications, concurrency, and observer UI
 
-Status: ❌ Not started
-Paired work: CA-22
-Reviewer floor: `R5`; reviewer owns acceptance commit.
+Status: ⏳ Awaiting independent review
+Paired work: ../work-batches/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md
+Dependencies: CA-17, CA-20, CA-21, CA-26, CA-27
 
-Read the paired brief and governing sources. Apply the full engineering review
-matrix. Independently model event ordering, queue bounds, contention, observer
-authority, locks, reservations, refresh, and failure recovery.
-Verify the exact file and interface surface in the paired brief and
-`tui-interface-contracts.md §CA-22`.
+Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: turn/event reducers and attachment controller. Own turn/event reducers and attachment controller: provisional validation, live edge, stale-confirmation invalidation, contention/wait, observer restrictions and bounded refresh.
 
-## Independent Proof
-
-- Apply `tui-operational-experience.md §§4 and 6`. Reproduce P0–P5 collisions
-  and cross-attachment apply/reject/expire, lifecycle, authorization, and turn
-  races; no stale action may execute and unrelated updates preserve input.
-
-- Reproduce buffered/streaming/malformed/failing/interrupted turns and atomic
-  provisional-to-validated replacement with usage/staleness/proposal states.
-- Burst chunks and notifications; verify finite accumulators/queues/caches,
-  ordering, frame coalescing, and no lost product event.
-- Reproduce live-edge and reading-anchor behavior under stream, prepend,
-  resize, notification, and validation replacement.
-- Race two attachments on one session: default fail and explicit durable wait
-  must create no duplicate invocation, lane lock, session lock while waiting,
-  or leaked endpoint reservation.
-- Reproduce observer allow/deny matrix; prove zero endpoint invocation,
-  mutation, confirmation, hold change, and provisional IPC.
-- Verify refresh is foreground-only, cancellable, checkpoint-correct,
-  visibility-aware, model-free, and does not move focus/composer/anchor/
-  confirmation or advance authority cursors.
-- Trace reducer inputs to normalized typed events and components to immutable
-  view models; run build/test/gates and independent size/Nirvana audits.
-
-Reject on provider-native parsing in UI, provisional truth, unbounded queue,
-duplicate turn, lock held across generation/wait, daemon/socket/IPC authority,
-observer mutation, notification model use, or any failed mandatory gate.
-
-Write
-`.local/agent-reports/coordinator-automation/reviews/CA-22-turn-streaming-notifications-concurrency-and-observer-ui-review.md`
-and hand exact bounds/lifecycle states to CA-23/CA-24.
+Independently reproduce Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh; negative/stale/corrupt/path/state/replay/concurrency/read-only/effect/relocation boundaries; Nirvana/NVB and API-gap evidence; public artifact synchronization; size/cohesion; build/test/dist; ownership/Git hygiene; and every mandatory engineering matrix row. Do not repair. Any failed gate rejects. Emit exactly one durable accept/reject/skip; only the reviewer may create the acceptance commit, separately from publication.

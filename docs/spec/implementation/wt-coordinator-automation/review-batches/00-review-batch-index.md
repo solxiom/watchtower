@@ -1,98 +1,40 @@
-# Review Batch Index — Watchtower v1 Coordinator Automation
+# Coordinator automation — Review Batch Index
 
-> **Accepted repack (2026-07-31).** Reviews CA-18 through CA-24 replace the
-> historical monolithic CA-18 review and are the active independent batch
-> acceptance gates.
+Status: **74-batch remediation synchronization candidate**
 
-> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
-> accepted dependency DAG and paired independent batch-review gates. Product-created
-> lanes remain subject to the structured pack acceptance and seal contract in
-> `docs/spec/v1-contracts.md`.
+| Batch | Review brief | Launch prompt | Paired work | Required proof |
+|---|---|---|---|---|
+| CA-01 | [review](CA-01-review-deterministic-sealed-pack-sqlite-compiler.md) | [prompt](CA-01-review-deterministic-sealed-pack-sqlite-compiler-agent-launch-prompt.md) | [work](../work-batches/CA-01-deterministic-sealed-pack-sqlite-compiler.md) | Identical logical rows/semantic root; path/digest/FK checks; staged immutable publication; linear build |
+| CA-02 | [review](CA-02-review-sqlite-index-stores-and-bounded-typed-queries.md) | [prompt](CA-02-review-sqlite-index-stores-and-bounded-typed-queries-agent-launch-prompt.md) | [work](../work-batches/CA-02-sqlite-index-stores-and-bounded-typed-queries.md) | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
+| CA-03 | [review](CA-03-review-runtime-sqlite-indexes-and-projections.md) | [prompt](CA-03-review-runtime-sqlite-indexes-and-projections-agent-launch-prompt.md) | [work](../work-batches/CA-03-runtime-sqlite-indexes-and-projections.md) | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
+| CA-04 | [review](CA-04-review-ready-set-and-resource-claim-projection.md) | [prompt](CA-04-review-ready-set-and-resource-claim-projection-agent-launch-prompt.md) | [work](../work-batches/CA-04-ready-set-and-resource-claim-projection.md) | DAG/dependency/claim/capacity blockers; no arbitrary winner |
+| CA-05 | [review](CA-05-review-ordered-routing-policy-and-capability-floors.md) | [prompt](CA-05-review-ordered-routing-policy-and-capability-floors-agent-launch-prompt.md) | [work](../work-batches/CA-05-ordered-routing-policy-and-capability-floors.md) | Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility |
+| CA-06 | [review](CA-06-review-endpoint-adapter-eligibility-and-isolation.md) | [prompt](CA-06-review-endpoint-adapter-eligibility-and-isolation-agent-launch-prompt.md) | [work](../work-batches/CA-06-endpoint-adapter-eligibility-and-isolation.md) | Unattended/advisory/skill-only classification; hard eligibility; drift invalidation/shared pools; no concrete CLI adapter |
+| CA-07 | [review](CA-07-review-immutable-decision-envelopes.md) | [prompt](CA-07-review-immutable-decision-envelopes-agent-launch-prompt.md) | [work](../work-batches/CA-07-immutable-decision-envelopes.md) | Stable semantic digest; bounded default context; contradiction/advisor evidence references and impact scope; untrusted-content delimiting |
+| CA-08 | [review](CA-08-review-context-broker-and-cycle-budgets.md) | [prompt](CA-08-review-context-broker-and-cycle-budgets-agent-launch-prompt.md) | [work](../work-batches/CA-08-context-broker-and-cycle-budgets.md) | Allowlisted queries; provenance/redaction; soft/hard limits; endpoint telemetry quality and shared-pool accounting |
+| CA-09 | [review](CA-09-review-typed-proposals-and-current-state-validator.md) | [prompt](CA-09-review-typed-proposals-and-current-state-validator-agent-launch-prompt.md) | [work](../work-batches/CA-09-typed-proposals-and-current-state-validator.md) | All 14 proposal types; specification-resolution authority/seal/independence checks; stale/illegal/invalid cases |
+| CA-10 | [review](CA-10-review-atomic-lane-local-effect-executor.md) | [prompt](CA-10-review-atomic-lane-local-effect-executor-agent-launch-prompt.md) | [work](../work-batches/CA-10-atomic-lane-local-effect-executor.md) | One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync |
+| CA-11 | [review](CA-11-review-tmux-prepare-attempt-verify-effect-adapter.md) | [prompt](CA-11-review-tmux-prepare-attempt-verify-effect-adapter-agent-launch-prompt.md) | [work](../work-batches/CA-11-tmux-prepare-attempt-verify-effect-adapter.md) | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
+| CA-12 | [review](CA-12-review-acceptance-and-git-publication-adapter.md) | [prompt](CA-12-review-acceptance-and-git-publication-adapter-agent-launch-prompt.md) | [work](../work-batches/CA-12-acceptance-and-git-publication-adapter.md) | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
+| CA-13 | [review](CA-13-review-coordinator-queue-cursor-replay-and-watcher-integration.md) | [prompt](CA-13-review-coordinator-queue-cursor-replay-and-watcher-integration-agent-launch-prompt.md) | [work](../work-batches/CA-13-coordinator-queue-cursor-replay-and-watcher-integration.md) | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
+| CA-14 | [review](CA-14-review-coordinator-event-and-ready-set-commands.md) | [prompt](CA-14-review-coordinator-event-and-ready-set-commands-agent-launch-prompt.md) | [work](../work-batches/CA-14-coordinator-event-and-ready-set-commands.md) | Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity |
+| CA-15 | [review](CA-15-review-operator-session-persistence-and-lifecycle.md) | [prompt](CA-15-review-operator-session-persistence-and-lifecycle-agent-launch-prompt.md) | [work](../work-batches/CA-15-operator-session-persistence-and-lifecycle.md) | Many sessions; one active turn each; immutable closed history; crash-safe journals |
+| CA-16 | [review](CA-16-review-session-sqlite-index-references-pins-and-compaction.md) | [prompt](CA-16-review-session-sqlite-index-references-pins-and-compaction-agent-launch-prompt.md) | [work](../work-batches/CA-16-session-sqlite-index-references-pins-and-compaction.md) | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
+| CA-17 | [review](CA-17-review-session-routing-budgets-proposals-holds-and-amendments.md) | [prompt](CA-17-review-session-routing-budgets-proposals-holds-and-amendments-agent-launch-prompt.md) | [work](../work-batches/CA-17-session-routing-budgets-proposals-holds-and-amendments.md) | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
+| CA-18 | [review](CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md) | [prompt](CA-18-review-nirvana-opentui-feasibility-and-packaging-gate-agent-launch-prompt.md) | [work](../work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md) | Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment |
+| CA-19 | [review](CA-19-review-tui-shell-responsive-layout-themes-and-focus.md) | [prompt](CA-19-review-tui-shell-responsive-layout-themes-and-focus-agent-launch-prompt.md) | [work](../work-batches/CA-19-tui-shell-responsive-layout-themes-and-focus.md) | Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation |
+| CA-20 | [review](CA-20-review-conversation-timeline-composer-history-and-references.md) | [prompt](CA-20-review-conversation-timeline-composer-history-and-references-agent-launch-prompt.md) | [work](../work-batches/CA-20-conversation-timeline-composer-history-and-references.md) | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
+| CA-21 | [review](CA-21-review-inspector-command-palette-and-overlays.md) | [prompt](CA-21-review-inspector-command-palette-and-overlays-agent-launch-prompt.md) | [work](../work-batches/CA-21-inspector-command-palette-and-overlays.md) | All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays |
+| CA-22 | [review](CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui.md) | [prompt](CA-22-review-turn-streaming-notifications-concurrency-and-observer-ui-agent-launch-prompt.md) | [work](../work-batches/CA-22-turn-streaming-notifications-concurrency-and-observer-ui.md) | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |
+| CA-23 | [review](CA-23-review-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | [prompt](CA-23-review-accessibility-terminal-lifecycle-recovery-and-pty-matrix-agent-launch-prompt.md) | [work](../work-batches/CA-23-accessibility-terminal-lifecycle-recovery-and-pty-matrix.md) | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
+| CA-24 | [review](CA-24-review-session-command-integration-scale-replay-and-m6-acceptance.md) | [prompt](CA-24-review-session-command-integration-scale-replay-and-m6-acceptance-agent-launch-prompt.md) | [work](../work-batches/CA-24-session-command-integration-scale-replay-and-m6-acceptance.md) | Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate |
+| CA-25 | [review](CA-25-review-cycle-escalation-and-specification-resolution-commands.md) | [prompt](CA-25-review-cycle-escalation-and-specification-resolution-commands-agent-launch-prompt.md) | [work](../work-batches/CA-25-cycle-escalation-and-specification-resolution-commands.md) | Cycle/escalate/resolution dry-run purity; normal validator/executor only; no command-local authority |
+| CA-26 | [review](CA-26-review-session-proposals-confirmation-revalidation-and-apply.md) | [prompt](CA-26-review-session-proposals-confirmation-revalidation-and-apply-agent-launch-prompt.md) | [work](../work-batches/CA-26-session-proposals-confirmation-revalidation-and-apply.md) | Explicit confirmation; current-state validation; stale/illegal refusal; sole executor handoff |
+| CA-27 | [review](CA-27-review-scoped-holds-amendment-requests-and-amendment-admission.md) | [prompt](CA-27-review-scoped-holds-amendment-requests-and-amendment-admission-agent-launch-prompt.md) | [work](../work-batches/CA-27-scoped-holds-amendment-requests-and-amendment-admission.md) | Impact-scoped expiry/interleaving; authority/independence/seal checks; no implicit pack edit |
+| CA-28 | [review](CA-28-review-opencode-decision-endpoint-adapter.md) | [prompt](CA-28-review-opencode-decision-endpoint-adapter-agent-launch-prompt.md) | [work](../work-batches/CA-28-opencode-decision-endpoint-adapter.md) | Required unattended conformance; bounded argv/env/cwd/result; fresh catalog/model fingerprint |
+| CA-29 | [review](CA-29-review-hermes-decision-endpoint-adapter.md) | [prompt](CA-29-review-hermes-decision-endpoint-adapter-agent-launch-prompt.md) | [work](../work-batches/CA-29-hermes-decision-endpoint-adapter.md) | Same conformance when installed; explicit healthy `not-installed` outcome |
+| CA-30 | [review](CA-30-review-pack-index-build-and-runtime-index-rebuild-command.md) | [prompt](CA-30-review-pack-index-build-and-runtime-index-rebuild-command-agent-launch-prompt.md) | [work](../work-batches/CA-30-pack-index-build-and-runtime-index-rebuild-command.md) | `index build [--runtime]`; dry-run purity; staged compile/rebuild; current-state validation; no command-local mutation |
+| CA-31 | [review](CA-31-review-coordinator-session-and-tui-doctor-providers.md) | [prompt](CA-31-review-coordinator-session-and-tui-doctor-providers-agent-launch-prompt.md) | [work](../work-batches/CA-31-coordinator-session-and-tui-doctor-providers.md) | Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior |
 
-All implementation/review work uses thin Nirvana command front doors,
-capability-owned foundation modules, the immutable packaged NVB task catalog,
-`LaneTaskRunner`, diagnostic-only Nirvana logging, appropriately bounded
-Nirvana storage adapters, and manifest-declared shell leaves only. Project
-`nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
-limits, and acceptance-with-follow-up are forbidden.
-
-Status: accepted bootstrap index
-Date: 2026-07-31
-
-## Review Order
-
-Review batches must be executed in numerical order, matching the work batch
-sequence. A review batch may not begin before the paired implementation batch
-is complete and the implementation report is written.
-
-| Review batch | Reviews work batch | Reviewer minimum proof |
-|-------------|-------------------|----------------------|
-| CA-01 | CA-01 | Independently compile the same sealed pack twice; prove identical logical rows and semantic-root digest from independent SQLite databases; verify FK integrity across all tables; simulate crash at every staged-publication stage; verify semantic root computed from logical rows, never SQLite bytes; corrupt partial index detected and refused; seal-drift detection; model-free check |
-| CA-02 | CA-02 | Independently open compiled index and verify all typed query methods return correct results; grep for `.exec(`, `.run(`, `.prepare(`, `.all(`, `.get(` — prove they appear ONLY in `IndexStore.ts`; verify SQLite bytes never treated as semantic authority; corrupt/missing/stale index → no query completes, no partial data; verify no full-pack/JSON-shard fallback exists; cursor/revision semantics; page/depth limits enforced |
-| CA-03 | CA-03 | Independently append events and verify checkpoint integrity; verify WAL-mode concurrent reader behavior; corrupt SQLite database → detection and staged rebuild from authoritative JSONL; verify rebuild idempotency; verify all projections deterministic; verify authoritative JSONL never modified; verify projections use JournalIndex typed reads, never raw SQL or JSONL |
-| CA-04 | CA-04 | Independently calculate ready set from 30-batch fixture; verify all dependency/claim/capacity blockers correctly identified; prove deterministic output from identical inputs; verify no arbitrary winner selection (multiple ready → all reported); model-free check |
-| CA-05 | CA-05 | Independently verify all 16 routing rules in correct order; prove first-match determinism; verify every guard condition with positive/negative fixtures; verify D1→C2, D2→C3, D3→C5 floors; verify M0 never invokes model; verify escalation never downgrades below minimum |
-| CA-06 | CA-06 | Independently verify all 10 unattended-eligibility requirements; verify adapter defaults to skill-only; prove eligibility checker is pure (no I/O); verify misclassified adapter cannot reach invocation path |
-| CA-07 | CA-07 | Independently construct envelopes from identical inputs; verify semantic digest stability; verify operational metadata excluded from digest; verify bounded-context size limits; verify untrusted content labeled and delimited |
-| CA-08 | CA-08 | Independently verify all allowlisted context types resolve; verify unauthorized types denied with recorded event; verify soft-limit warning and hard-limit blocking; verify budget per-cycle isolation; verify provenance and redaction applied |
-| CA-09 | CA-09 | Independently verify all 14 proposal types: valid, invalid, stale, illegal-transition, idempotency-conflict cases; verify permitted origin/class enforcement; verify stale state invalidates; verify idempotency key prevents double-commit; verify failed proposals recorded, never partially applied |
-| CA-10 | CA-10 | Independently verify lock acquisition prevents concurrent mutation; verify current-state revalidation rejects stale effects; verify idempotency key duplicate rejection; verify all-or-nothing execution with rollback; verify external-effect prepare/attempt/verify journal states; verify crash recovery from journal; verify preview without mutation |
-| CA-11 | CA-11 | Verify tmux prepare/attempt/verify adapter; unknown launch recovery; duplicate suppression; no arbitrary kill/shell |
-| CA-12 | CA-12 | Verify reviewer-session ownership; commit-set validation; partial push recovery |
-| CA-13 | CA-13 | Verify stable priority; fsynced cursor advance; interrupted/duplicate/uncertain replay |
-| CA-14 | CA-14 | Verify all coordinator commands; index/status/context/explain/cycle/escalate/events/ready; dry-run purity |
-| CA-15 | CA-15 | Verify many sessions; one active turn each; immutable closed history; crash-safe journals |
-| CA-16 | CA-16 | Verify session SQLite index; bounded metadata/excerpts; same-lane capsules; no full-history fallback |
-| CA-17 | CA-17 | Verify session routing/budgets/proposals/holds/amendments; M0/D1–D3 grants/reserves; confirmation/revalidation; scoped hold interleaving |
-| CA-18 | CA-18 | Independently qualify Node/OpenTUI/Nirvana, FFI bootstrap, native distribution, restoration, security, and non-TUI isolation |
-| CA-19 | CA-19 | Independently verify responsive shell, resize state, focus/keymap, themes/preferences, adapter isolation |
-| CA-20 | CA-20 | Independently verify virtualized bounded timeline, composer/slash/history/reference correctness and security |
-| CA-21 | CA-21 | Independently verify nine bounded inspector views, action parity, overlays, and confirmation authority |
-| CA-22 | CA-22 | Independently verify stream validation/bounds, contention/wait, notification correctness, and observer denial |
-| CA-23 | CA-23 | Independently capture restoration, signals/suspend, hostile-content, accessibility, and PTY/emulator matrix |
-| CA-24 | CA-24 | Independently reproduce commands, global install, 30–10k context invariance, long-session replay, soak, and M6 authority |
-
-## Shared Review Rule
-
-The reviewer must independently regenerate evidence. Implementation report
-conclusions are not accepted facts. Every reviewer must run the exact test
-commands named by the batch and record the output, not narrate the outcome.
-
-Acceptance commits must include all accepted non-`.local` changes with a
-descriptive commit message. Rejections must produce a numbered correction
-brief under `corrections/` with exact required fixes.
-
-## Batch Acceptance Criteria
-
-A review batch is accepted only when:
-
-1. All minimum proof obligations (above) are independently reproduced and pass.
-2. No hard-reject checklist item is flagged.
-3. Status docs (`implementation-tracker.md`, `implementation-roadmap.md`) are
-   updated for the batch outcome.
-4. The corrected `v1.md` command status table is updated only by its owning
-   command batches (CA-14 and CA-24).
-5. All files are owned by `kavan:kavan`.
-6. No `.local/` artifacts are staged.
-7. The reviewer creates the acceptance commit.
-
-## Dependency Order
-
-Review batches follow the same dependency order as work batches:
-
-- CA-01 must be reviewed first (depends on DB-01, LC-02, LC-05 accepted).
-- CA-02 depends on CA-01 accepted.
-- CA-03 depends on RM-05, CA-02 accepted.
-- CA-04 depends on RM-08, CA-01, CA-03 accepted.
-- CA-05 depends on CA-04, RT-02 accepted.
-- CA-06 depends on RT-05, CA-05 accepted.
-- CA-07 depends on CA-02 through CA-06 accepted.
-- CA-08 depends on CA-02, CA-06, CA-07 accepted.
-- CA-09 depends on CA-05, CA-07, CA-08 accepted.
-- CA-10 depends on LC-03, CA-09 accepted.
-- CA-11 through CA-17 depend on earlier CAs as pipeline allows.
-- CA-18 depends on RT-03, RT-05, and CA-14 through CA-17 accepted.
-- CA-19 depends on CA-18 accepted with `PASS`.
-- CA-20 and CA-21 follow their declared parallel dependency branches.
-- CA-22 joins CA-20/CA-21; CA-23 qualifies CA-18–CA-22.
-- CA-24 depends on CA-14 through CA-23 and is the sole Pack 5 exit review.
+Each reviewer is independent, reproduces the mandatory engineering matrix, and
+alone emits the durable verdict and acceptance commit. Publication is separate.

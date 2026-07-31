@@ -74,7 +74,7 @@ Task groups may express deterministic mechanical ordering, but no handler or
 group chooses semantic routing, advances a cursor before authoritative terminal
 evidence, or mutates outside a valid CA-10 invocation envelope. Retained shell
 is limited to cataloged external-tool leaves. New workflow-level watcher/
-coordinator shell and direct executable/NVB calls are hard rejects. Prove
+coordinator shell and direct executable/NVB contributes through the explicit composition rootare hard rejects. Prove
 interrupted, duplicate, and uncertain task results replay from authoritative
 journals without reusing a consumed envelope or duplicating a completed effect.
 

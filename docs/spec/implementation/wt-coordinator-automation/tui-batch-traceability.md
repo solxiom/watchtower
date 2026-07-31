@@ -1,4 +1,4 @@
-# CA-18–CA-24 TUI Traceability
+# CA-18–CA-24 TUI Traceability With CA-26/CA-27/CA-31 Services
 
 Status: **Accepted and bootstrap-sealed**
 Date: 2026-07-31
@@ -26,7 +26,7 @@ responsibility. It does not authorize dispatch or replace the briefs.
 | Terminal injection/bidi/clipboard/title/hyperlink security | CA-23 | REV-CA-23 | CA-24 security gate |
 | No-color, high contrast, reduced motion, accessible mode | CA-23 | REV-CA-23 | CA-24 end-to-end |
 | Preference/cache migrations and semantic visual-state catalog | CA-19, CA-23 | REV-CA-19, REV-CA-23 | CA-24 evidence index |
-| TUI doctor and explicit redacted support report | CA-21, CA-24 | REV-CA-21, REV-CA-24 | REV-CA-24 |
+| TUI doctor and explicit redacted support report | CA-31 | REV-CA-31 | CA-24 integrates; REV-CA-24 qualifies |
 | Session/ask/lifecycle command and help integration | CA-24 | REV-CA-24 | REV-CA-24 |
 | 30/300/3,000/10,000 context invariance | CA-24 | REV-CA-24 | REV-CA-24 |
 | Long-session/session-count replay and bounded memory | CA-24 | REV-CA-24 | REV-CA-24 |
@@ -63,7 +63,7 @@ responsibility. It does not authorize dispatch or replace the briefs.
 - [x] Shared launch contract preserves common safety instructions once.
 - [x] Framework-neutral cross-batch interface contracts are explicit.
 - [x] README, roadmap, tracker, indexes, reasoning classes, counts, and
-      dependency graph describe 24 batches.
+      dependency graph describes all 31 CA batches.
 - [x] Historical monolithic CA-18 artifacts are explicitly non-dispatchable.
 - [x] Independent bootstrap pack review reproduced counts, links,
       dependencies, ownership, precedence, and proof coverage.
