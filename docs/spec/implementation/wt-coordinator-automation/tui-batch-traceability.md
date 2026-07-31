@@ -1,6 +1,6 @@
 # CA-18–CA-24 TUI Traceability
 
-Status: **Repacked draft — independent pack review required**
+Status: **Accepted and bootstrap-sealed**
 Date: 2026-07-31
 
 This table proves that the full-screen amendment has one work owner, one
@@ -65,9 +65,10 @@ responsibility. It does not authorize dispatch or replace the briefs.
 - [x] README, roadmap, tracker, indexes, reasoning classes, counts, and
       dependency graph describe 24 batches.
 - [x] Historical monolithic CA-18 artifacts are explicitly non-dispatchable.
-- [ ] Independent pack reviewer reproduces counts, links, dependencies,
-      ownership, precedence, and proof coverage.
-- [ ] Accepted exact bytes are sealed.
+- [x] Independent bootstrap pack review reproduced counts, links,
+      dependencies, ownership, precedence, and proof coverage.
+- [x] Accepted exact bootstrap bytes are sealed by
+      `../pack-acceptance-review.md`.
 
-Until the last two items pass, this pack is ready for independent pack review,
-not ready for implementation dispatch.
+The bootstrap pack gate is accepted. Individual implementation batches remain
+subject to their dependency and paired independent review gates.

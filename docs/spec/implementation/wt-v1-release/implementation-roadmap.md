@@ -1,11 +1,9 @@
 # Watchtower v1 Release Implementation Roadmap
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
+> accepted dependency DAG and paired independent batch-review gates. Product-created
+> lanes remain subject to the structured pack acceptance and seal contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -83,7 +81,7 @@ Goal: globally install `wt`, initialize a complete implementation lane,
 dispatch work, hand off to a reviewer, record independent acceptance, and
 publish acceptance commits — one end-to-end documented cycle.
 
-Depends on: LC-08, UK-05, CA-18 accepted (Packs 3, 4, 5 complete).
+Depends on: LC-08, UK-05, CA-24 accepted (Packs 3, 4, 5 complete).
 
 Primary ownership: `spec/e2e/accept-trial.spec.ts`, release evidence fixtures.
 
@@ -225,7 +223,7 @@ Acceptance snapshot (target):
 
 ## Sequencing Rule
 
-- REL-01 depends on LC-08, UK-05, and CA-18 accepted (Packs 3, 4, 5 complete).
+- REL-01 depends on LC-08, UK-05, and CA-24 accepted (Packs 3, 4, 5 complete).
 - REL-02 depends on REL-01 accepted.
 - REL-03 depends on REL-01 and REL-02 accepted.
 - REL-04 depends on REL-01, REL-02, and REL-03 accepted.

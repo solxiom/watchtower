@@ -91,7 +91,7 @@
     },
     "packAcceptance": {
       "type": "object",
-      "required": ["schemaVersion", "packId", "verdict", "reviewerId", "reviewSessionId", "acceptedManifestDigest", "findings", "acceptanceCommit", "acceptedAt"],
+      "required": ["schemaVersion", "packId", "verdict", "reviewerId", "reviewSessionId", "acceptedManifestDigest", "findings", "reviewedCommit", "acceptedAt"],
       "properties": {
         "schemaVersion": {"const": 1},
         "packId": {"$ref": "#/$defs/id"},
@@ -100,7 +100,7 @@
         "reviewSessionId": {"$ref": "#/$defs/id"},
         "acceptedManifestDigest": {"$ref": "#/$defs/digest"},
         "findings": {"type": "array", "items": {"type": "object", "required": ["id", "severity", "disposition"], "properties": {"id": {"$ref": "#/$defs/id"}, "severity": {"enum": ["info", "minor", "major", "critical"]}, "disposition": {"enum": ["closed", "superseded"]}}, "additionalProperties": true}},
-        "acceptanceCommit": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"},
+        "reviewedCommit": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"},
         "acceptedAt": {"type": "string", "format": "date-time"}
       },
       "additionalProperties": true

@@ -1,6 +1,6 @@
 # Watchtower v1 Operator Sessions
 
-Status: **Proposed — implementation-ready**
+Status: **Accepted — implementation-ready**
 Target release: `1.0.0`
 CLI groups: `wt coordinator ask|session`, `wt coordinator hold`
 Last updated: 2026-07-31

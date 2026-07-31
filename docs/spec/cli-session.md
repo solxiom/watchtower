@@ -1,6 +1,6 @@
 # Watchtower v1 Full-Screen Operator Session TUI
 
-Status: **Proposed — implementation-ready**
+Status: **Accepted — implementation-ready**
 Target release: `1.0.0`
 CLI group: `wt coordinator session`
 

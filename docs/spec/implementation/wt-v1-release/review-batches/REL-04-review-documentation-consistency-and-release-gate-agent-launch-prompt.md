@@ -354,4 +354,4 @@ Include: changed-file list, independent traceability verification results with s
 
 ## Leave a helpful handoff message for the next agent
 
-This is the fourth and final review batch of the Watchtower v1 release. If you accepted REL-04, the Watchtower v1 implementation is complete. Record the independent verification results, the exact acceptance commit hash (the final release gate commit), and the synchronized final tracker state. The final release gate commit marks the completion of the entire 53-batch v1 implementation. There are no batches after REL-04.
+This is the fourth and final review batch of the Watchtower v1 release. If you accepted REL-04, the Watchtower v1 implementation is complete. Record the independent verification results, the exact acceptance commit hash (the final release gate commit), and the synchronized final tracker state. The final release gate commit marks the completion of the entire 59-batch v1 implementation. There are no batches after REL-04.

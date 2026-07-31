@@ -1,6 +1,6 @@
 # Watchtower v1 — Implementation Map
 
-Status: **Proposed — pack-authoring baseline**
+Status: **Accepted — implementation-ready construction plan**
 Target release: `1.0.0`
 Work batches: **59**
 Required review batches: **59**
@@ -19,8 +19,9 @@ Normative behavior remains in:
 - [architecture.md](architecture.md);
 - [nirvana-integration-architecture.md](nirvana-integration-architecture.md);
 - [coordinator-automation.md](coordinator-automation.md);
-- [operator-session.md](operator-session.md); and
-- [cli-session.md](cli-session.md).
+- [operator-session.md](operator-session.md);
+- [cli-session.md](cli-session.md); and
+- [tui-operational-experience.md](tui-operational-experience.md).
 
 All implementation and review batches are also governed by the mandatory
 [engineering and review standard](../development/engineering-and-review-standard.md).
@@ -88,14 +89,15 @@ Pack authors must:
 The former `CA-18` may remain as historical evidence only after being marked
 superseded. It is not an authorized implementation brief.
 
-The replacement CA-18 is now drafted as:
+The replacement CA-18 is defined as:
 
 - `implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
 - `implementation/wt-coordinator-automation/review-batches/CA-18-review-nirvana-opentui-feasibility-and-packaging-gate.md`
 
 The CA-18 through CA-24 briefs, prompts, indexes, and reasoning allocations are
-now repacked. Dispatch remains blocked until an independent pack review accepts
-their exact cross-references/counts and the resulting pack is sealed.
+accepted as part of the bootstrap implementation-pack seal. CA-18 remains a
+production implementation qualification gate; the earlier disposable smoke
+evidence informs it but does not replace its acceptance proof.
 
 ## 2. Current and target architecture
 

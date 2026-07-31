@@ -1,6 +1,6 @@
 # CA-18–CA-24 TUI Interface Contracts
 
-Status: **Normative within the repacked draft**
+Status: **Accepted bootstrap implementation contract**
 Date: 2026-07-31
 
 These are framework-neutral ownership contracts, not implementation. Exact

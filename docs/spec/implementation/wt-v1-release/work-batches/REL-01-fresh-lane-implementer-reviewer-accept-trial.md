@@ -44,7 +44,7 @@ governing sources leave a product decision unresolved.
 
 Status: ❌ Pending
 Phase: Release qualification
-Depends on: LC-08, UK-05, CA-18 accepted (Packs 3, 4, 5 complete); all packs 1–5 accepted
+Depends on: LC-08, UK-05, CA-24 accepted (Packs 3, 4, 5 complete); all packs 1–5 accepted
 Work ID: `REL-01`
 Governing spec: `docs/spec/v1.md` §17; `docs/spec/v1-contracts.md` §§2–8
 

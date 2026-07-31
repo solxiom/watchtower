@@ -1,11 +1,10 @@
 # Watchtower v1 — Implementation Packs
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap pack set.** These packs govern construction of
+> Watchtower itself before `wt init` exists. Their exact per-pack bytes are
+> accepted and sealed by `pack-acceptance-review.md`; product-created lanes
+> must use the structured manifest, acceptance, and lock contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -14,23 +13,28 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Draft — correction audit complete; awaiting independent pack review**
-Acceptance instrument: review batch
-Date: 2026-07-30
+Status: **Accepted and sealed — implementation dispatch authorized**
+Acceptance instrument: `pack-acceptance-review.md`
+Date: 2026-07-31
 
 ## Lane Purpose
 
-This directory contains six draft implementation packs intended to govern
-construction of Watchtower v1 (`1.0.0`) after independent pack review,
-acceptance, and sealing. Each candidate pack contains work batches, paired
-review batches, launch prompts, and supporting documents for one bounded
-product milestone. None is currently a sealed lane-initialization authority.
+This directory contains six accepted implementation packs governing
+construction of Watchtower v1 (`1.0.0`). Each pack contains work batches,
+paired review batches, launch prompts, and supporting documents for one bounded
+product milestone.
+
+These are bootstrap construction packs, not inputs to the not-yet-implemented
+`wt init` consumer. This one-time bootstrap distinction does not weaken the v1
+product contract: every lane initialized by Watchtower requires
+`implementation-pack.json`, `pack-acceptance.json`, and
+`implementation-pack.lock.json` exactly as specified in `v1-contracts.md`.
 
 Normative behavior remains in `../v1.md`, `../v1-contracts.md`,
 `../schemas/v1.schema.json`, `../architecture.md`,
 `../nirvana-integration-architecture.md`,
 `../coordinator-automation.md`, `../operator-session.md`, and
-`../cli-session.md`, together with
+`../cli-session.md`, `../tui-operational-experience.md`, together with
 `../../development/engineering-and-review-standard.md`. These packs translate
 those specifications into
 actionable implementation contracts; they do not override or reinterpret
@@ -54,9 +58,9 @@ the product specification.
 | 2 | `wt-runtime-distribution` | M2 | 7 | `wt-runtime-distribution/` |
 | 3 | `wt-lane-lifecycle` | M3–M4 | 8 | `wt-lane-lifecycle/` |
 | 4 | `wt-upgrade-knowledge` | M5 | 5 | `wt-upgrade-knowledge/` |
-| 5 | `wt-coordinator-automation` | M6 | 18 | `wt-coordinator-automation/` |
+| 5 | `wt-coordinator-automation` | M6 | 24 | `wt-coordinator-automation/` |
 | 6 | `wt-v1-release` | M7 | 4 | `wt-v1-release/` |
-| | **Total** | | **53 work + 53 review** | |
+| | **Total** | | **59 work + 59 review** | |
 
 ## Pack Acceptance Order
 
@@ -147,9 +151,9 @@ memory, and release qualification respectively.
 
 ## Completion Meaning
 
-The implementation packs directory is provisionally complete only when:
-- all 53 work batches have matching independent review outcomes
-- all six implementation packs are accepted and sealed
+The implementation delivery is complete only when:
+- all 59 work batches have matching independent review outcomes
+- all six bootstrap implementation packs remain seal-valid
 - every cross-pack compatibility surface has reproducible golden evidence
 - every v1 release criterion traces to an accepted batch and proof
 - no critical specification amendment remains unresolved

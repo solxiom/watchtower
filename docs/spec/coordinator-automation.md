@@ -1,6 +1,6 @@
 # Watchtower v1 Coordinator Automation
 
-Status: **Proposed — implementation-ready**
+Status: **Accepted — implementation-ready**
 Target release: `1.0.0`
 CLI group: `wt coordinator`
 Last updated: 2026-07-30

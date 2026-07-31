@@ -1,6 +1,6 @@
 # Watchtower Delivery Roadmap
 
-Status: **Planning baseline**
+Status: **Accepted v1 delivery baseline**
 Last updated: 2026-07-31
 
 This roadmap sequences outcomes, not commits. Each milestone should land as a

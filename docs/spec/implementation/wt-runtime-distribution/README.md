@@ -1,11 +1,9 @@
 # wt-runtime-distribution — Implementation Pack 2
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
+> accepted dependency DAG and paired independent batch-review gates. Product-created
+> lanes remain subject to the structured pack acceptance and seal contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -14,7 +12,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Draft — correction audit complete; awaiting independent pack review**
+Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
 Target release: `1.0.0`
 Pack order: 2 of 6
 Owner areas: Watchtower `src/foundation/`, `src/contracts/`, `runtime-nvb/`, `dist/`, `spec/integration/`

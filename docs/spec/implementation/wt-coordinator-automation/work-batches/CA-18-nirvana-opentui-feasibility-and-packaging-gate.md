@@ -50,8 +50,8 @@ recorded; evidence from one tuple never promotes another.
 - Apply the exact module/function/constructor limits and reviewer matrix from
   the mandatory engineering standard.
 
-Status: ❌ Not started — repacked draft; dispatch requires independent pack
-review and sealing
+Status: ❌ Not started — accepted bootstrap brief; dispatch requires its named
+predecessor batches
 
 Pack: wt-coordinator-automation (Pack 5)
 

@@ -1,11 +1,9 @@
 # Watchtower v1 Coordinator Automation Review Batches
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
+> accepted dependency DAG and paired independent batch-review gates. Product-created
+> lanes remain subject to the structured pack acceptance and seal contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -14,7 +12,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: repacked draft review brief pack
+Status: accepted bootstrap review brief pack
 Date: 2026-07-31
 
 ## Purpose
@@ -30,8 +28,8 @@ Each review batch includes:
 
 ## Acceptance Authority
 
-After independent pack review and sealing, this directory is the executable
-acceptance brief pack for the 24 wt-coordinator-automation batches (CA-01
+This directory is the accepted executable acceptance brief pack for the 24
+wt-coordinator-automation batches (CA-01
 through CA-24). Reviewers rerun proofs,
 inspect source independently, and are the acceptance authority. The
 implementation agent does not commit; the reviewer owns the acceptance decision

@@ -1,6 +1,6 @@
 # Watchtower v1 TUI Operational Experience
 
-Status: Proposed, normative for v1
+Status: **Accepted — normative for v1**
 
 Applies to: `wt coordinator session`, TUI attachments, TUI diagnostics, and
 operator-local presentation state

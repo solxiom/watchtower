@@ -260,9 +260,12 @@ using RFC 8785 canonicalization. Classify drift. No mutation.
      - `verdict` is `"accept"`
      - all findings with `severity: "critical"` have `disposition` of
        `"closed"` or `"superseded"`
-     - `acceptanceCommit` is reachable from HEAD in the git directory
-     - the acceptance commit author differs from the pack-author session identity
-       (as recorded in pack metadata)
+     - `reviewedCommit` is reachable from HEAD in the git directory and
+       contains the reviewed candidate sealed files other than the later
+       acceptance record and lock
+     - the acceptance publication commit descends from `reviewedCommit`
+     - the reviewer session differs from the pack-author session identity (as
+       recorded in pack metadata)
    - `validatePackFileSet(root: string, gitDir: string)`: use `git ls-files` or
      equivalent to enumerate tracked files, check:
      - every file below pack root is a regular file (not symlink, device, socket)

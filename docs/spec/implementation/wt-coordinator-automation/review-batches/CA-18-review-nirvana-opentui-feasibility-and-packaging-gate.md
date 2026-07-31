@@ -18,8 +18,7 @@ This review is subordinate to:
 - `docs/spec/implementation/wt-coordinator-automation/work-batches/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`
 - this pack's `implementation-quality-and-agent-rules.md`
 
-Status: ❌ Not started — repacked draft; it is not acceptance authority until
-independent pack review and sealing
+Status: ❌ Not started — accepted bootstrap review brief
 
 Paired work batch: CA-18
 

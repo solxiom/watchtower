@@ -1,11 +1,9 @@
 # Watchtower v1 Release Implementation Tracker
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
+> accepted dependency DAG and paired independent batch-review gates. Product-created
+> lanes remain subject to the structured pack acceptance and seal contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -48,7 +46,7 @@ limits, and acceptance-with-follow-up are forbidden.
 
 | Batch | Phase | Status | Short note |
 |-------|-------|--------|------------|
-| REL-01 | Release qualification | ❌ Pending | Fresh-lane implementer→reviewer→accept trial. Depends on LC-08, UK-05, CA-18 accepted. |
+| REL-01 | Release qualification | ❌ Pending | Fresh-lane implementer→reviewer→accept trial. Depends on LC-08, UK-05, CA-24 accepted. |
 | REL-02 | Release qualification | ❌ Pending | Concurrent and multi-repository recovery trials. Depends on REL-01 accepted. |
 | REL-03 | Release qualification | ❌ Pending | Security, ownership, performance, and package qualification. Depends on REL-01, REL-02 accepted. |
 | REL-04 | Release qualification | ❌ Pending | Documentation consistency and release gate. Depends on REL-01–03 accepted. |
@@ -83,11 +81,11 @@ REL-04: Documentation consistency and release gate
 
 ## Current Honest Next Step
 
-- **Current pack head:** 🔴 All batches pending. All 52 prior work/review
+- **Current pack head:** 🔴 All batches pending. All 55 prior work/review
   batches across packs 1–5 must be accepted before REL-01 may begin.
 
 - **REL-01:** ❌ Pending. Blocked until LC-08 (Pack 3), UK-05 (Pack 4), and
-  CA-18 (Pack 5) are independently accepted.
+  CA-24 (Pack 5) are independently accepted.
 - **REL-02:** ❌ Pending. Blocked until REL-01 is accepted.
 - **REL-03:** ❌ Pending. Blocked until REL-01 and REL-02 are accepted.
 - **REL-04:** ❌ Pending. Blocked until REL-01, REL-02, and REL-03 are accepted.
@@ -96,11 +94,11 @@ REL-04: Documentation consistency and release gate
 
 Before REL-01 begins, verify independently:
 
-- [ ] Pack 1 (`wt-read-model`): all 10 batches accepted
+- [ ] Pack 1 (`wt-read-model`): all 11 batches accepted
 - [ ] Pack 2 (`wt-runtime-distribution`): all 7 batches accepted
 - [ ] Pack 3 (`wt-lane-lifecycle`): all 8 batches accepted, including LC-08
 - [ ] Pack 4 (`wt-upgrade-knowledge`): all 5 batches accepted, including UK-05
-- [ ] Pack 5 (`wt-coordinator-automation`): all 18 batches accepted, including CA-18
+- [ ] Pack 5 (`wt-coordinator-automation`): all 24 batches accepted, including CA-24
 - [ ] `nvb dist` produces a package whose build validation passes
 - [ ] `nvb test` produces zero failures
 - [ ] `hello` scaffold is removed (per LC-08 exit condition)

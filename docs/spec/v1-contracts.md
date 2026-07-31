@@ -1,6 +1,6 @@
 # Watchtower v1 — Contract Closure
 
-Status: **Proposed — implementation-ready**
+Status: **Accepted — implementation-ready**
 Target release: `1.0.0`
 Schema bundle: [schemas/v1.schema.json](schemas/v1.schema.json)
 Last updated: 2026-07-31
@@ -161,15 +161,22 @@ untracked files, and ignored files below the pack root make the pack invalid.
 ### 3.3 Acceptance
 
 `pack-acceptance.json` identifies the independent reviewer, review session,
-verdict, accepted manifest digest, finding disposition, and acceptance commit.
+verdict, accepted manifest digest, finding disposition, and reviewed candidate
+commit.
 The verdict must be `accept`; all critical findings must be closed or
 explicitly superseded by a referenced accepted review.
 
-The acceptance commit must be reachable from `HEAD`, contain the accepted
-manifest and acceptance record bytes, and differ from the recorded pack-author
-session identity. OS username or Git author text alone is not independence
-proof; identity comes from the durable role/session event referenced by
-`reviewSessionId`.
+The `reviewedCommit` must be reachable from `HEAD` and contain the exact
+candidate manifest and prose bytes reviewed by the independent reviewer. The
+reviewed candidate file set is the sealed file set excluding the not-yet-issued
+`pack-acceptance.json`; the lock is already excluded by §3.2. The later commit
+containing `pack-acceptance.json` and the matching lock is the acceptance
+publication commit; it must descend from `reviewedCommit`.
+Requiring an acceptance record to contain the hash of the same commit that
+contains that record would be self-referential and is forbidden. The reviewer
+must differ from the recorded pack-author session identity. OS username or Git
+author text alone is not independence proof; identity comes from the durable
+role/session event referenced by `reviewSessionId`.
 
 ### 3.4 Seal and canonicalization
 

@@ -1,15 +1,13 @@
 # wt-coordinator-automation Implementation Roadmap
 
-> **Repacked draft (2026-07-31).** CA-18 through CA-24 replace the historical
-> monolithic attachment batch. Do not dispatch until independent pack review
-> and sealing.
+> **Accepted repack (2026-07-31).** CA-18 through CA-24 replace the historical
+> monolithic attachment batch. Their exact bootstrap pack bytes are accepted
+> and sealed by `../pack-acceptance-review.md`.
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
+> accepted dependency DAG and paired independent batch-review gates. Product-created
+> lanes remain subject to the structured pack acceptance and seal contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -18,7 +16,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Repacked draft — independent pack review and seal required**
+Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
 Date: 2026-07-31
 Pack: 5 of 6 — `wt-coordinator-automation`
 Milestone: M6

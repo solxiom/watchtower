@@ -1,19 +1,16 @@
 # wt-coordinator-automation — Implementation Pack 5
 
-> **Repacked draft (2026-07-31).** CA-18 through CA-24 now replace the
-> superseded monolithic session-attachment batch. This pack is internally
-> author-complete but remains unsealed and cannot initialize a lane until an
-> independent pack review accepts its exact bytes.
+> **Accepted repack (2026-07-31).** CA-18 through CA-24 replace the superseded
+> monolithic session-attachment batch. The bootstrap pack review accepted and
+> sealed the replacement briefs, prompts, indexes, and dependencies.
 
 The superseded monolithic CA-18 brief/prompt pair is retained only under
 `historical/monolithic-ca18/`; active indexes never reference it.
 
-> **Draft pack-authoring artifact.** This document is not a seal, acceptance
-> record, or authority to initialize a lane. Before pack acceptance, reconcile
-> it with `docs/spec/v1-implementation-map.md`,
-> `docs/development/engineering-and-review-standard.md`, and
-> `docs/spec/nirvana-integration-architecture.md`. The normative precedence in
-> `docs/spec/v1-contracts.md` governs every conflict.
+> **Accepted bootstrap implementation artifact.** Dispatch is authorized only under the
+> accepted dependency DAG and paired independent batch-review gates. Product-created
+> lanes remain subject to the structured pack acceptance and seal contract in
+> `docs/spec/v1-contracts.md`.
 
 All implementation/review work uses thin Nirvana command front doors,
 capability-owned foundation modules, the immutable packaged NVB task catalog,
@@ -22,7 +19,7 @@ Nirvana storage adapters, and manifest-declared shell leaves only. Project
 `nvb.json` files, workflow-level shell, arbitrary task selection, relaxed module
 limits, and acceptance-with-follow-up are forbidden.
 
-Status: **Repacked draft — independent pack review and seal required**
+Status: **Accepted and bootstrap-sealed — implementation dispatch authorized**
 Target release: `1.0.0`
 Pack ID: `CA-01` through `CA-24`
 Work batches: **24** | Review batches: **24**

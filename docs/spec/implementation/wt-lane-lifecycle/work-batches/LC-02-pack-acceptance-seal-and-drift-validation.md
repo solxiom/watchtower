@@ -166,8 +166,10 @@ function computeFileDigest(path: string): Promise<string>;
      are unique, check requirement-to-batch coverage
    - `validatePackAcceptance(root, gitDir)`: read `pack-acceptance.json`, validate
      schema, verify verdict is `"accept"`, verify all critical findings are closed
-     or superseded, verify acceptance commit is reachable from HEAD, verify the
-     commit differs from pack-author session identity
+     or superseded, verify `reviewedCommit` is reachable from HEAD and contains
+     the candidate sealed files other than the later acceptance record and
+     lock, verify the acceptance publication commit descends from it, and
+     verify the reviewer session differs from the pack-author session identity
    - `validatePackFileSet(root, gitDir)`: enumerate all regular files below pack
      root (excluding `implementation-pack.lock.json`), verify no symlinks/devices/
      sockets/untracked/ignored files, verify paths match v1-contracts.md §3.2 rules

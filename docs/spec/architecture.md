@@ -1,6 +1,6 @@
 # Watchtower Product Architecture
 
-Status: **Proposed — implementation-ready architecture baseline**
+Status: **Accepted — implementation-ready architecture baseline**
 Applies to: v1 foundation and post-v1 evolution
 Last updated: 2026-07-31
 
