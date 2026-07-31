@@ -104,7 +104,7 @@ Goal:
 Batches:
 
 - RM-01 — Contract kernel and error taxonomy (✅ accepted)
-- DB-01 — SQLite driver, packaging, and derived-store feasibility
+- DB-01 — SQLite driver, packaging, and derived-store feasibility (✅ accepted after correction 04; strict lock/sentinel validation and all preserved storage proofs independently passed)
 - RM-02 — Public JSON envelopes and schema validation
 - RM-03 — Canonical paths and workspace resolution
 - RM-04 — Strict env and lane-state parsers

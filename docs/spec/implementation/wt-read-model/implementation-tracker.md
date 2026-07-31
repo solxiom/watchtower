@@ -58,7 +58,7 @@ limits, and acceptance-with-follow-up are forbidden.
 | Batch | Phase | Status | Short note |
 |-------|-------|--------|------------|
 | RM-01 | Contract foundation | ✅ Done | Contract kernel and all three corrections independently accepted |
-| DB-01 | Storage feasibility | ❌ Pending | SQLite driver, packaging, and derived-store feasibility |
+| DB-01 | Storage feasibility | ✅ Done | Commons `SqliteService` / `better-sqlite3@13.0.1`, typed private SQL capsule, full §8A feasibility matrix, writer/publication exclusion, PID-reuse-safe lock identity, and strict lock/sentinel validation independently accepted after correction 04; 44/44 adversarial runs and 158 specs passed |
 | RM-02 | Contract foundation | ❌ Pending | JSON envelopes and schema validation |
 | RM-03 | Path resolution | ❌ Pending | Canonical paths and workspace resolution |
 | RM-04 | Parser foundation | ❌ Pending | Strict env and lane-state parsers |
@@ -122,15 +122,56 @@ RM-03  RM-04  RM-05
 
 ## Current Honest Next Step
 
-- **Current lane head:** RM-01 is independently accepted. DB-01 and RM-02
-  through RM-05 may now proceed under their dependency and review gates.
+- **Current lane head:** RM-01 and DB-01 are independently accepted. DB-01's
+  dependency gate for CA-01 and RT-03 is clear, while dispatch remains subject
+  to the current architect planning hold. RM-02 through RM-05 may proceed under
+  their own dependency and review gates.
 - **RM-01:** The accepted kernel has 23 exhaustively mapped codes, immutable
   registries and error values, bounded safe error context, corrected persisted
   lifecycle/claim vocabulary, durable worker-event envelopes, precise negative
   fixtures, and an automated mutable-global architecture regression.
 - **DB-01:** The SQLite driver selection and storage feasibility batch. It
   gates the entire derived-store path; failure requires a spec amendment.
-  Depends on RM-01 accepted.
+  Depends on RM-01 accepted. Correction 01 (retained) rebuilt it on the pinned
+  commons `SqliteService` worker facade (driver `better-sqlite3@13.0.1` isolated
+  in the commons worker; Watchtower imports no driver) and Node `>=26.4.0`.
+  Correction 02 closes the publication defect: a writable handle now acquires the
+  store's mutation lock at open and holds it for its whole lifetime, so no
+  ordinary write can bypass the lock a publication takes. The reproduced race
+  now ends with the publication refused as `ERR_LOCK_CONFLICT` and all 5,001
+  committed rows present, instead of both operations succeeding and the writer's
+  rows vanishing. Busy/timeout facade codes are translated at the adapter
+  boundary, integrity is verified at admission so a corrupt store blocks every
+  dependent read, the typed mutation surface proves FK insert/update/delete
+  rejection, and the barrel exposes no caller-selected path or lock.
+  Correction 03 completes the durable lock identity: the lock and its reclaim
+  sentinel now record five distinct validated §11 fields — `pid`,
+  `processStartIdentity` (the actual boot-anchored start marker, never the
+  acquisition time), a bounded redacted `command`, `acquiredAt`, and the
+  per-acquisition `token`. Liveness matches PID **and** process start identity,
+  so a lock left by a reused PID is reclaimed as stale instead of blocking
+  forever, while a genuinely running owner stays active even against a foreign
+  token. Process start identity is a proven `NIRVANA_API_GAP` filled by a focused
+  Linux `/proc` adapter mirroring Nira's `pidSafety` mechanism. The lock is
+  described accurately as the §11 projection/index publication lock, with the
+  lane lock a separate outer lock owned by a later batch.
+  Correction 04 closes the remaining validation hole: the record parser was only
+  checking presence and type, so a crafted `processStartIdentity` mismatched the
+  real process, was classified as a reused PID, and let a contender reclaim a
+  live holder's lock. The parser is now fail-closed — the file is size-bounded
+  before it is read, the value must be a plain object with **exactly** the five
+  allowed keys, and each field is validated against its own grammar: PID within
+  Linux `pid_max`, the minted `linux-boot:<seconds>:start:<ms>` marker or the
+  explicit `unverifiable` value, a bounded path-free command, a canonical
+  round-tripping timestamp, and a canonical UUID token. Only a fully validated
+  record reaches liveness classification or token comparison, so untrusted text
+  can no longer become stale authority. A 22-case adversarial matrix — including
+  the reviewer's exact adverse record — yields bounded `ERR_LOCK_CONFLICT` with
+  the original left byte-identical, run against both the lock and the reclaim
+  sentinel. Independent correction-04 review reproduced 44/44 fail-closed runs,
+  all 158 specs, the global native-binding proof, and the complete preserved
+  correction-02/03 matrix. The ADR is accepted and the reviewer owns the
+  acceptance commit.
 - **RM-02 through RM-05:** May proceed in parallel after RM-01 accepted.
 - **RM-06:** Must wait for RM-03 and RM-04 acceptance.
 - **RM-07:** Must wait for RM-03 and RM-06 acceptance.

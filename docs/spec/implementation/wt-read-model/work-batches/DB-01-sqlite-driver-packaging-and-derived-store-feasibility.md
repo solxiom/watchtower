@@ -42,7 +42,8 @@ governing sources leave a product decision unresolved.
   with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
   illustrative name does not silently create a public identifier.
 
-Status: ❌ Pending
+Status: ✅ Accepted
+Accepted by review batch: `DB-01`
 Phase: Storage feasibility
 Depends on: RM-01 accepted
 

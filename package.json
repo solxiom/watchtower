@@ -7,6 +7,9 @@
     "wt": "./bin/wt.js"
   },
   "main": "src/index.ts",
+  "engines": {
+    "node": ">=26.4.0"
+  },
   "keywords": [],
   "author": "",
   "license": "SEE LICENSE IN LICENSE.txt",

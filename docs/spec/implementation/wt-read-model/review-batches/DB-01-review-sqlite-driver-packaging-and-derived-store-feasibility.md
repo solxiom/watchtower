@@ -42,7 +42,8 @@ governing sources leave a product decision unresolved.
   with accepted RM-01 contracts and `docs/spec/schemas/v1.schema.json`; a local
   illustrative name does not silently create a public identifier.
 
-Status: ⏳ Awaiting review
+Status: ✅ Accepted
+Review outcome: correction 04 independently verified and accepted
 Reasoning: `R5`
 Paired work brief: `work-batches/DB-01-sqlite-driver-packaging-and-derived-store-feasibility.md`
 Implementation report: `.local/agent-reports/wt-read-model/DB-01-sqlite-driver-packaging-and-derived-store-feasibility.md`
