@@ -11,6 +11,13 @@ specification: it fixes precedence, input formats, routing, authority,
 defaults, persistence, recovery, adapters, and public output where the broader
 documents previously left an implementer a product choice.
 
+The authoritative schema sources are the capability fragments under
+`schemas/v1/`. `schemas/v1.schema.json` is their generated aggregate. The
+deterministic composer rejects duplicate definitions or fragment identities,
+missing or circular fragment inclusion, conflicting root metadata, and
+unresolved or escaping references. Repository validation fails when the
+checked-in aggregate is not the byte-identical canonical regeneration.
+
 ## 1. Normative precedence and release boundary
 
 For Watchtower v1, conflicts are resolved in this order:

@@ -1,0 +1,94 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.coordinator-views",
+    "includes": []
+  },
+  "$defs": {
+    "coordinatorResult": {
+      "type": "object",
+      "required": [
+        "laneId",
+        "projectionRevision",
+        "operation",
+        "outcome"
+      ],
+      "properties": {
+        "laneId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "projectionRevision": {
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "operation": {
+          "type": "string"
+        },
+        "outcome": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "eventPage": {
+      "$ref": "#/$defs/page"
+    },
+    "readySet": {
+      "type": "object",
+      "required": [
+        "candidates",
+        "blocked"
+      ],
+      "properties": {
+        "candidates": {
+          "type": "array"
+        },
+        "blocked": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "sessionPage": {
+      "$ref": "#/$defs/page"
+    },
+    "sessionResult": {
+      "type": "object",
+      "required": [
+        "operatorSessionId",
+        "state",
+        "turn",
+        "result"
+      ],
+      "properties": {
+        "operatorSessionId": {
+          "$ref": "#/$defs/id"
+        },
+        "state": {
+          "enum": [
+            "open",
+            "active-turn",
+            "suspended",
+            "closed",
+            "archived",
+            "pruned"
+          ]
+        },
+        "turn": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "result": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

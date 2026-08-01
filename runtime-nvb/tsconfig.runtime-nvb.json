@@ -6,14 +6,16 @@
     "ignoreDeprecations": "6.0",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "outDir": "../dist/runtime-nvb",
-    "rootDir": ".",
+    "resolveJsonModule": true,
+    "outDir": "../dist",
+    "rootDir": "..",
     "sourceMap": false,
     "skipLibCheck": true,
     "types": ["node"]
   },
   "include": [
     "./**/*.ts",
+    "./catalog/*.nvb.json",
     "./types/**/*.d.ts"
   ]
 }

@@ -1,0 +1,149 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.acceptance",
+    "includes": []
+  },
+  "$defs": {
+    "packAcceptance": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "packId",
+        "verdict",
+        "reviewerId",
+        "reviewSessionId",
+        "acceptedManifestDigest",
+        "findings",
+        "reviewedCommit",
+        "acceptedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "packId": {
+          "$ref": "#/$defs/id"
+        },
+        "verdict": {
+          "const": "accept"
+        },
+        "reviewerId": {
+          "$ref": "#/$defs/id"
+        },
+        "reviewSessionId": {
+          "$ref": "#/$defs/id"
+        },
+        "acceptedManifestDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "severity",
+              "disposition"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "minor",
+                  "major",
+                  "critical"
+                ]
+              },
+              "disposition": {
+                "enum": [
+                  "closed",
+                  "superseded"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "reviewedCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{7,64}$"
+        },
+        "acceptedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "sealedFile": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "implementationPackLock": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "packId",
+        "sealId",
+        "manifestDigest",
+        "acceptanceDigest",
+        "sourceBaselines",
+        "files",
+        "generatedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "packId": {
+          "$ref": "#/$defs/id"
+        },
+        "sealId": {
+          "$ref": "#/$defs/digest"
+        },
+        "manifestDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "acceptanceDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "sourceBaselines": {
+          "type": "object"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/sealedFile"
+          }
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

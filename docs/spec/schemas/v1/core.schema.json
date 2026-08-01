@@ -1,0 +1,85 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.core",
+    "includes": []
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*(?:^|/)\\.(?:/|$))(?!.*//)[^\\\\\\u0000]+$"
+    },
+    "repository": {
+      "type": "object",
+      "required": [
+        "id",
+        "role",
+        "access"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "enum": [
+            "read",
+            "write"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "requirement": {
+      "type": "object",
+      "required": [
+        "id",
+        "repository",
+        "source",
+        "workBatches",
+        "reviewBatches"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "repository": {
+          "$ref": "#/$defs/id"
+        },
+        "source": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "workBatches": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "reviewBatches": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

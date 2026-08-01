@@ -17,6 +17,6 @@ Status: **Synchronized remediation candidate**
 | RM-10 | `list` and `config show` | ❌ Pending | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
 | RM-11 | Repository NVB parent-chain composition | ❌ Pending | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
 | RM-12 | `status` command and read-only integration | ❌ Pending | Stable status schema; complete health/warning matrix; full read-only hash proof |
-| RM-13 | Deterministic JSON Schema composition | ❌ Pending | Duplicate `$defs`, unresolved `$ref`, root-conflict rejection; byte-identical regeneration |
+| RM-13 | Deterministic JSON Schema composition | ✅ Accepted after correction 02 | Duplicate `$defs`, unresolved `$ref`, root-conflict rejection; byte-identical regeneration |
 
 RM-02 has no pending human dependency-source decision. It resumes in its preserved lineage only after ACCEPT_PACKS activation, accepted RM-13 and RT-08, and explicit worktree synchronization.

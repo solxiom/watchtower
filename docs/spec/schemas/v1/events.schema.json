@@ -1,0 +1,74 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.events",
+    "includes": []
+  },
+  "$defs": {
+    "durableEvent": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "eventId",
+        "type",
+        "sequence",
+        "at",
+        "laneId",
+        "producer",
+        "correlationId",
+        "causationId",
+        "policyVersion",
+        "payload"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "eventId": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "laneId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "producer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "correlationId": {
+          "$ref": "#/$defs/id"
+        },
+        "causationId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "policyVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

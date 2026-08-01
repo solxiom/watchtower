@@ -1,0 +1,25 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.root",
+    "includes": [
+      "watchtower.v1.acceptance",
+      "watchtower.v1.batch",
+      "watchtower.v1.command-envelope",
+      "watchtower.v1.coordinator-views",
+      "watchtower.v1.core",
+      "watchtower.v1.derived-store",
+      "watchtower.v1.events",
+      "watchtower.v1.lane-views",
+      "watchtower.v1.mutation",
+      "watchtower.v1.pack",
+      "watchtower.v1.proposal",
+      "watchtower.v1.reports",
+      "watchtower.v1.resolution"
+    ]
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nirvana.dev/watchtower/spec/v1.schema.json",
+  "title": "Watchtower v1 public contracts",
+  "$ref": "#/$defs/commandResult"
+}

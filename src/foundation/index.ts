@@ -5,3 +5,4 @@ export * from './distribution/index.js';
 export {authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPathSafe} from './canonicalPaths.js';
 export {resolveWatchtowerDataHome, validateWatchtowerDataHome} from './dataHomeResolver.js';
 export {resolveRepositoryRoot, resolveWorkspace} from './workspaceResolver.js';
+export * from './schemaComposition/index.js';

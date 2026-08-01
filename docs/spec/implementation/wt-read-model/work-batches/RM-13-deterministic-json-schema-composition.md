@@ -13,7 +13,7 @@
 - **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ❌ Pending
+Status: ✅ Accepted after correction 02
 Depends on: RM-01
 
 ## Governing references

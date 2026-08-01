@@ -1,0 +1,115 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.reports",
+    "includes": []
+  },
+  "$defs": {
+    "doctorReport": {
+      "type": "object",
+      "required": [
+        "checks"
+      ],
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "status": {
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "skip"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "upgradePlan": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "applied",
+        "changed",
+        "unchanged",
+        "preserved",
+        "migrated",
+        "conflicts"
+      ],
+      "properties": {
+        "from": {
+          "type": "object"
+        },
+        "to": {
+          "type": "object"
+        },
+        "applied": {
+          "type": "boolean"
+        },
+        "changed": {
+          "type": "array"
+        },
+        "unchanged": {
+          "type": "array"
+        },
+        "preserved": {
+          "type": "array"
+        },
+        "migrated": {
+          "type": "array"
+        },
+        "conflicts": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "versionReport": {
+      "type": "object",
+      "required": [
+        "cliVersion",
+        "runtimeVersion",
+        "knowledgeVersion",
+        "laneSchemaVersion"
+      ],
+      "properties": {
+        "cliVersion": {
+          "type": "string"
+        },
+        "runtimeVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "knowledgeVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "laneSchemaVersion": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

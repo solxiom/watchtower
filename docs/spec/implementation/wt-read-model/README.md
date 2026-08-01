@@ -19,6 +19,6 @@ This pack is one part of the accepted 74-batch/33-wave architecture. The explici
 | RM-10 | `list` and `config show` | [work](work-batches/RM-10-list-config-show-and-status-commands.md) | [review](review-batches/RM-10-review-list-config-show-and-status-commands.md) | ❌ Pending |
 | RM-11 | Repository NVB parent-chain composition | [work](work-batches/RM-11-repository-nvb-parent-chain-composition.md) | [review](review-batches/RM-11-review-repository-nvb-parent-chain-composition.md) | ❌ Pending |
 | RM-12 | `status` command and read-only integration | [work](work-batches/RM-12-status-command-and-read-only-integration.md) | [review](review-batches/RM-12-review-status-command-and-read-only-integration.md) | ❌ Pending |
-| RM-13 | Deterministic JSON Schema composition | [work](work-batches/RM-13-deterministic-json-schema-composition.md) | [review](review-batches/RM-13-review-deterministic-json-schema-composition.md) | ❌ Pending |
+| RM-13 | Deterministic JSON Schema composition | [work](work-batches/RM-13-deterministic-json-schema-composition.md) | [review](review-batches/RM-13-review-deterministic-json-schema-composition.md) | ✅ Accepted after correction 02 |
 
 All batches follow [the mandatory engineering standard](../../../development/engineering-and-review-standard.md), [Nirvana integration architecture](../../nirvana-integration-architecture.md), and this pack's quality rules.

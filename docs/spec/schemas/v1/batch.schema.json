@@ -1,0 +1,136 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.batch",
+    "includes": []
+  },
+  "$defs": {
+    "batchRepository": {
+      "type": "object",
+      "required": [
+        "id",
+        "access",
+        "paths",
+        "claimMode"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "access": {
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relativePath"
+          }
+        },
+        "claimMode": {
+          "enum": [
+            "read",
+            "shared-write",
+            "exclusive-write"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "batch": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "dependsOn",
+        "primaryRepository",
+        "workBrief",
+        "reviewBrief",
+        "requirements",
+        "repositories",
+        "implementationReasoning",
+        "reviewReasoning",
+        "workload",
+        "proofClasses"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "primaryRepository": {
+          "$ref": "#/$defs/id"
+        },
+        "workBrief": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "reviewBrief": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "repositories": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/batchRepository"
+          }
+        },
+        "implementationReasoning": {
+          "enum": [
+            "R1",
+            "R2",
+            "R3",
+            "R4",
+            "R5"
+          ]
+        },
+        "reviewReasoning": {
+          "enum": [
+            "R1",
+            "R2",
+            "R3",
+            "R4",
+            "R5"
+          ]
+        },
+        "workload": {
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "very-large"
+          ]
+        },
+        "proofClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

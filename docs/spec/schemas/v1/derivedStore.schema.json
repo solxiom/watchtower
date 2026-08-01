@@ -1,0 +1,95 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.derived-store",
+    "includes": []
+  },
+  "$defs": {
+    "derivedStoreManifest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "backend",
+        "storeKind",
+        "databaseSchemaVersion",
+        "compilerVersion",
+        "laneId",
+        "source",
+        "semanticRoot",
+        "builtAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "backend": {
+          "const": "sqlite"
+        },
+        "storeKind": {
+          "enum": [
+            "pack",
+            "runtime",
+            "sessions"
+          ]
+        },
+        "databaseSchemaVersion": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "compilerVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "laneId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "packSealId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/digest"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "identity",
+            "checkpoint"
+          ],
+          "properties": {
+            "identity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "checkpoint": {
+              "type": [
+                "string",
+                "integer"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "semanticRoot": {
+          "$ref": "#/$defs/digest"
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "builtAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

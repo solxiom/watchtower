@@ -13,7 +13,7 @@
 - **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ⏳ Awaiting independent review
+Status: ✅ Accepted after correction 02 — prior rejections preserved
 Paired work brief: `work-batches/RM-13-deterministic-json-schema-composition.md`
 Depends on accepted evidence from: RM-01
 

@@ -1,0 +1,94 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.proposal",
+    "includes": []
+  },
+  "$defs": {
+    "decisionProposal": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "cycleId",
+        "proposalId",
+        "type",
+        "snapshotDigest",
+        "expiresAt",
+        "evidenceRefs",
+        "body",
+        "requestedEffects"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "cycleId": {
+          "$ref": "#/$defs/id"
+        },
+        "proposalId": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "enum": [
+            "select-ready-batch",
+            "classify-reject",
+            "open-correction",
+            "select-correction-route",
+            "request-reroute",
+            "propose-reconciliation",
+            "request-pack-amendment",
+            "grant-session-budget",
+            "place-hold",
+            "release-hold",
+            "escalate"
+          ]
+        },
+        "snapshotDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "body": {
+          "type": "object"
+        },
+        "requestedEffects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "effect"
+            ],
+            "properties": {
+              "effect": {
+                "enum": [
+                  "dispatch-batch",
+                  "open-correction",
+                  "route-correction",
+                  "reroute-endpoint",
+                  "reconcile-projection",
+                  "create-amendment-request",
+                  "grant-session-budget",
+                  "place-hold",
+                  "release-hold",
+                  "open-escalation"
+                ]
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

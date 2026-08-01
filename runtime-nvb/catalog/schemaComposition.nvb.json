@@ -1,0 +1,33 @@
+{
+  "handlers": [
+    "../handlers/SchemaCompositionTaskHandler.js"
+  ],
+  "tasks": {
+    "wt:schema:check": {
+      "doc": {
+        "summary": "Fail when the checked-in v1 schema aggregate is stale.",
+        "usage": "Internal Watchtower build task."
+      },
+      "runnerOpts": {},
+      "handle": {
+        "handler": "SchemaCompositionTaskHandler",
+        "args": [{"mode": "check"}],
+        "type": "auto",
+        "preferType": "async"
+      }
+    },
+    "wt:schema:generate": {
+      "doc": {
+        "summary": "Regenerate the checked-in v1 schema aggregate from authoritative fragments.",
+        "usage": "Internal Watchtower build task."
+      },
+      "runnerOpts": {},
+      "handle": {
+        "handler": "SchemaCompositionTaskHandler",
+        "args": [{"mode": "write"}],
+        "type": "auto",
+        "preferType": "async"
+      }
+    }
+  }
+}
