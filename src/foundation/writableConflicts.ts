@@ -43,7 +43,8 @@ function inspectPair(left: ActiveLaneClaims, right: ActiveLaneClaims, conflicts:
         for (const second of exclusiveClaims(right)) {
             if (first.repository !== second.repository) continue;
             for (const firstPath of first.paths) for (const secondPath of second.paths) {
-                if (pathsOverlap(firstPath, secondPath)) add(conflicts, 'path-conflict', left, right, first.repository, [firstPath, secondPath]);
+                if (resourcePathsOverlap(firstPath, secondPath)) add(conflicts, 'path-conflict', left, right,
+                    first.repository, [firstPath, secondPath]);
             }
         }
     }
@@ -61,7 +62,7 @@ function allowsSharedWrite(lane: ActiveLaneClaims, repository: string): boolean 
     return lane.claims.some(claim => claim.repository === repository && claim.mode === 'shared-write');
 }
 
-function pathsOverlap(left: string, right: string): boolean {
+export function resourcePathsOverlap(left: string, right: string): boolean {
     return segmentOverlap(left.split('/'), right.split('/'));
 }
 

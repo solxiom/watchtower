@@ -34,6 +34,13 @@
           "type": "array",
           "uniqueItems": true
         },
+        "proofInputs": {
+          "items": {
+            "$ref": "#/$defs/proofInput"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "repositories": {
           "items": {
             "$ref": "#/$defs/batchRepository"
@@ -578,6 +585,13 @@
         "packRepository": {
           "$ref": "#/$defs/id"
         },
+        "proofInputs": {
+          "items": {
+            "$ref": "#/$defs/proofInput"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "repositories": {
           "items": {
             "$ref": "#/$defs/repository"
@@ -864,110 +878,7 @@
       "type": "object"
     },
     "laneStatus": {
-      "additionalProperties": true,
-      "properties": {
-        "coordinator": {
-          "type": "object"
-        },
-        "health": {
-          "additionalProperties": true,
-          "properties": {
-            "status": {
-              "enum": [
-                "ok",
-                "attention",
-                "complete",
-                "invalid"
-              ]
-            },
-            "warnings": {
-              "type": "array"
-            }
-          },
-          "required": [
-            "status",
-            "warnings"
-          ],
-          "type": "object"
-        },
-        "lane": {
-          "additionalProperties": true,
-          "properties": {
-            "controlHome": {
-              "type": "string"
-            },
-            "id": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "initiativeId": {
-              "type": "string"
-            },
-            "kind": {
-              "const": "implementation"
-            },
-            "slug": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "id",
-            "slug",
-            "initiativeId",
-            "kind",
-            "controlHome"
-          ],
-          "type": "object"
-        },
-        "lifecycle": {
-          "additionalProperties": true,
-          "properties": {
-            "activeBatch": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "status": {
-              "enum": [
-                "bootstrap",
-                "active",
-                "paused",
-                "complete",
-                "unknown"
-              ]
-            }
-          },
-          "required": [
-            "status",
-            "activeBatch"
-          ],
-          "type": "object"
-        },
-        "repositories": {
-          "type": "array"
-        },
-        "runtime": {
-          "type": "object"
-        },
-        "watcher": {
-          "type": "object"
-        },
-        "workerSessions": {
-          "type": "object"
-        }
-      },
-      "required": [
-        "lane",
-        "repositories",
-        "lifecycle",
-        "health",
-        "workerSessions",
-        "watcher",
-        "coordinator",
-        "runtime"
-      ],
-      "type": "object"
+      "$ref": "#/$defs/statusProjection"
     },
     "mutationResult": {
       "additionalProperties": true,
@@ -1028,7 +939,33 @@
         "findings": {
           "items": {
             "additionalProperties": true,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "disposition": {
+                      "const": "superseded"
+                    },
+                    "severity": {
+                      "const": "critical"
+                    }
+                  },
+                  "required": [
+                    "severity",
+                    "disposition"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "acceptedReviewRef"
+                  ]
+                }
+              }
+            ],
             "properties": {
+              "acceptedReviewRef": {
+                "$ref": "#/$defs/id"
+              },
               "disposition": {
                 "enum": [
                   "closed",
@@ -1119,6 +1056,26 @@
         "limit",
         "nextCursor",
         "revision"
+      ],
+      "type": "object"
+    },
+    "proofInput": {
+      "additionalProperties": false,
+      "properties": {
+        "optional": {
+          "type": "boolean"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "repository": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "repository",
+        "path",
+        "optional"
       ],
       "type": "object"
     },
@@ -1685,6 +1642,1053 @@
         "affectedPaths",
         "evidenceRefs",
         "requiresSpecAuthority"
+      ],
+      "type": "object"
+    },
+    "statusBatchProgress": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted": {
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "total": {
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "accepted",
+        "total"
+      ],
+      "type": "object"
+    },
+    "statusConflict": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "shared-write",
+                "path-conflict",
+                "branch-conflict"
+              ]
+            },
+            "lanes": {
+              "$ref": "#/$defs/statusConflictLanes"
+            },
+            "paths": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 2,
+              "type": "array"
+            },
+            "repository": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "lanes",
+            "repository",
+            "paths"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "tmux-prefix"
+            },
+            "lanes": {
+              "$ref": "#/$defs/statusConflictLanes"
+            },
+            "prefix": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "lanes",
+            "prefix"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "proof-resource"
+            },
+            "lanes": {
+              "$ref": "#/$defs/statusConflictLanes"
+            },
+            "resource": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "lanes",
+            "resource"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "statusConflictLanes": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "statusCoordinator": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "const": "unavailable"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "activeCycle": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "budgetWarning": {
+              "type": "boolean"
+            },
+            "decisionClass": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "holds": {
+              "items": {
+                "$ref": "#/$defs/statusHold"
+              },
+              "maxItems": 200,
+              "type": "array"
+            },
+            "lastOutcome": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "operatorSessions": {
+              "$ref": "#/$defs/statusOperatorSessions"
+            },
+            "packIndex": {
+              "$ref": "#/$defs/statusPackIndex"
+            },
+            "queueDepth": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "routeAvailable": {
+              "type": "boolean"
+            },
+            "runtimeIndex": {
+              "$ref": "#/$defs/statusRuntimeIndex"
+            },
+            "status": {
+              "const": "available"
+            }
+          },
+          "required": [
+            "status",
+            "queueDepth",
+            "activeCycle",
+            "decisionClass",
+            "routeAvailable",
+            "lastOutcome",
+            "packIndex",
+            "runtimeIndex",
+            "budgetWarning",
+            "operatorSessions",
+            "holds"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "statusDiagnostics": {
+      "additionalProperties": false,
+      "properties": {
+        "conflictCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "eventWarningCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "membershipWarningCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "rejectedEventCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "relevantLaneCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspaceResolution": {
+          "enum": [
+            "explicit",
+            "git",
+            "ancestor",
+            "current-directory"
+          ]
+        }
+      },
+      "required": [
+        "workspaceResolution",
+        "relevantLaneCount",
+        "membershipWarningCount",
+        "eventWarningCount",
+        "rejectedEventCount",
+        "conflictCount"
+      ],
+      "type": "object"
+    },
+    "statusEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "batch": {
+          "type": "string"
+        },
+        "eventId": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "implementer",
+            "reviewer"
+          ]
+        },
+        "sequence": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "session": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "handoff",
+            "accept",
+            "reject",
+            "blocked"
+          ]
+        }
+      },
+      "required": [
+        "eventId",
+        "type",
+        "sequence",
+        "at",
+        "role",
+        "batch",
+        "session"
+      ],
+      "type": "object"
+    },
+    "statusHealth": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "attention",
+            "complete",
+            "invalid"
+          ]
+        },
+        "warnings": {
+          "items": {
+            "$ref": "#/$defs/statusWarning"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "status",
+        "warnings"
+      ],
+      "type": "object"
+    },
+    "statusHold": {
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "expiresAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "holdId": {
+          "type": "string"
+        },
+        "laneId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "operatorSessionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "scope": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "lane",
+                "batch",
+                "repository",
+                "effect"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "holdId",
+        "laneId",
+        "scope",
+        "blocks",
+        "reason",
+        "operatorSessionId",
+        "createdAt",
+        "expiresAt"
+      ],
+      "type": "object"
+    },
+    "statusLane": {
+      "additionalProperties": false,
+      "properties": {
+        "controlHome": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "initiativeId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "implementation"
+        },
+        "slug": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "initiativeId",
+        "kind",
+        "controlHome"
+      ],
+      "type": "object"
+    },
+    "statusLifecycle": {
+      "additionalProperties": false,
+      "properties": {
+        "activeBatch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "bootstrap",
+            "active",
+            "paused",
+            "complete",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "activeBatch"
+      ],
+      "type": "object"
+    },
+    "statusOperatorSessions": {
+      "additionalProperties": false,
+      "properties": {
+        "activeTurns": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "budgetWarning": {
+          "type": "boolean"
+        },
+        "open": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "recent": {
+          "items": {
+            "$ref": "#/$defs/statusRecentOperatorSession"
+          },
+          "maxItems": 8,
+          "type": "array"
+        },
+        "recentTruncated": {
+          "type": "boolean"
+        },
+        "staleProposals": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "suspended": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "open",
+        "suspended",
+        "activeTurns",
+        "budgetWarning",
+        "staleProposals",
+        "recent",
+        "recentTruncated"
+      ],
+      "type": "object"
+    },
+    "statusPackIndex": {
+      "additionalProperties": false,
+      "properties": {
+        "packSealId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "missing",
+            "stale",
+            "corrupt",
+            "incompatible",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "packSealId"
+      ],
+      "type": "object"
+    },
+    "statusPackIntegrity": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "sealId": {
+              "type": "string"
+            },
+            "status": {
+              "const": "valid"
+            }
+          }
+        },
+        {
+          "properties": {
+            "sealId": {
+              "type": "null"
+            },
+            "status": {
+              "enum": [
+                "missing",
+                "unavailable",
+                "invalid",
+                "unaccepted",
+                "drift"
+              ]
+            }
+          }
+        }
+      ],
+      "properties": {
+        "sealId": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "missing",
+            "unavailable",
+            "invalid",
+            "unaccepted",
+            "drift"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "sealId"
+      ],
+      "type": "object"
+    },
+    "statusProjection": {
+      "additionalProperties": false,
+      "properties": {
+        "batchProgress": {
+          "$ref": "#/$defs/statusBatchProgress"
+        },
+        "conflicts": {
+          "items": {
+            "$ref": "#/$defs/statusConflict"
+          },
+          "type": "array"
+        },
+        "coordinator": {
+          "$ref": "#/$defs/statusCoordinator"
+        },
+        "diagnostics": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/statusDiagnostics"
+            }
+          ]
+        },
+        "health": {
+          "$ref": "#/$defs/statusHealth"
+        },
+        "lane": {
+          "$ref": "#/$defs/statusLane"
+        },
+        "latestEvent": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/statusEvent"
+            }
+          ]
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/statusLifecycle"
+        },
+        "packIntegrity": {
+          "$ref": "#/$defs/statusPackIntegrity"
+        },
+        "relatedLanes": {
+          "items": {
+            "$ref": "#/$defs/statusRelatedLane"
+          },
+          "type": "array"
+        },
+        "repositories": {
+          "items": {
+            "$ref": "#/$defs/statusRepository"
+          },
+          "type": "array"
+        },
+        "runtime": {
+          "$ref": "#/$defs/statusRuntime"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "watcher": {
+          "$ref": "#/$defs/statusWatcher"
+        },
+        "workerSessions": {
+          "$ref": "#/$defs/statusWorkerSessions"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "lane",
+        "repositories",
+        "lifecycle",
+        "health",
+        "packIntegrity",
+        "workerSessions",
+        "watcher",
+        "coordinator",
+        "latestEvent",
+        "batchProgress",
+        "relatedLanes",
+        "conflicts",
+        "runtime",
+        "diagnostics"
+      ],
+      "type": "object"
+    },
+    "statusRecentOperatorSession": {
+      "additionalProperties": false,
+      "properties": {
+        "actionableHolds": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "actionableProposals": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "activeTurn": {
+          "type": "boolean"
+        },
+        "lastTurnAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "operatorSessionId": {
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "operator",
+            "system-escalation"
+          ]
+        },
+        "policyProfileId": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "open",
+            "active-turn",
+            "suspended",
+            "closed",
+            "archived",
+            "pruned"
+          ]
+        },
+        "topic": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "turnCount": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "operatorSessionId",
+        "origin",
+        "policyProfileId",
+        "state",
+        "topic",
+        "turnCount",
+        "lastTurnAt",
+        "activeTurn",
+        "actionableHolds",
+        "actionableProposals"
+      ],
+      "type": "object"
+    },
+    "statusRelatedLane": {
+      "additionalProperties": false,
+      "properties": {
+        "laneId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "relation": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "relation",
+        "laneId"
+      ],
+      "type": "object"
+    },
+    "statusRepository": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "branch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "role": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "worktreeMode": {
+          "enum": [
+            "dedicated",
+            "shared",
+            null
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "access",
+        "path",
+        "branch",
+        "worktreeMode"
+      ],
+      "type": "object"
+    },
+    "statusRuntime": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "available": {
+              "const": false
+            },
+            "availableVersions": {
+              "maxItems": 0
+            },
+            "installed": {
+              "type": "null"
+            },
+            "qualification": {
+              "const": "unavailable"
+            }
+          }
+        },
+        {
+          "properties": {
+            "qualification": {
+              "const": "valid"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "availableVersions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "configured": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "installed": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "qualification": {
+          "enum": [
+            "valid",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "qualification",
+        "configured",
+        "installed",
+        "available",
+        "availableVersions"
+      ],
+      "type": "object"
+    },
+    "statusRuntimeIndex": {
+      "additionalProperties": false,
+      "properties": {
+        "projectionRevision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "missing",
+            "stale",
+            "corrupt",
+            "incompatible",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "projectionRevision"
+      ],
+      "type": "object"
+    },
+    "statusWarning": {
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "code": {
+              "enum": [
+                "INVALID_LANE_STATE",
+                "INVALID_LANE_CONFIG",
+                "INVALID_INSTALL",
+                "INVALID_REPOSITORY_BINDINGS",
+                "IMPLEMENTATION_PACK_MISSING",
+                "IMPLEMENTATION_PACK_UNAVAILABLE",
+                "IMPLEMENTATION_PACK_INVALID",
+                "IMPLEMENTATION_PACK_UNACCEPTED",
+                "IMPLEMENTATION_PACK_DRIFT",
+                "SOURCE_BASELINE_CRITICAL",
+                "SOURCE_BASELINE_UNAVAILABLE"
+              ]
+            },
+            "severity": {
+              "const": "invalid"
+            }
+          }
+        },
+        {
+          "properties": {
+            "code": {
+              "enum": [
+                "SOURCE_BASELINE_UNRELATED",
+                "SOURCE_BASELINE_OPTIONAL_UNAVAILABLE",
+                "MEMBERSHIP_INDEX_STALE",
+                "REPOSITORY_UNAVAILABLE",
+                "CONFLICT_OBSERVATION_INCOMPLETE",
+                "WRITABLE_CONFLICT",
+                "PROOF_RESOURCE_CONFLICTS_UNAVAILABLE",
+                "LANE_BUSY",
+                "TMUX_UNAVAILABLE",
+                "WATCHER_MISSING",
+                "WATCHER_HEARTBEAT_ABSENT",
+                "WATCHER_HEARTBEAT_INVALID",
+                "WATCHER_STALE",
+                "WORKER_SESSION_MISSING",
+                "DURABLE_EVENT_CORRUPT",
+                "DURABLE_EVENT_REJECTED",
+                "PENDING_WORKER_EVENT",
+                "RUNTIME_INTEGRITY_UNAVAILABLE"
+              ]
+            },
+            "severity": {
+              "const": "attention"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "INVALID_LANE_STATE",
+            "INVALID_LANE_CONFIG",
+            "INVALID_INSTALL",
+            "INVALID_REPOSITORY_BINDINGS",
+            "IMPLEMENTATION_PACK_MISSING",
+            "IMPLEMENTATION_PACK_UNAVAILABLE",
+            "IMPLEMENTATION_PACK_INVALID",
+            "IMPLEMENTATION_PACK_UNACCEPTED",
+            "IMPLEMENTATION_PACK_DRIFT",
+            "SOURCE_BASELINE_CRITICAL",
+            "SOURCE_BASELINE_UNAVAILABLE",
+            "SOURCE_BASELINE_UNRELATED",
+            "SOURCE_BASELINE_OPTIONAL_UNAVAILABLE",
+            "MEMBERSHIP_INDEX_STALE",
+            "REPOSITORY_UNAVAILABLE",
+            "CONFLICT_OBSERVATION_INCOMPLETE",
+            "WRITABLE_CONFLICT",
+            "PROOF_RESOURCE_CONFLICTS_UNAVAILABLE",
+            "LANE_BUSY",
+            "TMUX_UNAVAILABLE",
+            "WATCHER_MISSING",
+            "WATCHER_HEARTBEAT_ABSENT",
+            "WATCHER_HEARTBEAT_INVALID",
+            "WATCHER_STALE",
+            "WORKER_SESSION_MISSING",
+            "DURABLE_EVENT_CORRUPT",
+            "DURABLE_EVENT_REJECTED",
+            "PENDING_WORKER_EVENT",
+            "RUNTIME_INTEGRITY_UNAVAILABLE"
+          ]
+        },
+        "message": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "attention",
+            "invalid"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "type": "object"
+    },
+    "statusWatcher": {
+      "additionalProperties": false,
+      "properties": {
+        "heartbeatStatus": {
+          "enum": [
+            "fresh",
+            "stale",
+            "absent",
+            "invalid"
+          ]
+        },
+        "lastHeartbeatAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "running": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "running",
+        "heartbeatStatus",
+        "lastHeartbeatAt"
+      ],
+      "type": "object"
+    },
+    "statusWorkerSession": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "present": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "present"
+      ],
+      "type": "object"
+    },
+    "statusWorkerSessions": {
+      "additionalProperties": false,
+      "properties": {
+        "implementer": {
+          "$ref": "#/$defs/statusWorkerSession"
+        },
+        "reviewer": {
+          "$ref": "#/$defs/statusWorkerSession"
+        }
+      },
+      "required": [
+        "implementer",
+        "reviewer"
       ],
       "type": "object"
     },

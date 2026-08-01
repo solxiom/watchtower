@@ -63,8 +63,23 @@
                   "closed",
                   "superseded"
                 ]
+              },
+              "acceptedReviewRef": {
+                "$ref": "#/$defs/id"
               }
             },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "severity": {"const": "critical"},
+                    "disposition": {"const": "superseded"}
+                  },
+                  "required": ["severity", "disposition"]
+                },
+                "then": {"required": ["acceptedReviewRef"]}
+              }
+            ],
             "additionalProperties": true
           }
         },

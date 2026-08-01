@@ -1,0 +1,71 @@
+{
+  "x-watchtower-fragment": {"schemaVersion": 1, "id": "watchtower.v1.status-details", "includes": []},
+  "$defs": {
+    "statusCoordinator": {"oneOf": [
+      {"type": "object", "required": ["status"], "properties": {"status": {"const": "unavailable"}}, "additionalProperties": false},
+      {"type": "object", "required": ["status", "queueDepth", "activeCycle", "decisionClass", "routeAvailable",
+        "lastOutcome", "packIndex", "runtimeIndex", "budgetWarning", "operatorSessions", "holds"],
+       "properties": {"status": {"const": "available"}, "queueDepth": {"type": "integer", "minimum": 0},
+        "activeCycle": {"type": ["string", "null"]}, "decisionClass": {"type": ["string", "null"]},
+        "routeAvailable": {"type": "boolean"}, "lastOutcome": {"type": ["string", "null"]},
+        "packIndex": {"$ref": "#/$defs/statusPackIndex"}, "runtimeIndex": {"$ref": "#/$defs/statusRuntimeIndex"},
+        "budgetWarning": {"type": "boolean"}, "operatorSessions": {"$ref": "#/$defs/statusOperatorSessions"},
+        "holds": {"type": "array", "maxItems": 200, "items": {"$ref": "#/$defs/statusHold"}}},
+       "additionalProperties": false}
+    ]},
+    "statusPackIndex": {"type": "object", "required": ["status", "packSealId"], "properties": {
+      "status": {"enum": ["valid", "missing", "stale", "corrupt", "incompatible", "unavailable"]},
+      "packSealId": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "statusRuntimeIndex": {"type": "object", "required": ["status", "projectionRevision"], "properties": {
+      "status": {"enum": ["valid", "missing", "stale", "corrupt", "incompatible", "unavailable"]},
+      "projectionRevision": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "statusOperatorSessions": {"type": "object", "required": ["open", "suspended", "activeTurns", "budgetWarning",
+      "staleProposals", "recent", "recentTruncated"], "properties": {"open": {"type": "integer", "minimum": 0},
+      "suspended": {"type": "integer", "minimum": 0}, "activeTurns": {"type": "integer", "minimum": 0},
+      "budgetWarning": {"type": "boolean"}, "staleProposals": {"type": "integer", "minimum": 0},
+      "recent": {"type": "array", "maxItems": 8, "items": {"$ref": "#/$defs/statusRecentOperatorSession"}},
+      "recentTruncated": {"type": "boolean"}}, "additionalProperties": false},
+    "statusRecentOperatorSession": {"type": "object", "required": ["operatorSessionId", "origin", "policyProfileId",
+      "state", "topic", "turnCount", "lastTurnAt", "activeTurn", "actionableHolds", "actionableProposals"],
+      "properties": {"operatorSessionId": {"type": "string"}, "origin": {"enum": ["operator", "system-escalation"]},
+      "policyProfileId": {"type": "string"}, "state": {"enum": ["open", "active-turn", "suspended", "closed", "archived", "pruned"]},
+      "topic": {"type": ["string", "null"]}, "turnCount": {"type": "integer", "minimum": 0},
+      "lastTurnAt": {"type": ["string", "null"], "format": "date-time"}, "activeTurn": {"type": "boolean"},
+      "actionableHolds": {"type": "integer", "minimum": 0}, "actionableProposals": {"type": "integer", "minimum": 0}},
+      "additionalProperties": false},
+    "statusHold": {"type": "object", "required": ["schemaVersion", "holdId", "laneId", "scope", "blocks", "reason",
+      "operatorSessionId", "createdAt", "expiresAt"], "properties": {"schemaVersion": {"const": 1}, "holdId": {"type": "string"},
+      "laneId": {"type": "string", "format": "uuid"}, "scope": {"type": "object", "required": ["kind", "id"],
+      "properties": {"kind": {"enum": ["lane", "batch", "repository", "effect"]}, "id": {"type": "string"}},
+      "additionalProperties": false}, "blocks": {"type": "array", "items": {"type": "string"}}, "reason": {"type": "string"},
+      "operatorSessionId": {"type": ["string", "null"]}, "createdAt": {"type": "string", "format": "date-time"},
+      "expiresAt": {"type": "string", "format": "date-time"}}, "additionalProperties": false},
+    "statusBatchProgress": {"type": "object", "required": ["accepted", "total"], "properties": {
+      "accepted": {"type": ["integer", "null"], "minimum": 0}, "total": {"type": ["integer", "null"], "minimum": 0}}, "additionalProperties": false},
+    "statusRelatedLane": {"type": "object", "required": ["relation", "laneId"], "properties": {
+      "relation": {"type": "string", "minLength": 1}, "laneId": {"type": "string", "format": "uuid"}}, "additionalProperties": false},
+    "statusConflict": {"oneOf": [
+      {"type": "object", "required": ["kind", "lanes", "repository", "paths"], "properties": {
+        "kind": {"enum": ["shared-write", "path-conflict", "branch-conflict"]}, "lanes": {"$ref": "#/$defs/statusConflictLanes"},
+        "repository": {"type": "string", "minLength": 1}, "paths": {"type": "array", "maxItems": 2, "items": {"type": "string"}}}, "additionalProperties": false},
+      {"type": "object", "required": ["kind", "lanes", "prefix"], "properties": {"kind": {"const": "tmux-prefix"},
+        "lanes": {"$ref": "#/$defs/statusConflictLanes"}, "prefix": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+      {"type": "object", "required": ["kind", "lanes", "resource"], "properties": {"kind": {"const": "proof-resource"},
+        "lanes": {"$ref": "#/$defs/statusConflictLanes"}, "resource": {"type": "string", "minLength": 1}}, "additionalProperties": false}
+    ]},
+    "statusConflictLanes": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string", "format": "uuid"}},
+    "statusRuntime": {"type": "object", "required": ["qualification", "configured", "installed", "available", "availableVersions"],
+      "properties": {"qualification": {"enum": ["valid", "unavailable"]}, "configured": {"type": ["string", "null"]},
+      "installed": {"type": ["string", "null"]}, "available": {"type": "boolean"},
+      "availableVersions": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}},
+      "oneOf": [{"properties": {"qualification": {"const": "unavailable"}, "installed": {"type": "null"},
+        "available": {"const": false}, "availableVersions": {"maxItems": 0}}},
+        {"properties": {"qualification": {"const": "valid"}}}], "additionalProperties": false},
+    "statusDiagnostics": {"type": "object", "required": ["workspaceResolution", "relevantLaneCount", "membershipWarningCount",
+      "eventWarningCount", "rejectedEventCount", "conflictCount"], "properties": {
+      "workspaceResolution": {"enum": ["explicit", "git", "ancestor", "current-directory"]},
+      "relevantLaneCount": {"type": "integer", "minimum": 0}, "membershipWarningCount": {"type": "integer", "minimum": 0},
+      "eventWarningCount": {"type": "integer", "minimum": 0}, "rejectedEventCount": {"type": "integer", "minimum": 0},
+      "conflictCount": {"type": "integer", "minimum": 0}}, "additionalProperties": false}
+  }
+}

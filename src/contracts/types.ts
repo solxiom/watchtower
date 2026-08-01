@@ -170,40 +170,6 @@ export interface ResolvedLane extends LaneRef {
     repositories: RepositoryBinding[];
 }
 
-export interface LifecycleStatus {
-    status: ReadModelLaneLifecycle;
-    activeBatch: string | null;
-    [field: string]: unknown;
-}
-
-/** The lane identity shape used by the public `laneStatus` schema. */
-export interface LaneStatusLane {
-    id: string;
-    slug: string;
-    initiativeId: string;
-    kind: LaneKind;
-    controlHome: string;
-    [field: string]: unknown;
-}
-
-export interface HealthSummary {
-    status: HealthStatus;
-    warnings: unknown[];
-    [field: string]: unknown;
-}
-
-export interface LaneStatusV1 {
-    lane: LaneStatusLane;
-    repositories: RepositoryBinding[];
-    lifecycle: LifecycleStatus;
-    health: HealthSummary;
-    workerSessions: Record<string, unknown>;
-    watcher: Record<string, unknown>;
-    coordinator: Record<string, unknown>;
-    runtime: Record<string, unknown>;
-    [field: string]: unknown;
-}
-
 /** Worker-specific values belong in the durable event payload, not its envelope. */
 export interface WorkerEventPayloadV1 {
     role: WorkerEventRole;

@@ -1,10 +1,13 @@
 import {createHash} from 'node:crypto';
 import {
-    lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync
+    existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readlinkSync, readdirSync, rmSync, symlinkSync,
+    writeFileSync
 } from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {cmd} from '@nirvana/base/terminal';
+import type {WorkerEventRecord} from '../../src/contracts/index.js';
+import {semanticDigest} from '../../src/foundation/schemaComposition/jsonCanonicalizer.js';
 
 export interface FixtureRepository {
     readonly id: string;
@@ -23,8 +26,32 @@ export interface LaneFixtureOptions {
     readonly runtimeVersion?: string;
     readonly configLines?: readonly string[];
     readonly install?: unknown;
+    readonly packAvailable?: boolean;
+    readonly runtimeAvailable?: boolean;
     readonly repositories?: readonly FixtureRepository[];
     readonly claims?: readonly unknown[];
+    readonly nestedPackLock?: boolean;
+    readonly acceptanceRef?: string;
+    readonly acceptedAt?: string;
+    readonly acceptanceFindings?: readonly Readonly<Record<string, string>>[];
+    readonly omitReviewAuthority?: boolean;
+    readonly baselineRevision?: string;
+    readonly proofInputs?: readonly Readonly<{repository: string; path: string; optional: boolean}>[];
+    readonly batchProofInputs?: readonly Readonly<{repository: string; path: string; optional: boolean}>[];
+    readonly missingPackPath?: string;
+    readonly reviewedSymlinkPath?: string;
+    readonly requirementBatchId?: string;
+    readonly packRequirements?: readonly Readonly<{
+        id: string;
+        workBatches: readonly string[];
+        reviewBatches: readonly string[];
+    }>[];
+    readonly packBatches?: readonly Readonly<{
+        id: string;
+        requirements: readonly string[];
+        workBrief: string;
+        reviewBrief: string;
+    }>[];
 }
 
 export interface ReadCommandFixture {
@@ -47,6 +74,11 @@ export function createReadCommandFixture(): ReadCommandFixture {
 export function createRepository(path: string): string {
     mkdirSync(path, {recursive: true});
     cmd.execSync({command: 'git', args: ['init', '-b', 'main'], options: {cwd: path, stdio: ['ignore', 'ignore', 'ignore']}});
+    git(path, ['config', 'user.email', 'watchtower-fixture@example.invalid']);
+    git(path, ['config', 'user.name', 'Watchtower-Fixture']);
+    writeFileSync(join(path, 'accepted-input.md'), 'accepted input\n');
+    git(path, ['add', 'accepted-input.md']);
+    git(path, ['commit', '-m', 'fixture-baseline']);
     return path;
 }
 
@@ -82,6 +114,12 @@ export function createLane(fixture: ReadCommandFixture, options: LaneFixtureOpti
     const active = options.activeBatch === undefined ? '' : `\nactive_batch=${options.activeBatch}`;
     writeFileSync(join(laneDir, 'state', 'coordinator-lane-state.txt'),
         `lane_status=${options.lifecycle ?? 'active'}${active}\n`);
+    if (options.packAvailable !== false) {
+        createAcceptedPack(fixture.controlHome, laneId, laneDir, options);
+    }
+    if (options.runtimeAvailable !== false) {
+        mkdirSync(join(fixture.dataHome, 'runtimes', options.runtimeVersion ?? '1.0.0'), {recursive: true});
+    }
     return laneDir;
 }
 
@@ -114,13 +152,113 @@ function collect(root: string, path: string, entries: string[]): void {
     const stat = lstatSync(path);
     const relative = path.slice(root.length) || '.';
     if (stat.isSymbolicLink()) {
-        entries.push(`${root}:${relative}:link:${stat.mode}`);
+        entries.push(`${root}:${relative}:link:${stat.mode}:${stat.uid}:${stat.gid}:${Buffer.from(readlinkSync(path)).toString('hex')}`);
         return;
     }
     if (stat.isFile()) {
-        entries.push(`${root}:${relative}:file:${stat.mode}:${createHash('sha256').update(readFileSync(path)).digest('hex')}`);
+        entries.push(`${root}:${relative}:file:${stat.mode}:${stat.uid}:${stat.gid}:${stat.size}:` +
+            createHash('sha256').update(readFileSync(path)).digest('hex'));
         return;
     }
-    entries.push(`${root}:${relative}:dir:${stat.mode}`);
-    for (const name of readdirSync(path)) collect(root, join(path, name), entries);
+    const names = readdirSync(path).sort();
+    entries.push(`${root}:${relative}:dir:${stat.mode}:${stat.uid}:${stat.gid}:${names.join('\\0')}`);
+    for (const name of names) collect(root, join(path, name), entries);
+}
+
+function createAcceptedPack(repositoryPath: string, authorLaneId: string, laneDir: string,
+    options: LaneFixtureOptions): void {
+    const root = join(repositoryPath, 'docs', 'spec', 'implementation', 'test-pack');
+    if (existsSync(root)) return;
+    mkdirSync(join(root, 'work-batches'), {recursive: true});
+    mkdirSync(join(root, 'review-batches'), {recursive: true});
+    const inputDigest = digest(readFileSync(join(repositoryPath, 'accepted-input.md')));
+    const artifacts = {
+        readme: 'README.md', traceability: 'requirements-traceability.md', implementationMap: 'implementation-map.md',
+        qualityRules: 'implementation-quality-and-agent-rules.md', roadmap: 'implementation-roadmap.md',
+        tracker: 'implementation-tracker.md', acceptance: 'pack-acceptance.json', seal: 'implementation-pack.lock.json'
+    };
+    const declaredRepositories = options.repositories ?? [repository('main', repositoryPath, 'primary', 'write')];
+    const requirements = options.packRequirements ?? [{id: 'REQ-1',
+        workBatches: [options.requirementBatchId ?? 'WB-1'],
+        reviewBatches: [options.requirementBatchId ?? 'WB-1']}];
+    const batches = options.packBatches ?? [{id: 'WB-1', requirements: ['REQ-1'],
+        workBrief: 'work-batches/WB-1.md', reviewBrief: 'review-batches/RB-1.md'}];
+    const manifest = {schemaVersion: 1, packId: 'test-pack', initiativeId: 'initiative-a',
+        authoredByLaneId: authorLaneId, kind: 'implementation', status: 'accepted',
+        packRepository: 'main', repositories: declaredRepositories.map(item => ({id: item.id, role: item.role,
+            access: item.access})), sourceBaselines: Object.fromEntries(declaredRepositories.map(item => [item.id,
+            {revision: item.id === 'main' && options.baselineRevision !== undefined ? options.baselineRevision :
+                git(item.path, ['rev-parse', 'HEAD']).trim(), dirty: false}])),
+        acceptedInputs: [{repository: 'main', path: 'accepted-input.md', sha256: inputDigest,
+            acceptanceRef: options.acceptanceRef ?? 'review-batches/RB-1.md'}], artifacts,
+        ...(options.proofInputs === undefined ? {} : {proofInputs: [...options.proofInputs]}),
+        requirements: requirements.map(item => ({...item, workBatches: [...item.workBatches],
+            reviewBatches: [...item.reviewBatches], repository: 'main', source: 'accepted-input.md'})),
+        batches: batches.map(item => ({...item, requirements: [...item.requirements], title: 'Fixture',
+            dependsOn: [], primaryRepository: 'main',
+            repositories: [{id: 'main', access: 'write', paths: ['src'], claimMode: 'exclusive-write'}],
+            implementationReasoning: 'R1', reviewReasoning: 'R1', workload: 'small', proofClasses: ['test'],
+            ...(options.batchProofInputs === undefined ? {} : {proofInputs: [...options.batchProofInputs]})}))};
+    writeJson(join(root, 'implementation-pack.json'), manifest);
+    const packPaths = new Set(['README.md', 'requirements-traceability.md', 'implementation-map.md',
+        'implementation-quality-and-agent-rules.md', 'implementation-roadmap.md', 'implementation-tracker.md',
+        ...batches.flatMap(batch => [batch.workBrief, batch.reviewBrief])]);
+    for (const path of packPaths) writeFileSync(join(root, path), `# ${path}\n`);
+    if (options.missingPackPath !== undefined) rmSync(join(root, options.missingPackPath));
+    if (options.reviewedSymlinkPath !== undefined) {
+        rmSync(join(root, options.reviewedSymlinkPath));
+        symlinkSync('reviewed-symlink-target', join(root, options.reviewedSymlinkPath));
+    }
+    if (options.nestedPackLock === true) writeFileSync(join(root, 'work-batches',
+        'implementation-pack.lock.json'), '{"nested":true}\n');
+    git(repositoryPath, ['add', 'docs/spec/implementation/test-pack']);
+    git(repositoryPath, ['commit', '-m', 'fixture-reviewed-candidate']);
+    const reviewedCommit = git(repositoryPath, ['rev-parse', 'HEAD']).trim();
+    if (options.reviewedSymlinkPath !== undefined) {
+        rmSync(join(root, options.reviewedSymlinkPath));
+        writeFileSync(join(root, options.reviewedSymlinkPath), 'reviewed-symlink-target');
+    }
+    const acceptance = {schemaVersion: 1, packId: 'test-pack', verdict: 'accept', reviewerId: 'reviewer-1',
+        reviewSessionId: 'review-session-1', acceptedManifestDigest: semanticDigest(manifest),
+        findings: [...(options.acceptanceFindings ?? [])], reviewedCommit,
+        acceptedAt: options.acceptedAt ?? '2026-08-01T10:00:00Z'};
+    writeJson(join(root, 'pack-acceptance.json'), acceptance);
+    const files = sealedFiles(root);
+    const lockBody = {schemaVersion: 1, packId: 'test-pack', manifestDigest: semanticDigest(manifest),
+        acceptanceDigest: semanticDigest(acceptance), sourceBaselines: manifest.sourceBaselines, files};
+    writeJson(join(root, 'implementation-pack.lock.json'), {...lockBody,
+        sealId: semanticDigest(lockBody), generatedAt: '2026-08-01T10:00:01Z'});
+    git(repositoryPath, ['add', 'docs/spec/implementation/test-pack']);
+    git(repositoryPath, ['commit', '-m', 'fixture-acceptance-publication']);
+    if (options.omitReviewAuthority !== true) writeFileSync(join(laneDir, 'state', 'pack-review-events.jsonl'),
+        `${JSON.stringify(packReviewEvent(authorLaneId, 'handoff', 'implementer', 'pack-author-session-1',
+            'pack-author-1', 'pack-author-event'))}\n${JSON.stringify(packReviewEvent(authorLaneId, 'accept', 'reviewer',
+            'review-session-1', 'reviewer-1', 'pack-review-event'))}\n`);
+}
+
+function sealedFiles(root: string): Array<{path: string; sha256: string; bytes: number}> {
+    const result: Array<{path: string; sha256: string; bytes: number}> = [];
+    const visit = (directory: string): void => {
+        for (const name of readdirSync(directory).sort()) {
+            const path = join(directory, name);
+            if (lstatSync(path).isDirectory()) visit(path);
+            else if (path.slice(root.length + 1) !== 'implementation-pack.lock.json') {
+                const bytes = readFileSync(path);
+                result.push({path: path.slice(root.length + 1), sha256: digest(bytes), bytes: bytes.length});
+            }
+        }
+    };
+    visit(root); return result.sort((a, b) => a.path.localeCompare(b.path));
+}
+function digest(bytes: Buffer): string { return `sha256:${createHash('sha256').update(bytes).digest('hex')}`; }
+function git(cwd: string, args: string[]): string {
+    return String(cmd.execSync({command: 'git', args, options: {cwd, stdio: ['ignore', 'pipe', 'ignore']}}));
+}
+
+function packReviewEvent(laneId: string, type: 'handoff' | 'accept', role: 'implementer' | 'reviewer',
+    session: string, producer: string, eventId: string): WorkerEventRecord {
+    return {schemaVersion: 1, eventId, type, sequence: type === 'handoff' ? 0 : 1,
+        at: type === 'handoff' ? '2026-08-01T09:59:00Z' : '2026-08-01T10:00:00Z', laneId, producer,
+        correlationId: 'pack-review:test-pack', causationId: type === 'accept' ? 'pack-author-event' : null,
+        policyVersion: 'v1', payload: {role, batch: 'test-pack', session}};
 }

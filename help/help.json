@@ -26,6 +26,12 @@
       "group": "basic",
       "summary": "List Watchtower lanes relevant to the resolved repository without changing lane state.",
       "usage": "wt list [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--limit=<1-200>] [--cursor=<opaque>] [--json] [--no-color] [--verbose]"
+    },
+    {
+      "name": "status",
+      "group": "basic",
+      "summary": "Report one lane's validated health, runtime observations, events, and conflicts without repair.",
+      "usage": "wt status [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color] [--verbose]"
     }
   ]
 }

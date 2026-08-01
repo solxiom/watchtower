@@ -1,5 +1,6 @@
 import {roleEventCompatibility, validateEventCompatibility} from '../contracts/events.js';
 import type {WorkerEventRecord, WorkerEventRole} from '../contracts/events.js';
+import {isRfc3339DateTime} from './rfc3339DateTime.js';
 
 export interface JsonlWarning {
     line: number;
@@ -13,7 +14,6 @@ export interface JsonlParseResult {
 
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$/;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const DATE_TIME_PATTERN = /^(\d{4})-(\d{2})-(\d{2})T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/;
 
 export function parseJsonlStream(content: string): JsonlParseResult {
     const lines = content.split('\n');
@@ -113,7 +113,7 @@ function requiredInteger(record: Record<string, unknown>, field: string): string
 
 function requiredDateTime(record: Record<string, unknown>, field: string): string | undefined {
     const value = record[field];
-    return typeof value === 'string' && isValidDateTime(value)
+    return typeof value === 'string' && isRfc3339DateTime(value)
         ? undefined : `${field} must be an ISO date-time`;
 }
 
@@ -124,16 +124,6 @@ function requiredUuid(record: Record<string, unknown>, field: string): string | 
 function requiredCausationId(record: Record<string, unknown>): string | undefined {
     return record.causationId === null || (typeof record.causationId === 'string' && ID_PATTERN.test(record.causationId))
         ? undefined : 'causationId must be a valid ID or null';
-}
-
-function isValidDateTime(value: string): boolean {
-    const match = DATE_TIME_PATTERN.exec(value);
-    if (match === null) return false;
-    const year = Number(match[1]);
-    const month = Number(match[2]);
-    const day = Number(match[3]);
-    const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
-    return month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth;
 }
 
 function findDuplicateMember(json: string): string | undefined {

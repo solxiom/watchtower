@@ -1,6 +1,6 @@
 # Read model Tracker
 
-Status: **Active implementation — 13/14 batches accepted**
+Status: **Complete — 14/14 batches accepted**
 
 | Batch | Capability | State | Acceptance proof |
 |---|---|---|---|
@@ -16,7 +16,7 @@ Status: **Active implementation — 13/14 batches accepted**
 | RM-09 | Tmux, watcher, heartbeat, and worker observations | ✅ Accepted | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
 | RM-10 | `list` and `config show` | ✅ Accepted after correction 01 | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
 | RM-11 | Repository NVB parent-chain composition | ✅ Accepted after correction 02 | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
-| RM-12 | `status` command and read-only integration | ⏳ Independent review | Stable status schema; complete health/warning matrix; full read-only hash proof |
+| RM-12 | `status` command and read-only integration | ✅ Accepted after correction 06 | Accepted-pack integrity, authoritative event filtering, closed status schema, real CLI and recursive read-only proof |
 | RM-13 | Deterministic JSON Schema composition | ✅ Accepted after correction 02 | Duplicate `$defs`, unresolved `$ref`, root-conflict rejection; byte-identical regeneration |
 
 RM-02 correction 04 was independently accepted by durable reviewer event

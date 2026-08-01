@@ -35,3 +35,7 @@ export type {LaneListQuery, LaneListServiceOptions} from './LaneListService.js';
 export {digestLaneListQuery, MAX_LIST_PAGE_SIZE, paginateLaneList, validateLaneListPageInput} from './LaneListCursor.js';
 export {ResolvedConfigService} from './ResolvedConfigService.js';
 export type {ResolvedConfigQuery, ResolvedConfigServiceOptions} from './ResolvedConfigService.js';
+export {StatusProjection} from './StatusProjection.js';
+export type {StatusProjectionOptions, StatusProjectionQuery} from './StatusProjection.js';
+export {deriveStatusHealth} from './statusHealth.js';
+export type {StatusHealthInput} from './statusHealth.js';

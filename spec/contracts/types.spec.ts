@@ -34,11 +34,20 @@ const lane: ResolvedLane = {
 };
 
 const status: LaneStatusV1 = {
+    schemaVersion: 1,
     lane: {id: manifest.laneId, slug: manifest.slug, initiativeId: manifest.initiativeId, kind: 'implementation', controlHome: lane.controlHome},
-    repositories: lane.repositories,
+    repositories: lane.repositories.map(repository => ({...repository})),
     lifecycle: {status: 'unknown', activeBatch: null},
     health: {status: 'invalid', warnings: []},
-    workerSessions: {}, watcher: {}, coordinator: {}, runtime: {}
+    packIntegrity: {status: 'missing', sealId: null},
+    workerSessions: {
+        implementer: {name: null, present: false}, reviewer: {name: null, present: false}
+    },
+    watcher: {running: false, heartbeatStatus: 'absent', lastHeartbeatAt: null},
+    coordinator: {status: 'unavailable'},
+    latestEvent: null, batchProgress: {accepted: null, total: null}, relatedLanes: [], conflicts: [],
+    runtime: {qualification: 'unavailable', configured: null, installed: null,
+        available: false, availableVersions: []}, diagnostics: null
 };
 
 const workerEvent: WorkerEventV1 = {

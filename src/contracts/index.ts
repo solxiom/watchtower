@@ -42,7 +42,6 @@ export type {
     EnvelopeValidationResult,
     EnvConfigResult,
     HealthStatus,
-    HealthSummary,
     ImplementationPackRef,
     JsonArray,
     JsonObject,
@@ -59,9 +58,6 @@ export type {
     ParseDiagnostic,
     ParserDiagnosticCode,
     ReadModelLaneLifecycle,
-    LaneStatusLane,
-    LaneStatusV1,
-    LifecycleStatus,
     RepositoryBinding,
     RepositoryMembership,
     RepositoryRef,
@@ -75,6 +71,30 @@ export type {
     WorkspaceResolution,
     WorktreeMode
 } from './types.js';
+export type {
+    LaneStatusV1,
+    StatusBatchProgress,
+    StatusConflictView,
+    StatusCoordinatorView,
+    StatusDiagnostics,
+    StatusEventView,
+    StatusIndexState,
+    StatusPackIndexView,
+    StatusPackIntegrityView,
+    StatusPackIntegrityState,
+    StatusLaneView,
+    StatusLifecycleView,
+    StatusOperatorSessionsView,
+    StatusRelatedLane,
+    StatusRepositoryView,
+    StatusRuntimeView,
+    StatusRuntimeIndexView,
+    StatusWarning,
+    StatusWarningCode,
+    StatusWatcher,
+    StatusWorkerSession,
+    StatusWorkerSessions
+} from './statusModels.js';
 export type {
     ConfigResolutionSources,
     LaneConflictState,

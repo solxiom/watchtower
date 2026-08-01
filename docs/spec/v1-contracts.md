@@ -184,7 +184,21 @@ Requiring an acceptance record to contain the hash of the same commit that
 contains that record would be self-referential and is forbidden. The reviewer
 must differ from the recorded pack-author session identity. OS username or Git
 author text alone is not independence proof; identity comes from the durable
-role/session event referenced by `reviewSessionId`.
+role/session event referenced by `reviewSessionId`. Watchtower reads the pack
+author's durable role evidence from `state/pack-review-events.jsonl` in the
+lane identified by `authoredByLaneId`. The author handoff is unique. The
+reviewer accept uses the same pack and correlation ID, directly names the
+handoff as its cause, and follows it in both journal sequence and RFC 3339
+time. A critical `superseded` finding also carries `acceptedReviewRef` naming
+a different reviewer-accept event with the same lane, pack, correlation,
+causal handoff, policy, and ordering rules.
+
+Proof inputs may occur on the implementation pack or on an individual batch as
+`proofInputs`. Each entry is the closed object `{repository, path, optional}`:
+`repository` names a declared repository (and, for a batch entry, one of that
+batch's repositories), `path` is a canonical repository-relative path, and
+`optional` is boolean. A repository/path pair occurs at most once across the
+pack and all batches; duplicate or contradictory declarations are invalid.
 
 ### 3.4 Seal and canonicalization
 

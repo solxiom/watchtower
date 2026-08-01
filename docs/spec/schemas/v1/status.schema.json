@@ -1,0 +1,173 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.status",
+    "includes": ["watchtower.v1.status-details"]
+  },
+  "$defs": {
+    "statusProjection": {
+      "type": "object",
+      "required": [
+        "schemaVersion", "lane", "repositories", "lifecycle", "health", "packIntegrity", "workerSessions", "watcher", "coordinator",
+        "latestEvent", "batchProgress", "relatedLanes", "conflicts", "runtime", "diagnostics"
+      ],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "lane": {"$ref": "#/$defs/statusLane"},
+        "repositories": {"type": "array", "items": {"$ref": "#/$defs/statusRepository"}},
+        "lifecycle": {"$ref": "#/$defs/statusLifecycle"},
+        "health": {"$ref": "#/$defs/statusHealth"},
+        "packIntegrity": {"$ref": "#/$defs/statusPackIntegrity"},
+        "workerSessions": {"$ref": "#/$defs/statusWorkerSessions"},
+        "watcher": {"$ref": "#/$defs/statusWatcher"},
+        "coordinator": {"$ref": "#/$defs/statusCoordinator"},
+        "latestEvent": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/statusEvent"}]},
+        "batchProgress": {"$ref": "#/$defs/statusBatchProgress"},
+        "relatedLanes": {"type": "array", "items": {"$ref": "#/$defs/statusRelatedLane"}},
+        "conflicts": {"type": "array", "items": {"$ref": "#/$defs/statusConflict"}},
+        "runtime": {"$ref": "#/$defs/statusRuntime"},
+        "diagnostics": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/statusDiagnostics"}]}
+      },
+      "additionalProperties": false
+    },
+    "statusLane": {
+      "type": "object",
+      "required": ["id", "slug", "initiativeId", "kind", "controlHome"],
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "slug": {"type": "string", "minLength": 1},
+        "initiativeId": {"type": "string", "minLength": 1},
+        "kind": {"const": "implementation"},
+        "controlHome": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "statusRepository": {
+      "type": "object",
+      "required": ["id", "role", "access", "path", "branch", "worktreeMode"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "role": {"type": "string", "minLength": 1},
+        "access": {"enum": ["read", "write"]},
+        "path": {"type": ["string", "null"]},
+        "branch": {"type": ["string", "null"]},
+        "worktreeMode": {"enum": ["dedicated", "shared", null]}
+      },
+      "additionalProperties": false
+    },
+    "statusLifecycle": {
+      "type": "object",
+      "required": ["status", "activeBatch"],
+      "properties": {
+        "status": {"enum": ["bootstrap", "active", "paused", "complete", "unknown"]},
+        "activeBatch": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "statusHealth": {
+      "type": "object",
+      "required": ["status", "warnings"],
+      "properties": {
+        "status": {"enum": ["ok", "attention", "complete", "invalid"]},
+        "warnings": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/statusWarning"}}
+      },
+      "additionalProperties": false
+    },
+    "statusWarning": {
+      "type": "object",
+      "required": ["code", "severity", "message"],
+      "properties": {
+        "code": {"enum": [
+          "INVALID_LANE_STATE", "INVALID_LANE_CONFIG", "INVALID_INSTALL", "INVALID_REPOSITORY_BINDINGS",
+          "IMPLEMENTATION_PACK_MISSING", "IMPLEMENTATION_PACK_UNAVAILABLE", "IMPLEMENTATION_PACK_INVALID",
+          "IMPLEMENTATION_PACK_UNACCEPTED", "IMPLEMENTATION_PACK_DRIFT", "SOURCE_BASELINE_CRITICAL",
+          "SOURCE_BASELINE_UNAVAILABLE", "SOURCE_BASELINE_UNRELATED",
+          "SOURCE_BASELINE_OPTIONAL_UNAVAILABLE", "MEMBERSHIP_INDEX_STALE", "REPOSITORY_UNAVAILABLE",
+          "CONFLICT_OBSERVATION_INCOMPLETE", "WRITABLE_CONFLICT", "PROOF_RESOURCE_CONFLICTS_UNAVAILABLE",
+          "LANE_BUSY", "TMUX_UNAVAILABLE", "WATCHER_MISSING",
+          "WATCHER_HEARTBEAT_ABSENT", "WATCHER_HEARTBEAT_INVALID", "WATCHER_STALE",
+          "WORKER_SESSION_MISSING", "DURABLE_EVENT_CORRUPT", "DURABLE_EVENT_REJECTED", "PENDING_WORKER_EVENT",
+          "RUNTIME_INTEGRITY_UNAVAILABLE"
+        ]},
+        "severity": {"enum": ["attention", "invalid"]},
+        "message": {"type": "string", "minLength": 1}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "code": {"enum": [
+              "INVALID_LANE_STATE", "INVALID_LANE_CONFIG", "INVALID_INSTALL",
+              "INVALID_REPOSITORY_BINDINGS", "IMPLEMENTATION_PACK_MISSING", "IMPLEMENTATION_PACK_UNAVAILABLE",
+              "IMPLEMENTATION_PACK_INVALID", "IMPLEMENTATION_PACK_UNACCEPTED", "IMPLEMENTATION_PACK_DRIFT",
+              "SOURCE_BASELINE_CRITICAL", "SOURCE_BASELINE_UNAVAILABLE"
+            ]},
+            "severity": {"const": "invalid"}
+          }
+        },
+        {
+          "properties": {
+            "code": {"enum": [
+              "SOURCE_BASELINE_UNRELATED", "SOURCE_BASELINE_OPTIONAL_UNAVAILABLE", "MEMBERSHIP_INDEX_STALE",
+              "REPOSITORY_UNAVAILABLE", "CONFLICT_OBSERVATION_INCOMPLETE", "WRITABLE_CONFLICT",
+              "PROOF_RESOURCE_CONFLICTS_UNAVAILABLE", "LANE_BUSY",
+              "TMUX_UNAVAILABLE", "WATCHER_MISSING", "WATCHER_HEARTBEAT_ABSENT",
+              "WATCHER_HEARTBEAT_INVALID", "WATCHER_STALE", "WORKER_SESSION_MISSING",
+              "DURABLE_EVENT_CORRUPT", "DURABLE_EVENT_REJECTED", "PENDING_WORKER_EVENT",
+              "RUNTIME_INTEGRITY_UNAVAILABLE"
+            ]},
+            "severity": {"const": "attention"}
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "statusWorkerSession": {
+      "type": "object",
+      "required": ["name", "present"],
+      "properties": {"name": {"type": ["string", "null"]}, "present": {"type": "boolean"}},
+      "additionalProperties": false
+    },
+    "statusWorkerSessions": {
+      "type": "object",
+      "required": ["implementer", "reviewer"],
+      "properties": {
+        "implementer": {"$ref": "#/$defs/statusWorkerSession"},
+        "reviewer": {"$ref": "#/$defs/statusWorkerSession"}
+      },
+      "additionalProperties": false
+    },
+    "statusWatcher": {
+      "type": "object",
+      "required": ["running", "heartbeatStatus", "lastHeartbeatAt"],
+      "properties": {
+        "running": {"type": "boolean"},
+        "heartbeatStatus": {"enum": ["fresh", "stale", "absent", "invalid"]},
+        "lastHeartbeatAt": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "statusEvent": {
+      "type": "object",
+      "required": ["eventId", "type", "sequence", "at", "role", "batch", "session"],
+      "properties": {
+        "eventId": {"type": "string"}, "type": {"enum": ["handoff", "accept", "reject", "blocked"]},
+        "sequence": {"type": "integer", "minimum": 0}, "at": {"type": "string", "format": "date-time"},
+        "role": {"enum": ["implementer", "reviewer"]}, "batch": {"type": "string"},
+        "session": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "statusPackIntegrity": {
+      "type": "object", "required": ["status", "sealId"],
+      "properties": {
+        "status": {"enum": ["valid", "missing", "unavailable", "invalid", "unaccepted", "drift"]},
+        "sealId": {"type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{64}$"}
+      },
+      "oneOf": [
+        {"properties": {"status": {"const": "valid"}, "sealId": {"type": "string"}}},
+        {"properties": {"status": {"enum": ["missing", "unavailable", "invalid", "unaccepted", "drift"]}, "sealId": {"type": "null"}}}
+      ],
+      "additionalProperties": false
+    }
+  }
+}

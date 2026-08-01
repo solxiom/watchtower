@@ -15,7 +15,8 @@
       "watchtower.v1.pack",
       "watchtower.v1.proposal",
       "watchtower.v1.reports",
-      "watchtower.v1.resolution"
+      "watchtower.v1.resolution",
+      "watchtower.v1.status"
     ]
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",

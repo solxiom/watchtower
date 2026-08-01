@@ -5,6 +5,16 @@
     "includes": []
   },
   "$defs": {
+    "proofInput": {
+      "type": "object",
+      "required": ["repository", "path", "optional"],
+      "properties": {
+        "repository": {"$ref": "#/$defs/id"},
+        "path": {"$ref": "#/$defs/relativePath"},
+        "optional": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
     "implementationPack": {
       "type": "object",
       "required": [
@@ -100,6 +110,11 @@
             },
             "additionalProperties": true
           }
+        },
+        "proofInputs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/proofInput"}
         },
         "artifacts": {
           "type": "object",

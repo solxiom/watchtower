@@ -16,7 +16,7 @@ const sharedValueFlags = new Set(['--workspace', '--lane', '--initiative']);
 const listValueFlags = new Set(['--limit', '--cursor']);
 const booleanFlags = new Set(['--json', '--no-color', '--verbose']);
 
-export function parseReadCommandOptions(args: CArgMap, command: 'list' | 'config'): ReadCommandOptions {
+export function parseReadCommandOptions(args: CArgMap, command: 'list' | 'config' | 'status'): ReadCommandOptions {
     const positional = command === 'config' ? new Set(['show']) : new Set<string>();
     const valueFlags = command === 'list' ? new Set([...sharedValueFlags, ...listValueFlags]) : sharedValueFlags;
     for (const [key, value] of args.entries()) validateArgument(key, value, positional, valueFlags);
@@ -33,7 +33,7 @@ export function parseReadCommandOptions(args: CArgMap, command: 'list' | 'config
 
 export function validateRawReadCommandArguments(rawArgs: readonly string[]): void {
     const command = rawArgs.find(argument => !argument.startsWith('-'));
-    if (command !== 'list' && command !== 'config') return;
+    if (command !== 'list' && command !== 'config' && command !== 'status') return;
     const valueFlags = command === 'list' ? [...sharedValueFlags, ...listValueFlags] : [...sharedValueFlags];
     for (const flag of [...valueFlags, ...booleanFlags]) {
         if (rawArgs.filter(argument => argument === flag || argument.startsWith(`${flag}=`)).length > 1) invalid(flag);
@@ -56,8 +56,8 @@ function validateArgument(key: string, value: string, positional: ReadonlySet<st
     invalid(key);
 }
 
-function listPageOptions(args: CArgMap, command: 'list' | 'config'): Pick<ReadCommandOptions, 'limit' | 'cursor'> {
-    if (command === 'config') return {};
+function listPageOptions(args: CArgMap, command: 'list' | 'config' | 'status'): Pick<ReadCommandOptions, 'limit' | 'cursor'> {
+    if (command !== 'list') return {};
     const limitText = args.getFlag('limit', true);
     const cursor = args.getFlag('cursor', true);
     let limit: number | undefined;
