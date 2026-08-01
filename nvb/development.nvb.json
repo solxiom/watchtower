@@ -1,0 +1,11 @@
+{
+  /* Development composition: this fragment owns only developer-facing groups. */
+  parent: "./distribution.nvb.json",
+  tasks: {
+    'check:development-nvb': {
+      doc: { summary: "Validate the development NVB parent chain and effective catalog.", usage: "`nvb check:development-nvb`" },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/validateDevelopmentNvb.mjs"] }], type: "auto", preferType: "sync" }
+    }
+  }
+}

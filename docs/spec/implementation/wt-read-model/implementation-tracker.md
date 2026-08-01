@@ -15,7 +15,7 @@ Status: **Synchronized remediation candidate**
 | RM-08 | Repository bindings and writable conflict inspection | ❌ Pending | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
 | RM-09 | Tmux, watcher, heartbeat, and worker observations | ❌ Pending | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
 | RM-10 | `list` and `config show` | ❌ Pending | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
-| RM-11 | Repository NVB parent-chain composition | ❌ Pending | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
+| RM-11 | Repository NVB parent-chain composition | ⏳ Correction 02 handoff ready | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |
 | RM-12 | `status` command and read-only integration | ❌ Pending | Stable status schema; complete health/warning matrix; full read-only hash proof |
 | RM-13 | Deterministic JSON Schema composition | ✅ Accepted after correction 02 | Duplicate `$defs`, unresolved `$ref`, root-conflict rejection; byte-identical regeneration |
 

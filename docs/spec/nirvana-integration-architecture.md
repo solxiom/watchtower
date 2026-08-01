@@ -198,6 +198,17 @@ capability-owned parent-chain fragments. Product runtime tasks remain separate
 under `runtime-nvb/`; this development composition does not authorize
 Watchtower to inspect or modify a participating repository's NVB config.
 
+The repository runs `nvb check:development-nvb` to load that parent chain and
+fail closed on missing, escaping, circular, or duplicate task/group parents.
+Every target is canonicalized before it is read; a missing or broken target is
+reported before containment, while an existing target whose canonical location
+escapes the repository is rejected. The gate accepts only the closed NVB
+development-config shape, compares effective task/group identities with the
+checked-in baseline, and rejects root or hand-maintained registry fragments,
+including the effective-catalog registry, over the engineering-standard
+physical-line limit. This is a development
+architecture gate, not a shipped lane action.
+
 ## 4. Layer and facade map
 
 ### 4.1 CLI and presentation

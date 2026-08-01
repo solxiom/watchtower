@@ -1,0 +1,1 @@
+{ parent: "./duplicateTaskParent.nvb.json", tasks: { build: {} } }

@@ -1,0 +1,10 @@
+{
+  "taskIds": [
+    "build", "build:tests", "check:development-nvb", "clean", "dist:chmod-bin", "dist:clean",
+    "dist:clean-build", "dist:clean-esm-stamp", "dist:compile", "dist:copy-bin",
+    "dist:copy-config", "dist:copy-help", "dist:fix-esm", "dist:package",
+    "dist:runtime-nvb:compile", "dist:runtime-nvb:copy", "runtime-nvb:validate",
+    "schema:stage-build", "schema:stage-dist", "test"
+  ],
+  "groupIds": ["dev:run", "dist"]
+}

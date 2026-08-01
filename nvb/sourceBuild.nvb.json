@@ -1,0 +1,56 @@
+{
+  /* Source compilation and test tasks; asset staging is inherited, never duplicated. */
+  parent: "../distributionAssets.nvb.json",
+  tasks: {
+    'build': {
+      doc: { summary: "Compile the watchtower source tree.", usage: "`nvb build`" },
+      runnerOpts: { postTasks: ["schema:stage-build"] },
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{ tsConfigFile: "./tsconfig.json", destPath: "./build" }],
+        type: "auto"
+      }
+    },
+    'build:tests': {
+      doc: { summary: "Compile watchtower source and spec trees for testing.", usage: "`nvb build:tests`" },
+      runnerOpts: { postTasks: ["schema:stage-build"] },
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{ tsConfigFile: "./tsconfig.tests.json", destPath: "./build" }],
+        type: "auto"
+      }
+    },
+    'test': {
+      doc: { summary: "Build and run watchtower specs with Jasmine.", usage: "`nvb test`" },
+      runnerOpts: { preTasks: ["build:tests"], postTasks: [] },
+      handle: {
+        handler: "JasmineRunHandler",
+        args: [{
+          title: "Running watchtower specs:",
+          jasmineExecPath: "./node_modules/.bin/jasmine",
+          jasminConfigPath: "./spec/support/jasmine.json"
+        }],
+        type: "auto"
+      }
+    },
+    'clean': {
+      doc: { summary: "Remove the build output directory.", usage: "`nvb clean`" },
+      runnerOpts: {},
+      handle: {
+        handler: "BasicCleanHandler",
+        args: ["build"],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'runtime-nvb:validate': {
+      doc: { summary: "Validate runtime-nvb manifest and file structure.", usage: "`nvb runtime-nvb:validate`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CommandHandler",
+        args: [{ name: "node", args: ["./scripts/validateRuntimeNvbManifest.mjs"] }],
+        type: "auto"
+      }
+    }
+  }
+}
