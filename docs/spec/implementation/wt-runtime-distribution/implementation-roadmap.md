@@ -4,7 +4,7 @@ Status: **Synchronized remediation candidate**
 
 | Wave | Batch | Capability | Depends on | Ownership |
 |---:|---|---|---|---|
-| 2 | RT-01 | Canonical runtime/knowledge audit and shell classification | `RM-01` | `runtime/`, `knowledge/`, import record |
+| 2 | RT-01 | Canonical runtime/knowledge audit and shell classification (✅ accepted) | `RM-01` | `runtime/`, `knowledge/`, import record |
 | 3 | RT-02 | Runtime and knowledge manifests | `RT-01`, `RM-11` | runtime/knowledge manifest contracts and validators |
 | 5 | RT-03 | Packaged runtime and distribution staging | `RT-02`, `RT-08`–`RT-10`, `DB-01` | dist configuration and packaged aggregate validation |
 | 4 | RT-04 | Immutable data-root catalog and staging | `RT-02`, `RM-03` | runtime catalog foundation |

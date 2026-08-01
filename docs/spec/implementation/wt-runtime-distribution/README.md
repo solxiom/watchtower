@@ -6,7 +6,7 @@ This pack is one part of the accepted 74-batch/33-wave architecture. The explici
 
 | Batch | Capability | Work | Review | State |
 |---|---|---|---|---|
-| RT-01 | Canonical runtime/knowledge audit and shell classification | [work](work-batches/RT-01-runtime-and-knowledge-asset-audit-import.md) | [review](review-batches/RT-01-review-runtime-and-knowledge-asset-audit-import.md) | ❌ Pending |
+| RT-01 | Canonical runtime/knowledge audit and shell classification | [work](work-batches/RT-01-runtime-and-knowledge-asset-audit-import.md) | [review](review-batches/RT-01-review-runtime-and-knowledge-asset-audit-import.md) | ✅ Accepted |
 | RT-02 | Runtime and knowledge manifests | [work](work-batches/RT-02-runtime-and-knowledge-manifests.md) | [review](review-batches/RT-02-review-runtime-and-knowledge-manifests.md) | ❌ Pending |
 | RT-03 | Packaged runtime and distribution staging | [work](work-batches/RT-03-nvb-distribution-staging.md) | [review](review-batches/RT-03-review-nvb-distribution-staging.md) | ❌ Pending |
 | RT-04 | Immutable data-root catalog and staging | [work](work-batches/RT-04-immutable-data-root-catalog-and-staging.md) | [review](review-batches/RT-04-review-immutable-data-root-catalog-and-staging.md) | ❌ Pending |
