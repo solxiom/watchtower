@@ -28,7 +28,7 @@ export type {MembershipIndexFileSystem} from './membershipIndex.js';
 export {discoverSecondaryLanes} from './SecondaryDiscovery.js';
 export {readRepositoryBindings} from './repositoryBindings.js';
 export type {RepositoryBindingInspector} from './repositoryBindings.js';
-export {inspectWritableConflicts} from './writableConflicts.js';
+export {inspectWritableConflicts, resourcePathsOverlap} from './writableConflicts.js';
 export type {ActiveLaneClaims, WritableConflict, WritableConflictKind} from './writableConflicts.js';
 export {LaneListService} from './LaneListService.js';
 export type {LaneListQuery, LaneListServiceOptions} from './LaneListService.js';
@@ -39,3 +39,31 @@ export {StatusProjection} from './StatusProjection.js';
 export type {StatusProjectionOptions, StatusProjectionQuery} from './StatusProjection.js';
 export {deriveStatusHealth} from './statusHealth.js';
 export type {StatusHealthInput} from './statusHealth.js';
+export {consumePack, packRepoPath} from './PackConsumer.js';
+export type {
+    PackAcceptanceEvidence,
+    PackConsumerContext,
+    PackConsumerDeps,
+    PackEntry,
+    PackEntryKind,
+    PackEvidenceInspector,
+    PackFileSystem,
+    PackGitInspector,
+    PackRootBinding,
+    PackSchemaValidators,
+    PackSessionIdentity,
+    PackSessionRole,
+    PackTreeEntry,
+    PathAuthorization,
+    PathKind,
+    SourceRepositoryFacts
+} from './PackConsumer.js';
+export {observePackDrift} from './PackDriftObserver.js';
+export {classifyDrift, computeDocumentDigest, computeSealId, fileDigest, sortSealedFiles} from './PackSeal.js';
+export type {SealInput} from './PackSeal.js';
+export {gitUnavailable, gitValue} from './packConsumerPorts.js';
+export type {GitOutcome} from './packConsumerPorts.js';
+export {createNodePackFileSystem, nodePackFileSystem} from './packFilesystemHost.js';
+export type {PackStorage, PackStorageFactory} from './packFilesystemHost.js';
+export {nodePackGitInspector} from './packGitHost.js';
+export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';

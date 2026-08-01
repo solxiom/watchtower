@@ -193,6 +193,13 @@ time. A critical `superseded` finding also carries `acceptedReviewRef` naming
 a different reviewer-accept event with the same lane, pack, correlation,
 causal handoff, policy, and ordering rules.
 
+Each `acceptedInputs[]` entry names its declared `repository`, the input `path`
+and `sha256`, and an `acceptanceRef` that must resolve, under that declared
+repository, to committed accepted-review evidence for the input: a tracked,
+non-ignored, exact-case, committed regular file whose durable evidence records
+an `accept` verdict by a `reviewer`-role session. A tracked but arbitrary
+Markdown or review-brief file is not acceptance evidence.
+
 Proof inputs may occur on the implementation pack or on an individual batch as
 `proofInputs`. Each entry is the closed object `{repository, path, optional}`:
 `repository` names a declared repository (and, for a batch entry, one of that

@@ -30,6 +30,29 @@ export type {
     NirvanaClosureSuccess,
     NirvanaDependencyClosureManifest
 } from './nirvanaClosure.js';
+export {PACK_DRIFT_CODES, PACK_REJECTION_REASONS} from './pack.js';
+export type {
+    AcceptedInputObservation,
+    ConsumedPack,
+    DriftObservations,
+    ExtraPackEntryObservation,
+    PackAcceptedInput,
+    PackClaimPath,
+    PackConsumerAccepted,
+    PackConsumerRejection,
+    PackConsumerResult,
+    PackDriftCode,
+    PackDriftFinding,
+    PackDriftResult,
+    PackDriftSeverity,
+    PackRejectionReason,
+    PackSourceBaseline,
+    SealedFile,
+    SealedFileObservation,
+    SealedFilePresence,
+    Sha256Digest,
+    SourceBaselineObservation
+} from './pack.js';
 export {roleEventCompatibility, validateEventCompatibility} from './events.js';
 export type {WorkerEventRecord} from './events.js';
 export type {
