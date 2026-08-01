@@ -12,7 +12,7 @@ Status: **Synchronized remediation candidate**
 | RM-05 | Durable worker-event JSONL parser | ⏳ Admitted line | Role/event compatibility; malformed/partial-line handling; bounded latest lookup |
 | RM-06 | Home-lane discovery and deterministic selection | ⏳ Correction 01 handoff | Descendant/lane-dir discovery; UUID/slug precedence; complete ambiguity matrix |
 | RM-07 | Membership index and secondary-repository discovery | ✅ Accepted after correction 02 | Advisory validation; stale entries ignored/reported; reads never repair |
-| RM-08 | Repository bindings and writable conflict inspection | ❌ Pending | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
+| RM-08 | Repository bindings and writable conflict inspection | ✅ Accepted after correction 03 | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
 | RM-09 | Tmux, watcher, heartbeat, and worker observations | ❌ Pending | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
 | RM-10 | `list` and `config show` | ❌ Pending | Human/JSON parity; ambiguity behavior; redaction; read-only proof |
 | RM-11 | Repository NVB parent-chain composition | ⏳ Correction 02 handoff ready | Effective-task equivalence; duplicate/circular parent rejection; every hand-maintained registry within limit |

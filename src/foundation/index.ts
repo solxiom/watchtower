@@ -20,3 +20,7 @@ export type {LaneSelectionContext} from './LaneSelector.js';
 export {readMembershipIndex} from './membershipIndex.js';
 export type {MembershipIndexFileSystem} from './membershipIndex.js';
 export {discoverSecondaryLanes} from './SecondaryDiscovery.js';
+export {readRepositoryBindings} from './repositoryBindings.js';
+export type {RepositoryBindingInspector} from './repositoryBindings.js';
+export {inspectWritableConflicts} from './writableConflicts.js';
+export type {ActiveLaneClaims, WritableConflict, WritableConflictKind} from './writableConflicts.js';
