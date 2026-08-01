@@ -30,6 +30,8 @@ export type {
     NirvanaClosureSuccess,
     NirvanaDependencyClosureManifest
 } from './nirvanaClosure.js';
+export {roleEventCompatibility, validateEventCompatibility} from './events.js';
+export type {WorkerEventRecord} from './events.js';
 export type {
     AccessMode,
     ClaimMode,

@@ -8,3 +8,5 @@ export {resolveRepositoryRoot, resolveWorkspace} from './workspaceResolver.js';
 export * from './schemaComposition/index.js';
 export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
 export {renderError, renderResult} from './ResultRenderer.js';
+export {latest, parseJsonlStream} from './JsonlParser.js';
+export type {JsonlParseResult, JsonlWarning} from './JsonlParser.js';
