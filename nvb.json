@@ -1,12 +1,13 @@
 {
   /*This file supports JSON5 syntax — comments are allowed.*/
+  parent: "./distributionAssets.nvb.json",
   handlers: [
     "./handlers/**/*"
   ],
   tasks: {
     'build': {
       doc: { summary: "Compile the watchtower source tree.", usage: "`nvb build`" },
-      runnerOpts: {},
+      runnerOpts: { postTasks: ["schema:stage-build"] },
       handle: {
         handler: "TypeScriptBuildHandler",
          args: [{ tsConfigFile: "./tsconfig.json", destPath: "./build" }],
@@ -15,7 +16,7 @@
     },
     'build:tests': {
       doc: { summary: "Compile watchtower source and spec trees for testing.", usage: "`nvb build:tests`" },
-      runnerOpts: {},
+      runnerOpts: { postTasks: ["schema:stage-build"] },
       handle: {
         handler: "TypeScriptBuildHandler",
         args: [{ tsConfigFile: "./tsconfig.tests.json", destPath: "./build" }],
@@ -52,41 +53,11 @@
     },
     'dist:compile': {
       doc: { summary: "Compile watchtower source to dist/.", usage: "`nvb dist:compile`" },
-      runnerOpts: {},
+      runnerOpts: { postTasks: ["schema:stage-dist"] },
       handle: {
         handler: "TypeScriptBuildHandler",
         args: [{ tsConfigFile: "./tsconfig.dist.json", destPath: "./dist" }],
         type: "auto"
-      }
-    },
-    'dist:copy-bin': {
-      doc: { summary: "Copy bin entry to dist/bin/.", usage: "`nvb dist:copy-bin`" },
-      runnerOpts: {},
-      handle: {
-        handler: "CopyHandler",
-        args: [{ src: "bin/wt.js", dest: "dist/bin" }],
-        type: "auto",
-        preferType: "async"
-      }
-    },
-    'dist:copy-help': {
-      doc: { summary: "Copy help assets to dist/help/.", usage: "`nvb dist:copy-help`" },
-      runnerOpts: {},
-      handle: {
-        handler: "CopyHandler",
-        args: [{ src: "help/**/*", dest: "dist/help" }],
-        type: "auto",
-        preferType: "async"
-      }
-    },
-    'dist:copy-config': {
-      doc: { summary: "Copy config assets to dist/config/.", usage: "`nvb dist:copy-config`" },
-      runnerOpts: {},
-      handle: {
-        handler: "CopyHandler",
-        args: [{ src: "config/**/*", dest: "dist/config" }],
-        type: "auto",
-        preferType: "async"
       }
     },
     'dist:runtime-nvb:compile': {

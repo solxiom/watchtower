@@ -13,7 +13,7 @@
 - **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ⏳ Awaiting review
+Status: ⏳ Correction 04 awaiting independent re-review
 Reasoning: `R4`
 Paired work brief: `work-batches/RM-02-json-envelopes-and-schema-validation.md`
 Implementation report: `.local/agent-reports/wt-read-model/RM-02-json-envelopes-and-schema-validation.md`

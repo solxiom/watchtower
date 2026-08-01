@@ -1,0 +1,63 @@
+{
+  /* Capability-owned repository build and distribution asset staging. */
+  tasks: {
+    'schema:stage-build': {
+      doc: { summary: "Stage the generated v1 schema for compiled test and development code." },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{
+          src: "docs/spec/schemas/v1.schema.json",
+          dest: "build/docs/spec/schemas",
+          destOptions: { overwrite: true }
+        }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'schema:stage-dist': {
+      doc: { summary: "Stage the generated v1 schema in the distributable package." },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{
+          src: "docs/spec/schemas/v1.schema.json",
+          dest: "dist/docs/spec/schemas",
+          destOptions: { overwrite: true }
+        }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:copy-bin': {
+      doc: { summary: "Copy bin entry to dist/bin/.", usage: "`nvb dist:copy-bin`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{ src: "bin/wt.js", dest: "dist/bin" }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:copy-help': {
+      doc: { summary: "Copy help assets to dist/help/.", usage: "`nvb dist:copy-help`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{ src: "help/**/*", dest: "dist/help" }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
+    'dist:copy-config': {
+      doc: { summary: "Copy config assets to dist/config/.", usage: "`nvb dist:copy-config`" },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{ src: "config/**/*", dest: "dist/config" }],
+        type: "auto",
+        preferType: "async"
+      }
+    }
+  }
+}

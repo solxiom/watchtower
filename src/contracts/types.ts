@@ -49,6 +49,40 @@ export interface LaneStateResult {
     valid: boolean;
 }
 
+export type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+export interface JsonObject {readonly [field: string]: JsonValue;}
+export type JsonArray = readonly JsonValue[];
+
+/** Closed public envelope for a successful finite command. */
+export interface CommandResult {
+    schemaVersion: 1;
+    command: string;
+    ok: true;
+    data: JsonValue;
+}
+
+/** Closed nested error object carried by a failed command envelope. */
+export interface CommandErrorDetails {
+    code: string;
+    message: string;
+    exitCode: import('./exitCodes.js').ExitCode;
+    details?: JsonValue;
+}
+
+/** Closed public envelope for a failed finite command. */
+export interface CommandError {
+    schemaVersion: 1;
+    command: string;
+    ok: false;
+    error: CommandErrorDetails;
+}
+
+export type CommandEnvelope = CommandResult | CommandError;
+
+export type EnvelopeValidationResult =
+    | {valid: true; envelope: CommandEnvelope}
+    | {valid: false; error: CommandError};
+
 export interface LaneRef {
     laneId: string;
     slug: string;

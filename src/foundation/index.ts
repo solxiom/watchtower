@@ -6,3 +6,5 @@ export {authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPat
 export {resolveWatchtowerDataHome, validateWatchtowerDataHome} from './dataHomeResolver.js';
 export {resolveRepositoryRoot, resolveWorkspace} from './workspaceResolver.js';
 export * from './schemaComposition/index.js';
+export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
+export {renderError, renderResult} from './ResultRenderer.js';
