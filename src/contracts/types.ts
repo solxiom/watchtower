@@ -103,6 +103,29 @@ export interface RepositoryBinding extends RepositoryRef {
     worktreeMode: WorktreeMode;
 }
 
+/** A validated advisory index reference for one local participating worktree. */
+export interface RepositoryMembership {
+    readonly worktreePath: string;
+    readonly laneId: string;
+    readonly laneHome: string;
+    readonly lane: LaneRef;
+}
+
+export type MembershipWarningReason = 'PATH_MISSING' | 'LANE_JSON_MISSING' | 'BINDING_MISMATCH';
+
+/** A non-authoritative index entry rejected during advisory validation. */
+export interface MembershipWarning {
+    readonly worktreePath: string;
+    readonly laneId: string;
+    readonly laneHome: string;
+    readonly reason: MembershipWarningReason;
+}
+
+export interface MembershipIndexResult {
+    readonly memberships: readonly RepositoryMembership[];
+    readonly warnings: readonly MembershipWarning[];
+}
+
 export interface WorkspaceContext {
     cwd: string;
     workspace: string;

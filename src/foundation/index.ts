@@ -17,3 +17,6 @@ export type {
 } from './LaneDiscoveryFileSystem.js';
 export {resolveLane, selectLane} from './LaneSelector.js';
 export type {LaneSelectionContext} from './LaneSelector.js';
+export {readMembershipIndex} from './membershipIndex.js';
+export type {MembershipIndexFileSystem} from './membershipIndex.js';
+export {discoverSecondaryLanes} from './SecondaryDiscovery.js';
