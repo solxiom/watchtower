@@ -10,6 +10,12 @@ export {buildCommandError, buildCommandResult, validateEnvelope} from './command
 export {renderError, renderResult} from './ResultRenderer.js';
 export {latest, parseJsonlStream} from './JsonlParser.js';
 export type {JsonlParseResult, JsonlWarning} from './JsonlParser.js';
+export {latestWorkerEvents, observeRuntimeSessions, parseTmuxSessionNames} from './runtimeObservations.js';
+export type {LatestWorkerEvents, RuntimeSessionNames, RuntimeSessionObservation} from './runtimeObservations.js';
+export {NirvanaTmuxObserver} from './NirvanaTmuxObserver.js';
+export type {NirvanaTmuxObserverOptions, TmuxCommandPort, TmuxCommandRequest} from './NirvanaTmuxObserver.js';
+export {observeHeartbeat} from './heartbeatObservation.js';
+export type {HeartbeatFileReader, HeartbeatObservation, HeartbeatObservationOptions, HeartbeatStatus} from './heartbeatObservation.js';
 export {discoverHomeLanes, readLaneManifest} from './homeLaneDiscovery.js';
 export type {DiscoveredLane} from './laneDiscovery.js';
 export type {
