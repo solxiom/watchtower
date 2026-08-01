@@ -10,7 +10,7 @@ Status: **Synchronized remediation candidate**
 | RM-03 | Canonical paths and workspace resolution | ⏳ Admitted line | Resolution precedence; symlink/case/path-escape fixtures; missing explicit workspace |
 | RM-04 | Strict env and lane-state parsers | ⏳ Admitted line | Accepted scalar grammar; malicious shell corpus never executes; unknown-key preservation |
 | RM-05 | Durable worker-event JSONL parser | ⏳ Admitted line | Role/event compatibility; malformed/partial-line handling; bounded latest lookup |
-| RM-06 | Home-lane discovery and deterministic selection | ❌ Pending | Descendant/lane-dir discovery; UUID/slug precedence; complete ambiguity matrix |
+| RM-06 | Home-lane discovery and deterministic selection | ⏳ Correction 01 handoff | Descendant/lane-dir discovery; UUID/slug precedence; complete ambiguity matrix |
 | RM-07 | Membership index and secondary-repository discovery | ❌ Pending | Advisory validation; stale entries ignored/reported; reads never repair |
 | RM-08 | Repository bindings and writable conflict inspection | ❌ Pending | Canonical bindings; branch/worktree/access checks; claim overlap matrix |
 | RM-09 | Tmux, watcher, heartbeat, and worker observations | ❌ Pending | Qualified names; stale heartbeat; presence never treated as lifecycle authority |
