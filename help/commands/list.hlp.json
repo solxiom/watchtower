@@ -1,0 +1,16 @@
+{
+  "name": "list",
+  "group": "basic",
+  "summary": "List Watchtower lanes relevant to the resolved repository without changing lane state.",
+  "usage": "wt list [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--limit=<1-200>] [--cursor=<opaque>] [--json] [--no-color] [--verbose]",
+  "flags": [
+    {"name": "workspace", "description": "Resolve lanes from this existing repository or control-home path.", "optional": true},
+    {"name": "lane", "description": "Limit the result to one relevant lane ID or slug.", "optional": true},
+    {"name": "initiative", "description": "Limit results to one initiative ID.", "optional": true},
+    {"name": "limit", "description": "Return 1 to 200 records per page; defaults to 50.", "optional": true},
+    {"name": "cursor", "description": "Continue a stable projection from an opaque cursor.", "optional": true},
+    {"name": "json", "description": "Emit one versioned command-result envelope.", "optional": true},
+    {"name": "no-color", "description": "Disable ANSI color in human output.", "optional": true},
+    {"name": "verbose", "description": "Include bounded resolution, lane-count, page-count, warning, and conflict diagnostics.", "optional": true}
+  ]
+}

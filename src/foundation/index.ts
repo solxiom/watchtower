@@ -4,7 +4,7 @@ export {parseLaneState} from './stateParser.js';
 export * from './distribution/index.js';
 export {authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPathSafe} from './canonicalPaths.js';
 export {resolveWatchtowerDataHome, validateWatchtowerDataHome} from './dataHomeResolver.js';
-export {resolveRepositoryRoot, resolveWorkspace} from './workspaceResolver.js';
+export {resolveRepositoryRoot, resolveWorkspace, resolveWorkspaceContext} from './workspaceResolver.js';
 export * from './schemaComposition/index.js';
 export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
 export {renderError, renderResult} from './ResultRenderer.js';
@@ -21,7 +21,7 @@ export type {DiscoveredLane} from './laneDiscovery.js';
 export type {
     LaneDiscoveryEntry, LaneDiscoveryFileSystem, LaneDiscoveryPathInfo, LaneDiscoveryPathKind
 } from './LaneDiscoveryFileSystem.js';
-export {resolveLane, selectLane} from './LaneSelector.js';
+export {filterRelevantLanes, resolveLane, selectLane} from './LaneSelector.js';
 export type {LaneSelectionContext} from './LaneSelector.js';
 export {readMembershipIndex} from './membershipIndex.js';
 export type {MembershipIndexFileSystem} from './membershipIndex.js';
@@ -30,3 +30,8 @@ export {readRepositoryBindings} from './repositoryBindings.js';
 export type {RepositoryBindingInspector} from './repositoryBindings.js';
 export {inspectWritableConflicts} from './writableConflicts.js';
 export type {ActiveLaneClaims, WritableConflict, WritableConflictKind} from './writableConflicts.js';
+export {LaneListService} from './LaneListService.js';
+export type {LaneListQuery, LaneListServiceOptions} from './LaneListService.js';
+export {digestLaneListQuery, MAX_LIST_PAGE_SIZE, paginateLaneList, validateLaneListPageInput} from './LaneListCursor.js';
+export {ResolvedConfigService} from './ResolvedConfigService.js';
+export type {ResolvedConfigQuery, ResolvedConfigServiceOptions} from './ResolvedConfigService.js';

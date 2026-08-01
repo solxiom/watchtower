@@ -1,15 +1,31 @@
 import {existsSync, statSync} from 'node:fs';
 import {dirname, isAbsolute, join, relative, sep} from 'node:path';
 import {cmd} from '@nirvana/base/terminal';
+import type {WorkspaceContext} from '../contracts/index.js';
 import {createWatchtowerError} from '../contracts/errors.js';
 import {assertLexicallySafePath, canonicalizePath, safePathTarget} from './canonicalPaths.js';
 
 export function resolveWorkspace(explicit?: string, cwd: string = process.cwd()): string {
+    return resolveWorkspaceContext(explicit, cwd).workspace;
+}
+
+export function resolveWorkspaceContext(explicit?: string, cwd: string = process.cwd()): WorkspaceContext {
     if (explicit !== undefined) {
-        return resolveExplicitWorkspace(explicit);
+        const workspace = resolveExplicitWorkspace(explicit);
+        return {cwd: canonicalCwdOr(cwd, workspace), workspace, resolution: 'explicit'};
     }
-    const canonicalCwd = canonicalizePath(cwd);
-    return resolveRepositoryRoot(canonicalCwd) ?? findWatchtowerAncestor(canonicalCwd) ?? canonicalCwd;
+    const canonical = canonicalCwd(cwd);
+    const repository = resolveRepositoryRoot(canonical);
+    if (repository !== undefined) return {cwd: canonical, workspace: repository, resolution: 'git'};
+    const ancestor = findWatchtowerAncestor(canonical);
+    if (ancestor !== undefined) return {cwd: canonical, workspace: ancestor, resolution: 'ancestor'};
+    return {cwd: canonical, workspace: canonical, resolution: 'current-directory'};
+}
+
+function canonicalCwd(cwd: string): string { return canonicalizePath(cwd); }
+
+function canonicalCwdOr(cwd: string, fallback: string): string {
+    try { return canonicalCwd(cwd); } catch { return fallback; }
 }
 
 export function resolveRepositoryRoot(cwd: string = process.cwd()): string | undefined {

@@ -112,7 +112,73 @@
       "additionalProperties": true
     },
     "laneListPage": {
-      "$ref": "#/$defs/page"
+      "type": "object",
+      "required": ["items", "limit", "nextCursor", "revision", "warnings", "diagnostics"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {"$ref": "#/$defs/laneListItem"}
+        },
+        "limit": {"type": "integer", "minimum": 1, "maximum": 200},
+        "nextCursor": {"type": ["string", "null"]},
+        "revision": {"$ref": "#/$defs/digest"},
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["laneId", "reason"],
+            "properties": {
+              "laneId": {"type": "string"},
+              "reason": {"enum": ["PATH_MISSING", "LANE_JSON_MISSING", "BINDING_MISMATCH"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "diagnostics": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "required": [
+                "workspaceResolution", "relevantLaneCount", "matchedLaneCount", "pageItemCount",
+                "warningCount", "conflictCount"
+              ],
+              "properties": {
+                "workspaceResolution": {"enum": ["explicit", "git", "ancestor", "current-directory"]},
+                "relevantLaneCount": {"type": "integer", "minimum": 0},
+                "matchedLaneCount": {"type": "integer", "minimum": 0},
+                "pageItemCount": {"type": "integer", "minimum": 0, "maximum": 200},
+                "warningCount": {"type": "integer", "minimum": 0},
+                "conflictCount": {"type": "integer", "minimum": 0}
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "laneListItem": {
+      "type": "object",
+      "required": [
+        "laneId", "slug", "initiativeId", "kind", "controlHome", "repositoryCount",
+        "lifecycle", "activeBatch", "runtimeVersion", "conflictState", "conflicts"
+      ],
+      "properties": {
+        "laneId": {"type": "string", "format": "uuid"},
+        "slug": {"type": "string"},
+        "initiativeId": {"type": "string"},
+        "kind": {"const": "implementation"},
+        "controlHome": {"type": "string"},
+        "repositoryCount": {"type": "integer", "minimum": 1},
+        "lifecycle": {"enum": ["bootstrap", "active", "paused", "complete", "unknown"]},
+        "activeBatch": {"type": ["string", "null"]},
+        "runtimeVersion": {"type": "string"},
+        "conflictState": {"enum": ["none", "detected"]},
+        "conflicts": {"type": "array", "items": {"enum": ["shared-write", "path-conflict", "branch-conflict"]}}
+      },
+      "additionalProperties": false
     }
   }
 }

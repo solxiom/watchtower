@@ -115,24 +115,41 @@
       "type": "object",
       "required": [
         "laneId",
+        "slug",
+        "initiativeId",
+        "kind",
         "controlHome",
+        "logicalRepositories",
         "repositories",
         "laneDir",
         "runtimeRoot",
         "knowledgeRoot",
+        "runtimeVersion",
+        "knowledgeVersion",
         "config",
-        "redactedKeys"
+        "redactedKeys",
+        "sources",
+        "paths",
+        "diagnostics"
       ],
       "properties": {
         "laneId": {
           "type": "string",
           "format": "uuid"
         },
+        "slug": {"type": "string"},
+        "initiativeId": {"type": "string"},
+        "kind": {"const": "implementation"},
         "controlHome": {
           "type": "string"
         },
+        "logicalRepositories": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/repository"}
+        },
         "repositories": {
-          "type": "array"
+          "type": "array",
+          "items": {"$ref": "#/$defs/repositoryBindingView"}
         },
         "laneDir": {
           "type": "string"
@@ -143,17 +160,75 @@
         "knowledgeRoot": {
           "type": "string"
         },
+        "runtimeVersion": {"type": "string"},
+        "knowledgeVersion": {"type": "string"},
         "config": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": {"type": "string"}
         },
         "redactedKeys": {
           "type": "array",
           "items": {
             "type": "string"
           }
+        },
+        "sources": {
+          "type": "object",
+          "required": ["workspace", "lane", "dataHome"],
+          "properties": {
+            "workspace": {"enum": ["explicit", "git", "ancestor", "current-directory"]},
+            "lane": {"enum": ["explicit", "selection-precedence"]},
+            "dataHome": {"enum": ["WATCHTOWER_DATA_HOME", "XDG_DATA_HOME", "default"]}
+          },
+          "additionalProperties": false
+        },
+        "paths": {
+          "type": "object",
+          "required": ["config", "install", "repositories"],
+          "properties": {
+            "config": {"type": "string"},
+            "install": {"type": "string"},
+            "repositories": {"type": "string"}
+          },
+          "additionalProperties": false
+        },
+        "diagnostics": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "required": [
+                "workspaceResolution", "relevantLaneCount", "membershipWarningCount",
+                "logicalRepositoryCount", "localRepositoryCount", "configKeyCount", "redactedKeyCount"
+              ],
+              "properties": {
+                "workspaceResolution": {"enum": ["explicit", "git", "ancestor", "current-directory"]},
+                "relevantLaneCount": {"type": "integer", "minimum": 0},
+                "membershipWarningCount": {"type": "integer", "minimum": 0},
+                "logicalRepositoryCount": {"type": "integer", "minimum": 0},
+                "localRepositoryCount": {"type": "integer", "minimum": 0},
+                "configKeyCount": {"type": "integer", "minimum": 0},
+                "redactedKeyCount": {"type": "integer", "minimum": 0}
+              },
+              "additionalProperties": false
+            }
+          ]
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
+    },
+    "repositoryBindingView": {
+      "type": "object",
+      "required": ["id", "role", "access", "path", "branch", "worktreeMode"],
+      "properties": {
+        "id": {"type": "string"},
+        "role": {"type": "string"},
+        "access": {"enum": ["read", "write"]},
+        "path": {"type": "string"},
+        "branch": {"type": "string"},
+        "worktreeMode": {"enum": ["dedicated", "shared"]}
+      },
+      "additionalProperties": false
     }
   }
 }

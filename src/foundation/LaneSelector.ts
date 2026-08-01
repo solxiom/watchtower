@@ -21,9 +21,7 @@ export function resolveLane(context: LaneSelectionContext, fileSystem?: LaneDisc
 }
 
 export function selectLane(lanes: readonly DiscoveredLane[], context: LaneSelectionContext): DiscoveredLane {
-    validateFilter(context.initiative, 'initiative');
-    const candidates = lanes.filter(candidate => context.initiative === undefined ||
-        candidate.initiativeId === context.initiative).sort(compareLanes);
+    const candidates = filterRelevantLanes(lanes, context.initiative);
     if (context.lane !== undefined) return selectExplicit(candidates, context.lane);
     if (candidates.length === 0) throw laneNotFound('current repository');
     const containing = containingLanes(candidates, context.cwd);
@@ -33,6 +31,13 @@ export function selectLane(lanes: readonly DiscoveredLane[], context: LaneSelect
     if (active.length === 1) return active[0];
     if (candidates.length === 1) return candidates[0];
     throw ambiguity(candidates);
+}
+
+export function filterRelevantLanes(
+    lanes: readonly DiscoveredLane[], initiative?: string
+): DiscoveredLane[] {
+    validateFilter(initiative, 'initiative');
+    return lanes.filter(candidate => initiative === undefined || candidate.initiativeId === initiative).sort(compareLanes);
 }
 
 function selectExplicit(candidates: readonly DiscoveredLane[], selector: string): DiscoveredLane {

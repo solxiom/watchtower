@@ -682,8 +682,186 @@
       ],
       "type": "object"
     },
+    "laneListItem": {
+      "additionalProperties": false,
+      "properties": {
+        "activeBatch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "conflictState": {
+          "enum": [
+            "none",
+            "detected"
+          ]
+        },
+        "conflicts": {
+          "items": {
+            "enum": [
+              "shared-write",
+              "path-conflict",
+              "branch-conflict"
+            ]
+          },
+          "type": "array"
+        },
+        "controlHome": {
+          "type": "string"
+        },
+        "initiativeId": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "implementation"
+        },
+        "laneId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "lifecycle": {
+          "enum": [
+            "bootstrap",
+            "active",
+            "paused",
+            "complete",
+            "unknown"
+          ]
+        },
+        "repositoryCount": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "runtimeVersion": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "laneId",
+        "slug",
+        "initiativeId",
+        "kind",
+        "controlHome",
+        "repositoryCount",
+        "lifecycle",
+        "activeBatch",
+        "runtimeVersion",
+        "conflictState",
+        "conflicts"
+      ],
+      "type": "object"
+    },
     "laneListPage": {
-      "$ref": "#/$defs/page"
+      "additionalProperties": false,
+      "properties": {
+        "diagnostics": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "conflictCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "matchedLaneCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "pageItemCount": {
+                  "maximum": 200,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "relevantLaneCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "warningCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "workspaceResolution": {
+                  "enum": [
+                    "explicit",
+                    "git",
+                    "ancestor",
+                    "current-directory"
+                  ]
+                }
+              },
+              "required": [
+                "workspaceResolution",
+                "relevantLaneCount",
+                "matchedLaneCount",
+                "pageItemCount",
+                "warningCount",
+                "conflictCount"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/laneListItem"
+          },
+          "maxItems": 200,
+          "type": "array"
+        },
+        "limit": {
+          "maximum": 200,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "nextCursor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revision": {
+          "$ref": "#/$defs/digest"
+        },
+        "warnings": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "laneId": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "PATH_MISSING",
+                  "LANE_JSON_MISSING",
+                  "BINDING_MISMATCH"
+                ]
+              }
+            },
+            "required": [
+              "laneId",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "items",
+        "limit",
+        "nextCursor",
+        "revision",
+        "warnings",
+        "diagnostics"
+      ],
+      "type": "object"
     },
     "laneStatus": {
       "additionalProperties": true,
@@ -990,6 +1168,44 @@
       ],
       "type": "object"
     },
+    "repositoryBindingView": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "branch": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "worktreeMode": {
+          "enum": [
+            "dedicated",
+            "shared"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "access",
+        "path",
+        "branch",
+        "worktreeMode"
+      ],
+      "type": "object"
+    },
     "requirement": {
       "additionalProperties": true,
       "properties": {
@@ -1029,15 +1245,81 @@
       "type": "object"
     },
     "resolvedConfig": {
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "config": {
+          "additionalProperties": {
+            "type": "string"
+          },
           "type": "object"
         },
         "controlHome": {
           "type": "string"
         },
+        "diagnostics": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "configKeyCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "localRepositoryCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "logicalRepositoryCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "membershipWarningCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "redactedKeyCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "relevantLaneCount": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "workspaceResolution": {
+                  "enum": [
+                    "explicit",
+                    "git",
+                    "ancestor",
+                    "current-directory"
+                  ]
+                }
+              },
+              "required": [
+                "workspaceResolution",
+                "relevantLaneCount",
+                "membershipWarningCount",
+                "logicalRepositoryCount",
+                "localRepositoryCount",
+                "configKeyCount",
+                "redactedKeyCount"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "initiativeId": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "implementation"
+        },
         "knowledgeRoot": {
+          "type": "string"
+        },
+        "knowledgeVersion": {
           "type": "string"
         },
         "laneDir": {
@@ -1047,6 +1329,32 @@
           "format": "uuid",
           "type": "string"
         },
+        "logicalRepositories": {
+          "items": {
+            "$ref": "#/$defs/repository"
+          },
+          "type": "array"
+        },
+        "paths": {
+          "additionalProperties": false,
+          "properties": {
+            "config": {
+              "type": "string"
+            },
+            "install": {
+              "type": "string"
+            },
+            "repositories": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "config",
+            "install",
+            "repositories"
+          ],
+          "type": "object"
+        },
         "redactedKeys": {
           "items": {
             "type": "string"
@@ -1054,21 +1362,71 @@
           "type": "array"
         },
         "repositories": {
+          "items": {
+            "$ref": "#/$defs/repositoryBindingView"
+          },
           "type": "array"
         },
         "runtimeRoot": {
           "type": "string"
+        },
+        "runtimeVersion": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "sources": {
+          "additionalProperties": false,
+          "properties": {
+            "dataHome": {
+              "enum": [
+                "WATCHTOWER_DATA_HOME",
+                "XDG_DATA_HOME",
+                "default"
+              ]
+            },
+            "lane": {
+              "enum": [
+                "explicit",
+                "selection-precedence"
+              ]
+            },
+            "workspace": {
+              "enum": [
+                "explicit",
+                "git",
+                "ancestor",
+                "current-directory"
+              ]
+            }
+          },
+          "required": [
+            "workspace",
+            "lane",
+            "dataHome"
+          ],
+          "type": "object"
         }
       },
       "required": [
         "laneId",
+        "slug",
+        "initiativeId",
+        "kind",
         "controlHome",
+        "logicalRepositories",
         "repositories",
         "laneDir",
         "runtimeRoot",
         "knowledgeRoot",
+        "runtimeVersion",
+        "knowledgeVersion",
         "config",
-        "redactedKeys"
+        "redactedKeys",
+        "sources",
+        "paths",
+        "diagnostics"
       ],
       "type": "object"
     },

@@ -10,10 +10,22 @@
   ],
   "commands": [
     {
+      "name": "config",
+      "group": "basic",
+      "summary": "Show resolved lane identity, bindings, paths, and redacted strict configuration.",
+      "usage": "wt config show [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color] [--verbose]"
+    },
+    {
       "name": "hello",
       "group": "basic",
       "summary": "Say hello from watchtower.",
       "usage": "wt hello [--name=<name>]"
+    },
+    {
+      "name": "list",
+      "group": "basic",
+      "summary": "List Watchtower lanes relevant to the resolved repository without changing lane state.",
+      "usage": "wt list [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--limit=<1-200>] [--cursor=<opaque>] [--json] [--no-color] [--verbose]"
     }
   ]
 }

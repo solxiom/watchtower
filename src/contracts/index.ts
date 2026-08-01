@@ -75,3 +75,16 @@ export type {
     WorkspaceResolution,
     WorktreeMode
 } from './types.js';
+export type {
+    ConfigResolutionSources,
+    LaneConflictState,
+    LaneListDiagnostics,
+    LaneListItem,
+    LaneListPage,
+    LaneListWarning,
+    LaneSelectionSource,
+    RepositoryBindingView,
+    ResolvedConfigDiagnostics,
+    ResolvedConfigPaths,
+    ResolvedConfigV1
+} from './readModels.js';

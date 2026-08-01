@@ -42,7 +42,7 @@ describe('schema composition file adapter', function () {
         if (result.ok) {
             expect(result.wrote).toBeFalse();
             expect(result.fragmentCount).toBe(14);
-            expect(result.definitionCount).toBe(31);
+            expect(result.definitionCount).toBe(33);
         }
     });
 });
