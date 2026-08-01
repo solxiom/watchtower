@@ -1,0 +1,8 @@
+{
+  "catalogId": "watchtower-runtime-nvb/v1",
+  "profileId": "implementation-v1",
+  "schemaVersion": 1,
+  "taskIds": [
+    "wt:check:hello"
+  ]
+}

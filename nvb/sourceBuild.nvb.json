@@ -4,7 +4,7 @@
   tasks: {
     'build': {
       doc: { summary: "Compile the watchtower source tree.", usage: "`nvb build`" },
-      runnerOpts: { postTasks: ["schema:stage-build"] },
+      runnerOpts: { postTasks: ["schema:stage-build", "build:runtime-nvb:foundation"] },
       handle: {
         handler: "TypeScriptBuildHandler",
         args: [{ tsConfigFile: "./tsconfig.json", destPath: "./build" }],
@@ -13,7 +13,7 @@
     },
     'build:tests': {
       doc: { summary: "Compile watchtower source and spec trees for testing.", usage: "`nvb build:tests`" },
-      runnerOpts: { postTasks: ["schema:stage-build"] },
+      runnerOpts: { postTasks: ["schema:stage-build", "build:runtime-nvb:foundation"] },
       handle: {
         handler: "TypeScriptBuildHandler",
         args: [{ tsConfigFile: "./tsconfig.tests.json", destPath: "./build" }],
@@ -41,6 +41,18 @@
         args: ["build"],
         type: "auto",
         preferType: "async"
+      }
+    },
+    'build:runtime-nvb:foundation': {
+      doc: { summary: "Compile the runtime handler dependency closure for source-tree execution.", usage: "Internal build task." },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{
+          tsConfigFile: "./runtime-nvb/tsconfig.runtime-foundation.build.json",
+          destPath: "./build/runtime-nvb/foundation"
+        }],
+        type: "auto"
       }
     },
     'runtime-nvb:validate': {

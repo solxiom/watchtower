@@ -1,0 +1,65 @@
+{
+  "actions": {},
+  "fragmentId": "schema-composition",
+  "groups": {},
+  "handlers": {
+    "SchemaCompositionTaskHandler": {
+      "module": "./handlers/SchemaCompositionTaskHandler.js"
+    }
+  },
+  "includes": [],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:schema:check": {
+      "catalog": {
+        "executionScope": "repository-development",
+        "inputSchema": "watchtower://runtime/schemas/schema-composition-input/v1",
+        "leafIds": [],
+        "mutationClass": "read-only",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/schema-composition-result/v1"
+      },
+      "doc": {
+        "summary": "Fail when the checked-in v1 schema aggregate is stale.",
+        "usage": "Internal Watchtower build task."
+      },
+      "handle": {
+        "args": [
+          {
+            "mode": "check"
+          }
+        ],
+        "handler": "SchemaCompositionTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:schema:generate": {
+      "catalog": {
+        "executionScope": "repository-development",
+        "inputSchema": "watchtower://runtime/schemas/schema-composition-input/v1",
+        "leafIds": [],
+        "mutationClass": "managed-runtime-write",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/schema-composition-result/v1"
+      },
+      "doc": {
+        "summary": "Regenerate the checked-in v1 schema aggregate from authoritative fragments.",
+        "usage": "Internal Watchtower build task."
+      },
+      "handle": {
+        "args": [
+          {
+            "mode": "write"
+          }
+        ],
+        "handler": "SchemaCompositionTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    }
+  }
+}

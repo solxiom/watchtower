@@ -16,6 +16,9 @@
   "include": [
     "./**/*.ts",
     "./catalog/*.nvb.json",
+    "./catalog/capabilities/*.catalog.json",
+    "./profiles/*.profile.json",
+    "./schemas/*.schema.json",
     "./types/**/*.d.ts"
   ]
 }

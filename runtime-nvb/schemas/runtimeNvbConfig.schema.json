@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/runtime-nvb-config/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["groups", "handlers", "tasks"],
+  "properties": {
+    "handlers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^\\./handlers/[A-Za-z0-9/._-]+\\.js$"}
+    },
+    "tasks": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"},
+      "additionalProperties": {"$ref": "#/definitions/runtimeTask"}
+    },
+    "groups": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"},
+      "additionalProperties": {"$ref": "#/definitions/runtimeGroup"}
+    }
+  },
+  "definitions": {
+    "runtimeTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["doc", "handle", "runnerOpts"],
+      "properties": {
+        "doc": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/doc"},
+        "handle": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/handle"},
+        "runnerOpts": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnerOpts"}
+      }
+    },
+    "runtimeGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["doc", "runnerOpts", "tasks"],
+      "properties": {
+        "doc": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/doc"},
+        "runnerOpts": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnerOpts"},
+        "tasks": {"type": "array", "items": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"}}
+      }
+    }
+  }
+}

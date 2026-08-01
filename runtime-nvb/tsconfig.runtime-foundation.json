@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "outDir": "../dist/runtime-nvb/foundation",
+    "rootDir": "../src/foundation",
+    "sourceMap": false,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": [
+    "../src/foundation/schemaComposition/**/*.ts",
+    "../src/foundation/taskCatalogComposition/**/*.ts"
+  ]
+}

@@ -1,21 +1,22 @@
 {
-  // Product NVB task config for watchtower runtime-NVB module.
-  handlers: [
-    "./handlers/**/*.js",
-    "./handlers/**/*.ts"
+  "groups": {},
+  "handlers": [
+    "./handlers/HelloRuntimeTaskHandler.js"
   ],
-  tasks: {
-    "wt:hello": {
-      doc: {
-        summary: "Example runtime task from watchtower.",
-        usage: "`nvb wt:hello`"
+  "tasks": {
+    "wt:check:hello": {
+      "doc": {
+        "summary": "Example runtime task retained until baseline handlers replace the scaffold.",
+        "usage": "Internal Watchtower build task."
       },
-      runnerOpts: {},
-      handle: {
-        handler: "HelloRuntimeTaskHandler",
-        args: ["Hello from watchtower runtime NVB."],
-        type: "auto"
-      }
+      "handle": {
+        "args": [
+          "Hello from watchtower runtime NVB."
+        ],
+        "handler": "HelloRuntimeTaskHandler",
+        "type": "auto"
+      },
+      "runnerOpts": {}
     }
   }
 }

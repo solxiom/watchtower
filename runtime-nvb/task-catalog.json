@@ -1,0 +1,124 @@
+{
+  "actions": {},
+  "catalogId": "watchtower-runtime-nvb/v1",
+  "catalogVersion": 1,
+  "fragments": [
+    "schema-composition",
+    "catalog-composition",
+    "scaffold"
+  ],
+  "groups": {},
+  "handlers": {
+    "HelloRuntimeTaskHandler": {
+      "module": "./handlers/HelloRuntimeTaskHandler.js"
+    },
+    "SchemaCompositionTaskHandler": {
+      "module": "./handlers/SchemaCompositionTaskHandler.js"
+    },
+    "TaskCatalogCompositionTaskHandler": {
+      "module": "./handlers/TaskCatalogCompositionTaskHandler.js"
+    }
+  },
+  "leaves": {},
+  "minimumRuntime": {
+    "cliVersion": "0.1.0",
+    "nodeVersion": "26.4.0"
+  },
+  "profiles": {
+    "implementation-v1": {
+      "taskIds": [
+        "wt:check:hello"
+      ]
+    }
+  },
+  "schemaVersion": 1,
+  "schemas": {
+    "watchtower://runtime/schemas/lane-task-profile/v1": {
+      "path": "./schemas/laneTaskProfile.schema.json",
+      "sha256": "sha256:91bcf114ef202f23f10436a960d029420505beeaffa45115462d8a774d59d0da"
+    },
+    "watchtower://runtime/schemas/runtime-nvb-config/v1": {
+      "path": "./schemas/runtimeNvbConfig.schema.json",
+      "sha256": "sha256:9b0d79ef3d92cb40903cd3bfa7fa527ee80cc8a904a0bfe75f728dfae21c889c"
+    },
+    "watchtower://runtime/schemas/scaffold-message-input/v1": {
+      "path": "./schemas/scaffoldMessageInput.schema.json",
+      "sha256": "sha256:4b890722505009201f9a1126f0388863c672a3095aaf54eb200a5978d36d2970"
+    },
+    "watchtower://runtime/schemas/scaffold-message-result/v1": {
+      "path": "./schemas/scaffoldMessageResult.schema.json",
+      "sha256": "sha256:cecee2db904d1786839c84e3124a56a34da0798a1056ae6638ad8a9063df25ad"
+    },
+    "watchtower://runtime/schemas/schema-composition-input/v1": {
+      "path": "./schemas/schemaCompositionInput.schema.json",
+      "sha256": "sha256:ba8e6c8559eaaf8026562d7a2a89e3be0b295def2dde146c6f682ecd84df1bb5"
+    },
+    "watchtower://runtime/schemas/schema-composition-result/v1": {
+      "path": "./schemas/schemaCompositionResult.schema.json",
+      "sha256": "sha256:f9a7b920c7ace5002911921722a32ee97245c4a2d844ccdc6ba96a90a70bc77e"
+    },
+    "watchtower://runtime/schemas/task-catalog-composition-input/v1": {
+      "path": "./schemas/taskCatalogCompositionInput.schema.json",
+      "sha256": "sha256:026af3b341756eb00ecfea9a60636aa8714bf59bfbcc25f2a90eda6cfa312804"
+    },
+    "watchtower://runtime/schemas/task-catalog-composition-result/v1": {
+      "path": "./schemas/taskCatalogCompositionResult.schema.json",
+      "sha256": "sha256:07217b745ac847f247bb2f2f16e5d42788a25145b37bd88f0735291bf9c2bdfb"
+    },
+    "watchtower://runtime/schemas/task-catalog-fragment/v1": {
+      "path": "./schemas/taskCatalogFragment.schema.json",
+      "sha256": "sha256:e13edab6d300c89638e3099d7ae07c35cac1bf922b2982c7505e045277466216"
+    },
+    "watchtower://runtime/schemas/task-catalog/v1": {
+      "path": "./schemas/taskCatalog.schema.json",
+      "sha256": "sha256:747142c4e30dac1c42e8e716055355a8f0fba10ab982170ed9f6bf99aadd7dc2"
+    }
+  },
+  "tasks": {
+    "wt:check:hello": {
+      "executionScope": "lane-runtime",
+      "handlerId": "HelloRuntimeTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/scaffold-message-input/v1",
+      "leafIds": [],
+      "mutationClass": "read-only",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/scaffold-message-result/v1"
+    },
+    "wt:runtime:catalog:check": {
+      "executionScope": "repository-development",
+      "handlerId": "TaskCatalogCompositionTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/task-catalog-composition-input/v1",
+      "leafIds": [],
+      "mutationClass": "read-only",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/task-catalog-composition-result/v1"
+    },
+    "wt:runtime:catalog:generate": {
+      "executionScope": "repository-development",
+      "handlerId": "TaskCatalogCompositionTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/task-catalog-composition-input/v1",
+      "leafIds": [],
+      "mutationClass": "managed-runtime-write",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/task-catalog-composition-result/v1"
+    },
+    "wt:schema:check": {
+      "executionScope": "repository-development",
+      "handlerId": "SchemaCompositionTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/schema-composition-input/v1",
+      "leafIds": [],
+      "mutationClass": "read-only",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/schema-composition-result/v1"
+    },
+    "wt:schema:generate": {
+      "executionScope": "repository-development",
+      "handlerId": "SchemaCompositionTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/schema-composition-input/v1",
+      "leafIds": [],
+      "mutationClass": "managed-runtime-write",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/schema-composition-result/v1"
+    }
+  }
+}

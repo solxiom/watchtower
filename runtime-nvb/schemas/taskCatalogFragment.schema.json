@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/task-catalog-fragment/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actions", "fragmentId", "groups", "handlers", "includes", "leaves",
+    "schemaVersion", "tasks"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "fragmentId": {"$ref": "#/definitions/simpleId"},
+    "includes": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/definitions/simpleId"}},
+    "handlers": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[A-Z][A-Za-z0-9]{0,127}$"},
+      "additionalProperties": {"$ref": "#/definitions/handler"}
+    },
+    "tasks": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/definitions/runnableId"},
+      "additionalProperties": {"$ref": "#/definitions/task"}
+    },
+    "groups": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/definitions/runnableId"},
+      "additionalProperties": {"$ref": "#/definitions/group"}
+    },
+    "actions": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/definitions/simpleId"},
+      "additionalProperties": {"$ref": "#/definitions/action"}
+    },
+    "leaves": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/definitions/simpleId"},
+      "additionalProperties": {"$ref": "#/definitions/leaf"}
+    }
+  },
+  "definitions": {
+    "simpleId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{0,127}$"},
+    "runnableId": {"type": "string", "pattern": "^wt:[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)+$"},
+    "schemaId": {"type": "string", "pattern": "^watchtower://runtime/schemas/[a-z0-9-]+/v1$"},
+    "doc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "usage": {"type": "string"},
+        "details": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "runnerOpts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preTasks": {"type": "array", "items": {"$ref": "#/definitions/runnableId"}},
+        "postTasks": {"type": "array", "items": {"$ref": "#/definitions/runnableId"}},
+        "multiExecPolicy": {"enum": ["series", "parallel"]}
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executionScope", "inputSchema", "leafIds", "mutationClass",
+        "requiresInvocationEnvelope", "resultSchema"
+      ],
+      "properties": {
+        "executionScope": {"enum": ["repository-development", "lane-runtime"]},
+        "inputSchema": {"$ref": "#/definitions/schemaId"},
+        "resultSchema": {"$ref": "#/definitions/schemaId"},
+        "leafIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/definitions/simpleId"}},
+        "mutationClass": {"enum": [
+          "read-only", "derived-write", "managed-runtime-write", "managed-lane-write",
+          "journaled-mutation", "authoritative-effect", "external-effect"
+        ]},
+        "requiresInvocationEnvelope": {"type": "boolean"}
+      }
+    },
+    "handle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handler", "type"],
+      "properties": {
+        "handler": {"type": "string", "pattern": "^[A-Z][A-Za-z0-9]{0,127}$"},
+        "type": {"const": "auto"},
+        "args": {"type": "array"},
+        "preferType": {"enum": ["sync", "async"]}
+      }
+    },
+    "handler": {
+      "type": "object", "additionalProperties": false, "required": ["module"],
+      "properties": {"module": {"type": "string", "pattern": "^\\./handlers/(?!(?:\\.{1,2})(?:/|$))(?!.*\\/\\.{1,2}(?:/|$))[A-Za-z0-9/._-]+\\.js$"}}
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["catalog", "doc", "handle", "runnerOpts"],
+      "properties": {
+        "catalog": {"$ref": "#/definitions/metadata"},
+        "doc": {"$ref": "#/definitions/doc"},
+        "handle": {"$ref": "#/definitions/handle"},
+        "runnerOpts": {"$ref": "#/definitions/runnerOpts"}
+      }
+    },
+    "group": {
+      "type": "object", "additionalProperties": false,
+      "required": ["catalog", "doc", "runnerOpts", "tasks"],
+      "properties": {
+        "catalog": {"$ref": "#/definitions/metadata"},
+        "doc": {"$ref": "#/definitions/doc"},
+        "runnerOpts": {"$ref": "#/definitions/runnerOpts"},
+        "tasks": {"type": "array", "items": {"$ref": "#/definitions/runnableId"}}
+      }
+    },
+    "action": {
+      "type": "object", "additionalProperties": false, "required": ["taskId"],
+      "properties": {"taskId": {"$ref": "#/definitions/runnableId"}}
+    },
+    "leaf": {
+      "type": "object", "additionalProperties": false,
+      "required": ["executable", "mode", "path", "sha256"],
+      "properties": {
+        "executable": {"const": true},
+        "mode": {"const": "0555"},
+        "path": {"type": "string", "pattern": "^\\./leaves/(?!.*(?:^|/)\\.\\.?/)[A-Za-z0-9/._-]+$"},
+        "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

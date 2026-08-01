@@ -37,11 +37,15 @@ describe('development NVB parent chain', function () {
         const output = validate();
         expect(JSON.parse(output)).toEqual({
             tasks: [
-                'build', 'build:tests', 'check:development-nvb', 'clean', 'dist:chmod-bin', 'dist:clean', 'dist:clean-build',
+                'build', 'build:runtime-nvb:foundation', 'build:tests', 'check:development-nvb', 'clean',
+                'dist:chmod-bin', 'dist:clean', 'dist:clean-build',
                 'dist:clean-esm-stamp', 'dist:compile', 'dist:copy-bin', 'dist:copy-config',
                 'dist:copy-help', 'dist:fix-esm', 'dist:package', 'dist:runtime-nvb:compile',
-                'dist:runtime-nvb:copy', 'runtime-nvb:validate', 'schema:stage-build',
-                'schema:stage-dist', 'test'
+                'dist:runtime-nvb:copy', 'dist:runtime-nvb:foundation-compile',
+                'dist:runtime-nvb:relocation-check', 'dist:runtime-nvb:schema-copy',
+                'runtime-nvb:catalog:check',
+                'runtime-nvb:catalog:generate', 'runtime-nvb:validate',
+                'schema:stage-build', 'schema:stage-dist', 'test'
             ],
             groups: ['dev:run', 'dist']
         });

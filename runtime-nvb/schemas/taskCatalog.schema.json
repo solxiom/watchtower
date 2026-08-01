@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/task-catalog/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actions", "catalogId", "catalogVersion", "fragments", "groups", "handlers",
+    "leaves", "minimumRuntime", "profiles", "schemaVersion", "schemas", "tasks"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "catalogId": {"const": "watchtower-runtime-nvb/v1"},
+    "catalogVersion": {"const": 1},
+    "fragments": {
+      "type": "array", "uniqueItems": true,
+      "items": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/simpleId"}
+    },
+    "minimumRuntime": {
+      "type": "object", "additionalProperties": false,
+      "required": ["cliVersion", "nodeVersion"],
+      "properties": {
+        "cliVersion": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "nodeVersion": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"}
+      }
+    },
+    "handlers": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[A-Z][A-Za-z0-9]{0,127}$"},
+      "additionalProperties": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/handler"}
+    },
+    "tasks": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"},
+      "additionalProperties": {"$ref": "#/definitions/taskEntry"}
+    },
+    "groups": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"},
+      "additionalProperties": {"$ref": "#/definitions/groupEntry"}
+    },
+    "actions": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/simpleId"},
+      "additionalProperties": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/action"}
+    },
+    "leaves": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/simpleId"},
+      "additionalProperties": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/leaf"}
+    },
+    "profiles": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+      "additionalProperties": {"$ref": "#/definitions/profileEntry"}
+    },
+    "schemas": {
+      "type": "object",
+      "propertyNames": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/schemaId"},
+      "additionalProperties": {"$ref": "#/definitions/schemaEntry"}
+    }
+  },
+  "definitions": {
+    "taskEntry": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "executionScope", "handlerId", "inputSchema", "leafIds", "mutationClass",
+        "requiresInvocationEnvelope", "resultSchema"
+      ],
+      "properties": {
+        "executionScope": {"enum": ["repository-development", "lane-runtime"]},
+        "handlerId": {"type": "string", "pattern": "^[A-Z][A-Za-z0-9]{0,127}$"},
+        "inputSchema": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/schemaId"},
+        "resultSchema": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/schemaId"},
+        "leafIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/simpleId"}},
+        "mutationClass": {"enum": [
+          "read-only", "derived-write", "managed-runtime-write", "managed-lane-write",
+          "journaled-mutation", "authoritative-effect", "external-effect"
+        ]},
+        "requiresInvocationEnvelope": {"type": "boolean"}
+      }
+    },
+    "groupEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executionScope", "inputSchema", "leafIds", "mutationClass",
+        "requiresInvocationEnvelope", "resultSchema", "taskIds"
+      ],
+      "properties": {
+        "executionScope": {"enum": ["repository-development", "lane-runtime"]},
+        "inputSchema": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/schemaId"},
+        "resultSchema": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/schemaId"},
+        "leafIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/simpleId"}},
+        "mutationClass": {"enum": [
+          "read-only", "derived-write", "managed-runtime-write", "managed-lane-write",
+          "journaled-mutation", "authoritative-effect", "external-effect"
+        ]},
+        "requiresInvocationEnvelope": {"type": "boolean"},
+        "taskIds": {"type": "array", "items": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"}}
+      }
+    },
+    "profileEntry": {
+      "type": "object", "additionalProperties": false, "required": ["taskIds"],
+      "properties": {"taskIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "watchtower://runtime/schemas/task-catalog-fragment/v1#/definitions/runnableId"}}}
+    },
+    "schemaEntry": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^\\./schemas/[A-Za-z0-9][A-Za-z0-9.-]*\\.schema\\.json$"},
+        "sha256": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"}
+      }
+    }
+  }
+}

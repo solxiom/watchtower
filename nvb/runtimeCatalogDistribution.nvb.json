@@ -1,0 +1,41 @@
+{
+  /* Compile the authoritative catalog/schema foundation closure inside staged runtime-nvb. */
+  parent: "./sourceBuild.nvb.json",
+  tasks: {
+    'dist:runtime-nvb:foundation-compile': {
+      doc: { summary: "Compile the catalog/schema dependency closure into staged runtime-nvb.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{
+          tsConfigFile: "./runtime-nvb/tsconfig.runtime-foundation.json",
+          destPath: "./dist/runtime-nvb/foundation"
+        }],
+        type: "auto"
+      }
+    },
+    'dist:runtime-nvb:relocation-check': {
+      doc: { summary: "Execute the staged catalog handler closure from a relocated runtime copy.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: {
+        handler: "CommandHandler",
+        args: [{ name: "node", args: ["./scripts/verifyRelocatedRuntimeCatalog.mjs"] }],
+        type: "auto"
+      }
+    },
+    'dist:runtime-nvb:schema-copy': {
+      doc: { summary: "Copy authoritative schema bytes into staged runtime-nvb.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{
+          src: "runtime-nvb/schemas/*.schema.json",
+          dest: "dist/runtime-nvb/schemas",
+          destOptions: { overwrite: true }
+        }],
+        type: "auto",
+        preferType: "async"
+      }
+    }
+  }
+}

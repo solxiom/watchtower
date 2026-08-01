@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/lane-task-profile/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["catalogId", "profileId", "schemaVersion", "taskIds"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "catalogId": {"type": "string", "pattern": "^watchtower-runtime-nvb/v[1-9][0-9]*$"},
+    "profileId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "taskIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^wt:[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)+$"}
+    }
+  }
+}

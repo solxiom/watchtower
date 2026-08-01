@@ -1,0 +1,67 @@
+{
+  "actions": {},
+  "fragmentId": "catalog-composition",
+  "groups": {},
+  "handlers": {
+    "TaskCatalogCompositionTaskHandler": {
+      "module": "./handlers/TaskCatalogCompositionTaskHandler.js"
+    }
+  },
+  "includes": [
+    "schema-composition"
+  ],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:runtime:catalog:check": {
+      "catalog": {
+        "executionScope": "repository-development",
+        "inputSchema": "watchtower://runtime/schemas/task-catalog-composition-input/v1",
+        "leafIds": [],
+        "mutationClass": "read-only",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/task-catalog-composition-result/v1"
+      },
+      "doc": {
+        "summary": "Fail when the generated runtime task aggregates are stale.",
+        "usage": "Internal Watchtower build task."
+      },
+      "handle": {
+        "args": [
+          {
+            "mode": "check"
+          }
+        ],
+        "handler": "TaskCatalogCompositionTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:runtime:catalog:generate": {
+      "catalog": {
+        "executionScope": "repository-development",
+        "inputSchema": "watchtower://runtime/schemas/task-catalog-composition-input/v1",
+        "leafIds": [],
+        "mutationClass": "managed-runtime-write",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/task-catalog-composition-result/v1"
+      },
+      "doc": {
+        "summary": "Regenerate runtime task aggregates from capability and profile fragments.",
+        "usage": "Internal Watchtower build task."
+      },
+      "handle": {
+        "args": [
+          {
+            "mode": "write"
+          }
+        ],
+        "handler": "TaskCatalogCompositionTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    }
+  }
+}

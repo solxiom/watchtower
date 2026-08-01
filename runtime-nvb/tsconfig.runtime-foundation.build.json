@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.runtime-foundation.json",
+  "compilerOptions": {
+    "outDir": "../build/runtime-nvb/foundation"
+  }
+}

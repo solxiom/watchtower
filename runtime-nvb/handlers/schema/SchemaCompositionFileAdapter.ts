@@ -6,8 +6,8 @@ import {
 } from 'node:fs/promises';
 import {isAbsolute, join, relative} from 'node:path';
 
-import {composeSchemaFragments} from '../../../src/foundation/schemaComposition/index.js';
 import type {SchemaFragmentInput} from '../../../src/foundation/schemaComposition/index.js';
+import {composeSchemaFragments} from '../../foundation/schemaComposition/index.js';
 import type {
     SchemaCompositionTaskFailureCode,
     SchemaCompositionTaskMode,

@@ -1,6 +1,6 @@
 {
   /* Distribution composition: packaging tasks remain separate from source builds. */
-  parent: "./sourceBuild.nvb.json",
+  parent: "./runtimeCatalogDistribution.nvb.json",
   tasks: {
     'dist:clean': {
       doc: { summary: "Remove the dist output directory.", usage: "`nvb dist:clean`" },
@@ -37,7 +37,11 @@
       handle: {
         handler: "TypeScriptBuildHandler",
         args: [{ tsConfigFile: "./runtime-nvb/tsconfig.runtime-nvb.json", destPath: "./dist/runtime-nvb" }],
-        src: ["runtime-nvb/nvb-manifest.json", "runtime-nvb/runtime-nvb.json"]
+        src: [
+          "runtime-nvb/nvb-manifest.json",
+          "runtime-nvb/runtime-nvb.json",
+          "runtime-nvb/task-catalog.json"
+        ]
       }
     },
     'dist:runtime-nvb:copy': {
@@ -45,7 +49,14 @@
       runnerOpts: {},
       handle: {
         handler: "CopyHandler",
-        args: [{ src: ["runtime-nvb/nvb-manifest.json", "runtime-nvb/runtime-nvb.json"], dest: "dist/runtime-nvb" }],
+        args: [{
+          src: [
+            "runtime-nvb/nvb-manifest.json",
+            "runtime-nvb/runtime-nvb.json",
+            "runtime-nvb/task-catalog.json"
+          ],
+          dest: "dist/runtime-nvb"
+        }],
         type: "auto",
         preferType: "async"
       }
@@ -95,7 +106,9 @@
       tasks: [
         "dist:clean-build", "dist:clean", "dist:compile", "dist:fix-esm",
         "dist:clean-esm-stamp", "dist:copy-bin", "dist:copy-help", "dist:copy-config",
-        "dist:runtime-nvb:compile", "dist:runtime-nvb:copy", "dist:package",
+        "dist:runtime-nvb:compile", "dist:runtime-nvb:foundation-compile",
+        "dist:runtime-nvb:copy", "dist:runtime-nvb:schema-copy",
+        "dist:runtime-nvb:relocation-check", "dist:package",
         "dist:chmod-bin", "dist:clean-build"
       ],
       runnerOpts: { multiExecPolicy: "series" }

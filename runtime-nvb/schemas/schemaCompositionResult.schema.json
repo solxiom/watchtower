@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/schema-composition-result/v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "ok", "mode", "semanticDigest", "aggregateBytes",
+        "fragmentCount", "definitionCount", "wrote"
+      ],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "ok": {"const": true},
+        "mode": {"enum": ["check", "write"]},
+        "semanticDigest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "aggregateBytes": {"type": "integer", "minimum": 0},
+        "fragmentCount": {"type": "integer", "minimum": 0},
+        "definitionCount": {"type": "integer", "minimum": 0},
+        "wrote": {"type": "boolean"}
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "ok", "mode", "failure"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "ok": {"const": false},
+        "mode": {"enum": ["check", "write", null]},
+        "failure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "subject"],
+          "properties": {
+            "code": {"enum": [
+              "SCHEMA_COMPOSITION_INPUT_INVALID", "SCHEMA_FRAGMENT_SOURCE_INVALID",
+              "SCHEMA_FRAGMENT_BYTES_INVALID", "SCHEMA_FRAGMENT_JSON_INVALID",
+              "SCHEMA_FRAGMENT_PROPERTY_DUPLICATE", "SCHEMA_FRAGMENT_ROOT_INVALID",
+              "SCHEMA_FRAGMENT_METADATA_INVALID", "SCHEMA_FRAGMENT_ID_DUPLICATE",
+              "SCHEMA_FRAGMENT_INCLUDE_MISSING", "SCHEMA_FRAGMENT_INCLUDE_CIRCULAR",
+              "SCHEMA_DEFINITION_DUPLICATE", "SCHEMA_ROOT_CONFLICT",
+              "SCHEMA_ROOT_REQUIRED_KEY_MISSING", "SCHEMA_REFERENCE_INVALID",
+              "SCHEMA_REFERENCE_ESCAPES", "SCHEMA_REFERENCE_UNRESOLVED",
+              "SCHEMA_TASK_INPUT_INVALID", "SCHEMA_FRAGMENT_DIRECTORY_INVALID",
+              "SCHEMA_FRAGMENT_FILE_INVALID", "SCHEMA_AGGREGATE_PATH_INVALID",
+              "SCHEMA_AGGREGATE_STALE", "SCHEMA_FILE_IO_FAILED",
+              "SCHEMA_WRITE_VERIFICATION_FAILED"
+            ]},
+            "subject": {"type": ["string", "null"]}
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  /* Repository-development task-catalog composition; never shipped as a lane task. */
+  parent: "./distribution.nvb.json",
+  tasks: {
+    'runtime-nvb:catalog:check': {
+      doc: { summary: "Fail when generated runtime task aggregates are stale.", usage: "`nvb runtime-nvb:catalog:check`" },
+      runnerOpts: { preTasks: ["build"] },
+      handle: {
+        handler: "CommandHandler",
+        args: [{ name: "node", args: ["./scripts/composeRuntimeTaskCatalog.mjs", "check"] }],
+        type: "auto"
+      }
+    },
+    'runtime-nvb:catalog:generate': {
+      doc: { summary: "Regenerate runtime task aggregates from capability/profile inputs.", usage: "`nvb runtime-nvb:catalog:generate`" },
+      runnerOpts: { preTasks: ["build"] },
+      handle: {
+        handler: "CommandHandler",
+        args: [{ name: "node", args: ["./scripts/composeRuntimeTaskCatalog.mjs", "write"] }],
+        type: "auto"
+      }
+    }
+  }
+}
