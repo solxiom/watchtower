@@ -80,7 +80,7 @@ describe('NirvanaInstallVerifier', () => {
         expect(install?.command).toBe('/tools/npm');
         expect(install?.args).toContain('--registry');
         expect(install?.args).toContain(path.join(artifactsRoot, 'nirvana-base-1.0.0.tgz'));
-        expect(install?.environment && Object.keys(install.environment).sort()).toEqual(['HOME', 'npm_config_globalconfig']);
+        expect(install?.environment && Object.keys(install.environment).sort()).toEqual(['npm_config_globalconfig']);
     });
 
     it('fails before install on digest drift and rejects unsafe installed dependency specs', async () => {

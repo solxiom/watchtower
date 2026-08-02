@@ -63,7 +63,7 @@ export class NirvanaInstallVerifier {
                 ...input.artifactPaths, input.watchtowerArtifact
             ],
             cwd: input.workRoot,
-            environment: {HOME: input.workRoot, npm_config_globalconfig: input.globalNpmrc},
+            environment: {npm_config_globalconfig: input.globalNpmrc},
             phase: 'install',
             failureReason: 'INSTALL_FAILED',
             rejectRegistry404: true

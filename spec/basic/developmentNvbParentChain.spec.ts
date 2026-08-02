@@ -39,11 +39,11 @@ describe('development NVB parent chain', function () {
             tasks: [
                 'build', 'build:runtime-nvb:foundation', 'build:tests', 'check:development-nvb', 'clean',
                 'dist:chmod-bin', 'dist:clean', 'dist:clean-build',
-                'dist:clean-esm-stamp', 'dist:compile', 'dist:copy-bin', 'dist:copy-config',
-                'dist:copy-help', 'dist:fix-esm', 'dist:package', 'dist:runtime-nvb:compile',
+                'dist:clean-esm-stamp', 'dist:closure:verify', 'dist:compile', 'dist:copy-bin', 'dist:copy-config',
+                'dist:copy-help', 'dist:copy-knowledge', 'dist:copy-runtime', 'dist:fix-esm', 'dist:package', 'dist:runtime-nvb:compile',
                 'dist:runtime-nvb:copy', 'dist:runtime-nvb:foundation-compile',
                 'dist:runtime-nvb:relocation-check', 'dist:runtime-nvb:schema-copy',
-                'runtime-nvb:catalog:check',
+                'dist:validate', 'runtime-nvb:catalog:check',
                 'runtime-nvb:catalog:generate', 'runtime-nvb:validate',
                 'schema:stage-build', 'schema:stage-dist', 'test'
             ],

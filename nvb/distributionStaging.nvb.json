@@ -1,0 +1,26 @@
+{
+  /* Packaged aggregate validation and versioned runtime/knowledge staging. */
+  parent: "./runtimeCatalogDistribution.nvb.json",
+  tasks: {
+    'dist:copy-runtime': {
+      doc: { summary: "Copy the runtime manifest required to stage the packaged runtime.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CopyHandler", args: [{ src: "runtime/**/*", dest: "dist/runtime" }], type: "auto", preferType: "async" }
+    },
+    'dist:copy-knowledge': {
+      doc: { summary: "Copy the versioned coordinator knowledge pack into the package.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CopyHandler", args: [{ src: "knowledge/**/*", dest: "dist/knowledge" }], type: "auto", preferType: "async" }
+    },
+    'dist:validate': {
+      doc: { summary: "Validate the complete staged package, manifests, and executable bin.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/validatePackagedDistribution.mjs"] }], type: "auto" }
+    },
+    'dist:closure:verify': {
+      doc: { summary: "Install the packaged tarball with the sealed Nirvana closure and prove SQLite loading.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/verifyPackagedClosure.mjs"] }], type: "auto" }
+    }
+  }
+}

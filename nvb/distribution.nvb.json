@@ -1,6 +1,6 @@
 {
   /* Distribution composition: packaging tasks remain separate from source builds. */
-  parent: "./runtimeCatalogDistribution.nvb.json",
+  parent: "./distributionStaging.nvb.json",
   tasks: {
     'dist:clean': {
       doc: { summary: "Remove the dist output directory.", usage: "`nvb dist:clean`" },
@@ -107,9 +107,9 @@
         "dist:clean-build", "dist:clean", "dist:compile", "dist:fix-esm",
         "dist:clean-esm-stamp", "dist:copy-bin", "dist:copy-help", "dist:copy-config",
         "dist:runtime-nvb:compile", "dist:runtime-nvb:foundation-compile",
-        "dist:runtime-nvb:copy", "dist:runtime-nvb:schema-copy",
+        "dist:runtime-nvb:copy", "dist:runtime-nvb:schema-copy", "dist:copy-runtime", "dist:copy-knowledge",
         "dist:runtime-nvb:relocation-check", "dist:package",
-        "dist:chmod-bin", "dist:clean-build"
+        "dist:chmod-bin", "dist:validate", "dist:closure:verify", "dist:clean-build"
       ],
       runnerOpts: { multiExecPolicy: "series" }
     }
