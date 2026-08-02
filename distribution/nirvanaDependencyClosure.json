@@ -43,7 +43,7 @@
       "name": "@nirvana/builder",
       "version": "1.0.0",
       "artifact": {"file": "nirvana-builder-1.0.0.tgz", "sha256": "sha256:2b89661c9383cd506086ae935a7556381073670a5a438211aeb023a2ec1fcd2f"},
-      "source": {"path": "components/builder", "sha256": "sha256:0c1ff338c0f005ad1b21faad2a976469de2b28cdd9da60844bc985a86feed5c8"},
+      "source": {"path": "components/builder", "sha256": "sha256:8243fbc5d1fc2a56c7f82ad4b4b9ce58bee2b65729e7c53686677b14c149920e"},
       "dependencies": [
         {"name": "@nirvana/b-core", "version": "1.0.0"},
         {"name": "@nirvana/t-cache", "version": "1.0.0"}
