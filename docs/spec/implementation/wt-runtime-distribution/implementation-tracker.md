@@ -7,7 +7,7 @@ Status: **Synchronized remediation candidate**
 | RT-01 | Canonical runtime/knowledge audit and shell classification | ✅ Accepted | Source provenance; no omitted action/doc; every script classified as TaskHandler, leaf, temporary wrapper, or removal |
 | RT-02 | Runtime and knowledge manifests | ⏳ Correction 03 handoff ready | Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection |
 | RT-03 | Packaged runtime and distribution staging | ✅ Accepted | Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback |
-| RT-04 | Immutable data-root catalog and staging | ❌ Pending | XDG precedence; atomic first stage; two versions coexist; immutable version roots |
+| RT-04 | Immutable data-root catalog and staging | ✅ Accepted | XDG precedence; ancestor-contained data root; exclusive crash-durable publication finalization; observable token-owned lock release; immutable version roots |
 | RT-05 | `LaneTaskRunner` and leaf invocation adapter | ❌ Pending | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
 | RT-06 | Managed lane links, task profiles, and compatibility names | ❌ Pending | Manifest-only ownership; task catalog/profile pin; project `nvb.json` unchanged; link targets/checksums; collision/path-escape refusal |
 | RT-07 | Packaged watcher and task-runtime smoke proof | ❌ Pending | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |

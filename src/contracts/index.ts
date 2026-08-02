@@ -7,6 +7,8 @@ export {
 export type {ErrorCode, ErrorContext, ErrorContextInput, WatchtowerErrorPayload} from './errors.js';
 export {RUNTIME_KNOWLEDGE_MANIFEST_REASONS, RuntimeKnowledgeManifestError} from './runtimeKnowledgeManifests.js';
 export type {KnowledgeManifestV1, KnowledgeProvenanceEvidence, ManifestAsset, ManifestAssetMode, ManifestAssetObservation, ManifestVerificationFailure, ManifestVerificationResult, ManifestVerificationSuccess, RuntimeKnowledgeManifestReason, RuntimeKnowledgeManifestV1, RuntimeManifestV1} from './runtimeKnowledgeManifests.js';
+export {RUNTIME_CATALOG_REASONS, RuntimeCatalogError} from './runtimeCatalog.js';
+export type {RuntimeCatalogReason} from './runtimeCatalog.js';
 export {
     EXIT_CONFLICT,
     EXIT_INTERNAL,
