@@ -48,8 +48,13 @@ map override illustrative implementation names.
    manifest, generated aggregate, normative document, report, and tracker row.
    Never stage '.local', 'build', 'dist', dependencies, or lane runtime.
 10. The implementer does not commit or issue a verdict. Emit the durable
-    handoff only after every gate passes; otherwise remain in the preserved
-    session and report the precise blocker.
+     handoff only after every gate passes; otherwise remain in the preserved
+     session and report the precise blocker.
+11. Before emitting handoff, run the full self-audit at
+    `docs/spec/implementation/pre-handoff-self-audit.md`. Every gate must be
+    PASS. The implementation report must include the completed PASS/FAIL matrix
+    and the hard-reject scan ("all false"). A handoff without this evidence is
+    incomplete; the coordinator must not dispatch review.
 
 ## Mandatory independent review method
 

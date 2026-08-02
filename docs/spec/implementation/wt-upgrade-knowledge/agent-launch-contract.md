@@ -18,6 +18,7 @@ Use this precedence: accepted product specs/schemas; engineering and review stan
 5. Preserve dependency direction, thin commands/TaskHandlers, injected nondeterminism, closed public contracts, the immutable NVB catalog, `LaneTaskRunner`, and the sole validated effect boundary.
 6. Run focused proof first, then `git diff --check`, `nvb build`, `nvb test`, and applicable dist/global-install/isolated/PTY/scale proof. Inventory module/function/constructor sizes and responsibilities.
 7. Record exact commands/results, changed-file ownership, Git hygiene, engineering PASS/FAIL matrix, and durable report/event identity. Never stage forbidden generated/local paths.
+8. Before emitting handoff, run the full self-audit at `docs/spec/implementation/pre-handoff-self-audit.md`. Every gate must be PASS. The implementation report must include the completed PASS/FAIL matrix and the hard-reject scan ("all false"). A handoff without this evidence is incomplete; the coordinator must not dispatch review.
 
 ## Work-agent boundary
 
