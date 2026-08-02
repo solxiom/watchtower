@@ -41,8 +41,8 @@ describe('schema composition file adapter', function () {
         expect([...after]).toEqual([...before]);
         if (result.ok) {
             expect(result.wrote).toBeFalse();
-            expect(result.fragmentCount).toBe(16);
-            expect(result.definitionCount).toBe(57);
+            expect(result.fragmentCount).toBe(17);
+            expect(result.definitionCount).toBe(61);
         }
     });
 });

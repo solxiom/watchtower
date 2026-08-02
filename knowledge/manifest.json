@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "watchtower-knowledge/v1",
+  "knowledgeVersion": "0.1.0",
+  "compatibleRuntimeVersions": ["0.1.0"],
+  "provenance": {
+    "repository": "implementation-lane-coordinator",
+    "commit": "a12be396063c00086509f61ab2b584cbc4a97766",
+    "importRecordSha256": "sha256:55a73c817492213e2b87a77d37b5baf8981dfd6a17949b9e2dfb6364b1cc9300"
+  },
+  "assets": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "sha256:1ce10d5f1173864af1d91663917e11f837618a0dc0cbd58df9a977c39518cf4b",
+      "mode": "0644"
+    },
+    {
+      "path": "adapters/README.md",
+      "sha256": "sha256:f6c0bb7f228eeb883866aa958fa60ba09a0f247f3b335aae96756e8ec9aa527c",
+      "mode": "0644"
+    },
+    {
+      "path": "bootstrap-checklist.md",
+      "sha256": "sha256:bca3f0ae3387371123dd9212dbce184c6219a641eda38b7bc95523f6f2a6ebc5",
+      "mode": "0644"
+    },
+    {
+      "path": "coordinator-policy-template.md",
+      "sha256": "sha256:e5e847d11e7ad96151e969019cee4e5f479cae20e8881029dbbef75f3268d2d9",
+      "mode": "0644"
+    },
+    {
+      "path": "cursor-loop-setup.md",
+      "sha256": "sha256:7a54ded3fe28654088d331d07e1dcc07f45270c77ff02c3c0d99fdab37b1a3ff",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/README.md",
+      "sha256": "sha256:80818a6b8819ba2e9226555954c99e6c69453902b4ec960b64fe983105bcf3e3",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/browser-proof-coordinator-playbook.md",
+      "sha256": "sha256:54273105dfd67383b60cc6eb15e56baacfb7c92b064f3babd77c17d6405548fc",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/coordinator-decision-rules.md",
+      "sha256": "sha256:a92c27836f44c19eee53811a4c11d5929a34c05254a902dcf414a5a5d90da237",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/durable-worker-events.md",
+      "sha256": "sha256:92309bca39812b58578bfbc683b99aa35d81d11361072a2a091e7549abd6638f",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/lane-watcher-and-closure.md",
+      "sha256": "sha256:62e22842335c656c7d3a4c5802e25e589df34f790585144bff4e058b02f4c49f",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/three-runtime-lessons.md",
+      "sha256": "sha256:67186614aa5593b6db64295ff0b1e68efc5938a3640f895746a5a793daacbe2c",
+      "mode": "0644"
+    },
+    {
+      "path": "guides/voice-vs-wake-and-piper.md",
+      "sha256": "sha256:464fe1300c496deaf95f0f1f70f8f5602199d6a571b7ce94ef00306ab735c944",
+      "mode": "0644"
+    },
+    {
+      "path": "playbook.md",
+      "sha256": "sha256:1d30ef57795b933967fae8b2cde00963ca5bd05cd3b43df00983ac83b8c8ef6f",
+      "mode": "0644"
+    },
+    {
+      "path": "skill/AGENTS.md",
+      "sha256": "sha256:67308c82beb9a0a58c111904440303d9b67c60115445bacf834338d984e0b732",
+      "mode": "0644"
+    },
+    {
+      "path": "skill/SKILL.md",
+      "sha256": "sha256:f9f07843bec0f9410a5be8000ef3d7305f924fde27d26c960282afae2f3f2501",
+      "mode": "0644"
+    },
+    {
+      "path": "skill/state-machine.md",
+      "sha256": "sha256:302774225307743088a2b988b8c87afb7996a12dc9ff8c011321350b78d9e5f9",
+      "mode": "0644"
+    }
+  ]
+}

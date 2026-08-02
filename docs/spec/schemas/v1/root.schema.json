@@ -16,6 +16,7 @@
       "watchtower.v1.proposal",
       "watchtower.v1.reports",
       "watchtower.v1.resolution",
+      "watchtower.v1.runtime-knowledge-manifest",
       "watchtower.v1.status"
     ]
   },

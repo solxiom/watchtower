@@ -4,6 +4,7 @@ export {parseLaneState} from './stateParser.js';
 export * from './distribution/index.js';
 export {authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPathSafe} from './canonicalPaths.js';
 export {resolveWatchtowerDataHome, validateWatchtowerDataHome} from './dataHomeResolver.js';
+export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
 export {resolveRepositoryRoot, resolveWorkspace, resolveWorkspaceContext} from './workspaceResolver.js';
 export * from './schemaComposition/index.js';
 export * from './taskCatalogComposition/index.js';

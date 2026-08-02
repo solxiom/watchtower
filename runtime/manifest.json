@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "watchtower-runtime/v1",
+  "runtimeVersion": "0.1.0",
+  "minimumCliVersion": "0.1.0",
+  "compatibleLaneSchemaVersions": [1],
+  "compatibleKnowledgeVersions": ["0.1.0"],
+  "assets": [
+    {
+      "path": "catalog/capabilities/catalogComposition.catalog.json",
+      "sha256": "sha256:b5947bd8b78497df1e5e32e0faddc7c2029cf38c1f69fdd03805fdd99ffdd074",
+      "mode": "0644"
+    },
+    {
+      "path": "catalog/capabilities/scaffold.catalog.json",
+      "sha256": "sha256:48557f6fde77a6aa1bbef3d42647eeb03af016cac99025421a1a4fab4b97b13a",
+      "mode": "0644"
+    },
+    {
+      "path": "catalog/capabilities/schemaComposition.catalog.json",
+      "sha256": "sha256:7bf88e62c4c0ed00a783df763c814cdec855c4f64845a09a3e247d9c295018a9",
+      "mode": "0644"
+    },
+    {
+      "path": "catalog/schemaComposition.nvb.json",
+      "sha256": "sha256:c24ed87c1d7dc38d8af1e99d7ffb0fac700cf19122790449e1991358fdecfc74",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/schemaComposition/index.d.ts",
+      "sha256": "sha256:c27f1e586932c14357942d505f07948ebcff1efa6a91ad2d209833867e3cf208",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/taskCatalogComposition/taskCatalogCompositionFileAdapter.d.ts",
+      "sha256": "sha256:de90cd3b5aa2952c5493d082dbd8ca7a516b97c8681a8a3edf3355388ca147ac",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/HelloRuntimeTaskHandler.ts",
+      "sha256": "sha256:b390fea6444e1db82f3123ef7e155c18ad7a9eaa926839604378075b1e6e2bec",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/SchemaCompositionTaskHandler.ts",
+      "sha256": "sha256:a43c7b8771a3e30e4acf539fa9184de907d38c4fc71bf70f8b791d3007b4ab28",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/TaskCatalogCompositionTaskHandler.ts",
+      "sha256": "sha256:3c5c6a7057181ed94d25f5609d58919c14c91a4863e31c0049e5147cf2959cc6",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/schema/SchemaAggregateWriter.ts",
+      "sha256": "sha256:442221da3573a9cbef36d36a5912b747a8175d8cde93157683b0b3081c5913e6",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/schema/SchemaCompositionFileAdapter.ts",
+      "sha256": "sha256:8f36e5639e6b673015aac7ac6941ada314afb02548ab2e95a233a91963d6dea0",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/schema/SchemaFileBoundaryError.ts",
+      "sha256": "sha256:428a9aab5614a2176764b781e25bd368b23926567b038fb3edd87469a8d5a8a4",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/schema/schemaCompositionTaskContracts.ts",
+      "sha256": "sha256:65839b4113a978df7156bc29eaf472a3907663258778a653a281bcaa3dd10b5f",
+      "mode": "0644"
+    },
+    {
+      "path": "nvb-manifest.json",
+      "sha256": "sha256:aebe209db881959c64b4ccab8eff3cf08b475099069ca17b57b37067b972c779",
+      "mode": "0644"
+    },
+    {
+      "path": "profiles/implementationV1.profile.json",
+      "sha256": "sha256:4761df479fd3ed618c3e7887c01912f22826dd786ddf31b2c3075d0412a521cf",
+      "mode": "0644"
+    },
+    {
+      "path": "runtime-nvb.json",
+      "sha256": "sha256:69b4fad5541e7284aa91aff9b5c068c167cabe72f5f0682d3b739e09c508604d",
+      "mode": "0644"
+    },
+    {
+      "path": "runtime-nvb.ts",
+      "sha256": "sha256:2d751d7f2559cf75c95277957fe2316dde44599aea2ac7724e1946ed6d22d18d",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/laneTaskProfile.schema.json",
+      "sha256": "sha256:91bcf114ef202f23f10436a960d029420505beeaffa45115462d8a774d59d0da",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/runtimeNvbConfig.schema.json",
+      "sha256": "sha256:9b0d79ef3d92cb40903cd3bfa7fa527ee80cc8a904a0bfe75f728dfae21c889c",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/scaffoldMessageInput.schema.json",
+      "sha256": "sha256:4b890722505009201f9a1126f0388863c672a3095aaf54eb200a5978d36d2970",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/scaffoldMessageResult.schema.json",
+      "sha256": "sha256:cecee2db904d1786839c84e3124a56a34da0798a1056ae6638ad8a9063df25ad",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/schemaCompositionInput.schema.json",
+      "sha256": "sha256:ba8e6c8559eaaf8026562d7a2a89e3be0b295def2dde146c6f682ecd84df1bb5",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/schemaCompositionResult.schema.json",
+      "sha256": "sha256:f9a7b920c7ace5002911921722a32ee97245c4a2d844ccdc6ba96a90a70bc77e",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/taskCatalog.schema.json",
+      "sha256": "sha256:747142c4e30dac1c42e8e716055355a8f0fba10ab982170ed9f6bf99aadd7dc2",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/taskCatalogCompositionInput.schema.json",
+      "sha256": "sha256:026af3b341756eb00ecfea9a60636aa8714bf59bfbcc25f2a90eda6cfa312804",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/taskCatalogCompositionResult.schema.json",
+      "sha256": "sha256:07217b745ac847f247bb2f2f16e5d42788a25145b37bd88f0735291bf9c2bdfb",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/taskCatalogFragment.schema.json",
+      "sha256": "sha256:e13edab6d300c89638e3099d7ae07c35cac1bf922b2982c7505e045277466216",
+      "mode": "0644"
+    },
+    {
+      "path": "task-catalog.json",
+      "sha256": "sha256:d65d988131b8cb1a78dd408e9810cd10358bda1d33277b2d35e1b3b9776c34ca",
+      "mode": "0644"
+    },
+    {
+      "path": "tsconfig.runtime-foundation.build.json",
+      "sha256": "sha256:b69ca586d2b89cc50385aa222982c5c8b57262ac6245017f715a6f46bc952802",
+      "mode": "0644"
+    },
+    {
+      "path": "tsconfig.runtime-foundation.json",
+      "sha256": "sha256:c792d2f52fa7b3bd2409cb9536c41d6a2fea5fada74015525808e6b02d5d3e69",
+      "mode": "0644"
+    },
+    {
+      "path": "tsconfig.runtime-nvb.json",
+      "sha256": "sha256:fa365f9e252064f3d0ee77075be1625b850e13b29389a5349dc072b672bda327",
+      "mode": "0644"
+    },
+    {
+      "path": "types/nirvana.d.ts",
+      "sha256": "sha256:c4a7ad7e3ad6db2c038c456efe279e8c9a6b90c8935f8baa854b97ce3a910f8e",
+      "mode": "0644"
+    }
+  ],
+  "actions": ["wt:hello"],
+  "requiredCommands": []
+}

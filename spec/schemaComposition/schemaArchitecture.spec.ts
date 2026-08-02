@@ -32,7 +32,7 @@ describe('schema composition architecture', function () {
             join(process.cwd(), 'docs', 'spec', 'schemas', 'v1.schema.json'), 'utf8'
         ))).not.toThrow();
         const fragments = readdirSync(FRAGMENT_ROOT).filter((name) => name.endsWith('.schema.json'));
-        expect(fragments.length).toBe(16);
+        expect(fragments.length).toBe(17);
         for (const name of fragments) {
             const path = join(FRAGMENT_ROOT, name);
             expect(physicalLines(path)).toBeLessThanOrEqual(240);

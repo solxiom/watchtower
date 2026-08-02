@@ -1,0 +1,118 @@
+{
+  "x-watchtower-fragment": {
+    "schemaVersion": 1,
+    "id": "watchtower.v1.runtime-knowledge-manifest",
+    "includes": ["watchtower.v1.core"]
+  },
+  "$defs": {
+    "manifestAsset": {
+      "type": "object",
+      "required": ["path", "sha256", "mode"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" },
+        "mode": { "enum": ["0644", "0755"] }
+      },
+      "additionalProperties": false
+    },
+    "manifestAssets": {
+      "type": "array",
+      "uniqueItems": true,
+      "x-watchtower-uniqueBy": "path",
+      "items": { "$ref": "#/$defs/manifestAsset" }
+    },
+    "runtimeManifest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "manifestId",
+        "runtimeVersion",
+        "minimumCliVersion",
+        "compatibleLaneSchemaVersions",
+        "compatibleKnowledgeVersions",
+        "assets",
+        "actions",
+        "requiredCommands"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "manifestId": { "const": "watchtower-runtime/v1" },
+        "runtimeVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "minimumCliVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "compatibleLaneSchemaVersions": { "const": [1] },
+        "compatibleKnowledgeVersions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+          }
+        },
+        "assets": {
+          "$ref": "#/$defs/manifestAssets"
+        },
+        "actions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)*$"
+          }
+        },
+        "requiredCommands": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "knowledgeManifest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "manifestId",
+        "knowledgeVersion",
+        "compatibleRuntimeVersions",
+        "provenance",
+        "assets"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "manifestId": { "const": "watchtower-knowledge/v1" },
+        "knowledgeVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+        },
+        "compatibleRuntimeVersions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "required": ["repository", "commit", "importRecordSha256"],
+          "properties": {
+            "repository": { "type": "string" },
+            "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "importRecordSha256": { "$ref": "#/$defs/digest" }
+          },
+          "additionalProperties": false
+        },
+        "assets": {
+          "$ref": "#/$defs/manifestAssets"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
