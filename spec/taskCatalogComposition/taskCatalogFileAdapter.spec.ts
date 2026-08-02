@@ -115,7 +115,7 @@ describe('task catalog path, symlink, and permission boundaries', function () {
     it('rejects source and aggregate symlinks without changing their targets', async function () {
         await withFixture(async (root) => {
             const sourceLink = join(root, CAPABILITIES, 'zzz.catalog.json');
-            await symlink('scaffold.catalog.json', sourceLink);
+            await symlink('runtimeSmoke.catalog.json', sourceLink);
             const sourceResult = await runTaskCatalogCompositionTask(
                 root, {mode: 'check'}, {tempToken: fixedToken}
             );
@@ -142,7 +142,7 @@ describe('task catalog path, symlink, and permission boundaries', function () {
 describe('task catalog source permission boundary', function () {
     it('maps unreadable source bytes to a closed failure without aggregate mutation', async function () {
         await withFixture(async (root) => {
-            const fragmentPath = join(root, CAPABILITIES, 'scaffold.catalog.json');
+            const fragmentPath = join(root, CAPABILITIES, 'runtimeSmoke.catalog.json');
             const before = await readFile(join(root, TASK_CATALOG));
             await chmod(fragmentPath, 0o000);
             try {

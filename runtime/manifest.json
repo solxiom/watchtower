@@ -12,8 +12,8 @@
       "mode": "0644"
     },
     {
-      "path": "catalog/capabilities/scaffold.catalog.json",
-      "sha256": "sha256:48557f6fde77a6aa1bbef3d42647eeb03af016cac99025421a1a4fab4b97b13a",
+      "path": "catalog/capabilities/runtimeSmoke.catalog.json",
+      "sha256": "sha256:e925e8285f2e91483aa01291e43335059fb79874b35af8ed6a3f92b3c48420e1",
       "mode": "0644"
     },
     {
@@ -37,8 +37,8 @@
       "mode": "0644"
     },
     {
-      "path": "handlers/HelloRuntimeTaskHandler.ts",
-      "sha256": "sha256:b390fea6444e1db82f3123ef7e155c18ad7a9eaa926839604378075b1e6e2bec",
+      "path": "handlers/RuntimeSmokeTaskHandler.ts",
+      "sha256": "sha256:fe5416f089ecb4ca984f306db969c512a0403a41679fb7bf9b8852dd4adcf316",
       "mode": "0644"
     },
     {
@@ -72,18 +72,23 @@
       "mode": "0644"
     },
     {
+      "path": "handlers/smoke/runtimeSmokeTask.ts",
+      "sha256": "sha256:ecc76e28d2c7da6b816de2b10e1bd376b084be0f5b2e0880bb009a65d46b2267",
+      "mode": "0644"
+    },
+    {
       "path": "nvb-manifest.json",
       "sha256": "sha256:aebe209db881959c64b4ccab8eff3cf08b475099069ca17b57b37067b972c779",
       "mode": "0644"
     },
     {
       "path": "profiles/implementationV1.profile.json",
-      "sha256": "sha256:4761df479fd3ed618c3e7887c01912f22826dd786ddf31b2c3075d0412a521cf",
+      "sha256": "sha256:57655dfb2589ddac4b72f91e9e259bcb08564a7bda83dbdbdff0a09f4a441d3c",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.json",
-      "sha256": "sha256:69b4fad5541e7284aa91aff9b5c068c167cabe72f5f0682d3b739e09c508604d",
+      "sha256": "sha256:f3933f728d7572bd118ba36590bd20524fa751d2e1eaf1c3948340eb293c615a",
       "mode": "0644"
     },
     {
@@ -102,13 +107,13 @@
       "mode": "0644"
     },
     {
-      "path": "schemas/scaffoldMessageInput.schema.json",
-      "sha256": "sha256:4b890722505009201f9a1126f0388863c672a3095aaf54eb200a5978d36d2970",
+      "path": "schemas/runtimeSmokeInput.schema.json",
+      "sha256": "sha256:7857d8a819a9c31dc7d5bc6dd9cb73d2c819f6c60c3447db81863f3ae9e7c541",
       "mode": "0644"
     },
     {
-      "path": "schemas/scaffoldMessageResult.schema.json",
-      "sha256": "sha256:cecee2db904d1786839c84e3124a56a34da0798a1056ae6638ad8a9063df25ad",
+      "path": "schemas/runtimeSmokeResult.schema.json",
+      "sha256": "sha256:89150d0b75550cd140571642dfe42165ab728f1ea6d2fd17c24b3b80ef62b4d6",
       "mode": "0644"
     },
     {
@@ -143,7 +148,7 @@
     },
     {
       "path": "task-catalog.json",
-      "sha256": "sha256:d65d988131b8cb1a78dd408e9810cd10358bda1d33277b2d35e1b3b9776c34ca",
+      "sha256": "sha256:66b2b4f88eccf12d7cff2539e64fc179c5ee10fe5cb7fde39a1cf6e55148f5e3",
       "mode": "0644"
     },
     {
@@ -167,6 +172,6 @@
       "mode": "0644"
     }
   ],
-  "actions": ["wt:hello"],
+  "actions": ["wt:runtime:smoke"],
   "requiredCommands": []
 }

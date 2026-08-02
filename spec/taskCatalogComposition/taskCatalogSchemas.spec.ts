@@ -40,6 +40,14 @@ function expectInvalid(ajv: Ajv, schemaId: string, value: unknown): void {
     expect(ajv.validate(schemaId, value)).withContext(JSON.stringify(value)).toBeFalse();
 }
 
+function expectInvalidRuntimeSmokeContracts(ajv: Ajv): void {
+    expectInvalid(ajv, 'watchtower://runtime/schemas/runtime-smoke-input/v1', {});
+    expectInvalid(ajv, 'watchtower://runtime/schemas/runtime-smoke-input/v1', {
+        schemaVersion: 1, operation: 'runtime-smoke', extra: true
+    });
+    expectInvalid(ajv, 'watchtower://runtime/schemas/runtime-smoke-result/v1', {});
+}
+
 describe('task catalog closed schema artifacts', function () {
     it('validates every authoritative source and generated aggregate', function () {
         const ajv = configuredAjv();
@@ -59,7 +67,7 @@ describe('task catalog closed schema artifacts', function () {
         const ajv = configuredAjv();
         expect(() => JSON.parse(readFileSync(join(FIXTURE_ROOT, 'malformed.json'), 'utf8'))).toThrow();
         const fragment = JSON.parse(readFileSync(
-            join('runtime-nvb', 'catalog', 'capabilities', 'scaffold.catalog.json'), 'utf8'
+            join('runtime-nvb', 'catalog', 'capabilities', 'runtimeSmoke.catalog.json'), 'utf8'
         ));
         const profile = JSON.parse(readFileSync(
             join('runtime-nvb', 'profiles', 'implementationV1.profile.json'), 'utf8'
@@ -78,8 +86,12 @@ describe('task catalog closed schema artifacts', function () {
 describe('declared task input and result schemas', function () {
     it('accepts the minimum valid task contracts', function () {
         const ajv = configuredAjv();
-        expectValid(ajv, 'watchtower://runtime/schemas/scaffold-message-input/v1', 'hello');
-        expectValid(ajv, 'watchtower://runtime/schemas/scaffold-message-result/v1', null);
+        expectValid(ajv, 'watchtower://runtime/schemas/runtime-smoke-input/v1', {
+            schemaVersion: 1, operation: 'runtime-smoke'
+        });
+        expectValid(ajv, 'watchtower://runtime/schemas/runtime-smoke-result/v1', {
+            schemaVersion: 1, ok: true, operation: 'runtime-smoke'
+        });
         expectValid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-input/v1', {mode: 'check'});
         expectValid(ajv, 'watchtower://runtime/schemas/schema-composition-input/v1', {mode: 'write'});
         expectValid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-result/v1', {
@@ -101,8 +113,7 @@ describe('declared task input and result schemas', function () {
             expectInvalid(ajv, schemaId,
                 JSON.parse(readFileSync(join(FIXTURE_ROOT, 'unsupported-task-mode.json'), 'utf8')));
         }
-        expectInvalid(ajv, 'watchtower://runtime/schemas/scaffold-message-input/v1', '');
-        expectInvalid(ajv, 'watchtower://runtime/schemas/scaffold-message-result/v1', {});
+        expectInvalidRuntimeSmokeContracts(ajv);
         const rejected = {schemaVersion: 1, ok: false, mode: null,
             failure: {code: 'UNSUPPORTED', subject: null}};
         expectInvalid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-result/v1', rejected);

@@ -16,7 +16,7 @@ it("accepts the committed manifests and verifies their complete asset/action obs
   expect(
     validator.verifyAssets(runtime, await observations("runtime-nvb")),
   ).toEqual({ ok: true });
-  expect(validator.verifyActions(runtime, ["wt:hello"])).toEqual({
+  expect(validator.verifyActions(runtime, ["wt:runtime:smoke"])).toEqual({
     ok: true,
   });
   expect(
@@ -39,7 +39,7 @@ it("rejects malformed, missing, extra, duplicate, and unsafe manifest fields", a
     "MANIFEST_IDENTITY_INVALID",
   );
   expectError(
-    { ...source, actions: ["wt:hello", "wt:hello"] },
+    { ...source, actions: ["wt:runtime:smoke", "wt:runtime:smoke"] },
     "MANIFEST_SCHEMA_INVALID",
   );
   expectError(
@@ -104,19 +104,19 @@ it("rejects missing and extra actions", async () => {
   expect(validator.verifyActions(manifest, [])).toEqual({
     ok: false,
     reason: "MANIFEST_ACTION_MISSING",
-    subject: "wt:hello",
+    subject: "wt:runtime:smoke",
   });
-  expect(validator.verifyActions(manifest, ["wt:hello", "wt:foreign"])).toEqual(
+  expect(validator.verifyActions(manifest, ["wt:runtime:smoke", "wt:foreign"])).toEqual(
     {
       ok: false,
       reason: "MANIFEST_ACTION_EXTRA",
       subject: "wt:foreign",
     },
   );
-  expect(validator.verifyActions(manifest, ["wt:hello", "wt:hello"])).toEqual({
+  expect(validator.verifyActions(manifest, ["wt:runtime:smoke", "wt:runtime:smoke"])).toEqual({
     ok: false,
     reason: "MANIFEST_ACTION_DUPLICATE",
-    subject: "wt:hello",
+    subject: "wt:runtime:smoke",
   });
 });
 

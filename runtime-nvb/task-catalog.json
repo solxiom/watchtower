@@ -5,12 +5,12 @@
   "fragments": [
     "schema-composition",
     "catalog-composition",
-    "scaffold"
+    "runtime-smoke"
   ],
   "groups": {},
   "handlers": {
-    "HelloRuntimeTaskHandler": {
-      "module": "./handlers/HelloRuntimeTaskHandler.js"
+    "RuntimeSmokeTaskHandler": {
+      "module": "./handlers/RuntimeSmokeTaskHandler.js"
     },
     "SchemaCompositionTaskHandler": {
       "module": "./handlers/SchemaCompositionTaskHandler.js"
@@ -27,7 +27,7 @@
   "profiles": {
     "implementation-v1": {
       "taskIds": [
-        "wt:check:hello"
+        "wt:runtime:smoke"
       ]
     }
   },
@@ -41,13 +41,13 @@
       "path": "./schemas/runtimeNvbConfig.schema.json",
       "sha256": "sha256:9b0d79ef3d92cb40903cd3bfa7fa527ee80cc8a904a0bfe75f728dfae21c889c"
     },
-    "watchtower://runtime/schemas/scaffold-message-input/v1": {
-      "path": "./schemas/scaffoldMessageInput.schema.json",
-      "sha256": "sha256:4b890722505009201f9a1126f0388863c672a3095aaf54eb200a5978d36d2970"
+    "watchtower://runtime/schemas/runtime-smoke-input/v1": {
+      "path": "./schemas/runtimeSmokeInput.schema.json",
+      "sha256": "sha256:7857d8a819a9c31dc7d5bc6dd9cb73d2c819f6c60c3447db81863f3ae9e7c541"
     },
-    "watchtower://runtime/schemas/scaffold-message-result/v1": {
-      "path": "./schemas/scaffoldMessageResult.schema.json",
-      "sha256": "sha256:cecee2db904d1786839c84e3124a56a34da0798a1056ae6638ad8a9063df25ad"
+    "watchtower://runtime/schemas/runtime-smoke-result/v1": {
+      "path": "./schemas/runtimeSmokeResult.schema.json",
+      "sha256": "sha256:89150d0b75550cd140571642dfe42165ab728f1ea6d2fd17c24b3b80ef62b4d6"
     },
     "watchtower://runtime/schemas/schema-composition-input/v1": {
       "path": "./schemas/schemaCompositionInput.schema.json",
@@ -75,15 +75,6 @@
     }
   },
   "tasks": {
-    "wt:check:hello": {
-      "executionScope": "lane-runtime",
-      "handlerId": "HelloRuntimeTaskHandler",
-      "inputSchema": "watchtower://runtime/schemas/scaffold-message-input/v1",
-      "leafIds": [],
-      "mutationClass": "read-only",
-      "requiresInvocationEnvelope": false,
-      "resultSchema": "watchtower://runtime/schemas/scaffold-message-result/v1"
-    },
     "wt:runtime:catalog:check": {
       "executionScope": "repository-development",
       "handlerId": "TaskCatalogCompositionTaskHandler",
@@ -101,6 +92,15 @@
       "mutationClass": "managed-runtime-write",
       "requiresInvocationEnvelope": false,
       "resultSchema": "watchtower://runtime/schemas/task-catalog-composition-result/v1"
+    },
+    "wt:runtime:smoke": {
+      "executionScope": "lane-runtime",
+      "handlerId": "RuntimeSmokeTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/runtime-smoke-input/v1",
+      "leafIds": [],
+      "mutationClass": "read-only",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/runtime-smoke-result/v1"
     },
     "wt:schema:check": {
       "executionScope": "repository-development",

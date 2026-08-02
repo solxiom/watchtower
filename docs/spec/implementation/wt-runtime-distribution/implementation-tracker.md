@@ -13,6 +13,6 @@ Status: **Synchronized remediation candidate**
 | RT-07 | Packaged watcher and task-runtime smoke proof | ❌ Pending | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |
 | RT-08 | Nirvana dependency closure and isolated install harness | ✅ Accepted | Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink |
 | RT-09 | Task catalog, lane profile, and aggregate contracts | ✅ Accepted | Duplicate/dangling/stale rejection; profile cannot add code/tasks; deterministic aggregate |
-| RT-10 | Baseline packaged TaskHandlers | ❌ Pending | Public TaskHandler API; schema-valid input/result/events; no product policy or future capability stubs |
+| RT-10 | Baseline packaged TaskHandlers | ✅ Accepted | Public TaskHandler API; schema-valid input/result/events; no product policy or future capability stubs |
 
 RM-02 has no pending human dependency-source decision. It resumes in its preserved lineage only after ACCEPT_PACKS activation, accepted RM-13 and RT-08, and explicit worktree synchronization.

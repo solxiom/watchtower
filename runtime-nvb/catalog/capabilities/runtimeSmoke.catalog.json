@@ -1,0 +1,41 @@
+{
+  "actions": {},
+  "fragmentId": "runtime-smoke",
+  "groups": {},
+  "handlers": {
+    "RuntimeSmokeTaskHandler": {
+      "module": "./handlers/RuntimeSmokeTaskHandler.js"
+    }
+  },
+  "includes": [],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:runtime:smoke": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/runtime-smoke-input/v1",
+        "leafIds": [],
+        "mutationClass": "read-only",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/runtime-smoke-result/v1"
+      },
+      "doc": {
+        "summary": "Verify that the packaged runtime TaskHandler emits a structured result.",
+        "usage": "Internal Watchtower runtime smoke task."
+      },
+      "handle": {
+        "args": [
+          {
+            "schemaVersion": 1,
+            "operation": "runtime-smoke"
+          }
+        ],
+        "handler": "RuntimeSmokeTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    }
+  }
+}

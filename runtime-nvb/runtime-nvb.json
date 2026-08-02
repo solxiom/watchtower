@@ -1,19 +1,23 @@
 {
   "groups": {},
   "handlers": [
-    "./handlers/HelloRuntimeTaskHandler.js"
+    "./handlers/RuntimeSmokeTaskHandler.js"
   ],
   "tasks": {
-    "wt:check:hello": {
+    "wt:runtime:smoke": {
       "doc": {
-        "summary": "Example runtime task retained until baseline handlers replace the scaffold.",
-        "usage": "Internal Watchtower build task."
+        "summary": "Verify that the packaged runtime TaskHandler emits a structured result.",
+        "usage": "Internal Watchtower runtime smoke task."
       },
       "handle": {
         "args": [
-          "Hello from watchtower runtime NVB."
+          {
+            "operation": "runtime-smoke",
+            "schemaVersion": 1
+          }
         ],
-        "handler": "HelloRuntimeTaskHandler",
+        "handler": "RuntimeSmokeTaskHandler",
+        "preferType": "async",
         "type": "auto"
       },
       "runnerOpts": {}

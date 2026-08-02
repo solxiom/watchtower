@@ -45,7 +45,7 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const fragments = readdirSync(join('runtime-nvb', 'catalog', 'capabilities'));
         const profiles = readdirSync(join('runtime-nvb', 'profiles'));
         expect(fragments).toEqual([
-            'catalogComposition.catalog.json', 'scaffold.catalog.json',
+            'catalogComposition.catalog.json', 'runtimeSmoke.catalog.json',
             'schemaComposition.catalog.json'
         ]);
         expect(profiles).toEqual(['implementationV1.profile.json']);
@@ -71,8 +71,8 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const runtime = JSON.parse(readFileSync(join('runtime-nvb', 'runtime-nvb.json'), 'utf8')) as {
             handlers: string[]; tasks: Record<string, unknown>;
         };
-        expect(runtime.handlers).toEqual(['./handlers/HelloRuntimeTaskHandler.js']);
-        expect(Object.keys(runtime.tasks)).toEqual(['wt:check:hello']);
+        expect(runtime.handlers).toEqual(['./handlers/RuntimeSmokeTaskHandler.js']);
+        expect(Object.keys(runtime.tasks)).toEqual(['wt:runtime:smoke']);
     });
 });
 

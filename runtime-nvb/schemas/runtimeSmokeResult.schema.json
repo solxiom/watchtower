@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/runtime-smoke-result/v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "ok", "operation"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "ok": {"const": true},
+        "operation": {"const": "runtime-smoke"}
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "ok", "failure"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "ok": {"const": false},
+        "failure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code"],
+          "properties": {
+            "code": {"const": "RUNTIME_SMOKE_INPUT_INVALID"}
+          }
+        }
+      }
+    }
+  ]
+}
