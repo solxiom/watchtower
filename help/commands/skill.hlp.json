@@ -1,0 +1,13 @@
+{
+  "name": "skill",
+  "group": "basic",
+  "summary": "Preview or install the bundled Watchtower coordinator knowledge pack for Codex, Cursor, or Claude.",
+  "usage": "wt skill install <codex|cursor|claude> [--scope=<skill-only|guides-only|full>] [--replace] [--dry-run] [--json] [--no-color]",
+  "flags": [
+    {"name": "scope", "description": "Install skill assets only, guides only, or the full pack; defaults to full.", "optional": true},
+    {"name": "replace", "description": "Replace an existing host installation without interactive confirmation.", "optional": true},
+    {"name": "dry-run", "description": "Preview the install plan without writing any host files.", "optional": true},
+    {"name": "json", "description": "Emit one versioned command-result envelope.", "optional": true},
+    {"name": "no-color", "description": "Disable ANSI color in human output.", "optional": true}
+  ]
+}

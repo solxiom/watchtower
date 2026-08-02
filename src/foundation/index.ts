@@ -76,3 +76,11 @@ export {createNodePackFileSystem, nodePackFileSystem} from './packFilesystemHost
 export type {PackStorage, PackStorageFactory} from './packFilesystemHost.js';
 export {nodePackGitInspector} from './packGitHost.js';
 export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
+export {
+    confirmationRequiredError, createClaudeHostAdapter, createCodexHostAdapter, createCursorHostAdapter,
+    HOST_NAMES, INSTALL_SCOPES, resolveHostAdapter, resolveKnowledgeRoot
+} from './hostAdapters/index.js';
+export type {
+    HostAdapter, HostName, HostNotificationStatus, InstallOptions, InstallResult, InstallScope,
+    PreviewFile, PreviewResult, ResolvedKnowledgePack
+} from './hostAdapters/index.js';
