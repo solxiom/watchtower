@@ -26,8 +26,8 @@
       "kind": "nirvana",
       "name": "@nirvana/b-core",
       "version": "1.0.0",
-      "artifact": {"file": "nirvana-b-core-1.0.0.tgz", "sha256": "sha256:fe91259268591835a681a71413c7fa46847425a79db7e0a300121a2428152856"},
-      "source": {"path": "components/b-core", "sha256": "sha256:982aef087d627ccce06b4436af0fa884e2f68b57bea727dc0966c107435e9687"},
+      "artifact": {"file": "nirvana-b-core-1.0.0.tgz", "sha256": "sha256:45691b76e21518c737e7335176dcc37ab16fe79883edd8cb2eda8a6ed3396114"},
+      "source": {"path": "components/b-core", "sha256": "sha256:afc9b0b21bffdbe440203d08029c4f4c222c7d7fd855f46f193bd1348861af32"},
       "dependencies": [{"name": "@nirvana/base", "version": "1.0.0"}]
     },
     {
