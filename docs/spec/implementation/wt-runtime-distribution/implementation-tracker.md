@@ -5,7 +5,7 @@ Status: **Synchronized remediation candidate**
 | Batch | Capability | State | Acceptance proof |
 |---|---|---|---|
 | RT-01 | Canonical runtime/knowledge audit and shell classification | ✅ Accepted | Source provenance; no omitted action/doc; every script classified as TaskHandler, leaf, temporary wrapper, or removal |
-| RT-02 | Runtime and knowledge manifests | ⏳ Correction 03 handoff ready | Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection |
+| RT-02 | Runtime and knowledge manifests | ✅ Accepted | Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection |
 | RT-03 | Packaged runtime and distribution staging | ✅ Accepted | Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback |
 | RT-04 | Immutable data-root catalog and staging | ✅ Accepted | XDG precedence; ancestor-contained data root; exclusive crash-durable publication finalization; observable token-owned lock release; immutable version roots |
 | RT-05 | `LaneTaskRunner` and leaf invocation adapter | ❌ Pending | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
