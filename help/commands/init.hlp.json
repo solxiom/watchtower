@@ -1,0 +1,16 @@
+{
+  "name": "init",
+  "group": "basic",
+  "summary": "Validate and preview an implementation-lane initialization plan without creating lane state.",
+  "usage": "wt init <slug> --tmux-prefix=<prefix> --impl-pack=<path> --coordinator-routing=<path> [--scope=<bindings.json>] [--runtime=<version>] [--workspace=<path>] [--update-gitignore] [--dry-run]",
+  "flags": [
+    {"name": "tmux-prefix", "description": "Required tmux prefix: 1–16 lowercase letters, digits, and hyphens.", "optional": false},
+    {"name": "impl-pack", "description": "Required existing implementation-pack directory, absolute or control-home-relative.", "optional": false},
+    {"name": "coordinator-routing", "description": "Required local version 1 coordinator routing policy JSON file.", "optional": false},
+    {"name": "scope", "description": "Optional schemaVersion 1 local repository bindings JSON file.", "optional": true},
+    {"name": "runtime", "description": "Optional installed compatible runtime version.", "optional": true},
+    {"name": "workspace", "description": "Optional existing control-home Git worktree.", "optional": true},
+    {"name": "update-gitignore", "description": "Permit the later init effect to add /.watchtower/ Git-ignore coverage.", "optional": true},
+    {"name": "dry-run", "description": "Render the complete preflight plan without creating directories, files, or links.", "optional": true}
+  ]
+}

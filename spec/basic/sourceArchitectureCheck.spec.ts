@@ -69,6 +69,17 @@ describe('contract source architecture', function () {
     });
 });
 
+describe('command facade architecture', function () {
+    it('keeps commands free of direct filesystem, process output, and external JSON parsing', function () {
+        const commandDirectory = join(process.cwd(), 'src', 'commands');
+        const offenders = sourceFiles(commandDirectory).filter((path) => {
+            const source = readFileSync(path, 'utf8');
+            return /from\s+['"]node:fs|process\.(?:stdout|stderr)|JSON\.parse|new\s+RuntimeCatalog/u.test(source);
+        });
+        expect(offenders).toEqual([]);
+    });
+});
+
 describe('SQLite driver boundary', function () {
     it('confines SQLite driver and facade imports to the one sanctioned adapter', function () {
         expect(DRIVER_IMPORT.test("import x from 'better-sqlite3';")).toBeTrue();

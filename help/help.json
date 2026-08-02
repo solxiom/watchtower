@@ -10,6 +10,12 @@
   ],
   "commands": [
     {
+      "name": "init",
+      "group": "basic",
+      "summary": "Validate and preview an implementation-lane initialization plan without creating lane state.",
+      "usage": "wt init <slug> --tmux-prefix=<prefix> --impl-pack=<path> --coordinator-routing=<path> [--scope=<bindings.json>] [--runtime=<version>] [--workspace=<path>] [--update-gitignore] [--dry-run]"
+    },
+    {
       "name": "config",
       "group": "basic",
       "summary": "Show resolved lane identity, bindings, paths, and redacted strict configuration.",
