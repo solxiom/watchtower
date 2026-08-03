@@ -31,3 +31,14 @@ The reviewer treats the implementation report as claims, inspects actual source/
 ## Host controls
 
 When the process user is not `kavan`, every command uses `sudo -u kavan -i`. Every edited file ends owned by `kavan:kavan`. Never commit `.local/`, `build/`, `dist/`, `node_modules/`, `.watchtower/`, or `.nira/local/`.
+
+## NPM is installed through nvm
+
+Use the npm and node installed through nvm.
+
++ load /home/kavan/.nvm/nvm.sh as kavan
+
+## RT-08 requires you run as kavan
+
+Do correctly perform `nvb dist` make sure you are running as kavan through `sudo -u kavan -i` and using
+nvm installed node and npm

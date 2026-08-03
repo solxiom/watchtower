@@ -79,3 +79,14 @@ The declared batch class is a floor for both execution and review. The selected
 agent must retain this complete contract, the batch brief, governing specs,
 current source, predecessor evidence, and proof output in context. Do not
 compress away safety instructions or replace proof with narrative confidence.
+
+## NPM is installed through nvm
+
+Use the npm and node installed through nvm.
+
++ load /home/kavan/.nvm/nvm.sh as kavan
+
+## RT-08 requires you run as kavan
+
+Do correctly perform `nvb dist` make sure you are running as kavan through `sudo -u kavan -i` and using
+nvm installed node and npm

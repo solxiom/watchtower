@@ -1,6 +1,6 @@
 # Runtime distribution Tracker
 
-Status: **Synchronized remediation candidate**
+Status: **Active — RT-05 Correction 03 in progress after substantive REJECT; RT-01–RT-04, RT-08–RT-10 accepted**
 
 | Batch | Capability | State | Acceptance proof |
 |---|---|---|---|
@@ -8,7 +8,7 @@ Status: **Synchronized remediation candidate**
 | RT-02 | Runtime and knowledge manifests | ✅ Accepted | Every asset/checksum/mode/action represented; missing/extra/checksum/mode rejection |
 | RT-03 | Packaged runtime and distribution staging | ✅ Accepted | Required dist including SQLite closure; executable preservation; reproducible validation; no source-link fallback |
 | RT-04 | Immutable data-root catalog and staging | ✅ Accepted | XDG precedence; ancestor-contained data root; exclusive crash-durable publication finalization; observable token-owned lock release; immutable version roots |
-| RT-05 | `LaneTaskRunner` and leaf invocation adapter | ❌ Pending | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
+| RT-05 | `LaneTaskRunner` and leaf invocation adapter | ⏳ Correction 03 in progress — substantive REJECT routed to existing kavan implementer | Explicit pinned NVB target; allowlisted action→task map; typed events/results; argv-only leaves; environment/cwd/account/access validation; signal/exit forwarding; NVB API gap proof |
 | RT-06 | Managed lane links, task profiles, and compatibility names | ❌ Pending | Manifest-only ownership; task catalog/profile pin; project `nvb.json` unchanged; link targets/checksums; collision/path-escape refusal |
 | RT-07 | Packaged watcher and task-runtime smoke proof | ❌ Pending | Relocated package works; catalog/profile escape rejected; structured task result; wake stdout/signal behavior; worker accounts read but cannot write |
 | RT-08 | Nirvana dependency closure and isolated install harness | ✅ Accepted | Complete transitive closure; fresh-prefix install; no wildcard, E404, local path, or source/ecosystem symlink |
