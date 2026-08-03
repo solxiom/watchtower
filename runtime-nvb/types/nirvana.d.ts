@@ -12,6 +12,7 @@ declare module '@nirvana/builder' {
             waitForDoneSignalOnAsync?: boolean;
         });
 
+        readonly argMap: {get(key: string): unknown; getOriginalIndexes(key: string): readonly number[]};
         readonly cwd: string | null;
         onResult(result: unknown): void;
         doneSignal(err?: Error): void;
@@ -29,6 +30,7 @@ declare module '@nirvana/b-core/TaskHandler' {
             waitForDoneSignalOnAsync?: boolean;
         });
 
+        readonly argMap: {get(key: string): unknown; getOriginalIndexes(key: string): readonly number[]};
         readonly cwd: string | null;
         onResult(result: unknown): void;
         doneSignal(err?: Error): void;

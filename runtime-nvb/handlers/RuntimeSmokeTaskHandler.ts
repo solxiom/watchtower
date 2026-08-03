@@ -1,11 +1,12 @@
 import {TaskHandler} from '@nirvana/builder';
 
-import {runRuntimeSmokeTask} from './smoke/runtimeSmokeTask.js';
+import {readRuntimeSmokeTaskRequest, runRuntimeSmokeTask, type RuntimeSmokeArgMap} from './smoke/runtimeSmokeTask.js';
 
 export default class RuntimeSmokeTaskHandler extends TaskHandler {
     static readonly handlerName = 'RuntimeSmokeTaskHandler';
+    private readonly requestArgMap: RuntimeSmokeArgMap | undefined;
 
-    constructor({taskName}: {readonly taskName: string}) {
+    constructor({taskName, requestArgMap}: {readonly taskName: string; readonly requestArgMap?: RuntimeSmokeArgMap}) {
         super({
             taskName,
             handlerName: RuntimeSmokeTaskHandler.handlerName,
@@ -13,11 +14,12 @@ export default class RuntimeSmokeTaskHandler extends TaskHandler {
             hasAsyncHandler: true,
             waitForDoneSignalOnAsync: true
         });
+        this.requestArgMap = requestArgMap;
     }
 
-    async handleAsync(input?: unknown): Promise<void> {
-        const result = runRuntimeSmokeTask(input);
-        this.onResult(result);
+    async handleAsync(): Promise<void> {
+        const result = runRuntimeSmokeTask(readRuntimeSmokeTaskRequest(this.requestArgMap ?? this.argMap));
+        this.onResult({structuredOutput: result});
         this.doneSignal(result.ok ? undefined : new Error(result.failure.code));
     }
 }
