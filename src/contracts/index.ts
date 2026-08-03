@@ -135,3 +135,31 @@ export type {
     ResolvedConfigPaths,
     ResolvedConfigV1
 } from './readModels.js';
+export {LANE_TASK_RUNTIME_REASONS, LaneTaskRuntimeError} from './taskRuntime.js';
+export type {
+    LaneRuntimeBaseEnvironment,
+    LaneRuntimeContext,
+    LaneRuntimeLeaf,
+    LaneTaskBinding,
+    LaneTaskCancelled,
+    LaneTaskCompleted,
+    LaneTaskEvent,
+    LaneTaskEventCategory,
+    LaneTaskFailed,
+    LaneTaskInvocation,
+    LaneTaskMutationClass,
+    LaneTaskRunResult,
+    LaneTaskRuntimeReason,
+    PinnedTaskRuntimeTarget
+} from './taskRuntime.js';
+export {LEAF_RUNTIME_REASONS, LeafRuntimeError} from './leafRuntime.js';
+export type {
+    LeafCancelled,
+    LeafCompleted,
+    LeafFailed,
+    LeafInvocation,
+    LeafInvocationResult,
+    LeafRuntimeReason,
+    TaskLeafCapability,
+    TaskLeafRequest
+} from './leafRuntime.js';

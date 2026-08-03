@@ -84,3 +84,5 @@ export type {
     HostAdapter, HostName, HostNotificationStatus, InstallOptions, InstallResult, InstallScope,
     PreviewFile, PreviewResult, ResolvedKnowledgePack
 } from './hostAdapters/index.js';
+export * from './taskRuntime/index.js';
+export * from './runtime/index.js';
