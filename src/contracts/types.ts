@@ -164,6 +164,12 @@ export interface LaneManifestV1 {
     [field: string]: unknown;
 }
 
+/** Closed `repositories.local.json` shape (`docs/spec/v1.md` §7.4). */
+export interface RepositoriesLocalV1 {
+    schemaVersion: 1;
+    repositories: RepositoryBinding[];
+}
+
 export interface ResolvedLane extends LaneRef {
     laneDir: string;
     manifest: LaneManifestV1;

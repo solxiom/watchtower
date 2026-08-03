@@ -85,6 +85,7 @@ export type {
     ParseDiagnostic,
     ParserDiagnosticCode,
     ReadModelLaneLifecycle,
+    RepositoriesLocalV1,
     RepositoryBinding,
     RepositoryMembership,
     RepositoryRef,

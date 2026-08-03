@@ -6,7 +6,7 @@ Status: **Synchronized remediation candidate**
 |---|---|---|---|
 | LC-01 | Init argument resolution and preflight plan | ✅ Accepted | Exact syntax; no destination creation in preview; prefix/scope/routing validation |
 | LC-02 | Pack acceptance, seal, and drift validation | ✅ Accepted | JSON Schema; RFC 8785 seal reproduction; Git/file-set/drift reason matrix |
-| LC-03 | Transactional lane layout and manifests | ❌ Pending | Adjacent staging; atomic commit point; failure at every write/fsync/rename stage |
+| LC-03 | Transactional lane layout and manifests | ✅ Accepted | Adjacent staging; atomic commit point; failure at every write/fsync/rename stage |
 | LC-04 | Bindings, Git-ignore, and membership registration | ❌ Pending | Lock order; conditional Git-ignore rollback; post-commit idempotent registration |
 | LC-05 | Coordinator and session policy baselines | ❌ Pending | Finite policies; installed-knowledge provenance; no Markdown restatement or model |
 | LC-06 | Foreground `watch` command | ❌ Pending | Preflight; exec behavior; stdout and Ctrl-C compatibility; no daemonization |
