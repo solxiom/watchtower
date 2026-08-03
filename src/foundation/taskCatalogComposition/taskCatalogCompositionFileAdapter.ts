@@ -1,12 +1,12 @@
 import {lstat, readFile, readdir, realpath} from 'node:fs/promises';
 import {isAbsolute, join, relative} from 'node:path';
 
-import {composeTaskCatalog} from './index.js';
-import type {CatalogSourceInput} from './index.js';
+import {composeTaskCatalog, type CatalogSourceInput} from './index.js';
 import type {TaskCatalogCompositionInput} from './taskCatalogContracts.js';
 import {replaceCatalogAggregates} from './catalogAggregatePairWriter.js';
 import type {CatalogAggregateFileSystem} from './catalogAggregateFileSystem.js';
 import {TaskCatalogFileBoundaryError} from './TaskCatalogFileBoundaryError.js';
+import {validateCatalogLeafAssets} from './catalogLeafAssetValidator.js';
 import type {
     TaskCatalogTaskFailureCode,
     TaskCatalogTaskMode,
@@ -28,7 +28,6 @@ interface CatalogPaths {
     readonly runtimeConfig: string;
     readonly taskCatalog: string;
 }
-
 export interface TaskCatalogCompositionRuntimeOptions {
     readonly tempToken: () => string;
     readonly aggregateFileSystem?: CatalogAggregateFileSystem;
@@ -172,6 +171,7 @@ async function executeTask(
     const paths = await resolvePaths(projectRoot);
     const composition = composeTaskCatalog(await readCompositionSources(paths));
     if (!composition.ok) return rejected(composition.failure.code, composition.failure.subject, mode);
+    await validateCatalogLeafAssets(projectRoot, composition.taskCatalog);
     const currentRuntime = await readAggregate(paths.runtimeConfig);
     const currentCatalog = await readAggregate(paths.taskCatalog);
     const matches = bytesEqual(currentRuntime, composition.runtimeConfigBytes) &&

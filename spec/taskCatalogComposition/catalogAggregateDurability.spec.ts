@@ -29,6 +29,7 @@ async function withFixture(action: (fixture: DurabilityFixture) => Promise<void>
     try {
         await mkdir(join(root, 'runtime-nvb'), {recursive: true});
         await cp(join('runtime-nvb', 'catalog'), join(root, 'runtime-nvb', 'catalog'), {recursive: true});
+        await cp(join('runtime-nvb', 'leaves'), join(root, 'runtime-nvb', 'leaves'), {recursive: true});
         await cp(join('runtime-nvb', 'profiles'), join(root, 'runtime-nvb', 'profiles'), {recursive: true});
         await cp(join('runtime-nvb', 'schemas'), join(root, 'runtime-nvb', 'schemas'), {recursive: true});
         await writeFile(join(root, RUNTIME), STALE);

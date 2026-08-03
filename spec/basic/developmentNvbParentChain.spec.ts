@@ -32,7 +32,7 @@ afterAll(function () {
     rmSync(temporaryRoot, {recursive: true, force: true});
 });
 
-describe('development NVB parent chain', function () {
+describe('development NVB accepted identity', function () {
     it('preserves the accepted effective task and group identities', function () {
         const output = validate();
         expect(JSON.parse(output)).toEqual({
@@ -42,7 +42,7 @@ describe('development NVB parent chain', function () {
                 'dist:clean-esm-stamp', 'dist:closure:verify', 'dist:compile', 'dist:copy-bin', 'dist:copy-config',
                 'dist:copy-help', 'dist:copy-knowledge', 'dist:copy-runtime', 'dist:fix-esm', 'dist:package', 'dist:runtime-nvb:compile',
                 'dist:runtime-nvb:copy', 'dist:runtime-nvb:foundation-compile',
-                'dist:runtime-nvb:relocation-check', 'dist:runtime-nvb:schema-copy',
+                'dist:runtime-nvb:leaf-copy', 'dist:runtime-nvb:relocation-check', 'dist:runtime-nvb:schema-copy',
                 'dist:validate', 'runtime-nvb:catalog:check',
                 'runtime-nvb:catalog:generate', 'runtime-nvb:validate',
                 'schema:stage-build', 'schema:stage-dist', 'test'
@@ -55,7 +55,9 @@ describe('development NVB parent chain', function () {
         expectCode('DEVELOPMENT_NVB_TASK_DUPLICATE', '--config', join(fixtures, 'duplicateTask.nvb.json'));
         expectCode('DEVELOPMENT_NVB_GROUP_DUPLICATE', '--config', join(fixtures, 'duplicateGroup.nvb.json'));
     });
+});
 
+describe('development NVB parent topology boundary', function () {
     it('rejects missing, circular, and canonical traversal parents', function () {
         expectCode('DEVELOPMENT_NVB_PARENT_MISSING', '--config', join(fixtures, 'missingParent.nvb.json'));
         expectCode('DEVELOPMENT_NVB_PARENT_CYCLE', '--config', join(fixtures, 'cycleA.nvb.json'));
@@ -79,7 +81,9 @@ describe('development NVB parent chain', function () {
         symlinkSync('/not-present/rm11.nvb.json', broken);
         expectCode('DEVELOPMENT_NVB_PARENT_MISSING', '--config', broken);
     });
+});
 
+describe('development NVB schema and physical bounds', function () {
     it('rejects malformed, non-object, unsupported, and invalid shape values', function () {
         const cases = [
             ['malformed.nvb.json', '{', 'DEVELOPMENT_NVB_SCHEMA_INVALID'],
@@ -104,7 +108,9 @@ describe('development NVB parent chain', function () {
         for (const config of atLimit) expect(validate('--config', config)).toContain('"tasks":[]');
         for (const config of aboveLimit) expectCode('DEVELOPMENT_NVB_PHYSICAL_LIMIT', '--config', config);
     });
+});
 
+describe('development NVB catalog baseline bounds', function () {
     it('rejects every invalid effective-catalog outer shape before dereference', function () {
         const stale = writeFixture('stale-baseline.json', '{"taskIds":[],"groupIds":[]}');
         const corrupt = writeFixture('corrupt-baseline.json', '{');
@@ -131,7 +137,9 @@ describe('development NVB parent chain', function () {
             expectCode('DEVELOPMENT_NVB_PHYSICAL_LIMIT', '--config', join(process.cwd(), 'nvb.json'), '--baseline', baseline);
         }
     });
+});
 
+describe('development NVB access and relocation boundaries', function () {
     it('refuses an unreadable config when platform permissions enforce it', function () {
         const unreadable = writeFixture('unreadable.nvb.json', '{}');
         chmodSync(unreadable, 0o000);

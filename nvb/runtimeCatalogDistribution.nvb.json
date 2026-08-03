@@ -23,9 +23,23 @@
         type: "auto"
       }
     },
+    'dist:runtime-nvb:leaf-copy': {
+      doc: { summary: "Copy audited runtime leaf executables into staged runtime-nvb.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: {
+        handler: "CopyHandler",
+        args: [{
+          src: "runtime-nvb/leaves/*",
+          dest: "dist/runtime-nvb/leaves",
+          destOptions: { overwrite: true, mode: 365 }
+        }],
+        type: "auto",
+        preferType: "async"
+      }
+    },
     'dist:runtime-nvb:schema-copy': {
       doc: { summary: "Copy authoritative schema bytes into staged runtime-nvb.", usage: "Internal distribution task." },
-      runnerOpts: {},
+      runnerOpts: { postTasks: ["dist:runtime-nvb:leaf-copy"] },
       handle: {
         handler: "CopyHandler",
         args: [{

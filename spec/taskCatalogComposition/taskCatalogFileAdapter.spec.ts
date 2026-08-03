@@ -20,6 +20,7 @@ const CATALOG = join('runtime-nvb', 'catalog');
 const CAPABILITIES = join(CATALOG, 'capabilities');
 const PROFILES = join('runtime-nvb', 'profiles');
 const SCHEMAS = join('runtime-nvb', 'schemas');
+const LEAVES = join('runtime-nvb', 'leaves');
 const RUNTIME_CONFIG = join('runtime-nvb', 'runtime-nvb.json');
 const TASK_CATALOG = join('runtime-nvb', 'task-catalog.json');
 
@@ -33,6 +34,7 @@ async function withFixture(
         await cp(join(process.cwd(), CATALOG), join(root, CATALOG), {recursive: true});
         await cp(join(process.cwd(), PROFILES), join(root, PROFILES), {recursive: true});
         await cp(join(process.cwd(), SCHEMAS), join(root, SCHEMAS), {recursive: true});
+        await cp(join(process.cwd(), LEAVES), join(root, LEAVES), {recursive: true});
         if (includeAggregates) {
             await cp(join(process.cwd(), RUNTIME_CONFIG), join(root, RUNTIME_CONFIG));
             await cp(join(process.cwd(), TASK_CATALOG), join(root, TASK_CATALOG));
@@ -45,6 +47,23 @@ async function withFixture(
 
 function fixedToken(): string {
     return 'fixed-token';
+}
+
+interface LeafFailureCase {
+    readonly code: string;
+    readonly mutate: (root: string, leaf: string) => Promise<void>;
+}
+
+async function expectLeafFailure(testCase: LeafFailureCase): Promise<void> {
+    await withFixture(async (root) => {
+        const catalogPath = join(root, TASK_CATALOG);
+        const before = await readFile(catalogPath);
+        await testCase.mutate(root, join(root, LEAVES, 'runtimeEcho.sh'));
+        const result = await runTaskCatalogCompositionTask(root, {mode: 'write'}, {tempToken: fixedToken});
+        expect(result.ok).toBeFalse();
+        if (!result.ok) expect(result.failure.code).toBe(testCase.code);
+        expect([...(await readFile(catalogPath))]).toEqual([...before]);
+    });
 }
 
 describe('task catalog aggregate check and deterministic replay', function () {
@@ -156,6 +175,65 @@ describe('task catalog source permission boundary', function () {
                 await chmod(fragmentPath, 0o644);
             }
         });
+    });
+});
+
+describe('task catalog leaf asset identity boundary', function () {
+    it('rejects a missing declared leaf without aggregate mutation', async function () {
+        await expectLeafFailure({code: 'TASK_CATALOG_LEAF_ASSET_INVALID', mutate: async (_root, leaf) => {
+            await unlink(leaf);
+        }});
+    });
+
+    it('rejects a symlinked declared leaf without following it', async function () {
+        await expectLeafFailure({code: 'TASK_CATALOG_LEAF_ASSET_INVALID', mutate: async (root, leaf) => {
+            await unlink(leaf);
+            await symlink(join(root, TASK_CATALOG), leaf);
+        }});
+    });
+
+    it('rejects a missing leaf directory before aggregate access', async function () {
+        await expectLeafFailure({code: 'TASK_CATALOG_LEAF_DIRECTORY_INVALID', mutate: async (root) => {
+            await rm(join(root, LEAVES), {recursive: true});
+        }});
+    });
+});
+
+describe('task catalog leaf checksum, mode, and inclusion boundary', function () {
+    it('rejects a non-executable declared source leaf', async function () {
+        await expectLeafFailure({code: 'TASK_CATALOG_LEAF_MODE_INVALID', mutate: async (_root, leaf) => {
+            await chmod(leaf, 0o644);
+        }});
+    });
+
+    it('accepts Git-materialized executable mode without weakening the installed contract', async function () {
+        await withFixture(async (root) => {
+            const leaf = join(root, LEAVES, 'runtimeEcho.sh');
+            await chmod(leaf, 0o775);
+            const checked = await runTaskCatalogCompositionTask(root, {mode: 'check'}, {tempToken: fixedToken});
+            const generated = await runTaskCatalogCompositionTask(root, {mode: 'write'}, {tempToken: fixedToken});
+            const catalog = JSON.parse(await readFile(join(root, TASK_CATALOG), 'utf8'));
+            expect(checked.ok).toBeTrue();
+            expect(generated.ok).toBeTrue();
+            expect(catalog.leaves['runtime.echo'].mode).toBe('0555');
+            expect((await stat(leaf)).mode & 0o777).toBe(0o775);
+        });
+    });
+
+    it('rejects checksum drift in an executable leaf', async function () {
+        await expectLeafFailure({code: 'TASK_CATALOG_LEAF_CHECKSUM_MISMATCH', mutate: async (_root, leaf) => {
+            await chmod(leaf, 0o755);
+            await writeFile(leaf, '#!/bin/sh\nexit 1\n');
+            await chmod(leaf, 0o555);
+        }});
+    });
+
+    it('rejects an undeclared extra leaf', async function () {
+        await expectLeafFailure({code: 'TASK_CATALOG_LEAF_ASSET_EXTRA', mutate: async (root) => {
+            const extra = join(root, LEAVES, 'extra.sh');
+            await writeFile(extra, '#!/bin/sh\nexit 0\n');
+            await chmod(extra, 0o555);
+        }});
     });
 });
 

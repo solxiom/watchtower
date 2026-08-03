@@ -48,6 +48,17 @@ function expectInvalidRuntimeSmokeContracts(ajv: Ajv): void {
     expectInvalid(ajv, 'watchtower://runtime/schemas/runtime-smoke-result/v1', {});
 }
 
+function expectValidCompositionFailures(ajv: Ajv): void {
+    expectValid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-result/v1', {
+        schemaVersion: 1, ok: false, mode: null,
+        failure: {code: 'TASK_CATALOG_TASK_INPUT_INVALID', subject: null}
+    });
+    expectValid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-result/v1', {
+        schemaVersion: 1, ok: false, mode: 'check',
+        failure: {code: 'TASK_CATALOG_LEAF_CHECKSUM_MISMATCH', subject: 'runtime.echo'}
+    });
+}
+
 describe('task catalog closed schema artifacts', function () {
     it('validates every authoritative source and generated aggregate', function () {
         const ajv = configuredAjv();
@@ -94,10 +105,7 @@ describe('declared task input and result schemas', function () {
         });
         expectValid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-input/v1', {mode: 'check'});
         expectValid(ajv, 'watchtower://runtime/schemas/schema-composition-input/v1', {mode: 'write'});
-        expectValid(ajv, 'watchtower://runtime/schemas/task-catalog-composition-result/v1', {
-            schemaVersion: 1, ok: false, mode: null,
-            failure: {code: 'TASK_CATALOG_TASK_INPUT_INVALID', subject: null}
-        });
+        expectValidCompositionFailures(ajv);
         expectValid(ajv, 'watchtower://runtime/schemas/schema-composition-result/v1', {
             schemaVersion: 1, ok: false, mode: null,
             failure: {code: 'SCHEMA_TASK_INPUT_INVALID', subject: null}

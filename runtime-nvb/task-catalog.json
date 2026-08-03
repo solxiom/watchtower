@@ -1,5 +1,9 @@
 {
-  "actions": {},
+  "actions": {
+    "runtime.smoke": {
+      "taskId": "wt:runtime:smoke"
+    }
+  },
   "catalogId": "watchtower-runtime-nvb/v1",
   "catalogVersion": 1,
   "fragments": [
@@ -19,7 +23,14 @@
       "module": "./handlers/TaskCatalogCompositionTaskHandler.js"
     }
   },
-  "leaves": {},
+  "leaves": {
+    "runtime.echo": {
+      "executable": true,
+      "mode": "0555",
+      "path": "./leaves/runtimeEcho.sh",
+      "sha256": "sha256:306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb"
+    }
+  },
   "minimumRuntime": {
     "cliVersion": "0.1.0",
     "nodeVersion": "26.4.0"
@@ -63,7 +74,7 @@
     },
     "watchtower://runtime/schemas/task-catalog-composition-result/v1": {
       "path": "./schemas/taskCatalogCompositionResult.schema.json",
-      "sha256": "sha256:07217b745ac847f247bb2f2f16e5d42788a25145b37bd88f0735291bf9c2bdfb"
+      "sha256": "sha256:f78508508f798aa3866cb5c361fb9007e72944e7a4c9477abf6584d0f1e99d48"
     },
     "watchtower://runtime/schemas/task-catalog-fragment/v1": {
       "path": "./schemas/taskCatalogFragment.schema.json",
@@ -97,7 +108,9 @@
       "executionScope": "lane-runtime",
       "handlerId": "RuntimeSmokeTaskHandler",
       "inputSchema": "watchtower://runtime/schemas/runtime-smoke-input/v1",
-      "leafIds": [],
+      "leafIds": [
+        "runtime.echo"
+      ],
       "mutationClass": "read-only",
       "requiresInvocationEnvelope": false,
       "resultSchema": "watchtower://runtime/schemas/runtime-smoke-result/v1"

@@ -1,4 +1,5 @@
-import {readdirSync, readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {readdirSync, readFileSync, statSync} from 'node:fs';
 import {basename, join} from 'node:path';
 
 import ts from 'typescript';
@@ -8,6 +9,8 @@ import {isJsonObject} from '../../src/foundation/schemaComposition/jsonCanonical
 const SOURCE_ROOT = join(process.cwd(), 'src', 'foundation', 'taskCatalogComposition');
 const HANDLER_ROOT = join(process.cwd(), 'runtime-nvb', 'handlers');
 const DEVELOPMENT_LEAF = join(process.cwd(), 'scripts', 'composeRuntimeTaskCatalog.mjs');
+const RELOCATION_PROOF = join(process.cwd(), 'scripts', 'verifyRelocatedRuntimeCatalog.mjs');
+const DEVELOPMENT_NVB_PROOF = join(process.cwd(), 'spec', 'basic', 'developmentNvbParentChain.spec.ts');
 const SPEC_ROOT = join(process.cwd(), 'spec', 'taskCatalogComposition');
 
 function physicalLines(path: string): number {
@@ -35,6 +38,13 @@ function sourceFiles(): string[] {
         ...readdirSync(SOURCE_ROOT).map((name) => join(SOURCE_ROOT, name)),
         join(HANDLER_ROOT, 'TaskCatalogCompositionTaskHandler.ts'),
         DEVELOPMENT_LEAF
+    ];
+}
+
+function changedProofFiles(): string[] {
+    return [
+        ...sourceFiles(), RELOCATION_PROOF, DEVELOPMENT_NVB_PROOF,
+        ...readdirSync(SPEC_ROOT).map((name) => join(SPEC_ROOT, name))
     ];
 }
 
@@ -76,6 +86,44 @@ describe('task catalog generated ownership and exact inclusion', function () {
     });
 });
 
+describe('runtime smoke task catalog bindings', function () {
+    it('binds the runtime smoke action and audited leaf into the aggregate', function () {
+        const catalog: unknown = JSON.parse(readFileSync(join('runtime-nvb', 'task-catalog.json'), 'utf8'));
+        expect(isJsonObject(catalog) && isJsonObject(catalog.actions) &&
+            isJsonObject(catalog.leaves) && isJsonObject(catalog.tasks)).toBeTrue();
+        if (!isJsonObject(catalog) || !isJsonObject(catalog.actions) ||
+            !isJsonObject(catalog.leaves) || !isJsonObject(catalog.tasks)) return;
+        const leaf = catalog.leaves['runtime.echo'];
+        const task = catalog.tasks['wt:runtime:smoke'];
+        expect(isJsonObject(leaf) && typeof leaf.path === 'string' && isJsonObject(task)).toBeTrue();
+        if (!isJsonObject(leaf) || typeof leaf.path !== 'string' || !isJsonObject(task)) return;
+        const leafPath = join('runtime-nvb', leaf.path.replace('./', ''));
+        const digest = createHash('sha256').update(readFileSync(leafPath)).digest('hex');
+        const actions: unknown = catalog.actions;
+        const leafIds: unknown = task.leafIds;
+        const leafEntry: unknown = leaf;
+        expect(actions).toEqual({'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
+        expect(leafIds).toEqual(['runtime.echo']);
+        expect(leafEntry).toEqual({
+            executable: true, mode: '0555', path: './leaves/runtimeEcho.sh', sha256: `sha256:${digest}`
+        });
+        expect(statSync(leafPath).mode & 0o111).not.toBe(0);
+    });
+
+    it('binds Git executable input to deterministic staged and manifest modes', function () {
+        const distribution = readFileSync(join('nvb', 'runtimeCatalogDistribution.nvb.json'), 'utf8');
+        const manifest = JSON.parse(readFileSync(join('runtime', 'manifest.json'), 'utf8'));
+        const leafAsset = manifest.assets.find((asset: {path: string}) =>
+            asset.path === 'leaves/runtimeEcho.sh');
+        expect(distribution).toContain('destOptions: { overwrite: true, mode: 365 }');
+        expect(leafAsset).toEqual({
+            path: 'leaves/runtimeEcho.sh',
+            sha256: 'sha256:306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb',
+            mode: '0755'
+        });
+    });
+});
+
 describe('task catalog module and function architecture', function () {
     it('uses PascalCase only for class-owning capsule modules', function () {
         const violations = readdirSync(SOURCE_ROOT).flatMap((name) => {
@@ -98,8 +146,7 @@ describe('task catalog module and function architecture', function () {
     });
 
     it('keeps every changed source and focused-spec function at forty lines or fewer', function () {
-        const files = [...sourceFiles(), ...readdirSync(SPEC_ROOT).map((name) => join(SPEC_ROOT, name))];
-        const violations = files.flatMap((path) => functionLineCounts(path)
+        const violations = changedProofFiles().flatMap((path) => functionLineCounts(path)
             .filter((lines) => lines > 40).map((lines) => ({file: basename(path), lines})));
         expect(violations).toEqual([]);
     });
