@@ -8,6 +8,24 @@ export {resolveDataRoot} from './DataRoot.js';
 export type {UserHomeProvider} from './DataRoot.js';
 export {RuntimeCatalog} from './RuntimeCatalog.js';
 export type {RuntimeCatalogOptions} from './RuntimeCatalog.js';
+export {ManagedAssets} from './ManagedAssets.js';
+export type {ManagedAssetsOptions} from './ManagedAssets.js';
+export {LaneTaskProfileInstaller} from './LaneTaskProfileInstaller.js';
+export type {LaneTaskProfileInstallRequest} from './LaneTaskProfileInstaller.js';
+export {
+    COMPATIBILITY_NAMES,
+    resolveCompatibilityName,
+    resolveCompatibilityNameFrom,
+    requireCompatibilityAction
+} from './managedAssets/compatibilityNameResolver.js';
+export type {CompatibilityNameTable} from './managedAssets/compatibilityNameResolver.js';
+export {nodeManagedLinkFileSystem} from './managedAssets/managedLinkFileSystem.js';
+export type {
+    ManagedLinkFileSystem,
+    ManagedLinkSourceKind,
+    ManagedLinkSourceObservation
+} from './managedAssets/managedLinkFileSystem.js';
+export {parseInstallManifest} from './managedAssets/installManifestReader.js';
 export {InitPlanner, validateInitRequest} from './InitPlanner.js';
 export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './InitContracts.js';
 export type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';

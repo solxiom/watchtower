@@ -17,6 +17,14 @@ Status: ❌ Pending
 Phase: Runtime adapter, managed links, and smoke proof
 Depends on: RT-04 accepted (immutable catalog), RT-05 accepted (lane task runner)
 
+**Correction 02 amendment:** [`RT-06-specification-resolution-amendment.md`](../RT-06-specification-resolution-amendment.md)
+records the operator-authorized resolution of two cross-batch scope
+questions raised by Correction 02: the `install.json.taskRuntime` writer
+boundary between RT-06 and `wt-lane-lifecycle` LC-03, and the narrowing of
+RT-06's compatibility-name acceptance criterion to the resolution mechanism
+only (production data deferred to a future classification batch). This
+batch's proof obligations are unchanged except as that amendment states.
+
 **Required implementor reasoning class:** `R4`
 **Class rationale:** managed link ownership with checksum validation, collision safety, and path-escape refusal across the lane directory boundary. The class is a floor; escalate when source inspection reveals missing safety cases.
 

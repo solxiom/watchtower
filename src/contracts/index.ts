@@ -153,6 +153,17 @@ export type {
     PinnedTaskRuntimeTarget
 } from './taskRuntime.js';
 export {LEAF_RUNTIME_REASONS, LeafRuntimeError} from './leafRuntime.js';
+export {MANAGED_ASSETS_REASONS, ManagedAssetsError} from './manifests.js';
+export type {
+    InstallManifestV1,
+    ManagedAssetDeclaration,
+    ManagedAssetsReason,
+    ManagedLinkFinding,
+    ManagedLinkFindingStatus,
+    ManagedLinkOutcome,
+    ManagedLinkResult,
+    ValidationResult
+} from './manifests.js';
 export type {
     LeafCancelled,
     LeafCompleted,
