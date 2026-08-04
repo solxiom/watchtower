@@ -33,13 +33,23 @@ product contract: every lane initialized by Watchtower requires
 
 Normative behavior remains in `../v1.md`, `../v1-contracts.md`,
 `../schemas/v1.schema.json`, `../architecture.md`,
-`../nirvana-integration-architecture.md`,
+`../nirvana-integration-architecture.md`, `../foundation-module-architecture.md`,
 `../coordinator-automation.md`, `../operator-session.md`, and
 `../cli-session.md`, `../tui-operational-experience.md`, together with
 `../../development/engineering-and-review-standard.md`. These packs translate
 those specifications into
 actionable implementation contracts; they do not override or reinterpret
 the product specification.
+
+## Structural remediation (outside the 74-batch graph)
+
+| Document | Role |
+|----------|------|
+| [../foundation-module-architecture.md](../foundation-module-architecture.md) | Normative target layout, barrels, layers, export contract |
+| [foundation-layout-remediation.md](foundation-layout-remediation.md) | Current diagnosis, file moves, `REF-01`/`REF-02` batches |
+
+These are behavior-neutral structural requirements. New foundation code must
+conform to the target architecture even before remediation completes.
 
 ## Lane Owner Maps
 
