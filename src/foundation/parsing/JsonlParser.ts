@@ -1,6 +1,6 @@
 import {roleEventCompatibility, validateEventCompatibility} from '../../contracts/events.js';
 import type {WorkerEventRecord, WorkerEventRole} from '../../contracts/events.js';
-import {isRfc3339DateTime} from '../rfc3339DateTime.js';
+import {isRfc3339DateTime} from '../schemaComposition/rfc3339DateTime.js';
 
 export interface JsonlWarning {
     line: number;

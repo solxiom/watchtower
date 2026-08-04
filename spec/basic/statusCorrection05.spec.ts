@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import type {WorkerEventRecord} from '../../src/contracts/index.js';
 import {parseJsonlStream} from '../../src/foundation/parsing/index.js';
 import {StatusPackAcceptanceAuthority, StatusProjection} from '../../src/foundation/status/index.js';
-import {compareRfc3339DateTimes, isRfc3339DateTime} from '../../src/foundation/rfc3339DateTime.js';
+import {compareRfc3339DateTimes, isRfc3339DateTime} from '../../src/foundation/schemaComposition/rfc3339DateTime.js';
 import type {PackAcceptanceRecord, PackManifestRecord} from '../../src/foundation/status/index.js';
 import {createLane, createReadCommandFixture} from './readCommandFixtures.js';
 

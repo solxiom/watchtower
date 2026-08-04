@@ -37,9 +37,12 @@ export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './init/index
 export type {InitPreflightPort, ScopeReadResult} from './init/index.js';
 export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
 export * from './schemaComposition/index.js';
+export {loadV1SchemaBundle} from './schemaComposition/schemaBundle.js';
+export type {SchemaAssetReader, SchemaBundle, SchemaBundleLoadResult} from './schemaComposition/schemaBundle.js';
+export {compareRfc3339DateTimes, isRfc3339DateTime} from './schemaComposition/rfc3339DateTime.js';
 export * from './taskCatalogComposition/index.js';
-export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
-export {renderError, renderResult} from './ResultRenderer.js';
+export {buildCommandError, buildCommandResult, validateEnvelope} from './presentation/index.js';
+export {renderError, renderResult} from './presentation/index.js';
 export {latestWorkerEvents, observeRuntimeSessions, parseTmuxSessionNames} from './observation/index.js';
 export type {LatestWorkerEvents, RuntimeSessionNames, RuntimeSessionObservation} from './observation/index.js';
 export {NirvanaTmuxObserver} from './observation/index.js';

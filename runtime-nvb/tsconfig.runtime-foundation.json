@@ -13,5 +13,9 @@
   "include": [
     "../src/foundation/schemaComposition/**/*.ts",
     "../src/foundation/taskCatalogComposition/**/*.ts"
+  ],
+  "exclude": [
+    "../src/foundation/schemaComposition/schemaBundle.ts",
+    "../src/foundation/schemaComposition/rfc3339DateTime.ts"
   ]
 }

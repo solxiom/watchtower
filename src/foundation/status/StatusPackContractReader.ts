@@ -1,8 +1,8 @@
 import Ajv2020 from 'ajv/dist/2020.js';
 import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
 import {isJsonObject, isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
-import {loadV1SchemaBundle} from '../schemaBundle.js';
-import {isRfc3339DateTime} from '../rfc3339DateTime.js';
+import {loadV1SchemaBundle} from '../schemaComposition/schemaBundle.js';
+import {isRfc3339DateTime} from '../schemaComposition/rfc3339DateTime.js';
 import {projectPackRecords} from './statusPackRecordProjection.js';
 import type {PackAcceptanceRecord, PackLockRecord, PackManifestRecord} from './statusPackTypes.js';
 import type {JsonObject} from '../schemaComposition/schemaCompositionContracts.js';

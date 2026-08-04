@@ -1,6 +1,6 @@
 import Ajv2020 from 'ajv/dist/2020.js';
 import {isRfc3339DateTime, isUuid} from './packSchemaFormats.js';
-import {loadV1SchemaBundle, type SchemaBundleLoadResult} from '../schemaBundle.js';
+import {loadV1SchemaBundle, type SchemaBundleLoadResult} from '../schemaComposition/schemaBundle.js';
 import {createWatchtowerError, type WatchtowerError} from '../../contracts/index.js';
 import type {PackSchemaValidators} from './packConsumerPorts.js';
 

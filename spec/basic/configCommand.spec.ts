@@ -6,7 +6,7 @@ import type {WatchtowerError} from '../../src/contracts/index.js';
 import {
     ResolvedConfigService, buildCommandResult, renderResult
 } from '../../src/foundation/index.js';
-import {loadV1SchemaBundle} from '../../src/foundation/schemaBundle.js';
+import {loadV1SchemaBundle} from '../../src/foundation/schemaComposition/schemaBundle.js';
 import {parseReadCommandOptions, validateRawReadCommandArguments} from '../../src/commands/readCommandOptions.js';
 import ConfigCommand from '../../src/commands/ConfigCommand.js';
 import ListCommand from '../../src/commands/ListCommand.js';

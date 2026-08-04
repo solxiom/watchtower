@@ -6,7 +6,7 @@ import {
     StatusAcceptedInputInspector, StatusPackAcceptanceAuthority, StatusPackIntegrity, StatusProjection,
     StatusSourceBaselineInspector
 } from '../../src/foundation/status/index.js';
-import {compareRfc3339DateTimes, isRfc3339DateTime} from '../../src/foundation/rfc3339DateTime.js';
+import {compareRfc3339DateTimes, isRfc3339DateTime} from '../../src/foundation/schemaComposition/rfc3339DateTime.js';
 import type {PackAcceptanceRecord, PackManifestRecord} from '../../src/foundation/status/index.js';
 import {
     createLane, createReadCommandFixture, repository, type LaneFixtureOptions

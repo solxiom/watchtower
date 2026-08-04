@@ -2,7 +2,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import {spawnSync} from 'node:child_process';
 import {existsSync, mkdirSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {loadV1SchemaBundle} from '../../src/foundation/schemaBundle.js';
+import {loadV1SchemaBundle} from '../../src/foundation/schemaComposition/schemaBundle.js';
 import {createKnowledgePackFixture, type KnowledgePackFixture} from './skillInstallFixtures.js';
 
 describe('wt skill install real CLI proof', function () {

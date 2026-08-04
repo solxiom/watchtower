@@ -1,4 +1,4 @@
-import {loadV1SchemaBundle} from '../../src/foundation/schemaBundle.js';
+import {loadV1SchemaBundle} from '../../src/foundation/schemaComposition/schemaBundle.js';
 
 const ID = 'https://nirvana.dev/watchtower/spec/v1.schema.json';
 
