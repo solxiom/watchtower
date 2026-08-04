@@ -9,13 +9,14 @@ integration facades**. Product behavior remains in the parent
 | Document | Status | Role |
 |----------|--------|------|
 | [foundation-module-architecture.md](foundation-module-architecture.md) | Accepted | Target `src/foundation/` domains, barrels, dependency layers, public export contract |
+| [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md) | Accepted | REF-03 nested capability trees — supersedes flat L5 REF-01 interim layout |
 | [foundation-layout-remediation.md](foundation-layout-remediation.md) | Accepted | Legacy flat-layout diagnosis, file migration inventory, reviewer checklist |
 
 ## Foundation refactor delivery
 
 | Document | Status | Role |
 |----------|--------|------|
-| [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md) | Accepted | Master plan: 5 milestones, 32 work units, dependencies, parallel waves |
+| [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md) | Accepted | Master plan: 6 milestones, 39 work units, 3 batches, dependencies, parallel waves |
 | [foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md) | Active | **Live status** — mark work units and milestones done here |
 
 Related product specs:

@@ -3,8 +3,8 @@
 Status: **Accepted — structural remediation authority**
 Scope: migrate legacy flat `src/foundation/` to
 [foundation-module-architecture.md](foundation-module-architecture.md)
-Work units: **32**
-Remediation batches: **2** (`REF-01`, `REF-02`)
+Work units: **39**
+Remediation batches: **3** (`REF-01`, `REF-02`, `REF-03`)
 Last updated: 2026-08-04
 
 This document is the **master construction plan** for the foundation layout
@@ -40,13 +40,17 @@ semantics may change unless a separate product spec amendment says otherwise.
 
 ## 1. Delivery shape
 
-The refactor is delivered as **two remediation batches** spanning **five
-milestones** and **32 work units**.
+The refactor is delivered as **three remediation batches** spanning **six
+milestones** and **39 work units**.
 
 | Batch | Milestones | Work units | Exit |
 |-------|------------|----------:|------|
 | **REF-01** | FM-0 … FM-3 | FR-00 … FR-24 | Zero root facades; all domains extracted; root only `index.ts` |
 | **REF-02** | FM-4 | FR-25 … FR-31 | God barrel removed; command domain imports; full dependency gate |
+| **REF-03** | FM-5 | FR-32 … FR-38 | Capability trees; zero flat prefix clusters; nested path gates green |
+
+**Amendment:** Flat L5 siblings from REF-01 are interim debt. Normative target is
+[foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md).
 
 ### Baseline metrics (2026-08-04)
 
@@ -57,6 +61,7 @@ milestones** and **32 work units**.
 | Root barrel lines | ~126 | ≤50 |
 | Root wildcard `export *` | 5 | 0 |
 | Command deep-imports | ~6 | 0 |
+| Flat prefix clusters at foundation root | 11 | 0 |
 | Domain architecture gates | 4 | 12+ |
 
 ---
@@ -68,8 +73,9 @@ milestones** and **32 work units**.
 | **FM-0** | Policy and baseline gates | REF-01 | — | Architecture docs landed; baseline arch specs pass on current tree |
 | **FM-1** | Capsule completion | REF-01 | FM-0 | Zero shadow structures; nine facades moved into existing capsules |
 | **FM-2** | L1–L3 domain extraction | REF-01 | FM-1 | `paths/`, `parsing/`, `discovery/`, `bindings/`, `read/`, `status/`, `init/` exist with barrels |
-| **FM-3** | L4 domain extraction | REF-01 | FM-2 | `pack/`, `upgrade/`, `observation/`, `lifecycle/`, `runtimeDistribution/` exist; root file count = 0 |
+| **FM-3** | L4 domain extraction | REF-01 | FM-2 | `pack/`, `upgrade/`, `observation/`, `lifecycle/` exist; root file count = 0; `runtimeDistribution/` interim only |
 | **FM-4** | Barrel hardening and import cleanup | REF-02 | FM-3 | Root barrel ≤50 lines; commands use domain barrels only; full layer gate |
+| **FM-5** | Capability tree re-nesting | REF-03 | FM-3 | `runtime/`, `task/`, `lane/`, `index/` trees; `pack/index/` nested; flat prefix count = 0 |
 
 ---
 
@@ -123,7 +129,7 @@ L4 mutation · L5–L6 infrastructure (existing capsules).
 | FR-20 | `upgrade/` | L4 | 6 | Move upgrade/migration modules | `upgrade-preview.spec.ts`; `upgradeArchitecture.spec.ts` (new) |
 | FR-21 | `observation/` | L2 | 5 | Move tmux/heartbeat/runtime obs; merge `process/` orphan | `runtimeObservations.spec.ts`; barrel |
 | FR-22 | `lifecycle/` | L4 | 2 | Move binding mutator + membership registrar | `binding-mutator.spec.ts`, `membership-registrar.spec.ts` |
-| FR-23 | `runtimeDistribution/` | L4 | — | Domain barrel re-exporting catalog + managed assets | Managed/runtime catalog specs via facades |
+| FR-23 | `runtimeDistribution/` | L4 | — | **Interim** re-export barrel (superseded by REF-03 `runtime/`) | Managed/runtime catalog specs via facades |
 | FR-24 | FM-3 integration | — | — | Confirm root has only `index.ts`; interim root barrel | Filesystem walk; `nvb test`; tracker FM-3 ✅ |
 
 ### FM-4 — Barrel hardening (REF-02)
@@ -138,6 +144,18 @@ L4 mutation · L5–L6 infrastructure (existing capsules).
 | FR-30 | Remaining domain arch gates | Any missing `*Architecture.spec.ts` from FM-2/3 | 12+ gates green |
 | FR-31 | REF-02 acceptance | Tracker + docs | Engineering standard matrix PASS; [§8 exit criteria](#8-exit-criteria) |
 
+### FM-5 — Capability tree re-nesting (REF-03)
+
+| ID | Work unit | Owns | Mandatory proof |
+|----|-----------|------|-----------------|
+| FR-32 | `runtime/` capability tree | Move `runtimeCatalog/` → `runtime/catalog/`; `managedAssets/` → `runtime/distribution/`; `runtimeKnowledgeManifest/` → `runtime/knowledge/`; L6 `runtime/` → `runtime/leaf/`; parent `runtime/index.ts`; remove `runtimeDistribution/` | `runtimeCapabilityArchitecture.spec.ts`; runtime catalog/managed-assets specs green |
+| FR-33 | `task/` capability tree | Move `taskRuntime/` → `task/runtime/`; `taskCatalogComposition/` → `task/catalog/`; parent barrel | `taskCapabilityArchitecture.spec.ts`; `taskRuntimeArchitecture.spec.ts` paths updated |
+| FR-34 | `lane/` capability tree | Move `laneStore/` → `lane/store/`; `transactionalWriter/` → `lane/writer/`; `coordinatorBaseline/` → `lane/coordinator/`; parent barrel | `laneCapabilityArchitecture.spec.ts`; lane-store/transactional-writer specs green |
+| FR-35 | `pack/index/` nest | Move `packIndex/` → `pack/index/`; update `pack/` barrel if needed | `packArchitecture.spec.ts` paths; `PackIndexCompiler.spec.ts` green |
+| FR-36 | `index/` capability tree | Move `indexStore/` → `index/store/`; `indexQuery/` → `index/query/`; parent barrel | `indexCapabilityArchitecture.spec.ts`; `indexQueryArchitecture.spec.ts` paths updated |
+| FR-37 | Import retarget sweep | `src/`, `spec/`, `runtime-nvb/`, `runtime/manifest.json` tsconfig paths | All imports use capability barrels; `nvb build && nvb test` green |
+| FR-38 | REF-03 integration | `foundationCapabilityTreeArchitecture.spec.ts`; tracker + docs | Flat prefix count = 0; forbidden dirs gate; FM-5 ✅ |
+
 ---
 
 ## 4. Dependency graph
@@ -145,7 +163,8 @@ L4 mutation · L5–L6 infrastructure (existing capsules).
 ### 4.1 Milestone graph
 
 ```text
-FM-0 ──► FM-1 ──► FM-2 ──► FM-3 ──► FM-4
+FM-0 ──► FM-1 ──► FM-2 ──► FM-3 ──┬──► FM-4
+         │         │         │      └──► FM-5 (REF-03; may overlap FM-4 where disjoint)
          │         │         │
          │         │         └── pack/upgrade depend on parsing/, paths/
          │         └── status/ depends on discovery/, observation/, parsing/
@@ -169,6 +188,9 @@ FM-0 ──► FM-1 ──► FM-2 ──► FM-3 ──► FM-4
 | FR-23 | FR-05, FR-06 |
 | FR-24 | FR-12 … FR-23 |
 | FR-25 … FR-31 | FR-24 |
+| FR-32 … FR-36 | FR-24 (FM-3 ✅); FR-32 before FR-37 |
+| FR-37 | FR-32 … FR-36 |
+| FR-38 | FR-37 |
 
 ---
 
@@ -191,6 +213,11 @@ same domain from two agents simultaneously.
 | 10 | FR-12 … FR-23 | FR-24 |
 | 11 | FR-24 | FR-25 … FR-30 (FR-28 after FR-25, FR-26) |
 | 12 | FR-25 … FR-30 | FR-31 |
+| 13 | FR-24 | FR-32, FR-33, FR-34 (parallel OK — disjoint trees) |
+| 14 | FR-24, FR-07 | FR-35 |
+| 15 | FR-24, FR-08, FR-09 | FR-36 |
+| 16 | FR-32 … FR-36 | FR-37 |
+| 17 | FR-37 | FR-38 |
 
 ---
 
@@ -210,7 +237,12 @@ same domain from two agents simultaneously.
 | `upgradeArchitecture.spec.ts` | FR-20 | `upgrade/` inventory |
 | `taskRuntimeArchitecture.spec.ts` | (existing) | Update paths only in FM-1 |
 | `managedAssetsArchitecture.spec.ts` | (existing) | Update paths in FR-05 |
-| `indexQueryArchitecture.spec.ts` | (existing) | Update paths in FR-08, FR-09 |
+| `indexQueryArchitecture.spec.ts` | (existing) | Update paths in FR-08, FR-09; final paths at FR-36 |
+| `foundationCapabilityTreeArchitecture.spec.ts` | FR-38 | Forbidden flat prefix clusters; allowed top-level dirs |
+| `runtimeCapabilityArchitecture.spec.ts` | FR-32 | `runtime/` subtree inventory + L5 boundary |
+| `taskCapabilityArchitecture.spec.ts` | FR-33 | `task/` subtree inventory |
+| `laneCapabilityArchitecture.spec.ts` | FR-34 | `lane/` subtree inventory |
+| `indexCapabilityArchitecture.spec.ts` | FR-35, FR-36 | `index/` + `pack/index/` inventory |
 
 ---
 
@@ -230,6 +262,8 @@ Every work unit must:
 
 - new `.ts` files at `src/foundation/` root (except transient migration — must clear same batch);
 - new shadow structures;
+- new flat prefix clusters at foundation root after REF-03;
+- re-export-only fake parent barrels (old `runtimeDistribution/` pattern);
 - new root `export *`;
 - module size evasion (compression instead of split);
 - commands importing capsule internals after FR-28;
@@ -261,13 +295,27 @@ Every work unit must:
 - full `foundationDependencyArchitecture.spec.ts` green;
 - engineering standard acceptance matrix PASS.
 
+**REF-03 accepted** when FM-5 is ✅ and:
+
+- flat prefix cluster count = 0 at foundation root;
+- capability trees `runtime/`, `task/`, `lane/`, `index/` exist with parent barrels;
+- `pack/index/` nested under `pack/`;
+- `runtimeDistribution/` and other forbidden flat dirs removed;
+- `foundationCapabilityTreeArchitecture.spec.ts` and per-tree gates green;
+- `nvb test` green.
+
+REF-02 and REF-03 may complete in either order once FM-3 is ✅, but **product
+code must conform to the capability-tree layout** before v1 foundation refactor
+is considered complete.
+
 ---
 
 ## 9. Related documents
 
 | Document | Role |
 |----------|------|
-| [foundation-module-architecture.md](foundation-module-architecture.md) | Normative target layout |
+| [foundation-module-architecture.md](foundation-module-architecture.md) | Normative target layout (capability-tree amended) |
+| [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md) | REF-03 normative capability tree |
 | [foundation-layout-remediation.md](foundation-layout-remediation.md) | File migration inventory, reviewer checklist |
 | [foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md) | **Live status** |
 | [README.md](README.md) | Architecture spec index |

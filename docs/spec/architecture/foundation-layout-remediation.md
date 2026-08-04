@@ -1,14 +1,15 @@
 # Watchtower Foundation Layout — Remediation Plan
 
-Status: **Accepted — structural remediation authority**
+Status: **Accepted — structural remediation authority (capability-tree amendment 2026-08-04)**
 Scope: migrate legacy flat `src/foundation/` to
-[foundation-module-architecture.md](foundation-module-architecture.md)
+[foundation-module-architecture.md](foundation-module-architecture.md) and
+[foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md)
 Applies to: v1 implementation lane (outside the 74-batch product graph)
 Last updated: 2026-08-04
 
 This document is the **execution plan** for remediating the legacy foundation
 layout. It covers current-state diagnosis, file migration inventory, phased
-migration, `REF-01`/`REF-02` batches, acceptance criteria, and progress
+migration, `REF-01`/`REF-02`/`REF-03` batches, acceptance criteria, and progress
 tracking.
 
 The **normative target architecture** — domains, barrels, layers, and public
@@ -45,22 +46,27 @@ pack, status, and upgrade code still lives flat at the foundation root.
 
 ### Delivery shape
 
-Two structural remediation batches:
+Three structural remediation batches:
 
 | Batch | Scope | Risk |
 |-------|-------|------|
 | **REF-01** | Capsule completion, domain extraction (`status/`, `init/`, `discovery/`, …) | Low — moves + import updates |
 | **REF-02** | God-barrel shrink, command import cleanup, `presentation/`, dependency gate | Medium — export surface change |
+| **REF-03** | Capability tree re-nesting (`runtime/`, `task/`, `lane/`, `index/`, `pack/index/`) | Medium — wide import path churn |
 
-Both batches are **behavior-neutral**. All proof is `nvb test` plus new
-architecture specs defined in
-[foundation-module-architecture.md §9](foundation-module-architecture.md#9-architecture-test-requirements).
+REF-01 cleared the foundation root but left **flat prefix clusters** (e.g.
+`runtimeCatalog/` beside `runtime/`). That layout is **interim debt** — see
+[foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md).
+
+All batches are **behavior-neutral**. Proof is `nvb test` plus architecture
+specs in [foundation-module-architecture.md §9](foundation-module-architecture.md#9-architecture-test-requirements).
 
 ### Phase timeline
 
 ```text
 REF-01  ──► Phase 0 + Phase 1 + Phase 2 + Phase 3
-REF-02  ──► Phase 4
+REF-02  ──► Phase 4          (may overlap REF-03 where disjoint)
+REF-03  ──► Phase 5
 ```
 
 Parallel agent work is safe **only** on disjoint domain directories after Phase 1
@@ -349,8 +355,36 @@ Complete target tree:
 | `BindingMutator.ts` | `lifecycle/BindingMutator.ts` |
 | `MembershipRegistrar.ts` | `lifecycle/MembershipRegistrar.ts` |
 
-Add `runtimeDistribution/index.ts` re-exporting `RuntimeCatalog`, `ManagedAssets`,
-and `LaneTaskProfileInstaller` from nested capsules.
+Add `runtime/index.ts` aggregating catalog, distribution, knowledge, and leaf
+sub-capsules. **Remove** interim `runtimeDistribution/` re-export shim (FR-23
+debt).
+
+### 3.5 Phase 5 — Capability tree re-nesting (REF-03)
+
+Full move table:
+[foundation-capability-tree-amendment.md §3](foundation-capability-tree-amendment.md#3-normative-target-tree-capability-grouped).
+
+| Current path | Target path |
+|--------------|-------------|
+| `runtimeCatalog/` | `runtime/catalog/` |
+| `managedAssets/` | `runtime/distribution/` |
+| `runtimeKnowledgeManifest/` | `runtime/knowledge/` |
+| `runtime/` (L6 leaf) | `runtime/leaf/` |
+| `runtimeDistribution/` | *(removed — use `runtime/index.ts`)* |
+| `taskRuntime/` | `task/runtime/` |
+| `taskCatalogComposition/` | `task/catalog/` |
+| `laneStore/` | `lane/store/` |
+| `transactionalWriter/` | `lane/writer/` |
+| `coordinatorBaseline/` | `lane/coordinator/` |
+| `packIndex/` | `pack/index/` |
+| `indexStore/` | `index/store/` |
+| `indexQuery/` | `index/query/` |
+
+Each capability parent gets `index.ts` (T2 barrel). L4 consumers import
+`runtime/index.js`, not sub-capsule paths.
+
+Work units FR-32 … FR-38 in
+[foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md).
 
 ### 3.4 Import rewrite checklist (every phase)
 
@@ -466,25 +500,39 @@ standard and independent review.
 | **Excludes** | New product commands |
 | **Proof** | `commandImportArchitecture.spec.ts`; root barrel denylist; full `nvb test` |
 
+### REF-03 — Capability tree re-nesting
+
+| Field | Value |
+|-------|-------|
+| **Objective** | Nest flat L5 siblings under `runtime/`, `task/`, `lane/`, `index/`; nest `packIndex/` under `pack/`; remove `runtimeDistribution/` shim |
+| **Dependencies** | REF-01 accepted (FM-3 ✅); may run parallel to REF-02 where disjoint |
+| **Owns** | Capability tree moves, parent barrels, import retarget across `src/`, `spec/`, `runtime-nvb/` |
+| **Excludes** | Product behavior changes; renaming `foundation/distribution/` |
+| **Proof** | `foundationCapabilityTreeArchitecture.spec.ts`; per-tree gates; `nvb build && nvb test` |
+| **Docs** | [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md); tracker FM-5 |
+
 ---
 
 ## 6. Acceptance criteria
 
-REF-01 and REF-02 are accepted when **all** of the following hold:
+REF-01, REF-02, and REF-03 are accepted when **all** of the following hold:
 
-| # | Criterion | Verification |
-|---|-----------|--------------|
-| 1 | No `*.ts` files at `src/foundation/` root except `index.ts` | Filesystem walk in architecture spec |
-| 2 | No shadow structures (`Foo.ts` beside `foo/`) | Architecture spec |
-| 3 | Root barrel ≤50 lines, no `export *` | `foundationRootBarrelArchitecture.spec.ts` |
-| 4 | Commands import only domain or root barrels | `commandImportArchitecture.spec.ts` |
-| 5 | Layer import matrix enforced | `foundationDependencyArchitecture.spec.ts` |
-| 6 | Each L3/L4 domain has `*Architecture.spec.ts` | File inventory |
-| 7 | All owned modules within size limits or accepted split | Per-domain size walk |
-| 8 | `nvb build && nvb test` pass with zero regressions | CI / local proof |
-| 9 | No normative product spec changes unless separately amended | Reviewer checklist |
-| 10 | Engineering standard acceptance matrix PASS | Review report |
-| 11 | Layout conforms to [foundation-module-architecture.md](foundation-module-architecture.md) | Reviewer checklist |
+| # | Criterion | Verification | Batch |
+|---|-----------|--------------|-------|
+| 1 | No `*.ts` files at `src/foundation/` root except `index.ts` | Filesystem walk in architecture spec | REF-01 |
+| 2 | No shadow structures (`Foo.ts` beside `foo/`) | Architecture spec | REF-01 |
+| 3 | Root barrel ≤50 lines, no `export *` | `foundationRootBarrelArchitecture.spec.ts` | REF-02 |
+| 4 | Commands import only domain or root barrels | `commandImportArchitecture.spec.ts` | REF-02 |
+| 5 | Layer import matrix enforced | `foundationDependencyArchitecture.spec.ts` | REF-02 |
+| 6 | Each L3/L4 domain has `*Architecture.spec.ts` | File inventory | REF-01 |
+| 7 | All owned modules within size limits or accepted split | Per-domain size walk | REF-01 |
+| 8 | `nvb build && nvb test` pass with zero regressions | CI / local proof | All |
+| 9 | No normative product spec changes unless separately amended | Reviewer checklist | All |
+| 10 | Engineering standard acceptance matrix PASS | Review report | REF-02, REF-03 |
+| 11 | Layout conforms to [foundation-module-architecture.md](foundation-module-architecture.md) | Reviewer checklist | All |
+| 12 | Zero flat prefix clusters at foundation root | `foundationCapabilityTreeArchitecture.spec.ts` | REF-03 |
+| 13 | Capability trees `runtime/`, `task/`, `lane/`, `index/` with parent barrels | Per-tree architecture specs | REF-03 |
+| 14 | `pack/index/` nested; `runtimeDistribution/` removed | Filesystem walk + gate | REF-03 |
 
 ---
 

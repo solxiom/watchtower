@@ -1,17 +1,23 @@
 # Watchtower Foundation Module Architecture
 
-Status: **Accepted — implementation architecture**
+Status: **Accepted — implementation architecture (capability-tree amendment 2026-08-04)**
 Scope: `src/foundation/` target layout, barrels, dependency layers, and public surfaces
 Applies to: v1 implementation and post-v1 foundation evolution
 Last updated: 2026-08-04
 
+**Amendment:** Flat L5 sibling capsules from the original REF-01 interim target are
+**superseded** by nested capability trees per
+[foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md).
+REF-01 clearing the foundation root was necessary but not sufficient; REF-03
+delivers the grouped layout.
+
 This document is the **normative target architecture** for `src/foundation/`:
-capability-owned domains, three-tier barrels, dependency layers, presentation
+capability-owned domains, four-tier barrels, dependency layers, presentation
 boundaries, and the public export contract commands and external packages may
 depend on.
 
 Execution — current-state diagnosis, file moves, phased migration, and
-`REF-01`/`REF-02` remediation batches — lives in
+`REF-01`/`REF-02`/`REF-03` remediation batches — lives in
 [foundation-layout-remediation.md](foundation-layout-remediation.md).
 
 It supplements, but does not replace:
@@ -61,6 +67,7 @@ must belong to a **named capability domain** with a deliberate barrel surface.
 | Foundation root barrel size | ~126 lines, ~80+ symbols | **≤50 lines**, domain re-exports only |
 | Command deep-imports into foundation internals | 6+ paths | **0** (domain barrels only) |
 | Shadow structures (`Foo.ts` beside `foo/`) | 8+ | **0** |
+| Flat prefix clusters at foundation root (`runtimeCatalog/`, `taskRuntime/`, …) | 10+ | **0** (REF-03) |
 | Architecture gates per major domain | 4 | **12+** |
 | Wildcard re-exports at root | 4 (`export *`) | **0** |
 
@@ -74,10 +81,17 @@ completes. Do not add files to the foundation root except `index.ts`.
 ### 2.1 Capability-first layout
 
 Group code by **what it does for the product**, not by file type or
-implementation-pack ID. Implementation packs (`wt-read-model`, `wt-lane-lifecycle`,
-etc.) are delivery boundaries; foundation domains are runtime capability
-boundaries. A domain may span evidence from multiple packs (for example `status/`
-implements read-model batch `RM-12` only).
+implementation-pack ID. When a capability needs **multiple modules or
+sub-capsules**, they live under **one parent capability directory** with a parent
+barrel (`runtime/`, `task/`, `lane/`, …). Do not scatter prefixed siblings at
+foundation root (`runtimeCatalog/` next to `runtime/`).
+
+Implementation packs (`wt-read-model`, `wt-lane-lifecycle`, etc.) are delivery
+boundaries; foundation capability trees are runtime product boundaries. A domain
+may span evidence from multiple packs (for example `status/` implements read-model
+batch `RM-12` only).
+
+See [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md).
 
 ### 2.2 Inward dependencies
 
@@ -88,28 +102,36 @@ commands/  →  foundation domain barrels  →  foundation capsules  →  contra
 ```
 
 Commands never import capsule internals. Foundation domains never import
-commands. Infrastructure capsules (`storage/`, `taskRuntime/`, `runtime/`) never
-import application services (`status/`, `init/`).
+commands. Infrastructure capsules never import application services (`status/`,
+`init/`). Sub-capsules import sibling sub-capsules only through the **parent
+capability barrel** unless they are at the same tier and the dependency matrix
+explicitly allows it.
 
 ### 2.3 Facade + capsule pattern
 
-Every domain follows the `taskRuntime/` template:
+Every domain follows the **capability tree + capsule** pattern:
 
 ```text
-domain/
-  index.ts              ← tier-1 barrel (public surface)
-  DomainFacade.ts       ← primary service / planner (optional if index is thin)
-  internalModule.ts     ← lowerCamelCase helpers
-  ports/                ← optional injected ports (only if multiple files)
+<capability>/
+  index.ts              ← tier-2 capability barrel (aggregates sub-capsules)
+  <sub-capability>/
+    index.ts            ← tier-1 capsule barrel (public surface of sub-area)
+    DomainFacade.ts     ← primary service (optional)
+    internalModule.ts
 ```
+
+Example: `task/runtime/index.ts` (lane task runner port), not `taskRuntime/` at
+foundation root. The positive template remains
+`src/foundation/task/runtime/index.ts` after REF-03.
 
 Rules:
 
 1. **One primary responsibility** per module (engineering standard §5).
-2. **Barrels export deliberately** — no wildcard growth at domain or root level.
-3. **Document withheld exports** in barrel header comments (see
-   `taskRuntime/index.ts`).
+2. **Barrels export deliberately** — no wildcard growth at domain, capability, or root level.
+3. **Document withheld exports** in barrel header comments (see `task/runtime/index.ts`).
 4. **No shadow structures** — the facade lives inside the capsule directory.
+5. **No flat prefix clusters** at foundation root — see
+   [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md).
 
 ### 2.4 Presentation stays at the edge
 
@@ -260,29 +282,48 @@ src/foundation/
     MigrationSteps.ts
     migrationValidation.ts
 
-  runtimeDistribution/
-    index.ts
-    # re-exports RuntimeCatalog, ManagedAssets, LaneTaskProfileInstaller facades
-    # from nested capsules
-
-  # ── L5–L6: infrastructure capsules (unchanged names) ───────────────
-  laneStore/
-  transactionalWriter/
-  coordinatorBaseline/
-  managedAssets/
-  runtimeCatalog/
-  packIndex/
-  indexStore/
-  indexQuery/
-  storage/
-  taskRuntime/
+  # ── L5–L6 capability trees (REF-03 target) ─────────────────────────
   runtime/
+    index.ts
+    catalog/              # was runtimeCatalog/
+    distribution/         # was managedAssets/; managed links + task profile
+    knowledge/            # was runtimeKnowledgeManifest/
+    leaf/                 # was runtime/ (L6 process invocation)
+
+  task/
+    index.ts
+    runtime/              # was taskRuntime/
+    catalog/              # was taskCatalogComposition/
+
+  lane/
+    index.ts
+    store/                # was laneStore/
+    writer/               # was transactionalWriter/
+    coordinator/            # was coordinatorBaseline/
+
+  pack/
+    …                     # L4 consumer/seal/drift (unchanged modules)
+    index/                # was packIndex/ (nested L5 compile pipeline)
+
+  index/                  # coordinator sealed-pack index (CA-02)
+    index.ts
+    store/                # was indexStore/
+    query/                # was indexQuery/
+
+  storage/
   hostAdapters/
-  distribution/
-  runtimeKnowledgeManifest/
-  schemaComposition/
-  taskCatalogComposition/
+  distribution/           # L6 Nirvana install verify — NOT runtime/distribution
 ```
+
+**Superseded (forbidden at foundation root after REF-03):** flat siblings
+`runtimeCatalog/`, `runtimeDistribution/`, `managedAssets/`,
+`runtimeKnowledgeManifest/`, `taskRuntime/`, `taskCatalogComposition/`,
+`laneStore/`, `transactionalWriter/`, `coordinatorBaseline/`, `packIndex/`,
+`indexStore/`, `indexQuery/`, and top-level `runtime/` (relocated to
+`runtime/leaf/`).
+
+Full move table:
+[foundation-capability-tree-amendment.md §3](foundation-capability-tree-amendment.md#3-normative-target-tree-capability-grouped).
 
 ### 3.2 Structural diagram
 
@@ -311,10 +352,12 @@ flowchart TB
     upgradeDomain[upgrade/]
   end
 
-  subgraph L5infra ["L5 infrastructure"]
-    storageCap[storage/]
-    taskRuntimeCap[taskRuntime/]
+  subgraph L5infra ["L5–L6 capability trees"]
     runtimeCap[runtime/]
+    taskCap[task/]
+    laneCap[lane/]
+    indexCap[index/]
+    storageCap[storage/]
   end
 
   subgraph contracts ["src/contracts/"]
@@ -328,6 +371,7 @@ flowchart TB
 
   foundationRoot --> L3read
   foundationRoot --> L4mut
+  foundationRoot --> L5infra
 
   L3read --> L2disc[discovery/]
   L3read --> L2obs[observation/]
@@ -338,8 +382,9 @@ flowchart TB
   L2disc --> L1paths[paths/]
   L3read --> L1parse
   packDomain --> storageCap
-  lifecycleDomain --> laneStore[laneStore/]
-  upgradeDomain --> runtimeDistribution[runtimeDistribution/]
+  lifecycleDomain --> laneCap
+  upgradeDomain --> runtimeCap
+  initDomain --> runtimeCap
 
   L3read --> types
   L4mut --> types
@@ -353,20 +398,25 @@ commands ──► domain/index.ts ──► capsule internals
                                   (never the reverse path for consumers)
 ```
 
-All domains follow the `taskRuntime/` encapsulation model.
+All domains follow the capability-tree encapsulation model (§2.3).
 
 ---
 
 ## 4. Capability domain catalog
 
-Each domain has a single tier-1 barrel. The table states purpose, layer,
-primary facade, and pack traceability.
+Each **top-level directory** is either a flat domain (L1–L4) or a **capability
+tree** (L5–L6 grouped under `runtime/`, `task/`, `lane/`, `index/`). Sub-capsules
+have tier-1 barrels; capability parents have tier-2 barrels. See
+[foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md).
+
+### 4.1 L1–L4 flat domains
 
 | Domain directory | Layer | Purpose | Primary facade / entry | Pack evidence |
 |------------------|------:|---------|------------------------|---------------|
 | `paths/` | L1 | Canonical path rules, data-home resolution, workspace context | `resolveWorkspace`, `resolveWatchtowerDataHome` | RM-03 |
 | `parsing/` | L1 | Strict env/state/scalar/JSONL parsing | `parseEnvConfig`, `parseLaneState`, `parseJsonlStream` | RM-04, RM-05 |
 | `presentation/` | L1 | Command envelope serialization and terminal/JSON rendering | `buildCommandResult`, `renderResult` | RM-02 |
+| `schemaComposition/` | L1 | Deterministic JSON Schema composition | (module exports) | RM-13 |
 | `discovery/` | L2 | Home and secondary lane discovery, selection | `discoverHomeLanes`, `selectLane` | RM-06, RM-07 |
 | `bindings/` | L2 | Repository bindings and writable conflict inspection | `readRepositoryBindings`, `inspectWritableConflicts` | RM-08 |
 | `observation/` | L2 | Tmux, heartbeat, runtime session observation | `observeRuntimeSessions`, `NirvanaTmuxObserver` | RM-09 |
@@ -376,41 +426,55 @@ primary facade, and pack traceability.
 | `lifecycle/` | L4 | Post-init binding/membership orchestration | `BindingMutator`, `MembershipRegistrar` | LC-04 |
 | `pack/` | L4 | Pack acceptance, seal, drift, consumption hosts | `consumePack`, `observePackDrift` | LC-02, CA-01 |
 | `upgrade/` | L4 | Upgrade preview/apply planning, migrations | `UpgradePlanner`, `MigrationRegistry` | UK-01–UK-03 |
-| `runtimeDistribution/` | L4 | Runtime catalog and managed asset facades | `RuntimeCatalog`, `ManagedAssets` | RT-04–RT-06 |
-| `laneStore/` | L5 | Transactional lane layout generation | `LaneStore` | LC-03 |
-| `transactionalWriter/` | L5 | Atomic lane directory commit | `commitLane` | LC-03 |
-| `coordinatorBaseline/` | L5 | Coordinator/session policy baselines at init | `buildCoordinatorBaseline` | LC-05 |
-| `managedAssets/` | L5 | Managed runtime links and task profile install | `ManagedAssets`, `LaneTaskProfileInstaller` | RT-06 |
-| `runtimeCatalog/` | L5 | Immutable runtime version tree | `RuntimeCatalog` | RT-04 |
-| `packIndex/` | L5 | Sealed-pack SQLite compile pipeline | `PackIndexCompiler` | CA-01 |
-| `indexStore/` | L5 | Pack index store open/read | `IndexStore` | CA-02 |
-| `indexQuery/` | L5 | Bounded typed index queries | `IndexQuery` | CA-02 |
-| `storage/` | L5 | Derived SQLite stores and migrations | `openDerivedStorage` | DB-01, CA-03 |
-| `taskRuntime/` | L5 | Lane task runner port and catalog | `LaneTaskRunner`, `NirvanaLaneTaskRunner` | RT-05 |
-| `runtime/` | L6 | Leaf/process invocation adapters | `LeafRuntimeInvoker` | RT-05 |
-| `hostAdapters/` | L6 | Knowledge pack installers (Codex/Cursor/Claude) | `resolveHostAdapter` | UK-04 |
-| `distribution/` | L6 | Nirvana closure/install verification | `NirvanaInstallVerifier` | RT-08 |
-| `schemaComposition/` | L1 | Deterministic JSON Schema composition | (module exports) | RM-13 |
-| `taskCatalogComposition/` | L5 | Task catalog aggregate composition | (module exports) | RT-09 |
-| `runtimeKnowledgeManifest/` | L5 | Runtime/knowledge manifest validation | `RuntimeKnowledgeManifestValidator` | RT-02 |
+
+### 4.2 L5–L6 capability trees (REF-03 target)
+
+| Capability | Sub-capsule | Layer | Purpose | Primary facade | Pack evidence |
+|------------|-------------|------:|---------|----------------|---------------|
+| `runtime/` | `catalog/` | L5 | Immutable runtime version tree | `RuntimeCatalog` | RT-04 |
+| | `distribution/` | L5 | Managed runtime links and task profile install | `ManagedAssets`, `LaneTaskProfileInstaller` | RT-06 |
+| | `knowledge/` | L5 | Runtime/knowledge manifest validation | `RuntimeKnowledgeManifestValidator` | RT-02 |
+| | `leaf/` | L6 | Leaf/process invocation adapters | `LeafRuntimeInvoker` | RT-05 |
+| `task/` | `runtime/` | L5 | Lane task runner port and catalog | `LaneTaskRunner`, `NirvanaLaneTaskRunner` | RT-05 |
+| | `catalog/` | L5 | Task catalog aggregate composition | (module exports) | RT-09 |
+| `lane/` | `store/` | L5 | Transactional lane layout generation | `LaneStore` | LC-03 |
+| | `writer/` | L5 | Atomic lane directory commit | `commitLane` | LC-03 |
+| | `coordinator/` | L5 | Coordinator/session policy baselines at init | `buildCoordinatorBaseline` | LC-05 |
+| `pack/index/` | — | L5 | Sealed-pack SQLite compile pipeline | `PackIndexCompiler` | CA-01 |
+| `index/` | `store/` | L5 | Pack index store open/read | `IndexStore` | CA-02 |
+| | `query/` | L5 | Bounded typed index queries | `IndexQuery` | CA-02 |
+| `storage/` | — | L5 | Derived SQLite stores and migrations | `openDerivedStorage` | DB-01, CA-03 |
+| `hostAdapters/` | — | L6 | Knowledge pack installers (Codex/Cursor/Claude) | `resolveHostAdapter` | UK-04 |
+| `distribution/` | — | L6 | Nirvana closure/install verification | `NirvanaInstallVerifier` | RT-08 |
+
+**Interim debt (forbidden after REF-03):** flat siblings `runtimeDistribution/`,
+`runtimeCatalog/`, `managedAssets/`, `runtimeKnowledgeManifest/`, `taskRuntime/`,
+`taskCatalogComposition/`, `laneStore/`, `transactionalWriter/`,
+`coordinatorBaseline/`, `packIndex/`, `indexStore/`, `indexQuery/`, and
+top-level `runtime/` (leaf capsule).
 
 ---
 
-## 5. Three-tier barrel model
+## 5. Four-tier barrel model
 
 ### 5.1 Tier definitions
 
 | Tier | Location | Responsibility | Wildcards |
 |------|----------|----------------|-----------|
-| **T1 — Capsule** | `foundation/<capsule>/index.ts` | Export the capability port, options types, and narrowly shared helpers | ❌ Forbidden |
-| **T2 — Domain** | `foundation/<domain>/index.ts` | Aggregate T1 exports for one product concern; hide internal inspectors | ❌ Forbidden |
-| **T3 — Root** | `foundation/index.ts` | Stable import path for commands and external packages (`src/index.ts`) | ❌ Forbidden |
+| **T3 — Root** | `foundation/index.ts` | Stable import path for commands and external packages | ❌ Forbidden |
+| **T2 — Capability** | `foundation/<capability>/index.ts` | Aggregate sub-capsules for one product capability (`runtime/`, `task/`, …) | ❌ Forbidden |
+| **T1 — Capsule** | `foundation/<capability>/<sub>/index.ts` or flat `foundation/<domain>/index.ts` | Export the port, options types, and narrowly shared helpers | ❌ Forbidden |
+| **T0 — Internal** | Module files not re-exported | Implementation detail | — |
+
+Flat L1–L4 domains use T1 at their directory root. L5–L6 infrastructure uses
+T2 + T1 under capability parents per
+[foundation-capability-tree-amendment.md §4](foundation-capability-tree-amendment.md#4-barrel-model-extended-tiers).
 
 ### 5.2 Import rules by consumer
 
 | Consumer | Allowed import paths | Forbidden |
 |----------|---------------------|-----------|
-| `src/commands/*` | `foundation/<domain>/index.js`, `foundation/index.js` | Any path matching `foundation/<domain>/<internal>.js` except through T1/T2 barrel |
+| `src/commands/*` | `foundation/<domain>/index.js`, `foundation/<capability>/index.js`, `foundation/index.js` | Any path matching `foundation/**/<internal>.js` except through T1/T2/T3 barrel |
 | `src/run.ts`, `src/cli.ts` | `foundation/presentation/index.js` | Domain internals |
 | `spec/foundation/<domain>/*` | Domain under test + its declared dependencies | Unrelated domain internals (use public barrel instead) |
 | `spec/integration/*` | `foundation/index.js` or specific domain barrels | Deep FS/SQL ports unless testing that capsule |
@@ -419,7 +483,7 @@ primary facade, and pack traceability.
 
 ### 5.3 Template: tier-1 barrel header
 
-Every capsule barrel must include a header modeled on `taskRuntime/index.ts`:
+Every capsule barrel must include a header modeled on `task/runtime/index.ts`:
 
 ```typescript
 // Public surface of the <domain> capability.
@@ -477,17 +541,18 @@ export {
 | **L1** | `paths/`, `parsing/`, `presentation/`, `schemaComposition/` | L0 |
 | **L2** | `discovery/`, `bindings/`, `observation/` | L0, L1 |
 | **L3** | `read/`, `status/` | L0, L1, L2 |
-| **L4** | `init/`, `lifecycle/`, `pack/`, `upgrade/`, `runtimeDistribution/` | L0–L3, L5 (via ports only) |
-| **L5** | `laneStore/`, `storage/`, `taskRuntime/`, `packIndex/`, `indexStore/`, `indexQuery/`, `managedAssets/`, `runtimeCatalog/`, `taskCatalogComposition/`, `runtimeKnowledgeManifest/`, `transactionalWriter/`, `coordinatorBaseline/` | L0, L1 (paths/parsing only) |
-| **L6** | `runtime/`, `hostAdapters/`, `distribution/` | L0, L1, L5 ports as needed |
+| **L4** | `init/`, `lifecycle/`, `pack/`, `upgrade/` | L0–L3; L5 via **capability barrels** only (`runtime/index.js`, `lane/index.js`, …) |
+| **L5** | `runtime/catalog/`, `runtime/distribution/`, `runtime/knowledge/`, `task/runtime/`, `task/catalog/`, `lane/store/`, `lane/writer/`, `lane/coordinator/`, `pack/index/`, `index/store/`, `index/query/`, `storage/` | L0, L1 (paths/parsing only) |
+| **L6** | `runtime/leaf/`, `hostAdapters/`, `distribution/` | L0, L1, L5 ports as needed |
 
 **Hard rules:**
 
 1. L1 must not import L2+.
 2. L3 must not import L4+.
 3. L5 `storage/` is the **only** layer that imports the SQLite driver.
-4. L6 `runtime/` owns process invocation; L4 never imports `node:child_process`.
-5. No circular dependencies — break cycles by moving shared types to `contracts/`.
+4. L6 `runtime/leaf/` owns process invocation; L4 never imports `node:child_process`.
+5. L4 imports infrastructure through **T2 capability barrels**, not sub-capsule internals.
+6. No circular dependencies — break cycles by moving shared types to `contracts/`.
 
 Enforcement lives in `spec/foundation/foundationDependencyArchitecture.spec.ts`
 (see [remediation plan](foundation-layout-remediation.md)).
@@ -507,22 +572,22 @@ Enforcement lives in `spec/foundation/foundationDependencyArchitecture.spec.ts`
 | `UpgradePlanner`, `UpgradePreviewSource` | `upgrade/` | `UpgradeCommand` |
 | `buildCommandResult`, `buildCommandError`, `renderResult`, `renderError` | `presentation/` | All commands, `run.ts` |
 | `resolveHostAdapter`, `create*HostAdapter`, `INSTALL_SCOPES`, `HOST_NAMES` | `hostAdapters/` | `SkillInstallCommand` |
-| `LaneTaskRunner`, `NirvanaLaneTaskRunner`, `LaneTaskCatalog` | `taskRuntime/` | Watch/coordinator batches |
-| `RuntimeCatalog`, `ManagedAssets` | `runtimeDistribution/` | Init, upgrade, doctor batches |
+| `LaneTaskRunner`, `NirvanaLaneTaskRunner`, `LaneTaskCatalog` | `task/` (via `task/runtime/`) | Watch/coordinator batches |
+| `RuntimeCatalog`, `ManagedAssets` | `runtime/` (via `runtime/catalog/`, `runtime/distribution/`) | Init, upgrade, doctor batches |
 
 ### 7.2 Root barrel — forbidden exports (capsule-internal)
 
 | Symbol | Owner capsule | Why internal |
 |--------|---------------|--------------|
-| `PACK_INDEX_SCHEMA`, `PACK_INDEX_META_TABLE` | `packIndex/` | SQL DDL |
-| `nodeManagedLinkFileSystem`, `ManagedLinkFileSystem` | `managedAssets/` | FS port |
-| `parseInstallManifest` | `managedAssets/` | Parser |
-| `COMPATIBILITY_NAMES`, `resolveCompatibilityName*` | `managedAssets/` | RT-06 internal |
+| `PACK_INDEX_SCHEMA`, `PACK_INDEX_META_TABLE` | `pack/index/` | SQL DDL |
+| `nodeManagedLinkFileSystem`, `ManagedLinkFileSystem` | `runtime/distribution/` | FS port |
+| `parseInstallManifest` | `runtime/distribution/` | Parser |
+| `COMPATIBILITY_NAMES`, `resolveCompatibilityName*` | `runtime/distribution/` | RT-06 internal |
 | `gitUnavailable`, `nodePackGitInspector` | `pack/` | Host adapter |
 | `createNodePackFileSystem`, `nodePackFileSystem` | `pack/` | Host adapter |
 | `loadPackSchemaValidators` | `pack/` | Host adapter |
 | `consumePack`, `observePackDrift`, pack seal helpers | `pack/` | Lifecycle/coordinator facades only |
-| `IndexStore`, `IndexQuery` | `indexStore/`, `indexQuery/` | CA batches use domain barrels |
+| `IndexStore`, `IndexQuery` | `index/store/`, `index/query/` | CA batches use capability barrel |
 | Wildcard re-exports from infrastructure capsules | respective capsules | Import capsule directly when needed |
 
 ### 7.3 Domain barrel surfaces (tier-2 examples)
@@ -617,11 +682,16 @@ Command-specific presenters remain in `src/commands/`.
 
 | Spec file | Domain |
 |-----------|--------|
-| `taskRuntimeArchitecture.spec.ts` | `taskRuntime/`, `runtime/` |
-| `managedAssetsArchitecture.spec.ts` | `managedAssets/` |
-| `indexQueryArchitecture.spec.ts` | `indexQuery/`, `indexStore/`, `storage/` |
-| `runtimeKnowledgeManifestArchitecture.spec.ts` | `runtimeKnowledgeManifest/` |
-| `coordinatorBaselinePolicy.spec.ts` | `coordinatorBaseline/` |
+| `taskRuntimeArchitecture.spec.ts` | `task/runtime/`, `runtime/leaf/` |
+| `managedAssetsArchitecture.spec.ts` | `runtime/distribution/` |
+| `indexQueryArchitecture.spec.ts` | `index/query/`, `index/store/`, `storage/` |
+| `runtimeKnowledgeManifestArchitecture.spec.ts` | `runtime/knowledge/` |
+| `coordinatorBaselinePolicy.spec.ts` | `lane/coordinator/` |
+| `foundationCapabilityTreeArchitecture.spec.ts` | Top-level dirs; forbidden flat prefix clusters (REF-03) |
+| `runtimeCapabilityArchitecture.spec.ts` | `runtime/` subtree (REF-03) |
+| `taskCapabilityArchitecture.spec.ts` | `task/` subtree (REF-03) |
+| `laneCapabilityArchitecture.spec.ts` | `lane/` subtree (REF-03) |
+| `indexCapabilityArchitecture.spec.ts` | `index/`, `pack/index/` (REF-03) |
 
 ### 9.2 Required gates (added during remediation)
 
@@ -649,7 +719,7 @@ Each `*Architecture.spec.ts` must include:
 ### 9.4 Positive template in codebase
 
 ```text
-src/foundation/taskRuntime/index.ts
+src/foundation/task/runtime/index.ts
 spec/foundation/taskRuntimeArchitecture.spec.ts
 ```
 
@@ -659,7 +729,9 @@ spec/foundation/taskRuntimeArchitecture.spec.ts
 
 | Item | Reason |
 |------|--------|
+| Flat prefix clusters at foundation root | REF-01 interim; remediated in REF-03 |
 | Renaming domains to match pack IDs | Capability names are clearer at runtime |
+| Renaming `foundation/distribution/` | Separate amendment if needed after REF-03 |
 | Refactoring `src/contracts/` | Separate concern |
 | Reorganizing `runtime-nvb/` handlers | Different layer; already capability-split |
 | Changing public CLI commands, flags, or JSON shapes | Structural refactor only |
@@ -671,6 +743,7 @@ spec/foundation/taskRuntimeArchitecture.spec.ts
 
 | Document | Role |
 |----------|------|
+| [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md) | REF-03 capability tree — supersedes flat L5 layout |
 | [foundation-layout-remediation.md](foundation-layout-remediation.md) | File migration inventory, reviewer checklist |
 | [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md) | Milestones, work units, dependencies, waves |
 | [foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md) | **Live status** |
@@ -687,11 +760,11 @@ spec/foundation/taskRuntimeArchitecture.spec.ts
 | `discovery/`, `bindings/` | RM-06, RM-07, RM-08 |
 | `read/` | RM-10 |
 | `status/` | RM-12 |
-| `taskRuntime/`, `runtime/` | RT-05 |
-| `managedAssets/`, `runtimeCatalog/` | RT-04, RT-06 |
-| `pack/`, `packIndex/`, `indexStore/`, `indexQuery/` | LC-02, CA-01, CA-02 |
-| `init/`, `laneStore/`, `transactionalWriter/` | LC-01, LC-03 |
-| `coordinatorBaseline/` | LC-05 |
+| `task/runtime/`, `runtime/leaf/` | RT-05 |
+| `runtime/distribution/`, `runtime/catalog/` | RT-04, RT-06 |
+| `pack/`, `pack/index/`, `index/store/`, `index/query/` | LC-02, CA-01, CA-02 |
+| `init/`, `lane/store/`, `lane/writer/` | LC-01, LC-03 |
+| `lane/coordinator/` | LC-05 |
 | `upgrade/` | UK-01, UK-02 |
 | `hostAdapters/` | UK-04 |
 | `distribution/` | RT-08 |

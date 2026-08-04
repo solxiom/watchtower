@@ -91,10 +91,12 @@ Product capabilities such as lane lifecycle, coordinator routing, effects, and
 sessions own their plans and validators in their own foundation capsules. They
 depend on the ports above; they do not collect inside `taskRuntime`.
 
-The complete target domain tree, three-tier barrel model, dependency layers,
+The complete target domain tree, four-tier barrel model, dependency layers,
 and public export contract are normative in
 [architecture/foundation-module-architecture.md](architecture/foundation-module-architecture.md).
-Phased migration and `REF-01`/`REF-02` remediation batches are tracked in
+Nested capability grouping (REF-03) is defined in
+[architecture/foundation-capability-tree-amendment.md](architecture/foundation-capability-tree-amendment.md).
+Phased migration and `REF-01`/`REF-02`/`REF-03` remediation batches are tracked in
 [architecture/foundation-layout-remediation.md](architecture/foundation-layout-remediation.md).
 
 The task source should be divided by capability:

@@ -1,12 +1,13 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 complete; FM-4 next (FR-25 … FR-26 ✅)**
+Status: **Active — FM-3 ✅; FM-4 in progress; FM-5 (REF-03) spec accepted, implementation pending**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
 
 Normative target:
-[foundation-module-architecture.md](foundation-module-architecture.md)
+[foundation-module-architecture.md](foundation-module-architecture.md) ·
+[foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md)
 
 Last updated: 2026-08-04
 
@@ -16,12 +17,13 @@ Last updated: 2026-08-04
 
 | Field | Value |
 |-------|-------|
-| Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
-| Work units | **32** (`FR-00` … `FR-31`) |
-| Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **26 / 32** work units accepted |
+| Remediation | Foundation layout refactor (`REF-01`, `REF-02`, `REF-03`) |
+| Work units | **39** (`FR-00` … `FR-38`) |
+| Milestones | **6** (`FM-0` … `FM-5`) |
+| Score | **26 / 39** work units accepted |
 | Baseline root files | 0 (target: 0) |
 | Shadow structures | 0 (target: 0) |
+| Flat prefix clusters | 11 (target: 0, REF-03) |
 
 ---
 
@@ -34,6 +36,7 @@ Last updated: 2026-08-04
 | FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
 | FM-3 | L4 domain extraction | REF-01 | ✅ Accepted | FR-18 … FR-24 ✅; root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ⏳ In progress | FR-25 ✅ |
+| FM-5 | Capability tree re-nesting | REF-03 | ❌ Pending | Spec accepted; FR-32 … FR-38 not started |
 
 ---
 
@@ -81,7 +84,7 @@ Last updated: 2026-08-04
 | FR-20 | `upgrade/` | ✅ Accepted | 6 modules + barrel; `upgradeArchitecture.spec.ts`; upgrade specs green; `nvb test` green |
 | FR-21 | `observation/` | ✅ Accepted | 5 modules + barrel; `runtimeObservations.spec.ts` green; `nvb test` green |
 | FR-22 | `lifecycle/` | ✅ Accepted | 2 modules + barrel; binding/membership specs green; `nvb test` green |
-| FR-23 | `runtimeDistribution/` | ✅ Accepted | Re-export barrel for catalog + managed assets; `nvb test` green |
+| FR-23 | `runtimeDistribution/` | ✅ Accepted (interim) | Re-export barrel — **superseded by REF-03 `runtime/`**; `nvb test` green |
 | FR-24 | FM-3 integration | ✅ Accepted | Root file count = 1; root layout gate; `nvb test` green |
 
 ### FM-4 — Barrel hardening (REF-02)
@@ -96,6 +99,18 @@ Last updated: 2026-08-04
 | FR-30 | Remaining arch gates | ❌ Pending | All gates from map §6 green |
 | FR-31 | REF-02 acceptance | ❌ Pending | Map §8 exit criteria; reviewer matrix PASS |
 
+### FM-5 — Capability tree re-nesting (REF-03)
+
+| ID | Work unit | State | Acceptance proof |
+|----|-----------|-------|------------------|
+| FR-32 | `runtime/` capability tree | ❌ Pending | `runtimeCapabilityArchitecture.spec.ts`; remove `runtimeDistribution/` |
+| FR-33 | `task/` capability tree | ❌ Pending | `taskCapabilityArchitecture.spec.ts` |
+| FR-34 | `lane/` capability tree | ❌ Pending | `laneCapabilityArchitecture.spec.ts` |
+| FR-35 | `pack/index/` nest | ❌ Pending | `pack/index/` under `pack/` |
+| FR-36 | `index/` capability tree | ❌ Pending | `indexCapabilityArchitecture.spec.ts` |
+| FR-37 | Import retarget sweep | ❌ Pending | `src/`, `spec/`, `runtime-nvb/` paths |
+| FR-38 | REF-03 integration | ❌ Pending | `foundationCapabilityTreeArchitecture.spec.ts`; flat prefix count = 0 |
+
 ---
 
 ## Batch rollup
@@ -104,20 +119,24 @@ Last updated: 2026-08-04
 |-------|----------:|---------:|-------|
 | REF-01 | FR-00 … FR-24 | 25 / 25 | ✅ Accepted |
 | REF-02 | FR-25 … FR-31 | 1 / 7 | ⏳ In progress |
+| REF-03 | FR-32 … FR-38 | 0 / 7 | ❌ Pending (spec ✅) |
 
 ---
 
 ## Domain directory checklist
 
-Target domains from
-[foundation-module-architecture.md §4](foundation-module-architecture.md#4-capability-domain-catalog).
-Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
+Target layout from
+[foundation-module-architecture.md §4](foundation-module-architecture.md#4-capability-domain-catalog)
+and [foundation-capability-tree-amendment.md §3](foundation-capability-tree-amendment.md#3-normative-target-tree-capability-grouped).
+
+### L1–L4 flat domains
 
 | Domain | Layer | FR | Directory exists | Barrel | State |
 |--------|------:|-----|:----------------:|:------:|-------|
 | `paths/` | L1 | FR-12 | ✅ | ✅ | Accepted |
 | `parsing/` | L1 | FR-13 | ✅ | ✅ | Accepted |
 | `presentation/` | L1 | FR-25 | ✅ | ✅ | Accepted |
+| `schemaComposition/` | L1 | FR-19 | ✅ | ✅ | Accepted |
 | `discovery/` | L2 | FR-14 | ✅ | ✅ | Accepted |
 | `bindings/` | L2 | FR-15 | ✅ | ✅ | Accepted |
 | `observation/` | L2 | FR-21 | ✅ | ✅ | Accepted |
@@ -127,23 +146,36 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `lifecycle/` | L4 | FR-22 | ✅ | ✅ | Accepted |
 | `pack/` | L4 | FR-19 | ✅ | ✅ | Accepted |
 | `upgrade/` | L4 | FR-20 | ✅ | ✅ | Accepted |
-| `runtimeDistribution/` | L4 | FR-23 | ✅ | ✅ | Accepted |
-| `laneStore/` | L5 | FR-03 | ✅ | ✅ | Accepted |
-| `transactionalWriter/` | L5 | FR-04 | ✅ | ✅ | Accepted |
-| `coordinatorBaseline/` | L5 | FR-10 | ✅ | ✅ | Accepted |
-| `managedAssets/` | L5 | FR-05 | ✅ | ✅ | Accepted |
-| `runtimeCatalog/` | L5 | FR-06 | ✅ | ✅ | Accepted |
-| `packIndex/` | L5 | FR-07 | ✅ | ✅ | Accepted |
-| `indexStore/` | L5 | FR-08 | ✅ | ✅ | Accepted |
-| `indexQuery/` | L5 | FR-09 | ✅ | ✅ | Accepted |
-| `storage/` | L5 | — | ✅ | ✅ | Pre-refactor OK |
-| `taskRuntime/` | L5 | — | ✅ | ✅ | Template reference |
-| `runtime/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
-| `hostAdapters/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
-| `distribution/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
-| `schemaComposition/` | L1 | FR-19 | ✅ | ✅ | Accepted |
-| `taskCatalogComposition/` | L5 | — | ✅ | ✅ | Pre-refactor OK |
-| `runtimeKnowledgeManifest/` | L5 | — | ✅ | ✅ | Pre-refactor OK |
+
+### L5–L6 capability trees (REF-03 target)
+
+| Capability / sub | Layer | FR | Exists | Barrel | State |
+|------------------|------:|-----|:------:|:------:|-------|
+| `runtime/` (parent) | T2 | FR-32 | ❌ | ❌ | Interim flat siblings |
+| `runtime/catalog/` | L5 | FR-32 | ⏳ `runtimeCatalog/` | ✅ | Move pending |
+| `runtime/distribution/` | L5 | FR-32 | ⏳ `managedAssets/` | ✅ | Move pending |
+| `runtime/knowledge/` | L5 | FR-32 | ⏳ `runtimeKnowledgeManifest/` | ✅ | Move pending |
+| `runtime/leaf/` | L6 | FR-32 | ⏳ `runtime/` | ✅ | Move pending |
+| `task/` (parent) | T2 | FR-33 | ❌ | ❌ | Interim flat siblings |
+| `task/runtime/` | L5 | FR-33 | ⏳ `taskRuntime/` | ✅ | Move pending |
+| `task/catalog/` | L5 | FR-33 | ⏳ `taskCatalogComposition/` | ✅ | Move pending |
+| `lane/` (parent) | T2 | FR-34 | ❌ | ❌ | Interim flat siblings |
+| `lane/store/` | L5 | FR-34 | ⏳ `laneStore/` | ✅ | Move pending |
+| `lane/writer/` | L5 | FR-34 | ⏳ `transactionalWriter/` | ✅ | Move pending |
+| `lane/coordinator/` | L5 | FR-34 | ⏳ `coordinatorBaseline/` | ✅ | Move pending |
+| `pack/index/` | L5 | FR-35 | ⏳ `packIndex/` | ✅ | Nest pending |
+| `index/` (parent) | T2 | FR-36 | ❌ | ❌ | Interim flat siblings |
+| `index/store/` | L5 | FR-36 | ⏳ `indexStore/` | ✅ | Move pending |
+| `index/query/` | L5 | FR-36 | ⏳ `indexQuery/` | ✅ | Move pending |
+| `storage/` | L5 | — | ✅ | ✅ | Unchanged top-level |
+| `hostAdapters/` | L6 | — | ✅ | ✅ | Unchanged top-level |
+| `distribution/` | L6 | — | ✅ | ✅ | Unchanged top-level (not `runtime/distribution/`) |
+
+### Interim debt (remove in REF-03)
+
+| Flat path | Layer | FR | State |
+|-----------|------:|-----|-------|
+| `runtimeDistribution/` | L4 shim | FR-23 | ⚠️ Accepted interim — remove FR-32 |
 
 ---
 
@@ -161,10 +193,15 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `initArchitecture.spec.ts` | FR-18 | ✅ Accepted |
 | `packArchitecture.spec.ts` | FR-19 | ✅ Accepted |
 | `upgradeArchitecture.spec.ts` | FR-20 | ✅ Accepted |
-| `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — no path changes required |
-| `managedAssetsArchitecture.spec.ts` | FR-05 | ✅ Exists — update paths in FR-05 |
+| `taskRuntimeArchitecture.spec.ts` | FR-33 | ✅ Exists — retarget paths at FR-33 |
+| `managedAssetsArchitecture.spec.ts` | FR-32 | ✅ Exists — retarget at FR-32 |
 | `indexQueryArchitecture.spec.ts` | FR-08, FR-09 | ✅ Accepted — paths updated |
-| `runtimeKnowledgeManifestArchitecture.spec.ts` | — | ✅ Exists |
+| `runtimeKnowledgeManifestArchitecture.spec.ts` | — | ✅ Exists — retarget at FR-32 |
+| `foundationCapabilityTreeArchitecture.spec.ts` | FR-38 | ❌ Not created |
+| `runtimeCapabilityArchitecture.spec.ts` | FR-32 | ❌ Not created |
+| `taskCapabilityArchitecture.spec.ts` | FR-33 | ❌ Not created |
+| `laneCapabilityArchitecture.spec.ts` | FR-34 | ❌ Not created |
+| `indexCapabilityArchitecture.spec.ts` | FR-35, FR-36 | ❌ Not created |
 
 ---
 
@@ -179,6 +216,7 @@ Refresh after each accepted work unit.
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |
+| Flat prefix clusters at foundation root | 11 | 0 | 2026-08-04 |
 
 ---
 
@@ -194,7 +232,7 @@ When a work unit completes:
 6. Update **Score** in lane summary.
 
 Do not mark a milestone ✅ until every child work unit is ✅ and integration
-proof (FR-11, FR-24, FR-31) passes.
+proof (FR-11, FR-24, FR-31, FR-38) passes.
 
 ---
 
