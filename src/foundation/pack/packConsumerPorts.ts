@@ -1,6 +1,6 @@
 import {isAbsolute, relative, sep} from 'node:path';
-import type {PackConsumerResult, PackRejectionReason} from '../contracts/pack.js';
-import type {WorkerEventRecord} from '../contracts/events.js';
+import type {PackConsumerResult, PackRejectionReason} from '../../contracts/pack.js';
+import type {WorkerEventRecord} from '../../contracts/events.js';
 
 export type PackEntryKind = 'file' | 'directory' | 'symlink' | 'other';
 export interface PackEntry {readonly path: string; readonly kind: PackEntryKind;}

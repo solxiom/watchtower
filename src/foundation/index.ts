@@ -73,7 +73,7 @@ export {StatusProjection} from './status/index.js';
 export type {StatusProjectionOptions, StatusProjectionQuery} from './status/index.js';
 export {deriveStatusHealth} from './status/index.js';
 export type {StatusHealthInput} from './status/index.js';
-export {consumePack, packRepoPath} from './PackConsumer.js';
+export {consumePack, packRepoPath} from './pack/index.js';
 export type {
     PackAcceptanceEvidence,
     PackConsumerContext,
@@ -91,16 +91,16 @@ export type {
     PathAuthorization,
     PathKind,
     SourceRepositoryFacts
-} from './PackConsumer.js';
-export {observePackDrift} from './PackDriftObserver.js';
-export {classifyDrift, computeDocumentDigest, computeSealId, fileDigest, sortSealedFiles} from './PackSeal.js';
-export type {SealInput} from './PackSeal.js';
-export {gitUnavailable, gitValue} from './packConsumerPorts.js';
-export type {GitOutcome} from './packConsumerPorts.js';
-export {createNodePackFileSystem, nodePackFileSystem} from './packFilesystemHost.js';
-export type {PackStorage, PackStorageFactory} from './packFilesystemHost.js';
-export {nodePackGitInspector} from './packGitHost.js';
-export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
+} from './pack/index.js';
+export {observePackDrift} from './pack/index.js';
+export {classifyDrift, computeDocumentDigest, computeSealId, fileDigest, sortSealedFiles} from './pack/index.js';
+export type {SealInput} from './pack/index.js';
+export {gitUnavailable, gitValue} from './pack/index.js';
+export type {GitOutcome} from './pack/index.js';
+export {createNodePackFileSystem, nodePackFileSystem} from './pack/index.js';
+export type {PackStorage, PackStorageFactory} from './pack/index.js';
+export {nodePackGitInspector} from './pack/index.js';
+export {loadPackSchemaValidators} from './pack/index.js';
 export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './packIndex/index.js';
 export type {PackIndexCompileDeps, PackIndexCompileRequest} from './packIndex/index.js';
 export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/index.js';

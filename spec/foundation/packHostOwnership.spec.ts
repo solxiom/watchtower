@@ -3,8 +3,10 @@ import {join} from 'node:path';
 
 const FOUNDATION = join(process.cwd(), 'src', 'foundation');
 
+const PACK_DIR = join(FOUNDATION, 'pack');
+
 function source(name: string): string {
-    return readFileSync(join(FOUNDATION, name), 'utf8');
+    return readFileSync(join(PACK_DIR, name), 'utf8');
 }
 
 const COMMONS_STORAGE = '@nirvana/commons/foundation/storage/basic';
@@ -13,9 +15,9 @@ const AJV = 'ajv/dist/2020.js';
 
 describe('pack host adapter ownership', function () {
     it('splits the host boundary into focused filesystem, Git, and schema owners', function () {
-        expect(existsSync(join(FOUNDATION, 'packFilesystemHost.ts'))).toBeTrue();
-        expect(existsSync(join(FOUNDATION, 'packGitHost.ts'))).toBeTrue();
-        expect(existsSync(join(FOUNDATION, 'packSchemaValidatorsHost.ts'))).toBeTrue();
+        expect(existsSync(join(PACK_DIR, 'packFilesystemHost.ts'))).toBeTrue();
+        expect(existsSync(join(PACK_DIR, 'packGitHost.ts'))).toBeTrue();
+        expect(existsSync(join(PACK_DIR, 'packSchemaValidatorsHost.ts'))).toBeTrue();
         // The former mixed module no longer exists.
         expect(existsSync(join(FOUNDATION, 'PackConsumerHost.ts'))).toBeFalse();
     });

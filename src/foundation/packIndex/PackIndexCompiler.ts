@@ -15,7 +15,7 @@ import {join} from 'node:path';
 import {WatchtowerError} from '../../contracts/index.js';
 import {packIndexRejection, type PackIndexCompileResult, type PackIndexManifest} from '../../contracts/packIndex.js';
 import type {ConsumedPack} from '../../contracts/pack.js';
-import type {PackFileSystem, PackSchemaValidators} from '../packConsumerPorts.js';
+import type {PackFileSystem, PackSchemaValidators} from '../pack/index.js';
 import {computeSemanticRoot, logicalExportCounts, openDerivedStorage} from '../storage/index.js';
 import type {DerivedStorage, DerivedStoreWriter, TypedRow} from '../storage/index.js';
 import {acquirePointerLock} from './packIndexPointerLock.js';

@@ -1,6 +1,6 @@
 import {join} from 'node:path';
-import {canonicalJson} from './schemaComposition/jsonCanonicalizer.js';
-import {hasDuplicateJsonObjectKey} from './schemaComposition/jsonDuplicateKeyDetector.js';
+import {canonicalJson} from '../schemaComposition/jsonCanonicalizer.js';
+import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
 import {computeDocumentDigest, computeSealId, fileDigest, sortSealedFiles} from './PackSeal.js';
 import {validateAcceptance, validateReferences} from './PackAcceptance.js';
 import {asArray, asJson, asString, buildConsumedPack, isRecord, isSafeRelativePath, readSealedFiles} from './packJsonReaders.js';
@@ -13,7 +13,7 @@ import {
     type PackRejection,
     type PackRootBinding
 } from './packConsumerPorts.js';
-import type {PackConsumerResult, SealedFile} from '../contracts/pack.js';
+import type {PackConsumerResult, SealedFile} from '../../contracts/pack.js';
 
 export type {
     PackAcceptanceEvidence,

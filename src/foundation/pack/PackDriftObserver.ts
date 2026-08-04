@@ -16,7 +16,7 @@ import type {
     SealedFileObservation,
     Sha256Digest,
     SourceBaselineObservation
-} from '../contracts/pack.js';
+} from '../../contracts/pack.js';
 
 const LOCK_FILE = 'implementation-pack.lock.json';
 

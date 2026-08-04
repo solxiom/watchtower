@@ -1,7 +1,7 @@
 import {readdirSync, realpathSync} from 'node:fs';
 import {basename, dirname, join} from 'node:path';
 import {BasicStorage, DefaultDisk} from '@nirvana/commons/foundation/storage/basic';
-import {authorizePath} from './paths/index.js';
+import {authorizePath} from '../paths/index.js';
 import type {PackEntry, PackFileSystem, PathAuthorization, PathKind} from './packConsumerPorts.js';
 
 /**

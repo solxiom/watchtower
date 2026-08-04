@@ -1,4 +1,4 @@
-import {isRfc3339DateTime, isUuid} from '../../src/foundation/packSchemaFormats.js';
+import {isRfc3339DateTime, isUuid} from '../../src/foundation/pack/index.js';
 
 describe('packSchemaFormats — normative uuid format', function () {
     it('accepts a canonical UUID and rejects malformed values', function () {

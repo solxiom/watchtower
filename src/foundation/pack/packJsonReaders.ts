@@ -1,4 +1,4 @@
-import type {JsonValue} from './schemaComposition/schemaCompositionContracts.js';
+import type {JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
 import type {
     ConsumedPack,
     PackAcceptedInput,
@@ -6,7 +6,7 @@ import type {
     PackSourceBaseline,
     SealedFile,
     Sha256Digest
-} from '../contracts/pack.js';
+} from '../../contracts/pack.js';
 
 const BACKSLASH = 0x5c;
 const DEL = 0x7f;

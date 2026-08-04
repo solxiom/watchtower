@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
-import {isJsonValue, semanticDigest} from './schemaComposition/jsonCanonicalizer.js';
-import {resourcePathsOverlap} from './bindings/index.js';
-import type {JsonValue} from './schemaComposition/schemaCompositionContracts.js';
+import {isJsonValue, semanticDigest} from '../schemaComposition/jsonCanonicalizer.js';
+import {resourcePathsOverlap} from '../bindings/index.js';
+import type {JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
 import type {
     DriftObservations,
     PackClaimPath,
@@ -9,7 +9,7 @@ import type {
     PackDriftResult,
     SealedFile,
     Sha256Digest
-} from '../contracts/pack.js';
+} from '../../contracts/pack.js';
 
 /** The exact, informational-metadata-free inputs of the RFC 8785 seal (§3.4). */
 export interface SealInput {

@@ -7,11 +7,11 @@
  * bytes: `unknown` in, a closed rejection or a validated document out.
  */
 import {join} from 'node:path';
-import {computeDocumentDigest, fileDigest} from '../PackSeal.js';
+import {computeDocumentDigest, fileDigest} from '../pack/index.js';
 import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
 import {isRecord, readManifestDocument, type PackIndexManifestDocument} from './packIndexJsonReaders.js';
 import {packIndexRejection, type PackIndexRejection} from '../../contracts/packIndex.js';
-import type {PackFileSystem, PackSchemaValidators} from '../packConsumerPorts.js';
+import type {PackFileSystem, PackSchemaValidators} from '../pack/index.js';
 import type {ConsumedPack} from '../../contracts/pack.js';
 
 const MANIFEST_FILE = 'implementation-pack.json';

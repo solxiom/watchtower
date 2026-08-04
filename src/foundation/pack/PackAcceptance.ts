@@ -1,9 +1,9 @@
 import {computeDocumentDigest} from './PackSeal.js';
 import {asArray, asString, isRecord} from './packJsonReaders.js';
-import {isJsonObject} from './schemaComposition/jsonCanonicalizer.js';
-import {StatusPackAcceptanceAuthority} from './status/index.js';
-import {projectPackRecords} from './status/index.js';
-import type {WorkerEventRecord} from '../contracts/events.js';
+import {isJsonObject} from '../schemaComposition/jsonCanonicalizer.js';
+import {StatusPackAcceptanceAuthority} from '../status/index.js';
+import {projectPackRecords} from '../status/index.js';
+import type {WorkerEventRecord} from '../../contracts/events.js';
 import {
     packRejection,
     packRepoPath,
@@ -14,7 +14,7 @@ import {
     type PackRootBinding,
     type PackSessionIdentity
 } from './packConsumerPorts.js';
-import type {SealedFile} from '../contracts/pack.js';
+import type {SealedFile} from '../../contracts/pack.js';
 const LOCK_FILE = 'implementation-pack.lock.json';
 const ACCEPTANCE_FILE = 'pack-acceptance.json';
 

@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-2 complete; FM-3 in progress (FR-18 ✅)**
+Status: **Active — FM-3 in progress (FR-18 … FR-19 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **19 / 32** work units accepted |
-| Baseline root files | 28 (target: 0) |
+| Score | **20 / 32** work units accepted |
+| Baseline root files | 18 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -32,7 +32,7 @@ Last updated: 2026-08-04
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
 | FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
 | FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
-| FM-3 | L4 domain extraction | REF-01 | ⏳ In progress | FR-18 ✅ |
+| FM-3 | L4 domain extraction | REF-01 | ⏳ In progress | FR-18 … FR-19 ✅ |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
 
 ---
