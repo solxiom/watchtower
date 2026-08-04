@@ -93,9 +93,9 @@ depend on the ports above; they do not collect inside `taskRuntime`.
 
 The complete target domain tree, three-tier barrel model, dependency layers,
 and public export contract are normative in
-[foundation-module-architecture.md](foundation-module-architecture.md).
+[architecture/foundation-module-architecture.md](architecture/foundation-module-architecture.md).
 Phased migration and `REF-01`/`REF-02` remediation batches are tracked in
-[implementation/foundation-layout-remediation.md](implementation/foundation-layout-remediation.md).
+[architecture/foundation-layout-remediation.md](architecture/foundation-layout-remediation.md).
 
 The task source should be divided by capability:
 

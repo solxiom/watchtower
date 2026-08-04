@@ -210,8 +210,8 @@ remediation plan.
   not by lazy imports or runtime indirection.
 
 Foundation module layout, domain barrels, and the phased remediation plan live
-in [foundation-module-architecture.md](../spec/foundation-module-architecture.md)
-and [foundation-layout-remediation.md](../spec/implementation/foundation-layout-remediation.md).
+in [architecture/foundation-module-architecture.md](../spec/architecture/foundation-module-architecture.md)
+and [architecture/foundation-layout-remediation.md](../spec/architecture/foundation-layout-remediation.md).
 
 ## 7. Contracts, errors, and state
 

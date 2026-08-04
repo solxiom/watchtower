@@ -12,16 +12,16 @@ depend on.
 
 Execution — current-state diagnosis, file moves, phased migration, and
 `REF-01`/`REF-02` remediation batches — lives in
-[foundation-layout-remediation.md](implementation/foundation-layout-remediation.md).
+[foundation-layout-remediation.md](foundation-layout-remediation.md).
 
 It supplements, but does not replace:
 
-- [architecture.md](architecture.md) — product separation of concerns;
-- [nirvana-integration-architecture.md](nirvana-integration-architecture.md) —
+- [architecture.md](../architecture.md) — product separation of concerns;
+- [nirvana-integration-architecture.md](../nirvana-integration-architecture.md) —
   NVB/runtime facade boundaries and the §2.1 module ownership sketch;
-- [../development/engineering-and-review-standard.md](../development/engineering-and-review-standard.md) —
+- [engineering-and-review-standard.md](../../development/engineering-and-review-standard.md) —
   layer ownership, size limits, barrel rules, naming; and
-- [../../AGENTS.md](../../AGENTS.md) — repository layout conventions.
+- [AGENTS.md](../../../AGENTS.md) — repository layout conventions.
 
 Normative product behavior is unchanged. Conforming to this architecture is a
 **structural requirement** for new foundation code. Remediation of the legacy
@@ -490,7 +490,7 @@ export {
 5. No circular dependencies — break cycles by moving shared types to `contracts/`.
 
 Enforcement lives in `spec/foundation/foundationDependencyArchitecture.spec.ts`
-(see [remediation plan](implementation/foundation-layout-remediation.md)).
+(see [remediation plan](foundation-layout-remediation.md)).
 
 ---
 
@@ -671,11 +671,11 @@ spec/foundation/taskRuntimeArchitecture.spec.ts
 
 | Document | Role |
 |----------|------|
-| [foundation-layout-remediation.md](implementation/foundation-layout-remediation.md) | Current diagnosis, file moves, phases, REF batches |
-| [architecture.md](architecture.md) | Product separations |
-| [nirvana-integration-architecture.md](nirvana-integration-architecture.md) | NVB/runtime facade targets |
-| [engineering-and-review-standard.md](../development/engineering-and-review-standard.md) | Mandatory gates |
-| [AGENTS.md](../../AGENTS.md) | Repository conventions |
+| [foundation-layout-remediation.md](foundation-layout-remediation.md) | Current diagnosis, file moves, phases, REF batches |
+| [architecture.md](../architecture.md) | Product separations |
+| [nirvana-integration-architecture.md](../nirvana-integration-architecture.md) | NVB/runtime facade targets |
+| [engineering-and-review-standard.md](../../development/engineering-and-review-standard.md) | Mandatory gates |
+| [AGENTS.md](../../../AGENTS.md) | Repository conventions |
 
 ### Pack traceability
 
