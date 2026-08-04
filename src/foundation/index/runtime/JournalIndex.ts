@@ -1,16 +1,19 @@
 import {dirname} from 'node:path';
 import {openDerivedStorage, type DerivedStoreWriter} from '../../storage/index.js';
-import type {CorruptionReport, DurableEvent, DurableEventPage, JournalCheckpoint} from '../../../contracts/runtimeJournal.js';
+import type {CorruptionReport, DurableEvent, JournalCheckpoint} from '../../../contracts/runtimeJournal.js';
 import {JournalError} from '../../../contracts/runtimeJournal.js';
 import {JOURNAL_INDEX_SCHEMA, openJournalStore, type JournalStore} from './JournalWal.js';
-import {asNumber, asString, checkpointFromRow, checkpointRow, eventFromRow, rowFor} from './journalIndexRows.js';
-import {isDurableEvent, parseJournal, type ParsedJournal} from './journalIndexSource.js';
+import {checkpointFromRow, rowFor} from './journalIndexRows.js';
+import {parseJournal, type ParsedJournal} from './journalIndexSource.js';
+import {appendEvents} from './journalIndexAppend.js';
+import {
+    countEventTypes, countEvents, readEvent, readEvents, readEventsByColumn, readLatestEvent,
+    readRecentEvents, type JournalIndexReadContext, verifyCheckpoint
+} from './journalIndexReads.js';
 
-const MAX_PAGE = 200;
 const CHECKPOINT_ID = 1;
 
 export class JournalIndex {
-    private readonly rows = new Map<number, {event: DurableEvent; offset: number}>();
     private checkpoint: JournalCheckpoint = {
         lastSequence: -1, lastEventId: null, lastByteOffset: 0, journalIdentityHash: null,
         journalByteLength: 0, projectionRevision: 0, createdAt: null
@@ -22,7 +25,16 @@ export class JournalIndex {
 
     static async open(dbPath: string, journalPath: string): Promise<JournalIndex> {
         const index = new JournalIndex(dbPath, journalPath, await openJournalStore(dbPath));
-        await index.load();
+        try {
+            await index.load();
+        } catch (error) {
+            if (error instanceof JournalError && error.reason === 'JOURNAL_INDEX_CORRUPT') {
+                index.unusable = true;
+            } else {
+                await index.journalStore.close().catch(() => undefined);
+                throw error;
+            }
+        }
         return index;
     }
 
@@ -30,10 +42,7 @@ export class JournalIndex {
         try {
             const checkpoint = await this.journalStore.database.getByPrimaryKey('journal_checkpoint', CHECKPOINT_ID);
             if (checkpoint !== undefined) this.checkpoint = checkpointFromRow(checkpoint);
-            const rows = await this.journalStore.database.list('journal_event');
-            for (const row of rows) this.rows.set(asNumber(row.sequence), {event: eventFromRow(row), offset: asNumber(row.byte_offset)});
         } catch (error) {
-            await this.journalStore.close().catch(() => undefined);
             if (error instanceof JournalError) throw error;
             throw new JournalError('JOURNAL_INDEX_CORRUPT', this.journalPath, error instanceof Error ? error.message : String(error));
         }
@@ -44,131 +53,118 @@ export class JournalIndex {
         if (this.rebuildRequired) throw new JournalError('JOURNAL_REBUILD_REQUIRED', this.journalPath, 'runtime journal index requires a staged rebuild');
     }
 
+    private poison(details: readonly string[]): never {
+        this.unusable = true;
+        throw new JournalError('JOURNAL_INDEX_CORRUPT', this.journalPath, details.join('; ') || 'runtime journal index failed integrity verification');
+    }
+
+    private async ensureHealthy(): Promise<void> {
+        this.assertUsable();
+        try {
+            const report = await this.journalStore.database.integrityCheck();
+            if (!report.ok) this.poison(report.details);
+        } catch (error) {
+            if (error instanceof JournalError) throw error;
+            this.poison([error instanceof Error ? error.message : String(error)]);
+        }
+    }
+
+    private async storeCall<T>(operation: () => Promise<T>): Promise<T> {
+        await this.ensureHealthy();
+        try {
+            return await operation();
+        } catch (error) {
+            if (error instanceof JournalError) {
+                if (error.reason === 'JOURNAL_INDEX_CORRUPT') this.unusable = true;
+                throw error;
+            }
+            this.poison([error instanceof Error ? error.message : String(error)]);
+        }
+    }
+
     private async ensureCheckpoint(): Promise<void> {
-        if (await this.journalStore.database.getByPrimaryKey('journal_checkpoint', CHECKPOINT_ID) !== undefined) return;
-        await this.journalStore.database.insert('journal_checkpoint', {
-            id: CHECKPOINT_ID, last_sequence: null, last_event_id: null, last_byte_offset: 0,
-            journal_identity_hash: null, journal_byte_length: 0, projection_revision: 0, created_at: null
+        await this.storeCall(async () => {
+            if (await this.journalStore.database.getByPrimaryKey('journal_checkpoint', CHECKPOINT_ID) !== undefined) return;
+            await this.journalStore.database.insert('journal_checkpoint', {
+                id: CHECKPOINT_ID, last_sequence: null, last_event_id: null, last_byte_offset: 0,
+                journal_identity_hash: null, journal_byte_length: 0, projection_revision: 0, created_at: null
+            });
         });
     }
 
-    private readAppendCandidates(events: readonly DurableEvent[], offsets: readonly number[]): {
-        readonly parsed: ParsedJournal;
-        readonly fresh: readonly DurableEvent[];
-        readonly freshOffsets: readonly number[];
-    } {
-        let parsed: ParsedJournal;
-        try {
-            parsed = parseJournal(this.journalPath);
-        } catch (error) {
-            if (error instanceof JournalError && error.reason === 'JOURNAL_SEQUENCE_GAP') this.rebuildRequired = true;
-            throw error;
-        }
-        if (parsed.partialTail) throw new JournalError('JOURNAL_CORRUPT_TAIL', this.journalPath, 'the authoritative journal has an incomplete final line');
-        const fresh: DurableEvent[] = [], freshOffsets: number[] = [];
-        for (let index = 0; index < events.length; index += 1) {
-            const event = events[index];
-            if (!isDurableEvent(event)) throw new JournalError('JOURNAL_INVALID_RECORD', this.journalPath, `event ${index} is invalid`);
-            if (event.sequence <= this.checkpoint.lastSequence) continue;
-            const authoritative = parsed.events[event.sequence];
-            if (authoritative === undefined || authoritative.eventId !== event.eventId || JSON.stringify(authoritative) !== JSON.stringify(event)) {
-                throw new JournalError('JOURNAL_CHECKPOINT_MISMATCH', this.journalPath, `event ${event.sequence} does not match the authoritative journal`);
-            }
-            const expected = this.checkpoint.lastSequence + fresh.length + 1;
-            if (event.sequence !== expected) {
-                this.rebuildRequired = true;
-                throw new JournalError('JOURNAL_SEQUENCE_GAP', this.journalPath, `expected sequence ${expected} but found ${event.sequence}`);
-            }
-            fresh.push(event); freshOffsets.push(offsets[index]);
-        }
-        return {parsed, fresh, freshOffsets};
+    private readContext(): JournalIndexReadContext {
+        return {
+            database: this.journalStore.database, journalPath: this.journalPath,
+            checkpoint: () => this.checkpoint, ensureHealthy: () => this.ensureHealthy(),
+            storeCall: (operation) => this.storeCall(operation), markUnusable: () => { this.unusable = true; }
+        };
+    }
+
+    private appendContext() {
+        return {
+            database: this.journalStore.database, journalPath: () => this.journalPath,
+            checkpoint: () => this.checkpoint, ensureHealthy: () => this.ensureHealthy(),
+            ensureCheckpoint: () => this.ensureCheckpoint(), storeCall: <T>(operation: () => Promise<T>) => this.storeCall(operation),
+            requireRebuild: () => { this.rebuildRequired = true; }, setCheckpoint: (value: JournalCheckpoint) => { this.checkpoint = value; }
+        };
     }
 
     async appendEvents(events: readonly DurableEvent[], offsets: readonly number[]): Promise<void> {
-        this.assertUsable();
-        if (events.length !== offsets.length) throw new JournalError('JOURNAL_INVALID_RECORD', this.journalPath, 'event and offset counts differ');
-        const {parsed, fresh, freshOffsets} = this.readAppendCandidates(events, offsets);
-        await this.ensureCheckpoint();
-        if (fresh.length === 0) return;
-        const final = fresh[fresh.length - 1];
-        const finalOffset = freshOffsets[freshOffsets.length - 1];
-        const finalLength = parsed.lengths[final.sequence] ?? Buffer.byteLength(JSON.stringify(final)) + 1;
-        const nextCheckpoint: JournalCheckpoint = {
-            lastSequence: final.sequence, lastEventId: final.eventId, lastByteOffset: finalOffset + finalLength,
-            journalIdentityHash: parsed.identityHash, journalByteLength: parsed.byteLength,
-            projectionRevision: this.checkpoint.projectionRevision + 1, createdAt: final.at
-        };
-        await this.journalStore.database.transaction(async (tx) => {
-            for (let index = 0; index < fresh.length; index += 1) {
-                await tx.insert('journal_event', rowFor(fresh[index], freshOffsets[index], parsed.lengths[fresh[index].sequence] ?? finalLength));
-            }
-            await tx.updateByPrimaryKey('journal_checkpoint', CHECKPOINT_ID, checkpointRow(nextCheckpoint));
-        });
-        for (let index = 0; index < fresh.length; index += 1) this.rows.set(fresh[index].sequence, {event: fresh[index], offset: freshOffsets[index]});
-        this.checkpoint = nextCheckpoint;
+        return appendEvents(this.appendContext(), events, offsets);
     }
 
     async readEvent(sequence: number): Promise<DurableEvent | null> {
-        this.assertUsable();
-        return this.rows.get(sequence)?.event ?? null;
+        return readEvent(this.readContext(), sequence);
     }
 
-    async readEvents(fromSequence: number, limit: number): Promise<DurableEventPage> {
-        this.assertUsable();
-        if (!Number.isSafeInteger(fromSequence) || fromSequence < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > MAX_PAGE) {
-            throw new JournalError('JOURNAL_INVALID_RECORD', this.journalPath, `bounded page requires sequence >= 0 and limit in 1..${MAX_PAGE}`);
-        }
-        const items: DurableEvent[] = [];
-        for (let sequence = fromSequence; sequence <= this.checkpoint.lastSequence && items.length < limit; sequence += 1) {
-            const item = this.rows.get(sequence);
-            if (item) items.push(item.event);
-        }
-        const next = items.length === limit ? items[items.length - 1].sequence + 1 : null;
-        return {items, fromSequence, limit, nextSequence: next};
+    async readEvents(fromSequence: number, limit: number) {
+        return readEvents(this.readContext(), fromSequence, limit);
     }
 
-    async readLatestEvent(): Promise<{event: DurableEvent; offset: number} | null> {
-        this.assertUsable();
-        return this.rows.get(this.checkpoint.lastSequence) ?? null;
+    async readEventsByColumn(column: 'batch_id' | 'cycle_id', value: string, limit?: number) {
+        return readEventsByColumn(this.readContext(), column, value, limit);
     }
 
-    async latestSequence(): Promise<number> { this.assertUsable(); return this.checkpoint.lastSequence; }
-    async getCheckpoint(): Promise<JournalCheckpoint> { this.assertUsable(); return this.checkpoint; }
-
-    async verifyCheckpoint(): Promise<boolean> {
-        this.assertUsable();
-        const parsed = parseJournal(this.journalPath);
-        if (parsed.partialTail || parsed.events.length - 1 !== this.checkpoint.lastSequence) return false;
-        if (parsed.identityHash !== this.checkpoint.journalIdentityHash || parsed.byteLength !== this.checkpoint.journalByteLength) return false;
-        const latest = parsed.events[parsed.events.length - 1];
-        if (latest !== undefined && (latest.eventId !== this.checkpoint.lastEventId || this.checkpoint.lastByteOffset !== parsed.byteLength)) return false;
-        for (const event of parsed.events) {
-            const indexed = this.rows.get(event.sequence)?.event;
-            if (indexed === undefined || JSON.stringify(indexed) !== JSON.stringify(event)) return false;
-        }
-        return true;
+    async readRecentEvents(limit: number) {
+        return readRecentEvents(this.readContext(), limit);
     }
+
+    async countEvents(): Promise<number> { return countEvents(this.readContext()); }
+
+    async countEventTypes() { return countEventTypes(this.readContext()); }
+
+    async readLatestEvent() { return readLatestEvent(this.readContext()); }
+
+    async latestSequence(): Promise<number> { await this.ensureHealthy(); return this.checkpoint.lastSequence; }
+    async getCheckpoint(): Promise<JournalCheckpoint> { await this.ensureHealthy(); return this.checkpoint; }
+
+    async verifyCheckpoint(): Promise<boolean> { return verifyCheckpoint(this.readContext()); }
 
     async detectCorruption(): Promise<CorruptionReport> {
         if (this.unusable) return {ok: false, usable: false, details: ['index was previously marked unusable']};
-        const report = await this.journalStore.database.integrityCheck();
-        if (!report.ok) {
+        try {
+            const report = await this.journalStore.database.integrityCheck();
+            if (!report.ok) {
+                this.unusable = true;
+                return {ok: false, usable: false, details: report.details};
+            }
+            return {ok: true, usable: true, details: []};
+        } catch (error) {
             this.unusable = true;
-            return {ok: false, usable: false, details: report.details};
+            return {ok: false, usable: false, details: [error instanceof Error ? error.message : String(error)]};
         }
-        return {ok: true, usable: true, details: []};
     }
 
-    async rebuildIndex(journalPath = this.journalPath): Promise<void> {
+    async rebuildIndex(journalPath = this.journalPath, lockTimeoutMs?: number): Promise<void> {
         const parsed = parseJournal(journalPath);
         await this.journalStore.close();
         const rebuilt = await openDerivedStorage(dirname(this.dbPath)).rebuild(
-            'runtime', JOURNAL_INDEX_SCHEMA, async (writer) => this.populateRebuild(writer, parsed)
+            'runtime', JOURNAL_INDEX_SCHEMA, async (writer) => this.populateRebuild(writer, parsed), lockTimeoutMs
         );
         if (!rebuilt) throw new JournalError('JOURNAL_STORE_UNAVAILABLE', journalPath, 'staged rebuild did not publish');
         this.journalPath = journalPath;
         this.journalStore = await openJournalStore(this.dbPath);
-        this.rows.clear(); this.checkpoint = {
+        this.checkpoint = {
             lastSequence: -1, lastEventId: null, lastByteOffset: 0, journalIdentityHash: null,
             journalByteLength: 0, projectionRevision: 0, createdAt: null
         };

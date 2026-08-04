@@ -16,7 +16,12 @@ export const JOURNAL_INDEX_SCHEMA: DerivedStoreSchema = [
             {name: 'byte_offset', type: 'integer', notNull: true}, {name: 'byte_length', type: 'integer', notNull: true},
             {name: 'created_at', type: 'text', notNull: true}
         ],
-        primaryKey: ['sequence']
+        primaryKey: ['sequence'],
+        indexes: [
+            {name: 'journal_event_batch_sequence_idx', columns: ['batch_id', 'sequence']},
+            {name: 'journal_event_cycle_sequence_idx', columns: ['cycle_id', 'sequence']},
+            {name: 'journal_event_type_sequence_idx', columns: ['event_type', 'sequence']}
+        ]
     },
     {
         name: 'journal_checkpoint',
@@ -42,6 +47,14 @@ function validateDatabasePath(dbPath: string): void {
     }
 }
 
+function quarantinedStore(dbPath: string, details: string): JournalStore {
+    const fail = async (): Promise<never> => {
+        throw new JournalError('JOURNAL_INDEX_CORRUPT', dbPath, details);
+    };
+    const database = new Proxy({} as DerivedStore, {get: () => fail});
+    return {database, checkpointWAL: async () => undefined, close: async () => undefined};
+}
+
 /** Opens the one mutable runtime store with WAL readers and one typed writer. */
 export async function openJournalStore(dbPath: string): Promise<JournalStore> {
     validateDatabasePath(dbPath);
@@ -49,13 +62,24 @@ export async function openJournalStore(dbPath: string): Promise<JournalStore> {
         const database = await openDerivedStorage(dirname(dbPath)).open(
             'runtime', JOURNAL_INDEX_SCHEMA, {create: !existsSync(dbPath)}
         );
-        const diagnostics = await database.diagnostics();
+        const store = {database, checkpointWAL: () => database.checkpoint(), close: () => database.close()};
+        let diagnostics;
+        try {
+            diagnostics = await database.diagnostics();
+        } catch (error) {
+            const code = (error as {code?: string}).code;
+            const message = error instanceof Error ? error.message : String(error);
+            if (code === 'ERR_INTEGRITY_FAILURE' || code === 'DB_CORRUPT' || message.includes('DB_CORRUPT')) return store;
+            throw error;
+        }
         if (diagnostics.journalMode.toLowerCase() !== 'wal' || !diagnostics.foreignKeys || diagnostics.busyTimeoutMs < 5000) {
             await database.close();
             throw new JournalError('JOURNAL_STORE_UNAVAILABLE', dbPath, 'runtime SQLite store did not open with WAL, foreign keys, and bounded busy handling');
         }
-        return {database, checkpointWAL: () => database.checkpoint(), close: () => database.close()};
+        return store;
     } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        if (message.includes('DB_CORRUPT')) return quarantinedStore(dbPath, message);
         if (error instanceof JournalError) throw error;
         throw new JournalError('JOURNAL_STORE_UNAVAILABLE', dbPath, error instanceof Error ? error.message : String(error));
     }

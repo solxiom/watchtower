@@ -6,8 +6,8 @@
  * from the capsule barrel.
  */
 import {readRow} from './sqliteRowCodec.js';
-import {renderCount, renderSelectAll, renderSelectByPrimaryKey} from './sqliteSchemaSql.js';
-import type {IntegrityReport, SqliteValue, StoreDiagnostics, TableDefinition, TypedRow} from './sqlitePorts.js';
+import {renderCount, renderGroupedCount, renderSelectAll, renderSelectByColumn, renderSelectByPrimaryKey, renderSelectFrom, renderSelectRecent} from './sqliteSchemaSql.js';
+import type {GroupedCount, IntegrityReport, SqliteValue, StoreDiagnostics, TableDefinition, TypedRow} from './sqlitePorts.js';
 
 export type SqlRunner = <T extends Record<string, unknown>>(sql: string, params: readonly SqliteValue[]) => Promise<T[]>;
 
@@ -24,6 +24,36 @@ export async function selectByPrimaryKey(
 export async function selectAll(run: SqlRunner, table: TableDefinition): Promise<readonly TypedRow[]> {
     const rows = await run(renderSelectAll(table), []);
     return rows.map(readRow);
+}
+
+function declaredColumn(table: TableDefinition, column: string): string {
+    if (!table.columns.some((item) => item.name === column)) throw new TypeError(`Undeclared SQLite column rejected: ${table.name}.${column}`);
+    return column;
+}
+
+function boundedLimit(limit: number): number {
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 201) throw new TypeError('Typed derived-store reads require a limit in 1..201');
+    return limit;
+}
+
+export async function selectByColumn(run: SqlRunner, table: TableDefinition, column: string, value: SqliteValue, limit: number): Promise<readonly TypedRow[]> {
+    const rows = await run(renderSelectByColumn(table, declaredColumn(table, column), false), [value, boundedLimit(limit)]);
+    return rows.map(readRow);
+}
+
+export async function selectFrom(run: SqlRunner, table: TableDefinition, column: string, fromInclusive: SqliteValue, limit: number): Promise<readonly TypedRow[]> {
+    const rows = await run(renderSelectFrom(table, declaredColumn(table, column)), [fromInclusive, boundedLimit(limit)]);
+    return rows.map(readRow);
+}
+
+export async function selectRecent(run: SqlRunner, table: TableDefinition, column: string, limit: number): Promise<readonly TypedRow[]> {
+    const rows = await run(renderSelectRecent(table, declaredColumn(table, column)), [boundedLimit(limit)]);
+    return rows.map(readRow).reverse();
+}
+
+export async function groupedCounts(run: SqlRunner, table: TableDefinition, column: string): Promise<readonly GroupedCount[]> {
+    const rows = await run<{value: SqliteValue; count: bigint | number}>(renderGroupedCount(table, declaredColumn(table, column)), []);
+    return rows.map((row) => ({value: row.value, count: Number(row.count)}));
 }
 
 export async function countRows(run: SqlRunner, table: TableDefinition): Promise<number> {
