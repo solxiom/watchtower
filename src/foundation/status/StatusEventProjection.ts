@@ -1,5 +1,5 @@
 import type {StatusEventView, StatusWarningCode, WorkerEventRecord} from '../../contracts/index.js';
-import type {RuntimeSessionNames} from '../runtimeObservations.js';
+import type {RuntimeSessionNames} from '../observation/index.js';
 import type {StatusSessionObservation} from './StatusLiveObserver.js';
 
 const ROLE_TYPES = {

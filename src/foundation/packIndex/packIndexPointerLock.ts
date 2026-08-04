@@ -36,7 +36,7 @@ import {
     currentProcessIdentity,
     isValidCommandIdentity,
     isValidProcessStartIdentity
-} from '../process/processIdentity.js';
+} from '../observation/index.js';
 import {packIndexRejection, type PackIndexRejection} from '../../contracts/packIndex.js';
 
 const LOCK_FILE = '.current.lock';

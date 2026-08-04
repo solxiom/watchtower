@@ -2,7 +2,7 @@ import {spawnSync} from 'node:child_process';
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {WatchtowerError} from '../../src/contracts/index.js';
-import {readProcessStartIdentity} from '../../src/foundation/process/processIdentity.js';
+import {readProcessStartIdentity} from '../../src/foundation/observation/index.js';
 import {acquireWriteLock} from '../../src/foundation/storage/sqliteWriteLock.js';
 import {createLockRecord, readLockRecord, tryCreateLockRecord} from '../../src/foundation/storage/writeLockRecord.js';
 import {GRAPH_SCHEMA, makeWorkDir, rejectionCode, removeWorkDir, storageAt} from './support/storeFixtures.js';

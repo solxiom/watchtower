@@ -34,7 +34,7 @@ import {
     currentProcessIdentity,
     isValidCommandIdentity,
     isValidProcessStartIdentity
-} from '../process/processIdentity.js';
+} from '../observation/index.js';
 
 /** The five distinct §11 fields carried by every lock and sentinel record. */
 export interface LockRecord {

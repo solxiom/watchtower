@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 in progress (FR-18 … FR-20 ✅)**
+Status: **Active — FM-3 in progress (FR-20 … FR-21 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **20 / 32** work units accepted |
-| Baseline root files | 18 (target: 0) |
+| Score | **21 / 32** work units accepted |
+| Baseline root files | 12 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -78,8 +78,8 @@ Last updated: 2026-08-04
 | ID | Domain | State | Acceptance proof |
 |----|--------|-------|------------------|
 | FR-19 | `pack/` | ✅ Accepted | 10 modules + barrel; `packArchitecture.spec.ts`; pack specs green; `nvb test` green |
-| FR-20 | `upgrade/` | ❌ Pending | 6 modules; arch gate |
-| FR-21 | `observation/` | ❌ Pending | 5 modules; `process/` merged |
+| FR-20 | `upgrade/` | ✅ Accepted | 6 modules + barrel; `upgradeArchitecture.spec.ts`; upgrade specs green; `nvb test` green |
+| FR-21 | `observation/` | ✅ Accepted | 5 modules + barrel; `runtimeObservations.spec.ts` green; `nvb test` green |
 | FR-22 | `lifecycle/` | ❌ Pending | 2 modules; barrel |
 | FR-23 | `runtimeDistribution/` | ❌ Pending | Re-export barrel for catalog + managed assets |
 | FR-24 | FM-3 integration | ❌ Pending | Root file count = 1; `nvb test` |
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 20 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 21 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -120,13 +120,13 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `presentation/` | L1 | FR-25 | ❌ | ❌ | Pending |
 | `discovery/` | L2 | FR-14 | ✅ | ✅ | Accepted |
 | `bindings/` | L2 | FR-15 | ✅ | ✅ | Accepted |
-| `observation/` | L2 | FR-21 | ❌ | ❌ | Pending |
+| `observation/` | L2 | FR-21 | ✅ | ✅ | Accepted |
 | `read/` | L3 | FR-16 | ✅ | ✅ | Accepted |
 | `status/` | L3 | FR-17 | ✅ | ✅ | Accepted |
 | `init/` | L4 | FR-18 | ✅ | ✅ | Accepted |
 | `lifecycle/` | L4 | FR-22 | ❌ | ❌ | Pending |
 | `pack/` | L4 | FR-19 | ✅ | ✅ | Accepted |
-| `upgrade/` | L4 | FR-20 | ❌ | ❌ | Pending |
+| `upgrade/` | L4 | FR-20 | ✅ | ✅ | Accepted |
 | `runtimeDistribution/` | L4 | FR-23 | ❌ | ❌ | Pending |
 | `laneStore/` | L5 | FR-03 | ✅ | ✅ | Accepted |
 | `transactionalWriter/` | L5 | FR-04 | ✅ | ✅ | Accepted |
@@ -160,7 +160,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `statusArchitecture.spec.ts` | FR-17 | ✅ Accepted |
 | `initArchitecture.spec.ts` | FR-18 | ✅ Accepted |
 | `packArchitecture.spec.ts` | FR-19 | ✅ Accepted |
-| `upgradeArchitecture.spec.ts` | FR-20 | ❌ Not created |
+| `upgradeArchitecture.spec.ts` | FR-20 | ✅ Accepted |
 | `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — no path changes required |
 | `managedAssetsArchitecture.spec.ts` | FR-05 | ✅ Exists — update paths in FR-05 |
 | `indexQueryArchitecture.spec.ts` | FR-08, FR-09 | ✅ Accepted — paths updated |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 18 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 12 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

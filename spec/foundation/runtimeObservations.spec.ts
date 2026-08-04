@@ -1,10 +1,10 @@
-import {NirvanaTmuxObserver} from '../../src/foundation/NirvanaTmuxObserver.js';
-import {observeHeartbeat} from '../../src/foundation/heartbeatObservation.js';
-import {latestWorkerEvents, observeRuntimeSessions} from '../../src/foundation/runtimeObservations.js';
+import {NirvanaTmuxObserver} from '../../src/foundation/observation/index.js';
+import {observeHeartbeat} from '../../src/foundation/observation/index.js';
+import {latestWorkerEvents, observeRuntimeSessions} from '../../src/foundation/observation/index.js';
 import {chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
-import type {TmuxCommandRequest} from '../../src/foundation/NirvanaTmuxObserver.js';
+import type {TmuxCommandRequest} from '../../src/foundation/observation/index.js';
 import type {WorkerEventRecord} from '../../src/contracts/events.js';
 
 function event(role: 'implementer' | 'reviewer', sequence: number): WorkerEventRecord {

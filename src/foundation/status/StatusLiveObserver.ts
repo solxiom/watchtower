@@ -1,10 +1,10 @@
 import type {StatusWarningCode} from '../../contracts/index.js';
 import {buildLaneFilePath} from '../paths/index.js';
-import {observeHeartbeat, type HeartbeatObservation} from '../heartbeatObservation.js';
+import {observeHeartbeat, type HeartbeatObservation} from '../observation/index.js';
 import {nodeLaneDiscoveryFileSystem, type LaneDiscoveryFileSystem} from '../discovery/index.js';
 import {ContainedLaneReadFileStore, type LaneReadFileStore} from '../read/index.js';
-import {NirvanaTmuxObserver} from '../NirvanaTmuxObserver.js';
-import {observeRuntimeSessions, type RuntimeSessionNames} from '../runtimeObservations.js';
+import {NirvanaTmuxObserver} from '../observation/index.js';
+import {observeRuntimeSessions, type RuntimeSessionNames} from '../observation/index.js';
 
 const MAX_HEARTBEAT_BYTES = 8 * 1024;
 const STALE_HEARTBEAT_MS = 60_000;

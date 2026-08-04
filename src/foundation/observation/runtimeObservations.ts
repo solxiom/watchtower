@@ -1,5 +1,5 @@
-import {latest} from './parsing/index.js';
-import type {WorkerEventRecord, WorkerEventRole} from '../contracts/events.js';
+import {latest} from '../parsing/index.js';
+import type {WorkerEventRecord, WorkerEventRole} from '../../contracts/events.js';
 
 export interface RuntimeSessionNames {
     readonly watcher: string;

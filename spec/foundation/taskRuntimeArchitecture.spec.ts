@@ -3,7 +3,7 @@ import {join, relative, sep} from 'node:path';
 
 const SOURCE_ROOT = join(process.cwd(), 'src');
 const PROCESS_OWNER = join('foundation', 'runtime', 'NirvanaProcessInvoker.ts');
-const TMUX_COMPATIBILITY_LEAF = join('foundation', 'TmuxSessionProcessRunner.ts');
+const TMUX_COMPATIBILITY_LEAF = join('foundation', 'observation', 'TmuxSessionProcessRunner.ts');
 const CHILD_PROCESS_IMPORT = /from\s+['"]node:child_process['"]/;
 const TERMINAL_FACADE_IMPORT = /from\s+['"]@nirvana\/base\/terminal['"]/;
 const NVB_FACADE_IMPORT = /from\s+['"]@nirvana\/commons(?:\/facades|\/foundation\/extra\/nvb)[A-Za-z0-9/._-]*['"]/;

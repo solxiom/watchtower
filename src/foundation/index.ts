@@ -40,12 +40,12 @@ export * from './schemaComposition/index.js';
 export * from './taskCatalogComposition/index.js';
 export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
 export {renderError, renderResult} from './ResultRenderer.js';
-export {latestWorkerEvents, observeRuntimeSessions, parseTmuxSessionNames} from './runtimeObservations.js';
-export type {LatestWorkerEvents, RuntimeSessionNames, RuntimeSessionObservation} from './runtimeObservations.js';
-export {NirvanaTmuxObserver} from './NirvanaTmuxObserver.js';
-export type {NirvanaTmuxObserverOptions, TmuxCommandPort, TmuxCommandRequest} from './NirvanaTmuxObserver.js';
-export {observeHeartbeat} from './heartbeatObservation.js';
-export type {HeartbeatFileReader, HeartbeatObservation, HeartbeatObservationOptions, HeartbeatStatus} from './heartbeatObservation.js';
+export {latestWorkerEvents, observeRuntimeSessions, parseTmuxSessionNames} from './observation/index.js';
+export type {LatestWorkerEvents, RuntimeSessionNames, RuntimeSessionObservation} from './observation/index.js';
+export {NirvanaTmuxObserver} from './observation/index.js';
+export type {NirvanaTmuxObserverOptions, TmuxCommandPort, TmuxCommandRequest} from './observation/index.js';
+export {observeHeartbeat} from './observation/index.js';
+export type {HeartbeatFileReader, HeartbeatObservation, HeartbeatObservationOptions, HeartbeatStatus} from './observation/index.js';
 export {
     discoverHomeLanes, discoverSecondaryLanes, filterRelevantLanes, nodeLaneDiscoveryFileSystem,
     readLaneManifest, readMembershipIndex, resolveLane, selectLane

@@ -8,7 +8,7 @@ import {
     isValidCommandIdentity,
     isValidProcessStartIdentity,
     readProcessStartIdentity
-} from '../../src/foundation/process/processIdentity.js';
+} from '../../src/foundation/observation/index.js';
 
 /**
  * Proof for the focused process-identity adapter that supplies the
