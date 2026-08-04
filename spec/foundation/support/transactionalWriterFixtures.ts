@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
-import {TransactionalWriteError} from '../../../src/foundation/TransactionalWriter.js';
+import {TransactionalWriteError} from '../../../src/foundation/transactionalWriter/index.js';
 import type {LaneLayout} from '../../../src/foundation/laneStore/laneStoreContracts.js';
 import type {TransactionalWriterFileHandle, TransactionalWriterFileSystem} from '../../../src/foundation/transactionalWriter/transactionalWriterFileSystem.js';
 

@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import {buildCoordinatorBaseline, composeLaneLayoutWithCoordinatorBaseline} from '../../src/foundation/CoordinatorBaseline.js';
 import type {KnowledgeProvenancePort} from '../../src/foundation/coordinatorBaseline/coordinatorBaselineContracts.js';
 import {resolveInstalledKnowledgeTag} from '../../src/foundation/coordinatorBaseline/knowledgeProvenanceHost.js';
-import {commitLane, TransactionalWriteError} from '../../src/foundation/TransactionalWriter.js';
+import {commitLane, TransactionalWriteError} from '../../src/foundation/transactionalWriter/index.js';
 import type {LaneLayout} from '../../src/foundation/laneStore/laneStoreContracts.js';
 import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/InitContracts.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';

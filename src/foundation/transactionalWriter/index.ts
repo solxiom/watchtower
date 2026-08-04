@@ -11,15 +11,15 @@
  * `TransactionalWriteError` — see `transactionalWriterContracts.ts`.
  */
 import {dirname, isAbsolute, join, relative, sep} from 'node:path';
-import {createWatchtowerError} from '../contracts/errors.js';
-import {safePathTarget} from './canonicalPaths.js';
-import type {LaneLayout} from './laneStore/laneStoreContracts.js';
-import {stageLaneLayout} from './transactionalWriter/laneStagingWriter.js';
-import {TransactionalWriteError, type WriteResult, type WriteStage} from './transactionalWriter/transactionalWriterContracts.js';
-import {nodeTransactionalWriterFileSystem, type TransactionalWriterFileSystem} from './transactionalWriter/transactionalWriterFileSystem.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import {safePathTarget} from '../canonicalPaths.js';
+import type {LaneLayout} from '../laneStore/laneStoreContracts.js';
+import {stageLaneLayout} from './laneStagingWriter.js';
+import {TransactionalWriteError, type WriteResult, type WriteStage} from './transactionalWriterContracts.js';
+import {nodeTransactionalWriterFileSystem, type TransactionalWriterFileSystem} from './transactionalWriterFileSystem.js';
 
-export type {WriteError, WriteResult, WriteStage} from './transactionalWriter/transactionalWriterContracts.js';
-export {TransactionalWriteError} from './transactionalWriter/transactionalWriterContracts.js';
+export type {WriteError, WriteResult, WriteStage} from './transactionalWriterContracts.js';
+export {TransactionalWriteError} from './transactionalWriterContracts.js';
 
 type PreCommitWriteStage = Extract<WriteStage, 'mkdir' | 'mkdtemp' | 'rename'>;
 
