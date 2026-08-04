@@ -12,12 +12,12 @@
 import {randomUUID} from 'node:crypto';
 import {mkdirSync, rmSync} from 'node:fs';
 import {join} from 'node:path';
-import {WatchtowerError} from '../../contracts/index.js';
-import {packIndexRejection, type PackIndexCompileResult, type PackIndexManifest} from '../../contracts/packIndex.js';
-import type {ConsumedPack} from '../../contracts/pack.js';
-import type {PackFileSystem, PackSchemaValidators} from '../pack/index.js';
-import {computeSemanticRoot, logicalExportCounts, openDerivedStorage} from '../storage/index.js';
-import type {DerivedStorage, DerivedStoreWriter, TypedRow} from '../storage/index.js';
+import {WatchtowerError} from '../../../contracts/index.js';
+import {packIndexRejection, type PackIndexCompileResult, type PackIndexManifest} from '../../../contracts/packIndex.js';
+import type {ConsumedPack} from '../../../contracts/pack.js';
+import type {PackFileSystem, PackSchemaValidators} from '../index.js';
+import {computeSemanticRoot, logicalExportCounts, openDerivedStorage} from '../../storage/index.js';
+import type {DerivedStorage, DerivedStoreWriter, TypedRow} from '../../storage/index.js';
 import {acquirePointerLock} from './packIndexPointerLock.js';
 import {readPackIndexSource, type PackIndexSource} from './packIndexManifestFile.js';
 import {buildPackIndexRows, type PackIndexRows} from './packIndexRowBuilder.js';

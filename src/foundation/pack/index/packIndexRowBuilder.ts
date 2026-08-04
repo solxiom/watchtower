@@ -9,9 +9,9 @@
  * construction are `O(entities)`, never quadratic in pack size (the "linear
  * build" proof).
  */
-import type {TypedRow} from '../storage/index.js';
-import {packIndexRejection, type PackIndexRejection} from '../../contracts/packIndex.js';
-import type {ConsumedPack} from '../../contracts/pack.js';
+import type {TypedRow} from '../../storage/index.js';
+import {packIndexRejection, type PackIndexRejection} from '../../../contracts/packIndex.js';
+import type {ConsumedPack} from '../../../contracts/pack.js';
 import type {PackIndexManifestDocument} from './packIndexJsonReaders.js';
 
 export interface PackIndexRows {

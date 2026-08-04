@@ -36,8 +36,8 @@ import {
     currentProcessIdentity,
     isValidCommandIdentity,
     isValidProcessStartIdentity
-} from '../observation/index.js';
-import {packIndexRejection, type PackIndexRejection} from '../../contracts/packIndex.js';
+} from '../../observation/index.js';
+import {packIndexRejection, type PackIndexRejection} from '../../../contracts/packIndex.js';
 
 const LOCK_FILE = '.current.lock';
 const RETRY_DELAY_MS = 20;

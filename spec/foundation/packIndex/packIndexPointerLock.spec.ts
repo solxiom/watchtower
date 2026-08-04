@@ -1,6 +1,6 @@
 import {mkdirSync, utimesSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {acquirePointerLock} from '../../../src/foundation/packIndex/packIndexPointerLock.js';
+import {acquirePointerLock} from '../../../src/foundation/pack/index/packIndexPointerLock.js';
 import {makeWorkDir, removeWorkDir} from '../../storage/support/storeFixtures.js';
 
 /** A syntactically valid abandoned-holder record carrying exactly the normative five keys. */

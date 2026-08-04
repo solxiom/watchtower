@@ -10,7 +10,7 @@
 import {randomUUID} from 'node:crypto';
 import {closeSync, fsyncSync, openSync, readFileSync, renameSync, rmSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
-import type {PackIndexManifest, PackIndexPointer} from '../../contracts/packIndex.js';
+import type {PackIndexManifest, PackIndexPointer} from '../../../contracts/packIndex.js';
 
 const MANIFEST_FILE = 'index-manifest.json';
 const POINTER_FILE = 'current.json';

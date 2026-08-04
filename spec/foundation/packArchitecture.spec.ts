@@ -12,7 +12,7 @@ const OWNED_MODULES = readdirSync(PACK_DIR)
     .filter((name) => name.endsWith('.ts'))
     .map((name) => join(PACK_DIR, name));
 
-const L5_CAPSULE_IMPORT = /from\s+['"]\.\.\/(runtime|task|lane|packIndex|indexStore|indexQuery)\//;
+const L5_CAPSULE_IMPORT = /from\s+['"]\.\.\/(runtime|task|lane|index)\//;
 const OWNED_MODULE_LIMIT = 262;
 const COMMONS_STORAGE = '@nirvana/commons/foundation/storage/basic';
 const GIT_DRIVER = '@nirvana/base/git';
@@ -73,7 +73,7 @@ describe('pack domain host adapter boundary (FR-19)', () => {
 
 describe('pack domain L4 boundary (FR-19)', () => {
     it('never imports L5 foundation capsules directly', () => {
-        expect(L5_CAPSULE_IMPORT.test("from '../packIndex/index.js'")).toBeTrue();
+        expect(L5_CAPSULE_IMPORT.test("from '../runtime/index.js'")).toBeTrue();
         const offenders = OWNED_MODULES
             .map((file) => ({file: relative(SOURCE_ROOT, file), text: readFileSync(file, 'utf8')}))
             .filter(({text}) => L5_CAPSULE_IMPORT.test(text))

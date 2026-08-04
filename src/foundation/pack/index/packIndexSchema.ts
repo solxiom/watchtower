@@ -12,7 +12,7 @@
  * version, database schema, and logical-export algorithm produce the same
  * typed rows and semantic root").
  */
-import type {DerivedStoreSchema} from '../storage/index.js';
+import type {DerivedStoreSchema} from '../../storage/index.js';
 
 export const PACK_INDEX_META_TABLE = 'index_meta';
 export const PACK_INDEX_DATABASE_SCHEMA_VERSION = 1;

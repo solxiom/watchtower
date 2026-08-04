@@ -2,7 +2,7 @@ import {mkdirSync, readFileSync, readdirSync, truncateSync, writeFileSync} from 
 import {join} from 'node:path';
 import {IndexQuery, IndexStore} from '../../src/foundation/index.js';
 import {openDerivedStorage} from '../../src/foundation/storage/index.js';
-import {PACK_INDEX_SCHEMA} from '../../src/foundation/packIndex/packIndexSchema.js';
+import {PACK_INDEX_SCHEMA} from '../../src/foundation/pack/index/packIndexSchema.js';
 import {IndexQueryError} from '../../src/contracts/index.js';
 import {makeWorkDir, removeWorkDir} from '../storage/support/storeFixtures.js';
 import {buildChainFixture, compileChainIndex, type ChainOptions} from './support/indexQueryFixtures.js';

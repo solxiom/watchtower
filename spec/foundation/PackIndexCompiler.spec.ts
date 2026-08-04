@@ -3,7 +3,7 @@ import {join} from 'node:path';
 import {PackIndexCompiler, consumePack} from '../../src/foundation/index.js';
 import {openDerivedStorage} from '../../src/foundation/storage/index.js';
 import type {PackIndexCompileRequest} from '../../src/foundation/index.js';
-import {PACK_INDEX_SCHEMA} from '../../src/foundation/packIndex/packIndexSchema.js';
+import {PACK_INDEX_SCHEMA} from '../../src/foundation/pack/index/packIndexSchema.js';
 import type {ConsumedPack, PackIndexCompileResult} from '../../src/contracts/index.js';
 import {buildPackFixture, deps, fakeFileSystem, realValidators, PACK_ROOT, type PackFixture} from './fixtures/packFixture.js';
 import {makeWorkDir, removeWorkDir} from '../storage/support/storeFixtures.js';

@@ -1,5 +1,5 @@
-import {buildPackIndexRows} from '../../../src/foundation/packIndex/packIndexRowBuilder.js';
-import type {PackIndexManifestDocument} from '../../../src/foundation/packIndex/packIndexJsonReaders.js';
+import {buildPackIndexRows} from '../../../src/foundation/pack/index/packIndexRowBuilder.js';
+import type {PackIndexManifestDocument} from '../../../src/foundation/pack/index/packIndexJsonReaders.js';
 import type {ConsumedPack} from '../../../src/contracts/index.js';
 
 const PACK: ConsumedPack = Object.freeze({
