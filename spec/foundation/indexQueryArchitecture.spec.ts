@@ -10,7 +10,7 @@ import {join} from 'node:path';
 const SOURCE_ROOT = join(process.cwd(), 'src');
 const FOUNDATION = join(SOURCE_ROOT, 'foundation');
 const INDEX_STORE = join(FOUNDATION, 'indexStore', 'index.ts');
-const INDEX_QUERY = join(FOUNDATION, 'IndexQuery.ts');
+const INDEX_QUERY = join(FOUNDATION, 'indexQuery', 'index.ts');
 const OWNED_FILES = [
     INDEX_STORE, INDEX_QUERY,
     join(FOUNDATION, 'indexStore', 'indexStoreIdentity.ts'),

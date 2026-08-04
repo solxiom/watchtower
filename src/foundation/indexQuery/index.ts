@@ -10,16 +10,16 @@
  * both are this batch's own sibling owners. `IndexQuery` itself is the thin
  * composition/dispatch layer — it constructs no SQL and reads no table.
  */
-import {IndexQueryError} from '../contracts/index.js';
+import {IndexQueryError} from '../../contracts/index.js';
 import type {
     ArtifactIndexEntry, BatchesByIdsResult, BatchIndexEntry, BatchQueryPage, BatchQueryParams,
     BatchRepositoryClaim, BoundedContext, ContextAssemblyOptions, DependencyResult,
     ProofIndexEntry, RepositoryIndexEntry, RequirementIndexEntry, RequirementQueryPage, RequirementQueryParams
-} from '../contracts/index.js';
-import type {IndexStore} from './indexStore/index.js';
-import type {PackIndexTables} from './indexStore/packIndexTables.js';
-import {MAX_DEPENDENCY_DEPTH, walkDependencies} from './indexQuery/dependencyTraversal.js';
-import {digest, MAX_PAGE_LIMIT, paginateIds, validateLimit} from './indexQuery/queryCursor.js';
+} from '../../contracts/index.js';
+import type {IndexStore} from '../indexStore/index.js';
+import type {PackIndexTables} from '../indexStore/packIndexTables.js';
+import {MAX_DEPENDENCY_DEPTH, walkDependencies} from './dependencyTraversal.js';
+import {digest, MAX_PAGE_LIMIT, paginateIds, validateLimit} from './queryCursor.js';
 
 const DEFAULT_DEPENDENTS_LIMIT = 50;
 const DEFAULT_REQUIREMENTS_LIMIT = 50;

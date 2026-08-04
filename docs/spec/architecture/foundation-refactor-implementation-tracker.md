@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-1 in progress (FR-03 … FR-08 ✅)**
+Status: **Active — FM-1 in progress (FR-03 … FR-09 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,9 +19,9 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **9 / 32** work units accepted |
-| Baseline root files | 86 (target: 0) |
-| Shadow structures | 2 (target: 0) |
+| Score | **10 / 32** work units accepted |
+| Baseline root files | 85 (target: 0) |
+| Shadow structures | 1 (target: 0) |
 
 ---
 
@@ -30,7 +30,7 @@ Last updated: 2026-08-04
 | Milestone | Name | Batch | State | Accepted proof |
 |-----------|------|-------|-------|----------------|
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
-| FM-1 | Capsule completion | REF-01 | ⏳ In progress | FR-03 … FR-08 ✅; 2 shadow structures remain |
+| FM-1 | Capsule completion | REF-01 | ⏳ In progress | FR-03 … FR-09 ✅; 1 shadow structure remains |
 | FM-2 | L1–L3 domain extraction | REF-01 | ❌ Pending | Seven domain dirs + barrels |
 | FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
@@ -57,7 +57,7 @@ Last updated: 2026-08-04
 | FR-06 | `runtimeCatalog` facade move | ✅ Accepted | `runtimeCatalog/index.ts`; `RuntimeCatalog.ts` removed; `nvb test` green |
 | FR-07 | `packIndex` facade move | ✅ Accepted | `packIndex/PackIndexCompiler.ts` + barrel; `nvb test` green |
 | FR-08 | `indexStore` facade move | ✅ Accepted | `indexStore/index.ts`; `IndexStore.ts` removed; arch spec path updated; `nvb test` green |
-| FR-09 | `indexQuery` facade move | ❌ Pending | Facade inside capsule; ≤200 lines or split |
+| FR-09 | `indexQuery` facade move | ✅ Accepted | `indexQuery/index.ts`; `IndexQuery.ts` removed; arch spec updated; `nvb test` green |
 | FR-10 | `coordinatorBaseline` facade move | ❌ Pending | Facade inside capsule |
 | FR-11 | FM-1 integration | ❌ Pending | Shadow-structure count = 0; `nvb test` |
 
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 9 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 10 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -135,7 +135,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `runtimeCatalog/` | L5 | FR-06 | ✅ | ✅ | Accepted |
 | `packIndex/` | L5 | FR-07 | ✅ | ✅ | Accepted |
 | `indexStore/` | L5 | FR-08 | ✅ | ✅ | Accepted |
-| `indexQuery/` | L5 | FR-09 | partial | ❌ | Shadow facade at root |
+| `indexQuery/` | L5 | FR-09 | ✅ | ✅ | Accepted |
 | `storage/` | L5 | — | ✅ | ✅ | Pre-refactor OK |
 | `taskRuntime/` | L5 | — | ✅ | ✅ | Template reference |
 | `runtime/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
@@ -163,7 +163,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `upgradeArchitecture.spec.ts` | FR-20 | ❌ Not created |
 | `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — update paths in FM-1 |
 | `managedAssetsArchitecture.spec.ts` | FR-05 | ✅ Exists — update paths in FR-05 |
-| `indexQueryArchitecture.spec.ts` | FR-08, FR-09 | ✅ Exists — indexStore path updated in FR-08 |
+| `indexQueryArchitecture.spec.ts` | FR-08, FR-09 | ✅ Accepted — paths updated |
 | `runtimeKnowledgeManifestArchitecture.spec.ts` | — | ✅ Exists |
 
 ---
@@ -174,8 +174,8 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 86 | 0 | 2026-08-04 |
-| Shadow structures | 2 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 85 | 0 | 2026-08-04 |
+| Shadow structures | 1 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |
