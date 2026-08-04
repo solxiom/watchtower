@@ -1,7 +1,7 @@
 import {existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {buildCoordinatorBaseline, composeLaneLayoutWithCoordinatorBaseline} from '../../src/foundation/CoordinatorBaseline.js';
+import {buildCoordinatorBaseline, composeLaneLayoutWithCoordinatorBaseline} from '../../src/foundation/coordinatorBaseline/index.js';
 import type {KnowledgeProvenancePort} from '../../src/foundation/coordinatorBaseline/coordinatorBaselineContracts.js';
 import {resolveInstalledKnowledgeTag} from '../../src/foundation/coordinatorBaseline/knowledgeProvenanceHost.js';
 import {commitLane, TransactionalWriteError} from '../../src/foundation/transactionalWriter/index.js';
