@@ -41,6 +41,10 @@ export async function checkIntegrity(run: SqlRunner): Promise<IntegrityReport> {
     }
 }
 
+export async function checkpoint(run: SqlRunner): Promise<void> {
+    await run('PRAGMA wal_checkpoint(PASSIVE)', []);
+}
+
 export async function readDiagnostics(run: SqlRunner): Promise<StoreDiagnostics> {
     const [journal] = await run<{journal_mode: string}>('PRAGMA journal_mode', []);
     const [busy] = await run<{timeout: bigint | number}>('PRAGMA busy_timeout', []);

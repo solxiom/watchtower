@@ -24,6 +24,7 @@ export type {
     DerivedStorage,
     DerivedStorageOpenOptions,
     DerivedStore,
+    DerivedStoreTransaction,
     DerivedStoreKind,
     DerivedStoreSchema,
     DerivedStoreWriter,

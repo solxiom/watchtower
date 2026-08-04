@@ -129,6 +129,11 @@ export type {
     WorkspaceResolution,
     WorktreeMode
 } from './types.js';
+export {JOURNAL_REASONS, JournalError} from './runtimeJournal.js';
+export type {
+    BatchProjection, CorruptionReport, CycleProjection, DurableEvent, DurableEventPage,
+    JournalCheckpoint, JournalReason, LaneEventSummary, ReadySetProjection
+} from './runtimeJournal.js';
 export type {
     LaneStatusV1,
     StatusBatchProgress,

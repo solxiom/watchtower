@@ -21,11 +21,11 @@ import {enforceOwnerOnlyPermissions} from './sqliteFilePermissions.js';
 import {translateDatabaseError} from './sqliteErrorMapping.js';
 import {acquireWriteLock} from './sqliteWriteLock.js';
 import {resolveStoreFile, toCommonsConfig} from './sqliteStorePaths.js';
-import {checkIntegrity, countRows, readDiagnostics, selectAll, selectByPrimaryKey, type SqlRunner} from './sqliteStoreQueries.js';
+import {checkIntegrity, checkpoint, countRows, readDiagnostics, selectAll, selectByPrimaryKey, type SqlRunner} from './sqliteStoreQueries.js';
 import {createSchema, deleteRow, insertRow, updateRow} from './sqliteStoreMutations.js';
 import type {
-    DerivedStore, DerivedStoreLocation, DerivedStoreSchema, IntegrityReport, LogicalExport,
-    SqliteValue, StoreDiagnostics, TableDefinition, TypedRow, WriteLock
+    DerivedStore, DerivedStoreLocation, DerivedStoreSchema, DerivedStoreTransaction, IntegrityReport,
+    LogicalExport, SqliteValue, StoreDiagnostics, TableDefinition, TypedRow, WriteLock
 } from './sqlitePorts.js';
 
 type Service = InstanceType<typeof sqlite.SqliteService>;
@@ -140,6 +140,18 @@ class DerivedSqliteStore implements DerivedStore {
         this.tightenPermissions();
     }
 
+    async transaction<T>(body: (transaction: DerivedStoreTransaction) => Promise<T>): Promise<T> {
+        return this.withTransaction(async (run) => body({
+            insert: (table, row) => insertRow(run, this.tableOf(table), row),
+            insertMany: async (table, rows) => {
+                const definition = this.tableOf(table);
+                for (const row of rows) await insertRow(run, definition, row);
+            },
+            updateByPrimaryKey: (table, key, changes) => updateRow(run, this.tableOf(table), key, changes),
+            deleteByPrimaryKey: (table, key) => deleteRow(run, this.tableOf(table), key)
+        }));
+    }
+
     async updateByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[], changes: TypedRow): Promise<void> {
         const definition = this.tableOf(table);
         await this.withTransaction((run) => updateRow(run, definition, key, changes));
@@ -189,6 +201,11 @@ class DerivedSqliteStore implements DerivedStore {
         } finally {
             if (this.lock) { await this.lock.release(); }
         }
+    }
+
+    async checkpoint(): Promise<void> {
+        this.assertUsable();
+        await checkpoint(this.run);
     }
 }
 
