@@ -66,6 +66,27 @@ export type {
     PackIndexReason,
     PackIndexRejection
 } from './packIndex.js';
+export {INDEX_QUERY_REASONS, IndexQueryError} from './indexQuery.js';
+export type {
+    ArtifactIndexEntry,
+    BatchesByIdsResult,
+    BatchIndexEntry,
+    BatchQueryPage,
+    BatchQueryParams,
+    BatchRepositoryClaim,
+    BatchRequirementRelation,
+    BoundedContext,
+    ContextAssemblyOptions,
+    DependencyEdge,
+    DependencyResult,
+    IndexQueryReason,
+    ProofIndexEntry,
+    QueryPage,
+    RepositoryIndexEntry,
+    RequirementIndexEntry,
+    RequirementQueryPage,
+    RequirementQueryParams
+} from './indexQuery.js';
 export {roleEventCompatibility, validateEventCompatibility} from './events.js';
 export type {WorkerEventRecord} from './events.js';
 export type {
@@ -178,6 +199,11 @@ export type {
     AssetClassification, AssetClassificationEntry, CompatibilityMatrix, RuntimeKnowledgeCompatibility,
     SchemaCompatibility, UpgradeAssetDeclaration, UpgradePlan, UpgradePlannerInput
 } from './upgrade.js';
+export {MIGRATION_REGISTRY_REASONS} from './migration.js';
+export type {
+    MigrationRebuildAdapter, MigrationRebuildContext, MigrationRegistryOptions, MigrationSnapshot, MigrationSnapshotEntry,
+    MigrationStageResult, MigrationStagingPlan, MigrationStepDefinition, PreservationPolicy, SchemaVersion
+} from './migration.js';
 export type {
     LeafCancelled,
     LeafCompleted,

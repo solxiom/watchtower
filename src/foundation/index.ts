@@ -31,6 +31,9 @@ export {UpgradePlanner} from './UpgradePlanner.js';
 export type {UpgradePlannerOptions} from './UpgradePlanner.js';
 export {UpgradePreviewSource} from './UpgradePreviewSource.js';
 export type {UpgradePreviewSourceOptions, UpgradeSourceQuery} from './UpgradePreviewSource.js';
+export {MigrationRegistry} from './MigrationRegistry.js';
+export type {MigrationRegistryOptions} from './MigrationRegistry.js';
+export {stageMigrationPlan} from './MigrationSteps.js';
 export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './InitContracts.js';
 export type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';
 export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
@@ -107,6 +110,9 @@ export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
 export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './PackIndexCompiler.js';
 export type {PackIndexCompileDeps, PackIndexCompileRequest} from './PackIndexCompiler.js';
 export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/packIndexSchema.js';
+export {IndexStore} from './IndexStore.js';
+export type {IndexIdentity} from './IndexStore.js';
+export {IndexQuery} from './IndexQuery.js';
 export {
     confirmationRequiredError, createClaudeHostAdapter, createCodexHostAdapter, createCursorHostAdapter,
     HOST_NAMES, INSTALL_SCOPES, resolveHostAdapter, resolveKnowledgeRoot
