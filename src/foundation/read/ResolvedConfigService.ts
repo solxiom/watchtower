@@ -1,13 +1,13 @@
 import {join} from 'node:path';
 import type {
     ConfigResolutionSources, RepositoryBinding, RepositoryBindingView, ResolvedConfigV1
-} from '../contracts/index.js';
-import {buildLaneFilePath} from './paths/index.js';
+} from '../../contracts/index.js';
+import {buildLaneFilePath} from '../paths/index.js';
 import {LaneConfigProjectionReader} from './LaneConfigProjectionReader.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
-import {selectLane} from './discovery/index.js';
-import {RelevantLaneDiscovery} from './discovery/index.js';
-import {readRepositoryBindings} from './bindings/index.js';
+import {selectLane} from '../discovery/index.js';
+import {RelevantLaneDiscovery} from '../discovery/index.js';
+import {readRepositoryBindings} from '../bindings/index.js';
 
 export interface ResolvedConfigQuery {
     readonly cwd: string;

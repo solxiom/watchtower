@@ -1,7 +1,7 @@
-import type {LaneDiscoveryFileSystem} from './discovery/index.js';
-import {nodeLaneDiscoveryFileSystem} from './discovery/index.js';
-import {buildLaneFilePath, safePathTarget} from './paths/index.js';
-import {createWatchtowerError} from '../contracts/index.js';
+import type {LaneDiscoveryFileSystem} from '../discovery/index.js';
+import {nodeLaneDiscoveryFileSystem} from '../discovery/index.js';
+import {buildLaneFilePath, safePathTarget} from '../paths/index.js';
+import {createWatchtowerError} from '../../contracts/index.js';
 
 export interface LaneReadFileStore {
     readRequired(laneDir: string, relativePath: string, maxBytes: number): string;

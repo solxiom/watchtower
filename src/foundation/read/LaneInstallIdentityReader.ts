@@ -1,5 +1,5 @@
-import {createWatchtowerError} from '../contracts/index.js';
-import {hasDuplicateJsonObjectKey} from './schemaComposition/jsonDuplicateKeyDetector.js';
+import {createWatchtowerError} from '../../contracts/index.js';
+import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
 import type {LaneReadFileStore} from './LaneReadFileStore.js';
 import {ContainedLaneReadFileStore} from './LaneReadFileStore.js';
 

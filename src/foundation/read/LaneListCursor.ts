@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
-import {createWatchtowerError} from '../contracts/index.js';
-import {hasDuplicateJsonObjectKey} from './schemaComposition/jsonDuplicateKeyDetector.js';
+import {createWatchtowerError} from '../../contracts/index.js';
+import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
 
 const DEFAULT_LIMIT = 50;
 export const MAX_LIST_PAGE_SIZE = 200;

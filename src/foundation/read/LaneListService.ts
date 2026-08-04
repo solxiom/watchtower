@@ -1,18 +1,18 @@
 import {createHash} from 'node:crypto';
 import type {
     LaneListItem, LaneListPage, LaneListWarning, RepositoryBinding
-} from '../contracts/index.js';
-import {filterRelevantLanes, selectLane} from './discovery/index.js';
-import {buildLaneFilePath} from './paths/index.js';
+} from '../../contracts/index.js';
+import {filterRelevantLanes, selectLane} from '../discovery/index.js';
+import {buildLaneFilePath} from '../paths/index.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {
     digestLaneListQuery, paginateLaneList, validateLaneListPageInput
 } from './LaneListCursor.js';
 import {LaneStateProjectionReader} from './LaneStateProjectionReader.js';
-import {RelevantLaneDiscovery} from './discovery/index.js';
-import {readRepositoryBindings} from './bindings/index.js';
-import type {ActiveLaneClaims, WritableConflict} from './bindings/index.js';
-import {inspectWritableConflicts} from './bindings/index.js';
+import {RelevantLaneDiscovery} from '../discovery/index.js';
+import {readRepositoryBindings} from '../bindings/index.js';
+import type {ActiveLaneClaims, WritableConflict} from '../bindings/index.js';
+import {inspectWritableConflicts} from '../bindings/index.js';
 
 export interface LaneListQuery {
     readonly cwd: string;

@@ -64,11 +64,11 @@ export {inspectWritableConflicts, readRepositoryBindings, resourcePathsOverlap} 
 export type {
     ActiveLaneClaims, RepositoryBindingInspector, WritableConflict, WritableConflictKind
 } from './bindings/index.js';
-export {LaneListService} from './LaneListService.js';
-export type {LaneListQuery, LaneListServiceOptions} from './LaneListService.js';
-export {digestLaneListQuery, MAX_LIST_PAGE_SIZE, paginateLaneList, validateLaneListPageInput} from './LaneListCursor.js';
-export {ResolvedConfigService} from './ResolvedConfigService.js';
-export type {ResolvedConfigQuery, ResolvedConfigServiceOptions} from './ResolvedConfigService.js';
+export {LaneListService} from './read/index.js';
+export type {LaneListQuery, LaneListServiceOptions} from './read/index.js';
+export {digestLaneListQuery, MAX_LIST_PAGE_SIZE, paginateLaneList, validateLaneListPageInput} from './read/index.js';
+export {ResolvedConfigService} from './read/index.js';
+export type {ResolvedConfigQuery, ResolvedConfigServiceOptions} from './read/index.js';
 export {StatusProjection} from './StatusProjection.js';
 export type {StatusProjectionOptions, StatusProjectionQuery} from './StatusProjection.js';
 export {deriveStatusHealth} from './statusHealth.js';

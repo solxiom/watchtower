@@ -1,5 +1,5 @@
 import {LaneTaskRuntimeError} from '../../../src/contracts/taskRuntime.js';
-import {LaneInstallIdentityReader, type LaneInstallIdentity} from '../../../src/foundation/LaneInstallIdentityReader.js';
+import {LaneInstallIdentityReader, type LaneInstallIdentity} from '../../../src/foundation/read/index.js';
 import {NirvanaLaneTaskRunner} from '../../../src/foundation/taskRuntime/NirvanaLaneTaskRunner.js';
 import type {NvbRunnerBinding} from '../../../src/foundation/taskRuntime/packagedNvbRunner.js';
 import type {RuntimeRootResolver, TaskRuntimePinSource}

@@ -18,7 +18,7 @@ import {
     type LaneTaskRunResult
 } from '../../contracts/taskRuntime.js';
 import type {JsonValue} from '../../contracts/types.js';
-import {LaneInstallIdentityReader} from '../LaneInstallIdentityReader.js';
+import {LaneInstallIdentityReader} from '../read/index.js';
 import type {RuntimeProcessInvoker} from '../runtime/runtimeProcessPorts.js';
 import {NirvanaProcessInvoker} from '../runtime/NirvanaProcessInvoker.js';
 import {LaneRuntimeAccessGuard} from './LaneRuntimeAccessGuard.js';

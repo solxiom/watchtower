@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-2 in progress (FR-14 … FR-15 ✅)**
+Status: **Active — FM-2 in progress (FR-15 … FR-16 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **16 / 32** work units accepted |
-| Baseline root files | 64 (target: 0) |
+| Score | **17 / 32** work units accepted |
+| Baseline root files | 56 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---

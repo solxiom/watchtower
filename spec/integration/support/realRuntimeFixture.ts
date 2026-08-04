@@ -15,7 +15,7 @@ import {semanticDigest} from '../../../src/foundation/schemaComposition/jsonCano
 import type {JsonObject} from '../../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 import type {LaneRuntimeContext, LaneTaskInvocation, PinnedTaskRuntimeTarget}
     from '../../../src/contracts/taskRuntime.js';
-import {LaneInstallIdentityReader, type LaneInstallIdentity} from '../../../src/foundation/LaneInstallIdentityReader.js';
+import {LaneInstallIdentityReader, type LaneInstallIdentity} from '../../../src/foundation/read/index.js';
 import {LaneTaskCatalog} from '../../../src/foundation/taskRuntime/LaneTaskCatalog.js';
 import {NirvanaLaneTaskRunner} from '../../../src/foundation/taskRuntime/NirvanaLaneTaskRunner.js';
 import {nodeRuntimeFileSystem} from '../../../src/foundation/taskRuntime/runtimeFileSystem.js';
