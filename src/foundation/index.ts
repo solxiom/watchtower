@@ -27,6 +27,10 @@ export type {
 } from './managedAssets/managedLinkFileSystem.js';
 export {parseInstallManifest} from './managedAssets/installManifestReader.js';
 export {InitPlanner, validateInitRequest} from './InitPlanner.js';
+export {UpgradePlanner} from './UpgradePlanner.js';
+export type {UpgradePlannerOptions} from './UpgradePlanner.js';
+export {UpgradePreviewSource} from './UpgradePreviewSource.js';
+export type {UpgradePreviewSourceOptions, UpgradeSourceQuery} from './UpgradePreviewSource.js';
 export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './InitContracts.js';
 export type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';
 export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
@@ -53,6 +57,12 @@ export type {LaneSelectionContext} from './LaneSelector.js';
 export {readMembershipIndex} from './membershipIndex.js';
 export type {MembershipIndexFileSystem} from './membershipIndex.js';
 export {discoverSecondaryLanes} from './SecondaryDiscovery.js';
+export {
+    acquireInitLocks, releaseInitLocks, shouldUpdateGitignore, updateGitignore, restoreGitignore, writeBindings
+} from './BindingMutator.js';
+export type {BindingResult, GitignoreUpdate} from './BindingMutator.js';
+export {registerLane, registerLaneWithRetry} from './MembershipRegistrar.js';
+export type {RegistrationOptions, RegistrationResult} from './MembershipRegistrar.js';
 export {readRepositoryBindings} from './repositoryBindings.js';
 export type {RepositoryBindingInspector} from './repositoryBindings.js';
 export {inspectWritableConflicts, resourcePathsOverlap} from './writableConflicts.js';
@@ -94,6 +104,9 @@ export {createNodePackFileSystem, nodePackFileSystem} from './packFilesystemHost
 export type {PackStorage, PackStorageFactory} from './packFilesystemHost.js';
 export {nodePackGitInspector} from './packGitHost.js';
 export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
+export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './PackIndexCompiler.js';
+export type {PackIndexCompileDeps, PackIndexCompileRequest} from './PackIndexCompiler.js';
+export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/packIndexSchema.js';
 export {
     confirmationRequiredError, createClaudeHostAdapter, createCodexHostAdapter, createCursorHostAdapter,
     HOST_NAMES, INSTALL_SCOPES, resolveHostAdapter, resolveKnowledgeRoot

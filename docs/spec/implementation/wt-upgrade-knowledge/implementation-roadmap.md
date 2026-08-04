@@ -4,7 +4,7 @@ Status: **Synchronized remediation candidate**
 
 | Wave | Batch | Capability | Depends on | Ownership |
 |---:|---|---|---|---|
-| 9 | UK-01 | Upgrade compatibility and preview planner | `LC-03`, `RT-02` | upgrade foundation/command |
+| 9 | UK-01 | Upgrade compatibility and preview planner | `LC-03`, `RT-02` | upgrade foundation/command — ✅ Accepted |
 | 10 | UK-02 | Migration framework and preservation harness | `UK-01`, `LC-05` | migration registry/staging contracts |
 | 11 | UK-03 | Atomic upgrade apply, recovery, and downgrade guard | `UK-02`, `RT-04`, `RT-06` | install pointer/store |
 | 4 | UK-04 | Codex, Cursor, and Claude knowledge installers | `RT-01`, `RT-02` | host adapters and skill command |

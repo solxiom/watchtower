@@ -308,7 +308,7 @@ lane-owned values or history.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
-| `UK-01` | Upgrade compatibility and preview planner | `LC-03`, `RT-02` | upgrade foundation/command | Runtime/knowledge/schema matrix; changed/preserved/conflict classification |
+| `UK-01` | Upgrade compatibility and preview planner | `LC-03`, `RT-02` | upgrade foundation/command | Runtime/knowledge/schema matrix; changed/preserved/conflict classification — ✅ Accepted |
 | `UK-02` | Migration framework and preservation harness | `UK-01`, `LC-05` | migration registry/staging contracts | Closed declared transitions only; no fictional versions; capability-owned rebuild adapters; value/history/pin/lifecycle preservation |
 | `UK-03` | Atomic upgrade apply, recovery, and downgrade guard | `UK-02`, `RT-04`, `RT-06` | install pointer/store | Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade |
 | `UK-04` | Codex, Cursor, and Claude knowledge installers | `RT-01`, `RT-02` | host adapters and skill command | Preview/replace/scope behavior; version record; no false notification claim |

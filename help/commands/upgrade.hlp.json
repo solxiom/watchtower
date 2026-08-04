@@ -1,0 +1,15 @@
+{
+  "name": "upgrade",
+  "group": "basic",
+  "summary": "Preview a compatible managed runtime upgrade without changing lane state.",
+  "usage": "wt upgrade [--lane=<slug-or-uuid>] [--workspace=<path>] [--to=<version>] [--apply] [--dry-run] [--json] [--no-color]",
+  "flags": [
+    {"name": "lane", "description": "Select one relevant lane by exact ID or slug.", "optional": true},
+    {"name": "workspace", "description": "Resolve the lane from this existing repository or control-home path.", "optional": true},
+    {"name": "to", "description": "Preview an explicitly selected compatible runtime version.", "optional": true},
+    {"name": "apply", "description": "Reserved for the later atomic upgrade apply implementation; UK-01 rejects this option.", "optional": true},
+    {"name": "dry-run", "description": "Render the read-only upgrade preview without changing lane state.", "optional": true},
+    {"name": "json", "description": "Emit one versioned command-result envelope.", "optional": true},
+    {"name": "no-color", "description": "Disable ANSI color in human output.", "optional": true}
+  ]
+}

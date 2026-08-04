@@ -57,6 +57,15 @@ export type {
     Sha256Digest,
     SourceBaselineObservation
 } from './pack.js';
+export {PACK_INDEX_REASONS, packIndexRejection} from './packIndex.js';
+export type {
+    PackIndexCompileAccepted,
+    PackIndexCompileResult,
+    PackIndexManifest,
+    PackIndexPointer,
+    PackIndexReason,
+    PackIndexRejection
+} from './packIndex.js';
 export {roleEventCompatibility, validateEventCompatibility} from './events.js';
 export type {WorkerEventRecord} from './events.js';
 export type {
@@ -165,6 +174,10 @@ export type {
     ManagedLinkResult,
     ValidationResult
 } from './manifests.js';
+export type {
+    AssetClassification, AssetClassificationEntry, CompatibilityMatrix, RuntimeKnowledgeCompatibility,
+    SchemaCompatibility, UpgradeAssetDeclaration, UpgradePlan, UpgradePlannerInput
+} from './upgrade.js';
 export type {
     LeafCancelled,
     LeafCompleted,
