@@ -214,3 +214,13 @@ export type {
     TaskLeafCapability,
     TaskLeafRequest
 } from './leafRuntime.js';
+export type {
+    ApplyResult,
+    DowngradeGuardReason,
+    DowngradeGuardResult,
+    OldManifestStatus,
+    RecoveryResult,
+    StagedAssetRecord,
+    UpgradeApplyFailure,
+    UpgradeApplyReason
+} from './upgradeApply.js';

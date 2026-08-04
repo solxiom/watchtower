@@ -16,16 +16,20 @@ const L4_PEER_IMPORT = /from\s+['"]\.\.\/(init|pack|status|read|lifecycle)\//;
 const L4_RUNTIME_SUBCAPSULE = /from\s+['"]\.\.\/runtime\/(catalog|distribution|knowledge|leaf)\//;
 const OWNED_MODULE_LIMIT = 200;
 
-describe('upgrade domain inventory (FR-20)', () => {
-    it('owns exactly six modules plus the barrel', () => {
+describe('upgrade domain inventory (FR-20, UK-03)', () => {
+    it('owns exactly ten modules plus the barrel', () => {
         const modules = OWNED_MODULES.map((file) => relative(UPGRADE_DIR, file)).sort();
         expect(modules).toEqual([
             'MigrationRegistry.ts',
             'MigrationSteps.ts',
+            'UpgradeApply.ts',
             'UpgradePlanner.ts',
             'UpgradePreviewSource.ts',
+            'UpgradeRecovery.ts',
             'index.ts',
             'migrationValidation.ts',
+            'upgradeApplyFileSystem.ts',
+            'upgradeApplyValidation.ts',
             'upgradeFileSystem.ts'
         ]);
     });

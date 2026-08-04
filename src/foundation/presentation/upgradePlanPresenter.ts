@@ -1,11 +1,16 @@
 import {output as prettyOutput} from '@nirvana/base/utils/pretty';
 import type {JsonValue} from '../../contracts/types.js';
 import type {UpgradePlan} from '../../contracts/upgrade.js';
+import type {ApplyResult} from '../../contracts/upgradeApply.js';
 import {buildCommandResult} from './commandEnvelopeSerializer.js';
 import {renderResult} from './ResultRenderer.js';
 
 export function presentUpgradePlan(plan: UpgradePlan, options: {readonly json: boolean; readonly noColor: boolean}): void {
     prettyOutput.write(renderResult(buildCommandResult('upgrade', toJson(plan)), options), 'basic', 0, true);
+}
+
+export function presentUpgradeApplyResult(result: ApplyResult, options: {readonly json: boolean; readonly noColor: boolean}): void {
+    prettyOutput.write(renderResult(buildCommandResult('upgrade', toJson(result)), options), 'basic', 0, true);
 }
 function toJson(value: unknown): JsonValue {
     if (value === null || typeof value === 'string' || typeof value === 'boolean') return value;

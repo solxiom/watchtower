@@ -2,4 +2,4 @@ export {buildCommandError, buildCommandResult, validateEnvelope} from './command
 export {renderError, renderResult} from './ResultRenderer.js';
 export type {RenderOptions} from './ResultRenderer.js';
 export {presentInitPlan} from './initPlanPresenter.js';
-export {presentUpgradePlan} from './upgradePlanPresenter.js';
+export {presentUpgradeApplyResult, presentUpgradePlan} from './upgradePlanPresenter.js';
