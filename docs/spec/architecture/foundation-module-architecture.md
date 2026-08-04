@@ -671,7 +671,9 @@ spec/foundation/taskRuntimeArchitecture.spec.ts
 
 | Document | Role |
 |----------|------|
-| [foundation-layout-remediation.md](foundation-layout-remediation.md) | Current diagnosis, file moves, phases, REF batches |
+| [foundation-layout-remediation.md](foundation-layout-remediation.md) | File migration inventory, reviewer checklist |
+| [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md) | Milestones, work units, dependencies, waves |
+| [foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md) | **Live status** |
 | [architecture.md](../architecture.md) | Product separations |
 | [nirvana-integration-architecture.md](../nirvana-integration-architecture.md) | NVB/runtime facade targets |
 | [engineering-and-review-standard.md](../../development/engineering-and-review-standard.md) | Mandatory gates |

@@ -30,6 +30,10 @@ semantics.
 7. [Progress tracking](#7-progress-tracking)
 8. [Appendix — reviewer checklist](#appendix--reviewer-checklist)
 
+Progress and status: **[foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md)**
+
+Construction plan: **[foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)**
+
 ---
 
 ## 1. Executive summary
@@ -486,13 +490,11 @@ REF-01 and REF-02 are accepted when **all** of the following hold:
 
 ## 7. Progress tracking
 
-| Phase | Status | Commit / batch |
-|-------|--------|----------------|
-| Phase 0 — Policy docs | ✅ Accepted | This commit |
-| Phase 1 — Capsule completion | ⏳ Pending | REF-01 |
-| Phase 2 — Flat cluster extraction | ⏳ Pending | REF-01 |
-| Phase 3 — Pack/upgrade/observation | ⏳ Pending | REF-01 |
-| Phase 4 — Barrel hardening | ⏳ Pending | REF-02 |
+**Do not edit milestone status in this document.** Update
+[foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md).
+
+Work unit definitions and dependencies:
+[foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md).
 
 ---
 
