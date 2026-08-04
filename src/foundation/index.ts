@@ -108,8 +108,8 @@ export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
 export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './packIndex/index.js';
 export type {PackIndexCompileDeps, PackIndexCompileRequest} from './packIndex/index.js';
 export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/packIndexSchema.js';
-export {IndexStore} from './IndexStore.js';
-export type {IndexIdentity} from './IndexStore.js';
+export {IndexStore} from './indexStore/index.js';
+export type {IndexIdentity} from './indexStore/index.js';
 export {IndexQuery} from './IndexQuery.js';
 export {
     confirmationRequiredError, createClaudeHostAdapter, createCodexHostAdapter, createCursorHostAdapter,

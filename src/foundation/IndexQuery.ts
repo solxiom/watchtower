@@ -16,7 +16,7 @@ import type {
     BatchRepositoryClaim, BoundedContext, ContextAssemblyOptions, DependencyResult,
     ProofIndexEntry, RepositoryIndexEntry, RequirementIndexEntry, RequirementQueryPage, RequirementQueryParams
 } from '../contracts/index.js';
-import type {IndexStore} from './IndexStore.js';
+import type {IndexStore} from './indexStore/index.js';
 import type {PackIndexTables} from './indexStore/packIndexTables.js';
 import {MAX_DEPENDENCY_DEPTH, walkDependencies} from './indexQuery/dependencyTraversal.js';
 import {digest, MAX_PAGE_LIMIT, paginateIds, validateLimit} from './indexQuery/queryCursor.js';
