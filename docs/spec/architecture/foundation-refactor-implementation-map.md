@@ -55,7 +55,7 @@ milestones** and **32 work units**.
 | Root-level `.ts` files (excl. `index.ts`) | 93 | 0 |
 | Shadow structures | 9 | 0 |
 | Root barrel lines | ~126 | ≤50 |
-| Root wildcard `export *` | 4 | 0 |
+| Root wildcard `export *` | 5 | 0 |
 | Command deep-imports | ~6 | 0 |
 | Domain architecture gates | 4 | 12+ |
 

@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-0 in progress**
+Status: **Active — FM-1 next (FM-0 complete)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,7 +19,7 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **2 / 32** work units accepted |
+| Score | **3 / 32** work units accepted |
 | Baseline root files | 93 (target: 0) |
 | Shadow structures | 9 (target: 0) |
 
@@ -29,7 +29,7 @@ Last updated: 2026-08-04
 
 | Milestone | Name | Batch | State | Accepted proof |
 |-----------|------|-------|-------|----------------|
-| FM-0 | Policy and baseline gates | REF-01 | ⏳ In progress | FR-00 ✅; FR-01 ✅; FR-02 pending |
+| FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
 | FM-1 | Capsule completion | REF-01 | ❌ Pending | Zero shadow structures |
 | FM-2 | L1–L3 domain extraction | REF-01 | ❌ Pending | Seven domain dirs + barrels |
 | FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
@@ -45,7 +45,7 @@ Last updated: 2026-08-04
 |----|-----------|-------|------------------|
 | FR-00 | Land architecture spec bundle | ✅ Accepted | `docs/spec/architecture/`; cross-links in README, engineering standard, nirvana-integration |
 | FR-01 | Baseline dependency architecture gate | ✅ Accepted | `spec/foundation/foundationDependencyArchitecture.spec.ts`; `nvb test` green |
-| FR-02 | Baseline root-barrel denylist gate | ❌ Pending | `spec/foundation/foundationRootBarrelArchitecture.spec.ts` passes on current tree |
+| FR-02 | Baseline root-barrel denylist gate | ✅ Accepted | `spec/foundation/foundationRootBarrelArchitecture.spec.ts`; `nvb test` green |
 
 ### FM-1 — Capsule completion
 
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 2 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 3 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -152,7 +152,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | Spec | FR | State |
 |------|-----|-------|
 | `foundationDependencyArchitecture.spec.ts` | FR-01, FR-29 | ⏳ Baseline gate (FR-01 ✅); full matrix at FR-29 |
-| `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-27 | ❌ Not created |
+| `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-27 | ⏳ Baseline gate (FR-02 ✅); denylist removal at FR-27 |
 | `commandImportArchitecture.spec.ts` | FR-28 | ❌ Not created |
 | `pathsArchitecture.spec.ts` | FR-12 | ❌ Not created |
 | `parsingArchitecture.spec.ts` | FR-13 | ❌ Not created |
@@ -177,7 +177,7 @@ Refresh after each accepted work unit.
 | Root `.ts` files (excl. `index.ts`) | 93 | 0 | 2026-08-04 |
 | Shadow structures | 9 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
-| Root `export *` count | 4 | 0 | 2026-08-04 |
+| Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |
 
 ---
