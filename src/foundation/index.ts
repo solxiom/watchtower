@@ -8,10 +8,8 @@ export {resolveDataRoot} from './DataRoot.js';
 export type {UserHomeProvider} from './DataRoot.js';
 export {RuntimeCatalog} from './RuntimeCatalog.js';
 export type {RuntimeCatalogOptions} from './RuntimeCatalog.js';
-export {ManagedAssets} from './ManagedAssets.js';
-export type {ManagedAssetsOptions} from './ManagedAssets.js';
-export {LaneTaskProfileInstaller} from './LaneTaskProfileInstaller.js';
-export type {LaneTaskProfileInstallRequest} from './LaneTaskProfileInstaller.js';
+export {ManagedAssets, LaneTaskProfileInstaller} from './managedAssets/index.js';
+export type {ManagedAssetsOptions, LaneTaskProfileInstallRequest} from './managedAssets/index.js';
 export {
     COMPATIBILITY_NAMES,
     resolveCompatibilityName,

@@ -7,8 +7,7 @@
 import {existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join, relative} from 'node:path';
-import {ManagedAssets} from '../../src/foundation/ManagedAssets.js';
-import {LaneTaskProfileInstaller} from '../../src/foundation/LaneTaskProfileInstaller.js';
+import {ManagedAssets, LaneTaskProfileInstaller} from '../../src/foundation/managedAssets/index.js';
 import {
     ASSET_KEY,
     CLI_VERSION,
@@ -24,11 +23,9 @@ const SYMLINK_IMPORT = /\bsymlinkSync\b|\bfs\.promises\.symlink\b|from\s+['"]nod
 const MANAGED_LINK_FILE_SYSTEM_OWNER = join('foundation', 'managedAssets', 'managedLinkFileSystem.ts');
 
 const OWNED_MODULE_LIMIT = 200;
-const OWNED_MODULES = [
-    join(SOURCE_ROOT, 'foundation', 'ManagedAssets.ts'),
-    join(SOURCE_ROOT, 'foundation', 'LaneTaskProfileInstaller.ts'),
-    ...readdirSync(join(SOURCE_ROOT, 'foundation', 'managedAssets')).map((name) => join(SOURCE_ROOT, 'foundation', 'managedAssets', name))
-];
+const OWNED_MODULES = readdirSync(join(SOURCE_ROOT, 'foundation', 'managedAssets'))
+    .filter((name) => name.endsWith('.ts'))
+    .map((name) => join(SOURCE_ROOT, 'foundation', 'managedAssets', name));
 const OWNED_CONTRACT_LIMIT = 240;
 const OWNED_CONTRACT = join(SOURCE_ROOT, 'contracts', 'manifests.ts');
 
@@ -90,11 +87,9 @@ describe('managed-asset install never touches a participating repository nvb.jso
     });
 
     it('never references process.cwd() or an nvb.json literal from the owned managed-asset/task-profile modules', () => {
-        const offenders = [
-            join(SOURCE_ROOT, 'foundation', 'ManagedAssets.ts'),
-            join(SOURCE_ROOT, 'foundation', 'LaneTaskProfileInstaller.ts'),
-            ...readdirSync(join(SOURCE_ROOT, 'foundation', 'managedAssets')).map((name) => join(SOURCE_ROOT, 'foundation', 'managedAssets', name))
-        ]
+        const offenders = readdirSync(join(SOURCE_ROOT, 'foundation', 'managedAssets'))
+            .filter((name) => name.endsWith('.ts'))
+            .map((name) => join(SOURCE_ROOT, 'foundation', 'managedAssets', name))
             .map((path) => ({path, text: readFileSync(path, 'utf8')}))
             .filter(({text}) => text.includes('process.cwd(') || text.includes("'nvb.json'") || text.includes('"nvb.json"'))
             .map(({path}) => relative(SOURCE_ROOT, path));

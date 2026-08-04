@@ -1,6 +1,6 @@
 import {existsSync, lstatSync, mkdirSync, readFileSync, symlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {ManagedAssets} from '../../src/foundation/ManagedAssets.js';
+import {ManagedAssets} from '../../src/foundation/managedAssets/index.js';
 import {ASSET_KEY, cleanupFixture, installManifestFor, makeManagedAssetsFixture, type ManagedAssetsFixture} from './support/managedAssetsFixtures.js';
 
 describe('ManagedAssets.removeLinks', () => {

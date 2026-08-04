@@ -8,13 +8,13 @@
  * never reads or trusts a participating repository's `nvb.json`.
  */
 import {join} from 'node:path';
-import type {RuntimeCatalog} from './RuntimeCatalog.js';
-import type {PinnedTaskRuntimeTarget} from '../contracts/taskRuntime.js';
-import type {InstallManifestV1} from '../contracts/manifests.js';
-import {readTaskRuntimePin} from './taskRuntime/taskRuntimePin.js';
-import {nodeRuntimeFileSystem, type RuntimeFileSystem} from './taskRuntime/runtimeFileSystem.js';
-import {readNarrowedProfileCatalog} from './managedAssets/laneTaskProfileCatalogReader.js';
-import {rebindTaskRuntime} from './managedAssets/installManifestTaskRuntimeWriter.js';
+import type {RuntimeCatalog} from '../RuntimeCatalog.js';
+import type {PinnedTaskRuntimeTarget} from '../../contracts/taskRuntime.js';
+import type {InstallManifestV1} from '../../contracts/manifests.js';
+import {readTaskRuntimePin} from '../taskRuntime/taskRuntimePin.js';
+import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+import {readNarrowedProfileCatalog} from './laneTaskProfileCatalogReader.js';
+import {rebindTaskRuntime} from './installManifestTaskRuntimeWriter.js';
 
 export interface LaneTaskProfileInstallRequest {
     readonly runtimeVersion: string;

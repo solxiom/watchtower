@@ -1,6 +1,6 @@
 import {chmodSync, existsSync, readFileSync, unlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {LaneTaskProfileInstaller} from '../../src/foundation/LaneTaskProfileInstaller.js';
+import {LaneTaskProfileInstaller} from '../../src/foundation/managedAssets/index.js';
 import {rebindTaskRuntime} from '../../src/foundation/managedAssets/installManifestTaskRuntimeWriter.js';
 import {ManagedAssetsError} from '../../src/contracts/manifests.js';
 import {createLockRecord, tryCreateLockRecord} from '../../src/foundation/storage/writeLockRecord.js';

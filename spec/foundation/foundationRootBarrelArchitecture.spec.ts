@@ -11,8 +11,6 @@ const ROOT_BARREL = join(FOUNDATION_ROOT, 'index.ts');
 
 /** Facade file at foundation root that must move into its capsule (FR-03 … FR-10). */
 const SHADOW_PAIRS: ReadonlyArray<readonly [facade: string, capsule: string]> = [
-    ['ManagedAssets.ts', 'managedAssets'],
-    ['LaneTaskProfileInstaller.ts', 'managedAssets'],
     ['RuntimeCatalog.ts', 'runtimeCatalog'],
     ['PackIndexCompiler.ts', 'packIndex'],
     ['IndexStore.ts', 'indexStore'],
@@ -50,7 +48,7 @@ const REF02_ROOT_EXPORT_DENYLIST = [
 
 const BASELINE_ROOT_BARREL_MAX_LINES = 130;
 const BASELINE_WILDCARD_EXPORT_COUNT = 5;
-const BASELINE_SHADOW_STRUCTURE_COUNT = 7;
+const BASELINE_SHADOW_STRUCTURE_COUNT = 5;
 const REF02_TARGET_ROOT_BARREL_MAX_LINES = 50;
 const REF02_TARGET_WILDCARD_EXPORT_COUNT = 0;
 const REF02_TARGET_SHADOW_STRUCTURE_COUNT = 0;
@@ -79,7 +77,7 @@ describe('foundation root barrel baseline (FR-02)', () => {
         expect(wildcards).toBeGreaterThan(REF02_TARGET_WILDCARD_EXPORT_COUNT);
     });
 
-    it('records seven shadow structures before FM-1 completes', () => {
+    it('records five shadow structures before FM-1 completes', () => {
         expect(countShadowStructures()).toBe(BASELINE_SHADOW_STRUCTURE_COUNT);
         expect(BASELINE_SHADOW_STRUCTURE_COUNT).toBeGreaterThan(REF02_TARGET_SHADOW_STRUCTURE_COUNT);
     });
