@@ -1,4 +1,4 @@
-import type {StatusRuntimeView, StatusWarningCode} from '../contracts/index.js';
+import type {StatusRuntimeView, StatusWarningCode} from '../../contracts/index.js';
 
 /**
  * Runtime qualification remains unavailable until RT-02 provides the accepted

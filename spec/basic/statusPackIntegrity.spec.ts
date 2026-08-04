@@ -2,13 +2,12 @@ import {cmd} from '@nirvana/base/terminal';
 import {mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import type {WorkerEventRecord} from '../../src/contracts/index.js';
-import {StatusAcceptedInputInspector} from '../../src/foundation/StatusAcceptedInputInspector.js';
-import {StatusPackAcceptanceAuthority} from '../../src/foundation/StatusPackAcceptanceAuthority.js';
-import {StatusPackIntegrity} from '../../src/foundation/StatusPackIntegrity.js';
-import {StatusProjection} from '../../src/foundation/StatusProjection.js';
-import {StatusSourceBaselineInspector} from '../../src/foundation/StatusSourceBaselineInspector.js';
+import {
+    StatusAcceptedInputInspector, StatusPackAcceptanceAuthority, StatusPackIntegrity, StatusProjection,
+    StatusSourceBaselineInspector
+} from '../../src/foundation/status/index.js';
 import {compareRfc3339DateTimes, isRfc3339DateTime} from '../../src/foundation/rfc3339DateTime.js';
-import type {PackAcceptanceRecord, PackManifestRecord} from '../../src/foundation/statusPackTypes.js';
+import type {PackAcceptanceRecord, PackManifestRecord} from '../../src/foundation/status/index.js';
 import {
     createLane, createReadCommandFixture, repository, type LaneFixtureOptions
 } from './readCommandFixtures.js';

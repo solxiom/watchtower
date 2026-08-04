@@ -1,9 +1,9 @@
 import {relative, sep} from 'node:path';
-import type {RepositoryBinding} from '../contracts/index.js';
+import type {RepositoryBinding} from '../../contracts/index.js';
 import {StatusRepositoryGitInspector, type RepositoryChanges} from './StatusRepositoryGitInspector.js';
 import type {PackManifestRecord} from './statusPackTypes.js';
 import {StatusProofInputInspector} from './StatusProofInputInspector.js';
-import {resourcePathsOverlap} from './bindings/index.js';
+import {resourcePathsOverlap} from '../bindings/index.js';
 
 export class StatusSourceBaselineInspector {
     constructor(private readonly git: StatusRepositoryChangesSource = new StatusRepositoryGitInspector(),

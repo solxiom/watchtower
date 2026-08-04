@@ -1,8 +1,8 @@
 import {existsSync, lstatSync, realpathSync} from 'node:fs';
 import {resolve, sep} from 'node:path';
-import type {RepositoryBinding, StatusPackIntegrityView, StatusWarningCode, WorkerEventRecord} from '../contracts/index.js';
+import type {RepositoryBinding, StatusPackIntegrityView, StatusWarningCode, WorkerEventRecord} from '../../contracts/index.js';
 import type {StatusLane} from './statusLaneTypes.js';
-import {semanticDigest} from './schemaComposition/jsonCanonicalizer.js';
+import {semanticDigest} from '../schemaComposition/jsonCanonicalizer.js';
 import {StatusPackContractReader} from './StatusPackContractReader.js';
 import {StatusAcceptedInputInspector} from './StatusAcceptedInputInspector.js';
 import {StatusPackAcceptanceAuthority} from './StatusPackAcceptanceAuthority.js';

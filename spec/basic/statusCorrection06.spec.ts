@@ -1,4 +1,4 @@
-import {StatusProjection} from '../../src/foundation/StatusProjection.js';
+import {StatusProjection} from '../../src/foundation/status/index.js';
 import {createLane, createReadCommandFixture, type LaneFixtureOptions} from './readCommandFixtures.js';
 
 describe('RM-12 correction 06', function () {

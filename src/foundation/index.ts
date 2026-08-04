@@ -69,10 +69,10 @@ export type {LaneListQuery, LaneListServiceOptions} from './read/index.js';
 export {digestLaneListQuery, MAX_LIST_PAGE_SIZE, paginateLaneList, validateLaneListPageInput} from './read/index.js';
 export {ResolvedConfigService} from './read/index.js';
 export type {ResolvedConfigQuery, ResolvedConfigServiceOptions} from './read/index.js';
-export {StatusProjection} from './StatusProjection.js';
-export type {StatusProjectionOptions, StatusProjectionQuery} from './StatusProjection.js';
-export {deriveStatusHealth} from './statusHealth.js';
-export type {StatusHealthInput} from './statusHealth.js';
+export {StatusProjection} from './status/index.js';
+export type {StatusProjectionOptions, StatusProjectionQuery} from './status/index.js';
+export {deriveStatusHealth} from './status/index.js';
+export type {StatusHealthInput} from './status/index.js';
 export {consumePack, packRepoPath} from './PackConsumer.js';
 export type {
     PackAcceptanceEvidence,

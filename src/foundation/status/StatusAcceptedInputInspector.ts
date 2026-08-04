@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {relative, sep} from 'node:path';
-import type {RepositoryBinding} from '../contracts/index.js';
+import type {RepositoryBinding} from '../../contracts/index.js';
 import {StatusRepositoryGitInspector} from './StatusRepositoryGitInspector.js';
 import type {PackAcceptedInput, PackFileDigest} from './statusPackTypes.js';
 import {regularContainedFile} from './statusRegularFileIdentity.js';

@@ -1,8 +1,8 @@
 import {computeDocumentDigest} from './PackSeal.js';
 import {asArray, asString, isRecord} from './packJsonReaders.js';
 import {isJsonObject} from './schemaComposition/jsonCanonicalizer.js';
-import {StatusPackAcceptanceAuthority} from './StatusPackAcceptanceAuthority.js';
-import {projectPackRecords} from './statusPackRecordProjection.js';
+import {StatusPackAcceptanceAuthority} from './status/index.js';
+import {projectPackRecords} from './status/index.js';
 import type {WorkerEventRecord} from '../contracts/events.js';
 import {
     packRejection,

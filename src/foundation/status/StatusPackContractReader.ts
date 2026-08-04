@@ -1,11 +1,11 @@
 import Ajv2020 from 'ajv/dist/2020.js';
-import {hasDuplicateJsonObjectKey} from './schemaComposition/jsonDuplicateKeyDetector.js';
-import {isJsonObject, isJsonValue} from './schemaComposition/jsonCanonicalizer.js';
-import {loadV1SchemaBundle} from './schemaBundle.js';
-import {isRfc3339DateTime} from './rfc3339DateTime.js';
+import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
+import {isJsonObject, isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
+import {loadV1SchemaBundle} from '../schemaBundle.js';
+import {isRfc3339DateTime} from '../rfc3339DateTime.js';
 import {projectPackRecords} from './statusPackRecordProjection.js';
 import type {PackAcceptanceRecord, PackLockRecord, PackManifestRecord} from './statusPackTypes.js';
-import type {JsonObject} from './schemaComposition/schemaCompositionContracts.js';
+import type {JsonObject} from '../schemaComposition/schemaCompositionContracts.js';
 
 export class StatusPackContractReader {
     read(manifestText: string, acceptanceText: string, lockText: string): {

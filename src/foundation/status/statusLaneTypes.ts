@@ -1,3 +1,3 @@
-import type {RelevantLaneDiscovery} from './discovery/index.js';
+import type {RelevantLaneDiscovery} from '../discovery/index.js';
 
 export type StatusLane = ReturnType<RelevantLaneDiscovery['discover']>['lanes'][number];

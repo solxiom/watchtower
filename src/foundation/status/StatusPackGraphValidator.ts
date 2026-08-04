@@ -1,5 +1,5 @@
-import {isJsonObject} from './schemaComposition/jsonCanonicalizer.js';
-import type {JsonObject, JsonValue} from './schemaComposition/schemaCompositionContracts.js';
+import {isJsonObject} from '../schemaComposition/jsonCanonicalizer.js';
+import type {JsonObject, JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
 import type {PackFileDigest, PackManifestRecord} from './statusPackTypes.js';
 
 const ARTIFACT_PATHS: Readonly<Record<string, string>> = Object.freeze({

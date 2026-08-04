@@ -1,4 +1,4 @@
-import type {JsonValue} from './schemaComposition/schemaCompositionContracts.js';
+import type {JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
 
 export interface PackManifestRecord {
     readonly value: JsonValue;

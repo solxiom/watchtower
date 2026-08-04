@@ -10,7 +10,7 @@ import {
 } from '../../src/foundation/index.js';
 import {loadV1SchemaBundle} from '../../src/foundation/schemaBundle.js';
 import {isRfc3339DateTime} from '../../src/foundation/rfc3339DateTime.js';
-import {StatusEventProjection} from '../../src/foundation/StatusEventProjection.js';
+import {StatusEventProjection} from '../../src/foundation/status/index.js';
 import {createCli} from '../../src/run.js';
 import {
     createLane, createReadCommandFixture, repository, treeSnapshot, writeJson, writeMembershipIndex

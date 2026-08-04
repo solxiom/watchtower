@@ -1,5 +1,5 @@
-import type {WorkerEventRecord} from '../contracts/index.js';
-import {compareRfc3339DateTimes} from './rfc3339DateTime.js';
+import type {WorkerEventRecord} from '../../contracts/index.js';
+import {compareRfc3339DateTimes} from '../rfc3339DateTime.js';
 import type {PackAcceptanceRecord, PackManifestRecord} from './statusPackTypes.js';
 
 export class StatusPackAcceptanceAuthority {

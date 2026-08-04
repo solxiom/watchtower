@@ -1,4 +1,4 @@
-import type {HealthStatus, ReadModelLaneLifecycle, StatusWarning, StatusWarningCode} from '../contracts/index.js';
+import type {HealthStatus, ReadModelLaneLifecycle, StatusWarning, StatusWarningCode} from '../../contracts/index.js';
 
 export interface StatusHealthInput {
     readonly lifecycle: ReadModelLaneLifecycle;

@@ -1,5 +1,5 @@
 import type {LaneStatusV1, RepositoryBinding, StatusRelatedLane, StatusRepositoryView,
-    StatusWarningCode} from '../contracts/index.js';
+    StatusWarningCode} from '../../contracts/index.js';
 import type {StatusLane} from './statusLaneTypes.js';
 import type {StatusSessionObservation} from './StatusLiveObserver.js';
 

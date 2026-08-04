@@ -1,5 +1,5 @@
-import {isJsonObject, isJsonValue} from './schemaComposition/jsonCanonicalizer.js';
-import type {JsonObject, JsonValue} from './schemaComposition/schemaCompositionContracts.js';
+import {isJsonObject, isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
+import type {JsonObject, JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
 import type {PackAcceptanceRecord, PackLockRecord, PackManifestRecord} from './statusPackTypes.js';
 
 export function projectPackRecords(manifest: JsonObject, acceptance: JsonObject, lock: JsonObject): {

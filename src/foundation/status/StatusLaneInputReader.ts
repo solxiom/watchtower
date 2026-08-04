@@ -1,11 +1,11 @@
-import type {RepositoryBinding, StatusWarningCode, WatchtowerError, WorkerEventRecord} from '../contracts/index.js';
-import {buildLaneFilePath} from './paths/index.js';
-import {parseJsonlStream} from './parsing/index.js';
-import {LaneConfigProjectionReader} from './read/index.js';
-import {LaneInstallIdentityReader} from './read/index.js';
-import {ContainedLaneReadFileStore, type LaneReadFileStore} from './read/index.js';
+import type {RepositoryBinding, StatusWarningCode, WatchtowerError, WorkerEventRecord} from '../../contracts/index.js';
+import {buildLaneFilePath} from '../paths/index.js';
+import {parseJsonlStream} from '../parsing/index.js';
+import {LaneConfigProjectionReader} from '../read/index.js';
+import {LaneInstallIdentityReader} from '../read/index.js';
+import {ContainedLaneReadFileStore, type LaneReadFileStore} from '../read/index.js';
 import type {StatusLane} from './statusLaneTypes.js';
-import {readRepositoryBindings} from './bindings/index.js';
+import {readRepositoryBindings} from '../bindings/index.js';
 
 const MAX_EVENT_BYTES = 4 * 1024 * 1024;
 
