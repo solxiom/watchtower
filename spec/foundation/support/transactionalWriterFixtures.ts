@@ -1,8 +1,8 @@
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
-import {TransactionalWriteError} from '../../../src/foundation/transactionalWriter/index.js';
-import type {LaneLayout} from '../../../src/foundation/laneStore/laneStoreContracts.js';
-import type {TransactionalWriterFileHandle, TransactionalWriterFileSystem} from '../../../src/foundation/transactionalWriter/transactionalWriterFileSystem.js';
+import {TransactionalWriteError} from '../../../src/foundation/lane/writer/index.js';
+import type {LaneLayout} from '../../../src/foundation/lane/store/laneStoreContracts.js';
+import type {TransactionalWriterFileHandle, TransactionalWriterFileSystem} from '../../../src/foundation/lane/writer/transactionalWriterFileSystem.js';
 
 export const LANE_DIR = '/repo/.watchtower/lanes/lane-1';
 export const LANES_DIR = '/repo/.watchtower/lanes';

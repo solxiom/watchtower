@@ -11,7 +11,7 @@
  * created by LC-03's `buildLaneLayout`.
  */
 import {join} from 'node:path';
-import type {LaneFile} from '../laneStore/laneStoreContracts.js';
+import type {LaneFile} from '../store/laneStoreContracts.js';
 
 const JOURNAL_FILES = ['coordinator-events.jsonl', 'effect-events.jsonl', 'usage-ledger.jsonl'] as const;
 

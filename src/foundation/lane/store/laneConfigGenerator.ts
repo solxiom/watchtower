@@ -4,10 +4,10 @@
  * double-quoted and re-checked against the exact byte class the parser
  * rejects, so a generated file always round-trips through that reader.
  */
-import type {ConsumedPack} from '../../contracts/pack.js';
-import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../paths/index.js';
-import type {InitPlan} from '../init/index.js';
+import type {ConsumedPack} from '../../../contracts/pack.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
+import {safePathTarget} from '../../paths/index.js';
+import type {InitPlan} from '../../init/index.js';
 import {homeRepositoryId} from './laneManifestGenerator.js';
 
 const ORDERED_KEYS = ['LANE_ID', 'LANE_SLUG', 'INITIATIVE_ID', 'HOME_REPOSITORY_ID', 'WORKSPACE', 'TMUX_PREFIX', 'IMPL_PACK_REL'] as const;

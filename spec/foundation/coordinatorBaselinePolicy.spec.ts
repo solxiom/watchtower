@@ -1,8 +1,8 @@
 import {join} from 'node:path';
-import {buildContextPolicyDocument} from '../../src/foundation/coordinatorBaseline/contextPolicyBaseline.js';
-import {buildDurableRoots} from '../../src/foundation/coordinatorBaseline/durableRootsPlanner.js';
-import {buildRoutingPolicyDocument} from '../../src/foundation/coordinatorBaseline/routingPolicyProjection.js';
-import type {InstalledKnowledgeTag} from '../../src/foundation/coordinatorBaseline/coordinatorBaselineContracts.js';
+import {buildContextPolicyDocument} from '../../src/foundation/lane/coordinator/contextPolicyBaseline.js';
+import {buildDurableRoots} from '../../src/foundation/lane/coordinator/durableRootsPlanner.js';
+import {buildRoutingPolicyDocument} from '../../src/foundation/lane/coordinator/routingPolicyProjection.js';
+import type {InstalledKnowledgeTag} from '../../src/foundation/lane/coordinator/coordinatorBaselineContracts.js';
 import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/init/index.js';
 import type {WatchtowerError} from '../../src/contracts/index.js';
 

@@ -11,9 +11,9 @@
  * `TransactionalWriteError` — see `transactionalWriterContracts.ts`.
  */
 import {dirname, isAbsolute, join, relative, sep} from 'node:path';
-import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../paths/index.js';
-import type {LaneLayout} from '../laneStore/laneStoreContracts.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
+import {safePathTarget} from '../../paths/index.js';
+import type {LaneLayout} from '../store/laneStoreContracts.js';
 import {stageLaneLayout} from './laneStagingWriter.js';
 import {TransactionalWriteError, type WriteResult, type WriteStage} from './transactionalWriterContracts.js';
 import {nodeTransactionalWriterFileSystem, type TransactionalWriterFileSystem} from './transactionalWriterFileSystem.js';

@@ -11,8 +11,8 @@
  * model-free projection: `wt init` never asks a model to infer session
  * limits, and no Markdown guide asset is parsed to produce it.
  */
-import {isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
-import {createWatchtowerError} from '../../contracts/errors.js';
+import {isJsonValue} from '../../schemaComposition/jsonCanonicalizer.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
 import type {ContextPolicyDocument, InstalledKnowledgeTag, OperatorSessionPolicy} from './coordinatorBaselineContracts.js';
 
 /** Exact `docs/spec/v1-contracts.md` §7 "Operator-standard session defaults" values; every number is pinned, none is invented. */

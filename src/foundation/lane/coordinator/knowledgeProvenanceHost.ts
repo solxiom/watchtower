@@ -5,7 +5,7 @@
  * version and `provenance` block. This never reads or restates a knowledge
  * asset's Markdown bytes.
  */
-import {resolveKnowledgeRoot} from '../hostAdapters/knowledgePackSource.js';
+import {resolveKnowledgeRoot} from '../../hostAdapters/knowledgePackSource.js';
 import type {InstalledKnowledgeTag, KnowledgeProvenancePort} from './coordinatorBaselineContracts.js';
 
 export function resolveInstalledKnowledgeTag(dataHome: string): InstalledKnowledgeTag {

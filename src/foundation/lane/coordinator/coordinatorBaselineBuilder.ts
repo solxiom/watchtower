@@ -14,13 +14,13 @@
  * than only a standalone fixture.
  */
 import {join} from 'node:path';
-import {createWatchtowerError} from '../../contracts/errors.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
 import {buildContextPolicyDocument} from './contextPolicyBaseline.js';
 import type {CoordinatorBaselineInputs, CoordinatorBaselineLayout, LaneLayout} from './coordinatorBaselineContracts.js';
 import {buildDurableRoots} from './durableRootsPlanner.js';
 import {nodeKnowledgeProvenanceHost} from './knowledgeProvenanceHost.js';
 import {buildRoutingPolicyDocument} from './routingPolicyProjection.js';
-import type {LaneFile} from '../laneStore/laneStoreContracts.js';
+import type {LaneFile} from '../store/laneStoreContracts.js';
 
 export function buildCoordinatorBaseline(inputs: CoordinatorBaselineInputs): CoordinatorBaselineLayout {
     const {plan, dataHome, knowledgePort = nodeKnowledgeProvenanceHost} = inputs;

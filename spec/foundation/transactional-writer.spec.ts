@@ -1,6 +1,6 @@
 import {join} from 'node:path';
-import {commitLane, rollbackStaging} from '../../src/foundation/transactionalWriter/index.js';
-import type {LaneLayout} from '../../src/foundation/laneStore/laneStoreContracts.js';
+import {commitLane, rollbackStaging} from '../../src/foundation/lane/writer/index.js';
+import type {LaneLayout} from '../../src/foundation/lane/store/laneStoreContracts.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 import {
     basenameOf,

@@ -8,8 +8,8 @@
  * for dry-run reporting and is intentionally not reused here.
  */
 import {join} from 'node:path';
-import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../paths/index.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
+import {safePathTarget} from '../../paths/index.js';
 import {generateInstallManifest} from './installManifestGenerator.js';
 import {generateLaneConfig} from './laneConfigGenerator.js';
 import {generateLaneManifest} from './laneManifestGenerator.js';

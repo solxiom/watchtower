@@ -6,9 +6,9 @@
  * owner); it only records policy version, a semantic digest, and knowledge
  * attribution, so no truth is duplicated across the two files.
  */
-import {createWatchtowerError} from '../../contracts/errors.js';
-import {isJsonValue, semanticDigest} from '../schemaComposition/jsonCanonicalizer.js';
-import type {InitPlan} from '../init/index.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
+import {isJsonValue, semanticDigest} from '../../schemaComposition/jsonCanonicalizer.js';
+import type {InitPlan} from '../../init/index.js';
 import type {InstalledKnowledgeTag, RoutingPolicyDocument} from './coordinatorBaselineContracts.js';
 
 export function buildRoutingPolicyDocument(

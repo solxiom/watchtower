@@ -1,11 +1,11 @@
 import {existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {buildCoordinatorBaseline, composeLaneLayoutWithCoordinatorBaseline} from '../../src/foundation/coordinatorBaseline/index.js';
-import type {KnowledgeProvenancePort} from '../../src/foundation/coordinatorBaseline/coordinatorBaselineContracts.js';
-import {resolveInstalledKnowledgeTag} from '../../src/foundation/coordinatorBaseline/knowledgeProvenanceHost.js';
-import {commitLane, TransactionalWriteError} from '../../src/foundation/transactionalWriter/index.js';
-import type {LaneLayout} from '../../src/foundation/laneStore/laneStoreContracts.js';
+import {buildCoordinatorBaseline, composeLaneLayoutWithCoordinatorBaseline} from '../../src/foundation/lane/coordinator/index.js';
+import type {KnowledgeProvenancePort} from '../../src/foundation/lane/coordinator/coordinatorBaselineContracts.js';
+import {resolveInstalledKnowledgeTag} from '../../src/foundation/lane/coordinator/knowledgeProvenanceHost.js';
+import {commitLane, TransactionalWriteError} from '../../src/foundation/lane/writer/index.js';
+import type {LaneLayout} from '../../src/foundation/lane/store/laneStoreContracts.js';
 import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/init/index.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 import {createKnowledgePackFixture, FIXTURE_KNOWLEDGE_VERSION} from '../basic/skillInstallFixtures.js';

@@ -8,7 +8,7 @@
  */
 import {createHash} from 'node:crypto';
 import {basename, dirname, join, relative} from 'node:path';
-import type {LaneFile, LaneLayout, LaneManagedLink} from '../laneStore/laneStoreContracts.js';
+import type {LaneFile, LaneLayout, LaneManagedLink} from '../store/laneStoreContracts.js';
 import {TransactionalWriteError, type WriteStage} from './transactionalWriterContracts.js';
 import type {TransactionalWriterFileSystem} from './transactionalWriterFileSystem.js';
 

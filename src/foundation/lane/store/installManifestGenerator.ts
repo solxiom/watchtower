@@ -8,10 +8,10 @@
  * later `upgrade`.
  */
 import {isAbsolute, relative} from 'node:path';
-import type {ManagedAssetDeclaration, InstallManifestV1} from '../../contracts/manifests.js';
-import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../paths/index.js';
-import type {InitPlan} from '../init/index.js';
+import type {ManagedAssetDeclaration, InstallManifestV1} from '../../../contracts/manifests.js';
+import {createWatchtowerError} from '../../../contracts/errors.js';
+import {safePathTarget} from '../../paths/index.js';
+import type {InitPlan} from '../../init/index.js';
 import type {InstallManifestInputs, LaneManagedLink} from './laneStoreContracts.js';
 
 const VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(?:-.+)?$/u;
