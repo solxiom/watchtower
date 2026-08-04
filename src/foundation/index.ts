@@ -7,10 +7,10 @@ export {
     resolveWorkspaceContext, validateWatchtowerDataHome
 } from './paths/index.js';
 export type {UserHomeProvider} from './paths/index.js';
-export {RuntimeCatalog} from './runtimeCatalog/index.js';
-export type {RuntimeCatalogOptions} from './runtimeCatalog/index.js';
-export {ManagedAssets, LaneTaskProfileInstaller} from './managedAssets/index.js';
-export type {ManagedAssetsOptions, LaneTaskProfileInstallRequest} from './managedAssets/index.js';
+export {RuntimeCatalog} from './runtimeDistribution/index.js';
+export type {RuntimeCatalogOptions} from './runtimeDistribution/index.js';
+export {ManagedAssets, LaneTaskProfileInstaller} from './runtimeDistribution/index.js';
+export type {ManagedAssetsOptions, LaneTaskProfileInstallRequest} from './runtimeDistribution/index.js';
 export {
     COMPATIBILITY_NAMES,
     resolveCompatibilityName,
@@ -18,13 +18,13 @@ export {
     requireCompatibilityAction,
     nodeManagedLinkFileSystem,
     parseInstallManifest
-} from './managedAssets/index.js';
+} from './runtimeDistribution/index.js';
 export type {
     CompatibilityNameTable,
     ManagedLinkFileSystem,
     ManagedLinkSourceKind,
     ManagedLinkSourceObservation
-} from './managedAssets/index.js';
+} from './runtimeDistribution/index.js';
 export {InitPlanner, validateInitRequest} from './init/index.js';
 export {UpgradePlanner} from './upgrade/index.js';
 export type {UpgradePlannerOptions} from './upgrade/index.js';

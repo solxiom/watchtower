@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 in progress (FR-20 … FR-22 ✅)**
+Status: **Active — FM-3 in progress (FR-20 … FR-23 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,7 +19,7 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **23 / 32** work units accepted |
+| Score | **24 / 32** work units accepted |
 | Baseline root files | 6 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
@@ -32,7 +32,7 @@ Last updated: 2026-08-04
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
 | FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
 | FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
-| FM-3 | L4 domain extraction | REF-01 | ⏳ In progress | FR-18 … FR-19 ✅ |
+| FM-3 | L4 domain extraction | REF-01 | ⏳ In progress | FR-18 … FR-23 ✅ |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
 
 ---
@@ -81,7 +81,7 @@ Last updated: 2026-08-04
 | FR-20 | `upgrade/` | ✅ Accepted | 6 modules + barrel; `upgradeArchitecture.spec.ts`; upgrade specs green; `nvb test` green |
 | FR-21 | `observation/` | ✅ Accepted | 5 modules + barrel; `runtimeObservations.spec.ts` green; `nvb test` green |
 | FR-22 | `lifecycle/` | ✅ Accepted | 2 modules + barrel; binding/membership specs green; `nvb test` green |
-| FR-23 | `runtimeDistribution/` | ❌ Pending | Re-export barrel for catalog + managed assets |
+| FR-23 | `runtimeDistribution/` | ✅ Accepted | Re-export barrel for catalog + managed assets; `nvb test` green |
 | FR-24 | FM-3 integration | ❌ Pending | Root file count = 1; `nvb test` |
 
 ### FM-4 — Barrel hardening (REF-02)
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 23 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 24 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -127,7 +127,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `lifecycle/` | L4 | FR-22 | ✅ | ✅ | Accepted |
 | `pack/` | L4 | FR-19 | ✅ | ✅ | Accepted |
 | `upgrade/` | L4 | FR-20 | ✅ | ✅ | Accepted |
-| `runtimeDistribution/` | L4 | FR-23 | ❌ | ❌ | Pending |
+| `runtimeDistribution/` | L4 | FR-23 | ✅ | ✅ | Accepted |
 | `laneStore/` | L5 | FR-03 | ✅ | ✅ | Accepted |
 | `transactionalWriter/` | L5 | FR-04 | ✅ | ✅ | Accepted |
 | `coordinatorBaseline/` | L5 | FR-10 | ✅ | ✅ | Accepted |
