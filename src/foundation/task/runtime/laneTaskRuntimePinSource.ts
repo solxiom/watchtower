@@ -5,9 +5,9 @@
  * beyond "the document parses and has a `taskRuntime` member", because the pin
  * contract belongs to `taskRuntimePin.ts`.
  */
-import {createWatchtowerError} from '../../contracts/index.js';
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
-import {ContainedLaneReadFileStore, type LaneReadFileStore} from '../read/index.js';
+import {createWatchtowerError} from '../../../contracts/index.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
+import {ContainedLaneReadFileStore, type LaneReadFileStore} from '../../read/index.js';
 import type {TaskRuntimePinSource} from './LaneTaskRunner.js';
 
 const INSTALL_FILE = 'install.json';

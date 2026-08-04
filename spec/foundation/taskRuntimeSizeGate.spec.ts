@@ -84,7 +84,7 @@ function ownedFiles(): readonly string[] {
         ...OWNED_PROBES,
         join(ROOT, 'src', 'contracts', 'taskRuntime.ts'),
         join(ROOT, 'src', 'contracts', 'leafRuntime.ts'),
-        ...typeScriptFiles(join(ROOT, 'src', 'foundation', 'taskRuntime')),
+        ...typeScriptFiles(join(ROOT, 'src', 'foundation', 'task', 'runtime')),
         ...typeScriptFiles(join(ROOT, 'src', 'foundation', 'runtime')),
         ...typeScriptFiles(join(ROOT, 'spec', 'integration')),
         ...OWNED_SUPPORT.map((name) => join(ROOT, 'spec', 'foundation', 'support', name)),

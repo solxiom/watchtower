@@ -27,8 +27,8 @@
  * fails closed until the predecessor emits a loadable module; it does not weaken
  * the target to preserve a green path.
  */
-import type {PinnedTaskRuntimeTarget} from '../../contracts/taskRuntime.js';
-import type {RuntimeProcessRequest} from '../runtime/leaf/runtimeProcessPorts.js';
+import type {PinnedTaskRuntimeTarget} from '../../../contracts/taskRuntime.js';
+import type {RuntimeProcessRequest} from '../../runtime/leaf/runtimeProcessPorts.js';
 import type {NvbRunnerBinding} from './packagedNvbRunner.js';
 
 const ENVELOPE_FLAG = '--wt-invocation-envelope';

@@ -4,7 +4,7 @@ import type {
     CatalogAggregateFileHandle,
     CatalogAggregateFileInfo,
     CatalogAggregateFileSystem
-} from '../../src/foundation/taskCatalogComposition/catalogAggregateFileSystem.js';
+} from '../../src/foundation/task/catalog/catalogAggregateFileSystem.js';
 
 export interface CatalogFileSystemFault {
     readonly operationPrefix: string;

@@ -12,10 +12,10 @@
  * the process starts when the packaged projection and the declared contract
  * disagree.
  */
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
-import {isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
-import {LaneTaskRuntimeError, type LaneTaskRuntimeReason} from '../../contracts/taskRuntime.js';
-import type {JsonValue} from '../../contracts/types.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
+import {isJsonValue} from '../../schemaComposition/jsonCanonicalizer.js';
+import {LaneTaskRuntimeError, type LaneTaskRuntimeReason} from '../../../contracts/taskRuntime.js';
+import type {JsonValue} from '../../../contracts/types.js';
 import type {RuntimeFileSystem} from './runtimeFileSystem.js';
 
 const MAX_CONFIG_BYTES = 4 * 1024 * 1024;

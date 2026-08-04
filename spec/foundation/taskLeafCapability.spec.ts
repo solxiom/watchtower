@@ -8,7 +8,7 @@
  * invoker, and it still must not obtain the capability.
  */
 import {LeafRuntimeError, type TaskLeafCapability} from '../../src/contracts/leafRuntime.js';
-import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
+import {LaneTaskCatalog} from '../../src/foundation/task/runtime/LaneTaskCatalog.js';
 // The internal, argv-injectable core — imported directly (not through any
 // public barrel) so this suite can exercise every argv shape. The exported
 // `grantExecutingTaskLeafCapability` (Correction 05 finding 1) takes no `argv`

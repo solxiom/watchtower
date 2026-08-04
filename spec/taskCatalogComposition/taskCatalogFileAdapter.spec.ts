@@ -14,7 +14,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 
 import {runTaskCatalogCompositionTask} from
-    '../../src/foundation/taskCatalogComposition/taskCatalogCompositionFileAdapter.js';
+    '../../src/foundation/task/catalog/taskCatalogCompositionFileAdapter.js';
 
 const CATALOG = join('runtime-nvb', 'catalog');
 const CAPABILITIES = join(CATALOG, 'capabilities');

@@ -12,7 +12,7 @@
  */
 import {createRequire} from 'node:module';
 import {dirname, join} from 'node:path';
-import {LaneTaskRuntimeError} from '../../contracts/taskRuntime.js';
+import {LaneTaskRuntimeError} from '../../../contracts/taskRuntime.js';
 import type {RuntimeFileSystem} from './runtimeFileSystem.js';
 
 const BUILDER_PACKAGE = '@nirvana/builder';

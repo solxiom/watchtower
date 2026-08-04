@@ -33,7 +33,7 @@ import {decideCreate, decideRemove} from './managedLinkValidator.js';
 import {createLink, removeLink} from './managedLinkMutator.js';
 import {validateLink} from './managedLinkValidation.js';
 import {acquireManagedAssetsLock} from './managedAssetsLock.js';
-import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
+import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../../task/runtime/runtimeFileSystem.js';
 
 export interface ManagedAssetsOptions {
     readonly fileSystem?: ManagedLinkFileSystem;

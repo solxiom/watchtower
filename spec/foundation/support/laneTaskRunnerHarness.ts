@@ -1,9 +1,9 @@
 import {LaneTaskRuntimeError} from '../../../src/contracts/taskRuntime.js';
 import {LaneInstallIdentityReader, type LaneInstallIdentity} from '../../../src/foundation/read/index.js';
-import {NirvanaLaneTaskRunner} from '../../../src/foundation/taskRuntime/NirvanaLaneTaskRunner.js';
-import type {NvbRunnerBinding} from '../../../src/foundation/taskRuntime/packagedNvbRunner.js';
+import {NirvanaLaneTaskRunner} from '../../../src/foundation/task/runtime/NirvanaLaneTaskRunner.js';
+import type {NvbRunnerBinding} from '../../../src/foundation/task/runtime/packagedNvbRunner.js';
 import type {RuntimeRootResolver, TaskRuntimePinSource}
-    from '../../../src/foundation/taskRuntime/LaneTaskRunner.js';
+    from '../../../src/foundation/task/runtime/LaneTaskRunner.js';
 import type {JsonObject} from '../../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 import type {RuntimeProcessOutcome} from '../../../src/foundation/runtime/leaf/runtimeProcessPorts.js';
 import type {FakeEntry} from './laneTaskRuntimeFixtures.js';

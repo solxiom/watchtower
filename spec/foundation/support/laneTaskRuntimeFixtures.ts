@@ -9,7 +9,7 @@ import type {
     RuntimeAccount,
     RuntimeFileSystem,
     RuntimePathObservation
-} from '../../../src/foundation/taskRuntime/runtimeFileSystem.js';
+} from '../../../src/foundation/task/runtime/runtimeFileSystem.js';
 import type {
     RuntimeProcessInvoker,
     RuntimeProcessOutcome,

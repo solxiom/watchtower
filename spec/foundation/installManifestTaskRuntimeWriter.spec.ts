@@ -4,8 +4,8 @@ import {LaneTaskProfileInstaller} from '../../src/foundation/runtime/distributio
 import {rebindTaskRuntime} from '../../src/foundation/runtime/distribution/installManifestTaskRuntimeWriter.js';
 import {ManagedAssetsError} from '../../src/contracts/manifests.js';
 import {createLockRecord, tryCreateLockRecord} from '../../src/foundation/storage/writeLockRecord.js';
-import {readTaskRuntimePin} from '../../src/foundation/taskRuntime/taskRuntimePin.js';
-import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';
+import {readTaskRuntimePin} from '../../src/foundation/task/runtime/taskRuntimePin.js';
+import {nodeRuntimeFileSystem} from '../../src/foundation/task/runtime/runtimeFileSystem.js';
 import {
     CLI_VERSION,
     PROFILE_ID,

@@ -3,7 +3,7 @@ import {
     formattedCanonicalJson,
     isJsonObject,
     semanticDigest
-} from '../schemaComposition/jsonCanonicalizer.js';
+} from '../../schemaComposition/jsonCanonicalizer.js';
 import type {
     CatalogCollections,
     JsonObject,

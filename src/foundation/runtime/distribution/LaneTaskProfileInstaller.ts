@@ -11,8 +11,8 @@ import {join} from 'node:path';
 import type {RuntimeCatalog} from '../catalog/index.js';
 import type {PinnedTaskRuntimeTarget} from '../../../contracts/taskRuntime.js';
 import type {InstallManifestV1} from '../../../contracts/manifests.js';
-import {readTaskRuntimePin} from '../../taskRuntime/taskRuntimePin.js';
-import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
+import {readTaskRuntimePin} from '../../task/runtime/taskRuntimePin.js';
+import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../../task/runtime/runtimeFileSystem.js';
 import {readNarrowedProfileCatalog} from './laneTaskProfileCatalogReader.js';
 import {rebindTaskRuntime} from './installManifestTaskRuntimeWriter.js';
 

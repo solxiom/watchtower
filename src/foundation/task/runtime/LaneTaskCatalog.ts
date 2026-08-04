@@ -9,10 +9,10 @@
  * catalog bytes, and treats every field as `unknown` until proved.
  */
 import {dirname, join} from 'node:path';
-import {isJsonValue, semanticDigest} from '../schemaComposition/jsonCanonicalizer.js';
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
-import type {JsonObject} from '../schemaComposition/schemaCompositionContracts.js';
-import {LeafRuntimeError} from '../../contracts/leafRuntime.js';
+import {isJsonValue, semanticDigest} from '../../schemaComposition/jsonCanonicalizer.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
+import type {JsonObject} from '../../schemaComposition/schemaCompositionContracts.js';
+import {LeafRuntimeError} from '../../../contracts/leafRuntime.js';
 import {
     LaneTaskRuntimeError,
     type LaneRuntimeLeaf,
@@ -20,7 +20,7 @@ import {
     type LaneTaskMutationClass,
     type LaneTaskRuntimeReason,
     type PinnedTaskRuntimeTarget
-} from '../../contracts/taskRuntime.js';
+} from '../../../contracts/taskRuntime.js';
 import {containedInRoot, requireContainedRuntimeFile} from './taskRuntimePin.js';
 import {readCatalogSchema, type JsonSchemaDocument} from './laneTaskSchemaValidation.js';
 import type {RuntimeFileSystem} from './runtimeFileSystem.js';

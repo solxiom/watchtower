@@ -88,7 +88,7 @@ async function verify() {
         const sourceFixtureRoot = join(temporaryRoot, 'git-materialized-fixture');
         await cp(DIST_RUNTIME, runtimeRoot, {recursive: true});
         await copyFixture(runtimeRoot, fixtureRoot);
-        const adapterUrl = pathToFileURL(join(runtimeRoot, 'foundation', 'taskCatalogComposition',
+        const adapterUrl = pathToFileURL(join(runtimeRoot, 'foundation', 'task', 'catalog',
             'taskCatalogCompositionFileAdapter.js')).href;
         const adapterModule = await import(adapterUrl);
         const sourceLeafMode = await verifyGitMaterializedSource(adapterModule, sourceFixtureRoot);

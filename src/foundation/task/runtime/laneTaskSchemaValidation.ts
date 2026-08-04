@@ -12,8 +12,8 @@
 import {join} from 'node:path';
 import Ajv from 'ajv';
 import Ajv2020 from 'ajv/dist/2020.js';
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
-import {LaneTaskRuntimeError} from '../../contracts/taskRuntime.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
+import {LaneTaskRuntimeError} from '../../../contracts/taskRuntime.js';
 import {requireContainedRuntimeFile} from './taskRuntimePin.js';
 import type {RuntimeFileSystem} from './runtimeFileSystem.js';
 

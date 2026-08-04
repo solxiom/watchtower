@@ -12,7 +12,7 @@ const OWNED_MODULES = readdirSync(PACK_DIR)
     .filter((name) => name.endsWith('.ts'))
     .map((name) => join(PACK_DIR, name));
 
-const L5_CAPSULE_IMPORT = /from\s+['"]\.\.\/(laneStore|transactionalWriter|runtime|packIndex|indexStore|indexQuery|coordinatorBaseline|taskRuntime)\//;
+const L5_CAPSULE_IMPORT = /from\s+['"]\.\.\/(laneStore|transactionalWriter|runtime|task|packIndex|indexStore|indexQuery|coordinatorBaseline)\//;
 const OWNED_MODULE_LIMIT = 262;
 const COMMONS_STORAGE = '@nirvana/commons/foundation/storage/basic';
 const GIT_DRIVER = '@nirvana/base/git';

@@ -6,7 +6,7 @@ import ts from 'typescript';
 
 import {isJsonObject} from '../../src/foundation/schemaComposition/jsonCanonicalizer.js';
 
-const SOURCE_ROOT = join(process.cwd(), 'src', 'foundation', 'taskCatalogComposition');
+const SOURCE_ROOT = join(process.cwd(), 'src', 'foundation', 'task', 'catalog');
 const HANDLER_ROOT = join(process.cwd(), 'runtime-nvb', 'handlers');
 const DEVELOPMENT_LEAF = join(process.cwd(), 'scripts', 'composeRuntimeTaskCatalog.mjs');
 const RELOCATION_PROOF = join(process.cwd(), 'scripts', 'verifyRelocatedRuntimeCatalog.mjs');

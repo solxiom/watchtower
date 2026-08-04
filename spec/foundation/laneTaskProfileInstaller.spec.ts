@@ -1,8 +1,8 @@
 import {LaneTaskProfileInstaller} from '../../src/foundation/runtime/distribution/index.js';
-import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
+import {LaneTaskCatalog} from '../../src/foundation/task/runtime/LaneTaskCatalog.js';
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
 import {RuntimeCatalogError} from '../../src/contracts/runtimeCatalog.js';
-import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';
+import {nodeRuntimeFileSystem} from '../../src/foundation/task/runtime/runtimeFileSystem.js';
 import {
     ACTION_ID,
     CLI_VERSION,

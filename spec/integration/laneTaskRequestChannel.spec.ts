@@ -20,9 +20,9 @@ import {createRequire} from 'node:module';
 import {tmpdir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {NirvanaProcessInvoker} from '../../src/foundation/runtime/leaf/NirvanaProcessInvoker.js';
-import {planLaneTaskInvocation} from '../../src/foundation/taskRuntime/laneTaskInvocationPlan.js';
-import {encodeTaskRequest} from '../../src/foundation/taskRuntime/laneTaskRequest.js';
-import {NvbRunOutputReader} from '../../src/foundation/taskRuntime/nvbRunOutput.js';
+import {planLaneTaskInvocation} from '../../src/foundation/task/runtime/laneTaskInvocationPlan.js';
+import {encodeTaskRequest} from '../../src/foundation/task/runtime/laneTaskRequest.js';
+import {NvbRunOutputReader} from '../../src/foundation/task/runtime/nvbRunOutput.js';
 import type {JsonValue} from '../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 
 const TASK_ID = 'wt:probe:echo';

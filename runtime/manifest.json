@@ -32,8 +32,8 @@
       "mode": "0644"
     },
     {
-      "path": "foundation/taskCatalogComposition/taskCatalogCompositionFileAdapter.d.ts",
-      "sha256": "sha256:de90cd3b5aa2952c5493d082dbd8ca7a516b97c8681a8a3edf3355388ca147ac",
+      "path": "foundation/task/catalog/taskCatalogCompositionFileAdapter.d.ts",
+      "sha256": "sha256:0e5c0e653a1232c03fee95123fe5baca5c676aef72caa202d6b07a329d79fd9e",
       "mode": "0644"
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "path": "handlers/TaskCatalogCompositionTaskHandler.ts",
-      "sha256": "sha256:3c5c6a7057181ed94d25f5609d58919c14c91a4863e31c0049e5147cf2959cc6",
+      "sha256": "sha256:4b03b1da86734dbf44df95202ab2191c69367f813b1ebd50d579a5b3b4b2e411",
       "mode": "0644"
     },
     {
@@ -163,7 +163,7 @@
     },
     {
       "path": "tsconfig.runtime-foundation.json",
-      "sha256": "sha256:343efc0fc8e53535801e5b79c846802a1d2fb682c6b68692c3d9ef9b43d86d4b",
+      "sha256": "sha256:2397ce99e33666cbeea02a69a43f56dfd1f8b935104ff75e4afd7c79c26762f8",
       "mode": "0644"
     },
     {

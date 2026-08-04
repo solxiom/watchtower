@@ -1,7 +1,7 @@
 import {randomUUID} from 'node:crypto';
 
 import {runTaskCatalogCompositionTask} from
-    '../build/src/foundation/taskCatalogComposition/taskCatalogCompositionFileAdapter.js';
+    '../build/src/foundation/task/catalog/taskCatalogCompositionFileAdapter.js';
 
 const mode = process.argv[2];
 const result = await runTaskCatalogCompositionTask(process.cwd(), {mode}, {tempToken: randomUUID});

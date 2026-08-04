@@ -28,7 +28,7 @@ import {
     type LaneTaskBinding,
     type LaneTaskMutationClass,
     type LaneTaskRuntimeReason
-} from '../../contracts/taskRuntime.js';
+} from '../../../contracts/taskRuntime.js';
 import {containedInRoot} from './taskRuntimePin.js';
 import type {RuntimeAccount, RuntimeFileSystem} from './runtimeFileSystem.js';
 

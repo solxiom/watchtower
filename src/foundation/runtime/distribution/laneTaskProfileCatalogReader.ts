@@ -11,8 +11,8 @@ import {isJsonValue, semanticDigest} from '../../schemaComposition/jsonCanonical
 import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
 import type {JsonObject} from '../../schemaComposition/schemaCompositionContracts.js';
 import {LaneTaskRuntimeError, type LaneTaskRuntimeReason} from '../../../contracts/taskRuntime.js';
-import {requireContainedRuntimeFile} from '../../taskRuntime/taskRuntimePin.js';
-import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
+import {requireContainedRuntimeFile} from '../../task/runtime/taskRuntimePin.js';
+import type {RuntimeFileSystem} from '../../task/runtime/runtimeFileSystem.js';
 
 const CATALOG_FILE = 'task-catalog.json';
 const MAX_CATALOG_BYTES = 4 * 1024 * 1024;

@@ -7,7 +7,7 @@
  * identifier, and never construct an NVB target of their own — they name one
  * allowlisted action and consume one typed result.
  */
-import type {LaneTaskInvocation, LaneTaskRunResult} from '../../contracts/taskRuntime.js';
+import type {LaneTaskInvocation, LaneTaskRunResult} from '../../../contracts/taskRuntime.js';
 
 export interface LaneTaskRunner {
     /**

@@ -1,7 +1,7 @@
-import {composeTaskCatalog} from '../../src/foundation/taskCatalogComposition/index.js';
+import {composeTaskCatalog} from '../../src/foundation/task/catalog/index.js';
 import {isJsonObject} from '../../src/foundation/schemaComposition/jsonCanonicalizer.js';
 import type {JsonObject, TaskCatalogCompositionFailureCode} from
-    '../../src/foundation/taskCatalogComposition/taskCatalogContracts.js';
+    '../../src/foundation/task/catalog/taskCatalogContracts.js';
 import {fragmentValue, profileValue, schemaSources, source} from './catalogCompositionFixtures.js';
 
 function rejectedCode(fragments: readonly JsonObject[], profiles: readonly JsonObject[] = [profileValue()]):

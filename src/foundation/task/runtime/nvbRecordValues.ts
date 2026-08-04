@@ -6,8 +6,8 @@
  * strict: a member of the wrong type, an unparsable instant, or a nested value
  * that is not JSON is a forged or drifted producer, never a value to narrow.
  */
-import {isJsonObject, isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
-import type {JsonObject} from '../schemaComposition/schemaCompositionContracts.js';
+import {isJsonObject, isJsonValue} from '../../schemaComposition/jsonCanonicalizer.js';
+import type {JsonObject} from '../../schemaComposition/schemaCompositionContracts.js';
 
 /** ISO-8601 instant with milliseconds and an explicit zone, as the pinned runner emits. */
 const INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/u;

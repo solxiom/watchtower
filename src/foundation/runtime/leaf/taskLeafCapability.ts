@@ -31,9 +31,9 @@
 import {LeafRuntimeError, type LeafInvocationResult, type TaskLeafCapability, type TaskLeafRequest}
     from '../../../contracts/leafRuntime.js';
 import {LaneTaskRuntimeError, type LaneTaskBinding} from '../../../contracts/taskRuntime.js';
-import type {LaneTaskCatalog} from '../../taskRuntime/LaneTaskCatalog.js';
-import {containedInRoot} from '../../taskRuntime/taskRuntimePin.js';
-import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
+import type {LaneTaskCatalog} from '../../task/runtime/LaneTaskCatalog.js';
+import {containedInRoot} from '../../task/runtime/taskRuntimePin.js';
+import type {RuntimeFileSystem} from '../../task/runtime/runtimeFileSystem.js';
 import {LeafRuntimeInvoker} from './LeafRuntimeInvoker.js';
 import type {RuntimeProcessInvoker} from './runtimeProcessPorts.js';
 

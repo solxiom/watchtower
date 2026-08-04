@@ -3,11 +3,11 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 
 import {nodeCatalogAggregateFileSystem} from
-    '../../src/foundation/taskCatalogComposition/catalogAggregateFileSystem.js';
+    '../../src/foundation/task/catalog/catalogAggregateFileSystem.js';
 import {runTaskCatalogCompositionTask} from
-    '../../src/foundation/taskCatalogComposition/taskCatalogCompositionFileAdapter.js';
+    '../../src/foundation/task/catalog/taskCatalogCompositionFileAdapter.js';
 import type {TaskCatalogTaskResult} from
-    '../../src/foundation/taskCatalogComposition/taskCatalogTaskContracts.js';
+    '../../src/foundation/task/catalog/taskCatalogTaskContracts.js';
 import {
     createCatalogFileSystemGate,
     FaultInjectingCatalogFileSystem

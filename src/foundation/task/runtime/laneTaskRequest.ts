@@ -23,9 +23,9 @@
  * no `=`, no control characters, no shell, and byte-identical after decoding.
  */
 import {Buffer} from 'node:buffer';
-import {canonicalJson, isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
-import {LaneTaskRuntimeError} from '../../contracts/taskRuntime.js';
-import type {JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
+import {canonicalJson, isJsonValue} from '../../schemaComposition/jsonCanonicalizer.js';
+import {LaneTaskRuntimeError} from '../../../contracts/taskRuntime.js';
+import type {JsonValue} from '../../schemaComposition/schemaCompositionContracts.js';
 
 /** The argv flag carrying one invocation's typed request. */
 export const TASK_REQUEST_FLAG = '--wt-task-request';

@@ -1,4 +1,4 @@
-import type {JsonObject, JsonValue} from '../schemaComposition/schemaCompositionContracts.js';
+import type {JsonObject, JsonValue} from '../../schemaComposition/schemaCompositionContracts.js';
 
 export interface CatalogSourceInput {
     readonly source: string;

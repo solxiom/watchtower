@@ -1,5 +1,5 @@
 import type {JsonObject, JsonValue, TaskCatalogCompositionInput} from
-    '../../src/foundation/taskCatalogComposition/taskCatalogContracts.js';
+    '../../src/foundation/task/catalog/taskCatalogContracts.js';
 
 export interface FragmentFixtureOptions {
     readonly fragmentId: string;

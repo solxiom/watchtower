@@ -10,7 +10,7 @@ import {
     LaneTaskRuntimeError,
     type LaneTaskRuntimeReason,
     type PinnedTaskRuntimeTarget
-} from '../../contracts/taskRuntime.js';
+} from '../../../contracts/taskRuntime.js';
 import type {RuntimeFileSystem} from './runtimeFileSystem.js';
 
 const CATALOG_ID = /^[a-z0-9][a-z0-9-]{0,63}(?:\/[a-z0-9][a-z0-9-]{0,63})*\/v[0-9]{1,3}$/u;

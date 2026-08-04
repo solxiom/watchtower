@@ -1,4 +1,4 @@
-import {isJsonObject} from '../schemaComposition/jsonCanonicalizer.js';
+import {isJsonObject} from '../../schemaComposition/jsonCanonicalizer.js';
 import type {JsonObject} from './taskCatalogContracts.js';
 import {hasExactKeys, stringArray} from './catalogParsing.js';
 

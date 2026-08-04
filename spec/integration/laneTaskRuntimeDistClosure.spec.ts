@@ -19,9 +19,9 @@ import {
 import {createHash} from 'node:crypto';
 import {tmpdir} from 'node:os';
 import {join, relative} from 'node:path';
-import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
-import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';
-import type {TaskRuntimePinSource} from '../../src/foundation/taskRuntime/LaneTaskRunner.js';
+import {LaneTaskCatalog} from '../../src/foundation/task/runtime/LaneTaskCatalog.js';
+import {nodeRuntimeFileSystem} from '../../src/foundation/task/runtime/runtimeFileSystem.js';
+import type {TaskRuntimePinSource} from '../../src/foundation/task/runtime/LaneTaskRunner.js';
 import {semanticDigest} from '../../src/foundation/schemaComposition/jsonCanonicalizer.js';
 import type {JsonObject} from '../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 

@@ -16,11 +16,11 @@ import type {JsonObject} from '../../../src/foundation/schemaComposition/schemaC
 import type {LaneRuntimeContext, LaneTaskInvocation, PinnedTaskRuntimeTarget}
     from '../../../src/contracts/taskRuntime.js';
 import {LaneInstallIdentityReader, type LaneInstallIdentity} from '../../../src/foundation/read/index.js';
-import {LaneTaskCatalog} from '../../../src/foundation/taskRuntime/LaneTaskCatalog.js';
-import {NirvanaLaneTaskRunner} from '../../../src/foundation/taskRuntime/NirvanaLaneTaskRunner.js';
-import {nodeRuntimeFileSystem} from '../../../src/foundation/taskRuntime/runtimeFileSystem.js';
+import {LaneTaskCatalog} from '../../../src/foundation/task/runtime/LaneTaskCatalog.js';
+import {NirvanaLaneTaskRunner} from '../../../src/foundation/task/runtime/NirvanaLaneTaskRunner.js';
+import {nodeRuntimeFileSystem} from '../../../src/foundation/task/runtime/runtimeFileSystem.js';
 import type {RuntimeRootResolver, TaskRuntimePinSource}
-    from '../../../src/foundation/taskRuntime/LaneTaskRunner.js';
+    from '../../../src/foundation/task/runtime/LaneTaskRunner.js';
 import type {RuntimeProcessInvoker, RuntimeProcessOutcome, RuntimeProcessRequest}
     from '../../../src/foundation/runtime/leaf/runtimeProcessPorts.js';
 

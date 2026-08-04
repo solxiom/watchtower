@@ -1,6 +1,6 @@
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
 import {LeafRuntimeError} from '../../src/contracts/leafRuntime.js';
-import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
+import {LaneTaskCatalog} from '../../src/foundation/task/runtime/LaneTaskCatalog.js';
 import {
     ACTION_ID,
     CATALOG_TARGET,

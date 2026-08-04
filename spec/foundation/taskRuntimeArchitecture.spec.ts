@@ -27,7 +27,7 @@ describe('lane task runtime process boundary', () => {
         // Positive control: the detector must see the import it is guarding against.
         expect(CHILD_PROCESS_IMPORT.test("import {spawn} from 'node:child_process';")).toBeTrue();
         const runtimeCapsules = sourceFiles(join(SOURCE_ROOT, 'foundation', 'runtime', 'leaf'))
-            .concat(sourceFiles(join(SOURCE_ROOT, 'foundation', 'taskRuntime')))
+            .concat(sourceFiles(join(SOURCE_ROOT, 'foundation', 'task', 'runtime')))
             .filter((path) => CHILD_PROCESS_IMPORT.test(readFileSync(path, 'utf8')));
         expect(runtimeCapsules).toEqual([]);
     });
@@ -35,7 +35,7 @@ describe('lane task runtime process boundary', () => {
     it('confines the lane runtime process facade to its one adapter', () => {
         const runtimeOwners = offenders(TERMINAL_FACADE_IMPORT, [])
             .filter((path) => path.startsWith(`foundation${sep}runtime${sep}`)
-                || path.startsWith(`foundation${sep}taskRuntime${sep}`));
+                || path.startsWith(`foundation${sep}task${sep}runtime${sep}`));
         expect(runtimeOwners).toEqual([relative(SOURCE_ROOT, join(SOURCE_ROOT, PROCESS_OWNER))]);
     });
 

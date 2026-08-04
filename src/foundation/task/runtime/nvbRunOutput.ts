@@ -14,7 +14,7 @@
  * so malformed, extra-membered, foreign, contradictory, and replayed output can
  * never be reported as completion.
  */
-import type {LaneTaskEvent, LaneTaskRuntimeReason} from '../../contracts/taskRuntime.js';
+import type {LaneTaskEvent, LaneTaskRuntimeReason} from '../../../contracts/taskRuntime.js';
 import {readNvbRecord, redactDiagnostic, type NvbEventRecord, type NvbResultRecord} from './nvbRunRecords.js';
 
 export {redactDiagnostic};

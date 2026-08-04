@@ -9,7 +9,7 @@
  * invocation. Values are never logged; `redactedEnvironmentKeys` exists so a
  * diagnostic can name the keys that were exported without their contents.
  */
-import {LaneTaskRuntimeError, type LaneRuntimeContext} from '../../contracts/taskRuntime.js';
+import {LaneTaskRuntimeError, type LaneRuntimeContext} from '../../../contracts/taskRuntime.js';
 
 const MAX_VALUE_LENGTH = 4096;
 const UNSAFE_VALUE = /[\u0000-\u001f\u007f]/u;

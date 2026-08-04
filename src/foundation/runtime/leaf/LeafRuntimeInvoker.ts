@@ -32,11 +32,11 @@ import {
 } from '../../../contracts/leafRuntime.js';
 import type {LaneRuntimeLeaf, LaneTaskBinding} from '../../../contracts/taskRuntime.js';
 import {LaneTaskRuntimeError} from '../../../contracts/taskRuntime.js';
-import type {LaneTaskCatalog} from '../../taskRuntime/LaneTaskCatalog.js';
-import {LaneRuntimeAccessGuard} from '../../taskRuntime/LaneRuntimeAccessGuard.js';
-import {buildRuntimeEnvironment} from '../../taskRuntime/laneTaskEnvironment.js';
-import {containedInRoot} from '../../taskRuntime/taskRuntimePin.js';
-import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
+import type {LaneTaskCatalog} from '../../task/runtime/LaneTaskCatalog.js';
+import {LaneRuntimeAccessGuard} from '../../task/runtime/LaneRuntimeAccessGuard.js';
+import {buildRuntimeEnvironment} from '../../task/runtime/laneTaskEnvironment.js';
+import {containedInRoot} from '../../task/runtime/taskRuntimePin.js';
+import type {RuntimeFileSystem} from '../../task/runtime/runtimeFileSystem.js';
 import {NirvanaProcessInvoker} from './NirvanaProcessInvoker.js';
 import type {RuntimeProcessInvoker} from './runtimeProcessPorts.js';
 

@@ -18,9 +18,9 @@
  * right": it is rejected, because a forged or drifted producer must never be
  * interpreted as a run.
  */
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
-import type {JsonValue} from '../../contracts/types.js';
-import type {LaneTaskEventCategory} from '../../contracts/taskRuntime.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
+import type {JsonValue} from '../../../contracts/types.js';
+import type {LaneTaskEventCategory} from '../../../contracts/taskRuntime.js';
 import {
     hasExactMembers,
     instantOf,

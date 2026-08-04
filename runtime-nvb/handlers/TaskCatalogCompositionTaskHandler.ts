@@ -3,7 +3,7 @@ import {randomUUID} from 'node:crypto';
 import {TaskHandler} from '@nirvana/builder';
 
 import {runTaskCatalogCompositionTask} from
-    '../foundation/taskCatalogComposition/taskCatalogCompositionFileAdapter.js';
+    '../foundation/task/catalog/taskCatalogCompositionFileAdapter.js';
 
 export default class TaskCatalogCompositionTaskHandler extends TaskHandler {
     static readonly handlerName = 'TaskCatalogCompositionTaskHandler';

@@ -26,7 +26,7 @@
  */
 import {ManagedAssetsError} from '../../../contracts/manifests.js';
 import {LaneTaskRuntimeError} from '../../../contracts/taskRuntime.js';
-import type {LaneTaskCatalog} from '../../taskRuntime/LaneTaskCatalog.js';
+import type {LaneTaskCatalog} from '../../task/runtime/LaneTaskCatalog.js';
 
 export type CompatibilityNameTable = Readonly<Record<string, string>>;
 

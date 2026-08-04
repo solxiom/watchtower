@@ -12,7 +12,7 @@
   },
   "include": [
     "../src/foundation/schemaComposition/**/*.ts",
-    "../src/foundation/taskCatalogComposition/**/*.ts"
+    "../src/foundation/task/catalog/**/*.ts"
   ],
   "exclude": [
     "../src/foundation/schemaComposition/schemaBundle.ts",

@@ -2,7 +2,7 @@ import {createHash} from 'node:crypto';
 import {lstat, readFile, readdir, realpath} from 'node:fs/promises';
 import {isAbsolute, join, relative} from 'node:path';
 
-import {isJsonObject} from '../schemaComposition/jsonCanonicalizer.js';
+import {isJsonObject} from '../../schemaComposition/jsonCanonicalizer.js';
 import type {JsonObject} from './taskCatalogContracts.js';
 import {TaskCatalogFileBoundaryError} from './TaskCatalogFileBoundaryError.js';
 

@@ -7,7 +7,7 @@
 import {ManagedAssetsError, type InstallManifestV1, type ManagedLinkFinding, type ManagedLinkFindingStatus} from '../../../contracts/manifests.js';
 import type {ManagedLinkFileSystem} from './managedLinkFileSystem.js';
 import {planLink} from './managedLinkPlanner.js';
-import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
+import type {RuntimeFileSystem} from '../../task/runtime/runtimeFileSystem.js';
 
 export function validateLink(
     laneDir: string,

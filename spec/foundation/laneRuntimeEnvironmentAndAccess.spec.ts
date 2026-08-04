@@ -4,8 +4,8 @@ import {
     RUNTIME_ENVIRONMENT_KEYS,
     buildRuntimeEnvironment,
     redactedEnvironmentKeys
-} from '../../src/foundation/taskRuntime/laneTaskEnvironment.js';
-import {LaneRuntimeAccessGuard} from '../../src/foundation/taskRuntime/LaneRuntimeAccessGuard.js';
+} from '../../src/foundation/task/runtime/laneTaskEnvironment.js';
+import {LaneRuntimeAccessGuard} from '../../src/foundation/task/runtime/LaneRuntimeAccessGuard.js';
 import {
     CONTROL_HOME,
     LANE_DIR,

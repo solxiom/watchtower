@@ -5,8 +5,8 @@ import {
     resolveCompatibilityNameFrom
 } from '../../src/foundation/runtime/distribution/compatibilityNameResolver.js';
 import {ManagedAssetsError} from '../../src/contracts/manifests.js';
-import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
-import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';
+import {LaneTaskCatalog} from '../../src/foundation/task/runtime/LaneTaskCatalog.js';
+import {nodeRuntimeFileSystem} from '../../src/foundation/task/runtime/runtimeFileSystem.js';
 import {semanticDigest} from '../../src/foundation/schemaComposition/jsonCanonicalizer.js';
 import {
     ACTION_ID,

@@ -1,9 +1,9 @@
-import {composeTaskCatalog} from '../../src/foundation/taskCatalogComposition/index.js';
+import {composeTaskCatalog} from '../../src/foundation/task/catalog/index.js';
 import type {
     JsonObject,
     TaskCatalogCompositionFailureCode,
     TaskCatalogCompositionInput
-} from '../../src/foundation/taskCatalogComposition/taskCatalogContracts.js';
+} from '../../src/foundation/task/catalog/taskCatalogContracts.js';
 import {
     fragmentValue,
     profileValue,

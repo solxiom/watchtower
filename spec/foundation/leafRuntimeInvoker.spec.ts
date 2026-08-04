@@ -1,5 +1,5 @@
 import {LeafRuntimeError, type LeafInvocation} from '../../src/contracts/leafRuntime.js';
-import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
+import {LaneTaskCatalog} from '../../src/foundation/task/runtime/LaneTaskCatalog.js';
 import {LeafRuntimeInvoker} from '../../src/foundation/runtime/leaf/LeafRuntimeInvoker.js';
 import type {JsonObject} from '../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 import type {FakeEntry, FakeRuntimeFileSystem} from './support/laneTaskRuntimeFixtures.js';

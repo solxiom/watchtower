@@ -1,7 +1,7 @@
 import type {TaskCatalogTaskResult} from
-    '../../../src/foundation/taskCatalogComposition/taskCatalogTaskContracts.js';
+    '../../../src/foundation/task/catalog/taskCatalogTaskContracts.js';
 import type {CatalogAggregateFileSystem} from
-    '../../../src/foundation/taskCatalogComposition/catalogAggregateFileSystem.js';
+    '../../../src/foundation/task/catalog/catalogAggregateFileSystem.js';
 
 export interface TaskCatalogCompositionRuntimeOptions {
     readonly tempToken: () => string;

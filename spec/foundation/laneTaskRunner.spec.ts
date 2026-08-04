@@ -1,8 +1,8 @@
 import {Buffer} from 'node:buffer';
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
 import {canonicalJson} from '../../src/foundation/schemaComposition/jsonCanonicalizer.js';
-import {readDeclaredTaskInput} from '../../src/foundation/taskRuntime/laneTaskConfigInput.js';
-import {TASK_REQUEST_FLAG, decodeTaskRequest} from '../../src/foundation/taskRuntime/laneTaskRequest.js';
+import {readDeclaredTaskInput} from '../../src/foundation/task/runtime/laneTaskConfigInput.js';
+import {TASK_REQUEST_FLAG, decodeTaskRequest} from '../../src/foundation/task/runtime/laneTaskRequest.js';
 import {RUNNER, harness, reasonOf} from './support/laneTaskRunnerHarness.js';
 import {
     ACTION_ID,

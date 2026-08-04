@@ -1,5 +1,5 @@
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
-import {readTaskRuntimePin} from '../../src/foundation/taskRuntime/taskRuntimePin.js';
+import {readTaskRuntimePin} from '../../src/foundation/task/runtime/taskRuntimePin.js';
 import {
     CATALOG_ID,
     CONFIG_TARGET,

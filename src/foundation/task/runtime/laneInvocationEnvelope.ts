@@ -15,15 +15,15 @@
  * exactly as it was.
  */
 import {isAbsolute} from 'node:path';
-import {isJsonObject, isJsonValue, semanticDigest} from '../schemaComposition/jsonCanonicalizer.js';
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
-import type {JsonObject} from '../schemaComposition/schemaCompositionContracts.js';
+import {isJsonObject, isJsonValue, semanticDigest} from '../../schemaComposition/jsonCanonicalizer.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
+import type {JsonObject} from '../../schemaComposition/schemaCompositionContracts.js';
 import {
     LaneTaskRuntimeError,
     type LaneTaskBinding,
     type LaneTaskRuntimeReason,
     type PinnedTaskRuntimeTarget
-} from '../../contracts/taskRuntime.js';
+} from '../../../contracts/taskRuntime.js';
 import {hasExactMembers, isInstant, isNonEmptyString} from './nvbRecordValues.js';
 import {containedInRoot} from './taskRuntimePin.js';
 import type {RuntimeFileSystem} from './runtimeFileSystem.js';

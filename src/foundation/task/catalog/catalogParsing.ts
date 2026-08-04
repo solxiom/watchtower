@@ -1,5 +1,5 @@
-import {isJsonObject, isJsonValue} from '../schemaComposition/jsonCanonicalizer.js';
-import {hasDuplicateJsonObjectKey} from '../schemaComposition/jsonDuplicateKeyDetector.js';
+import {isJsonObject, isJsonValue} from '../../schemaComposition/jsonCanonicalizer.js';
+import {hasDuplicateJsonObjectKey} from '../../schemaComposition/jsonDuplicateKeyDetector.js';
 import type {
     CatalogSourceInput,
     JsonObject,

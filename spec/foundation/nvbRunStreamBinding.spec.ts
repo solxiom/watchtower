@@ -6,8 +6,8 @@
  * proves the production reader accepts real output and a failing case proves it
  * refuses a specific forgery rather than a strawman.
  */
-import {NvbRunOutputReader} from '../../src/foundation/taskRuntime/nvbRunOutput.js';
-import {readNvbRecord} from '../../src/foundation/taskRuntime/nvbRunRecords.js';
+import {NvbRunOutputReader} from '../../src/foundation/task/runtime/nvbRunOutput.js';
+import {readNvbRecord} from '../../src/foundation/task/runtime/nvbRunRecords.js';
 import {harness} from './support/laneTaskRunnerHarness.js';
 import {
     CONTROL_HOME,

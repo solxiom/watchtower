@@ -15,7 +15,7 @@ import {join} from 'node:path';
 
 const packageRoot = process.argv[2];
 const sourceRoot = process.argv[3];
-const installedTaskRuntime = join(packageRoot, 'src', 'foundation', 'taskRuntime');
+const installedTaskRuntime = join(packageRoot, 'src', 'foundation', 'task', 'runtime');
 /** `<prefix>/lib/node_modules`: the package and its dependency closure. */
 const installedRoots = join(packageRoot, '..');
 
