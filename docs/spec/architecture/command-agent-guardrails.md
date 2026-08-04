@@ -36,13 +36,15 @@ Bind implementers, reviewers, and coordinators the same way as
 | CLI-only shared helper (rare) | `src/commands/shared/` with batch-brief justification |
 
 **Root ratchet:** `src/commands/` root may not gain new `.ts` files except
-`index.ts`. Existing flat files are grandfathered until migrated.
+`index.ts`. CMD-01 (2026-08-04) migrated all flat root modules into capability
+groups; the gate baseline is zero root modules besides `index.ts`.
 
 ### 2.3 Import rules
 
 - Foundation: domain/capability barrels only (same as foundation guardrails §2.3).
-- Sibling colocation: `./readCommandOptions.js` within the same group.
-- **Forbidden:** importing another group's options/presenter (`../init/…` from `read/`).
+- Sibling colocation: `./skillInstallOptions.js` within the same group.
+- Cross-group shared CLI helpers: `../shared/…` only (see [command-module-architecture.md §6](command-module-architecture.md#6-import-rules)).
+- **Forbidden:** importing another group's options/presenter (`../init/…` from `read/`) except via `shared/`.
 
 ### 2.4 Mandatory proof
 

@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 ✅; FM-4 ✅; FM-5 ✅; foundation refactor complete**
+Status: **Complete — REF-01/02/03 accepted (39/39); CMD-01 command layout migration accepted**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -17,10 +17,10 @@ Last updated: 2026-08-04
 
 | Field | Value |
 |-------|-------|
-| Remediation | Foundation layout refactor (`REF-01`, `REF-02`, `REF-03`) |
-| Work units | **39** (`FR-00` … `FR-38`) |
+| Remediation | Foundation layout refactor (`REF-01`, `REF-02`, `REF-03`) + command layout (`CMD-01`) |
+| Work units | **39** (`FR-00` … `FR-38`) + **CMD-01** |
 | Milestones | **6** (`FM-0` … `FM-5`) |
-| Score | **39 / 39** work units accepted |
+| Score | **39 / 39** work units accepted; **CMD-01** accepted |
 | Baseline root files | 0 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 | Flat prefix clusters | 0 (target: 0, REF-03) |
@@ -186,6 +186,7 @@ and [foundation-capability-tree-amendment.md §3](foundation-capability-tree-ame
 | `foundationDependencyArchitecture.spec.ts` | FR-01, FR-29 | ✅ Accepted |
 | `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-24, FR-27 | ✅ Accepted (FR-26/27) |
 | `commandImportArchitecture.spec.ts` | FR-28 | ✅ Accepted |
+| `commandLayoutArchitecture.spec.ts` | CMD-01 | ✅ Accepted |
 | `pathsArchitecture.spec.ts` | FR-12 | ✅ Accepted |
 | `parsingArchitecture.spec.ts` | FR-13 | ✅ Accepted |
 | `discoveryArchitecture.spec.ts` | FR-14 | ✅ Accepted |
@@ -218,6 +219,7 @@ Refresh after each accepted work unit.
 | Root `export *` count | 0 | 0 | 2026-08-04 |
 | Command deep-imports | 0 | 0 | 2026-08-04 |
 | Flat prefix clusters at foundation root | 0 | 0 | 2026-08-04 |
+| Command root modules (excl. `index.ts`) | 0 | 0 | 2026-08-04 (CMD-01) |
 
 ---
 

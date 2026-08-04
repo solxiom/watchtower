@@ -20,12 +20,13 @@ integration facades**. Product behavior remains in the parent
 | Document | Status | Role |
 |----------|--------|------|
 | [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md) | Accepted | Master plan: 6 milestones, 39 work units, 3 batches, dependencies, parallel waves |
-| [foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md) | Active | **Live status** — mark work units and milestones done here |
+| [foundation-refactor-implementation-tracker.md](foundation-refactor-implementation-tracker.md) | Complete | Final status — REF-01/02/03 and CMD-01 accepted |
 
 Related product specs:
 
 - [../architecture.md](../architecture.md) — product boundaries and domain model
 - [../nirvana-integration-architecture.md](../nirvana-integration-architecture.md) — NVB runtime, lane profiles, shell-leaf facades
 
-New foundation code must conform to the target module architecture even before
-remediation completes. Update the tracker when refactor work units land.
+New foundation and command code must conform to the target module architecture.
+The foundation refactor and CMD-01 layout migration are complete; update the
+tracker only if a future structural amendment reopens remediation.
