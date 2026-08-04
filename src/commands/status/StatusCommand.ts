@@ -1,8 +1,8 @@
 import {BaseCommand} from '@nirvana/base/cli/basic';
 import type {Command} from '@nirvana/base/cli/contracts';
-import {StatusProjection} from '../foundation/status/index.js';
-import {parseReadCommandOptions} from './readCommandOptions.js';
-import {presentReadCommand} from './readCommandPresenter.js';
+import {StatusProjection} from '../../foundation/status/index.js';
+import {parseReadCommandOptions} from '../shared/readCommandOptions.js';
+import {presentReadCommand} from '../shared/readCommandPresenter.js';
 
 export default class StatusCommand extends BaseCommand implements Command {
     name = 'status';

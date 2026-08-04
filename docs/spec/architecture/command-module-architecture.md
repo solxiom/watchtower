@@ -77,19 +77,21 @@ Each subgroup colocates its `*Command.ts`, `*Options.ts`, and `*Presenter.ts` fi
 
 ---
 
-## 4. Target tree (illustrative)
+## 4. Target tree (current)
 
-Current flat files are **interim debt** (grandfathered). **New** modules must land
-in groups immediately.
+CMD-01 (2026-08-04) migrated flat root modules into capability groups.
+Only `index.ts` remains at `src/commands/` root. Shared read CLI helpers live
+in `shared/` because `read/` and `status/` both consume them.
 
 ```text
 src/commands/
   index.ts                      ← optional explicit registry (tests/tools); CLI uses directory scan
+  shared/
+    readCommandOptions.ts       ← shared by read + status groups
+    readCommandPresenter.ts
   read/
     ListCommand.ts
     ConfigCommand.ts
-    readCommandOptions.ts
-    readCommandPresenter.ts
   status/
     StatusCommand.ts
   init/
@@ -102,19 +104,20 @@ src/commands/
     SkillInstallCommand.ts
     skillInstallOptions.ts
     skillInstallPresenter.ts
+  hello/                        ← interim scaffold; remove in REL-01
+    HelloCommand.ts
   coordinator/
     session/
       …
-  shared/                       ← CLI-only shared helpers (avoid; last resort)
-    …
 ```
 
 **Forbidden:**
 
-- New `*Command.ts`, `*Options.ts`, or `*Presenter.ts` at `src/commands/` root after baseline freeze (see gate spec).
+- New `*Command.ts`, `*Options.ts`, or `*Presenter.ts` at `src/commands/` root (gate ratchet: baseline is empty except `index.ts`).
 - Generic bags: `commands/utils/`, `commands/helpers/`.
 - Directory shadow: `InitCommand.ts` beside `init/`.
 - Domain logic duplicated from foundation in command options/presenters.
+- Cross-group imports except through `shared/` (see §6).
 
 ---
 
@@ -151,7 +154,7 @@ import {presentReadCommand} from './readCommandPresenter.js';
 
 **From `src/run.ts`:**
 
-- Presentation barrel for errors; command-local validators only via stable group paths (e.g. `./commands/read/readCommandOptions.js`).
+- Presentation barrel for errors; command-local validators only via stable group paths (e.g. `./commands/shared/readCommandOptions.js`).
 
 ---
 
@@ -169,9 +172,11 @@ Run via `nvb test`.
 
 ## 8. Migration
 
-Flat root files may be moved in a dedicated layout batch (no product behavior
-change). Do not add new flat root files while migration is pending — the gate
-**ratchets** root file count downward over time.
+**CMD-01 ✅ (2026-08-04):** Flat root command modules moved into capability
+groups; root ratchet baseline is zero modules besides `index.ts`. Shared read
+options/presenter extracted to `shared/` for `read/` + `status/` consumption.
+
+Future commands must land in groups immediately — no new flat root files.
 
 ---
 

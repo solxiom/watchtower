@@ -5,7 +5,7 @@ import {makeArgMap} from '@nirvana/base/utils/argUtil';
 import {LaneListService, renderResult, buildCommandResult} from '../../src/foundation/index.js';
 import {loadV1SchemaBundle} from '../../src/foundation/schemaComposition/schemaBundle.js';
 import type {LaneListWarning, MembershipWarningReason, WatchtowerError} from '../../src/contracts/index.js';
-import {parseReadCommandOptions} from '../../src/commands/readCommandOptions.js';
+import {parseReadCommandOptions} from '../../src/commands/shared/readCommandOptions.js';
 import {
     createLane, createReadCommandFixture, repository, treeSnapshot, writeMembershipIndex
 } from './readCommandFixtures.js';

@@ -1,8 +1,8 @@
 import {BaseCommand} from '@nirvana/base/cli/basic';
 import type {Command} from '@nirvana/base/cli/contracts';
-import {ResolvedConfigService} from '../foundation/read/index.js';
-import {parseReadCommandOptions} from './readCommandOptions.js';
-import {presentReadCommand} from './readCommandPresenter.js';
+import {ResolvedConfigService} from '../../foundation/read/index.js';
+import {parseReadCommandOptions} from '../shared/readCommandOptions.js';
+import {presentReadCommand} from '../shared/readCommandPresenter.js';
 
 export default class ConfigCommand extends BaseCommand implements Command {
     name = 'config';

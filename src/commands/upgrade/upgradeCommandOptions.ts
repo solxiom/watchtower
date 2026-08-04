@@ -1,5 +1,5 @@
 import type {CArgMap} from '@nirvana/base/cli/contracts';
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 
 export interface UpgradeCommandOptions {
     readonly lane?: string;

@@ -1,7 +1,7 @@
 import {output as prettyOutput} from '@nirvana/base/utils/pretty';
-import type {JsonValue} from '../contracts/index.js';
-import type {InstallResult, PreviewResult} from '../foundation/hostAdapters/index.js';
-import {buildCommandResult, renderResult} from '../foundation/presentation/index.js';
+import type {JsonValue} from '../../contracts/index.js';
+import type {InstallResult, PreviewResult} from '../../foundation/hostAdapters/index.js';
+import {buildCommandResult, renderResult} from '../../foundation/presentation/index.js';
 
 export function presentSkillInstallResult(
     result: PreviewResult | InstallResult, options: {readonly json: boolean; readonly noColor: boolean}

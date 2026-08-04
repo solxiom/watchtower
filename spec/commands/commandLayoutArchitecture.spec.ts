@@ -7,22 +7,8 @@ import {join, relative} from 'node:path';
 const SOURCE_ROOT = join(process.cwd(), 'src');
 const COMMANDS_ROOT = join(SOURCE_ROOT, 'commands');
 
-/** Grandfathered flat root modules — root must not grow beyond this set until migration. */
-const BASELINE_ROOT_COMMAND_MODULES = [
-    'ConfigCommand.ts',
-    'HelloCommand.ts',
-    'InitCommand.ts',
-    'ListCommand.ts',
-    'SkillInstallCommand.ts',
-    'StatusCommand.ts',
-    'UpgradeCommand.ts',
-    'initCommandOptions.ts',
-    'readCommandOptions.ts',
-    'readCommandPresenter.ts',
-    'skillInstallOptions.ts',
-    'skillInstallPresenter.ts',
-    'upgradeCommandOptions.ts'
-] as const;
+/** After CMD-01 — only index.ts remains at commands root. */
+const BASELINE_ROOT_COMMAND_MODULES = [] as const;
 
 const TOP_LEVEL_COMMAND_GROUPS = [
     'read',
@@ -53,7 +39,7 @@ function relCommandPath(absPath: string): string {
 
 describe('command layout inventory', () => {
     it('positive control: detects a new flat root module', () => {
-        expect(BASELINE_ROOT_COMMAND_MODULES.includes('ListCommand.ts' as typeof BASELINE_ROOT_COMMAND_MODULES[number])).toBeTrue();
+        expect(BASELINE_ROOT_COMMAND_MODULES.includes('ListCommand.ts' as typeof BASELINE_ROOT_COMMAND_MODULES[number])).toBeFalse();
         expect(BASELINE_ROOT_COMMAND_MODULES.includes('NewFlatCommand.ts' as typeof BASELINE_ROOT_COMMAND_MODULES[number])).toBeFalse();
     });
 

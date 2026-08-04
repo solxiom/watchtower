@@ -3,8 +3,8 @@ import {makeArgMap} from '@nirvana/base/utils/argUtil';
 import {readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import type {StatusWarningCode, WatchtowerError, WorkerEventRecord} from '../../src/contracts/index.js';
-import StatusCommand from '../../src/commands/StatusCommand.js';
-import {parseReadCommandOptions, validateRawReadCommandArguments} from '../../src/commands/readCommandOptions.js';
+import StatusCommand from '../../src/commands/status/StatusCommand.js';
+import {parseReadCommandOptions, validateRawReadCommandArguments} from '../../src/commands/shared/readCommandOptions.js';
 import {
     StatusProjection, buildCommandResult, renderResult
 } from '../../src/foundation/index.js';

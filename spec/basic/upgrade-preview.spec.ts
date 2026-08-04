@@ -6,7 +6,7 @@ import type {KnowledgeManifestV1, RuntimeManifestV1} from '../../src/contracts/r
 import {UpgradePlanner} from '../../src/foundation/upgrade/index.js';
 import type {UpgradeFileSystem, UpgradePathKind} from '../../src/foundation/upgrade/index.js';
 import type {UpgradeAssetDeclaration, UpgradePlannerInput} from '../../src/contracts/upgrade.js';
-import UpgradeCommand from '../../src/commands/UpgradeCommand.js';
+import UpgradeCommand from '../../src/commands/upgrade/UpgradeCommand.js';
 import {createCli} from '../../src/run.js';
 
 describe('UpgradePlanner', () => {

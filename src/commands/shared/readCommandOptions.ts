@@ -1,5 +1,5 @@
 import type {CArgMap} from '@nirvana/base/cli/contracts';
-import {createWatchtowerError} from '../contracts/index.js';
+import {createWatchtowerError} from '../../contracts/index.js';
 
 export interface ReadCommandOptions {
     readonly workspace?: string;

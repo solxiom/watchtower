@@ -3,13 +3,13 @@ import type {Command} from '@nirvana/base/cli/contracts';
 import {
     confirmationRequiredError, resolveHostAdapter, resolveKnowledgeRoot, terminalReplaceConfirmation,
     type ReplaceConfirmationPort
-} from '../foundation/hostAdapters/index.js';
-import {resolveWatchtowerDataHome, validateWatchtowerDataHome} from '../foundation/paths/index.js';
-import type {PreviewResult} from '../foundation/hostAdapters/index.js';
+} from '../../foundation/hostAdapters/index.js';
+import {resolveWatchtowerDataHome, validateWatchtowerDataHome} from '../../foundation/paths/index.js';
+import type {PreviewResult} from '../../foundation/hostAdapters/index.js';
 import {parseSkillInstallOptions, type SkillInstallOptions} from './skillInstallOptions.js';
 import {presentSkillInstallResult} from './skillInstallPresenter.js';
 
-export type {ReplaceConfirmationPort} from '../foundation/hostAdapters/index.js';
+export type {ReplaceConfirmationPort} from '../../foundation/hostAdapters/index.js';
 
 export default class SkillInstallCommand extends BaseCommand implements Command {
     name = 'skill';

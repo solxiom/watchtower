@@ -3,7 +3,7 @@ import {execFileSync} from 'node:child_process';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {createCli} from '../../src/run.js';
-import InitCommand from '../../src/commands/InitCommand.js';
+import InitCommand from '../../src/commands/init/InitCommand.js';
 
 describe('InitCommand', function () {
     let root: string;

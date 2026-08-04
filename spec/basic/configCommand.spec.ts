@@ -7,9 +7,9 @@ import {
     ResolvedConfigService, buildCommandResult, renderResult
 } from '../../src/foundation/index.js';
 import {loadV1SchemaBundle} from '../../src/foundation/schemaComposition/schemaBundle.js';
-import {parseReadCommandOptions, validateRawReadCommandArguments} from '../../src/commands/readCommandOptions.js';
-import ConfigCommand from '../../src/commands/ConfigCommand.js';
-import ListCommand from '../../src/commands/ListCommand.js';
+import {parseReadCommandOptions, validateRawReadCommandArguments} from '../../src/commands/shared/readCommandOptions.js';
+import ConfigCommand from '../../src/commands/read/ConfigCommand.js';
+import ListCommand from '../../src/commands/read/ListCommand.js';
 import {createCli} from '../../src/run.js';
 import {
     createLane, createReadCommandFixture, replaceWithSymlink, repository, treeSnapshot, writeMembershipIndex
