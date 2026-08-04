@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 ✅; FM-4 in progress; FM-5 (REF-03) ✅ accepted**
+Status: **Active — FM-3 ✅; FM-4 ✅; FM-5 ✅; foundation refactor complete**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -20,7 +20,7 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`, `REF-03`) |
 | Work units | **39** (`FR-00` … `FR-38`) |
 | Milestones | **6** (`FM-0` … `FM-5`) |
-| Score | **36 / 39** work units accepted |
+| Score | **39 / 39** work units accepted |
 | Baseline root files | 0 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 | Flat prefix clusters | 0 (target: 0, REF-03) |
@@ -35,7 +35,7 @@ Last updated: 2026-08-04
 | FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
 | FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
 | FM-3 | L4 domain extraction | REF-01 | ✅ Accepted | FR-18 … FR-24 ✅; root only `index.ts` |
-| FM-4 | Barrel hardening | REF-02 | ⏳ In progress | FR-25 ✅ FR-26 ✅ FR-27 ✅ FR-28 ✅ |
+| FM-4 | Barrel hardening | REF-02 | ✅ Accepted | FR-25 … FR-31 ✅; root barrel 33 lines; layer matrix gate green |
 | FM-5 | Capability tree re-nesting | REF-03 | ✅ Accepted | FR-32 … FR-38 ✅; `foundationCapabilityTreeArchitecture.spec.ts` green |
 
 ---
@@ -95,9 +95,9 @@ Last updated: 2026-08-04
 | FR-26 | Root barrel shrink | ✅ Accepted | 33 lines; no wildcards; `foundationRootBarrelArchitecture.spec.ts` tightened |
 | FR-27 | Remove denylisted exports | ✅ Accepted | Denylist gate pass; capsule internals off root barrel |
 | FR-28 | Command import cleanup | ✅ Accepted | `commandImportArchitecture.spec.ts`; domain barrels only |
-| FR-29 | Full dependency gate | ❌ Pending | Full L0–L6 matrix |
-| FR-30 | Remaining arch gates | ❌ Pending | All gates from map §6 green |
-| FR-31 | REF-02 acceptance | ❌ Pending | Map §8 exit criteria; reviewer matrix PASS |
+| FR-29 | Full dependency gate | ✅ Accepted | L1–L4 layer matrix in `foundationDependencyArchitecture.spec.ts`; `nvb test` green (1402 specs) |
+| FR-30 | Remaining arch gates | ✅ Accepted | Map §6 gate inventory spec; all gates green |
+| FR-31 | REF-02 acceptance | ✅ Accepted | Map §8 exit criteria; `nvb test` green |
 
 ### FM-5 — Capability tree re-nesting (REF-03)
 
@@ -118,7 +118,7 @@ Last updated: 2026-08-04
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
 | REF-01 | FR-00 … FR-24 | 25 / 25 | ✅ Accepted |
-| REF-02 | FR-25 … FR-31 | 4 / 7 | ⏳ In progress |
+| REF-02 | FR-25 … FR-31 | 7 / 7 | ✅ Accepted |
 | REF-03 | FR-32 … FR-38 | 7 / 7 | ✅ Accepted |
 
 ---
@@ -183,7 +183,7 @@ and [foundation-capability-tree-amendment.md §3](foundation-capability-tree-ame
 
 | Spec | FR | State |
 |------|-----|-------|
-| `foundationDependencyArchitecture.spec.ts` | FR-01, FR-29 | ⏳ Baseline gate (FR-01 ✅); full matrix at FR-29 |
+| `foundationDependencyArchitecture.spec.ts` | FR-01, FR-29 | ✅ Accepted |
 | `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-24, FR-27 | ✅ Accepted (FR-26/27) |
 | `commandImportArchitecture.spec.ts` | FR-28 | ✅ Accepted |
 | `pathsArchitecture.spec.ts` | FR-12 | ✅ Accepted |
