@@ -43,7 +43,13 @@ actionable implementation contracts; they do not override or reinterpret
 the product specification.
 
 Implementation architecture specs (foundation layout, barrels, remediation)
-live under [../architecture/](../architecture/).
+live under [../architecture/](../architecture/). **Agent enforcement** for
+foundation layout is mandatory via
+[../architecture/foundation-agent-guardrails.md](../architecture/foundation-agent-guardrails.md),
+every pack `agent-launch-contract.md`, and
+[shared-foundation-review-reject-conditions.md](shared-foundation-review-reject-conditions.md)
+and [shared-command-review-reject-conditions.md](shared-command-review-reject-conditions.md)
+for independent review batches.
 
 ## Lane Owner Maps
 

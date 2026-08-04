@@ -46,6 +46,26 @@ Hard limits per `engineering-and-review-standard.md` §4.
 - [ ] No deep import of another package's private paths
 - [ ] Owns only the batch's declared exclusive files; does not duplicate another batch's owner
 
+### 5.1 Foundation layout (mandatory when touching `src/foundation/`, commands, or `src/run.ts`)
+
+Complete [Foundation agent guardrails](../architecture/foundation-agent-guardrails.md) before handoff.
+
+- [ ] New/changed modules live under the correct capability/domain tree (no flat prefix clusters at foundation root)
+- [ ] Commands import foundation through domain/capability barrels only (`read/`, `runtime/`, … — not `foundation/index.js` or capsule internals)
+- [ ] L4 code reaches L5 only through capability barrels (`runtime/index.js`, not `runtime/catalog/`)
+- [ ] Root barrel `src/foundation/index.ts` unchanged or still ≤50 lines with no `export *` and no denylisted exports
+- [ ] Matching `spec/foundation/*Architecture.spec.ts` updated when file inventory or boundaries change
+- [ ] `nvb build && nvb test` green (includes `foundationCapabilityTreeArchitecture`, `foundationRootBarrelArchitecture`, `commandImportArchitecture`, `commandLayoutArchitecture`, `foundationDependencyArchitecture`, and owned domain gates)
+
+### 5.2 Command layout (mandatory when adding or moving CLI modules)
+
+Complete [Command agent guardrails](../architecture/command-agent-guardrails.md) before handoff.
+
+- [ ] New modules under `src/commands/<group>/` — **no new flat root `.ts`** (root is ratcheted)
+- [ ] `*Command.ts`, `*Options.ts`, and `*Presenter.ts` colocated in the same group
+- [ ] No cross-group command imports (`read/` must not import `../init/…`)
+- [ ] `spec/commands/commandLayoutArchitecture.spec.ts` and `commandImportArchitecture.spec.ts` green
+
 ## 6. Nirvana API audit
 
 - [ ] Every capability checked against pinned `@nirvana/*` packages before using bare Node
@@ -89,6 +109,10 @@ Copy this into your implementation report. Every gate must be PASS:
 | State/effect/security boundaries | PASS / FAIL |
 | Tests and build/dist proof | PASS / FAIL |
 | Help/schema/spec synchronization | PASS / FAIL |
+| Foundation layout and import guardrails | PASS / FAIL / N/A |
+| Command layout and colocation guardrails | PASS / FAIL / N/A |
+
+Use **N/A** only when the batch does not touch `src/foundation/`, `src/commands/`, `src/run.ts`, or foundation architecture specs.
 
 ## 10. Hard-reject scan
 
@@ -107,5 +131,7 @@ If ANY of these are true, do not hand off:
 - [ ] "Refactor later" promise for introduced debt
 - [ ] Missing Nirvana audit or size report in implementation report
 - [ ] Project-root Watchtower tasks, arbitrary NVB task selection, or direct NVB invocation outside `LaneTaskRunner`
+- [ ] Foundation layout guardrail violation (**FLG-01** … **FLG-10** in [foundation-agent-guardrails.md](../architecture/foundation-agent-guardrails.md))
+- [ ] Command layout guardrail violation (**CLG-01** … **CLG-10** in [command-agent-guardrails.md](../architecture/command-agent-guardrails.md))
 
 All false before handoff.

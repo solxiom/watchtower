@@ -55,8 +55,8 @@ rejected in favor of NVB task composition.
 
 | Path | Purpose |
 |------|---------|
-| `src/commands/` | One `*Command.ts` per `wt` subcommand; extend `BaseCommand` |
-| `src/foundation/` | Discovery, path resolution, lane config IO, script delegation |
+| `src/commands/` | Grouped CLI orchestration — see [command-module-architecture.md](docs/spec/architecture/command-module-architecture.md) |
+| `src/foundation/` | Capability-tree domains (see [foundation-agent-guardrails.md](docs/spec/architecture/foundation-agent-guardrails.md)) |
 | `src/contracts/` | Public types shared across commands |
 | `help/commands/` | Help fragment per command |
 | `runtime-nvb/` | Immutable internal NVB task catalog and focused handlers shipped in `dist/` |
@@ -133,6 +133,14 @@ index.
 - **Apply the mandatory reviewer gates** in
   `docs/development/engineering-and-review-standard.md`; known failures cannot
   be accepted with a follow-up promise
+- **Follow foundation layout guardrails** in
+  `docs/spec/architecture/foundation-agent-guardrails.md` for every change under
+  `src/foundation/`, commands, or `src/run.ts`; reviewers **REJECT** on
+  **FLG-01** … **FLG-10** violations
+- **Follow command layout guardrails** in
+  `docs/spec/architecture/command-agent-guardrails.md` when adding or moving CLI
+  modules; new commands go under `src/commands/<group>/`; reviewers **REJECT** on
+  **CLG-01** … **CLG-10** violations
 
 ## Source of truth for coordinator behavior
 

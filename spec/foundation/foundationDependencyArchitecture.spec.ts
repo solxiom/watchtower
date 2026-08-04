@@ -34,6 +34,7 @@ const MAP_SECTION6_GATE_FILES = [
     'foundationDependencyArchitecture.spec.ts',
     'foundationRootBarrelArchitecture.spec.ts',
     'commandImportArchitecture.spec.ts',
+    'commandLayoutArchitecture.spec.ts',
     'pathsArchitecture.spec.ts',
     'parsingArchitecture.spec.ts',
     'discoveryArchitecture.spec.ts',
@@ -182,9 +183,15 @@ describe('foundation layer import matrix (FR-29)', () => {
 
 describe('architecture gate inventory (FR-30)', () => {
     it('ships every gate file listed in the implementation map section 6', () => {
-        const specDir = join(process.cwd(), 'spec', 'foundation');
+        const foundationSpecDir = join(process.cwd(), 'spec', 'foundation');
+        const commandSpecDir = join(process.cwd(), 'spec', 'commands');
+        const commandGateFiles = new Set([
+            'commandImportArchitecture.spec.ts',
+            'commandLayoutArchitecture.spec.ts'
+        ]);
         for (const name of MAP_SECTION6_GATE_FILES) {
-            expect(existsSync(join(specDir, name))).withContext(name).toBeTrue();
+            const dir = commandGateFiles.has(name) ? commandSpecDir : foundationSpecDir;
+            expect(existsSync(join(dir, name))).withContext(name).toBeTrue();
         }
     });
 });

@@ -212,6 +212,10 @@ remediation plan.
 Foundation module layout, domain barrels, and the phased remediation plan live
 in [architecture/foundation-module-architecture.md](../spec/architecture/foundation-module-architecture.md)
 and [architecture/foundation-layout-remediation.md](../spec/architecture/foundation-layout-remediation.md).
+**Operational agent enforcement** (implementer placement, import rules, reviewer
+**FLG-** reject codes) is mandatory via
+[architecture/foundation-agent-guardrails.md](../spec/architecture/foundation-agent-guardrails.md)
+and every pack `agent-launch-contract.md`.
 
 ## 7. Contracts, errors, and state
 
@@ -296,6 +300,8 @@ The source architecture suite must fail builds for:
 - generic helper bags and directory-shadow layouts;
 - invalid naming and foreign API re-exports;
 - forbidden dependency direction or cycles;
+- foundation layout guardrail violations (**FLG-01** … **FLG-10** in
+  [foundation-agent-guardrails.md](../spec/architecture/foundation-agent-guardrails.md));
 - product logic accumulating in `src/cli.ts` or `src/run.ts`;
 - direct NVB invocation outside `LaneTaskRunner`, project-root Watchtower task
   definitions, arbitrary task selection, or workflow-level shell scripts;
@@ -333,6 +339,9 @@ Every review report must include this matrix with evidence:
 | State/effect/security boundaries | PASS / FAIL |
 | Tests and build/dist proof | PASS / FAIL |
 | Help/schema/spec synchronization | PASS / FAIL |
+| Foundation layout and import guardrails | PASS / FAIL / N/A |
+
+Use **N/A** only when the batch does not touch foundation layout surfaces.
 
 Any `FAIL` means **REJECT**. There is no “accept with follow-up” for a known
 violation.
@@ -380,7 +389,11 @@ Reject the batch when it contains any of the following:
 17. project-root/user-editable Watchtower tasks, arbitrary NVB task selection,
     or direct NVB invocation outside `LaneTaskRunner`; or
 18. workflow orchestration implemented in shell instead of focused TaskHandlers
-    and an NVB task group.
+    and an NVB task group; or
+19. a foundation layout guardrail violation (**FLG-01** … **FLG-10** in
+    [foundation-agent-guardrails.md](../spec/architecture/foundation-agent-guardrails.md))
+    including flat prefix clusters, command deep-import bypass, root-barrel
+    policy breach, upward layer imports, or missing architecture gate proof.
 
 ## 13. Definition of done
 

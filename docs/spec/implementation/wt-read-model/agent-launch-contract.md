@@ -9,6 +9,21 @@ This contract and one batch-specific launch prompt form one self-contained launc
 
 Use this precedence: accepted product specs/schemas; engineering and review standard; AGENTS.md; accepted implementation map and amendment; pack quality rules; paired brief; launch prompt. Read `docs/spec/v1.md`, `docs/spec/v1-contracts.md`, `docs/spec/nirvana-integration-architecture.md`, `docs/spec/v1-implementation-map.md`, `docs/spec/implementation/planning-remediation-amendment.md`, the complete paired brief, and actual accepted predecessor source/evidence. Stop for specification resolution rather than inventing policy or ownership.
 
+## Foundation layout guardrails (mandatory)
+
+Any batch that touches `src/foundation/`, `src/commands/`, `src/run.ts`, or foundation architecture specs must read and apply [Foundation agent guardrails](../../architecture/foundation-agent-guardrails.md) in full before editing or reviewing.
+
+- **Implementers** place code in the correct capability/domain tree, import only through allowed barrels, keep the root foundation barrel within policy, update matching `*Architecture.spec.ts` gates when inventories change, and prove compliance with `nvb build && nvb test` before handoff.
+- **Reviewers** independently verify guardrail compliance from source and diff. A foundation layout violation (**FLG-01** … **FLG-10**) is an immediate **REJECT** with a numbered correction brief — never accept with a follow-up promise.
+- **Coordinators** do not dispatch review when the implementation report omits foundation layout proof required by the guardrails and [pre-handoff-self-audit.md §5](../pre-handoff-self-audit.md).
+
+## Command layout guardrails (mandatory)
+
+Any batch that **adds or moves** CLI modules must read and apply [Command agent guardrails](../../architecture/command-agent-guardrails.md) and [Command module architecture](../../architecture/command-module-architecture.md).
+
+- **New** command, options, or presenter modules land under `src/commands/<group>/` — the flat root is **frozen** (ratchet).
+- **Reviewers** **REJECT** on **CLG-01** … **CLG-10** with correction briefs.
+
 ## Required execution method
 
 1. Verify the assigned checkout, branch, clean/expected dirty state, accepted dependency commits, claim/resource fences, and `kavan:kavan` ownership.

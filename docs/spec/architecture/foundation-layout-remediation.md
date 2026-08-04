@@ -553,11 +553,12 @@ Work unit definitions and dependencies:
 - [ ] Module size limits satisfied or split with justification
 - [ ] No new circular dependencies
 - [ ] Architecture specs updated with exact paths
+- [ ] [Foundation agent guardrails](foundation-agent-guardrails.md) satisfied — **REJECT** on **FLG-01** … **FLG-10**
 - [ ] Root barrel denylist enforced
 - [ ] Command imports use domain barrels only (REF-02)
 - [ ] No `export *` at root or domain barrels
-- [ ] No shadow structures remain
-- [ ] `nvb build && nvb test` evidence attached
+- [ ] No shadow structures or flat prefix clusters remain
+- [ ] `nvb build && nvb test` evidence attached (architecture gate specs green)
 - [ ] Engineering standard acceptance matrix PASS
 - [ ] Conforms to [foundation-module-architecture.md](foundation-module-architecture.md)
 

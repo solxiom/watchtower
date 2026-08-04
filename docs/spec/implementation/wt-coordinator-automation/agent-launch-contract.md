@@ -17,6 +17,21 @@ pack's quality rules, the exact batch brief, accepted predecessor source and
 evidence, and the current tracker. Normative specifications and the accepted
 map override illustrative implementation names.
 
+## Foundation layout guardrails (mandatory)
+
+Any batch that touches `src/foundation/`, `src/commands/`, `src/run.ts`, or foundation architecture specs must read and apply [Foundation agent guardrails](../../architecture/foundation-agent-guardrails.md) in full before editing or reviewing.
+
+- **Implementers** place code in the correct capability/domain tree, import only through allowed barrels, keep the root foundation barrel within policy, update matching `*Architecture.spec.ts` gates when inventories change, and prove compliance with `nvb build && nvb test` before handoff.
+- **Reviewers** independently verify guardrail compliance from source and diff. A foundation layout violation (**FLG-01** … **FLG-10**) is an immediate **reject** with a numbered correction brief — never accept with a follow-up promise.
+- **Coordinators** do not dispatch review when the implementation report omits foundation layout proof required by the guardrails and [pre-handoff-self-audit.md §5](../pre-handoff-self-audit.md).
+
+## Command layout guardrails (mandatory)
+
+Any batch that **adds or moves** CLI modules must read and apply [Command agent guardrails](../../architecture/command-agent-guardrails.md) and [Command module architecture](../../architecture/command-module-architecture.md).
+
+- **New** command, options, or presenter modules land under `src/commands/<group>/` — the flat root is **frozen** (ratchet).
+- **Reviewers** **reject** on **CLG-01** … **CLG-10** with correction briefs.
+
 ## Mandatory implementation method
 
 1. Confirm the exact checkout/worktree, branch/commit, accepted dependencies,

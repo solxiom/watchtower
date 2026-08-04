@@ -41,7 +41,9 @@ Every correction brief must include:
 5. the required additional proof after correction
 6. the exact files that must change
 7. any architectural or ownership boundaries that were violated and must be
-   restored
+   restored — cite **FLG-** codes from
+   [shared-foundation-review-reject-conditions.md](../../shared-foundation-review-reject-conditions.md)
+   when the violation is foundation layout or import related
 8. a statement that all other batch acceptance criteria remain unchanged
 9. a reference to the review report containing the original rejection
 10. a status line: open, in-progress (with assignee), or resolved (with

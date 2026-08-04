@@ -743,6 +743,7 @@ spec/foundation/taskRuntimeArchitecture.spec.ts
 
 | Document | Role |
 |----------|------|
+| [foundation-agent-guardrails.md](foundation-agent-guardrails.md) | **Mandatory agent enforcement** — implementer placement, imports, reviewer FLG rejects |
 | [foundation-capability-tree-amendment.md](foundation-capability-tree-amendment.md) | REF-03 capability tree — supersedes flat L5 layout |
 | [foundation-layout-remediation.md](foundation-layout-remediation.md) | File migration inventory, reviewer checklist |
 | [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md) | Milestones, work units, dependencies, waves |
