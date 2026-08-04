@@ -6,7 +6,7 @@ import {
     generateLaneConfig,
     generateLaneManifest,
     generateRepositoriesLocal
-} from '../../src/foundation/LaneStore.js';
+} from '../../src/foundation/laneStore/index.js';
 import type {InstallManifestInputs, LaneLayoutInputs, LaneManagedLink, RuntimeAssetRef} from '../../src/foundation/laneStore/laneStoreContracts.js';
 import type {ConsumedPack} from '../../src/contracts/pack.js';
 import type {InitPlan} from '../../src/foundation/InitContracts.js';

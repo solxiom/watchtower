@@ -7,11 +7,11 @@
  * itself belongs to `TransactionalWriter`; this module never touches the
  * filesystem.
  */
-export {buildLaneLayout} from './laneStore/laneLayoutPlanner.js';
-export {generateLaneManifest} from './laneStore/laneManifestGenerator.js';
-export {generateInstallManifest} from './laneStore/installManifestGenerator.js';
-export {generateRepositoriesLocal} from './laneStore/repositoriesLocalGenerator.js';
-export {generateLaneConfig} from './laneStore/laneConfigGenerator.js';
+export {buildLaneLayout} from './laneLayoutPlanner.js';
+export {generateLaneManifest} from './laneManifestGenerator.js';
+export {generateInstallManifest} from './installManifestGenerator.js';
+export {generateRepositoriesLocal} from './repositoriesLocalGenerator.js';
+export {generateLaneConfig} from './laneConfigGenerator.js';
 export type {
     InstallManifestInputs,
     LaneFile,
@@ -19,4 +19,4 @@ export type {
     LaneLayoutInputs,
     LaneManagedLink,
     RuntimeAssetRef
-} from './laneStore/laneStoreContracts.js';
+} from './laneStoreContracts.js';

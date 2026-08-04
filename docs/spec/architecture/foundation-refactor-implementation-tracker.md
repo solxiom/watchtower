@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-1 next (FM-0 complete)**
+Status: **Active — FM-1 in progress (FR-03 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,9 +19,9 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **3 / 32** work units accepted |
-| Baseline root files | 93 (target: 0) |
-| Shadow structures | 9 (target: 0) |
+| Score | **4 / 32** work units accepted |
+| Baseline root files | 92 (target: 0) |
+| Shadow structures | 8 (target: 0) |
 
 ---
 
@@ -30,7 +30,7 @@ Last updated: 2026-08-04
 | Milestone | Name | Batch | State | Accepted proof |
 |-----------|------|-------|-------|----------------|
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
-| FM-1 | Capsule completion | REF-01 | ❌ Pending | Zero shadow structures |
+| FM-1 | Capsule completion | REF-01 | ⏳ In progress | FR-03 ✅; 8 shadow structures remain |
 | FM-2 | L1–L3 domain extraction | REF-01 | ❌ Pending | Seven domain dirs + barrels |
 | FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
@@ -51,7 +51,7 @@ Last updated: 2026-08-04
 
 | ID | Work unit | State | Acceptance proof |
 |----|-----------|-------|------------------|
-| FR-03 | `laneStore` facade move | ❌ Pending | `LaneStore.ts` inside `laneStore/`; specs green |
+| FR-03 | `laneStore` facade move | ✅ Accepted | `laneStore/index.ts`; `LaneStore.ts` removed; `nvb test` green |
 | FR-04 | `transactionalWriter` facade move | ❌ Pending | Facade inside capsule |
 | FR-05 | `managedAssets` facade move | ❌ Pending | Both facades inside capsule; arch spec paths updated |
 | FR-06 | `runtimeCatalog` facade move | ❌ Pending | Facade inside capsule |
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 3 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 4 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -128,7 +128,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `pack/` | L4 | FR-19 | ❌ | ❌ | Pending |
 | `upgrade/` | L4 | FR-20 | ❌ | ❌ | Pending |
 | `runtimeDistribution/` | L4 | FR-23 | ❌ | ❌ | Pending |
-| `laneStore/` | L5 | FR-03 | partial | ❌ | Shadow facade at root |
+| `laneStore/` | L5 | FR-03 | ✅ | ✅ | Accepted |
 | `transactionalWriter/` | L5 | FR-04 | partial | ❌ | Shadow facade at root |
 | `coordinatorBaseline/` | L5 | FR-10 | partial | ❌ | Shadow facade at root |
 | `managedAssets/` | L5 | FR-05 | partial | ❌ | Shadow facade at root |
@@ -174,8 +174,8 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 93 | 0 | 2026-08-04 |
-| Shadow structures | 9 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 92 | 0 | 2026-08-04 |
+| Shadow structures | 8 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |
