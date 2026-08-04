@@ -198,10 +198,11 @@ and [foundation-capability-tree-amendment.md §3](foundation-capability-tree-ame
 | `indexQueryArchitecture.spec.ts` | FR-08, FR-09 | ✅ Accepted — paths updated |
 | `runtimeKnowledgeManifestArchitecture.spec.ts` | — | ✅ Exists — retarget at FR-32 |
 | `foundationCapabilityTreeArchitecture.spec.ts` | FR-38 | ❌ Not created |
-| `runtimeCapabilityArchitecture.spec.ts` | FR-32 | ❌ Not created |
-| `taskCapabilityArchitecture.spec.ts` | FR-33 | ❌ Not created |
-| `laneCapabilityArchitecture.spec.ts` | FR-34 | ❌ Not created |
-| `indexCapabilityArchitecture.spec.ts` | FR-35, FR-36 | ❌ Not created |
+| `runtimeCapabilityArchitecture.spec.ts` | FR-32 | ✅ Accepted |
+| `taskCapabilityArchitecture.spec.ts` | FR-33 | ✅ Accepted |
+| `laneCapabilityArchitecture.spec.ts` | FR-34 | ✅ Accepted |
+| `packIndexArchitecture.spec.ts` | FR-35 | ✅ Accepted |
+| `indexCapabilityArchitecture.spec.ts` | FR-36 | ✅ Accepted |
 
 ---
 
@@ -216,7 +217,7 @@ Refresh after each accepted work unit.
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |
-| Flat prefix clusters | 0 | 0 | 2026-08-04 |
+| Flat prefix clusters at foundation root | 0 | 0 | 2026-08-04 |
 
 ---
 
