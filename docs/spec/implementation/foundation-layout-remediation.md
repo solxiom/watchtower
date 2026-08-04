@@ -2,7 +2,7 @@
 
 Status: **Accepted — structural remediation authority**
 Scope: migrate legacy flat `src/foundation/` to
-[foundation-module-architecture.md](foundation-module-architecture.md)
+[foundation-module-architecture.md](../foundation-module-architecture.md)
 Applies to: v1 implementation lane (outside the 74-batch product graph)
 Last updated: 2026-08-04
 
@@ -13,7 +13,7 @@ tracking.
 
 The **normative target architecture** — domains, barrels, layers, and public
 export contract — lives in
-[foundation-module-architecture.md](foundation-module-architecture.md). This
+[foundation-module-architecture.md](../foundation-module-architecture.md). This
 remediation plan must not change public CLI behavior, schema version, or lane
 semantics.
 
@@ -50,7 +50,7 @@ Two structural remediation batches:
 
 Both batches are **behavior-neutral**. All proof is `nvb test` plus new
 architecture specs defined in
-[foundation-module-architecture.md §9](foundation-module-architecture.md#9-architecture-test-requirements).
+[foundation-module-architecture.md §9](../foundation-module-architecture.md#9-architecture-test-requirements).
 
 ### Phase timeline
 
@@ -189,7 +189,7 @@ while moving.
 ## 3. File migration inventory
 
 Complete target tree:
-[foundation-module-architecture.md §3.1](foundation-module-architecture.md#31-full-target-tree).
+[foundation-module-architecture.md §3.1](../foundation-module-architecture.md#31-full-target-tree).
 
 ### 3.1 Phase 1 — finish existing capsules
 
@@ -370,7 +370,7 @@ For each moved file:
 
 | Step | Action |
 |------|--------|
-| 0.1 | Land [foundation-module-architecture.md](foundation-module-architecture.md) and this document |
+| 0.1 | Land [foundation-module-architecture.md](../foundation-module-architecture.md) and this document |
 | 0.2 | Add `foundationDependencyArchitecture.spec.ts` with current-state baseline |
 | 0.3 | Add `foundationRootBarrelArchitecture.spec.ts` listing symbols to remove in REF-02 |
 | 0.4 | Cross-link from [engineering-and-review-standard.md §6](../../development/engineering-and-review-standard.md#6-naming-imports-and-layout) and [nirvana-integration-architecture.md §2.1](../nirvana-integration-architecture.md#21-target-module-ownership) |
@@ -425,7 +425,7 @@ For each moved file:
 | Step | Action |
 |------|--------|
 | 4.1 | Replace root wildcard exports with named domain re-exports |
-| 4.2 | Remove denylisted symbols from root barrel (see [architecture §7.2](foundation-module-architecture.md#72-root-barrel--forbidden-exports-capsule-internal)) |
+| 4.2 | Remove denylisted symbols from root barrel (see [architecture §7.2](../foundation-module-architecture.md#72-root-barrel--forbidden-exports-capsule-internal)) |
 | 4.3 | Create `presentation/`; move presenters |
 | 4.4 | Update all commands to domain-barrel imports |
 | 4.5 | Add `commandImportArchitecture.spec.ts` |
@@ -480,7 +480,7 @@ REF-01 and REF-02 are accepted when **all** of the following hold:
 | 8 | `nvb build && nvb test` pass with zero regressions | CI / local proof |
 | 9 | No normative product spec changes unless separately amended | Reviewer checklist |
 | 10 | Engineering standard acceptance matrix PASS | Review report |
-| 11 | Layout conforms to [foundation-module-architecture.md](foundation-module-architecture.md) | Reviewer checklist |
+| 11 | Layout conforms to [foundation-module-architecture.md](../foundation-module-architecture.md) | Reviewer checklist |
 
 ---
 
@@ -509,7 +509,7 @@ REF-01 and REF-02 are accepted when **all** of the following hold:
 - [ ] No shadow structures remain
 - [ ] `nvb build && nvb test` evidence attached
 - [ ] Engineering standard acceptance matrix PASS
-- [ ] Conforms to [foundation-module-architecture.md](foundation-module-architecture.md)
+- [ ] Conforms to [foundation-module-architecture.md](../foundation-module-architecture.md)
 
 ---
 
