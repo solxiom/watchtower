@@ -18,7 +18,7 @@
  * and already-applied entries resolve idempotently through `decideCreate`/
  * `decideRemove` on replay.
  */
-import type {RuntimeCatalog} from '../RuntimeCatalog.js';
+import type {RuntimeCatalog} from '../runtimeCatalog/index.js';
 import type {
     InstallManifestV1,
     ManagedAssetDeclaration,

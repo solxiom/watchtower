@@ -1,9 +1,9 @@
 import {join} from 'node:path';
-import type {KnowledgeManifestV1, RuntimeManifestV1} from '../contracts/runtimeKnowledgeManifests.js';
-import {RuntimeCatalogError} from '../contracts/runtimeCatalog.js';
-import {resolveWatchtowerDataHome} from './dataHomeResolver.js';
-import {ImmutableVersionStore} from './runtimeCatalog/ImmutableVersionStore.js';
-import {ManifestStagingValidator} from './runtimeCatalog/ManifestStagingValidator.js';
+import type {KnowledgeManifestV1, RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
+import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
+import {resolveWatchtowerDataHome} from '../dataHomeResolver.js';
+import {ImmutableVersionStore} from './ImmutableVersionStore.js';
+import {ManifestStagingValidator} from './ManifestStagingValidator.js';
 
 const VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$/u;
 

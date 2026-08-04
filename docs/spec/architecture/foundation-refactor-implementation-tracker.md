@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-1 in progress (FR-03 … FR-05 ✅)**
+Status: **Active — FM-1 in progress (FR-03 … FR-06 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,9 +19,9 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **6 / 32** work units accepted |
-| Baseline root files | 89 (target: 0) |
-| Shadow structures | 5 (target: 0) |
+| Score | **7 / 32** work units accepted |
+| Baseline root files | 88 (target: 0) |
+| Shadow structures | 4 (target: 0) |
 
 ---
 
@@ -30,7 +30,7 @@ Last updated: 2026-08-04
 | Milestone | Name | Batch | State | Accepted proof |
 |-----------|------|-------|-------|----------------|
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
-| FM-1 | Capsule completion | REF-01 | ⏳ In progress | FR-03 … FR-05 ✅; 5 shadow structures remain |
+| FM-1 | Capsule completion | REF-01 | ⏳ In progress | FR-03 … FR-06 ✅; 4 shadow structures remain |
 | FM-2 | L1–L3 domain extraction | REF-01 | ❌ Pending | Seven domain dirs + barrels |
 | FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
@@ -54,7 +54,7 @@ Last updated: 2026-08-04
 | FR-03 | `laneStore` facade move | ✅ Accepted | `laneStore/index.ts`; `LaneStore.ts` removed; `nvb test` green |
 | FR-04 | `transactionalWriter` facade move | ✅ Accepted | `transactionalWriter/index.ts`; `TransactionalWriter.ts` removed; `nvb test` green |
 | FR-05 | `managedAssets` facade move | ✅ Accepted | `managedAssets/index.ts`; root facades removed; arch spec updated; `nvb test` green |
-| FR-06 | `runtimeCatalog` facade move | ❌ Pending | Facade inside capsule |
+| FR-06 | `runtimeCatalog` facade move | ✅ Accepted | `runtimeCatalog/index.ts`; `RuntimeCatalog.ts` removed; `nvb test` green |
 | FR-07 | `packIndex` facade move | ❌ Pending | `PackIndexCompiler.ts` inside `packIndex/` |
 | FR-08 | `indexStore` facade move | ❌ Pending | Facade inside capsule |
 | FR-09 | `indexQuery` facade move | ❌ Pending | Facade inside capsule; ≤200 lines or split |
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 6 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 7 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -132,7 +132,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `transactionalWriter/` | L5 | FR-04 | ✅ | ✅ | Accepted |
 | `coordinatorBaseline/` | L5 | FR-10 | partial | ❌ | Shadow facade at root |
 | `managedAssets/` | L5 | FR-05 | ✅ | ✅ | Accepted |
-| `runtimeCatalog/` | L5 | FR-06 | partial | ❌ | Shadow facade at root |
+| `runtimeCatalog/` | L5 | FR-06 | ✅ | ✅ | Accepted |
 | `packIndex/` | L5 | FR-07 | partial | ❌ | Shadow facade at root |
 | `indexStore/` | L5 | FR-08 | partial | ❌ | Shadow facade at root |
 | `indexQuery/` | L5 | FR-09 | partial | ❌ | Shadow facade at root |
@@ -174,8 +174,8 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 89 | 0 | 2026-08-04 |
-| Shadow structures | 5 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 88 | 0 | 2026-08-04 |
+| Shadow structures | 4 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |

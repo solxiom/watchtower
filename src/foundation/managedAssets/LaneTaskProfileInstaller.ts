@@ -8,7 +8,7 @@
  * never reads or trusts a participating repository's `nvb.json`.
  */
 import {join} from 'node:path';
-import type {RuntimeCatalog} from '../RuntimeCatalog.js';
+import type {RuntimeCatalog} from '../runtimeCatalog/index.js';
 import type {PinnedTaskRuntimeTarget} from '../../contracts/taskRuntime.js';
 import type {InstallManifestV1} from '../../contracts/manifests.js';
 import {readTaskRuntimePin} from '../taskRuntime/taskRuntimePin.js';

@@ -1,7 +1,7 @@
 import {existsSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {RuntimeCatalogError} from '../../src/contracts/runtimeCatalog.js';
-import {RuntimeCatalog} from '../../src/foundation/RuntimeCatalog.js';
+import {RuntimeCatalog} from '../../src/foundation/runtimeCatalog/index.js';
 import {ImmutableVersionStore} from '../../src/foundation/runtimeCatalog/ImmutableVersionStore.js';
 import {nodeImmutableVersionFileSystem} from '../../src/foundation/runtimeCatalog/ImmutableVersionFileSystem.js';
 import {ManifestStagingValidator} from '../../src/foundation/runtimeCatalog/ManifestStagingValidator.js';

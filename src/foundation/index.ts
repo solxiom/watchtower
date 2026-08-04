@@ -6,8 +6,8 @@ export {authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPat
 export {authorizeWatchtowerDataHomeForCreation, resolveWatchtowerDataHome, validateWatchtowerDataHome} from './dataHomeResolver.js';
 export {resolveDataRoot} from './DataRoot.js';
 export type {UserHomeProvider} from './DataRoot.js';
-export {RuntimeCatalog} from './RuntimeCatalog.js';
-export type {RuntimeCatalogOptions} from './RuntimeCatalog.js';
+export {RuntimeCatalog} from './runtimeCatalog/index.js';
+export type {RuntimeCatalogOptions} from './runtimeCatalog/index.js';
 export {ManagedAssets, LaneTaskProfileInstaller} from './managedAssets/index.js';
 export type {ManagedAssetsOptions, LaneTaskProfileInstallRequest} from './managedAssets/index.js';
 export {

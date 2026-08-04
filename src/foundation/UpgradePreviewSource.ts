@@ -6,7 +6,7 @@ import type {UpgradePlannerInput} from '../contracts/upgrade.js';
 import {createWatchtowerError} from '../contracts/errors.js';
 import {parseInstallManifest} from './managedAssets/installManifestReader.js';
 import {resolveLane, type LaneSelectionContext} from './LaneSelector.js';
-import {RuntimeCatalog} from './RuntimeCatalog.js';
+import {RuntimeCatalog} from './runtimeCatalog/index.js';
 import {parseKnowledgeManifest, parseRuntimeManifest} from './runtimeKnowledgeManifest/manifestDocumentParser.js';
 
 export interface UpgradeSourceQuery extends LaneSelectionContext { readonly workspace?: string; readonly to?: string; }

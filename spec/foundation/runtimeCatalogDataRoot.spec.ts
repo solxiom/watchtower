@@ -1,6 +1,6 @@
 import {existsSync, mkdirSync, symlinkSync} from 'node:fs';
 import {join} from 'node:path';
-import {RuntimeCatalog} from '../../src/foundation/RuntimeCatalog.js';
+import {RuntimeCatalog} from '../../src/foundation/runtimeCatalog/index.js';
 import {cleanupFixture, expectCatalogError, makeRuntimeCatalogFixture, runtimeManifest} from './support/runtimeCatalogFixtures.js';
 
 describe('RuntimeCatalog data-root containment', () => {

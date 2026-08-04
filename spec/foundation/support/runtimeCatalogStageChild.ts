@@ -1,6 +1,6 @@
 import {writeFileSync} from 'node:fs';
 import {RuntimeCatalogError} from '../../../src/contracts/runtimeCatalog.js';
-import {RuntimeCatalog} from '../../../src/foundation/RuntimeCatalog.js';
+import {RuntimeCatalog} from '../../../src/foundation/runtimeCatalog/index.js';
 import {ImmutableVersionStore} from '../../../src/foundation/runtimeCatalog/ImmutableVersionStore.js';
 
 interface ChildRequest {
