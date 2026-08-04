@@ -3,11 +3,51 @@
  * I/O of its own; every filesystem fact it judges is passed in already
  * observed by the caller through `UpgradeApplyFileSystem`.
  */
-import {relative, sep} from 'node:path';
+import {lstatSync, realpathSync} from 'node:fs';
+import {dirname, relative, resolve, sep} from 'node:path';
 import type {AssetClassificationEntry, UpgradePlan} from '../../contracts/upgrade.js';
 import type {RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
 import type {ApplyResult, StagedAssetRecord, UpgradeApplyFailure, UpgradeApplyReason} from '../../contracts/upgradeApply.js';
 import type {UpgradeLinkObservation} from './upgradeApplyFileSystem.js';
+
+/**
+ * Resolve a managed `bin/` link's lane-relative path to an absolute source
+ * path, authorizing only its *ancestor directories* against the lane —
+ * never the leaf itself. `buildLaneFilePath` is deliberately wrong here: a
+ * managed link is a symlink whose entire purpose is to resolve outside the
+ * lane into the immutable runtime store, so fully resolving the leaf (as
+ * `buildLaneFilePath` does for authoritative lane-owned files) would reject
+ * every legitimate managed link. This mirrors RT-06's
+ * `managedLinkPlanner.ts#resolveSource` containment technique — walk to the
+ * nearest existing ancestor and prove *that* stays inside the lane — without
+ * importing RT-06's internal module (an L5 sub-capsule the barrel does not
+ * expose), and without deciding any managed-link policy: checksum/target
+ * authority remains `assertChecksum`'s job.
+ */
+export function resolveManagedLinkSourcePath(laneDir: string, assetPath: string): string {
+    const canonicalLaneDir = realpathSync(laneDir);
+    const candidate = resolve(canonicalLaneDir, assetPath);
+    let current = dirname(candidate);
+    while (current !== canonicalLaneDir) {
+        const parent = dirname(current);
+        if (parent === current) throw stagingError('IO_UNAVAILABLE', assetPath, 'The managed link path escapes the lane directory.');
+        if (!existsAt(current)) { current = parent; continue; }
+        if (!isContained(canonicalLaneDir, realpathSync(current))) {
+            throw stagingError('MANAGED_COLLISION', assetPath, 'A managed link ancestor directory resolves outside the lane.');
+        }
+        break;
+    }
+    return candidate;
+}
+
+function existsAt(path: string): boolean {
+    try { lstatSync(path); return true; } catch { return false; }
+}
+
+function isContained(root: string, candidate: string): boolean {
+    const difference = relative(root, candidate);
+    return difference === '' || (!difference.startsWith(`..${sep}`) && difference !== '..');
+}
 
 export function requireNonNull<T>(value: T | null, path: string, reason: UpgradeApplyReason, message: string): T {
     if (value === null) throw stagingError(reason, path, message);

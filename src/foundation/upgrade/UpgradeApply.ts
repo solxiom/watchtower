@@ -25,7 +25,7 @@ import {stageMigrationPlan} from './MigrationSteps.js';
 import {installStagingTempPath, nodeUpgradeApplyFileSystem, stagingTempPath, type UpgradeApplyFileSystem} from './upgradeApplyFileSystem.js';
 import {
     alreadyLinked, assertChecksum, assertNoTamperedCollision, failureResult, nextManagedAssets, requireNonNull,
-    successResult, toFailure
+    resolveManagedLinkSourcePath, successResult, toFailure
 } from './upgradeApplyValidation.js';
 
 const LANE_SCHEMA_VERSION: 1 = 1;
@@ -65,7 +65,8 @@ export class UpgradeApply {
             const entries = [...input.plan.added, ...input.plan.changed];
             const staged = this.stageEntries(input, entries);
             if (staged.failure !== null) return failureResult(input.plan, migrated, staged);
-            this.writeInstallManifest(input);
+            const manifestFailure = this.writeInstallManifest(input);
+            if (manifestFailure !== null) return failureResult(input.plan, migrated, {...staged, failure: manifestFailure});
             return successResult(input.plan, migrated, staged);
         } finally {
             await lock.release();
@@ -99,7 +100,7 @@ export class UpgradeApply {
         assertChecksum(
             (path) => this.fileSystem.digestFile(path), entry.path, targetPath, declaredSha256, input.targetRuntimeRoot, input.targetRuntime
         );
-        const sourcePath = buildLaneFilePath(input.laneDir, entry.path);
+        const sourcePath = resolveManagedLinkSourcePath(input.laneDir, entry.path);
         const observation = this.fileSystem.inspectLink(sourcePath);
         if (alreadyLinked(observation, targetPath)) return null;
         assertNoTamperedCollision(entry, observation);
@@ -123,7 +124,16 @@ export class UpgradeApply {
         return {path, tempPath, targetPath, renamed: true};
     }
 
-    private writeInstallManifest(input: UpgradeApplyInput): void {
+    /**
+     * Returns a data-shaped `UpgradeApplyFailure` for any failure strictly
+     * before the manifest rename (the commit point) — nothing durable
+     * changed, so the caller may safely retry. A failure at or after the
+     * rename is an uncertain/post-commit outcome and propagates as a thrown
+     * exception instead: the mutation may have already happened, so the
+     * caller must resolve durable state (via `UpgradeRecovery`) before
+     * retrying, never assume `success: false`.
+     */
+    private writeInstallManifest(input: UpgradeApplyInput): UpgradeApplyFailure | null {
         const pin = new LaneTaskProfileInstaller(this.runtimeCatalog).install({
             runtimeVersion: input.targetRuntime.runtimeVersion,
             profile: input.currentInstall.taskRuntime.profile,
@@ -143,10 +153,16 @@ export class UpgradeApply {
         const installJsonPath = buildLaneFilePath(input.laneDir, 'install.json');
         const directory = dirname(installJsonPath);
         const tempPath = installStagingTempPath(installJsonPath);
-        this.fileSystem.removeIfExists(tempPath);
-        this.fileSystem.writeFileExclusive(tempPath, `${JSON.stringify(next, null, 2)}\n`);
+        try {
+            this.fileSystem.removeIfExists(tempPath);
+            this.fileSystem.writeFileExclusive(tempPath, `${JSON.stringify(next, null, 2)}\n`);
+        } catch (error) {
+            this.fileSystem.removeIfExists(tempPath);
+            return toFailure('install.json', error);
+        }
         this.fileSystem.renameAtomic(tempPath, installJsonPath);
         this.fileSystem.fsyncDirectory(directory);
+        return null;
     }
 }
 
