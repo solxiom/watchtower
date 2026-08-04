@@ -6,8 +6,8 @@
  * authoring one fixture per batch count.
  */
 import {join} from 'node:path';
-import {PackIndexCompiler, consumePack} from '../../../src/foundation/index.js';
-import type {PackIndexCompileRequest} from '../../../src/foundation/index.js';
+import {PackIndexCompiler, consumePack} from '../../../src/foundation/pack/index.js';
+import type {PackIndexCompileRequest} from '../../../src/foundation/pack/index.js';
 import type {ConsumedPack, PackIndexCompileResult} from '../../../src/contracts/index.js';
 import {buildPackFixture, deps, fakeFileSystem, realValidators, PACK_ROOT, type PackFixture} from '../fixtures/packFixture.js';
 

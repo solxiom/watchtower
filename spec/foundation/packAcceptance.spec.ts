@@ -1,6 +1,6 @@
-import {consumePack} from '../../src/foundation/index.js';
+import {consumePack} from '../../src/foundation/pack/index.js';
 import type {PackConsumerResult, PackRejectionReason} from '../../src/contracts/index.js';
-import type {PackSessionIdentity, PathKind} from '../../src/foundation/index.js';
+import type {PackSessionIdentity, PathKind} from '../../src/foundation/pack/index.js';
 import {
     ACCEPTED_INPUT_PATH,
     ACCEPTED_INPUT_REPOSITORY,
@@ -16,7 +16,7 @@ import {
     packReviewEvents,
     type PackFixture
 } from './fixtures/packFixture.js';
-import type {PackAcceptanceEvidence} from '../../src/foundation/index.js';
+import type {PackAcceptanceEvidence} from '../../src/foundation/pack/index.js';
 
 function reject(result: PackConsumerResult): PackRejectionReason {
     if (result.ok) throw new Error('expected a rejection');

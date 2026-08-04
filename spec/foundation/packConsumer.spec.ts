@@ -1,6 +1,6 @@
-import {consumePack} from '../../src/foundation/index.js';
+import {consumePack} from '../../src/foundation/pack/index.js';
 import type {PackConsumerResult, PackRejectionReason} from '../../src/contracts/index.js';
-import type {PathKind} from '../../src/foundation/index.js';
+import type {PathKind} from '../../src/foundation/pack/index.js';
 import {
     PACK_ROOT,
     buildPackFixture,

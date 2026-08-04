@@ -1,5 +1,5 @@
 /**
- * Write-time counterpart of `foundation/taskRuntime/taskRuntimePin.ts`
+ * Write-time counterpart of `foundation/task/runtime/taskRuntimePin.ts`
  * (`docs/spec/v1.md` §7.5; RT-06). Resolves the immutable RT-04 runtime root
  * for a requested runtime version, proves the requested catalog/profile only
  * narrows the packaged catalog, and returns the exact `install.json.taskRuntime`

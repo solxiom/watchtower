@@ -1,6 +1,5 @@
 /**
- * FR-02 baseline root-barrel architecture gate.
- * Baseline mode documents pre-REF-02 debt; tighten at FR-26/FR-27 (REF-02).
+ * FR-02 / FR-26 / FR-27 root-barrel architecture gate.
  */
 import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -11,12 +10,11 @@ const ROOT_BARREL = join(FOUNDATION_ROOT, 'index.ts');
 
 /** Facade file at foundation root that must move into its capsule (FR-03 … FR-10). */
 const SHADOW_PAIRS: ReadonlyArray<readonly [facade: string, capsule: string]> = [];
-const BASELINE_SHADOW_STRUCTURE_COUNT = 0;
+
 const REF02_ROOT_EXPORT_DENYLIST = [
     'PACK_INDEX_SCHEMA',
     'PACK_INDEX_META_TABLE',
     'nodeManagedLinkFileSystem',
-    // ManagedLinkFileSystem is type-only; verified separately from runtime export keys.
     'parseInstallManifest',
     'COMPATIBILITY_NAMES',
     'resolveCompatibilityName',
@@ -39,11 +37,8 @@ const REF02_ROOT_EXPORT_DENYLIST = [
     'IndexQuery'
 ] as const;
 
-const BASELINE_ROOT_BARREL_MAX_LINES = 130;
-const BASELINE_WILDCARD_EXPORT_COUNT = 4;
-const REF02_TARGET_ROOT_BARREL_MAX_LINES = 50;
-const REF02_TARGET_WILDCARD_EXPORT_COUNT = 0;
-const REF02_TARGET_SHADOW_STRUCTURE_COUNT = 0;
+const REF02_ROOT_BARREL_MAX_LINES = 50;
+const REF02_WILDCARD_EXPORT_COUNT = 0;
 
 function countShadowStructures(): number {
     return SHADOW_PAIRS.filter(([facade, capsule]) =>
@@ -60,33 +55,29 @@ describe('foundation root layout (FR-24)', () => {
     });
 });
 
-describe('foundation root barrel baseline (FR-02)', () => {
-    it('positive control: detects wildcard re-exports', () => {
-        expect('export * from'.length).toBeGreaterThan(0);
-        expect(readFileSync(ROOT_BARREL, 'utf8')).toContain('export *');
+describe('foundation root barrel (FR-26, FR-27)', () => {
+    it('positive control: detects wildcard re-export statements', () => {
+        expect(/^export \* from/m.test('export * from "./foo/index.js";')).toBeTrue();
     });
 
-    it('tracks baseline root barrel size before REF-02 shrink', () => {
+    it('keeps the root barrel within the REF-02 line budget', () => {
         const lines = readFileSync(ROOT_BARREL, 'utf8').split('\n').length;
-        expect(lines).toBeLessThanOrEqual(BASELINE_ROOT_BARREL_MAX_LINES);
-        expect(lines).toBeGreaterThan(REF02_TARGET_ROOT_BARREL_MAX_LINES);
+        expect(lines).toBeLessThanOrEqual(REF02_ROOT_BARREL_MAX_LINES);
     });
 
-    it('tracks baseline wildcard export count before REF-02', () => {
+    it('forbids wildcard re-exports at the root barrel', () => {
         const wildcards = (readFileSync(ROOT_BARREL, 'utf8').match(/^export \* from/gm) ?? []).length;
-        expect(wildcards).toBe(BASELINE_WILDCARD_EXPORT_COUNT);
-        expect(wildcards).toBeGreaterThan(REF02_TARGET_WILDCARD_EXPORT_COUNT);
+        expect(wildcards).toBe(REF02_WILDCARD_EXPORT_COUNT);
     });
 
     it('records zero shadow structures after FM-1 capsule moves complete', () => {
-        expect(countShadowStructures()).toBe(BASELINE_SHADOW_STRUCTURE_COUNT);
-        expect(BASELINE_SHADOW_STRUCTURE_COUNT).toBe(REF02_TARGET_SHADOW_STRUCTURE_COUNT);
+        expect(countShadowStructures()).toBe(0);
     });
 
-    it('documents REF-02 denylisted exports as current baseline debt', async () => {
+    it('keeps denylisted capsule-internal symbols off the root barrel', async () => {
         const exported = Object.keys(await import('../../src/foundation/index.js') as Record<string, unknown>);
         const stillDenied = REF02_ROOT_EXPORT_DENYLIST.filter((name) => exported.includes(name));
-        expect(stillDenied.sort()).toEqual([...REF02_ROOT_EXPORT_DENYLIST].sort());
+        expect(stillDenied).toEqual([]);
     });
 
     it('keeps runtime-internal escape hatches off the public barrels', async () => {

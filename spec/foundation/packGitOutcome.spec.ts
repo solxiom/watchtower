@@ -1,5 +1,5 @@
-import {consumePack, gitUnavailable, gitValue} from '../../src/foundation/index.js';
-import type {GitOutcome, PackGitInspector} from '../../src/foundation/index.js';
+import {consumePack, gitUnavailable, gitValue} from '../../src/foundation/pack/index.js';
+import type {GitOutcome, PackGitInspector} from '../../src/foundation/pack/index.js';
 import type {PackConsumerResult, PackRejectionReason} from '../../src/contracts/index.js';
 import {
     HEAD_COMMIT,

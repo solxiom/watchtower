@@ -1,4 +1,4 @@
-import {detectContradictions, normalizeLaneStatus, parseLaneState} from '../../src/foundation/index.js';
+import {detectContradictions, normalizeLaneStatus, parseLaneState} from '../../src/foundation/parsing/index.js';
 
 describe('lane-state parser', function () {
     it('normalizes every persisted lifecycle and preserves unknown state keys', function () {

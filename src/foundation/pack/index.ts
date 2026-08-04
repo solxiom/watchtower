@@ -27,3 +27,12 @@ export type {PackStorage, PackStorageFactory} from './packFilesystemHost.js';
 export {nodePackGitInspector} from './packGitHost.js';
 export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
 export {isRfc3339DateTime, isUuid} from './packSchemaFormats.js';
+export {
+    PACK_INDEX_COMPILER_VERSION,
+    PackIndexCompiler,
+    PACK_INDEX_DATABASE_SCHEMA_VERSION,
+    PACK_INDEX_META_TABLE,
+    PACK_INDEX_SCHEMA,
+    readIndexManifest
+} from './index/index.js';
+export type {PackIndexCompileDeps, PackIndexCompileRequest} from './index/index.js';

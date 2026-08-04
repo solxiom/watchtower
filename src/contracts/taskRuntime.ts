@@ -155,7 +155,7 @@ export interface LaneRuntimeBaseEnvironment {
  * validated against the selected task's checksum-bound `inputSchema` before the
  * process starts and delivered to the owning TaskHandler unchanged through the
  * pinned `TaskHandler.argMap` channel (see
- * `foundation/taskRuntime/laneTaskRequest.ts` for the pinned-parser constraints
+ * `foundation/task/runtime/laneTaskRequest.ts` for the pinned-parser constraints
  * that fix the encoding). The task's static `handle.args` in the pinned config
  * remains validated configuration; it is not this request.
  *

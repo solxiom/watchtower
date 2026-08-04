@@ -1,5 +1,5 @@
-import {inspectWritableConflicts} from '../../src/foundation/index.js';
-import type {ActiveLaneClaims} from '../../src/foundation/index.js';
+import {inspectWritableConflicts} from '../../src/foundation/bindings/index.js';
+import type {ActiveLaneClaims} from '../../src/foundation/bindings/index.js';
 
 describe('writable conflict inspection', function () {
     it('reports shared writable worktrees unless both lanes explicitly claim shared-write', function () {

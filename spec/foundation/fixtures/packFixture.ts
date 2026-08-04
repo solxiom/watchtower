@@ -6,7 +6,7 @@ import {
     gitValue,
     loadPackSchemaValidators,
     sortSealedFiles
-} from '../../../src/foundation/index.js';
+} from '../../../src/foundation/pack/index.js';
 import type {
     GitOutcome,
     PackAcceptanceEvidence,
@@ -20,7 +20,7 @@ import type {
     PackSessionIdentity,
     PackTreeEntry,
     PathKind
-} from '../../../src/foundation/index.js';
+} from '../../../src/foundation/pack/index.js';
 import type {SealedFile, WorkerEventRecord} from '../../../src/contracts/index.js';
 
 const encoder = new TextEncoder();

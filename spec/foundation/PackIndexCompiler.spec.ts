@@ -1,8 +1,8 @@
 import {existsSync, readFileSync, readdirSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {PackIndexCompiler, consumePack} from '../../src/foundation/index.js';
+import {PackIndexCompiler, consumePack} from '../../src/foundation/pack/index.js';
 import {openDerivedStorage} from '../../src/foundation/storage/index.js';
-import type {PackIndexCompileRequest} from '../../src/foundation/index.js';
+import type {PackIndexCompileRequest} from '../../src/foundation/pack/index.js';
 import {PACK_INDEX_SCHEMA} from '../../src/foundation/pack/index/packIndexSchema.js';
 import type {ConsumedPack, PackIndexCompileResult} from '../../src/contracts/index.js';
 import {buildPackFixture, deps, fakeFileSystem, realValidators, PACK_ROOT, type PackFixture} from './fixtures/packFixture.js';

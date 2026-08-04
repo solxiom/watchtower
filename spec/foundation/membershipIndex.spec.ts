@@ -1,7 +1,7 @@
 import {chmodSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {discoverSecondaryLanes, readMembershipIndex} from '../../src/foundation/index.js';
+import {discoverSecondaryLanes, readMembershipIndex} from '../../src/foundation/discovery/index.js';
 
 const LANE_ID = '10000000-0000-4000-8000-000000000001';
 

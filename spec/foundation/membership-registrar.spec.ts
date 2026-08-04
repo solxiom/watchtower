@@ -2,7 +2,7 @@ import {mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync} from 'node:
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {cmd} from '@nirvana/base/terminal';
-import {registerLane, registerLaneWithRetry} from '../../src/foundation/index.js';
+import {registerLane, registerLaneWithRetry} from '../../src/foundation/lifecycle/index.js';
 
 const LANE_ID = '10000000-0000-4000-8000-000000000001';
 

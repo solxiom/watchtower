@@ -4,7 +4,7 @@ import {
     computeSealId,
     fileDigest,
     sortSealedFiles
-} from '../../src/foundation/index.js';
+} from '../../src/foundation/pack/index.js';
 import type {DriftObservations, PackClaimPath, SealedFile} from '../../src/contracts/index.js';
 
 const encoder = new TextEncoder();

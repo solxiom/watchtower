@@ -6,8 +6,9 @@ import type {StatusWarningCode, WatchtowerError, WorkerEventRecord} from '../../
 import StatusCommand from '../../src/commands/StatusCommand.js';
 import {parseReadCommandOptions, validateRawReadCommandArguments} from '../../src/commands/readCommandOptions.js';
 import {
-    StatusProjection, buildCommandResult, deriveStatusHealth, renderResult
+    StatusProjection, buildCommandResult, renderResult
 } from '../../src/foundation/index.js';
+import {deriveStatusHealth} from '../../src/foundation/status/index.js';
 import {loadV1SchemaBundle} from '../../src/foundation/schemaComposition/schemaBundle.js';
 import {isRfc3339DateTime} from '../../src/foundation/schemaComposition/rfc3339DateTime.js';
 import {StatusEventProjection} from '../../src/foundation/status/index.js';

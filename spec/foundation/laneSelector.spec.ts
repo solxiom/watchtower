@@ -2,8 +2,9 @@ import {mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync} from 'node:f
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import type {LaneManifestV1, ReadModelLaneLifecycle} from '../../src/contracts/index.js';
-import type {DiscoveredLane} from '../../src/foundation/index.js';
-import {canonicalizePath, resolveLane, selectLane} from '../../src/foundation/index.js';
+import type {DiscoveredLane} from '../../src/foundation/discovery/index.js';
+import {resolveLane, selectLane} from '../../src/foundation/discovery/index.js';
+import {canonicalizePath} from '../../src/foundation/paths/index.js';
 
 const IDS = [
     '10000000-0000-4000-8000-000000000001',

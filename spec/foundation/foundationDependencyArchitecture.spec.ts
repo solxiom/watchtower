@@ -9,17 +9,8 @@ const SOURCE_ROOT = join(process.cwd(), 'src');
 const FOUNDATION_ROOT = join(SOURCE_ROOT, 'foundation');
 const SQL_DRIVER_IMPORT = /@nirvana\/commons\/foundation\/db|better-sqlite3|from\s+['"]node:sqlite['"]/;
 
-/** Deep command imports allowed until FR-28 replaces them with domain barrels. */
-const BASELINE_COMMAND_DEEP_IMPORTS: Readonly<Record<string, readonly string[]>> = {
-    'commands/InitCommand.ts': ['../foundation/init/index.js', '../foundation/presentation/index.js'],
-    'commands/UpgradeCommand.ts': [
-        '../foundation/upgrade/index.js',
-        '../foundation/upgrade/index.js',
-        '../foundation/presentation/index.js'
-    ],
-    'commands/initCommandOptions.ts': ['../foundation/init/index.js'],
-    'commands/SkillInstallCommand.ts': ['../foundation/hostAdapters/replaceConfirmation.js']
-};
+const DOMAIN_BARREL_PATTERN = /^\.\.\/foundation\/[a-zA-Z]+\/index\.js$/;
+const CAPABILITY_BARREL_PATTERN = /^\.\.\/foundation\/(runtime|task|lane|index)\/index\.js$/;
 
 function foundationSourceFiles(): string[] {
     return readdirSync(FOUNDATION_ROOT, {recursive: true, encoding: 'utf8'})
@@ -38,8 +29,8 @@ function extractFoundationImportPaths(source: string): string[] {
     return [...source.matchAll(importPattern)].map((match) => match[1]);
 }
 
-function isRootBarrelImport(specifier: string): boolean {
-    return specifier.endsWith('/foundation/index.js');
+function isAllowedCommandFoundationImport(specifier: string): boolean {
+    return DOMAIN_BARREL_PATTERN.test(specifier) || CAPABILITY_BARREL_PATTERN.test(specifier);
 }
 
 describe('foundation dependency baseline (FR-01)', () => {
@@ -63,34 +54,21 @@ describe('foundation dependency baseline (FR-01)', () => {
         expect(offenders).toEqual([]);
     });
 
-    it('limits run.ts foundation imports to the root barrel', () => {
+    it('limits run.ts foundation imports to the presentation barrel', () => {
         const imports = extractFoundationImportPaths(readFileSync(join(SOURCE_ROOT, 'run.ts'), 'utf8'));
-        expect(imports).toEqual(['./foundation/index.js']);
+        expect(imports).toEqual(['./foundation/presentation/index.js']);
     });
 
-    it('records the baseline command deep-import debt without allowing new escape paths', () => {
-        const observed = new Map<string, string[]>();
+    it('imports foundation from commands only through domain or capability barrels', () => {
+        const offenders: Array<{file: string; specifier: string}> = [];
         for (const path of commandSources()) {
             const rel = relative(SOURCE_ROOT, path);
-            const deep = extractFoundationImportPaths(readFileSync(path, 'utf8'))
-                .filter((specifier) => !isRootBarrelImport(specifier));
-            if (deep.length > 0) observed.set(rel, deep.sort());
-        }
-
-        const expected = Object.fromEntries(
-            Object.entries(BASELINE_COMMAND_DEEP_IMPORTS).map(([file, imports]) => [file, [...imports].sort()])
-        );
-        expect(Object.fromEntries(observed)).toEqual(expected);
-    });
-
-    it('allows only foundation/index.js or documented deep imports from commands', () => {
-        for (const path of commandSources()) {
-            const rel = relative(SOURCE_ROOT, path);
-            const allowedDeep = new Set(BASELINE_COMMAND_DEEP_IMPORTS[rel] ?? []);
             for (const specifier of extractFoundationImportPaths(readFileSync(path, 'utf8'))) {
-                const ok = isRootBarrelImport(specifier) || allowedDeep.has(specifier);
-                expect({file: rel, specifier, ok}).toEqual({file: rel, specifier, ok: true});
+                if (!isAllowedCommandFoundationImport(specifier)) {
+                    offenders.push({file: rel, specifier});
+                }
             }
         }
+        expect(offenders).toEqual([]);
     });
 });

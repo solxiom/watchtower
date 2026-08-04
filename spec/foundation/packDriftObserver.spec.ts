@@ -1,11 +1,11 @@
-import {fileDigest, gitUnavailable, gitValue, observePackDrift} from '../../src/foundation/index.js';
+import {fileDigest, gitUnavailable, gitValue, observePackDrift} from '../../src/foundation/pack/index.js';
 import type {
     PackConsumerContext,
     PackConsumerDeps,
     PackFileSystem,
     PackGitInspector,
     PathKind
-} from '../../src/foundation/index.js';
+} from '../../src/foundation/pack/index.js';
 import type {ConsumedPack, Sha256Digest} from '../../src/contracts/index.js';
 import {fakeEvidence, realValidators} from './fixtures/packFixture.js';
 

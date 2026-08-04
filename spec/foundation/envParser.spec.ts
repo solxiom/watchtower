@@ -1,5 +1,5 @@
 import {existsSync} from 'node:fs';
-import {parseEnvConfig, redactSensitiveKeys} from '../../src/foundation/index.js';
+import {parseEnvConfig, redactSensitiveKeys} from '../../src/foundation/parsing/index.js';
 
 const maliciousValues = [
     '$(touch /tmp/watchtower-pwned)', '`touch /tmp/watchtower-pwned`', '${HOME}', '$HOME',

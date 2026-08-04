@@ -1,6 +1,6 @@
 import {BaseCommand} from '@nirvana/base/cli/basic';
 import type {Command} from '@nirvana/base/cli/contracts';
-import {ResolvedConfigService} from '../foundation/index.js';
+import {ResolvedConfigService} from '../foundation/read/index.js';
 import {parseReadCommandOptions} from './readCommandOptions.js';
 import {presentReadCommand} from './readCommandPresenter.js';
 

@@ -1,6 +1,6 @@
 import type {CArgMap} from '@nirvana/base/cli/contracts';
-import type {InstallScope} from '../foundation/index.js';
-import {INSTALL_SCOPES} from '../foundation/index.js';
+import type {InstallScope} from '../foundation/hostAdapters/index.js';
+import {INSTALL_SCOPES} from '../foundation/hostAdapters/index.js';
 import {createWatchtowerError} from '../contracts/index.js';
 
 export interface SkillInstallOptions {

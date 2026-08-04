@@ -257,8 +257,8 @@ src/foundation/
     index.ts
     BindingMutator.ts
     MembershipRegistrar.ts
-    # facades delegate to nested capsules:
-    #   laneStore/, transactionalWriter/, coordinatorBaseline/
+    # facades delegate to nested lane/ capsules:
+    #   lane/store/, lane/writer/, lane/coordinator/
 
   pack/
     index.ts

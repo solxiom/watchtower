@@ -17,8 +17,12 @@
  * is a `Map`/`Set` lookup, never a fresh SQLite read.
  */
 import {computeSemanticRoot, openDerivedStorage, type DerivedStore, type IntegrityReport} from '../../storage/index.js';
-import {readIndexManifest} from '../../pack/index/packIndexPublisher.js';
-import {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from '../../pack/index/packIndexSchema.js';
+import {
+    PACK_INDEX_DATABASE_SCHEMA_VERSION,
+    PACK_INDEX_META_TABLE,
+    PACK_INDEX_SCHEMA,
+    readIndexManifest
+} from '../../pack/index/index.js';
 import {IndexQueryError} from '../../../contracts/index.js';
 import type {ArtifactIndexEntry, BatchIndexEntry, RepositoryIndexEntry, RequirementIndexEntry} from '../../../contracts/index.js';
 import {basename, expectedMetaRows, metaRowsMatch, type IndexIdentity} from './indexStoreIdentity.js';

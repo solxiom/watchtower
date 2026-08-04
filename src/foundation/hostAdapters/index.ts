@@ -14,6 +14,8 @@ export {confirmationRequiredError, resolveKnowledgeRoot} from './knowledgePackSo
 export {createClaudeHostAdapter} from './claudeHostAdapter.js';
 export {createCodexHostAdapter} from './codexHostAdapter.js';
 export {createCursorHostAdapter} from './cursorHostAdapter.js';
+export {terminalReplaceConfirmation} from './replaceConfirmation.js';
+export type {ReplaceConfirmationPort} from './replaceConfirmation.js';
 
 const FACTORIES: Readonly<Record<HostName, () => HostAdapter>> = {
     codex: createCodexHostAdapter, cursor: createCursorHostAdapter, claude: createClaudeHostAdapter

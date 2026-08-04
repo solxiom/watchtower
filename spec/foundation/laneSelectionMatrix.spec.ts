@@ -1,7 +1,7 @@
 import {mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {resolveLane} from '../../src/foundation/index.js';
+import {resolveLane} from '../../src/foundation/discovery/index.js';
 
 const IDS = [
     '10000000-0000-4000-8000-000000000001',

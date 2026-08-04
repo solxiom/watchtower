@@ -2,8 +2,8 @@ import {mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {cmd} from '@nirvana/base/terminal';
-import {readRepositoryBindings} from '../../src/foundation/index.js';
-import type {RepositoryBindingInspector} from '../../src/foundation/index.js';
+import {readRepositoryBindings} from '../../src/foundation/bindings/index.js';
+import type {RepositoryBindingInspector} from '../../src/foundation/bindings/index.js';
 
 const repository = {id: 'main', role: 'primary', access: 'write'} as const;
 

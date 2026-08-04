@@ -8,8 +8,8 @@ import {
     nodePackFileSystem,
     nodePackGitInspector,
     observePackDrift
-} from '../../src/foundation/index.js';
-import type {PackConsumerContext, PackConsumerDeps, PackEvidenceInspector, PackStorage} from '../../src/foundation/index.js';
+} from '../../src/foundation/pack/index.js';
+import type {PackConsumerContext, PackConsumerDeps, PackEvidenceInspector, PackStorage} from '../../src/foundation/pack/index.js';
 import type {ConsumedPack} from '../../src/contracts/index.js';
 import {
     ACCEPTED_INPUT_ACCEPTANCE_REF,

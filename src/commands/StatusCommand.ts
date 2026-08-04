@@ -1,6 +1,6 @@
 import {BaseCommand} from '@nirvana/base/cli/basic';
 import type {Command} from '@nirvana/base/cli/contracts';
-import {StatusProjection} from '../foundation/index.js';
+import {StatusProjection} from '../foundation/status/index.js';
 import {parseReadCommandOptions} from './readCommandOptions.js';
 import {presentReadCommand} from './readCommandPresenter.js';
 

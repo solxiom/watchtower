@@ -12,7 +12,7 @@ import {
     resolveWatchtowerDataHome,
     resolveWorkspace,
     validateWatchtowerDataHome
-} from '../../src/foundation/index.js';
+} from '../../src/foundation/paths/index.js';
 
 describe('Watchtower data-home resolution', function () {
     it('uses WATCHTOWER_DATA_HOME before XDG_DATA_HOME without creating either path', function () {

@@ -6,7 +6,7 @@ import path, {dirname} from "path";
 import {fileURLToPath} from "url";
 import {readFile} from "fs/promises";
 import {WatchtowerError} from './contracts/index.js';
-import {buildCommandError, renderError} from './foundation/index.js';
+import {buildCommandError, renderError} from './foundation/presentation/index.js';
 import {validateRawReadCommandArguments} from './commands/readCommandOptions.js';
 
 const cliRootPath = dirname(fileURLToPath(import.meta.url));

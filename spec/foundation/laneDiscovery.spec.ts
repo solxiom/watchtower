@@ -3,10 +3,9 @@ import {
 } from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {
-    canonicalizePath, discoverHomeLanes, readLaneManifest, selectLane
-} from '../../src/foundation/index.js';
-import type {LaneDiscoveryFileSystem} from '../../src/foundation/index.js';
+import {discoverHomeLanes, readLaneManifest, selectLane} from '../../src/foundation/discovery/index.js';
+import {canonicalizePath} from '../../src/foundation/paths/index.js';
+import type {LaneDiscoveryFileSystem} from '../../src/foundation/discovery/index.js';
 import {NodeLaneDiscoveryFileSystem} from '../../src/foundation/discovery/index.js';
 
 const UUIDS = [

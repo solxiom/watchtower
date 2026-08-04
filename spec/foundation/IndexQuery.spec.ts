@@ -1,6 +1,6 @@
 import {mkdirSync, readFileSync, readdirSync, truncateSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {IndexQuery, IndexStore} from '../../src/foundation/index.js';
+import {IndexQuery, IndexStore} from '../../src/foundation/index/index.js';
 import {openDerivedStorage} from '../../src/foundation/storage/index.js';
 import {PACK_INDEX_SCHEMA} from '../../src/foundation/pack/index/packIndexSchema.js';
 import {IndexQueryError} from '../../src/contracts/index.js';
