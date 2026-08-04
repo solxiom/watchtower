@@ -20,7 +20,7 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`, `REF-03`) |
 | Work units | **39** (`FR-00` … `FR-38`) |
 | Milestones | **6** (`FM-0` … `FM-5`) |
-| Score | **26 / 39** work units accepted |
+| Score | **29 / 39** work units accepted |
 | Baseline root files | 0 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 | Flat prefix clusters | 11 (target: 0, REF-03) |
@@ -36,7 +36,7 @@ Last updated: 2026-08-04
 | FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
 | FM-3 | L4 domain extraction | REF-01 | ✅ Accepted | FR-18 … FR-24 ✅; root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ⏳ In progress | FR-25 ✅ |
-| FM-5 | Capability tree re-nesting | REF-03 | ❌ Pending | Spec accepted; FR-32 … FR-38 not started |
+| FM-5 | Capability tree re-nesting | REF-03 | ⏳ In progress | FR-32 ✅ FR-33 ✅ FR-34 ✅ |
 
 ---
 
@@ -103,9 +103,9 @@ Last updated: 2026-08-04
 
 | ID | Work unit | State | Acceptance proof |
 |----|-----------|-------|------------------|
-| FR-32 | `runtime/` capability tree | ❌ Pending | `runtimeCapabilityArchitecture.spec.ts`; remove `runtimeDistribution/` |
-| FR-33 | `task/` capability tree | ❌ Pending | `taskCapabilityArchitecture.spec.ts` |
-| FR-34 | `lane/` capability tree | ❌ Pending | `laneCapabilityArchitecture.spec.ts` |
+| FR-32 | `runtime/` capability tree | ✅ Accepted | `runtimeCapabilityArchitecture.spec.ts`; `runtimeDistribution/` removed |
+| FR-33 | `task/` capability tree | ✅ Accepted | `taskCapabilityArchitecture.spec.ts` |
+| FR-34 | `lane/` capability tree | ✅ Accepted | `laneCapabilityArchitecture.spec.ts` |
 | FR-35 | `pack/index/` nest | ❌ Pending | `pack/index/` under `pack/` |
 | FR-36 | `index/` capability tree | ❌ Pending | `indexCapabilityArchitecture.spec.ts` |
 | FR-37 | Import retarget sweep | ❌ Pending | `src/`, `spec/`, `runtime-nvb/` paths |
@@ -119,7 +119,7 @@ Last updated: 2026-08-04
 |-------|----------:|---------:|-------|
 | REF-01 | FR-00 … FR-24 | 25 / 25 | ✅ Accepted |
 | REF-02 | FR-25 … FR-31 | 1 / 7 | ⏳ In progress |
-| REF-03 | FR-32 … FR-38 | 0 / 7 | ❌ Pending (spec ✅) |
+| REF-03 | FR-32 … FR-38 | 3 / 7 | ⏳ In progress |
 
 ---
 
