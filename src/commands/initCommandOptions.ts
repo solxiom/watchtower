@@ -1,6 +1,6 @@
 import type {CArgMap} from '@nirvana/base/cli/contracts';
 import {createWatchtowerError} from '../contracts/errors.js';
-import type {InitRequest} from '../foundation/InitContracts.js';
+import type {InitRequest} from '../foundation/init/index.js';
 
 const VALUE_FLAGS = ['--tmux-prefix', '--impl-pack', '--coordinator-routing', '--scope', '--runtime', '--workspace'];
 const BOOLEAN_FLAGS = ['--update-gitignore', '--dry-run', '--json', '--no-color'];

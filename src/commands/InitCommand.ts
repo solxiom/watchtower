@@ -1,6 +1,6 @@
 import {BaseCommand} from '@nirvana/base/cli/basic';
 import type {Command} from '@nirvana/base/cli/contracts';
-import {InitPlanner} from '../foundation/InitPlanner.js';
+import {InitPlanner} from '../foundation/init/index.js';
 import {presentInitPlan} from '../foundation/initPlanPresenter.js';
 import {parseInitCommandOptions} from './initCommandOptions.js';
 

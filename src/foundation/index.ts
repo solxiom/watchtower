@@ -25,7 +25,7 @@ export type {
     ManagedLinkSourceKind,
     ManagedLinkSourceObservation
 } from './managedAssets/index.js';
-export {InitPlanner, validateInitRequest} from './InitPlanner.js';
+export {InitPlanner, validateInitRequest} from './init/index.js';
 export {UpgradePlanner} from './UpgradePlanner.js';
 export type {UpgradePlannerOptions} from './UpgradePlanner.js';
 export {UpgradePreviewSource} from './UpgradePreviewSource.js';
@@ -33,8 +33,8 @@ export type {UpgradePreviewSourceOptions, UpgradeSourceQuery} from './UpgradePre
 export {MigrationRegistry} from './MigrationRegistry.js';
 export type {MigrationRegistryOptions} from './MigrationRegistry.js';
 export {stageMigrationPlan} from './MigrationSteps.js';
-export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './InitContracts.js';
-export type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';
+export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './init/index.js';
+export type {InitPreflightPort, ScopeReadResult} from './init/index.js';
 export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
 export * from './schemaComposition/index.js';
 export * from './taskCatalogComposition/index.js';

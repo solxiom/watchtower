@@ -8,7 +8,7 @@
  */
 import {createWatchtowerError} from '../../contracts/errors.js';
 import {isJsonValue, semanticDigest} from '../schemaComposition/jsonCanonicalizer.js';
-import type {InitPlan} from '../InitContracts.js';
+import type {InitPlan} from '../init/index.js';
 import type {InstalledKnowledgeTag, RoutingPolicyDocument} from './coordinatorBaselineContracts.js';
 
 export function buildRoutingPolicyDocument(

@@ -1,6 +1,6 @@
 import {output as prettyOutput} from '@nirvana/base/utils/pretty';
 import type {JsonValue} from '../contracts/types.js';
-import type {InitPlan} from './InitContracts.js';
+import type {InitPlan} from './init/index.js';
 import {buildCommandResult} from './commandEnvelopeSerializer.js';
 import {renderResult} from './ResultRenderer.js';
 

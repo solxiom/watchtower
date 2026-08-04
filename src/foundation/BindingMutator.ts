@@ -5,7 +5,7 @@ import {dirname, join} from 'node:path';
 import type {RepositoryBinding} from '../contracts/types.js';
 import {createWatchtowerError} from '../contracts/errors.js';
 import {authorizePath, canonicalizePath, safePathTarget} from './paths/index.js';
-import {acquireInitLocks, releaseInitLocks} from './initLocks.js';
+import {acquireInitLocks, releaseInitLocks} from './init/index.js';
 
 const WATCHTOWER_LINE = '/.watchtower/';
 const ORIGINALS = new Map<string, OriginalGitignore>();

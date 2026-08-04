@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-2 in progress (FR-16 … FR-17 ✅)**
+Status: **Active — FM-2 complete; FM-3 in progress (FR-18 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **18 / 32** work units accepted |
-| Baseline root files | 34 (target: 0) |
+| Score | **19 / 32** work units accepted |
+| Baseline root files | 28 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -31,8 +31,8 @@ Last updated: 2026-08-04
 |-----------|------|-------|-------|----------------|
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
 | FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
-| FM-2 | L1–L3 domain extraction | REF-01 | ⏳ In progress | FR-12 … FR-17 ✅ |
-| FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
+| FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
+| FM-3 | L4 domain extraction | REF-01 | ⏳ In progress | FR-18 ✅ |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
 
 ---
@@ -71,7 +71,7 @@ Last updated: 2026-08-04
 | FR-15 | `bindings/` | ✅ Accepted | 2 modules + barrel; binding specs green; `nvb test` green |
 | FR-16 | `read/` | ✅ Accepted | 7 modules + barrel; list/config specs green; `nvb test` green |
 | FR-17 | `status/` | ✅ Accepted | 22 modules + barrel; `statusArchitecture.spec.ts`; status specs green; `nvb test` green |
-| FR-18 | `init/` | ❌ Pending | 6 modules; `init/index.ts`; init arch gate |
+| FR-18 | `init/` | ✅ Accepted | 6 modules + barrel; `initArchitecture.spec.ts`; init specs green; `nvb test` green |
 
 ### FM-3 — L4 domain extraction
 
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 18 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 19 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -123,7 +123,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `observation/` | L2 | FR-21 | ❌ | ❌ | Pending |
 | `read/` | L3 | FR-16 | ✅ | ✅ | Accepted |
 | `status/` | L3 | FR-17 | ✅ | ✅ | Accepted |
-| `init/` | L4 | FR-18 | ❌ | ❌ | Pending |
+| `init/` | L4 | FR-18 | ✅ | ✅ | Accepted |
 | `lifecycle/` | L4 | FR-22 | ❌ | ❌ | Pending |
 | `pack/` | L4 | FR-19 | ❌ | ❌ | Pending |
 | `upgrade/` | L4 | FR-20 | ❌ | ❌ | Pending |
@@ -158,7 +158,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `parsingArchitecture.spec.ts` | FR-13 | ✅ Accepted |
 | `discoveryArchitecture.spec.ts` | FR-14 | ✅ Accepted |
 | `statusArchitecture.spec.ts` | FR-17 | ✅ Accepted |
-| `initArchitecture.spec.ts` | FR-18 | ❌ Not created |
+| `initArchitecture.spec.ts` | FR-18 | ✅ Accepted |
 | `packArchitecture.spec.ts` | FR-19 | ❌ Not created |
 | `upgradeArchitecture.spec.ts` | FR-20 | ❌ Not created |
 | `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — no path changes required |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 34 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 28 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

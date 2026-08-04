@@ -1,4 +1,4 @@
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 import type {
     AutomatedRoute, CapabilityClass, CoordinatorRoutingPolicy, DecisionClass, RoutingEndpoint, SessionRoute
 } from './InitContracts.js';

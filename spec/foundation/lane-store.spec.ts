@@ -9,7 +9,7 @@ import {
 } from '../../src/foundation/laneStore/index.js';
 import type {InstallManifestInputs, LaneLayoutInputs, LaneManagedLink, RuntimeAssetRef} from '../../src/foundation/laneStore/laneStoreContracts.js';
 import type {ConsumedPack} from '../../src/contracts/pack.js';
-import type {InitPlan} from '../../src/foundation/InitContracts.js';
+import type {InitPlan} from '../../src/foundation/init/index.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 
 describe('LaneStore.buildLaneLayout', function () {

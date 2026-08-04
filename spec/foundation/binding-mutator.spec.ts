@@ -5,7 +5,7 @@ import {join} from 'node:path';
 import {
     acquireInitLocks, releaseInitLocks, restoreGitignore, shouldUpdateGitignore, updateGitignore, writeBindings
 } from '../../src/foundation/index.js';
-import {acquireInitLockLease} from '../../src/foundation/initLocks.js';
+import {acquireInitLockLease} from '../../src/foundation/init/index.js';
 
 describe('lane binding mutator', function () {
     it('updates and conditionally restores .gitignore, including a missing file', async function () {

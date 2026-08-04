@@ -7,7 +7,7 @@
 import type {ConsumedPack} from '../../contracts/pack.js';
 import {createWatchtowerError} from '../../contracts/errors.js';
 import {safePathTarget} from '../paths/index.js';
-import type {InitPlan} from '../InitContracts.js';
+import type {InitPlan} from '../init/index.js';
 import {homeRepositoryId} from './laneManifestGenerator.js';
 
 const ORDERED_KEYS = ['LANE_ID', 'LANE_SLUG', 'INITIATIVE_ID', 'HOME_REPOSITORY_ID', 'WORKSPACE', 'TMUX_PREFIX', 'IMPL_PACK_REL'] as const;

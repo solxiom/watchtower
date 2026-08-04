@@ -1,5 +1,5 @@
 import {isAbsolute, relative, sep, join} from 'node:path';
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 import type {InitPlan, InitRequest} from './InitContracts.js';
 import type {InitPreflightPort} from './InitPorts.js';
 import {InitPreflightHost} from './InitPreflightHost.js';

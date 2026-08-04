@@ -8,7 +8,7 @@ import {isAbsolute} from 'node:path';
 import type {RepositoriesLocalV1} from '../../contracts/types.js';
 import {createWatchtowerError} from '../../contracts/errors.js';
 import {safePathTarget} from '../paths/index.js';
-import type {InitPlan} from '../InitContracts.js';
+import type {InitPlan} from '../init/index.js';
 
 export function generateRepositoriesLocal(plan: InitPlan): RepositoriesLocalV1 {
     if (plan.repositories.length === 0) throw integrityFailure('repositories', 'Declare at least one repository binding.');

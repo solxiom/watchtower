@@ -10,7 +10,7 @@
  * invokes a model; every emitted document is a finite, injected-collaborator
  * projection of already-verified structured inputs.
  */
-import type {CoordinatorRoutingPolicy, InitPlan} from '../InitContracts.js';
+import type {CoordinatorRoutingPolicy, InitPlan} from '../init/index.js';
 import type {KnowledgeProvenanceEvidence, Sha256Digest} from '../../contracts/index.js';
 import type {LaneFile, LaneLayout} from '../laneStore/laneStoreContracts.js';
 

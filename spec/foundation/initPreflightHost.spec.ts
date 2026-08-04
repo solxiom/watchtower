@@ -2,7 +2,7 @@ import {chmodSync, mkdtempSync, mkdirSync, rmSync, symlinkSync, writeFileSync} f
 import {execFileSync} from 'node:child_process';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
-import {InitPreflightHost} from '../../src/foundation/InitPreflightHost.js';
+import {InitPreflightHost} from '../../src/foundation/init/index.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 
 let root: string;

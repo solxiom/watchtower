@@ -6,7 +6,7 @@ import type {KnowledgeProvenancePort} from '../../src/foundation/coordinatorBase
 import {resolveInstalledKnowledgeTag} from '../../src/foundation/coordinatorBaseline/knowledgeProvenanceHost.js';
 import {commitLane, TransactionalWriteError} from '../../src/foundation/transactionalWriter/index.js';
 import type {LaneLayout} from '../../src/foundation/laneStore/laneStoreContracts.js';
-import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/InitContracts.js';
+import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/init/index.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 import {createKnowledgePackFixture, FIXTURE_KNOWLEDGE_VERSION} from '../basic/skillInstallFixtures.js';
 

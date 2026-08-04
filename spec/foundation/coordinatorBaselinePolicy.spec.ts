@@ -3,7 +3,7 @@ import {buildContextPolicyDocument} from '../../src/foundation/coordinatorBaseli
 import {buildDurableRoots} from '../../src/foundation/coordinatorBaseline/durableRootsPlanner.js';
 import {buildRoutingPolicyDocument} from '../../src/foundation/coordinatorBaseline/routingPolicyProjection.js';
 import type {InstalledKnowledgeTag} from '../../src/foundation/coordinatorBaseline/coordinatorBaselineContracts.js';
-import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/InitContracts.js';
+import type {CoordinatorRoutingPolicy, InitPlan} from '../../src/foundation/init/index.js';
 import type {WatchtowerError} from '../../src/contracts/index.js';
 
 const LANE_DIR = '/home/operator/.watchtower/lanes/lane-1';

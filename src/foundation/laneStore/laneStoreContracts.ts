@@ -8,7 +8,7 @@
  * function in this capsule a pure, side-effect-free planning step.
  */
 import type {ConsumedPack} from '../../contracts/pack.js';
-import type {InitPlan} from '../InitContracts.js';
+import type {InitPlan} from '../init/index.js';
 import type {PinnedTaskRuntimeTarget} from '../../contracts/taskRuntime.js';
 
 /** One regular file to materialize inside the lane directory. */

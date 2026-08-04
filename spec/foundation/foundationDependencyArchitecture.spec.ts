@@ -11,13 +11,13 @@ const SQL_DRIVER_IMPORT = /@nirvana\/commons\/foundation\/db|better-sqlite3|from
 
 /** Deep command imports allowed until FR-28 replaces them with domain barrels. */
 const BASELINE_COMMAND_DEEP_IMPORTS: Readonly<Record<string, readonly string[]>> = {
-    'commands/InitCommand.ts': ['../foundation/InitPlanner.js', '../foundation/initPlanPresenter.js'],
+    'commands/InitCommand.ts': ['../foundation/init/index.js', '../foundation/initPlanPresenter.js'],
     'commands/UpgradeCommand.ts': [
         '../foundation/UpgradePlanner.js',
         '../foundation/UpgradePreviewSource.js',
         '../foundation/upgradePlanPresenter.js'
     ],
-    'commands/initCommandOptions.ts': ['../foundation/InitContracts.js'],
+    'commands/initCommandOptions.ts': ['../foundation/init/index.js'],
     'commands/SkillInstallCommand.ts': ['../foundation/hostAdapters/replaceConfirmation.js']
 };
 

@@ -9,7 +9,7 @@ import {resolveWatchtowerDataHome} from './paths/index.js';
 import {readLaneManifest} from './discovery/index.js';
 import {nodeLaneDiscoveryFileSystem} from './discovery/index.js';
 import {readMembershipIndex} from './discovery/index.js';
-import {acquireInitLockLease, type InitLockLease, type InitLockOptions} from './initLocks.js';
+import {acquireInitLockLease, type InitLockLease, type InitLockOptions} from './init/index.js';
 import {readRepositoryBindings} from './bindings/index.js';
 
 const MAX_INDEX_BYTES = 1024 * 1024;

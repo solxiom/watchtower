@@ -1,4 +1,4 @@
-import type {RepositoryBinding} from '../contracts/types.js';
+import type {RepositoryBinding} from '../../contracts/types.js';
 
 export type CapabilityClass = 'C2' | 'C3' | 'C5';
 export type DecisionClass = 'D1' | 'D2' | 'D3';

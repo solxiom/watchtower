@@ -1,9 +1,9 @@
 import type {RepositoryBinding} from '../../src/contracts/types.js';
 import type {WatchtowerError} from '../../src/contracts/errors.js';
-import type {CoordinatorRoutingPolicy, InitConflict, InitRequest} from '../../src/foundation/InitContracts.js';
-import type {InitPreflightPort, ScopeReadResult} from '../../src/foundation/InitPorts.js';
-import {InitPlanner, validateInitRequest} from '../../src/foundation/InitPlanner.js';
-import {validateRoutingPolicy} from '../../src/foundation/InitRoutingValidator.js';
+import type {CoordinatorRoutingPolicy, InitConflict, InitRequest} from '../../src/foundation/init/index.js';
+import type {InitPreflightPort, ScopeReadResult} from '../../src/foundation/init/index.js';
+import {InitPlanner, validateInitRequest} from '../../src/foundation/init/index.js';
+import {validateRoutingPolicy} from '../../src/foundation/init/index.js';
 
 describe('InitPlanner corrected contract', function () {
     it('builds the bounded no-effect plan and explicitly defers later-batch authority', function () {

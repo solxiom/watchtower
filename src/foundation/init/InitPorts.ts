@@ -1,4 +1,4 @@
-import type {RepositoryBinding} from '../contracts/types.js';
+import type {RepositoryBinding} from '../../contracts/types.js';
 import type {CoordinatorRoutingPolicy, InitConflict, InitWarning} from './InitContracts.js';
 
 export interface ScopeReadResult {
