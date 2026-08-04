@@ -20,6 +20,7 @@ describe('UpgradeRecovery.recover', () => {
         expect(existsSync(binTemp)).toBeFalse();
         expect(existsSync(installTemp)).toBeFalse();
         expect(result.artifactsCleaned.length).toBe(2);
+        expect(result.linksRestored).toEqual([]);
         expect(result.oldManifestStatus).toBe('valid');
         expect(result.oldRuntimeInvocable).toBeTrue();
     });
@@ -30,6 +31,7 @@ describe('UpgradeRecovery.recover', () => {
         const result = new UpgradeRecovery().recover(fixture.laneDir);
         expect(result.oldManifestStatus).toBe('missing');
         expect(result.oldRuntimeInvocable).toBeFalse();
+        expect(result.linksRestored).toEqual([]);
     });
 
     it('reports invalid when install.json is not well-formed JSON', () => {
@@ -38,9 +40,10 @@ describe('UpgradeRecovery.recover', () => {
         const result = new UpgradeRecovery().recover(fixture.laneDir);
         expect(result.oldManifestStatus).toBe('invalid');
         expect(result.oldRuntimeInvocable).toBeFalse();
+        expect(result.linksRestored).toEqual([]);
     });
 
-    it('reports the old runtime not invocable when a declared managed-asset target no longer matches its checksum', () => {
+    it('reports the old runtime not invocable when a declared managed-asset target no longer matches its checksum, and does not repair toward a broken target', () => {
         fixture = makeUpgradeApplyFixture();
         chmodSync(fixture.currentRuntimeRoot, 0o755);
         chmodSync(join(fixture.currentRuntimeRoot, 'coordinator'), 0o755);
@@ -49,6 +52,7 @@ describe('UpgradeRecovery.recover', () => {
         const result = new UpgradeRecovery().recover(fixture.laneDir);
         expect(result.oldManifestStatus).toBe('valid');
         expect(result.oldRuntimeInvocable).toBeFalse();
+        expect(result.linksRestored).toEqual([]);
     });
 });
 
