@@ -1,6 +1,6 @@
 import {createWatchtowerError} from '../../src/contracts/index.js';
-import {buildCommandError, buildCommandResult} from '../../src/foundation/commandEnvelopeSerializer.js';
-import {renderError, renderResult} from '../../src/foundation/ResultRenderer.js';
+import {buildCommandError, buildCommandResult} from '../../src/foundation/presentation/commandEnvelopeSerializer.js';
+import {renderError, renderResult} from '../../src/foundation/presentation/ResultRenderer.js';
 
 const ansiPattern = /\u001b\[[0-?]*[ -/]*[@-~]/;
 

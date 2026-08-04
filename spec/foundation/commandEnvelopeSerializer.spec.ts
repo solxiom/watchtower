@@ -1,6 +1,6 @@
 import {createWatchtowerError, ERROR_DEFINITIONS, type ErrorCode, type JsonValue} from '../../src/contracts/index.js';
-import {buildCommandError, buildCommandResult, validateEnvelope} from '../../src/foundation/commandEnvelopeSerializer.js';
-import {renderResult} from '../../src/foundation/ResultRenderer.js';
+import {buildCommandError, buildCommandResult, validateEnvelope} from '../../src/foundation/presentation/commandEnvelopeSerializer.js';
+import {renderResult} from '../../src/foundation/presentation/ResultRenderer.js';
 
 const jsonValues: JsonValue[] = [{future: true}, ['future'], 'future', 4, false, null];
 const contexts = {operation: 'test envelope', target: 'fixture', remediation: 'use a valid fixture'};
