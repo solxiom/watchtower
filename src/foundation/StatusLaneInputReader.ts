@@ -5,7 +5,7 @@ import {LaneConfigProjectionReader} from './LaneConfigProjectionReader.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {ContainedLaneReadFileStore, type LaneReadFileStore} from './LaneReadFileStore.js';
 import type {StatusLane} from './statusLaneTypes.js';
-import {readRepositoryBindings} from './repositoryBindings.js';
+import {readRepositoryBindings} from './bindings/index.js';
 
 const MAX_EVENT_BYTES = 4 * 1024 * 1024;
 

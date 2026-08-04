@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {isJsonValue, semanticDigest} from './schemaComposition/jsonCanonicalizer.js';
-import {resourcePathsOverlap} from './writableConflicts.js';
+import {resourcePathsOverlap} from './bindings/index.js';
 import type {JsonValue} from './schemaComposition/schemaCompositionContracts.js';
 import type {
     DriftObservations,

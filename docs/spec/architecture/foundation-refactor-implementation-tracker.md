@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-2 in progress (FR-14 ✅)**
+Status: **Active — FM-2 in progress (FR-14 … FR-15 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **15 / 32** work units accepted |
-| Baseline root files | 66 (target: 0) |
+| Score | **16 / 32** work units accepted |
+| Baseline root files | 64 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -68,7 +68,7 @@ Last updated: 2026-08-04
 | FR-12 | `paths/` | ✅ Accepted | 4 modules + barrel; `pathsArchitecture.spec.ts`; `nvb test` green |
 | FR-13 | `parsing/` | ✅ Accepted | 6 modules + barrel; `parsingArchitecture.spec.ts`; `nvb test` green |
 | FR-14 | `discovery/` | ✅ Accepted | 8 modules + barrel; `discoveryArchitecture.spec.ts`; `nvb test` green |
-| FR-15 | `bindings/` | ❌ Pending | 2 modules; barrel |
+| FR-15 | `bindings/` | ✅ Accepted | 2 modules + barrel; binding specs green; `nvb test` green |
 | FR-16 | `read/` | ❌ Pending | 7 modules; `read/index.ts`; list/config specs |
 | FR-17 | `status/` | ❌ Pending | 22 modules; `status/index.ts`; status arch gate |
 | FR-18 | `init/` | ❌ Pending | 6 modules; `init/index.ts`; init arch gate |
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 15 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 16 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -119,7 +119,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `parsing/` | L1 | FR-13 | ✅ | ✅ | Accepted |
 | `presentation/` | L1 | FR-25 | ❌ | ❌ | Pending |
 | `discovery/` | L2 | FR-14 | ✅ | ✅ | Accepted |
-| `bindings/` | L2 | FR-15 | ❌ | ❌ | Pending |
+| `bindings/` | L2 | FR-15 | ✅ | ✅ | Accepted |
 | `observation/` | L2 | FR-21 | ❌ | ❌ | Pending |
 | `read/` | L3 | FR-16 | ❌ | ❌ | Pending |
 | `status/` | L3 | FR-17 | ❌ | ❌ | Pending |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 66 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 64 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

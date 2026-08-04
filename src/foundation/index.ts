@@ -60,10 +60,10 @@ export {
 export type {BindingResult, GitignoreUpdate} from './BindingMutator.js';
 export {registerLane, registerLaneWithRetry} from './MembershipRegistrar.js';
 export type {RegistrationOptions, RegistrationResult} from './MembershipRegistrar.js';
-export {readRepositoryBindings} from './repositoryBindings.js';
-export type {RepositoryBindingInspector} from './repositoryBindings.js';
-export {inspectWritableConflicts, resourcePathsOverlap} from './writableConflicts.js';
-export type {ActiveLaneClaims, WritableConflict, WritableConflictKind} from './writableConflicts.js';
+export {inspectWritableConflicts, readRepositoryBindings, resourcePathsOverlap} from './bindings/index.js';
+export type {
+    ActiveLaneClaims, RepositoryBindingInspector, WritableConflict, WritableConflictKind
+} from './bindings/index.js';
 export {LaneListService} from './LaneListService.js';
 export type {LaneListQuery, LaneListServiceOptions} from './LaneListService.js';
 export {digestLaneListQuery, MAX_LIST_PAGE_SIZE, paginateLaneList, validateLaneListPageInput} from './LaneListCursor.js';

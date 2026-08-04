@@ -10,9 +10,9 @@ import {
 } from './LaneListCursor.js';
 import {LaneStateProjectionReader} from './LaneStateProjectionReader.js';
 import {RelevantLaneDiscovery} from './discovery/index.js';
-import {readRepositoryBindings} from './repositoryBindings.js';
-import type {ActiveLaneClaims, WritableConflict} from './writableConflicts.js';
-import {inspectWritableConflicts} from './writableConflicts.js';
+import {readRepositoryBindings} from './bindings/index.js';
+import type {ActiveLaneClaims, WritableConflict} from './bindings/index.js';
+import {inspectWritableConflicts} from './bindings/index.js';
 
 export interface LaneListQuery {
     readonly cwd: string;

@@ -1,4 +1,4 @@
-import type {LaneLifecycle, RepositoryBinding, ResourceClaim} from '../contracts/types.js';
+import type {LaneLifecycle, RepositoryBinding, ResourceClaim} from '../../contracts/types.js';
 
 export type WritableConflictKind = 'shared-write' | 'path-conflict' | 'branch-conflict';
 

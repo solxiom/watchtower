@@ -9,7 +9,7 @@ import {RuntimeCatalogError} from '../contracts/runtimeCatalog.js';
 import {buildLanePath, canonicalizePath, safePathTarget} from './paths/index.js';
 import {discoverHomeLanes} from './discovery/index.js';
 import {StatusLaneInputReader} from './StatusLaneInputReader.js';
-import {inspectWritableConflicts} from './writableConflicts.js';
+import {inspectWritableConflicts} from './bindings/index.js';
 import {resolveRepositoryRoot, resolveWorkspace} from './paths/index.js';
 import type {CoordinatorRoutingPolicy, InitConflict, InitWarning} from './InitContracts.js';
 import type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';

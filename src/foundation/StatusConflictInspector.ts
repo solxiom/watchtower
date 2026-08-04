@@ -1,5 +1,5 @@
 import type {RepositoryBinding, StatusConflictView, StatusWarningCode} from '../contracts/index.js';
-import {inspectWritableConflicts} from './writableConflicts.js';
+import {inspectWritableConflicts} from './bindings/index.js';
 import {StatusLaneInputReader} from './StatusLaneInputReader.js';
 import type {StatusLane} from './statusLaneTypes.js';
 

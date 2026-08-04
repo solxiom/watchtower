@@ -7,7 +7,7 @@ import {LaneConfigProjectionReader} from './LaneConfigProjectionReader.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {selectLane} from './discovery/index.js';
 import {RelevantLaneDiscovery} from './discovery/index.js';
-import {readRepositoryBindings} from './repositoryBindings.js';
+import {readRepositoryBindings} from './bindings/index.js';
 
 export interface ResolvedConfigQuery {
     readonly cwd: string;
