@@ -12,17 +12,17 @@
 import {randomUUID} from 'node:crypto';
 import {mkdirSync, rmSync} from 'node:fs';
 import {join} from 'node:path';
-import {WatchtowerError} from '../contracts/index.js';
-import {packIndexRejection, type PackIndexCompileResult, type PackIndexManifest} from '../contracts/packIndex.js';
-import type {ConsumedPack} from '../contracts/pack.js';
-import {acquirePointerLock} from './packIndex/packIndexPointerLock.js';
-import {readPackIndexSource, type PackIndexSource} from './packIndex/packIndexManifestFile.js';
-import {buildPackIndexRows, type PackIndexRows} from './packIndex/packIndexRowBuilder.js';
-import {readIndexManifest, readPointer, writeIndexManifest, writePointer} from './packIndex/packIndexPublisher.js';
-import {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/packIndexSchema.js';
-import {computeSemanticRoot, logicalExportCounts, openDerivedStorage} from './storage/index.js';
-import type {DerivedStorage, DerivedStoreWriter, TypedRow} from './storage/index.js';
-import type {PackFileSystem, PackSchemaValidators} from './packConsumerPorts.js';
+import {WatchtowerError} from '../../contracts/index.js';
+import {packIndexRejection, type PackIndexCompileResult, type PackIndexManifest} from '../../contracts/packIndex.js';
+import type {ConsumedPack} from '../../contracts/pack.js';
+import type {PackFileSystem, PackSchemaValidators} from '../packConsumerPorts.js';
+import {computeSemanticRoot, logicalExportCounts, openDerivedStorage} from '../storage/index.js';
+import type {DerivedStorage, DerivedStoreWriter, TypedRow} from '../storage/index.js';
+import {acquirePointerLock} from './packIndexPointerLock.js';
+import {readPackIndexSource, type PackIndexSource} from './packIndexManifestFile.js';
+import {buildPackIndexRows, type PackIndexRows} from './packIndexRowBuilder.js';
+import {readIndexManifest, readPointer, writeIndexManifest, writePointer} from './packIndexPublisher.js';
+import {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndexSchema.js';
 
 export const PACK_INDEX_COMPILER_VERSION = '1.0.0';
 

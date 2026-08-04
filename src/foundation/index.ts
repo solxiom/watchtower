@@ -105,8 +105,8 @@ export {createNodePackFileSystem, nodePackFileSystem} from './packFilesystemHost
 export type {PackStorage, PackStorageFactory} from './packFilesystemHost.js';
 export {nodePackGitInspector} from './packGitHost.js';
 export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
-export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './PackIndexCompiler.js';
-export type {PackIndexCompileDeps, PackIndexCompileRequest} from './PackIndexCompiler.js';
+export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './packIndex/index.js';
+export type {PackIndexCompileDeps, PackIndexCompileRequest} from './packIndex/index.js';
 export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/packIndexSchema.js';
 export {IndexStore} from './IndexStore.js';
 export type {IndexIdentity} from './IndexStore.js';
