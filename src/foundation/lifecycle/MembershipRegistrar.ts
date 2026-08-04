@@ -2,15 +2,15 @@
 import {createHash, randomUUID} from 'node:crypto';
 import {mkdir, open, readFile, rename, rm, lstat} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
-import type {RepositoryBinding} from '../contracts/types.js';
-import {createWatchtowerError} from '../contracts/errors.js';
-import {canonicalizePath, safePathTarget} from './paths/index.js';
-import {resolveWatchtowerDataHome} from './paths/index.js';
-import {readLaneManifest} from './discovery/index.js';
-import {nodeLaneDiscoveryFileSystem} from './discovery/index.js';
-import {readMembershipIndex} from './discovery/index.js';
-import {acquireInitLockLease, type InitLockLease, type InitLockOptions} from './init/index.js';
-import {readRepositoryBindings} from './bindings/index.js';
+import type {RepositoryBinding} from '../../contracts/types.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import {canonicalizePath, safePathTarget} from '../paths/index.js';
+import {resolveWatchtowerDataHome} from '../paths/index.js';
+import {readLaneManifest} from '../discovery/index.js';
+import {nodeLaneDiscoveryFileSystem} from '../discovery/index.js';
+import {readMembershipIndex} from '../discovery/index.js';
+import {acquireInitLockLease, type InitLockLease, type InitLockOptions} from '../init/index.js';
+import {readRepositoryBindings} from '../bindings/index.js';
 
 const MAX_INDEX_BYTES = 1024 * 1024;
 

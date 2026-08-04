@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 in progress (FR-20 … FR-21 ✅)**
+Status: **Active — FM-3 in progress (FR-20 … FR-22 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **21 / 32** work units accepted |
-| Baseline root files | 12 (target: 0) |
+| Score | **23 / 32** work units accepted |
+| Baseline root files | 6 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -80,7 +80,7 @@ Last updated: 2026-08-04
 | FR-19 | `pack/` | ✅ Accepted | 10 modules + barrel; `packArchitecture.spec.ts`; pack specs green; `nvb test` green |
 | FR-20 | `upgrade/` | ✅ Accepted | 6 modules + barrel; `upgradeArchitecture.spec.ts`; upgrade specs green; `nvb test` green |
 | FR-21 | `observation/` | ✅ Accepted | 5 modules + barrel; `runtimeObservations.spec.ts` green; `nvb test` green |
-| FR-22 | `lifecycle/` | ❌ Pending | 2 modules; barrel |
+| FR-22 | `lifecycle/` | ✅ Accepted | 2 modules + barrel; binding/membership specs green; `nvb test` green |
 | FR-23 | `runtimeDistribution/` | ❌ Pending | Re-export barrel for catalog + managed assets |
 | FR-24 | FM-3 integration | ❌ Pending | Root file count = 1; `nvb test` |
 
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 21 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 23 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -124,7 +124,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `read/` | L3 | FR-16 | ✅ | ✅ | Accepted |
 | `status/` | L3 | FR-17 | ✅ | ✅ | Accepted |
 | `init/` | L4 | FR-18 | ✅ | ✅ | Accepted |
-| `lifecycle/` | L4 | FR-22 | ❌ | ❌ | Pending |
+| `lifecycle/` | L4 | FR-22 | ✅ | ✅ | Accepted |
 | `pack/` | L4 | FR-19 | ✅ | ✅ | Accepted |
 | `upgrade/` | L4 | FR-20 | ✅ | ✅ | Accepted |
 | `runtimeDistribution/` | L4 | FR-23 | ❌ | ❌ | Pending |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 12 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 6 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

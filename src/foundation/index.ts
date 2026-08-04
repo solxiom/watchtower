@@ -56,10 +56,10 @@ export type {
 } from './discovery/index.js';
 export {
     acquireInitLocks, releaseInitLocks, shouldUpdateGitignore, updateGitignore, restoreGitignore, writeBindings
-} from './BindingMutator.js';
-export type {BindingResult, GitignoreUpdate} from './BindingMutator.js';
-export {registerLane, registerLaneWithRetry} from './MembershipRegistrar.js';
-export type {RegistrationOptions, RegistrationResult} from './MembershipRegistrar.js';
+} from './lifecycle/index.js';
+export type {BindingResult, GitignoreUpdate} from './lifecycle/index.js';
+export {registerLane, registerLaneWithRetry} from './lifecycle/index.js';
+export type {RegistrationOptions, RegistrationResult} from './lifecycle/index.js';
 export {inspectWritableConflicts, readRepositoryBindings, resourcePathsOverlap} from './bindings/index.js';
 export type {
     ActiveLaneClaims, RepositoryBindingInspector, WritableConflict, WritableConflictKind
