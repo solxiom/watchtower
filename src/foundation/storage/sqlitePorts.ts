@@ -93,8 +93,15 @@ export interface DerivedStoreWriter {
     insertMany(table: string, rows: Iterable<TypedRow>): Promise<void>;
 }
 
+/** Transaction-scoped typed mutation surface; no nested transaction is possible. */
+export interface DerivedStoreTransaction extends DerivedStoreWriter {
+    updateByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[], changes: TypedRow): Promise<void>;
+    deleteByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[]): Promise<void>;
+}
+
 /** A typed derived store over the closed schema; the only downstream API. */
 export interface DerivedStore extends DerivedStoreWriter {
+    transaction<T>(body: (transaction: DerivedStoreTransaction) => Promise<T>): Promise<T>;
     updateByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[], changes: TypedRow): Promise<void>;
     deleteByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[]): Promise<void>;
     getByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[]): Promise<TypedRow | undefined>;
@@ -104,6 +111,7 @@ export interface DerivedStore extends DerivedStoreWriter {
     diagnostics(): Promise<StoreDiagnostics>;
     exportLogical(): Promise<LogicalExport>;
     close(): Promise<void>;
+    checkpoint(): Promise<void>;
 }
 
 /**
