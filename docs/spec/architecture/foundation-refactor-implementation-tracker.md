@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 in progress (FR-20 … FR-23 ✅)**
+Status: **Active — FM-3 complete; FM-4 next (FR-25 … FR-26 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **24 / 32** work units accepted |
-| Baseline root files | 6 (target: 0) |
+| Score | **26 / 32** work units accepted |
+| Baseline root files | 0 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -32,8 +32,8 @@ Last updated: 2026-08-04
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
 | FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
 | FM-2 | L1–L3 domain extraction | REF-01 | ✅ Accepted | FR-12 … FR-18 ✅ |
-| FM-3 | L4 domain extraction | REF-01 | ⏳ In progress | FR-18 … FR-23 ✅ |
-| FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
+| FM-3 | L4 domain extraction | REF-01 | ✅ Accepted | FR-18 … FR-24 ✅; root only `index.ts` |
+| FM-4 | Barrel hardening | REF-02 | ⏳ In progress | FR-25 ✅ |
 
 ---
 
@@ -82,13 +82,13 @@ Last updated: 2026-08-04
 | FR-21 | `observation/` | ✅ Accepted | 5 modules + barrel; `runtimeObservations.spec.ts` green; `nvb test` green |
 | FR-22 | `lifecycle/` | ✅ Accepted | 2 modules + barrel; binding/membership specs green; `nvb test` green |
 | FR-23 | `runtimeDistribution/` | ✅ Accepted | Re-export barrel for catalog + managed assets; `nvb test` green |
-| FR-24 | FM-3 integration | ❌ Pending | Root file count = 1; `nvb test` |
+| FR-24 | FM-3 integration | ✅ Accepted | Root file count = 1; root layout gate; `nvb test` green |
 
 ### FM-4 — Barrel hardening (REF-02)
 
 | ID | Work unit | State | Acceptance proof |
 |----|-----------|-------|------------------|
-| FR-25 | `presentation/` domain | ❌ Pending | Presenters + envelope/renderer; barrel |
+| FR-25 | `presentation/` domain | ✅ Accepted | 4 modules + barrel; envelope/renderer specs green; `nvb test` green |
 | FR-26 | Root barrel shrink | ❌ Pending | ≤50 lines; no `export *` |
 | FR-27 | Remove denylisted exports | ❌ Pending | Root denylist gate green |
 | FR-28 | Command import cleanup | ❌ Pending | `commandImportArchitecture.spec.ts` |
@@ -102,8 +102,8 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 24 / 25 | ⏳ In progress |
-| REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
+| REF-01 | FR-00 … FR-24 | 25 / 25 | ✅ Accepted |
+| REF-02 | FR-25 … FR-31 | 1 / 7 | ⏳ In progress |
 
 ---
 
@@ -117,7 +117,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 |--------|------:|-----|:----------------:|:------:|-------|
 | `paths/` | L1 | FR-12 | ✅ | ✅ | Accepted |
 | `parsing/` | L1 | FR-13 | ✅ | ✅ | Accepted |
-| `presentation/` | L1 | FR-25 | ❌ | ❌ | Pending |
+| `presentation/` | L1 | FR-25 | ✅ | ✅ | Accepted |
 | `discovery/` | L2 | FR-14 | ✅ | ✅ | Accepted |
 | `bindings/` | L2 | FR-15 | ✅ | ✅ | Accepted |
 | `observation/` | L2 | FR-21 | ✅ | ✅ | Accepted |
@@ -141,7 +141,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `runtime/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
 | `hostAdapters/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
 | `distribution/` | L6 | — | ✅ | ✅ | Pre-refactor OK |
-| `schemaComposition/` | L1 | FR-19 | ✅ | ✅ | `schemaBundle` move pending |
+| `schemaComposition/` | L1 | FR-19 | ✅ | ✅ | Accepted |
 | `taskCatalogComposition/` | L5 | — | ✅ | ✅ | Pre-refactor OK |
 | `runtimeKnowledgeManifest/` | L5 | — | ✅ | ✅ | Pre-refactor OK |
 
@@ -152,7 +152,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | Spec | FR | State |
 |------|-----|-------|
 | `foundationDependencyArchitecture.spec.ts` | FR-01, FR-29 | ⏳ Baseline gate (FR-01 ✅); full matrix at FR-29 |
-| `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-27 | ⏳ Baseline gate (FR-02 ✅); denylist removal at FR-27 |
+| `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-24, FR-27 | ⏳ Baseline gate + FR-24 root layout ✅; denylist removal at FR-27 |
 | `commandImportArchitecture.spec.ts` | FR-28 | ❌ Not created |
 | `pathsArchitecture.spec.ts` | FR-12 | ✅ Accepted |
 | `parsingArchitecture.spec.ts` | FR-13 | ✅ Accepted |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 6 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 0 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

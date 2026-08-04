@@ -2,7 +2,7 @@
  * FR-02 baseline root-barrel architecture gate.
  * Baseline mode documents pre-REF-02 debt; tighten at FR-26/FR-27 (REF-02).
  */
-import {existsSync, readFileSync} from 'node:fs';
+import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
 
 const SOURCE_ROOT = join(process.cwd(), 'src');
@@ -50,6 +50,15 @@ function countShadowStructures(): number {
         existsSync(join(FOUNDATION_ROOT, facade)) && existsSync(join(FOUNDATION_ROOT, capsule))
     ).length;
 }
+
+describe('foundation root layout (FR-24)', () => {
+    it('keeps only index.ts at the foundation root after FM-3 extraction', () => {
+        const rootModules = readdirSync(FOUNDATION_ROOT)
+            .filter((name) => name.endsWith('.ts'))
+            .sort();
+        expect(rootModules).toEqual(['index.ts']);
+    });
+});
 
 describe('foundation root barrel baseline (FR-02)', () => {
     it('positive control: detects wildcard re-exports', () => {
