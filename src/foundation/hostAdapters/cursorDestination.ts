@@ -1,6 +1,6 @@
 import {basename} from 'node:path';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {createPathEscapeError} from '../canonicalPaths.js';
+import {createPathEscapeError} from '../paths/index.js';
 import {classifyEntry} from './directoryInstallRecovery.js';
 
 /** Classifies `.cursorrules` destination identity without following symlinks. */

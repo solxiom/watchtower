@@ -2,7 +2,7 @@ import {join} from 'node:path';
 import type {
     ConfigResolutionSources, RepositoryBinding, RepositoryBindingView, ResolvedConfigV1
 } from '../contracts/index.js';
-import {buildLaneFilePath} from './canonicalPaths.js';
+import {buildLaneFilePath} from './paths/index.js';
 import {LaneConfigProjectionReader} from './LaneConfigProjectionReader.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {selectLane} from './LaneSelector.js';

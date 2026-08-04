@@ -1,7 +1,7 @@
 import {cpSync, lstatSync, mkdirSync, mkdtempSync, readdirSync} from 'node:fs';
 import {basename, dirname, join} from 'node:path';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {createPathEscapeError} from '../canonicalPaths.js';
+import {createPathEscapeError} from '../paths/index.js';
 import {classifyEntry, classifyManagedDestination, removeTransactionMarker, writeTransactionMarker} from './directoryInstallRecovery.js';
 import {directoryInstallPort} from './directoryInstallPort.js';
 import {assertNoLaneState, VERSION_RECORD_FILE, writeDurableFile} from './hostAdapterInstaller.js';

@@ -9,7 +9,7 @@
  */
 import {join} from 'node:path';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../canonicalPaths.js';
+import {safePathTarget} from '../paths/index.js';
 import {generateInstallManifest} from './installManifestGenerator.js';
 import {generateLaneConfig} from './laneConfigGenerator.js';
 import {generateLaneManifest} from './laneManifestGenerator.js';

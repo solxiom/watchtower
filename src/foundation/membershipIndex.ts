@@ -1,7 +1,7 @@
 import {join} from 'node:path';
 import type {LaneManifestV1, MembershipIndexResult, MembershipWarning, RepositoryMembership} from '../contracts/index.js';
 import {createWatchtowerError} from '../contracts/errors.js';
-import {authorizePath, canonicalizePath, safePathTarget} from './canonicalPaths.js';
+import {authorizePath, canonicalizePath, safePathTarget} from './paths/index.js';
 import {discoverHomeLanes} from './homeLaneDiscovery.js';
 import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 import {nodeLaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';

@@ -1,6 +1,6 @@
 import {lstatSync, realpathSync} from 'node:fs';
 import {dirname, isAbsolute, relative, resolve, sep} from 'node:path';
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 
 const CONTROL_CHARACTER = /[\u0000-\u001f\u007f]/u;
 const LANE_SLUG = /^[a-z0-9][a-z0-9-]{0,62}$/u;

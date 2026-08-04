@@ -2,7 +2,7 @@ import {accessSync, constants, existsSync, lstatSync} from 'node:fs';
 import {userInfo} from 'node:os';
 import {dirname, parse, join, resolve} from 'node:path';
 import {assertLexicallySafePath, canonicalizePath, safePathTarget} from './canonicalPaths.js';
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 
 export function resolveWatchtowerDataHome(environment: NodeJS.ProcessEnv = process.env, home: string = userInfo().homedir): string {
     const configured = environment.WATCHTOWER_DATA_HOME;

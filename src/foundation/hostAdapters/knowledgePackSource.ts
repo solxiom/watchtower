@@ -5,7 +5,7 @@ import {
     createWatchtowerError, type KnowledgeManifestV1, type ManifestAsset, type ManifestAssetObservation
 } from '../../contracts/index.js';
 import {RuntimeKnowledgeManifestValidator} from '../runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
-import {authorizePath, canonicalizePath} from '../canonicalPaths.js';
+import {authorizePath, canonicalizePath} from '../paths/index.js';
 import type {InstallScope, ResolvedKnowledgePack} from './hostAdapterTypes.js';
 
 const LANE_STATE_MARKERS = ['.watchtower/lanes/', 'LANE_ID=', 'TMUX_PREFIX=', 'INITIATIVE_ID=', 'HOME_REPOSITORY_ID='];

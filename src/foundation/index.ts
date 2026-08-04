@@ -2,10 +2,12 @@ export {parseEnvConfig, redactSensitiveKeys} from './envParser.js';
 export {detectContradictions, normalizeLaneStatus} from './laneLifecycle.js';
 export {parseLaneState} from './stateParser.js';
 export * from './distribution/index.js';
-export {authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPathSafe} from './canonicalPaths.js';
-export {authorizeWatchtowerDataHomeForCreation, resolveWatchtowerDataHome, validateWatchtowerDataHome} from './dataHomeResolver.js';
-export {resolveDataRoot} from './DataRoot.js';
-export type {UserHomeProvider} from './DataRoot.js';
+export {
+    authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPathSafe,
+    resolveDataRoot, resolveRepositoryRoot, resolveWatchtowerDataHome, resolveWorkspace,
+    resolveWorkspaceContext, validateWatchtowerDataHome
+} from './paths/index.js';
+export type {UserHomeProvider} from './paths/index.js';
 export {RuntimeCatalog} from './runtimeCatalog/index.js';
 export type {RuntimeCatalogOptions} from './runtimeCatalog/index.js';
 export {ManagedAssets, LaneTaskProfileInstaller} from './managedAssets/index.js';
@@ -35,7 +37,6 @@ export {stageMigrationPlan} from './MigrationSteps.js';
 export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './InitContracts.js';
 export type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';
 export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
-export {resolveRepositoryRoot, resolveWorkspace, resolveWorkspaceContext} from './workspaceResolver.js';
 export * from './schemaComposition/index.js';
 export * from './taskCatalogComposition/index.js';
 export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';

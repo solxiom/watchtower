@@ -12,7 +12,7 @@
  */
 import {dirname, isAbsolute, join, relative, sep} from 'node:path';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../canonicalPaths.js';
+import {safePathTarget} from '../paths/index.js';
 import type {LaneLayout} from '../laneStore/laneStoreContracts.js';
 import {stageLaneLayout} from './laneStagingWriter.js';
 import {TransactionalWriteError, type WriteResult, type WriteStage} from './transactionalWriterContracts.js';

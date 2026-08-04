@@ -1,7 +1,7 @@
 import {existsSync, mkdirSync, mkdtempSync, realpathSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {resolveWatchtowerDataHome} from '../../src/foundation/dataHomeResolver.js';
+import {resolveWatchtowerDataHome} from '../../src/foundation/paths/index.js';
 
 describe('resolveWatchtowerDataHome', () => {
     let root: string;

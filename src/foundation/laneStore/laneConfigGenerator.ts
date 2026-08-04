@@ -6,7 +6,7 @@
  */
 import type {ConsumedPack} from '../../contracts/pack.js';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../canonicalPaths.js';
+import {safePathTarget} from '../paths/index.js';
 import type {InitPlan} from '../InitContracts.js';
 import {homeRepositoryId} from './laneManifestGenerator.js';
 

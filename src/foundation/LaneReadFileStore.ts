@@ -1,6 +1,6 @@
 import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 import {nodeLaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
-import {buildLaneFilePath, safePathTarget} from './canonicalPaths.js';
+import {buildLaneFilePath, safePathTarget} from './paths/index.js';
 import {createWatchtowerError} from '../contracts/index.js';
 
 export interface LaneReadFileStore {

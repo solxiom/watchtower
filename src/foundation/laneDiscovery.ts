@@ -1,7 +1,7 @@
 import {dirname, isAbsolute, join, relative, sep} from 'node:path';
 import type {LaneManifestV1, LaneRef, ReadModelLaneLifecycle} from '../contracts/index.js';
 import {createWatchtowerError} from '../contracts/errors.js';
-import {canonicalizePath, safePathTarget} from './canonicalPaths.js';
+import {canonicalizePath, safePathTarget} from './paths/index.js';
 import {parseLaneState} from './stateParser.js';
 import {readLaneManifest} from './laneManifestReader.js';
 import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';

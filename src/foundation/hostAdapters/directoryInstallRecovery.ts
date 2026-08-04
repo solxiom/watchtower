@@ -1,7 +1,7 @@
 import {lstatSync, readFileSync} from 'node:fs';
 import {basename, dirname, join} from 'node:path';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {authorizePath, canonicalizePath, createPathEscapeError} from '../canonicalPaths.js';
+import {authorizePath, canonicalizePath, createPathEscapeError} from '../paths/index.js';
 import {directoryInstallPort} from './directoryInstallPort.js';
 import {VERSION_RECORD_FILE, writeDurableFile} from './hostAdapterInstaller.js';
 

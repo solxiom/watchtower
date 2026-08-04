@@ -2,7 +2,7 @@ import {accessSync, constants, lstatSync, readFileSync} from 'node:fs';
 import {cmd} from '@nirvana/base/terminal';
 import type {RepositoryBinding, RepositoryRef, WorktreeMode} from '../contracts/types.js';
 import {createWatchtowerError} from '../contracts/errors.js';
-import {canonicalizePath, safePathTarget} from './canonicalPaths.js';
+import {canonicalizePath, safePathTarget} from './paths/index.js';
 
 const MAX_BINDING_BYTES = 256 * 1024;
 const SLUG = /^[a-z0-9][a-z0-9-]{0,62}$/u;

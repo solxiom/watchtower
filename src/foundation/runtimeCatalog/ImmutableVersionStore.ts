@@ -4,7 +4,7 @@ import type {LockRecord} from '../storage/writeLockRecord.js';
 import {currentProcessIdentity} from '../process/processIdentity.js';
 import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
 import {WatchtowerError} from '../../contracts/errors.js';
-import {authorizeWatchtowerDataHomeForCreation} from '../dataHomeResolver.js';
+import {authorizeWatchtowerDataHomeForCreation} from '../paths/index.js';
 import {nodeImmutableVersionFileSystem, type ImmutableVersionFileSystem} from './ImmutableVersionFileSystem.js';
 import {InstalledVersionCatalog} from './InstalledVersionCatalog.js';
 import {

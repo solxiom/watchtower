@@ -1,7 +1,7 @@
 import {join} from 'node:path';
 import type {KnowledgeManifestV1, RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
 import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
-import {resolveWatchtowerDataHome} from '../dataHomeResolver.js';
+import {resolveWatchtowerDataHome} from '../paths/index.js';
 import {ImmutableVersionStore} from './ImmutableVersionStore.js';
 import {ManifestStagingValidator} from './ManifestStagingValidator.js';
 

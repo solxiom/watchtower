@@ -7,7 +7,7 @@
 import type {ConsumedPack} from '../../contracts/pack.js';
 import type {LaneManifestV1, RepositoryRef} from '../../contracts/types.js';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../canonicalPaths.js';
+import {safePathTarget} from '../paths/index.js';
 import type {InitPlan} from '../InitContracts.js';
 
 const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/iu;

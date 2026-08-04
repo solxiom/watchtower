@@ -3,7 +3,7 @@ import type {
     LaneListItem, LaneListPage, LaneListWarning, RepositoryBinding
 } from '../contracts/index.js';
 import {filterRelevantLanes, selectLane} from './LaneSelector.js';
-import {buildLaneFilePath} from './canonicalPaths.js';
+import {buildLaneFilePath} from './paths/index.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {
     digestLaneListQuery, paginateLaneList, validateLaneListPageInput

@@ -1,5 +1,5 @@
 import type {StatusWarningCode} from '../contracts/index.js';
-import {buildLaneFilePath} from './canonicalPaths.js';
+import {buildLaneFilePath} from './paths/index.js';
 import {observeHeartbeat, type HeartbeatObservation} from './heartbeatObservation.js';
 import {nodeLaneDiscoveryFileSystem, type LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 import {ContainedLaneReadFileStore, type LaneReadFileStore} from './LaneReadFileStore.js';

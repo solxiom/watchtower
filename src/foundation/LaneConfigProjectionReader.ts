@@ -1,6 +1,6 @@
 import type {LaneManifestV1} from '../contracts/index.js';
 import {createWatchtowerError} from '../contracts/index.js';
-import {canonicalizePath} from './canonicalPaths.js';
+import {canonicalizePath} from './paths/index.js';
 import {parseEnvConfig, redactSensitiveKeys} from './envParser.js';
 import type {LaneReadFileStore} from './LaneReadFileStore.js';
 import {ContainedLaneReadFileStore} from './LaneReadFileStore.js';

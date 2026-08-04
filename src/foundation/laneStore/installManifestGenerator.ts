@@ -10,7 +10,7 @@
 import {isAbsolute, relative} from 'node:path';
 import type {ManagedAssetDeclaration, InstallManifestV1} from '../../contracts/manifests.js';
 import {createWatchtowerError} from '../../contracts/errors.js';
-import {safePathTarget} from '../canonicalPaths.js';
+import {safePathTarget} from '../paths/index.js';
 import type {InitPlan} from '../InitContracts.js';
 import type {InstallManifestInputs, LaneManagedLink} from './laneStoreContracts.js';
 

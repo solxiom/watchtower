@@ -1,7 +1,7 @@
 import {closeSync, existsSync, fsyncSync, openSync, readFileSync, renameSync, rmSync, writeSync} from 'node:fs';
 import {randomUUID} from 'node:crypto';
 import {basename, dirname, join} from 'node:path';
-import {authorizePath, canonicalizePath} from '../canonicalPaths.js';
+import {authorizePath, canonicalizePath} from '../paths/index.js';
 import {findLaneStateMarker, laneStateError} from './knowledgePackSource.js';
 import type {PreviewFile} from './hostAdapterTypes.js';
 

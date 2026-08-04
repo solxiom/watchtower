@@ -1,8 +1,8 @@
 import {existsSync, statSync} from 'node:fs';
 import {dirname, isAbsolute, join, relative, sep} from 'node:path';
 import {cmd} from '@nirvana/base/terminal';
-import type {WorkspaceContext} from '../contracts/index.js';
-import {createWatchtowerError} from '../contracts/errors.js';
+import type {WorkspaceContext} from '../../contracts/index.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 import {assertLexicallySafePath, canonicalizePath, safePathTarget} from './canonicalPaths.js';
 
 export function resolveWorkspace(explicit?: string, cwd: string = process.cwd()): string {

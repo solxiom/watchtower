@@ -5,8 +5,8 @@
 import {mkdir} from 'node:fs/promises';
 import {dirname, join} from 'node:path';
 import {createWatchtowerError} from '../contracts/errors.js';
-import {buildLanePath, canonicalizePath} from './canonicalPaths.js';
-import {resolveWatchtowerDataHome} from './dataHomeResolver.js';
+import {buildLanePath, canonicalizePath} from './paths/index.js';
+import {resolveWatchtowerDataHome} from './paths/index.js';
 import {acquireWriteLock} from './storage/sqliteWriteLock.js';
 import type {WriteLock} from './storage/sqlitePorts.js';
 
