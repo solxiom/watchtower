@@ -29,11 +29,11 @@
  * barrel.
  */
 import {LeafRuntimeError, type LeafInvocationResult, type TaskLeafCapability, type TaskLeafRequest}
-    from '../../contracts/leafRuntime.js';
-import {LaneTaskRuntimeError, type LaneTaskBinding} from '../../contracts/taskRuntime.js';
-import type {LaneTaskCatalog} from '../taskRuntime/LaneTaskCatalog.js';
-import {containedInRoot} from '../taskRuntime/taskRuntimePin.js';
-import type {RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+    from '../../../contracts/leafRuntime.js';
+import {LaneTaskRuntimeError, type LaneTaskBinding} from '../../../contracts/taskRuntime.js';
+import type {LaneTaskCatalog} from '../../taskRuntime/LaneTaskCatalog.js';
+import {containedInRoot} from '../../taskRuntime/taskRuntimePin.js';
+import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
 import {LeafRuntimeInvoker} from './LeafRuntimeInvoker.js';
 import type {RuntimeProcessInvoker} from './runtimeProcessPorts.js';
 

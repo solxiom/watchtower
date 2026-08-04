@@ -2,9 +2,9 @@ import {existsSync, mkdirSync, readdirSync, symlinkSync, unlinkSync, writeFileSy
 import {join} from 'node:path';
 import {spawn} from 'node:child_process';
 import {createLockRecord, readLockRecord} from '../../src/foundation/storage/writeLockRecord.js';
-import {RuntimeCatalog} from '../../src/foundation/runtimeCatalog/index.js';
-import {ImmutableVersionStore} from '../../src/foundation/runtimeCatalog/ImmutableVersionStore.js';
-import {nodeImmutableVersionFileSystem} from '../../src/foundation/runtimeCatalog/ImmutableVersionFileSystem.js';
+import {RuntimeCatalog} from '../../src/foundation/runtime/catalog/index.js';
+import {ImmutableVersionStore} from '../../src/foundation/runtime/catalog/ImmutableVersionStore.js';
+import {nodeImmutableVersionFileSystem} from '../../src/foundation/runtime/catalog/ImmutableVersionFileSystem.js';
 import {
     childExit,
     childRequest,

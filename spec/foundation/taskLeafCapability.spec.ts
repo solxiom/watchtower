@@ -14,7 +14,7 @@ import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.
 // `grantExecutingTaskLeafCapability` (Correction 05 finding 1) takes no `argv`
 // field; its own non-forgeability is proved in the second describe block below
 // via the real public barrel with no override at all.
-import {grantTaskLeafCapabilityFromArgv} from '../../src/foundation/runtime/taskLeafCapability.js';
+import {grantTaskLeafCapabilityFromArgv} from '../../src/foundation/runtime/leaf/taskLeafCapability.js';
 import {grantExecutingTaskLeafCapability} from '../../src/foundation/runtime/index.js';
 import type {JsonObject} from '../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 import {
@@ -183,8 +183,8 @@ describe('the raw leaf boundary is not reachable through any public barrel', () 
         }
     });
 
-    it('exposes only the task-scoped grant from the runtime capsule', async () => {
-        const capsule = Object.keys(await import('../../src/foundation/runtime/index.js'));
+    it('exposes only the task-scoped grant from the runtime leaf capsule', async () => {
+        const capsule = Object.keys(await import('../../src/foundation/runtime/leaf/index.js'));
         expect(capsule).toEqual(['grantExecutingTaskLeafCapability']);
     });
 });

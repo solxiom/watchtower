@@ -4,7 +4,7 @@ import {isAbsolute, join, resolve} from 'node:path';
 import {cmd} from '@nirvana/base/terminal';
 import type {RepositoryBinding, WorktreeMode} from '../../contracts/types.js';
 import type {StatusWarningCode} from '../../contracts/statusModels.js';
-import {RuntimeCatalog} from '../runtimeCatalog/index.js';
+import {RuntimeCatalog} from '../runtime/index.js';
 import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
 import {buildLanePath, canonicalizePath, safePathTarget} from '../paths/index.js';
 import {discoverHomeLanes} from '../discovery/index.js';

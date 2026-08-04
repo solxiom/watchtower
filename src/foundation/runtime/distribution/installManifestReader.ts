@@ -13,7 +13,7 @@
  * later against a resolved runtime root; this reader only proves the
  * `taskRuntime` block has exactly the five expected string fields.
  */
-import {ManagedAssetsError, type InstallManifestV1, type ManagedAssetDeclaration} from '../../contracts/manifests.js';
+import {ManagedAssetsError, type InstallManifestV1, type ManagedAssetDeclaration} from '../../../contracts/manifests.js';
 import {isManagedBinPath} from './managedLinkPlanner.js';
 
 const SEMVER = /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-[0-9A-Za-z.-]+)?$/u;

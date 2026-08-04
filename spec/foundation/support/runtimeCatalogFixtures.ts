@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import type {KnowledgeManifestV1, RuntimeManifestV1} from '../../../src/contracts/runtimeKnowledgeManifests.js';
 import {RuntimeCatalogError} from '../../../src/contracts/runtimeCatalog.js';
-import {RuntimeCatalog} from '../../../src/foundation/runtimeCatalog/index.js';
+import {RuntimeCatalog} from '../../../src/foundation/runtime/catalog/index.js';
 
 export interface RuntimeCatalogFixture {
     readonly root: string;

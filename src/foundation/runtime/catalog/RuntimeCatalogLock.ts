@@ -1,7 +1,7 @@
 import {dirname, join} from 'node:path';
-import type {LockRecord} from '../storage/writeLockRecord.js';
-import {readLockRecord, recordIsReclaimable, tryCreateLockRecord} from '../storage/writeLockRecord.js';
-import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
+import type {LockRecord} from '../../storage/writeLockRecord.js';
+import {readLockRecord, recordIsReclaimable, tryCreateLockRecord} from '../../storage/writeLockRecord.js';
+import {RuntimeCatalogError} from '../../../contracts/runtimeCatalog.js';
 import type {ImmutableVersionFileSystem} from './ImmutableVersionFileSystem.js';
 
 export interface RuntimeCatalogLockLease {

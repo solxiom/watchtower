@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import {
     createWatchtowerError, type KnowledgeManifestV1, type ManifestAsset, type ManifestAssetObservation
 } from '../../contracts/index.js';
-import {RuntimeKnowledgeManifestValidator} from '../runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
+import {RuntimeKnowledgeManifestValidator} from '../runtime/index.js';
 import {authorizePath, canonicalizePath} from '../paths/index.js';
 import type {InstallScope, ResolvedKnowledgePack} from './hostAdapterTypes.js';
 

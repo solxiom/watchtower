@@ -7,10 +7,10 @@ export {
     resolveWorkspaceContext, validateWatchtowerDataHome
 } from './paths/index.js';
 export type {UserHomeProvider} from './paths/index.js';
-export {RuntimeCatalog} from './runtimeDistribution/index.js';
-export type {RuntimeCatalogOptions} from './runtimeDistribution/index.js';
-export {ManagedAssets, LaneTaskProfileInstaller} from './runtimeDistribution/index.js';
-export type {ManagedAssetsOptions, LaneTaskProfileInstallRequest} from './runtimeDistribution/index.js';
+export {RuntimeCatalog} from './runtime/index.js';
+export type {RuntimeCatalogOptions} from './runtime/index.js';
+export {ManagedAssets, LaneTaskProfileInstaller} from './runtime/index.js';
+export type {ManagedAssetsOptions, LaneTaskProfileInstallRequest} from './runtime/index.js';
 export {
     COMPATIBILITY_NAMES,
     resolveCompatibilityName,
@@ -18,13 +18,13 @@ export {
     requireCompatibilityAction,
     nodeManagedLinkFileSystem,
     parseInstallManifest
-} from './runtimeDistribution/index.js';
+} from './runtime/index.js';
 export type {
     CompatibilityNameTable,
     ManagedLinkFileSystem,
     ManagedLinkSourceKind,
     ManagedLinkSourceObservation
-} from './runtimeDistribution/index.js';
+} from './runtime/index.js';
 export {InitPlanner, validateInitRequest} from './init/index.js';
 export {UpgradePlanner} from './upgrade/index.js';
 export type {UpgradePlannerOptions} from './upgrade/index.js';
@@ -35,7 +35,7 @@ export type {MigrationRegistryOptions} from './upgrade/index.js';
 export {stageMigrationPlan} from './upgrade/index.js';
 export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './init/index.js';
 export type {InitPreflightPort, ScopeReadResult} from './init/index.js';
-export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
+export {RuntimeKnowledgeManifestValidator} from './runtime/index.js';
 export * from './schemaComposition/index.js';
 export {loadV1SchemaBundle} from './schemaComposition/schemaBundle.js';
 export type {SchemaAssetReader, SchemaBundle, SchemaBundleLoadResult} from './schemaComposition/schemaBundle.js';

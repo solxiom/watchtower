@@ -1,7 +1,7 @@
 import {accessSync, chmodSync, constants, existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {RuntimeCatalog} from '../../src/foundation/runtimeCatalog/index.js';
-import {ImmutableVersionStore} from '../../src/foundation/runtimeCatalog/ImmutableVersionStore.js';
+import {RuntimeCatalog} from '../../src/foundation/runtime/catalog/index.js';
+import {ImmutableVersionStore} from '../../src/foundation/runtime/catalog/ImmutableVersionStore.js';
 import {
     cleanupFixture,
     expectCatalogError,

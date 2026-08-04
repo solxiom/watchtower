@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {chmodSync, existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {ManagedAssets} from '../../src/foundation/managedAssets/index.js';
+import {ManagedAssets} from '../../src/foundation/runtime/distribution/index.js';
 import {ManagedAssetsError} from '../../src/contracts/manifests.js';
 import {createLockRecord, tryCreateLockRecord} from '../../src/foundation/storage/writeLockRecord.js';
 import {

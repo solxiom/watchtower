@@ -5,7 +5,7 @@ import type {NvbRunnerBinding} from '../../../src/foundation/taskRuntime/package
 import type {RuntimeRootResolver, TaskRuntimePinSource}
     from '../../../src/foundation/taskRuntime/LaneTaskRunner.js';
 import type {JsonObject} from '../../../src/foundation/schemaComposition/schemaCompositionContracts.js';
-import type {RuntimeProcessOutcome} from '../../../src/foundation/runtime/runtimeProcessPorts.js';
+import type {RuntimeProcessOutcome} from '../../../src/foundation/runtime/leaf/runtimeProcessPorts.js';
 import type {FakeEntry} from './laneTaskRuntimeFixtures.js';
 import {
     FakeProcessInvoker,

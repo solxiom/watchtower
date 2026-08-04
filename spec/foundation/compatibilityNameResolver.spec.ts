@@ -3,7 +3,7 @@ import {
     requireCompatibilityAction,
     resolveCompatibilityName,
     resolveCompatibilityNameFrom
-} from '../../src/foundation/managedAssets/compatibilityNameResolver.js';
+} from '../../src/foundation/runtime/distribution/compatibilityNameResolver.js';
 import {ManagedAssetsError} from '../../src/contracts/manifests.js';
 import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
 import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';

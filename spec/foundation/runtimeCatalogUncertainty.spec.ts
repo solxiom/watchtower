@@ -1,10 +1,10 @@
 import {existsSync} from 'node:fs';
 import {dirname, join} from 'node:path';
-import {RuntimeCatalog} from '../../src/foundation/runtimeCatalog/index.js';
+import {RuntimeCatalog} from '../../src/foundation/runtime/catalog/index.js';
 import {RuntimeCatalogError} from '../../src/contracts/runtimeCatalog.js';
-import {ManifestStagingValidator} from '../../src/foundation/runtimeCatalog/ManifestStagingValidator.js';
-import {ImmutableVersionStore} from '../../src/foundation/runtimeCatalog/ImmutableVersionStore.js';
-import {nodeImmutableVersionFileSystem} from '../../src/foundation/runtimeCatalog/ImmutableVersionFileSystem.js';
+import {ManifestStagingValidator} from '../../src/foundation/runtime/catalog/ManifestStagingValidator.js';
+import {ImmutableVersionStore} from '../../src/foundation/runtime/catalog/ImmutableVersionStore.js';
+import {nodeImmutableVersionFileSystem} from '../../src/foundation/runtime/catalog/ImmutableVersionFileSystem.js';
 import {cleanupFixture, expectCatalogError, makeRuntimeCatalogFixture, runtimeManifest} from './support/runtimeCatalogFixtures.js';
 
 describe('RuntimeCatalog post-rename uncertainty', () => {

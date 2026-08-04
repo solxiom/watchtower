@@ -4,7 +4,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import type {InstallManifestV1, ManagedAssetDeclaration} from '../../../src/contracts/manifests.js';
 import type {ManifestAsset, RuntimeManifestV1} from '../../../src/contracts/runtimeKnowledgeManifests.js';
-import {RuntimeCatalog} from '../../../src/foundation/runtimeCatalog/index.js';
+import {RuntimeCatalog} from '../../../src/foundation/runtime/catalog/index.js';
 import {semanticDigest} from '../../../src/foundation/schemaComposition/jsonCanonicalizer.js';
 import type {JsonObject} from '../../../src/foundation/schemaComposition/schemaCompositionContracts.js';
 

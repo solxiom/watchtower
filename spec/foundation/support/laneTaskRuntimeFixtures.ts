@@ -14,7 +14,7 @@ import type {
     RuntimeProcessInvoker,
     RuntimeProcessOutcome,
     RuntimeProcessRequest
-} from '../../../src/foundation/runtime/runtimeProcessPorts.js';
+} from '../../../src/foundation/runtime/leaf/runtimeProcessPorts.js';
 
 export const RUNTIME_ROOT = '/data/watchtower/runtimes/1.0.0';
 export const CATALOG_DIRECTORY = `${RUNTIME_ROOT}/runtime-nvb`;

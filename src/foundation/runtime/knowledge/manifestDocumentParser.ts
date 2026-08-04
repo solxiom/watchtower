@@ -2,8 +2,8 @@ import type {
   KnowledgeManifestV1,
   ManifestAsset,
   RuntimeManifestV1,
-} from "../../contracts/runtimeKnowledgeManifests.js";
-import { RuntimeKnowledgeManifestError } from "../../contracts/runtimeKnowledgeManifests.js";
+} from "../../../contracts/runtimeKnowledgeManifests.js";
+import { RuntimeKnowledgeManifestError } from "../../../contracts/runtimeKnowledgeManifests.js";
 
 const digestPattern = /^sha256:[0-9a-f]{64}$/;
 const versionPattern = /^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?$/;

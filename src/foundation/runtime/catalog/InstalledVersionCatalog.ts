@@ -1,5 +1,5 @@
 import {join} from 'node:path';
-import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
+import {RuntimeCatalogError} from '../../../contracts/runtimeCatalog.js';
 import type {ImmutableVersionFileSystem} from './ImmutableVersionFileSystem.js';
 import {finalizingPublicationPath, pendingPublicationPath} from './PendingVersionPublication.js';
 

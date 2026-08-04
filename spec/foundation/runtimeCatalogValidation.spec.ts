@@ -1,7 +1,7 @@
 import {chmodSync, existsSync, mkdirSync, symlinkSync, writeFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {join} from 'node:path';
-import {RuntimeCatalog} from '../../src/foundation/runtimeCatalog/index.js';
+import {RuntimeCatalog} from '../../src/foundation/runtime/catalog/index.js';
 import {
     cleanupFixture,
     digest,

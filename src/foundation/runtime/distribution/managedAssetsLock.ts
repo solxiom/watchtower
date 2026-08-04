@@ -12,8 +12,8 @@
  */
 import {unlinkSync} from 'node:fs';
 import {join} from 'node:path';
-import {ManagedAssetsError} from '../../contracts/manifests.js';
-import {createLockRecord, readLockRecord, recordIsReclaimable, tryCreateLockRecord, type LockRecord} from '../storage/writeLockRecord.js';
+import {ManagedAssetsError} from '../../../contracts/manifests.js';
+import {createLockRecord, readLockRecord, recordIsReclaimable, tryCreateLockRecord, type LockRecord} from '../../storage/writeLockRecord.js';
 
 const LOCK_FILE = '.watchtower-managed-assets.lock';
 

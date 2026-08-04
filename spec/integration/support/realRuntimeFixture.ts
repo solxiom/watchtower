@@ -22,7 +22,7 @@ import {nodeRuntimeFileSystem} from '../../../src/foundation/taskRuntime/runtime
 import type {RuntimeRootResolver, TaskRuntimePinSource}
     from '../../../src/foundation/taskRuntime/LaneTaskRunner.js';
 import type {RuntimeProcessInvoker, RuntimeProcessOutcome, RuntimeProcessRequest}
-    from '../../../src/foundation/runtime/runtimeProcessPorts.js';
+    from '../../../src/foundation/runtime/leaf/runtimeProcessPorts.js';
 
 export const CATALOG_ID = 'watchtower-runtime-nvb/v1';
 export const PROFILE_ID = 'implementation-v1';

@@ -24,9 +24,9 @@
  * claim to "mechanism proven, catalog/profile-bound" and is recorded as a
  * formal scope note pending explicit ruling (Correction 01, finding 6).
  */
-import {ManagedAssetsError} from '../../contracts/manifests.js';
-import {LaneTaskRuntimeError} from '../../contracts/taskRuntime.js';
-import type {LaneTaskCatalog} from '../taskRuntime/LaneTaskCatalog.js';
+import {ManagedAssetsError} from '../../../contracts/manifests.js';
+import {LaneTaskRuntimeError} from '../../../contracts/taskRuntime.js';
+import type {LaneTaskCatalog} from '../../taskRuntime/LaneTaskCatalog.js';
 
 export type CompatibilityNameTable = Readonly<Record<string, string>>;
 

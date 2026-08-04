@@ -16,3 +16,4 @@ export type {
     ManagedLinkSourceObservation
 } from './managedLinkFileSystem.js';
 export {parseInstallManifest} from './installManifestReader.js';
+export {isManagedBinPath} from './managedLinkPlanner.js';

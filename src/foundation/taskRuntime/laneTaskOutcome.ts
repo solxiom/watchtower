@@ -16,7 +16,7 @@ import {
     type LaneTaskRunResult,
     type LaneTaskRuntimeReason
 } from '../../contracts/taskRuntime.js';
-import type {RuntimeProcessOutcome} from '../runtime/runtimeProcessPorts.js';
+import type {RuntimeProcessOutcome} from '../runtime/leaf/runtimeProcessPorts.js';
 import {cancellationSignal} from './laneTaskInvocationPlan.js';
 import {NvbRunOutputReader, redactDiagnostic, type NvbRunResultView} from './nvbRunOutput.js';
 import type {SchemaValidator} from './laneTaskSchemaValidation.js';

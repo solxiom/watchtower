@@ -1,10 +1,10 @@
 import {randomUUID} from 'node:crypto';
 import {dirname, join} from 'node:path';
-import type {LockRecord} from '../storage/writeLockRecord.js';
-import {currentProcessIdentity} from '../observation/index.js';
-import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
-import {WatchtowerError} from '../../contracts/errors.js';
-import {authorizeWatchtowerDataHomeForCreation} from '../paths/index.js';
+import type {LockRecord} from '../../storage/writeLockRecord.js';
+import {currentProcessIdentity} from '../../observation/index.js';
+import {RuntimeCatalogError} from '../../../contracts/runtimeCatalog.js';
+import {WatchtowerError} from '../../../contracts/errors.js';
+import {authorizeWatchtowerDataHomeForCreation} from '../../paths/index.js';
 import {nodeImmutableVersionFileSystem, type ImmutableVersionFileSystem} from './ImmutableVersionFileSystem.js';
 import {InstalledVersionCatalog} from './InstalledVersionCatalog.js';
 import {

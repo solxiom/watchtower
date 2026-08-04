@@ -1,5 +1,5 @@
 import {dirname, join, relative} from 'node:path';
-import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
+import {RuntimeCatalogError} from '../../../contracts/runtimeCatalog.js';
 import type {ImmutableVersionFileSystem} from './ImmutableVersionFileSystem.js';
 import {syncDirectory} from './RuntimeCatalogLock.js';
 

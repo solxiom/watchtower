@@ -1,9 +1,9 @@
 import {createHash} from 'node:crypto';
 import {lstatSync, readdirSync, readFileSync, statSync} from 'node:fs';
 import {join, relative, sep} from 'node:path';
-import type {KnowledgeManifestV1, ManifestAssetObservation, RuntimeKnowledgeManifestV1, RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
-import {RuntimeCatalogError} from '../../contracts/runtimeCatalog.js';
-import {RuntimeKnowledgeManifestValidator} from '../runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';
+import type {KnowledgeManifestV1, ManifestAssetObservation, RuntimeKnowledgeManifestV1, RuntimeManifestV1} from '../../../contracts/runtimeKnowledgeManifests.js';
+import {RuntimeCatalogError} from '../../../contracts/runtimeCatalog.js';
+import {RuntimeKnowledgeManifestValidator} from '../knowledge/RuntimeKnowledgeManifestValidator.js';
 
 export class ManifestStagingValidator {
     private readonly validator = new RuntimeKnowledgeManifestValidator();

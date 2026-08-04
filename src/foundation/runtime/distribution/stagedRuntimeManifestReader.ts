@@ -6,10 +6,10 @@
  * root and hands its bytes to that parser.
  */
 import {join} from 'node:path';
-import {parseRuntimeManifest} from '../runtimeKnowledgeManifest/manifestDocumentParser.js';
-import type {RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
-import {ManagedAssetsError} from '../../contracts/manifests.js';
-import type {RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+import {parseRuntimeManifest} from '../knowledge/manifestDocumentParser.js';
+import type {RuntimeManifestV1} from '../../../contracts/runtimeKnowledgeManifests.js';
+import {ManagedAssetsError} from '../../../contracts/manifests.js';
+import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
 
 const MANIFEST_FILE = 'manifest.json';
 const MAX_MANIFEST_BYTES = 4 * 1024 * 1024;

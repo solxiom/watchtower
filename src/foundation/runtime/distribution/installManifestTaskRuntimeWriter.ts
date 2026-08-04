@@ -38,9 +38,9 @@
 import {closeSync, fsyncSync, openSync, readFileSync, renameSync, unlinkSync, writeSync} from 'node:fs';
 import {randomUUID} from 'node:crypto';
 import {dirname, join} from 'node:path';
-import {ManagedAssetsError, type InstallManifestV1} from '../../contracts/manifests.js';
-import type {PinnedTaskRuntimeTarget} from '../../contracts/taskRuntime.js';
-import {buildLaneFilePath} from '../paths/index.js';
+import {ManagedAssetsError, type InstallManifestV1} from '../../../contracts/manifests.js';
+import type {PinnedTaskRuntimeTarget} from '../../../contracts/taskRuntime.js';
+import {buildLaneFilePath} from '../../paths/index.js';
 import {acquireManagedAssetsLock} from './managedAssetsLock.js';
 import {parseInstallManifest} from './installManifestReader.js';
 

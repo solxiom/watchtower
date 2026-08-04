@@ -5,7 +5,7 @@ import type {
   ManifestVerificationResult,
   RuntimeManifestV1,
   RuntimeKnowledgeManifestV1,
-} from "../../contracts/runtimeKnowledgeManifests.js";
+} from "../../../contracts/runtimeKnowledgeManifests.js";
 import {
   parseKnowledgeManifest,
   parseRuntimeManifest,
@@ -93,7 +93,7 @@ function compare(
 }
 function failure(
   reason: Exclude<
-    import("../../contracts/runtimeKnowledgeManifests.js").RuntimeKnowledgeManifestReason,
+    import("../../../contracts/runtimeKnowledgeManifests.js").RuntimeKnowledgeManifestReason,
     "MANIFEST_SCHEMA_INVALID" | "MANIFEST_IDENTITY_INVALID"
   >,
   subject: string,

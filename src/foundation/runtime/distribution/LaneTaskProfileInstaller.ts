@@ -8,11 +8,11 @@
  * never reads or trusts a participating repository's `nvb.json`.
  */
 import {join} from 'node:path';
-import type {RuntimeCatalog} from '../runtimeCatalog/index.js';
-import type {PinnedTaskRuntimeTarget} from '../../contracts/taskRuntime.js';
-import type {InstallManifestV1} from '../../contracts/manifests.js';
-import {readTaskRuntimePin} from '../taskRuntime/taskRuntimePin.js';
-import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+import type {RuntimeCatalog} from '../catalog/index.js';
+import type {PinnedTaskRuntimeTarget} from '../../../contracts/taskRuntime.js';
+import type {InstallManifestV1} from '../../../contracts/manifests.js';
+import {readTaskRuntimePin} from '../../taskRuntime/taskRuntimePin.js';
+import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
 import {readNarrowedProfileCatalog} from './laneTaskProfileCatalogReader.js';
 import {rebindTaskRuntime} from './installManifestTaskRuntimeWriter.js';
 

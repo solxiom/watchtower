@@ -17,7 +17,7 @@ import {chmodSync, existsSync, mkdirSync, readFileSync, symlinkSync, writeFileSy
 import {join} from 'node:path';
 import {LeafRuntimeError} from '../../src/contracts/leafRuntime.js';
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
-import {LeafRuntimeInvoker} from '../../src/foundation/runtime/LeafRuntimeInvoker.js';
+import {LeafRuntimeInvoker} from '../../src/foundation/runtime/leaf/LeafRuntimeInvoker.js';
 import {resolvePackagedNvbRunner} from '../../src/foundation/taskRuntime/packagedNvbRunner.js';
 import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';
 import {

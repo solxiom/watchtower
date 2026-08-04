@@ -18,22 +18,22 @@
  * and already-applied entries resolve idempotently through `decideCreate`/
  * `decideRemove` on replay.
  */
-import type {RuntimeCatalog} from '../runtimeCatalog/index.js';
+import type {RuntimeCatalog} from '../catalog/index.js';
 import type {
     InstallManifestV1,
     ManagedAssetDeclaration,
     ManagedAssetsReason,
     ManagedLinkResult,
     ValidationResult
-} from '../../contracts/manifests.js';
-import {ManagedAssetsError} from '../../contracts/manifests.js';
+} from '../../../contracts/manifests.js';
+import {ManagedAssetsError} from '../../../contracts/manifests.js';
 import {nodeManagedLinkFileSystem, type ManagedLinkFileSystem, type ManagedLinkSourceObservation} from './managedLinkFileSystem.js';
 import {planLink, planRemoval} from './managedLinkPlanner.js';
 import {decideCreate, decideRemove} from './managedLinkValidator.js';
 import {createLink, removeLink} from './managedLinkMutator.js';
 import {validateLink} from './managedLinkValidation.js';
 import {acquireManagedAssetsLock} from './managedAssetsLock.js';
-import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+import {nodeRuntimeFileSystem, type RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
 
 export interface ManagedAssetsOptions {
     readonly fileSystem?: ManagedLinkFileSystem;

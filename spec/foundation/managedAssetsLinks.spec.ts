@@ -1,6 +1,6 @@
 import {lstatSync, mkdirSync, readlinkSync, symlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {ManagedAssets} from '../../src/foundation/managedAssets/index.js';
+import {ManagedAssets} from '../../src/foundation/runtime/distribution/index.js';
 import {
     ASSET_KEY,
     cleanupFixture,

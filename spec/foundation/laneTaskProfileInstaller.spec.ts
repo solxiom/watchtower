@@ -1,4 +1,4 @@
-import {LaneTaskProfileInstaller} from '../../src/foundation/managedAssets/index.js';
+import {LaneTaskProfileInstaller} from '../../src/foundation/runtime/distribution/index.js';
 import {LaneTaskCatalog} from '../../src/foundation/taskRuntime/LaneTaskCatalog.js';
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
 import {RuntimeCatalogError} from '../../src/contracts/runtimeCatalog.js';

@@ -2,7 +2,7 @@ import {readdirSync, readFileSync} from 'node:fs';
 import {join, relative, sep} from 'node:path';
 
 const SOURCE_ROOT = join(process.cwd(), 'src');
-const PROCESS_OWNER = join('foundation', 'runtime', 'NirvanaProcessInvoker.ts');
+const PROCESS_OWNER = join('foundation', 'runtime', 'leaf', 'NirvanaProcessInvoker.ts');
 const TMUX_COMPATIBILITY_LEAF = join('foundation', 'observation', 'TmuxSessionProcessRunner.ts');
 const CHILD_PROCESS_IMPORT = /from\s+['"]node:child_process['"]/;
 const TERMINAL_FACADE_IMPORT = /from\s+['"]@nirvana\/base\/terminal['"]/;
@@ -26,7 +26,7 @@ describe('lane task runtime process boundary', () => {
     it('keeps `node:child_process` out of the lane task runtime capability', () => {
         // Positive control: the detector must see the import it is guarding against.
         expect(CHILD_PROCESS_IMPORT.test("import {spawn} from 'node:child_process';")).toBeTrue();
-        const runtimeCapsules = sourceFiles(join(SOURCE_ROOT, 'foundation', 'runtime'))
+        const runtimeCapsules = sourceFiles(join(SOURCE_ROOT, 'foundation', 'runtime', 'leaf'))
             .concat(sourceFiles(join(SOURCE_ROOT, 'foundation', 'taskRuntime')))
             .filter((path) => CHILD_PROCESS_IMPORT.test(readFileSync(path, 'utf8')));
         expect(runtimeCapsules).toEqual([]);

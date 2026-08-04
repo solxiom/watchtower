@@ -4,7 +4,7 @@
  * may safely remove it. Never mutates; `managedLinkMutator.ts` performs the
  * one authorized effect after this module approves it.
  */
-import {ManagedAssetsError} from '../../contracts/manifests.js';
+import {ManagedAssetsError} from '../../../contracts/manifests.js';
 import type {ManagedLinkPlan} from './managedLinkPlanner.js';
 import type {ManagedLinkSourceObservation} from './managedLinkFileSystem.js';
 

@@ -30,9 +30,9 @@
  */
 import {lstatSync, realpathSync} from 'node:fs';
 import {dirname, isAbsolute, relative, resolve, sep} from 'node:path';
-import {ManagedAssetsError, type ManagedAssetDeclaration} from '../../contracts/manifests.js';
-import {containedInRoot} from '../taskRuntime/taskRuntimePin.js';
-import type {RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+import {ManagedAssetsError, type ManagedAssetDeclaration} from '../../../contracts/manifests.js';
+import {containedInRoot} from '../../taskRuntime/taskRuntimePin.js';
+import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
 import {isMissingPath} from './managedLinkFileSystem.js';
 import {readStagedRuntimeManifest} from './stagedRuntimeManifestReader.js';
 

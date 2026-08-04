@@ -4,10 +4,10 @@
  * classified against the exact same containment and checksum rules, never a
  * second copy of them.
  */
-import {ManagedAssetsError, type InstallManifestV1, type ManagedLinkFinding, type ManagedLinkFindingStatus} from '../../contracts/manifests.js';
+import {ManagedAssetsError, type InstallManifestV1, type ManagedLinkFinding, type ManagedLinkFindingStatus} from '../../../contracts/manifests.js';
 import type {ManagedLinkFileSystem} from './managedLinkFileSystem.js';
 import {planLink} from './managedLinkPlanner.js';
-import type {RuntimeFileSystem} from '../taskRuntime/runtimeFileSystem.js';
+import type {RuntimeFileSystem} from '../../taskRuntime/runtimeFileSystem.js';
 
 export function validateLink(
     laneDir: string,

@@ -6,7 +6,8 @@ const sourceRoot = join(
   process.cwd(),
   "src",
   "foundation",
-  "runtimeKnowledgeManifest",
+  "runtime",
+  "knowledge",
 );
 const specRoot = join(process.cwd(), "spec", "foundation");
 

@@ -2,7 +2,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { RuntimeKnowledgeManifestError } from "../../src/contracts/runtimeKnowledgeManifests.js";
-import { RuntimeKnowledgeManifestValidator } from "../../src/foundation/runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js";
+import { RuntimeKnowledgeManifestValidator } from "../../src/foundation/runtime/knowledge/RuntimeKnowledgeManifestValidator.js";
 
 const validator = new RuntimeKnowledgeManifestValidator();
 

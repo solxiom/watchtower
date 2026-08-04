@@ -13,7 +13,7 @@ import {mkdirSync, renameSync, rmSync, symlinkSync} from 'node:fs';
 import {join} from 'node:path';
 import {LeafRuntimeError} from '../../src/contracts/leafRuntime.js';
 import {LaneTaskRuntimeError} from '../../src/contracts/taskRuntime.js';
-import {LeafRuntimeInvoker} from '../../src/foundation/runtime/LeafRuntimeInvoker.js';
+import {LeafRuntimeInvoker} from '../../src/foundation/runtime/leaf/LeafRuntimeInvoker.js';
 import {nodeRuntimeFileSystem} from '../../src/foundation/taskRuntime/runtimeFileSystem.js';
 import {
     ACTION_ID,

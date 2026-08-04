@@ -1,4 +1,4 @@
-import {parseInstallManifest} from '../../src/foundation/managedAssets/installManifestReader.js';
+import {parseInstallManifest} from '../../src/foundation/runtime/distribution/installManifestReader.js';
 import {ManagedAssetsError} from '../../src/contracts/manifests.js';
 
 function validManifest(): Record<string, unknown> {

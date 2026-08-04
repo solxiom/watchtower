@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { RuntimeKnowledgeManifestSchemaConsumer } from "../../src/foundation/runtimeKnowledgeManifest/RuntimeKnowledgeManifestSchemaConsumer.js";
+import { RuntimeKnowledgeManifestSchemaConsumer } from "../../src/foundation/runtime/knowledge/RuntimeKnowledgeManifestSchemaConsumer.js";
 
 it("accepts both checked-in full documents through fragment and aggregate schemas", async () => {
   const [runtime, knowledge] = await documents();

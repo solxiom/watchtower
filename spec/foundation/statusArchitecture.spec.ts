@@ -12,7 +12,8 @@ const OWNED_MODULES = readdirSync(STATUS_DIR)
     .filter((name) => name.endsWith('.ts'))
     .map((name) => join(STATUS_DIR, name));
 
-const L4_PLUS_IMPORT = /from\s+['"]\.\.\/(init|pack|upgrade|lifecycle|runtimeDistribution)\//;
+const L4_PLUS_IMPORT = /from\s+['"]\.\.\/(init|pack|upgrade|lifecycle)\//;
+const L4_RUNTIME_SUBCAPSULE = /from\s+['"]\.\.\/runtime\/(catalog|distribution|knowledge|leaf)\//;
 const OWNED_MODULE_LIMIT = 200;
 
 describe('status domain inventory (FR-17)', () => {
