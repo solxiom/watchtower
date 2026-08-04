@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-1 integration next (FR-10 ✅; FR-11 pending)**
+Status: **Active — FM-2 in progress (FM-1 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,7 +19,7 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **11 / 32** work units accepted |
+| Score | **12 / 32** work units accepted |
 | Baseline root files | 84 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
@@ -30,8 +30,8 @@ Last updated: 2026-08-04
 | Milestone | Name | Batch | State | Accepted proof |
 |-----------|------|-------|-------|----------------|
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
-| FM-1 | Capsule completion | REF-01 | ⏳ In progress | FR-03 … FR-10 ✅; FR-11 integration pending |
-| FM-2 | L1–L3 domain extraction | REF-01 | ❌ Pending | Seven domain dirs + barrels |
+| FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
+| FM-2 | L1–L3 domain extraction | REF-01 | ⏳ In progress | FR-12 next |
 | FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
 
@@ -59,7 +59,7 @@ Last updated: 2026-08-04
 | FR-08 | `indexStore` facade move | ✅ Accepted | `indexStore/index.ts`; `IndexStore.ts` removed; arch spec path updated; `nvb test` green |
 | FR-09 | `indexQuery` facade move | ✅ Accepted | `indexQuery/index.ts`; `IndexQuery.ts` removed; arch spec updated; `nvb test` green |
 | FR-10 | `coordinatorBaseline` facade move | ✅ Accepted | `coordinatorBaseline/index.ts`; `CoordinatorBaseline.ts` removed; `nvb test` green |
-| FR-11 | FM-1 integration | ❌ Pending | Shadow-structure count = 0; `nvb test` |
+| FR-11 | FM-1 integration | ✅ Accepted | Shadow count 0; capsule barrels on root re-exports; `nvb test` green |
 
 ### FM-2 — L1–L3 domain extraction
 
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 11 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 12 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -161,7 +161,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `initArchitecture.spec.ts` | FR-18 | ❌ Not created |
 | `packArchitecture.spec.ts` | FR-19 | ❌ Not created |
 | `upgradeArchitecture.spec.ts` | FR-20 | ❌ Not created |
-| `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — update paths in FM-1 |
+| `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — no path changes required |
 | `managedAssetsArchitecture.spec.ts` | FR-05 | ✅ Exists — update paths in FR-05 |
 | `indexQueryArchitecture.spec.ts` | FR-08, FR-09 | ✅ Accepted — paths updated |
 | `runtimeKnowledgeManifestArchitecture.spec.ts` | — | ✅ Exists |

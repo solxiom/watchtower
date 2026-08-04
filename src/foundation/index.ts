@@ -14,16 +14,16 @@ export {
     COMPATIBILITY_NAMES,
     resolveCompatibilityName,
     resolveCompatibilityNameFrom,
-    requireCompatibilityAction
-} from './managedAssets/compatibilityNameResolver.js';
-export type {CompatibilityNameTable} from './managedAssets/compatibilityNameResolver.js';
-export {nodeManagedLinkFileSystem} from './managedAssets/managedLinkFileSystem.js';
+    requireCompatibilityAction,
+    nodeManagedLinkFileSystem,
+    parseInstallManifest
+} from './managedAssets/index.js';
 export type {
+    CompatibilityNameTable,
     ManagedLinkFileSystem,
     ManagedLinkSourceKind,
     ManagedLinkSourceObservation
-} from './managedAssets/managedLinkFileSystem.js';
-export {parseInstallManifest} from './managedAssets/installManifestReader.js';
+} from './managedAssets/index.js';
 export {InitPlanner, validateInitRequest} from './InitPlanner.js';
 export {UpgradePlanner} from './UpgradePlanner.js';
 export type {UpgradePlannerOptions} from './UpgradePlanner.js';
@@ -107,7 +107,7 @@ export {nodePackGitInspector} from './packGitHost.js';
 export {loadPackSchemaValidators} from './packSchemaValidatorsHost.js';
 export {PACK_INDEX_COMPILER_VERSION, PackIndexCompiler} from './packIndex/index.js';
 export type {PackIndexCompileDeps, PackIndexCompileRequest} from './packIndex/index.js';
-export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/packIndexSchema.js';
+export {PACK_INDEX_DATABASE_SCHEMA_VERSION, PACK_INDEX_META_TABLE, PACK_INDEX_SCHEMA} from './packIndex/index.js';
 export {IndexStore} from './indexStore/index.js';
 export type {IndexIdentity} from './indexStore/index.js';
 export {IndexQuery} from './indexQuery/index.js';
