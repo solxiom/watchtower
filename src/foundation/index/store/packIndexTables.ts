@@ -15,11 +15,11 @@
  * either; building the equality index once in memory is the compliant,
  * available alternative.
  */
-import type {LogicalExport} from '../storage/index.js';
+import type {LogicalExport} from '../../storage/index.js';
 import type {
     ArtifactIndexEntry, BatchIndexEntry, BatchRepositoryClaim, BatchRequirementRelation,
     ProofIndexEntry, RepositoryIndexEntry, RequirementIndexEntry
-} from '../../contracts/index.js';
+} from '../../../contracts/index.js';
 import {
     toArtifact, toBatch, toBatchRepository, toBatchRequirement, toDependency, toProof, toRepository, toRequirement
 } from './packIndexRowMappers.js';

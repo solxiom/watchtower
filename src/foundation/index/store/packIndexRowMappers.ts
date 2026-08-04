@@ -5,11 +5,11 @@
  * database handle — every function is a total, side-effect-free mapping over
  * an already-read `TypedRow`.
  */
-import type {TypedRow} from '../storage/index.js';
+import type {TypedRow} from '../../storage/index.js';
 import type {
     ArtifactIndexEntry, BatchIndexEntry, BatchRepositoryClaim, BatchRequirementRelation,
     DependencyEdge, ProofIndexEntry, RepositoryIndexEntry, RequirementIndexEntry
-} from '../../contracts/index.js';
+} from '../../../contracts/index.js';
 
 export function asText(row: TypedRow, key: string): string {
     const value = row[key];

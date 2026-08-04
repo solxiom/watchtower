@@ -5,8 +5,8 @@
  * (`PackIndexCompiler.ts`'s `metaRows`), used to prove the stored rows still
  * agree with the sidecar that describes them before any query is queryable.
  */
-import type {PackIndexManifest} from '../../contracts/index.js';
-import type {TypedRow} from '../storage/index.js';
+import type {PackIndexManifest} from '../../../contracts/index.js';
+import type {TypedRow} from '../../storage/index.js';
 
 /** Identity facts recorded for the open generation; never a filesystem path or handle. */
 export interface IndexIdentity {

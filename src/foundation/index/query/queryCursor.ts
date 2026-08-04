@@ -10,7 +10,7 @@
  * CA-02's own `INDEX_CURSOR_INVALID`/`INDEX_LIMIT_EXCEEDED`.
  */
 import {createHash} from 'node:crypto';
-import {IndexQueryError} from '../../contracts/index.js';
+import {IndexQueryError} from '../../../contracts/index.js';
 
 export const DEFAULT_PAGE_LIMIT = 50;
 export const MAX_PAGE_LIMIT = 200;

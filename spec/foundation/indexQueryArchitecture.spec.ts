@@ -9,15 +9,15 @@ import {join} from 'node:path';
 
 const SOURCE_ROOT = join(process.cwd(), 'src');
 const FOUNDATION = join(SOURCE_ROOT, 'foundation');
-const INDEX_STORE = join(FOUNDATION, 'indexStore', 'index.ts');
-const INDEX_QUERY = join(FOUNDATION, 'indexQuery', 'index.ts');
+const INDEX_STORE = join(FOUNDATION, 'index', 'store', 'index.ts');
+const INDEX_QUERY = join(FOUNDATION, 'index', 'query', 'index.ts');
 const OWNED_FILES = [
     INDEX_STORE, INDEX_QUERY,
-    join(FOUNDATION, 'indexStore', 'indexStoreIdentity.ts'),
-    join(FOUNDATION, 'indexStore', 'packIndexRowMappers.ts'),
-    join(FOUNDATION, 'indexStore', 'packIndexTables.ts'),
-    join(FOUNDATION, 'indexQuery', 'queryCursor.ts'),
-    join(FOUNDATION, 'indexQuery', 'dependencyTraversal.ts')
+    join(FOUNDATION, 'index', 'store', 'indexStoreIdentity.ts'),
+    join(FOUNDATION, 'index', 'store', 'packIndexRowMappers.ts'),
+    join(FOUNDATION, 'index', 'store', 'packIndexTables.ts'),
+    join(FOUNDATION, 'index', 'query', 'queryCursor.ts'),
+    join(FOUNDATION, 'index', 'query', 'dependencyTraversal.ts')
 ];
 
 /** SQL keyword literals — the actual tell of a raw SQL string, unlike the driver method names, which also name ordinary `Map`/`Array` methods this module legitimately uses (`Map.get`, `Array.every`). */
