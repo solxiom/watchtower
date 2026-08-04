@@ -6,18 +6,25 @@
  * specs can inject a fault at an exact step without a real crash.
  *
  * `NIRVANA_API_GAP:UPGRADE_ATOMIC_STAGING_ADAPTER` — no pinned `@nirvana/*`
- * package exposes symlink creation, fsync, or atomic rename; the pinned
- * storage facade is root-scoped file/text I/O only (the same documented gap
- * class as `runtimeFileSystem.ts` and `managedLinkFileSystem.ts`). This
- * narrow `node:fs` adapter is the sole accepted bypass for that missing
- * capability, scoped to the install-pointer/store boundary this batch owns.
+ * package exposes fsync or atomic rename; the pinned storage facade is
+ * root-scoped file/text I/O only (the same documented gap class as
+ * `runtimeFileSystem.ts` and `managedLinkFileSystem.ts`). This narrow
+ * `node:fs` adapter is the sole accepted bypass for that missing capability,
+ * scoped to the install-pointer/store boundary this batch owns. Symlink
+ * creation itself is never duplicated here: the managed-asset architecture
+ * gate confines every low-level link-creation call in `src/` to RT-06's
+ * link-filesystem adapter, so this port delegates staging's link write to
+ * `nodeManagedLinkFileSystem.createSymlink`, passing the staging temp path
+ * as its `source` argument — that primitive is generic over any source path,
+ * not only a managed lane `bin/` target.
  */
 import {createHash} from 'node:crypto';
 import {
     closeSync, existsSync, fsyncSync, lstatSync, mkdirSync, openSync, readdirSync, readFileSync,
-    readlinkSync, renameSync, symlinkSync, unlinkSync, writeSync
+    readlinkSync, renameSync, unlinkSync, writeSync
 } from 'node:fs';
 import {basename, dirname, join} from 'node:path';
+import {nodeManagedLinkFileSystem} from '../runtime/index.js';
 
 /** Predictable staging suffix a crash-recovery scan can glob for (Recovery owns detection, not this module). */
 export const STAGING_SUFFIX = '.wt-upgrade.tmp';
@@ -79,7 +86,7 @@ export const nodeUpgradeApplyFileSystem: UpgradeApplyFileSystem = Object.freeze(
         mkdirSync(dir, {recursive: true});
     },
     createSymlinkAt(target: string, linkPath: string): void {
-        symlinkSync(target, linkPath);
+        nodeManagedLinkFileSystem.createSymlink(target, linkPath);
     },
     renameAtomic(fromPath: string, toPath: string): void {
         renameSync(fromPath, toPath);

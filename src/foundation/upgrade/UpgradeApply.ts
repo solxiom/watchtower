@@ -11,18 +11,22 @@
  * failure reason to the registered public error/exit code, and `UpgradeRecovery`
  * can clean any leftover temp artifact on a later run.
  */
-import {dirname, join, relative, sep} from 'node:path';
+import {dirname, join} from 'node:path';
 import type {AssetClassificationEntry, UpgradePlan} from '../../contracts/upgrade.js';
 import type {InstallManifestV1} from '../../contracts/manifests.js';
 import type {KnowledgeManifestV1, RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
-import type {ApplyResult, StagedAssetRecord, UpgradeApplyFailure, UpgradeApplyReason} from '../../contracts/upgradeApply.js';
+import type {ApplyResult, StagedAssetRecord, UpgradeApplyFailure} from '../../contracts/upgradeApply.js';
 import {createWatchtowerError} from '../../contracts/errors.js';
 import {buildLaneFilePath} from '../paths/index.js';
-import {LaneTaskProfileInstaller, type RuntimeCatalog} from '../runtime/index.js';
+import {LaneTaskProfileInstaller, RuntimeCatalog} from '../runtime/index.js';
 import {acquireWriteLock} from '../storage/sqliteWriteLock.js';
 import {MigrationRegistry} from './MigrationRegistry.js';
 import {stageMigrationPlan} from './MigrationSteps.js';
 import {installStagingTempPath, nodeUpgradeApplyFileSystem, stagingTempPath, type UpgradeApplyFileSystem} from './upgradeApplyFileSystem.js';
+import {
+    alreadyLinked, assertChecksum, assertNoTamperedCollision, failureResult, nextManagedAssets, requireNonNull,
+    successResult, toFailure
+} from './upgradeApplyValidation.js';
 
 const LANE_SCHEMA_VERSION: 1 = 1;
 
@@ -39,15 +43,18 @@ export interface UpgradeApplyInput {
     readonly targetKnowledge: KnowledgeManifestV1;
     readonly targetRuntimeRoot: string;
     readonly taskRuntimeTargets: TaskRuntimeRelativeTargets;
-    readonly runtimeCatalog: RuntimeCatalog;
 }
 
-export interface UpgradeApplyOptions { readonly fileSystem?: UpgradeApplyFileSystem; }
+export interface UpgradeApplyOptions { readonly fileSystem?: UpgradeApplyFileSystem; readonly runtimeCatalog?: RuntimeCatalog; }
 
 export class UpgradeApply {
     private readonly fileSystem: UpgradeApplyFileSystem;
+    private readonly runtimeCatalog: RuntimeCatalog;
 
-    constructor(options: UpgradeApplyOptions = {}) { this.fileSystem = options.fileSystem ?? nodeUpgradeApplyFileSystem; }
+    constructor(options: UpgradeApplyOptions = {}) {
+        this.fileSystem = options.fileSystem ?? nodeUpgradeApplyFileSystem;
+        this.runtimeCatalog = options.runtimeCatalog ?? new RuntimeCatalog();
+    }
 
     async apply(input: UpgradeApplyInput): Promise<ApplyResult> {
         assertNoConflicts(input.plan);
@@ -68,8 +75,7 @@ export class UpgradeApply {
     private runMigration(plan: UpgradePlan): readonly string[] {
         const registry = new MigrationRegistry({acceptedSchemaVersions: [LANE_SCHEMA_VERSION], steps: []});
         const migrationPlan = registry.plan(plan.from.laneSchemaVersion, LANE_SCHEMA_VERSION);
-        const result = stageMigrationPlan(registry, migrationPlan, {});
-        return result.appliedStepIds;
+        return stageMigrationPlan(registry, migrationPlan, {}).appliedStepIds;
     }
 
     private stageEntries(
@@ -90,11 +96,17 @@ export class UpgradeApply {
     private stageOne(input: UpgradeApplyInput, entry: AssetClassificationEntry): StagedAssetRecord | null {
         const targetPath = requireNonNull(entry.targetTarget, entry.path, 'TARGET_MISSING', 'managed asset has no declared target');
         const declaredSha256 = requireNonNull(entry.targetSha256, entry.path, 'TARGET_MISSING', 'managed asset has no declared checksum');
-        this.assertChecksum(input, entry.path, targetPath, declaredSha256);
+        assertChecksum(
+            (path) => this.fileSystem.digestFile(path), entry.path, targetPath, declaredSha256, input.targetRuntimeRoot, input.targetRuntime
+        );
         const sourcePath = buildLaneFilePath(input.laneDir, entry.path);
         const observation = this.fileSystem.inspectLink(sourcePath);
         if (alreadyLinked(observation, targetPath)) return null;
-        this.assertNoTamperedCollision(entry, observation);
+        assertNoTamperedCollision(entry, observation);
+        return this.stageAndRename(sourcePath, targetPath, entry.path);
+    }
+
+    private stageAndRename(sourcePath: string, targetPath: string, path: string): StagedAssetRecord {
         const directory = dirname(sourcePath);
         const tempPath = stagingTempPath(sourcePath);
         this.fileSystem.ensureDirectory(directory);
@@ -108,30 +120,11 @@ export class UpgradeApply {
             throw error;
         }
         this.fileSystem.fsyncDirectory(directory);
-        return {path: entry.path, tempPath, targetPath, renamed: true};
-    }
-
-    private assertChecksum(input: UpgradeApplyInput, path: string, targetPath: string, declaredSha256: string): void {
-        const liveDigest = this.fileSystem.digestFile(targetPath);
-        if (liveDigest === null) throw stagingError('TARGET_MISSING', path, 'The declared managed-asset target is unreadable or missing.');
-        if (liveDigest !== declaredSha256) throw stagingError('CHECKSUM_MISMATCH', path, 'The live target digest disagrees with the declared checksum.');
-        const relativePath = relative(input.targetRuntimeRoot, targetPath).split(sep).join('/');
-        const asset = input.targetRuntime.assets.find((candidate) => candidate.path === relativePath);
-        if (asset === undefined) throw stagingError('TARGET_MISSING', path, 'The target is not a declared target-runtime-manifest asset.');
-        if (asset.sha256 !== declaredSha256 || asset.mode !== '0755') {
-            throw stagingError('CHECKSUM_MISMATCH', path, 'The target-runtime-manifest asset disagrees with the declared checksum or mode.');
-        }
-    }
-
-    private assertNoTamperedCollision(entry: AssetClassificationEntry, observation: {readonly kind: string; readonly target: string | null}): void {
-        if (observation.kind === 'missing') return;
-        if (observation.kind === 'symlink' && entry.currentTarget !== null && observation.target === entry.currentTarget) return;
-        throw stagingError('MANAGED_COLLISION', entry.path, 'The live managed link no longer matches the current install manifest declaration.');
+        return {path, tempPath, targetPath, renamed: true};
     }
 
     private writeInstallManifest(input: UpgradeApplyInput): void {
-        const installer = new LaneTaskProfileInstaller(input.runtimeCatalog);
-        const pin = installer.install({
+        const pin = new LaneTaskProfileInstaller(this.runtimeCatalog).install({
             runtimeVersion: input.targetRuntime.runtimeVersion,
             profile: input.currentInstall.taskRuntime.profile,
             cliVersion: input.currentInstall.cliVersion,
@@ -163,63 +156,4 @@ function assertNoConflicts(plan: UpgradePlan): void {
         operation: 'apply upgrade', target: plan.conflicts[0].path,
         remediation: 'Resolve the regular-file collision, then rerun the preview before applying an upgrade.'
     });
-}
-
-function nextManagedAssets(plan: UpgradePlan): Readonly<Record<string, {readonly target: string; readonly sha256: `sha256:${string}`}>> {
-    const result: Record<string, {readonly target: string; readonly sha256: `sha256:${string}`}> = {};
-    for (const entry of [...plan.preserved, ...plan.changed, ...plan.added]) {
-        result[entry.path] = {target: entry.targetTarget as string, sha256: entry.targetSha256 as `sha256:${string}`};
-    }
-    return result;
-}
-
-function alreadyLinked(observation: {readonly kind: string; readonly target: string | null}, targetPath: string): boolean {
-    return observation.kind === 'symlink' && observation.target === targetPath;
-}
-
-function requireNonNull<T>(value: T | null, path: string, reason: UpgradeApplyReason, message: string): T {
-    if (value === null) throw stagingError(reason, path, message);
-    return value;
-}
-
-function stagingError(reason: UpgradeApplyReason, path: string, message: string): Error & {readonly reason: UpgradeApplyReason} {
-    const error = new Error(message) as Error & {reason: UpgradeApplyReason};
-    error.reason = reason;
-    Object.assign(error, {path});
-    return error;
-}
-
-function toFailure(path: string, error: unknown): UpgradeApplyFailure {
-    if (error instanceof Error && 'reason' in error && typeof (error as {reason?: unknown}).reason === 'string') {
-        return {reason: (error as {reason: UpgradeApplyReason}).reason, path, message: error.message};
-    }
-    return {reason: 'IO_UNAVAILABLE', path, message: error instanceof Error ? error.message : 'unexpected failure'};
-}
-
-function successResult(
-    plan: UpgradePlan, migrated: readonly string[], staged: {readonly records: StagedAssetRecord[]}
-): ApplyResult {
-    return {
-        success: true, applied: true, from: plan.from, to: plan.to,
-        changed: staged.records.map((record) => record.path),
-        unchanged: plan.preserved.map((entry) => entry.path),
-        preserved: plan.preserved.map((entry) => entry.path),
-        migrated, conflicts: [], stagedCount: staged.records.length, partialStagingPaths: [], failure: null
-    };
-}
-
-function failureResult(
-    plan: UpgradePlan, migrated: readonly string[],
-    staged: {readonly records: StagedAssetRecord[]; readonly failure: UpgradeApplyFailure | null}
-): ApplyResult {
-    return {
-        success: false, applied: false, from: plan.from, to: plan.to,
-        changed: staged.records.map((record) => record.path),
-        unchanged: plan.preserved.map((entry) => entry.path),
-        preserved: plan.preserved.map((entry) => entry.path),
-        migrated, conflicts: [],
-        stagedCount: staged.records.length,
-        partialStagingPaths: staged.records.filter((record) => !record.renamed).map((record) => record.tempPath),
-        failure: staged.failure
-    };
 }
