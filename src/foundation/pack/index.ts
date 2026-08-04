@@ -33,6 +33,7 @@ export {
     PACK_INDEX_DATABASE_SCHEMA_VERSION,
     PACK_INDEX_META_TABLE,
     PACK_INDEX_SCHEMA,
-    readIndexManifest
+    readIndexManifest,
+    InitialPackIndexActivation
 } from './index/index.js';
-export type {PackIndexCompileDeps, PackIndexCompileRequest} from './index/index.js';
+export type {PackIndexCompileDeps, PackIndexCompileRequest, PackIndexActivationRequest} from './index/index.js';
