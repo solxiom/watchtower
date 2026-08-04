@@ -1,8 +1,8 @@
-import {createWatchtowerError} from '../contracts/errors.js';
-import type {JsonValue} from '../contracts/types.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import type {JsonValue} from '../../contracts/types.js';
 import type {
     MigrationSnapshot, MigrationSnapshotEntry, MigrationStageResult, MigrationStagingPlan, MigrationStepDefinition
-} from '../contracts/migration.js';
+} from '../../contracts/migration.js';
 import type {MigrationRegistry} from './MigrationRegistry.js';
 import {validateMigrationSnapshot, validateStagingPlan} from './migrationValidation.js';
 

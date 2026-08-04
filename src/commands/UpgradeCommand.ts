@@ -1,8 +1,8 @@
 import {BaseCommand} from '@nirvana/base/cli/basic';
 import type {Command} from '@nirvana/base/cli/contracts';
 import {createWatchtowerError} from '../contracts/errors.js';
-import {UpgradePlanner} from '../foundation/UpgradePlanner.js';
-import {UpgradePreviewSource} from '../foundation/UpgradePreviewSource.js';
+import {UpgradePlanner} from '../foundation/upgrade/index.js';
+import {UpgradePreviewSource} from '../foundation/upgrade/index.js';
 import {presentUpgradePlan} from '../foundation/upgradePlanPresenter.js';
 import {parseUpgradeCommandOptions} from './upgradeCommandOptions.js';
 

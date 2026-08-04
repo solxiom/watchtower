@@ -1,8 +1,8 @@
-import {createWatchtowerError} from '../contracts/errors.js';
-import type {MigrationRegistryOptions, MigrationStagingPlan, MigrationStepDefinition, SchemaVersion} from '../contracts/migration.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import type {MigrationRegistryOptions, MigrationStagingPlan, MigrationStepDefinition, SchemaVersion} from '../../contracts/migration.js';
 import {validateRegistryOptions, validateSchemaVersion, validateStepDefinition} from './migrationValidation.js';
 
-export type {MigrationRegistryOptions} from '../contracts/migration.js';
+export type {MigrationRegistryOptions} from '../../contracts/migration.js';
 
 const MAX_CHAIN_STEPS = 64;
 const CONSTRUCT_OP = 'construct migration registry';

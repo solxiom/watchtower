@@ -26,13 +26,13 @@ export type {
     ManagedLinkSourceObservation
 } from './managedAssets/index.js';
 export {InitPlanner, validateInitRequest} from './init/index.js';
-export {UpgradePlanner} from './UpgradePlanner.js';
-export type {UpgradePlannerOptions} from './UpgradePlanner.js';
-export {UpgradePreviewSource} from './UpgradePreviewSource.js';
-export type {UpgradePreviewSourceOptions, UpgradeSourceQuery} from './UpgradePreviewSource.js';
-export {MigrationRegistry} from './MigrationRegistry.js';
-export type {MigrationRegistryOptions} from './MigrationRegistry.js';
-export {stageMigrationPlan} from './MigrationSteps.js';
+export {UpgradePlanner} from './upgrade/index.js';
+export type {UpgradePlannerOptions} from './upgrade/index.js';
+export {UpgradePreviewSource} from './upgrade/index.js';
+export type {UpgradePreviewSourceOptions, UpgradeSourceQuery} from './upgrade/index.js';
+export {MigrationRegistry} from './upgrade/index.js';
+export type {MigrationRegistryOptions} from './upgrade/index.js';
+export {stageMigrationPlan} from './upgrade/index.js';
 export type {InitPlan, InitRequest, CoordinatorRoutingPolicy} from './init/index.js';
 export type {InitPreflightPort, ScopeReadResult} from './init/index.js';
 export {RuntimeKnowledgeManifestValidator} from './runtimeKnowledgeManifest/RuntimeKnowledgeManifestValidator.js';

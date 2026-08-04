@@ -1,13 +1,13 @@
 import {join} from 'node:path';
 import {lstatSync, readFileSync} from 'node:fs';
-import type {KnowledgeManifestV1, RuntimeManifestV1} from '../contracts/runtimeKnowledgeManifests.js';
-import {ManagedAssetsError} from '../contracts/manifests.js';
-import type {UpgradePlannerInput} from '../contracts/upgrade.js';
-import {createWatchtowerError} from '../contracts/errors.js';
-import {parseInstallManifest} from './managedAssets/installManifestReader.js';
-import {resolveLane, type LaneSelectionContext} from './discovery/index.js';
-import {RuntimeCatalog} from './runtimeCatalog/index.js';
-import {parseKnowledgeManifest, parseRuntimeManifest} from './runtimeKnowledgeManifest/manifestDocumentParser.js';
+import type {KnowledgeManifestV1, RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.js';
+import {ManagedAssetsError} from '../../contracts/manifests.js';
+import type {UpgradePlannerInput} from '../../contracts/upgrade.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import {parseInstallManifest} from '../managedAssets/installManifestReader.js';
+import {resolveLane, type LaneSelectionContext} from '../discovery/index.js';
+import {RuntimeCatalog} from '../runtimeCatalog/index.js';
+import {parseKnowledgeManifest, parseRuntimeManifest} from '../runtimeKnowledgeManifest/manifestDocumentParser.js';
 
 export interface UpgradeSourceQuery extends LaneSelectionContext { readonly workspace?: string; readonly to?: string; }
 export interface UpgradePreviewSourceOptions { readonly catalog?: RuntimeCatalog; }

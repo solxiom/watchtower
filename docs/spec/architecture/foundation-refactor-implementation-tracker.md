@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-3 in progress (FR-18 … FR-19 ✅)**
+Status: **Active — FM-3 in progress (FR-18 … FR-20 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -77,7 +77,7 @@ Last updated: 2026-08-04
 
 | ID | Domain | State | Acceptance proof |
 |----|--------|-------|------------------|
-| FR-19 | `pack/` | ❌ Pending | 11 modules; split if needed; arch gate |
+| FR-19 | `pack/` | ✅ Accepted | 10 modules + barrel; `packArchitecture.spec.ts`; pack specs green; `nvb test` green |
 | FR-20 | `upgrade/` | ❌ Pending | 6 modules; arch gate |
 | FR-21 | `observation/` | ❌ Pending | 5 modules; `process/` merged |
 | FR-22 | `lifecycle/` | ❌ Pending | 2 modules; barrel |
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 19 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 20 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -125,7 +125,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `status/` | L3 | FR-17 | ✅ | ✅ | Accepted |
 | `init/` | L4 | FR-18 | ✅ | ✅ | Accepted |
 | `lifecycle/` | L4 | FR-22 | ❌ | ❌ | Pending |
-| `pack/` | L4 | FR-19 | ❌ | ❌ | Pending |
+| `pack/` | L4 | FR-19 | ✅ | ✅ | Accepted |
 | `upgrade/` | L4 | FR-20 | ❌ | ❌ | Pending |
 | `runtimeDistribution/` | L4 | FR-23 | ❌ | ❌ | Pending |
 | `laneStore/` | L5 | FR-03 | ✅ | ✅ | Accepted |
@@ -159,7 +159,7 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `discoveryArchitecture.spec.ts` | FR-14 | ✅ Accepted |
 | `statusArchitecture.spec.ts` | FR-17 | ✅ Accepted |
 | `initArchitecture.spec.ts` | FR-18 | ✅ Accepted |
-| `packArchitecture.spec.ts` | FR-19 | ❌ Not created |
+| `packArchitecture.spec.ts` | FR-19 | ✅ Accepted |
 | `upgradeArchitecture.spec.ts` | FR-20 | ❌ Not created |
 | `taskRuntimeArchitecture.spec.ts` | — | ✅ Exists — no path changes required |
 | `managedAssetsArchitecture.spec.ts` | FR-05 | ✅ Exists — update paths in FR-05 |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 28 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 18 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

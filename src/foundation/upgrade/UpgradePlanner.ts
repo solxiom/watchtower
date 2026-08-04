@@ -1,10 +1,10 @@
 import {join, relative} from 'node:path';
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 import type {
     AssetClassificationEntry, CompatibilityMatrix, UpgradeAssetDeclaration, UpgradePlan, UpgradePlannerInput
-} from '../contracts/upgrade.js';
-import {safePathTarget} from './paths/index.js';
-import {isManagedBinPath} from './managedAssets/managedLinkPlanner.js';
+} from '../../contracts/upgrade.js';
+import {safePathTarget} from '../paths/index.js';
+import {isManagedBinPath} from '../managedAssets/managedLinkPlanner.js';
 import {nodeUpgradeFileSystem, type UpgradeFileSystem, type UpgradePathKind} from './upgradeFileSystem.js';
 
 export interface UpgradePlannerOptions { readonly fileSystem?: UpgradeFileSystem; }

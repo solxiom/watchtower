@@ -1,9 +1,9 @@
-import {createWatchtowerError} from '../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
 import type {
     MigrationRegistryOptions, MigrationSnapshot, MigrationSnapshotEntry, MigrationStagingPlan, MigrationStepDefinition,
     PreservationPolicy, SchemaVersion
-} from '../contracts/migration.js';
-import type {JsonValue} from '../contracts/types.js';
+} from '../../contracts/migration.js';
+import type {JsonValue} from '../../contracts/types.js';
 
 const MAX_CHAIN_STEPS = 64;
 const SNAPSHOT_ENTRY_KEYS = Object.freeze(['kind', 'value']);

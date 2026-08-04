@@ -3,7 +3,7 @@ import type {MigrationSnapshot, MigrationStagingPlan, MigrationStepDefinition} f
 import {
     validateMigrationSnapshot, validatePreservationPolicy, validateRegistryOptions, validateSchemaVersion, validateStagingPlan,
     validateStepDefinition
-} from '../../src/foundation/migrationValidation.js';
+} from '../../src/foundation/upgrade/index.js';
 
 function validStep(id = 'a-to-b', fromSchemaVersion = 1, toSchemaVersion = 2): MigrationStepDefinition {
     return {id, fromSchemaVersion, toSchemaVersion, preservation: {protectedEntries: ['x']}, rebuild: (input: MigrationSnapshot) => input};

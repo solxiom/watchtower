@@ -13,8 +13,8 @@ const SQL_DRIVER_IMPORT = /@nirvana\/commons\/foundation\/db|better-sqlite3|from
 const BASELINE_COMMAND_DEEP_IMPORTS: Readonly<Record<string, readonly string[]>> = {
     'commands/InitCommand.ts': ['../foundation/init/index.js', '../foundation/initPlanPresenter.js'],
     'commands/UpgradeCommand.ts': [
-        '../foundation/UpgradePlanner.js',
-        '../foundation/UpgradePreviewSource.js',
+        '../foundation/upgrade/index.js',
+        '../foundation/upgrade/index.js',
         '../foundation/upgradePlanPresenter.js'
     ],
     'commands/initCommandOptions.ts': ['../foundation/init/index.js'],

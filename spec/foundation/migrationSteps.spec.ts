@@ -1,7 +1,7 @@
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 import type {MigrationSnapshot, MigrationStagingPlan, MigrationStepDefinition} from '../../src/contracts/migration.js';
-import {MigrationRegistry} from '../../src/foundation/MigrationRegistry.js';
-import {stageMigrationPlan} from '../../src/foundation/MigrationSteps.js';
+import {MigrationRegistry} from '../../src/foundation/upgrade/index.js';
+import {stageMigrationPlan} from '../../src/foundation/upgrade/index.js';
 
 /**
  * These fixture steps and fixture registries are test-local only: they exercise the harness mechanics

@@ -1,6 +1,6 @@
 import type {WatchtowerError} from '../../src/contracts/errors.js';
 import type {MigrationSnapshot, MigrationStepDefinition} from '../../src/contracts/migration.js';
-import {MigrationRegistry} from '../../src/foundation/MigrationRegistry.js';
+import {MigrationRegistry} from '../../src/foundation/upgrade/index.js';
 
 describe('MigrationRegistry (UK-02 closed declared transitions)', () => {
     it('plans a no-op when the requested version equals the current version, with zero registered steps', () => {
