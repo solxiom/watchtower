@@ -34,12 +34,16 @@ product contract: every lane initialized by Watchtower requires
 Normative behavior remains in `../v1.md`, `../v1-contracts.md`,
 `../schemas/v1.schema.json`, `../architecture.md`,
 `../nirvana-integration-architecture.md`,
+`../architecture/foundation-module-architecture.md`,
 `../coordinator-automation.md`, `../operator-session.md`, and
 `../cli-session.md`, `../tui-operational-experience.md`, together with
 `../../development/engineering-and-review-standard.md`. These packs translate
 those specifications into
 actionable implementation contracts; they do not override or reinterpret
 the product specification.
+
+Implementation architecture specs (foundation layout, barrels, remediation)
+live under [../architecture/](../architecture/).
 
 ## Lane Owner Maps
 

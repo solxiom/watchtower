@@ -9,6 +9,7 @@ Normative product docs for the `wt` CLI.
 | [v1.md](v1.md) | Proposed | Normative v1 product and CLI contract |
 | [architecture.md](architecture.md) | Proposed | Product boundary, domain model, components, safety, and evolution |
 | [nirvana-integration-architecture.md](nirvana-integration-architecture.md) | Proposed | Normative Nirvana facade, packaged NVB task-runtime, lane-profile, and shell-leaf architecture |
+| [architecture/](architecture/) | Accepted | Implementation architecture specs (foundation module layout and remediation) |
 | [roadmap.md](roadmap.md) | Planning | Milestones, implementation packs, release gates, and post-v1 horizons |
 | [v1-implementation-map.md](v1-implementation-map.md) | Proposed | Master 59-batch construction, dependency, ownership, and proof map |
 | [pack-design-draft.md](pack-design-draft.md) | Draft | Canonical accepted-spec to implementation-pack process |

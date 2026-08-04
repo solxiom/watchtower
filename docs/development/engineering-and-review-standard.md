@@ -209,6 +209,10 @@ remediation plan.
 - Circular dependencies are rejected. Break cycles by moving contracts inward,
   not by lazy imports or runtime indirection.
 
+Foundation module layout, domain barrels, and the phased remediation plan live
+in [architecture/foundation-module-architecture.md](../spec/architecture/foundation-module-architecture.md)
+and [architecture/foundation-layout-remediation.md](../spec/architecture/foundation-layout-remediation.md).
+
 ## 7. Contracts, errors, and state
 
 - Parse external data as `unknown`, validate it, and normalize it into explicit
