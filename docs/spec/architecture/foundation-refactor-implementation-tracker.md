@@ -20,7 +20,7 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`, `REF-03`) |
 | Work units | **39** (`FR-00` … `FR-38`) |
 | Milestones | **6** (`FM-0` … `FM-5`) |
-| Score | **29 / 39** work units accepted |
+| Score | **31 / 39** work units accepted |
 | Baseline root files | 0 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 | Flat prefix clusters | 11 (target: 0, REF-03) |
@@ -106,8 +106,8 @@ Last updated: 2026-08-04
 | FR-32 | `runtime/` capability tree | ✅ Accepted | `runtimeCapabilityArchitecture.spec.ts`; `runtimeDistribution/` removed |
 | FR-33 | `task/` capability tree | ✅ Accepted | `taskCapabilityArchitecture.spec.ts` |
 | FR-34 | `lane/` capability tree | ✅ Accepted | `laneCapabilityArchitecture.spec.ts` |
-| FR-35 | `pack/index/` nest | ❌ Pending | `pack/index/` under `pack/` |
-| FR-36 | `index/` capability tree | ❌ Pending | `indexCapabilityArchitecture.spec.ts` |
+| FR-35 | `pack/index/` nest | ✅ Accepted | `packIndexArchitecture.spec.ts` |
+| FR-36 | `index/` capability tree | ✅ Accepted | `indexCapabilityArchitecture.spec.ts` |
 | FR-37 | Import retarget sweep | ❌ Pending | `src/`, `spec/`, `runtime-nvb/` paths |
 | FR-38 | REF-03 integration | ❌ Pending | `foundationCapabilityTreeArchitecture.spec.ts`; flat prefix count = 0 |
 
@@ -119,7 +119,7 @@ Last updated: 2026-08-04
 |-------|----------:|---------:|-------|
 | REF-01 | FR-00 … FR-24 | 25 / 25 | ✅ Accepted |
 | REF-02 | FR-25 … FR-31 | 1 / 7 | ⏳ In progress |
-| REF-03 | FR-32 … FR-38 | 3 / 7 | ⏳ In progress |
+| REF-03 | FR-32 … FR-38 | 5 / 7 | ⏳ In progress |
 
 ---
 
@@ -151,31 +151,31 @@ and [foundation-capability-tree-amendment.md §3](foundation-capability-tree-ame
 
 | Capability / sub | Layer | FR | Exists | Barrel | State |
 |------------------|------:|-----|:------:|:------:|-------|
-| `runtime/` (parent) | T2 | FR-32 | ❌ | ❌ | Interim flat siblings |
-| `runtime/catalog/` | L5 | FR-32 | ⏳ `runtimeCatalog/` | ✅ | Move pending |
-| `runtime/distribution/` | L5 | FR-32 | ⏳ `managedAssets/` | ✅ | Move pending |
-| `runtime/knowledge/` | L5 | FR-32 | ⏳ `runtimeKnowledgeManifest/` | ✅ | Move pending |
-| `runtime/leaf/` | L6 | FR-32 | ⏳ `runtime/` | ✅ | Move pending |
-| `task/` (parent) | T2 | FR-33 | ❌ | ❌ | Interim flat siblings |
-| `task/runtime/` | L5 | FR-33 | ⏳ `taskRuntime/` | ✅ | Move pending |
-| `task/catalog/` | L5 | FR-33 | ⏳ `taskCatalogComposition/` | ✅ | Move pending |
-| `lane/` (parent) | T2 | FR-34 | ❌ | ❌ | Interim flat siblings |
-| `lane/store/` | L5 | FR-34 | ⏳ `laneStore/` | ✅ | Move pending |
-| `lane/writer/` | L5 | FR-34 | ⏳ `transactionalWriter/` | ✅ | Move pending |
-| `lane/coordinator/` | L5 | FR-34 | ⏳ `coordinatorBaseline/` | ✅ | Move pending |
-| `pack/index/` | L5 | FR-35 | ⏳ `packIndex/` | ✅ | Nest pending |
-| `index/` (parent) | T2 | FR-36 | ❌ | ❌ | Interim flat siblings |
-| `index/store/` | L5 | FR-36 | ⏳ `indexStore/` | ✅ | Move pending |
-| `index/query/` | L5 | FR-36 | ⏳ `indexQuery/` | ✅ | Move pending |
+| `runtime/` (parent) | T2 | FR-32 | ✅ | ✅ | Accepted |
+| `runtime/catalog/` | L5 | FR-32 | ✅ | ✅ | Accepted |
+| `runtime/distribution/` | L5 | FR-32 | ✅ | ✅ | Accepted |
+| `runtime/knowledge/` | L5 | FR-32 | ✅ | ✅ | Accepted |
+| `runtime/leaf/` | L6 | FR-32 | ✅ | ✅ | Accepted |
+| `task/` (parent) | T2 | FR-33 | ✅ | ✅ | Accepted |
+| `task/runtime/` | L5 | FR-33 | ✅ | ✅ | Accepted |
+| `task/catalog/` | L5 | FR-33 | ✅ | ✅ | Accepted |
+| `lane/` (parent) | T2 | FR-34 | ✅ | ✅ | Accepted |
+| `lane/store/` | L5 | FR-34 | ✅ | ✅ | Accepted |
+| `lane/writer/` | L5 | FR-34 | ✅ | ✅ | Accepted |
+| `lane/coordinator/` | L5 | FR-34 | ✅ | ✅ | Accepted |
+| `pack/index/` | L5 | FR-35 | ✅ | ✅ | Accepted |
+| `index/` (parent) | T2 | FR-36 | ✅ | ✅ | Accepted |
+| `index/store/` | L5 | FR-36 | ✅ | ✅ | Accepted |
+| `index/query/` | L5 | FR-36 | ✅ | ✅ | Accepted |
 | `storage/` | L5 | — | ✅ | ✅ | Unchanged top-level |
 | `hostAdapters/` | L6 | — | ✅ | ✅ | Unchanged top-level |
 | `distribution/` | L6 | — | ✅ | ✅ | Unchanged top-level (not `runtime/distribution/`) |
 
-### Interim debt (remove in REF-03)
+### Interim debt (cleared)
 
 | Flat path | Layer | FR | State |
 |-----------|------:|-----|-------|
-| `runtimeDistribution/` | L4 shim | FR-23 | ⚠️ Accepted interim — remove FR-32 |
+| `runtimeDistribution/` | L4 shim | FR-23 | ✅ Removed FR-32 |
 
 ---
 
@@ -216,7 +216,7 @@ Refresh after each accepted work unit.
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |
 | Command deep-imports | ~6 | 0 | 2026-08-04 |
-| Flat prefix clusters at foundation root | 11 | 0 | 2026-08-04 |
+| Flat prefix clusters | 0 | 0 | 2026-08-04 |
 
 ---
 
