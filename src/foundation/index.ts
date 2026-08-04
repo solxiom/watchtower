@@ -1,6 +1,5 @@
-export {parseEnvConfig, redactSensitiveKeys} from './envParser.js';
-export {detectContradictions, normalizeLaneStatus} from './laneLifecycle.js';
-export {parseLaneState} from './stateParser.js';
+export {parseEnvConfig, redactSensitiveKeys, detectContradictions, normalizeLaneStatus, parseLaneState, latest, parseJsonlStream} from './parsing/index.js';
+export type {JsonlParseResult, JsonlWarning} from './parsing/index.js';
 export * from './distribution/index.js';
 export {
     authorizePath, buildLaneFilePath, buildLanePath, canonicalizePath, isPathSafe,
@@ -41,8 +40,6 @@ export * from './schemaComposition/index.js';
 export * from './taskCatalogComposition/index.js';
 export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
 export {renderError, renderResult} from './ResultRenderer.js';
-export {latest, parseJsonlStream} from './JsonlParser.js';
-export type {JsonlParseResult, JsonlWarning} from './JsonlParser.js';
 export {latestWorkerEvents, observeRuntimeSessions, parseTmuxSessionNames} from './runtimeObservations.js';
 export type {LatestWorkerEvents, RuntimeSessionNames, RuntimeSessionObservation} from './runtimeObservations.js';
 export {NirvanaTmuxObserver} from './NirvanaTmuxObserver.js';

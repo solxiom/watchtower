@@ -2,7 +2,7 @@ import {cmd} from '@nirvana/base/terminal';
 import {chmodSync, lstatSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import type {WorkerEventRecord} from '../../src/contracts/index.js';
-import {parseJsonlStream} from '../../src/foundation/JsonlParser.js';
+import {parseJsonlStream} from '../../src/foundation/parsing/index.js';
 import {StatusPackAcceptanceAuthority} from '../../src/foundation/StatusPackAcceptanceAuthority.js';
 import {StatusProjection} from '../../src/foundation/StatusProjection.js';
 import {compareRfc3339DateTimes, isRfc3339DateTime} from '../../src/foundation/rfc3339DateTime.js';

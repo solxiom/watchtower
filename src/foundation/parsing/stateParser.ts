@@ -1,4 +1,4 @@
-import type {LaneStateResult, ParseDiagnostic} from '../contracts/index.js';
+import type {LaneStateResult, ParseDiagnostic} from '../../contracts/index.js';
 import {detectContradictions, normalizeLaneStatus} from './laneLifecycle.js';
 import {parseStateRecords} from './stateRecordParser.js';
 

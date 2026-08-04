@@ -1,4 +1,4 @@
-import {classifyScalarValue, isBlankLine, isCommentLine, isSafeScalarValue, parseKeyValue, splitLines} from '../../src/foundation/scalarLineParser.js';
+import {classifyScalarValue, isBlankLine, isCommentLine, isSafeScalarValue, parseKeyValue, splitLines} from '../../src/foundation/parsing/index.js';
 
 describe('scalar line parser', function () {
     it('preserves physical lines and classifies the accepted scalar forms', function () {

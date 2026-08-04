@@ -1,4 +1,4 @@
-import type {ParseDiagnostic} from '../contracts/index.js';
+import type {ParseDiagnostic} from '../../contracts/index.js';
 import {isBlankLine, isCommentLine, isSafeScalarValue, parseKeyValue, splitLines} from './scalarLineParser.js';
 
 const knownKeys = new Set(['lane_status', 'active_batch', 'watcher_status']);

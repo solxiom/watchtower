@@ -1,4 +1,4 @@
-import {latest, parseJsonlStream} from '../../src/foundation/JsonlParser.js';
+import {latest, parseJsonlStream} from '../../src/foundation/parsing/index.js';
 import type {WorkerEventRecord} from '../../src/contracts/events.js';
 
 function event(type: string, role: 'implementer' | 'reviewer', sequence = 0): WorkerEventRecord {

@@ -1,4 +1,4 @@
-import type {EnvConfigResult, ParseDiagnostic, ParserDiagnosticCode} from '../contracts/index.js';
+import type {EnvConfigResult, ParseDiagnostic, ParserDiagnosticCode} from '../../contracts/index.js';
 import {isBlankLine, isCommentLine, isSafeScalarValue, parseKeyValue, splitLines} from './scalarLineParser.js';
 
 const knownKeys = new Set(['LANE_ID', 'LANE_SLUG', 'INITIATIVE_ID', 'HOME_REPOSITORY_ID', 'WORKSPACE', 'TMUX_PREFIX', 'IMPL_PACK_REL']);

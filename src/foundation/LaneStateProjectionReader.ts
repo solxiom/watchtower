@@ -1,5 +1,5 @@
 import type {ReadModelLaneLifecycle} from '../contracts/index.js';
-import {parseLaneState} from './stateParser.js';
+import {parseLaneState} from './parsing/index.js';
 import type {LaneReadFileStore} from './LaneReadFileStore.js';
 import {ContainedLaneReadFileStore} from './LaneReadFileStore.js';
 

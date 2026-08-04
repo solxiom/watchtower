@@ -1,4 +1,4 @@
-import type {ReadModelLaneLifecycle} from '../contracts/index.js';
+import type {ReadModelLaneLifecycle} from '../../contracts/index.js';
 
 export function normalizeLaneStatus(rawState: Record<string, string>): ReadModelLaneLifecycle {
     const status = rawState.lane_status;

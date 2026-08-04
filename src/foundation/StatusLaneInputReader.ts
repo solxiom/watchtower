@@ -1,6 +1,6 @@
 import type {RepositoryBinding, StatusWarningCode, WatchtowerError, WorkerEventRecord} from '../contracts/index.js';
 import {buildLaneFilePath} from './paths/index.js';
-import {parseJsonlStream} from './JsonlParser.js';
+import {parseJsonlStream} from './parsing/index.js';
 import {LaneConfigProjectionReader} from './LaneConfigProjectionReader.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {ContainedLaneReadFileStore, type LaneReadFileStore} from './LaneReadFileStore.js';

@@ -1,5 +1,5 @@
 import {join} from 'node:path';
-import {parseEnvConfig} from '../../src/foundation/envParser.js';
+import {parseEnvConfig} from '../../src/foundation/parsing/index.js';
 import {
     buildLaneLayout,
     generateInstallManifest,
