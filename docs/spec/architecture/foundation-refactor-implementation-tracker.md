@@ -1,6 +1,6 @@
 # Foundation Refactor — Implementation Tracker
 
-Status: **Active — FM-2 in progress (FR-12 … FR-13 ✅)**
+Status: **Active — FM-2 in progress (FR-14 ✅)**
 
 Construction plan:
 [foundation-refactor-implementation-map.md](foundation-refactor-implementation-map.md)
@@ -19,8 +19,8 @@ Last updated: 2026-08-04
 | Remediation | Foundation layout refactor (`REF-01`, `REF-02`) |
 | Work units | **32** (`FR-00` … `FR-31`) |
 | Milestones | **5** (`FM-0` … `FM-4`) |
-| Score | **14 / 32** work units accepted |
-| Baseline root files | 74 (target: 0) |
+| Score | **15 / 32** work units accepted |
+| Baseline root files | 66 (target: 0) |
 | Shadow structures | 0 (target: 0) |
 
 ---
@@ -31,7 +31,7 @@ Last updated: 2026-08-04
 |-----------|------|-------|-------|----------------|
 | FM-0 | Policy and baseline gates | REF-01 | ✅ Accepted | FR-00 … FR-02 ✅; baseline arch gates green |
 | FM-1 | Capsule completion | REF-01 | ✅ Accepted | FR-03 … FR-11 ✅; zero shadow structures; capsule barrel re-exports |
-| FM-2 | L1–L3 domain extraction | REF-01 | ⏳ In progress | FR-12 ✅; FR-13 next |
+| FM-2 | L1–L3 domain extraction | REF-01 | ⏳ In progress | FR-12 … FR-14 ✅ |
 | FM-3 | L4 domain extraction | REF-01 | ❌ Pending | Root only `index.ts` |
 | FM-4 | Barrel hardening | REF-02 | ❌ Pending | Full import + dependency gates |
 
@@ -66,8 +66,8 @@ Last updated: 2026-08-04
 | ID | Domain | State | Acceptance proof |
 |----|--------|-------|------------------|
 | FR-12 | `paths/` | ✅ Accepted | 4 modules + barrel; `pathsArchitecture.spec.ts`; `nvb test` green |
-| FR-13 | `parsing/` | ❌ Pending | 6 modules; `parsing/index.ts`; arch gate |
-| FR-14 | `discovery/` | ❌ Pending | 8 modules; barrel; arch gate |
+| FR-13 | `parsing/` | ✅ Accepted | 6 modules + barrel; `parsingArchitecture.spec.ts`; `nvb test` green |
+| FR-14 | `discovery/` | ✅ Accepted | 8 modules + barrel; `discoveryArchitecture.spec.ts`; `nvb test` green |
 | FR-15 | `bindings/` | ❌ Pending | 2 modules; barrel |
 | FR-16 | `read/` | ❌ Pending | 7 modules; `read/index.ts`; list/config specs |
 | FR-17 | `status/` | ❌ Pending | 22 modules; `status/index.ts`; status arch gate |
@@ -102,7 +102,7 @@ Last updated: 2026-08-04
 
 | Batch | Work units | Accepted | State |
 |-------|----------:|---------:|-------|
-| REF-01 | FR-00 … FR-24 | 13 / 25 | ⏳ In progress |
+| REF-01 | FR-00 … FR-24 | 15 / 25 | ⏳ In progress |
 | REF-02 | FR-25 … FR-31 | 0 / 7 | ❌ Blocked on REF-01 |
 
 ---
@@ -116,9 +116,9 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | Domain | Layer | FR | Directory exists | Barrel | State |
 |--------|------:|-----|:----------------:|:------:|-------|
 | `paths/` | L1 | FR-12 | ✅ | ✅ | Accepted |
-| `parsing/` | L1 | FR-13 | ❌ | ❌ | Pending |
+| `parsing/` | L1 | FR-13 | ✅ | ✅ | Accepted |
 | `presentation/` | L1 | FR-25 | ❌ | ❌ | Pending |
-| `discovery/` | L2 | FR-14 | ❌ | ❌ | Pending |
+| `discovery/` | L2 | FR-14 | ✅ | ✅ | Accepted |
 | `bindings/` | L2 | FR-15 | ❌ | ❌ | Pending |
 | `observation/` | L2 | FR-21 | ❌ | ❌ | Pending |
 | `read/` | L3 | FR-16 | ❌ | ❌ | Pending |
@@ -155,8 +155,8 @@ Mark ✅ when directory exists, barrel lands, and owning FR work unit accepts.
 | `foundationRootBarrelArchitecture.spec.ts` | FR-02, FR-27 | ⏳ Baseline gate (FR-02 ✅); denylist removal at FR-27 |
 | `commandImportArchitecture.spec.ts` | FR-28 | ❌ Not created |
 | `pathsArchitecture.spec.ts` | FR-12 | ✅ Accepted |
-| `parsingArchitecture.spec.ts` | FR-13 | ❌ Not created |
-| `discoveryArchitecture.spec.ts` | FR-14 | ❌ Not created |
+| `parsingArchitecture.spec.ts` | FR-13 | ✅ Accepted |
+| `discoveryArchitecture.spec.ts` | FR-14 | ✅ Accepted |
 | `statusArchitecture.spec.ts` | FR-17 | ❌ Not created |
 | `initArchitecture.spec.ts` | FR-18 | ❌ Not created |
 | `packArchitecture.spec.ts` | FR-19 | ❌ Not created |
@@ -174,7 +174,7 @@ Refresh after each accepted work unit.
 
 | Metric | Value | Target | Last verified |
 |--------|------:|-------:|---------------|
-| Root `.ts` files (excl. `index.ts`) | 80 | 0 | 2026-08-04 |
+| Root `.ts` files (excl. `index.ts`) | 66 | 0 | 2026-08-04 |
 | Shadow structures | 0 | 0 | 2026-08-04 |
 | Root barrel lines | ~126 | ≤50 | 2026-08-04 |
 | Root `export *` count | 5 | 0 | 2026-08-04 |

@@ -5,8 +5,8 @@ import type {
 import {buildLaneFilePath} from './paths/index.js';
 import {LaneConfigProjectionReader} from './LaneConfigProjectionReader.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
-import {selectLane} from './LaneSelector.js';
-import {RelevantLaneDiscovery} from './RelevantLaneDiscovery.js';
+import {selectLane} from './discovery/index.js';
+import {RelevantLaneDiscovery} from './discovery/index.js';
 import {readRepositoryBindings} from './repositoryBindings.js';
 
 export interface ResolvedConfigQuery {

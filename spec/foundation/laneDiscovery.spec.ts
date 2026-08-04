@@ -7,7 +7,7 @@ import {
     canonicalizePath, discoverHomeLanes, readLaneManifest, selectLane
 } from '../../src/foundation/index.js';
 import type {LaneDiscoveryFileSystem} from '../../src/foundation/index.js';
-import {NodeLaneDiscoveryFileSystem} from '../../src/foundation/LaneDiscoveryFileSystem.js';
+import {NodeLaneDiscoveryFileSystem} from '../../src/foundation/discovery/index.js';
 
 const UUIDS = [
     '10000000-0000-4000-8000-000000000001',

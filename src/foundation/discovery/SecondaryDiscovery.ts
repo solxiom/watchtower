@@ -1,5 +1,5 @@
-import type {MembershipIndexResult} from '../contracts/index.js';
-import {canonicalizePath} from './paths/index.js';
+import type {MembershipIndexResult} from '../../contracts/index.js';
+import {canonicalizePath} from '../paths/index.js';
 import {readMembershipIndex, type MembershipIndexFileSystem} from './membershipIndex.js';
 
 /** Finds only validated advisory memberships for the current secondary worktree. */

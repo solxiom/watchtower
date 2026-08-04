@@ -2,14 +2,14 @@ import {createHash} from 'node:crypto';
 import type {
     LaneListItem, LaneListPage, LaneListWarning, RepositoryBinding
 } from '../contracts/index.js';
-import {filterRelevantLanes, selectLane} from './LaneSelector.js';
+import {filterRelevantLanes, selectLane} from './discovery/index.js';
 import {buildLaneFilePath} from './paths/index.js';
 import {LaneInstallIdentityReader} from './LaneInstallIdentityReader.js';
 import {
     digestLaneListQuery, paginateLaneList, validateLaneListPageInput
 } from './LaneListCursor.js';
 import {LaneStateProjectionReader} from './LaneStateProjectionReader.js';
-import {RelevantLaneDiscovery} from './RelevantLaneDiscovery.js';
+import {RelevantLaneDiscovery} from './discovery/index.js';
 import {readRepositoryBindings} from './repositoryBindings.js';
 import type {ActiveLaneClaims, WritableConflict} from './writableConflicts.js';
 import {inspectWritableConflicts} from './writableConflicts.js';

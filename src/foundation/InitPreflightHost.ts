@@ -7,7 +7,7 @@ import type {StatusWarningCode} from '../contracts/statusModels.js';
 import {RuntimeCatalog} from './runtimeCatalog/index.js';
 import {RuntimeCatalogError} from '../contracts/runtimeCatalog.js';
 import {buildLanePath, canonicalizePath, safePathTarget} from './paths/index.js';
-import {discoverHomeLanes} from './homeLaneDiscovery.js';
+import {discoverHomeLanes} from './discovery/index.js';
 import {StatusLaneInputReader} from './StatusLaneInputReader.js';
 import {inspectWritableConflicts} from './writableConflicts.js';
 import {resolveRepositoryRoot, resolveWorkspace} from './paths/index.js';

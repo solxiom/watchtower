@@ -1,4 +1,4 @@
-import type {LaneManifestV1} from '../contracts/index.js';
+import type {LaneManifestV1} from '../../contracts/index.js';
 import {discoverHomeLanes as discover, type DiscoveredLane} from './laneDiscovery.js';
 import {readLaneManifest as readManifest} from './laneManifestReader.js';
 import {

@@ -6,9 +6,9 @@ import type {RepositoryBinding} from '../contracts/types.js';
 import {createWatchtowerError} from '../contracts/errors.js';
 import {canonicalizePath, safePathTarget} from './paths/index.js';
 import {resolveWatchtowerDataHome} from './paths/index.js';
-import {readLaneManifest} from './laneManifestReader.js';
-import {nodeLaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
-import {readMembershipIndex} from './membershipIndex.js';
+import {readLaneManifest} from './discovery/index.js';
+import {nodeLaneDiscoveryFileSystem} from './discovery/index.js';
+import {readMembershipIndex} from './discovery/index.js';
 import {acquireInitLockLease, type InitLockLease, type InitLockOptions} from './initLocks.js';
 import {readRepositoryBindings} from './repositoryBindings.js';
 

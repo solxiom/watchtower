@@ -5,7 +5,7 @@ import {ManagedAssetsError} from '../contracts/manifests.js';
 import type {UpgradePlannerInput} from '../contracts/upgrade.js';
 import {createWatchtowerError} from '../contracts/errors.js';
 import {parseInstallManifest} from './managedAssets/installManifestReader.js';
-import {resolveLane, type LaneSelectionContext} from './LaneSelector.js';
+import {resolveLane, type LaneSelectionContext} from './discovery/index.js';
 import {RuntimeCatalog} from './runtimeCatalog/index.js';
 import {parseKnowledgeManifest, parseRuntimeManifest} from './runtimeKnowledgeManifest/manifestDocumentParser.js';
 

@@ -1,9 +1,9 @@
 import {basename, join} from 'node:path';
 import type {
     ImplementationPackRef, LaneManifestV1, LaneRelationSet, RepositoryRef, ResourceClaim
-} from '../contracts/index.js';
-import {createWatchtowerError} from '../contracts/errors.js';
-import {safePathTarget} from './paths/index.js';
+} from '../../contracts/index.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import {safePathTarget} from '../paths/index.js';
 import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 
 const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/iu;

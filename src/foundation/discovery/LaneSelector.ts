@@ -1,7 +1,7 @@
 import {isAbsolute, relative, sep} from 'node:path';
-import type {WatchtowerError} from '../contracts/errors.js';
-import {createWatchtowerError} from '../contracts/errors.js';
-import {canonicalizePath} from './paths/index.js';
+import type {WatchtowerError} from '../../contracts/errors.js';
+import {createWatchtowerError} from '../../contracts/errors.js';
+import {canonicalizePath} from '../paths/index.js';
 import type {DiscoveredLane} from './laneDiscovery.js';
 import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 import {discoverHomeLanes} from './homeLaneDiscovery.js';

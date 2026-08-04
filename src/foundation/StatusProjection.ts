@@ -1,7 +1,7 @@
 import type {LaneStatusV1, StatusWarningCode} from '../contracts/index.js';
 import {LaneStateProjectionReader} from './LaneStateProjectionReader.js';
-import {RelevantLaneDiscovery} from './RelevantLaneDiscovery.js';
-import {selectLane} from './LaneSelector.js';
+import {RelevantLaneDiscovery} from './discovery/index.js';
+import {selectLane} from './discovery/index.js';
 import {StatusConflictInspector, type StatusConflictInspectorOptions} from './StatusConflictInspector.js';
 import {StatusEventProjection} from './StatusEventProjection.js';
 import {StatusLaneInputReader} from './StatusLaneInputReader.js';

@@ -1,5 +1,5 @@
-import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
-import {nodeLaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
+import type {LaneDiscoveryFileSystem} from './discovery/index.js';
+import {nodeLaneDiscoveryFileSystem} from './discovery/index.js';
 import {buildLaneFilePath, safePathTarget} from './paths/index.js';
 import {createWatchtowerError} from '../contracts/index.js';
 

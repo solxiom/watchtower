@@ -46,16 +46,14 @@ export {NirvanaTmuxObserver} from './NirvanaTmuxObserver.js';
 export type {NirvanaTmuxObserverOptions, TmuxCommandPort, TmuxCommandRequest} from './NirvanaTmuxObserver.js';
 export {observeHeartbeat} from './heartbeatObservation.js';
 export type {HeartbeatFileReader, HeartbeatObservation, HeartbeatObservationOptions, HeartbeatStatus} from './heartbeatObservation.js';
-export {discoverHomeLanes, readLaneManifest} from './homeLaneDiscovery.js';
-export type {DiscoveredLane} from './laneDiscovery.js';
+export {
+    discoverHomeLanes, discoverSecondaryLanes, filterRelevantLanes, nodeLaneDiscoveryFileSystem,
+    readLaneManifest, readMembershipIndex, resolveLane, selectLane
+} from './discovery/index.js';
 export type {
-    LaneDiscoveryEntry, LaneDiscoveryFileSystem, LaneDiscoveryPathInfo, LaneDiscoveryPathKind
-} from './LaneDiscoveryFileSystem.js';
-export {filterRelevantLanes, resolveLane, selectLane} from './LaneSelector.js';
-export type {LaneSelectionContext} from './LaneSelector.js';
-export {readMembershipIndex} from './membershipIndex.js';
-export type {MembershipIndexFileSystem} from './membershipIndex.js';
-export {discoverSecondaryLanes} from './SecondaryDiscovery.js';
+    DiscoveredLane, LaneDiscoveryEntry, LaneDiscoveryFileSystem, LaneDiscoveryPathInfo,
+    LaneDiscoveryPathKind, LaneSelectionContext, MembershipIndexFileSystem
+} from './discovery/index.js';
 export {
     acquireInitLocks, releaseInitLocks, shouldUpdateGitignore, updateGitignore, restoreGitignore, writeBindings
 } from './BindingMutator.js';

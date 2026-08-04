@@ -1,15 +1,15 @@
 import type {
     MembershipWarning, WorkspaceContext
-} from '../contracts/index.js';
-import {createWatchtowerError} from '../contracts/index.js';
-import {safePathTarget} from './paths/index.js';
-import {resolveWatchtowerDataHome} from './paths/index.js';
+} from '../../contracts/index.js';
+import {createWatchtowerError} from '../../contracts/index.js';
+import {safePathTarget} from '../paths/index.js';
+import {resolveWatchtowerDataHome} from '../paths/index.js';
 import {discoverHomeLanes} from './homeLaneDiscovery.js';
 import type {DiscoveredLane} from './laneDiscovery.js';
 import type {LaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 import {nodeLaneDiscoveryFileSystem} from './LaneDiscoveryFileSystem.js';
 import {discoverSecondaryLanes} from './SecondaryDiscovery.js';
-import {resolveWorkspaceContext} from './paths/index.js';
+import {resolveWorkspaceContext} from '../paths/index.js';
 
 export interface RelevantLaneQuery {
     readonly cwd: string;
