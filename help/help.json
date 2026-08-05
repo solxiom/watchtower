@@ -50,6 +50,12 @@
       "group": "basic",
       "summary": "Preview or atomically apply a compatible managed runtime upgrade.",
       "usage": "wt upgrade [--lane=<slug-or-uuid>] [--workspace=<path>] [--to=<version>] [--apply] [--allow-downgrade] [--dry-run] [--json] [--no-color]"
+    },
+    {
+      "name": "watch",
+      "group": "basic",
+      "summary": "Run the lane watcher in the foreground; never daemonizes and never emits JSON.",
+      "usage": "wt watch [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--no-color]"
     }
   ]
 }

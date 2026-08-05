@@ -33,3 +33,21 @@ export type {
     TaskCatalogCompositionResult,
     TaskCatalogCompositionSuccess
 } from './catalog/index.js';
+export {
+    WatchPreflight,
+    WatchAttachment,
+    createNodeWatchSignalSource,
+    nodeWatchSignalSource,
+    nodeEventLoopKeepAlive
+} from './watch/index.js';
+export type {
+    WatchPreflightOptions,
+    WatchPreflightQuery,
+    WatchPreflightResult,
+    WatchAttachmentOptions,
+    WatchAttachmentOutcome,
+    WatchSink,
+    WatchSignalSource,
+    WatchTerminationSignal,
+    WatchEventLoopKeepAlive
+} from './watch/index.js';
