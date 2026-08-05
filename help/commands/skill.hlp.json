@@ -2,6 +2,7 @@
   "name": "skill",
   "group": "basic",
   "summary": "Preview or install the bundled Watchtower coordinator knowledge pack for Codex, Cursor, or Claude.",
+  "description": "Preview or install the bundled Watchtower coordinator knowledge pack for Codex, Cursor, or Claude.",
   "usage": "wt skill install <codex|cursor|claude> [--scope=<skill-only|guides-only|full>] [--replace] [--dry-run] [--json] [--no-color]",
   "flags": [
     {"name": "scope", "description": "Install skill assets only, guides only, or the full pack; defaults to full.", "optional": true},

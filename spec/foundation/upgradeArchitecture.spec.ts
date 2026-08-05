@@ -17,7 +17,7 @@ const L4_RUNTIME_SUBCAPSULE = /from\s+['"]\.\.\/runtime\/(catalog|distribution|k
 const OWNED_MODULE_LIMIT = 200;
 
 describe('upgrade domain inventory (FR-20, UK-03)', () => {
-    it('owns exactly eleven modules plus the barrel', () => {
+    it('owns the upgrade modules plus the version-reporting capability and barrel', () => {
         const modules = OWNED_MODULES.map((file) => relative(UPGRADE_DIR, file)).sort();
         expect(modules).toEqual([
             'MigrationRegistry.ts',
@@ -26,6 +26,7 @@ describe('upgrade domain inventory (FR-20, UK-03)', () => {
             'UpgradePlanner.ts',
             'UpgradePreviewSource.ts',
             'UpgradeRecovery.ts',
+            'VersionReportService.ts',
             'index.ts',
             'managedLinkReconciliation.ts',
             'migrationValidation.ts',

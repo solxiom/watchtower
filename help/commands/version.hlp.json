@@ -1,0 +1,12 @@
+{
+  "name": "version",
+  "group": "basic",
+  "summary": "Report the CLI, runtime, knowledge, and lane-schema versions.",
+  "description": "Report the CLI, runtime, knowledge, and lane-schema versions.",
+  "usage": "wt version [--lane=<slug-or-uuid>] [--json] [--no-color]",
+  "flags": [
+    {"name": "lane", "description": "Select one discovered lane by exact ID or slug; includes staged-version availability.", "optional": true},
+    {"name": "json", "description": "Emit one versioned command-result envelope whose data is versionReport.", "optional": true},
+    {"name": "no-color", "description": "Disable ANSI color in human output.", "optional": true}
+  ]
+}

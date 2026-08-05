@@ -4,6 +4,7 @@ import ListCommand from './read/ListCommand.js';
 import SkillInstallCommand from './skill/SkillInstallCommand.js';
 import StatusCommand from './status/StatusCommand.js';
 import UpgradeCommand from './upgrade/UpgradeCommand.js';
+import VersionCommand from './version/VersionCommand.js';
 
 export const commandRegistry = [
     ConfigCommand,
@@ -11,5 +12,6 @@ export const commandRegistry = [
     ListCommand,
     SkillInstallCommand,
     StatusCommand,
-    UpgradeCommand
+    UpgradeCommand,
+    VersionCommand
 ];

@@ -62,7 +62,7 @@ function stageVersion(runtimeCatalog: RuntimeCatalog, root: string, version: str
 /** A real two-managed-asset, two-runtime-version fixture on a real filesystem, for genuine atomic-rename/fsync proof. */
 export function makeUpgradeApplyFixture(): UpgradeApplyFixture {
     const root = mkRoot();
-    const laneDir = join(root, 'lane');
+    const laneDir = join(root, '.watchtower', 'lanes', 'lane-a');
     mkdirSync(join(laneDir, 'bin'), {recursive: true});
     mkdirSync(join(laneDir, 'state'), {recursive: true});
     const runtimeCatalog = new RuntimeCatalog({dataRoot: () => join(root, 'data')});
