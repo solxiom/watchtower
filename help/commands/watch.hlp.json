@@ -1,0 +1,12 @@
+{
+  "name": "watch",
+  "group": "basic",
+  "summary": "Run the lane watcher in the foreground; never daemonizes and never emits JSON.",
+  "usage": "wt watch [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--no-color]",
+  "flags": [
+    {"name": "workspace", "description": "Resolve the lane from this existing repository or control-home path.", "optional": true},
+    {"name": "lane", "description": "Select one relevant lane by exact ID or slug.", "optional": true},
+    {"name": "initiative", "description": "Restrict selection to one initiative ID.", "optional": true},
+    {"name": "no-color", "description": "Disable ANSI color in human output.", "optional": true}
+  ]
+}
