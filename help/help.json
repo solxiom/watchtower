@@ -24,8 +24,8 @@
     {
       "name": "doctor",
       "group": "basic",
-      "summary": "Validate lane-local markers, configuration, bindings, permissions, and Git-ignore coverage without repair.",
-      "usage": "wt doctor [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] [--no-color]"
+      "summary": "Validate lane-local markers, configuration, bindings, permissions, Git-ignore coverage, the installed runtime, account access, watcher heartbeat, and pack index without repair.",
+      "usage": "wt doctor [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] [--no-color] [--verbose]"
     },
     {
       "name": "list",

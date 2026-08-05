@@ -18,7 +18,7 @@ function statusOf(checks: readonly {id: DoctorCheckId; status: string}[], id: Do
 }
 
 describe('DoctorKernel lane-local checks', function () {
-    it('snapshots injected providers and rejects duplicate or unsupported IDs', function () {
+    it('snapshots injected providers and rejects duplicate or unsupported IDs', async function () {
         const input: DoctorCheckProvider[] = [];
         const kernel = new DoctorKernel(input);
         input.push({id: 'git-ignore-coverage', run: () => ({
@@ -27,7 +27,7 @@ describe('DoctorKernel lane-local checks', function () {
         const fixture = createReadCommandFixture();
         try {
             createLane(fixture, {packAvailable: false});
-            expect(kernel.run({cwd: fixture.controlHome}).checks).toEqual([]);
+            expect((await kernel.run({cwd: fixture.controlHome})).checks).toEqual([]);
         } finally { fixture.remove(); }
 
         const provider: DoctorCheckProvider = {id: 'lane-marker', run: () => ({
@@ -41,13 +41,13 @@ describe('DoctorKernel lane-local checks', function () {
             .toThrow(jasmine.objectContaining({code: 'ERR_INVALID_ARGUMENT'}));
     });
 
-    it('reports pass for every owned check on a healthy lane without writing bytes', function () {
+    it('reports pass for every owned check on a healthy lane without writing bytes', async function () {
         const fixture = createReadCommandFixture();
         try {
             createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             const before = treeSnapshot(fixture.root);
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(report.schemaVersion).toBe(1);
             expect(report.lane.slug).toBe('lane-a');
             expect(report.checks.length).toBe(5);
@@ -60,70 +60,70 @@ describe('DoctorKernel lane-local checks', function () {
         } finally { fixture.remove(); }
     });
 
-    it('fails the git-ignore check when /.watchtower/ is not ignored', function () {
+    it('fails the git-ignore check when /.watchtower/ is not ignored', async function () {
         const fixture = createReadCommandFixture();
         try {
             createLane(fixture, {packAvailable: false});
             const before = treeSnapshot(fixture.root);
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'git-ignore-coverage')).toBe('fail');
             expect(report.summary.fail).toBe(1);
             expect(treeSnapshot(fixture.root)).toBe(before);
         } finally { fixture.remove(); }
     });
 
-    it('fails the binding check and skips the permission check for a repositories.local.json with an incomplete identity', function () {
+    it('fails the binding check and skips the permission check for a repositories.local.json with an incomplete identity', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             writeFileSync(join(laneDir, 'repositories.local.json'), '{"schemaVersion":1,"repositories":[]}\n');
             const before = treeSnapshot(fixture.root);
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
             expect(treeSnapshot(fixture.root)).toBe(before);
         } finally { fixture.remove(); }
     });
 
-    it('skips the permission check when repositories.local.json cannot be parsed at all', function () {
+    it('skips the permission check when repositories.local.json cannot be parsed at all', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             writeFileSync(join(laneDir, 'repositories.local.json'), 'not valid json\n');
             const before = treeSnapshot(fixture.root);
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
             expect(treeSnapshot(fixture.root)).toBe(before);
         } finally { fixture.remove(); }
     });
 
-    it('fails the config check when lane state is missing', function () {
+    it('fails the config check when lane state is missing', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             rmSync(join(laneDir, 'state', 'coordinator-lane-state.txt'));
             const before = treeSnapshot(fixture.root);
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'lane-config')).toBe('fail');
             expect(treeSnapshot(fixture.root)).toBe(before);
         } finally { fixture.remove(); }
     });
 
-    it('fails the config check for a contradictory lane state', function () {
+    it('fails the config check for a contradictory lane state', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             writeFileSync(join(laneDir, 'state', 'coordinator-lane-state.txt'), 'lane_status=complete\nactive_batch=RM-1\n');
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'lane-config')).toBe('fail');
         } finally { fixture.remove(); }
     });
 
-    it('fails the permission check for an inaccessible participating repository', function () {
+    it('fails the permission check for an inaccessible participating repository', async function () {
         const fixture = createReadCommandFixture();
         try {
             const secondRepo = join(fixture.root, 'second-repo');
@@ -136,7 +136,7 @@ describe('DoctorKernel lane-local checks', function () {
             chmodSync(fixture.controlHome, 0o500);
             try {
                 const before = treeSnapshot(fixture.root);
-                const report = new DoctorKernel().run({cwd: fixture.controlHome});
+                const report = await new DoctorKernel().run({cwd: fixture.controlHome});
                 expect(statusOf(report.checks, 'repository-permissions')).toBe('fail');
                 expect(treeSnapshot(fixture.root)).toBe(before);
             } finally {
@@ -146,7 +146,7 @@ describe('DoctorKernel lane-local checks', function () {
         } finally { fixture.remove(); }
     });
 
-    it('fails the permission check for a read-denied, otherwise validly declared secondary repository', function () {
+    it('fails the permission check for a read-denied, otherwise validly declared secondary repository', async function () {
         const fixture = createReadCommandFixture();
         try {
             const secondary = createRepository(join(fixture.root, 'secondary-repo'));
@@ -157,7 +157,7 @@ describe('DoctorKernel lane-local checks', function () {
             ignoreWatchtower(fixture.controlHome);
             chmodSync(secondary, 0o000);
             try {
-                const report = new DoctorKernel().run({cwd: fixture.controlHome});
+                const report = await new DoctorKernel().run({cwd: fixture.controlHome});
                 expect(statusOf(report.checks, 'repository-permissions')).toBe('fail');
                 expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             } finally {
@@ -166,7 +166,7 @@ describe('DoctorKernel lane-local checks', function () {
         } finally { fixture.remove(); }
     });
 
-    it('fails the permission check for a write-denied, otherwise validly declared secondary repository', function () {
+    it('fails the permission check for a write-denied, otherwise validly declared secondary repository', async function () {
         const fixture = createReadCommandFixture();
         try {
             const secondary = createRepository(join(fixture.root, 'secondary-repo'));
@@ -177,7 +177,7 @@ describe('DoctorKernel lane-local checks', function () {
             ignoreWatchtower(fixture.controlHome);
             chmodSync(secondary, 0o500);
             try {
-                const report = new DoctorKernel().run({cwd: fixture.controlHome});
+                const report = await new DoctorKernel().run({cwd: fixture.controlHome});
                 expect(statusOf(report.checks, 'repository-permissions')).toBe('fail');
                 expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             } finally {
@@ -186,32 +186,32 @@ describe('DoctorKernel lane-local checks', function () {
         } finally { fixture.remove(); }
     });
 
-    it('propagates lane-not-found without touching the filesystem for an empty relevant set', function () {
+    it('propagates lane-not-found without touching the filesystem for an empty relevant set', async function () {
         const fixture = createReadCommandFixture();
         try {
             const before = treeSnapshot(fixture.root);
-            expect(() => new DoctorKernel().run({cwd: fixture.controlHome}))
-                .toThrow(jasmine.objectContaining({code: 'ERR_LANE_NOT_FOUND'}));
+            await expectAsync(new DoctorKernel().run({cwd: fixture.controlHome}))
+                .toBeRejectedWith(jasmine.objectContaining({code: 'ERR_LANE_NOT_FOUND'}));
             expect(treeSnapshot(fixture.root)).toBe(before);
         } finally { fixture.remove(); }
     });
 
-    it('selects among multiple lanes with --lane and rejects ambiguity otherwise', function () {
+    it('selects among multiple lanes with --lane and rejects ambiguity otherwise', async function () {
         const fixture = createReadCommandFixture();
         try {
             createLane(fixture, {packAvailable: false});
             createLane(fixture, {slug: 'lane-b', laneId: '22222222-2222-4222-8222-222222222222', packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
-            expect(() => new DoctorKernel().run({cwd: fixture.controlHome}))
-                .toThrow(jasmine.objectContaining({code: 'ERR_AMBIGUOUS_SELECTION'}));
-            const report = new DoctorKernel().run({cwd: fixture.controlHome, lane: 'lane-b'});
+            await expectAsync(new DoctorKernel().run({cwd: fixture.controlHome}))
+                .toBeRejectedWith(jasmine.objectContaining({code: 'ERR_AMBIGUOUS_SELECTION'}));
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome, lane: 'lane-b'});
             expect(report.lane.slug).toBe('lane-b');
         } finally { fixture.remove(); }
     });
 });
 
 describe('DoctorKernel isolated check adversarial proof', function () {
-    it('uses the injected file system for discovery as well as lane-local checks', function () {
+    it('uses the injected file system for discovery as well as lane-local checks', async function () {
         const fixture = createReadCommandFixture();
         try {
             createLane(fixture, {packAvailable: false});
@@ -227,7 +227,7 @@ describe('DoctorKernel isolated check adversarial proof', function () {
                     readText(path: string) { return nodeLaneDiscoveryFileSystem.readText(path); }
                 }
             });
-            const report = kernel.run({cwd: fixture.controlHome});
+            const report = await kernel.run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'lane-marker')).toBe('pass');
             expect(listCalls).toBeGreaterThan(0);
         } finally { fixture.remove(); }
@@ -235,7 +235,7 @@ describe('DoctorKernel isolated check adversarial proof', function () {
 });
 
 describe('DoctorCheckResult reason-code contract (LC07-R1)', function () {
-    it('never lets an arbitrary, unregistered code escape into a DoctorCheck reason', function () {
+    it('never lets an arbitrary, unregistered code escape into a DoctorCheck reason', async function () {
         expect(watchtowerErrorReason({code: 'NOT_A_WATCHTOWER_CODE', message: 'x'})).toBeNull();
         expect(watchtowerErrorReason({code: 'ARBITRARY_INJECTED_VALUE'})).toBeNull();
         expect(watchtowerErrorReason(new Error('plain error, no code field'))).toBeNull();
@@ -244,7 +244,7 @@ describe('DoctorCheckResult reason-code contract (LC07-R1)', function () {
         expect(watchtowerErrorReason('a bare string')).toBeNull();
     });
 
-    it('accepts only a code registered in the closed ErrorCode contract', function () {
+    it('accepts only a code registered in the closed ErrorCode contract', async function () {
         expect(watchtowerErrorReason({code: 'ERR_INVALID_LANE_CONFIG', message: 'x'})).toBe('ERR_INVALID_LANE_CONFIG');
         expect(watchtowerErrorReason({code: 'ERR_PREFLIGHT_FAILED', message: 'x'})).toBe('ERR_PREFLIGHT_FAILED');
     });

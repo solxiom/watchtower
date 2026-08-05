@@ -1,21 +1,44 @@
 import {writeFileSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {join} from 'node:path';
+import {RuntimeCatalog} from '../../src/foundation/runtime/index.js';
+import {cleanupFixture, makeRuntimeCatalogFixture, runtimeManifest} from '../foundation/support/runtimeCatalogFixtures.js';
 import {createLane, createReadCommandFixture, treeSnapshot} from './readCommandFixtures.js';
 
 describe('wt doctor real CLI proof', function () {
     it('proves pass/fail reporting and exit codes without changing recursive inventory', function () {
         const fixture = createReadCommandFixture();
+        const runtimeSource = makeRuntimeCatalogFixture();
         try {
-            createLane(fixture, {packAvailable: false});
+            createLane(fixture, {packAvailable: false, runtimeAvailable: false});
             writeFileSync(join(fixture.controlHome, '.gitignore'), '.watchtower/\n');
+            new RuntimeCatalog({dataRoot: () => fixture.dataHome})
+                .stageRuntime('1.0.0', runtimeManifest('1.0.0'), runtimeSource.source);
             const before = treeSnapshot(fixture.root);
             const healthy = cli(fixture.controlHome, fixture.dataHome, ['--json']);
             expect(healthy.status).toBe(0);
             const report = JSON.parse(healthy.stdout).data;
-            expect(report.summary).toEqual({pass: 5, warn: 0, fail: 0, skip: 0});
+            // Every lane-local (LC-07) check and the injected tools/runtime/
+            // account checks pass against this real environment and staged
+            // runtime. No watcher is attached and no pack index is activated
+            // in this fixture, so those two injected checks correctly `skip`
+            // rather than fail — `injectedCheckProviders.spec.ts` proves the
+            // full 10/10-pass path including an activated pack-index
+            // generation.
+            const statusOf = (id: string) => report.checks.find((check: {id: string}) => check.id === id).status;
+            expect(statusOf('lane-marker')).toBe('pass');
+            expect(statusOf('lane-config')).toBe('pass');
+            expect(statusOf('repository-bindings')).toBe('pass');
+            expect(statusOf('repository-permissions')).toBe('pass');
+            expect(statusOf('git-ignore-coverage')).toBe('pass');
+            expect(statusOf('required-tools')).toBe('pass');
+            expect(statusOf('runtime-catalog')).toBe('pass');
+            expect(statusOf('account-access')).toBe('pass');
+            expect(statusOf('watcher-heartbeat')).toBe('skip');
+            expect(statusOf('pack-index')).toBe('skip');
+            expect(report.summary).toEqual({pass: 8, warn: 0, fail: 0, skip: 2});
             expect(treeSnapshot(fixture.root)).toBe(before);
-        } finally { fixture.remove(); }
+        } finally { cleanupFixture(fixture.root); cleanupFixture(runtimeSource.root); }
 
         const broken = createReadCommandFixture();
         try {

@@ -16,7 +16,7 @@ function statusOf(checks: readonly {id: DoctorCheckId; status: string}[], id: Do
 }
 
 describe('binding-identity closed contract and single-read consistency (LC07-R3)', function () {
-    it('rejects a read binding that omits required access and worktreeMode fields', function () {
+    it('rejects a read binding that omits required access and worktreeMode fields', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false, repositories: [
@@ -26,26 +26,26 @@ describe('binding-identity closed contract and single-read consistency (LC07-R3)
             writeFileSync(join(laneDir, 'repositories.local.json'), JSON.stringify({schemaVersion: 1, repositories: [{
                 id: 'main', path: fixture.controlHome, branch: 'main', role: 'primary'
             }]}));
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
         } finally { fixture.remove(); }
     });
 
-    it('rejects a repositories.local.json with a duplicate top-level JSON member', function () {
+    it('rejects a repositories.local.json with a duplicate top-level JSON member', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             writeFileSync(join(laneDir, 'repositories.local.json'),
                 '{"schemaVersion":1,"schemaVersion":1,"repositories":[]}\n');
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
         } finally { fixture.remove(); }
     });
 
-    it('rejects a repository entry with an extra, unrecognized key', function () {
+    it('rejects a repository entry with an extra, unrecognized key', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
@@ -54,13 +54,13 @@ describe('binding-identity closed contract and single-read consistency (LC07-R3)
                 role: 'primary', access: 'write', extraUnknownField: 'x'};
             writeFileSync(join(laneDir, 'repositories.local.json'),
                 JSON.stringify({schemaVersion: 1, repositories: [entry]}));
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
         } finally { fixture.remove(); }
     });
 
-    it('rejects an unsupported access value rather than silently coercing it to read', function () {
+    it('rejects an unsupported access value rather than silently coercing it to read', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
@@ -69,25 +69,25 @@ describe('binding-identity closed contract and single-read consistency (LC07-R3)
                 role: 'primary', access: 'admin'};
             writeFileSync(join(laneDir, 'repositories.local.json'),
                 JSON.stringify({schemaVersion: 1, repositories: [entry]}));
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
         } finally { fixture.remove(); }
     });
 
-    it('rejects a repositories.local.json above the 256 KiB read bound', function () {
+    it('rejects a repositories.local.json above the 256 KiB read bound', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
             writeFileSync(join(laneDir, 'repositories.local.json'), ' '.repeat(300 * 1024));
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
         } finally { fixture.remove(); }
     });
 
-    it('rejects a declared path that is a symlink rather than its own canonical resolution', function () {
+    it('rejects a declared path that is a symlink rather than its own canonical resolution', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
@@ -107,13 +107,13 @@ describe('binding-identity closed contract and single-read consistency (LC07-R3)
                     {id: 'secondary', role: 'integration', access: 'read'}]
             }));
             writeFileSync(join(laneDir, 'repositories.local.json'), JSON.stringify({schemaVersion: 1, repositories: [entry, linked]}));
-            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            const report = await new DoctorKernel().run({cwd: fixture.controlHome});
             expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
         } finally { fixture.remove(); }
     });
 
-    it('derives repository-bindings and repository-permissions from exactly one read of repositories.local.json', function () {
+    it('derives repository-bindings and repository-permissions from exactly one read of repositories.local.json', async function () {
         const fixture = createReadCommandFixture();
         try {
             const laneDir = createLane(fixture, {packAvailable: false});
@@ -129,7 +129,7 @@ describe('binding-identity closed contract and single-read consistency (LC07-R3)
                     }
                 }
             });
-            const report = kernel.run({cwd: fixture.controlHome});
+            const report = await kernel.run({cwd: fixture.controlHome});
             expect(readCount).toBe(1);
             expect(statusOf(report.checks, 'repository-bindings')).toBe('pass');
             expect(statusOf(report.checks, 'repository-permissions')).toBe('pass');

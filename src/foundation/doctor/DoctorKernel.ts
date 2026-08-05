@@ -44,7 +44,7 @@ export class DoctorKernel {
         this.gitIgnored = options.gitIgnored ?? nodeGitIgnored;
     }
 
-    run(query: DoctorQuery): DoctorReport {
+    async run(query: DoctorQuery): Promise<DoctorReport> {
         const relevant = this.discovery.discover(query);
         const lane = selectLane(relevant.lanes, query);
         const context: DoctorLaneContext = {
@@ -56,9 +56,10 @@ export class DoctorKernel {
             bindings: resolveBindings(lane, this.bindingInspector),
             fileSystem: this.fileSystem,
             bindingInspector: this.bindingInspector,
-            gitIgnored: this.gitIgnored
+            gitIgnored: this.gitIgnored,
+            environment: query.environment ?? process.env
         };
-        const checks = this.providers.map(provider => provider.run(context));
+        const checks = await Promise.all(this.providers.map(provider => provider.run(context)));
         return {
             schemaVersion: 1,
             lane: {id: lane.laneId, slug: lane.slug},

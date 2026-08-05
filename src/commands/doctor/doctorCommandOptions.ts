@@ -6,10 +6,11 @@ export interface DoctorCommandOptions {
     readonly lane?: string;
     readonly json: boolean;
     readonly noColor: boolean;
+    readonly verbose: boolean;
 }
 
 const valueFlags = new Set(['--workspace', '--lane']);
-const booleanFlags = new Set(['--json', '--no-color']);
+const booleanFlags = new Set(['--json', '--no-color', '--verbose']);
 
 export function parseDoctorCommandOptions(args: CArgMap): DoctorCommandOptions {
     for (const [key, value] of args.entries()) validateArgument(key, value);
@@ -22,7 +23,8 @@ export function parseDoctorCommandOptions(args: CArgMap): DoctorCommandOptions {
         ...(workspace === null ? {} : {workspace}),
         ...(lane === null ? {} : {lane}),
         json: args.hasFlag('json', true),
-        noColor: args.hasFlag('no-color', true)
+        noColor: args.hasFlag('no-color', true),
+        verbose: args.hasFlag('verbose', true)
     };
 }
 
@@ -41,6 +43,6 @@ function validateArgument(key: string, value: string): void {
 function invalid(target: string): never {
     throw createWatchtowerError('ERR_INVALID_ARGUMENT', {
         operation: 'parse doctor command options', target,
-        remediation: 'Use only --workspace, --lane, --json, and --no-color, each at most once.'
+        remediation: 'Use only --workspace, --lane, --json, --no-color, and --verbose, each at most once.'
     });
 }

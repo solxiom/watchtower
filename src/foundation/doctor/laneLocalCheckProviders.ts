@@ -17,7 +17,8 @@ export const laneLocalCheckProviders: readonly DoctorCheckProvider[] = Object.fr
 ]);
 
 const CLOSED_PROVIDER_IDS: readonly DoctorCheckId[] = Object.freeze([
-    'lane-marker', 'lane-config', 'repository-bindings', 'repository-permissions', 'git-ignore-coverage'
+    'lane-marker', 'lane-config', 'repository-bindings', 'repository-permissions', 'git-ignore-coverage',
+    'required-tools', 'runtime-catalog', 'account-access', 'watcher-heartbeat', 'pack-index'
 ]);
 const CLOSED_PROVIDER_ID_SET: ReadonlySet<DoctorCheckId> = new Set(CLOSED_PROVIDER_IDS);
 
@@ -42,6 +43,6 @@ function isProvider(value: unknown): value is DoctorCheckProvider {
 function invalidProviderComposition(): never {
     throw createWatchtowerError('ERR_INVALID_ARGUMENT', {
         operation: 'construct doctor kernel', target: 'doctor provider composition',
-        remediation: 'Use each supported LC-07 doctor provider ID at most once.'
+        remediation: 'Use each supported doctor provider ID at most once.'
     });
 }
