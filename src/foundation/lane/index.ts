@@ -21,6 +21,9 @@ export {
     composeLaneLayoutWithCoordinatorBaseline,
     buildContextPolicyDocument,
     buildDurableRoots,
+    classifyRoute,
+    selectRouteEndpoint,
+    verifyRoutingPolicy,
     nodeKnowledgeProvenanceHost,
     resolveInstalledKnowledgeTag
 } from './coordinator/index.js';
@@ -28,8 +31,16 @@ export type {
     ContextPolicyDocument,
     CoordinatorBaselineInputs,
     CoordinatorBaselineLayout,
+    CoordinatorRoutingPolicy,
     InstalledKnowledgeTag,
     KnowledgeProvenancePort,
     OperatorSessionPolicy,
-    RoutingPolicyDocument
+    RoutingPolicyDocument,
+    EndpointSelectionInput,
+    InstalledRoutingPolicyArtifact,
+    InstalledRoutingPolicyManifest,
+    RouteClassificationInput,
+    RoutingPolicyVerificationInput,
+    RoutingPolicyVerificationResult,
+    VerifiedRoutingPolicy
 } from './coordinator/index.js';

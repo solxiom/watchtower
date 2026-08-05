@@ -5,6 +5,19 @@ export {
     isErrorCode
 } from './errors.js';
 export type {ErrorCode, ErrorContext, ErrorContextInput, WatchtowerErrorPayload} from './errors.js';
+export {
+    ROUTING_CAPABILITY_CLASSES,
+    ROUTING_DECISION_CLASSES
+} from './routing.js';
+export type {
+    RouteSelection,
+    RoutingCapabilityClass,
+    RoutingClassification,
+    RoutingDecisionClass,
+    RoutingEndpointCandidate,
+    RoutingGuardFacts,
+    RoutingRule
+} from './routing.js';
 export {RUNTIME_KNOWLEDGE_MANIFEST_REASONS, RuntimeKnowledgeManifestError} from './runtimeKnowledgeManifests.js';
 export type {KnowledgeManifestV1, KnowledgeProvenanceEvidence, ManifestAsset, ManifestAssetMode, ManifestAssetObservation, ManifestVerificationFailure, ManifestVerificationResult, ManifestVerificationSuccess, RuntimeKnowledgeManifestReason, RuntimeKnowledgeManifestV1, RuntimeManifestV1} from './runtimeKnowledgeManifests.js';
 export {RUNTIME_CATALOG_REASONS, RuntimeCatalogError} from './runtimeCatalog.js';
