@@ -21,11 +21,11 @@ import {enforceOwnerOnlyPermissions} from './sqliteFilePermissions.js';
 import {translateDatabaseError} from './sqliteErrorMapping.js';
 import {acquireWriteLock} from './sqliteWriteLock.js';
 import {resolveStoreFile, toCommonsConfig} from './sqliteStorePaths.js';
-import {checkIntegrity, countRows, readDiagnostics, selectAll, selectByPrimaryKey, type SqlRunner} from './sqliteStoreQueries.js';
-import {createSchema, deleteRow, insertRow, updateRow} from './sqliteStoreMutations.js';
+import {checkIntegrity, checkpoint, countRows, groupedCounts, readDiagnostics, selectAll, selectByColumn, selectFrom, selectRecent, selectByPrimaryKey, type SqlRunner} from './sqliteStoreQueries.js';
+import {createIndexes, createSchema, deleteRow, insertRow, updateRow} from './sqliteStoreMutations.js';
 import type {
-    DerivedStore, DerivedStoreLocation, DerivedStoreSchema, IntegrityReport, LogicalExport,
-    SqliteValue, StoreDiagnostics, TableDefinition, TypedRow, WriteLock
+    DerivedStore, DerivedStoreLocation, DerivedStoreSchema, DerivedStoreTransaction, IntegrityReport,
+    LogicalExport, SqliteValue, StoreDiagnostics, TableDefinition, TypedRow, WriteLock
 } from './sqlitePorts.js';
 
 type Service = InstanceType<typeof sqlite.SqliteService>;
@@ -67,6 +67,8 @@ class DerivedSqliteStore implements DerivedStore {
                 await store.withTransaction((run) => createSchema(run, schema));
             } else if (!(await store.integrityCheck()).ok) {
                 store.poisoned = true;
+            } else if (!config.readOnly) {
+                await store.withTransaction((run) => createIndexes(run, schema));
             }
             store.tightenPermissions();
             return store;
@@ -140,6 +142,18 @@ class DerivedSqliteStore implements DerivedStore {
         this.tightenPermissions();
     }
 
+    async transaction<T>(body: (transaction: DerivedStoreTransaction) => Promise<T>): Promise<T> {
+        return this.withTransaction(async (run) => body({
+            insert: (table, row) => insertRow(run, this.tableOf(table), row),
+            insertMany: async (table, rows) => {
+                const definition = this.tableOf(table);
+                for (const row of rows) await insertRow(run, definition, row);
+            },
+            updateByPrimaryKey: (table, key, changes) => updateRow(run, this.tableOf(table), key, changes),
+            deleteByPrimaryKey: (table, key) => deleteRow(run, this.tableOf(table), key)
+        }));
+    }
+
     async updateByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[], changes: TypedRow): Promise<void> {
         const definition = this.tableOf(table);
         await this.withTransaction((run) => updateRow(run, definition, key, changes));
@@ -159,6 +173,22 @@ class DerivedSqliteStore implements DerivedStore {
 
     async list(table: string): Promise<readonly TypedRow[]> {
         return selectAll(this.run, this.tableOf(table));
+    }
+
+    async listByColumn(table: string, column: string, value: SqliteValue, limit: number): Promise<readonly TypedRow[]> {
+        return selectByColumn(this.run, this.tableOf(table), column, value, limit);
+    }
+
+    async listFrom(table: string, column: string, fromInclusive: SqliteValue, limit: number): Promise<readonly TypedRow[]> {
+        return selectFrom(this.run, this.tableOf(table), column, fromInclusive, limit);
+    }
+
+    async listRecent(table: string, column: string, limit: number): Promise<readonly TypedRow[]> {
+        return selectRecent(this.run, this.tableOf(table), column, limit);
+    }
+
+    async groupedCounts(table: string, column: string) {
+        return groupedCounts(this.run, this.tableOf(table), column);
     }
 
     async count(table: string): Promise<number> {
@@ -189,6 +219,11 @@ class DerivedSqliteStore implements DerivedStore {
         } finally {
             if (this.lock) { await this.lock.release(); }
         }
+    }
+
+    async checkpoint(): Promise<void> {
+        this.assertUsable();
+        await checkpoint(this.run);
     }
 }
 

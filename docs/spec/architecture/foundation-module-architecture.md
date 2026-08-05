@@ -441,7 +441,7 @@ have tier-1 barrels; capability parents have tier-2 barrels. See
 | | `writer/` | L5 | Atomic lane directory commit | `commitLane` | LC-03 |
 | | `coordinator/` | L5 | Coordinator/session policy baselines at init | `buildCoordinatorBaseline` | LC-05 |
 | `pack/index/` | — | L5 | Sealed-pack SQLite compile pipeline | `PackIndexCompiler` | CA-01 |
-| `index/` | `store/` | L5 | Pack index store open/read | `IndexStore` | CA-02 |
+| `index/` | `store/`, `query/`, `runtime/` | L5 | Pack and runtime journal index/projection access | `IndexStore`, `JournalIndex`, `JournalProjection` | CA-02, CA-03 |
 | | `query/` | L5 | Bounded typed index queries | `IndexQuery` | CA-02 |
 | `storage/` | — | L5 | Derived SQLite stores and migrations | `openDerivedStorage` | DB-01, CA-03 |
 | `hostAdapters/` | — | L6 | Knowledge pack installers (Codex/Cursor/Claude) | `resolveHostAdapter` | UK-04 |
@@ -542,7 +542,7 @@ export {
 | **L2** | `discovery/`, `bindings/`, `observation/` | L0, L1 |
 | **L3** | `read/`, `status/` | L0, L1, L2 |
 | **L4** | `init/`, `lifecycle/`, `pack/`, `upgrade/` | L0–L3; L5 via **capability barrels** only (`runtime/index.js`, `lane/index.js`, …) |
-| **L5** | `runtime/catalog/`, `runtime/distribution/`, `runtime/knowledge/`, `task/runtime/`, `task/catalog/`, `lane/store/`, `lane/writer/`, `lane/coordinator/`, `pack/index/`, `index/store/`, `index/query/`, `storage/` | L0, L1 (paths/parsing only) |
+| **L5** | `runtime/catalog/`, `runtime/distribution/`, `runtime/knowledge/`, `task/runtime/`, `task/catalog/`, `lane/store/`, `lane/writer/`, `lane/coordinator/`, `pack/index/`, `index/store/`, `index/query/`, `index/runtime/`, `storage/` | L0, L1 (paths/parsing only) |
 | **L6** | `runtime/leaf/`, `hostAdapters/`, `distribution/` | L0, L1, L5 ports as needed |
 
 **Hard rules:**

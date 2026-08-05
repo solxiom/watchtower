@@ -6,7 +6,7 @@ Status: **Synchronized remediation candidate**
 |---|---|---|---|
 | CA-01 | Deterministic sealed-pack SQLite compiler | ✅ Accepted | Identical logical rows/semantic root; path/digest/FK checks; staged immutable publication; linear build |
 | CA-02 | SQLite index stores and bounded typed queries | ✅ Accepted | Indexed bounded reads; limits/cursors/truncation; no direct SQL; stale/missing/corrupt block |
-| CA-03 | Runtime SQLite indexes and projections | ❌ Pending | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
+| CA-03 | Runtime SQLite indexes and projections | ✅ Accepted | Journal checkpoints; single writer/WAL readers; incremental append; corruption and staged rebuild |
 | CA-04 | Ready set and resource-claim projection | ❌ Pending | DAG/dependency/claim/capacity blockers; no arbitrary winner |
 | CA-05 | Ordered routing policy and capability floors | ❌ Pending | Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility |
 | CA-06 | Provider-neutral endpoint eligibility and isolation core | ❌ Pending | Unattended/advisory/skill-only classification; hard eligibility; drift invalidation/shared pools; no concrete CLI adapter |

@@ -8,7 +8,7 @@
  * interpolated. Nothing here is re-exported from the capsule barrel, so no raw
  * SQL surface reaches a domain consumer.
  */
-import type {ColumnType, TableDefinition} from './sqlitePorts.js';
+import type {ColumnType, IndexDefinition, TableDefinition} from './sqlitePorts.js';
 
 const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
@@ -68,6 +68,41 @@ export function renderSelectAll(table: TableDefinition): string {
 export function renderSelectByPrimaryKey(table: TableDefinition): string {
     const predicate = table.primaryKey.map((column) => `${ident(column)} = ?`).join(' AND ');
     return `SELECT * FROM ${ident(table.name)} WHERE ${predicate}`;
+}
+
+function columnOrder(column: string, descending: boolean): string {
+    return `${ident(column)} ${descending ? 'DESC' : 'ASC'}`;
+}
+
+function validateIndex(index: IndexDefinition): void {
+    if (!IDENTIFIER.test(index.name) || index.columns.length === 0) throw new TypeError(`Unsafe SQLite index rejected: ${index.name}`);
+}
+
+/** Bounded lookup by one declared column, ordered by the table primary key. */
+export function renderSelectByColumn(table: TableDefinition, column: string, descending: boolean): string {
+    return `SELECT * FROM ${ident(table.name)} WHERE ${ident(column)} = ? ORDER BY ${columnOrder(table.primaryKey[0], descending)} LIMIT ?`;
+}
+
+/** Bounded primary-key range read used for cursor pagination. */
+export function renderSelectFrom(table: TableDefinition, column: string): string {
+    return `SELECT * FROM ${ident(table.name)} WHERE ${ident(column)} >= ? ORDER BY ${columnOrder(column, false)} LIMIT ?`;
+}
+
+/** Bounded newest-first read for recent projections. */
+export function renderSelectRecent(table: TableDefinition, column: string): string {
+    return `SELECT * FROM ${ident(table.name)} ORDER BY ${columnOrder(column, true)} LIMIT ?`;
+}
+
+/** Aggregate event-type counts without materializing every event row. */
+export function renderGroupedCount(table: TableDefinition, column: string): string {
+    return `SELECT ${ident(column)} AS value, COUNT(*) AS count FROM ${ident(table.name)} GROUP BY ${ident(column)} ORDER BY ${ident(column)} ASC`;
+}
+
+/** Declarative index creation kept inside the storage query owner. */
+export function renderCreateIndex(table: TableDefinition, index: IndexDefinition): string {
+    validateIndex(index);
+    const uniqueness = index.unique ? 'UNIQUE ' : '';
+    return `CREATE ${uniqueness}INDEX IF NOT EXISTS ${ident(index.name)} ON ${ident(table.name)} (${index.columns.map(ident).join(', ')})`;
 }
 
 /** `SELECT COUNT(*)` for one table. */

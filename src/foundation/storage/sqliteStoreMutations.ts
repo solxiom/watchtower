@@ -6,7 +6,7 @@
  * column handling. Nothing here is exported from the capsule barrel.
  */
 import {createWatchtowerError} from '../../contracts/index.js';
-import {renderCreateTable, renderDeleteByPrimaryKey, renderInsert, renderUpdateByPrimaryKey} from './sqliteSchemaSql.js';
+import {renderCreateIndex, renderCreateTable, renderDeleteByPrimaryKey, renderInsert, renderUpdateByPrimaryKey} from './sqliteSchemaSql.js';
 import type {SqlRunner} from './sqliteStoreQueries.js';
 import type {DerivedStoreSchema, SqliteValue, TableDefinition, TypedRow} from './sqlitePorts.js';
 
@@ -14,6 +14,13 @@ import type {DerivedStoreSchema, SqliteValue, TableDefinition, TypedRow} from '.
 export async function createSchema(run: SqlRunner, schema: DerivedStoreSchema): Promise<void> {
     for (const table of schema) {
         await run(renderCreateTable(table), []);
+        for (const index of table.indexes ?? []) await run(renderCreateIndex(table, index), []);
+    }
+}
+
+export async function createIndexes(run: SqlRunner, schema: DerivedStoreSchema): Promise<void> {
+    for (const table of schema) {
+        for (const index of table.indexes ?? []) await run(renderCreateIndex(table, index), []);
     }
 }
 
