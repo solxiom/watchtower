@@ -18,3 +18,9 @@ export type {
     OperatorSessionPolicy,
     RoutingPolicyDocument
 } from './coordinatorBaselineContracts.js';
+export {SessionLifecycle, SessionStore, OperatorSessionError} from './session/index.js';
+export type {
+    CreateSessionParams, ForkSessionParams, OperatorSession, SessionFilters, SessionJournalEntry, SessionJsonObject, SessionJsonValue,
+    SessionJournalEventType, SessionLifecycleEventType, SessionOrigin, SessionState, SessionStoreOptions, SessionJournalReadResult, SessionPersistencePort,
+    SessionLifecycleOptions, TurnFilters, TurnMessage, TurnRecord, TurnState, ValidationResult
+} from './session/index.js';
