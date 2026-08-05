@@ -6,7 +6,7 @@ Status: **Synchronized remediation candidate**
 |---|---|---|---|
 | UK-01 | Upgrade compatibility and preview planner | ✅ Accepted | Runtime/knowledge/schema matrix; changed/preserved/conflict classification |
 | UK-02 | Migration framework and preservation harness | ✅ Accepted | Closed declared transitions only; no fictional versions; capability-owned rebuild adapters; value/history/pin/lifecycle preservation |
-| UK-03 | Atomic upgrade apply, recovery, and downgrade guard | ❌ Pending | Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade |
+| UK-03 | Atomic upgrade apply, recovery, and downgrade guard | ✅ Accepted | Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade |
 | UK-04 | Codex, Cursor, and Claude knowledge installers | ✅ Accepted | Preview/replace/scope behavior; version record; no false notification claim |
 | UK-05 | Version reporting and upgrade conformance | ❌ Pending | CLI/runtime/knowledge/schema report; two-version fixtures; collision and failed migration |
 

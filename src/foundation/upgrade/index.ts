@@ -11,3 +11,10 @@ export {
     validateMigrationSnapshot, validatePreservationPolicy, validateRegistryOptions, validateSchemaVersion,
     validateStagingPlan, validateStepDefinition
 } from './migrationValidation.js';
+export {UpgradeApply} from './UpgradeApply.js';
+export type {TaskRuntimeRelativeTargets, UpgradeApplyInput, UpgradeApplyOptions} from './UpgradeApply.js';
+export {UpgradeRecovery} from './UpgradeRecovery.js';
+export type {DowngradeGuardInput, UpgradeRecoveryOptions} from './UpgradeRecovery.js';
+export {nodeUpgradeApplyFileSystem} from './upgradeApplyFileSystem.js';
+export type {UpgradeApplyFileSystem, UpgradeLinkKind, UpgradeLinkObservation} from './upgradeApplyFileSystem.js';
+export {reconcileManagedLinks} from './managedLinkReconciliation.js';
