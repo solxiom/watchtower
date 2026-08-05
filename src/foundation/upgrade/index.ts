@@ -17,3 +17,4 @@ export {UpgradeRecovery} from './UpgradeRecovery.js';
 export type {DowngradeGuardInput, UpgradeRecoveryOptions} from './UpgradeRecovery.js';
 export {nodeUpgradeApplyFileSystem} from './upgradeApplyFileSystem.js';
 export type {UpgradeApplyFileSystem, UpgradeLinkKind, UpgradeLinkObservation} from './upgradeApplyFileSystem.js';
+export {reconcileManagedLinks} from './managedLinkReconciliation.js';

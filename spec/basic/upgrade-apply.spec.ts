@@ -1,9 +1,9 @@
-import {chmodSync, existsSync, readFileSync, readlinkSync, writeFileSync} from 'node:fs';
+import {chmodSync, existsSync, readFileSync, readlinkSync, symlinkSync, unlinkSync, writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {join} from 'node:path';
 import type {InstallManifestV1} from '../../src/contracts/manifests.js';
 import {UpgradeApply, UpgradePlanner, UpgradeRecovery} from '../../src/foundation/upgrade/index.js';
-import {nodeUpgradeApplyFileSystem, type UpgradeApplyFileSystem} from '../../src/foundation/upgrade/upgradeApplyFileSystem.js';
+import {STAGING_SUFFIX, nodeUpgradeApplyFileSystem, type UpgradeApplyFileSystem} from '../../src/foundation/upgrade/upgradeApplyFileSystem.js';
 import {cleanupUpgradeApplyFixture, makeUpgradeApplyFixture, type UpgradeApplyFixture} from './support/upgradeApplyFixtures.js';
 
 function withFault(method: keyof UpgradeApplyFileSystem, failAtCall: number): UpgradeApplyFileSystem {
@@ -27,10 +27,26 @@ function linkTarget(laneDir: string, name: string): string {
     return readlinkSync(join(laneDir, 'bin', name));
 }
 
+/** Real, direct relink — bypasses UpgradeApply entirely, simulating exactly what a real process kill would leave live on disk. */
+function relinkForReal(laneDir: string, name: string, target: string): void {
+    const path = join(laneDir, 'bin', name);
+    unlinkSync(path);
+    symlinkSync(target, path);
+}
+
+function leaveOrphanTemp(laneDir: string, name: string, target: string): void {
+    symlinkSync(target, join(laneDir, 'bin', `.${name}${STAGING_SUFFIX}`));
+}
+
 function digest(text: string): string { return createHash('sha256').update(text).digest('hex'); }
 
 function assertLockReleased(laneDir: string): void {
     expect(existsSync(join(laneDir, 'state', 'lane.lock'))).toBeFalse();
+}
+
+function assertLinksMatch(fixture: UpgradeApplyFixture, root: string): void {
+    expect(linkTarget(fixture.laneDir, 'assetA.sh')).toBe(join(root, 'coordinator/assetA.sh'));
+    expect(linkTarget(fixture.laneDir, 'assetB.sh')).toBe(join(root, 'coordinator/assetB.sh'));
 }
 
 async function run(fixture: UpgradeApplyFixture, fileSystem?: UpgradeApplyFileSystem) {
@@ -54,8 +70,7 @@ describe('UpgradeApply end-to-end', () => {
         expect(result.success).toBeTrue();
         expect(result.applied).toBeTrue();
         expect(result.stagedCount).toBe(2);
-        expect(linkTarget(fixture.laneDir, 'assetA.sh')).toBe(join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'));
-        expect(linkTarget(fixture.laneDir, 'assetB.sh')).toBe(join(fixture.targetRuntimeRoot, 'coordinator/assetB.sh'));
+        assertLinksMatch(fixture, fixture.targetRuntimeRoot);
         const install = readInstall(fixture.laneDir);
         expect(install.runtimeVersion).toBe('2.0.0');
         expect(install.taskRuntime.configTarget).toBe(join(fixture.targetRuntimeRoot, 'runtime-nvb/runtime-nvb.json'));
@@ -70,57 +85,46 @@ describe('UpgradeApply end-to-end', () => {
     });
 });
 
-describe('UpgradeApply crash recovery at every staging write point', () => {
+describe('UpgradeApply same-call rollback at every pre-commit staging write point', () => {
     let fixture: UpgradeApplyFixture;
     afterEach(() => cleanupUpgradeApplyFixture(fixture.root));
 
-    it('before any asset staging: recovery restores clean state and old install.json is untouched', async () => {
+    it('before any asset staging: no link ever moves, old install.json untouched', async () => {
         fixture = makeUpgradeApplyFixture();
         const result = await run(fixture, withFault('ensureDirectory', 1));
         expect(result.success).toBeFalse();
         expect(readInstall(fixture.laneDir).runtimeVersion).toBe('1.0.0');
-        expect(linkTarget(fixture.laneDir, 'assetA.sh')).toBe(join(fixture.currentRuntimeRoot, 'coordinator/assetA.sh'));
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
         assertLockReleased(fixture.laneDir);
-        const recovery = new UpgradeRecovery().recover(fixture.laneDir);
-        expect(recovery.oldManifestStatus).toBe('valid');
-        expect(recovery.oldRuntimeInvocable).toBeTrue();
     });
 
-    it('after the first asset is renamed, before the second: old runtime store remains checksummed and invocable', async () => {
+    it('after the first asset is renamed, before the second: apply() itself restores asset A before returning', async () => {
         fixture = makeUpgradeApplyFixture();
         const result = await run(fixture, withFault('fsyncDirectory', 3));
         expect(result.success).toBeFalse();
-        expect(linkTarget(fixture.laneDir, 'assetA.sh')).toBe(join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'));
-        expect(linkTarget(fixture.laneDir, 'assetB.sh')).toBe(join(fixture.currentRuntimeRoot, 'coordinator/assetB.sh'));
+        expect(result.restoredLinks).toEqual(['bin/assetA.sh']);
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
         expect(readInstall(fixture.laneDir).runtimeVersion).toBe('1.0.0');
         assertLockReleased(fixture.laneDir);
-        const recovery = new UpgradeRecovery().recover(fixture.laneDir);
-        expect(recovery.artifactsCleaned.some((path) => path.includes('assetB.sh'))).toBeTrue();
-        expect(recovery.oldManifestStatus).toBe('valid');
-        expect(recovery.oldRuntimeInvocable).toBeTrue();
     });
 
-    it('after all assets staged but before the manifest write: old manifest remains authoritative', async () => {
+    it('after all assets staged but before the manifest write: apply() restores every switched link before returning', async () => {
         fixture = makeUpgradeApplyFixture();
         const result = await run(fixture, withFault('writeFileExclusive', 1));
         expect(result.success).toBeFalse();
+        expect([...result.restoredLinks].sort()).toEqual(['bin/assetA.sh', 'bin/assetB.sh']);
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
         expect(readInstall(fixture.laneDir).runtimeVersion).toBe('1.0.0');
-        expect(linkTarget(fixture.laneDir, 'assetA.sh')).toBe(join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'));
-        expect(linkTarget(fixture.laneDir, 'assetB.sh')).toBe(join(fixture.targetRuntimeRoot, 'coordinator/assetB.sh'));
         assertLockReleased(fixture.laneDir);
-        const recovery = new UpgradeRecovery().recover(fixture.laneDir);
-        expect(recovery.oldManifestStatus).toBe('valid');
-        expect(recovery.oldRuntimeInvocable).toBeTrue();
     });
 
-    it('after the manifest rename but before its final directory fsync: manifest-last commit already honored', async () => {
+    it('after the manifest rename but before its final directory fsync: manifest-last commit already honored, links already match the new manifest', async () => {
         fixture = makeUpgradeApplyFixture();
         await expectAsync(run(fixture, withFault('fsyncDirectory', 5))).toBeRejected();
         const install = readInstall(fixture.laneDir);
         expect(install.runtimeVersion).toBe('2.0.0');
+        assertLinksMatch(fixture, fixture.targetRuntimeRoot);
         assertLockReleased(fixture.laneDir);
-        const recovery = new UpgradeRecovery().recover(fixture.laneDir);
-        expect(recovery.oldManifestStatus).toBe('valid');
     });
 
     it('checksum mismatch during staging stops before any link rename', async () => {
@@ -133,8 +137,71 @@ describe('UpgradeApply crash recovery at every staging write point', () => {
         const result = await run(fixture);
         expect(result.success).toBeFalse();
         expect(result.failure?.reason).toBe('CHECKSUM_MISMATCH');
-        expect(linkTarget(fixture.laneDir, 'assetA.sh')).toBe(join(fixture.currentRuntimeRoot, 'coordinator/assetA.sh'));
+        expect(result.restoredLinks).toEqual([]);
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
         expect(readInstall(fixture.laneDir).runtimeVersion).toBe('1.0.0');
         assertLockReleased(fixture.laneDir);
     });
 });
+
+describe('UpgradeRecovery repairs a genuine abandoned crash — no UpgradeApply cooperation', () => {
+    let fixture: UpgradeApplyFixture;
+    afterEach(() => cleanupUpgradeApplyFixture(fixture.root));
+
+    it('before any asset staging: recover() is a clean no-op', () => {
+        fixture = makeUpgradeApplyFixture();
+        const result = new UpgradeRecovery().recover(fixture.laneDir);
+        expect(result.linksRestored).toEqual([]);
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
+        expect(result.oldManifestStatus).toBe('valid');
+        expect(result.oldRuntimeInvocable).toBeTrue();
+    });
+
+    it('mid-staging: one link already live-switched for real, the other only has an orphan temp — recover() restores both to v1', () => {
+        fixture = makeUpgradeApplyFixture();
+        relinkForReal(fixture.laneDir, 'assetA.sh', join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'));
+        leaveOrphanTemp(fixture.laneDir, 'assetB.sh', join(fixture.targetRuntimeRoot, 'coordinator/assetB.sh'));
+        const result = new UpgradeRecovery().recover(fixture.laneDir);
+        expect(result.linksRestored).toEqual(['bin/assetA.sh']);
+        expect(result.artifactsCleaned.some((path) => path.includes('assetB.sh'))).toBeTrue();
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
+        expect(result.oldManifestStatus).toBe('valid');
+        expect(result.oldRuntimeInvocable).toBeTrue();
+    });
+
+    it('every asset already live-switched, manifest never written: recover() restores every link to v1', () => {
+        fixture = makeUpgradeApplyFixture();
+        relinkForReal(fixture.laneDir, 'assetA.sh', join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'));
+        relinkForReal(fixture.laneDir, 'assetB.sh', join(fixture.targetRuntimeRoot, 'coordinator/assetB.sh'));
+        const result = new UpgradeRecovery().recover(fixture.laneDir);
+        expect([...result.linksRestored].sort()).toEqual(['bin/assetA.sh', 'bin/assetB.sh']);
+        assertLinksMatch(fixture, fixture.currentRuntimeRoot);
+        expect(readInstall(fixture.laneDir).runtimeVersion).toBe('1.0.0');
+        expect(result.oldManifestStatus).toBe('valid');
+        expect(result.oldRuntimeInvocable).toBeTrue();
+    });
+
+    it('manifest already committed to v2 for real: recover() leaves the already-consistent v2 links alone', () => {
+        fixture = makeUpgradeApplyFixture();
+        relinkForReal(fixture.laneDir, 'assetA.sh', join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'));
+        relinkForReal(fixture.laneDir, 'assetB.sh', join(fixture.targetRuntimeRoot, 'coordinator/assetB.sh'));
+        const next: InstallManifestV1 = {
+            ...fixture.currentInstall, runtimeVersion: '2.0.0',
+            managedAssets: {
+                'bin/assetA.sh': {target: join(fixture.targetRuntimeRoot, 'coordinator/assetA.sh'), sha256: digestAsset(fixture.targetRuntimeRoot, 'assetA.sh')},
+                'bin/assetB.sh': {target: join(fixture.targetRuntimeRoot, 'coordinator/assetB.sh'), sha256: digestAsset(fixture.targetRuntimeRoot, 'assetB.sh')}
+            }
+        };
+        writeFileSync(join(fixture.laneDir, 'install.json'), `${JSON.stringify(next, null, 2)}\n`);
+        const result = new UpgradeRecovery().recover(fixture.laneDir);
+        expect(result.linksRestored).toEqual([]);
+        assertLinksMatch(fixture, fixture.targetRuntimeRoot);
+        expect(readInstall(fixture.laneDir).runtimeVersion).toBe('2.0.0');
+        expect(result.oldManifestStatus).toBe('valid');
+        expect(result.oldRuntimeInvocable).toBeTrue();
+    });
+});
+
+function digestAsset(runtimeRoot: string, name: string): `sha256:${string}` {
+    return `sha256:${digest(readFileSync(join(runtimeRoot, 'coordinator', name), 'utf8'))}`;
+}

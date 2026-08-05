@@ -111,13 +111,14 @@ export function successResult(
         changed: staged.records.map((record) => record.path),
         unchanged: plan.preserved.map((entry) => entry.path),
         preserved: plan.preserved.map((entry) => entry.path),
-        migrated, conflicts: [], stagedCount: staged.records.length, partialStagingPaths: [], failure: null
+        migrated, conflicts: [], stagedCount: staged.records.length, partialStagingPaths: [], restoredLinks: [], failure: null
     };
 }
 
 export function failureResult(
     plan: UpgradePlan, migrated: readonly string[],
-    staged: {readonly records: StagedAssetRecord[]; readonly failure: UpgradeApplyFailure | null}
+    staged: {readonly records: StagedAssetRecord[]; readonly failure: UpgradeApplyFailure | null},
+    restoredLinks: readonly string[]
 ): ApplyResult {
     return {
         success: false, applied: false, from: plan.from, to: plan.to,
@@ -127,6 +128,7 @@ export function failureResult(
         migrated, conflicts: [],
         stagedCount: staged.records.length,
         partialStagingPaths: staged.records.filter((record) => !record.renamed).map((record) => record.tempPath),
+        restoredLinks,
         failure: staged.failure
     };
 }

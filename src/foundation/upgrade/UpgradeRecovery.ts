@@ -5,12 +5,17 @@
  * trusts any in-process bookkeeping from a crashed `apply()` call, because a
  * real crash leaves nothing in memory. It removes leftover staging temp
  * artifacts (predictable-suffix names `UpgradeApply` writes adjacent to their
- * target), then proves the old `install.json` is still readable and every
- * declared managed-asset target still exists in the immutable runtime store
- * with a matching checksum — the old runtime is invocable at that root
- * regardless of what a lane `bin/` link happens to point to after a crash.
- * `guardDowngrade()` performs no I/O and no mutation; it only classifies
- * whether a requested downgrade may proceed before any lock is acquired.
+ * target), reads the currently-authoritative `install.json`, and — before
+ * reporting anything usable — actively reconciles every live managed `bin/`
+ * link back to that manifest's declared targets (`reconcileManagedLinks`,
+ * shared with `UpgradeApply`'s own rollback-on-failure). §11 requires the old
+ * runtime binding to remain authoritative until the new pointer is verified;
+ * a real process crash mid-staging can leave a live link already switched
+ * with no in-memory state to undo it, so recovery is the only place that
+ * guarantee can be restored for that case — it must repair, not merely
+ * observe. `guardDowngrade()` performs no I/O and no mutation; it only
+ * classifies whether a requested downgrade may proceed before any lock is
+ * acquired.
  */
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -19,6 +24,7 @@ import type {RuntimeManifestV1} from '../../contracts/runtimeKnowledgeManifests.
 import type {DowngradeGuardResult, OldManifestStatus, RecoveryResult} from '../../contracts/upgradeApply.js';
 import {buildLaneFilePath} from '../paths/index.js';
 import {parseInstallManifest} from '../runtime/index.js';
+import {reconcileManagedLinks} from './managedLinkReconciliation.js';
 import {INSTALL_STAGING_SUFFIX, nodeUpgradeApplyFileSystem, STAGING_SUFFIX, type UpgradeApplyFileSystem} from './upgradeApplyFileSystem.js';
 
 export interface DowngradeGuardInput {
@@ -52,9 +58,12 @@ export class UpgradeRecovery {
     recover(laneDir: string): RecoveryResult {
         const artifactsCleaned = [...this.cleanDirectory(laneDir, INSTALL_STAGING_SUFFIX), ...this.cleanDirectory(join(laneDir, 'bin'), STAGING_SUFFIX)];
         const {install, status} = this.readOldInstall(laneDir);
-        if (install === null) return {recovered: artifactsCleaned.length > 0, artifactsCleaned, oldManifestStatus: status, oldRuntimeInvocable: false};
+        if (install === null) {
+            return {recovered: artifactsCleaned.length > 0, artifactsCleaned, oldManifestStatus: status, oldRuntimeInvocable: false, linksRestored: []};
+        }
+        const linksRestored = reconcileManagedLinks(laneDir, install, this.fileSystem);
         const oldRuntimeInvocable = this.verifyManagedAssets(install);
-        return {recovered: true, artifactsCleaned, oldManifestStatus: status, oldRuntimeInvocable};
+        return {recovered: true, artifactsCleaned, oldManifestStatus: status, oldRuntimeInvocable, linksRestored};
     }
 
     guardDowngrade(input: DowngradeGuardInput): DowngradeGuardResult {

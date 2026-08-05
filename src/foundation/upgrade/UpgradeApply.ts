@@ -5,11 +5,19 @@
  * plan crosses a schema version, stages every changed/added managed `bin/`
  * link to a temp path adjacent to its target and atomically renames it, then
  * writes `install.json` last, after every staged asset is fsynced and
- * checksum-verified. A staging failure never writes the manifest and never
- * throws mid-mutation for a data-shaped failure: it returns `ApplyResult`
- * with `success: false` so the caller (thin command layer) maps the typed
- * failure reason to the registered public error/exit code, and `UpgradeRecovery`
- * can clean any leftover temp artifact on a later run.
+ * checksum-verified.
+ *
+ * §11's manifest-last rule requires more than "write the manifest last": it
+ * requires that "old runtime binding … remains until the new pointer is
+ * verified" — so a pre-commit failure must not leave any live link switched
+ * ahead of the manifest. Any failure strictly before the `install.json`
+ * rename (staging or the manifest temp-write) therefore reconciles every
+ * live link back to `currentInstall`'s declared targets — via the same
+ * shared `reconcileManagedLinks` primitive `UpgradeRecovery` uses for a real
+ * crash — *before* `apply()` returns, so `success: false` always means the
+ * old binding is fully authoritative again, never a mixed one. A failure at
+ * or after the rename is a different, uncertain/post-commit outcome and
+ * propagates as a thrown exception instead (see `writeInstallManifest`).
  */
 import {dirname, join} from 'node:path';
 import type {AssetClassificationEntry, UpgradePlan} from '../../contracts/upgrade.js';
@@ -22,6 +30,7 @@ import {LaneTaskProfileInstaller, RuntimeCatalog} from '../runtime/index.js';
 import {acquireWriteLock} from '../storage/sqliteWriteLock.js';
 import {MigrationRegistry} from './MigrationRegistry.js';
 import {stageMigrationPlan} from './MigrationSteps.js';
+import {reconcileManagedLinks} from './managedLinkReconciliation.js';
 import {installStagingTempPath, nodeUpgradeApplyFileSystem, stagingTempPath, type UpgradeApplyFileSystem} from './upgradeApplyFileSystem.js';
 import {
     alreadyLinked, assertChecksum, assertNoTamperedCollision, failureResult, nextManagedAssets, requireNonNull,
@@ -64,9 +73,15 @@ export class UpgradeApply {
             const migrated = this.runMigration(input.plan);
             const entries = [...input.plan.added, ...input.plan.changed];
             const staged = this.stageEntries(input, entries);
-            if (staged.failure !== null) return failureResult(input.plan, migrated, staged);
+            if (staged.failure !== null) {
+                const restoredLinks = reconcileManagedLinks(input.laneDir, input.currentInstall, this.fileSystem);
+                return failureResult(input.plan, migrated, staged, restoredLinks);
+            }
             const manifestFailure = this.writeInstallManifest(input);
-            if (manifestFailure !== null) return failureResult(input.plan, migrated, {...staged, failure: manifestFailure});
+            if (manifestFailure !== null) {
+                const restoredLinks = reconcileManagedLinks(input.laneDir, input.currentInstall, this.fileSystem);
+                return failureResult(input.plan, migrated, {...staged, failure: manifestFailure}, restoredLinks);
+            }
             return successResult(input.plan, migrated, staged);
         } finally {
             await lock.release();
@@ -110,11 +125,11 @@ export class UpgradeApply {
     private stageAndRename(sourcePath: string, targetPath: string, path: string): StagedAssetRecord {
         const directory = dirname(sourcePath);
         const tempPath = stagingTempPath(sourcePath);
-        this.fileSystem.ensureDirectory(directory);
-        this.fileSystem.removeIfExists(tempPath);
-        this.fileSystem.createSymlinkAt(targetPath, tempPath);
-        this.fileSystem.fsyncDirectory(directory);
         try {
+            this.fileSystem.ensureDirectory(directory);
+            this.fileSystem.removeIfExists(tempPath);
+            this.fileSystem.createSymlinkAt(targetPath, tempPath);
+            this.fileSystem.fsyncDirectory(directory);
             this.fileSystem.renameAtomic(tempPath, sourcePath);
         } catch (error) {
             this.fileSystem.removeIfExists(tempPath);

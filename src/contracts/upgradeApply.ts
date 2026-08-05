@@ -42,6 +42,8 @@ export interface ApplyResult {
     readonly conflicts: readonly string[];
     readonly stagedCount: number;
     readonly partialStagingPaths: readonly string[];
+    /** Managed-asset paths reconciled back to `currentInstall`'s declared target after a pre-commit failure. */
+    readonly restoredLinks: readonly string[];
     readonly failure: UpgradeApplyFailure | null;
 }
 
@@ -53,6 +55,8 @@ export interface RecoveryResult {
     readonly artifactsCleaned: readonly string[];
     readonly oldManifestStatus: OldManifestStatus;
     readonly oldRuntimeInvocable: boolean;
+    /** Managed-asset paths whose live link was reconciled back to the authoritative install manifest's declared target. */
+    readonly linksRestored: readonly string[];
 }
 
 export type DowngradeGuardReason = 'DOWNGRADE_NOT_ALLOWED' | 'DOWNGRADE_SCHEMA_INCOMPATIBLE';
