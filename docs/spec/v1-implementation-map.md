@@ -312,7 +312,7 @@ lane-owned values or history.
 | `UK-02` | Migration framework and preservation harness | `UK-01`, `LC-05` | migration registry/staging contracts | Closed declared transitions only; no fictional versions; capability-owned rebuild adapters; value/history/pin/lifecycle preservation |
 | `UK-03` | Atomic upgrade apply, recovery, and downgrade guard | `UK-02`, `RT-04`, `RT-06` | install pointer/store | Manifest-last switch; crash recovery; old runtime remains usable; guarded downgrade |
 | `UK-04` | Codex, Cursor, and Claude knowledge installers | `RT-01`, `RT-02` | host adapters and skill command | Preview/replace/scope behavior; version record; no false notification claim |
-| `UK-05` | Version reporting and upgrade conformance | `UK-03`, `UK-04` | version command/help/integration | CLI/runtime/knowledge/schema report; two-version fixtures; collision and failed migration |
+| `UK-05` | Version reporting and upgrade conformance | `UK-03`, `UK-04` | version command/help/integration | CLI/runtime/knowledge/schema report; two-version fixtures; collision and failed migration — ✅ Accepted |
 
 Pack exit: operators can preview and apply a compatible managed upgrade and
 install the matching knowledge adapter without overwriting lane-owned data.
