@@ -4,7 +4,7 @@ export const JOURNAL_REASONS = [
     'JOURNAL_NOT_FOUND', 'JOURNAL_CORRUPT_TAIL', 'JOURNAL_SEQUENCE_GAP',
     'JOURNAL_CHECKPOINT_MISMATCH', 'JOURNAL_INVALID_RECORD',
     'JOURNAL_ENTRY_NOT_FOUND', 'JOURNAL_REBUILD_REQUIRED',
-    'JOURNAL_INDEX_CORRUPT', 'JOURNAL_STORE_UNAVAILABLE'
+    'JOURNAL_INDEX_CORRUPT', 'JOURNAL_STORE_UNAVAILABLE', 'JOURNAL_PROJECTION_BOUNDED'
 ] as const;
 
 export type JournalReason = typeof JOURNAL_REASONS[number];
@@ -50,6 +50,11 @@ export interface DurableEventPage {
     readonly nextSequence: number | null;
 }
 
+export interface BoundedEventPage {
+    readonly items: readonly DurableEvent[];
+    readonly hasMore: boolean;
+}
+
 export interface CycleProjection {
     readonly cycleId: string;
     readonly state: string;
@@ -85,6 +90,11 @@ export interface ReadySetProjection {
     readonly pendingBatchIds: readonly string[];
     readonly readyBatchIds: readonly string[];
     readonly blockedBatchIds: readonly string[];
+}
+
+export interface ReadyBatchDescriptor {
+    readonly id: string;
+    readonly dependsOn: readonly string[];
 }
 
 export interface CorruptionReport {

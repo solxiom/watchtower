@@ -44,6 +44,14 @@ export interface TableDefinition {
     readonly columns: readonly ColumnDefinition[];
     readonly primaryKey: readonly string[];
     readonly foreignKeys?: readonly ForeignKeyDefinition[];
+    readonly indexes?: readonly IndexDefinition[];
+}
+
+/** A declared non-primary lookup index used by bounded typed reads. */
+export interface IndexDefinition {
+    readonly name: string;
+    readonly columns: readonly string[];
+    readonly unique?: boolean;
 }
 
 /** The closed table registry in schema order. */
@@ -106,12 +114,22 @@ export interface DerivedStore extends DerivedStoreWriter {
     deleteByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[]): Promise<void>;
     getByPrimaryKey(table: string, key: SqliteValue | readonly SqliteValue[]): Promise<TypedRow | undefined>;
     list(table: string): Promise<readonly TypedRow[]>;
+    listByColumn(table: string, column: string, value: SqliteValue, limit: number): Promise<readonly TypedRow[]>;
+    listFrom(table: string, column: string, fromInclusive: SqliteValue, limit: number): Promise<readonly TypedRow[]>;
+    listRecent(table: string, column: string, limit: number): Promise<readonly TypedRow[]>;
+    groupedCounts(table: string, column: string): Promise<readonly GroupedCount[]>;
     count(table: string): Promise<number>;
     integrityCheck(): Promise<IntegrityReport>;
     diagnostics(): Promise<StoreDiagnostics>;
     exportLogical(): Promise<LogicalExport>;
     close(): Promise<void>;
     checkpoint(): Promise<void>;
+}
+
+/** A typed aggregate row returned by a grouped count query. */
+export interface GroupedCount {
+    readonly value: SqliteValue;
+    readonly count: number;
 }
 
 /**
