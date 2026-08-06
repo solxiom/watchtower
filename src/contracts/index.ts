@@ -154,7 +154,7 @@ export type {
     WorktreeMode
 } from './types.js';
 export type {
-    CapacityPoolSnapshot, CapacityPoolUsage, EndpointAvailability, EndpointCapabilityClass, EndpointCapabilities,
+    CapacityPoolSnapshot, CapacityPoolUsage, EndpointAvailability as EndpointAvailabilityStatus, EndpointCapabilityClass, EndpointCapabilities,
     EndpointConformance, EndpointContextClass, EndpointFingerprint, EndpointProfile, EndpointReasoningClass,
     EndpointSupportMode, EligibilityFacts, EligibilityReason, EligibilityRequirements, EligibilityResult
 } from './endpointEligibility.js';
@@ -258,3 +258,26 @@ export type {
     UpgradeApplyFailure,
     UpgradeApplyReason
 } from './upgradeApply.js';
+export {BROKER_REASONS, BROKER_REFERENCE_KINDS} from './contextBroker.js';
+export type {
+    BrokerContentProvenance,
+    BrokerPage,
+    BrokerQueryBounds,
+    BrokerReason,
+    BrokerReferenceKind,
+    BrokerReferenceRequest,
+    BrokerResponse,
+    BudgetLimitLevel,
+    CapacityPoolLedgerState,
+    ContextRequestedAppendResult,
+    ContextRequestedAppendStatus,
+    ContextRequestedEvent,
+    CycleBudgetCheck,
+    CycleBudgetDebit,
+    CycleBudgetLimits,
+    CycleBudgetResult,
+    CycleBudgetState,
+    EndpointUsageLimits,
+    EndpointUsageRecord,
+    TelemetryQuality
+} from './contextBroker.js';

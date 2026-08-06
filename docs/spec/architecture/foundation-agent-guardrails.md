@@ -38,6 +38,7 @@ Normative layout detail lives in the architecture specs above. This document is 
 | Lane persistence, writer, coordinator bootstrap | `lane/store/`, `lane/writer/`, `lane/coordinator/` | `laneStore/`, `transactionalWriter/`, `coordinatorBaseline/` |
 | Pack index compile (CA-01) | `pack/index/` | `packIndex/` |
 | Index store and query (CA-02) | `index/store/`, `index/query/` | `indexStore/`, `indexQuery/` |
+| Context broker, cycle-budget ledger (CA-08) | `broker/` | flat prefix cluster, `contextBroker/` at foundation root |
 | Pack consumer, seal, drift | `pack/` (L4 domain) | mixed into unrelated trees |
 | Command orchestration | `src/commands/` | `src/foundation/` |
 | Shared types | `src/contracts/` | foundation modules |
@@ -169,7 +170,7 @@ For foundation-touching batches, add this row to the engineering acceptance matr
 ## 5. Quick reference — allowed top-level foundation directories
 
 ```text
-bindings, discovery, distribution, hostAdapters, index, init, lane,
+bindings, broker, discovery, distribution, hostAdapters, index, init, lane,
 lifecycle, observation, pack, parsing, paths, presentation, read, runtime,
 schemaComposition, status, storage, task, upgrade
 ```

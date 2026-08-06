@@ -11,6 +11,7 @@ const FOUNDATION = join(SOURCE_ROOT, 'foundation');
 /** Normative top-level foundation directories after REF-03. */
 const ALLOWED_TOP_LEVEL_DIRS = [
     'bindings',
+    'broker',
     'discovery',
     'distribution',
     'hostAdapters',
@@ -112,7 +113,8 @@ describe('foundation capability tree integration (FR-38)', () => {
         'taskCapabilityArchitecture.spec.ts',
         'laneCapabilityArchitecture.spec.ts',
         'packIndexArchitecture.spec.ts',
-        'indexCapabilityArchitecture.spec.ts'
+        'indexCapabilityArchitecture.spec.ts',
+        'brokerCapabilityArchitecture.spec.ts'
     ] as const;
 
     it('ships per-capability architecture gates for each REF-03 tree', () => {

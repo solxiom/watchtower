@@ -282,6 +282,16 @@ src/foundation/
     MigrationSteps.ts
     migrationValidation.ts
 
+  broker/
+    index.ts
+    ContextBroker.ts
+    contextBrokerAllowlist.ts
+    contextBrokerContentSource.ts
+    contextBrokerRedaction.ts
+    contextBrokerBudget.ts
+    contextBrokerEndpointUsage.ts
+    contextBrokerErrors.ts
+
   # ── L5–L6 capability trees (REF-03 target) ─────────────────────────
   runtime/
     index.ts
@@ -426,6 +436,7 @@ have tier-1 barrels; capability parents have tier-2 barrels. See
 | `lifecycle/` | L4 | Post-init binding/membership orchestration | `BindingMutator`, `MembershipRegistrar` | LC-04 |
 | `pack/` | L4 | Pack acceptance, seal, drift, consumption hosts | `consumePack`, `observePackDrift` | LC-02, CA-01 |
 | `upgrade/` | L4 | Upgrade preview/apply planning, migrations | `UpgradePlanner`, `MigrationRegistry` | UK-01–UK-03 |
+| `broker/` | L4 | Context broker allowlisting/redaction, cycle- and endpoint-usage budget ledgers | `ContextBroker` | CA-08 |
 
 ### 4.2 L5–L6 capability trees (REF-03 target)
 
@@ -541,7 +552,7 @@ export {
 | **L1** | `paths/`, `parsing/`, `presentation/`, `schemaComposition/` | L0 |
 | **L2** | `discovery/`, `bindings/`, `observation/` | L0, L1 |
 | **L3** | `read/`, `status/` | L0, L1, L2 |
-| **L4** | `init/`, `lifecycle/`, `pack/`, `upgrade/` | L0–L3; L5 via **capability barrels** only (`runtime/index.js`, `lane/index.js`, …) |
+| **L4** | `init/`, `lifecycle/`, `pack/`, `upgrade/`, `broker/` | L0–L3; L5 via **capability barrels** only (`runtime/index.js`, `lane/index.js`, `index/index.js`, …) |
 | **L5** | `runtime/catalog/`, `runtime/distribution/`, `runtime/knowledge/`, `task/runtime/`, `task/catalog/`, `lane/store/`, `lane/writer/`, `lane/coordinator/`, `pack/index/`, `index/store/`, `index/query/`, `index/runtime/`, `storage/` | L0, L1 (paths/parsing only) |
 | **L6** | `runtime/leaf/`, `hostAdapters/`, `distribution/` | L0, L1, L5 ports as needed |
 
