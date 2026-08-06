@@ -9,6 +9,14 @@ export {buildContextPolicyDocument} from './contextPolicyBaseline.js';
 export {buildRoutingPolicyDocument} from './routingPolicyProjection.js';
 export {buildDurableRoots} from './durableRootsPlanner.js';
 export {nodeKnowledgeProvenanceHost, resolveInstalledKnowledgeTag} from './knowledgeProvenanceHost.js';
+export {
+    DecisionEnvelopeBuilder, DecisionEnvelopeError, computeEnvelopeDigest, verifyEnvelopeDigest,
+    parseDecisionEnvelope, validateDecisionEnvelope
+} from './DecisionEnvelope.js';
+export type {
+    DecisionEnvelopeBuilderOptions, EnvelopeIndexQuery, EnvelopeJournalProjection, EnvelopeParams,
+    EnvelopeRouteDecision, EnvelopeReason, EnvelopeVerificationInput
+} from './DecisionEnvelope.js';
 export type {
     ContextPolicyDocument,
     CoordinatorBaselineInputs,

@@ -87,6 +87,30 @@ export type {
     RequirementQueryPage,
     RequirementQueryParams
 } from './indexQuery.js';
+export type {
+    BoundedContext as DecisionBoundedContext,
+    CapabilityClass as DecisionCapabilityClass,
+    DecisionClass,
+    DecisionEnvelope,
+    EnvelopeBatch,
+    EnvelopeBudget,
+    EndpointAvailability,
+    EnvelopeReference,
+    EnvelopeDigest,
+    EnvelopeTrigger,
+    EvidenceReference,
+    EvidenceSource,
+    IndexBatchSummary,
+    IndexContextSection,
+    JournalContextSection,
+    JournalEventReference,
+    LaneProjection,
+    PackIndexProvenance,
+    ProjectionSummary,
+    RoutingContextSection,
+    UntrustedContentEntry,
+    UntrustedSection
+} from './decision.js';
 export {roleEventCompatibility, validateEventCompatibility} from './events.js';
 export type {WorkerEventRecord} from './events.js';
 export type {

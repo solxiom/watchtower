@@ -134,6 +134,173 @@
       ],
       "type": "object"
     },
+    "boundedContext": {
+      "additionalProperties": false,
+      "properties": {
+        "indexContext": {
+          "additionalProperties": false,
+          "properties": {
+            "evidenceRefs": {
+              "items": {
+                "$ref": "#/$defs/evidenceReference"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "impactScope": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "packSealId": {
+              "$ref": "#/$defs/id"
+            },
+            "relevantBatches": {
+              "items": {
+                "$ref": "#/$defs/indexBatchSummary"
+              },
+              "type": "array"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "packSealId",
+            "relevantBatches",
+            "evidenceRefs",
+            "impactScope",
+            "truncated"
+          ],
+          "type": "object"
+        },
+        "journalContext": {
+          "additionalProperties": false,
+          "properties": {
+            "batch": {
+              "$ref": "#/$defs/projectionSummary"
+            },
+            "cycle": {
+              "$ref": "#/$defs/projectionSummary"
+            },
+            "eventRefs": {
+              "items": {
+                "$ref": "#/$defs/evidenceReference"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "impactScope": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "maxJournalEntries": {
+              "maximum": 200,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "recentEvents": {
+              "items": {
+                "$ref": "#/$defs/journalEventReference"
+              },
+              "type": "array"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "recentEvents",
+            "cycle",
+            "batch",
+            "eventRefs",
+            "impactScope",
+            "maxJournalEntries",
+            "truncated"
+          ],
+          "type": "object"
+        },
+        "routingContext": {
+          "additionalProperties": false,
+          "properties": {
+            "decisionClass": {
+              "enum": [
+                "D1",
+                "D2",
+                "D3"
+              ]
+            },
+            "endpointAvailability": {
+              "$ref": "#/$defs/endpointAvailability"
+            },
+            "evidenceRefs": {
+              "items": {
+                "$ref": "#/$defs/evidenceReference"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "impactScope": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "matchedRuleId": {
+              "$ref": "#/$defs/id"
+            },
+            "minimumCapability": {
+              "enum": [
+                "C2",
+                "C3",
+                "C5"
+              ]
+            },
+            "permittedProposalTypes": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "policyDigest": {
+              "$ref": "#/$defs/digest"
+            },
+            "policyVersion": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "matchedRuleId",
+            "decisionClass",
+            "minimumCapability",
+            "permittedProposalTypes",
+            "policyVersion",
+            "policyDigest",
+            "endpointAvailability",
+            "evidenceRefs",
+            "impactScope"
+          ],
+          "type": "object"
+        },
+        "untrustedContent": {
+          "$ref": "#/$defs/untrustedSection"
+        }
+      },
+      "required": [
+        "indexContext",
+        "journalContext",
+        "routingContext",
+        "untrustedContent"
+      ],
+      "type": "object"
+    },
     "commandError": {
       "additionalProperties": false,
       "properties": {
@@ -232,6 +399,223 @@
         "projectionRevision",
         "operation",
         "outcome"
+      ],
+      "type": "object"
+    },
+    "decisionEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "batch": {
+          "additionalProperties": false,
+          "properties": {
+            "briefRef": {
+              "$ref": "#/$defs/envelopeReference"
+            },
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "reasoningClass": {
+              "$ref": "#/$defs/id"
+            },
+            "repositories": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "id",
+            "briefRef",
+            "reasoningClass",
+            "repositories"
+          ],
+          "type": "object"
+        },
+        "boundedContext": {
+          "$ref": "#/$defs/boundedContext"
+        },
+        "budget": {
+          "additionalProperties": false,
+          "properties": {
+            "inputHard": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "inputSoft": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "outputHard": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "unit": {
+              "const": "estimated-tokens"
+            }
+          },
+          "required": [
+            "inputSoft",
+            "inputHard",
+            "outputHard",
+            "unit"
+          ],
+          "type": "object"
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "cycleId": {
+          "$ref": "#/$defs/id"
+        },
+        "decisionClass": {
+          "enum": [
+            "D1",
+            "D2",
+            "D3"
+          ]
+        },
+        "expiresAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "findingRefs": {
+          "items": {
+            "$ref": "#/$defs/envelopeReference"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "initiativeId": {
+          "$ref": "#/$defs/id"
+        },
+        "laneId": {
+          "$ref": "#/$defs/id"
+        },
+        "laneProjection": {
+          "additionalProperties": false,
+          "properties": {
+            "accepted": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "activeBatch": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "blocked": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "ready": {
+              "items": {
+                "$ref": "#/$defs/id"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "status": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "status",
+            "activeBatch",
+            "accepted",
+            "ready",
+            "blocked"
+          ],
+          "type": "object"
+        },
+        "packIndex": {
+          "additionalProperties": false,
+          "properties": {
+            "compilerVersion": {
+              "$ref": "#/$defs/id"
+            },
+            "manifestDigest": {
+              "$ref": "#/$defs/digest"
+            },
+            "packSealId": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "packSealId",
+            "manifestDigest",
+            "compilerVersion"
+          ],
+          "type": "object"
+        },
+        "permittedProposalTypes": {
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "routingRuleId": {
+          "$ref": "#/$defs/id"
+        },
+        "schemaVersion": {
+          "const": 1
+        },
+        "semanticDigest": {
+          "$ref": "#/$defs/digest"
+        },
+        "trigger": {
+          "additionalProperties": false,
+          "properties": {
+            "batchId": {
+              "$ref": "#/$defs/id"
+            },
+            "event": {
+              "$ref": "#/$defs/id"
+            },
+            "eventId": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "eventId",
+            "event",
+            "batchId"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "cycleId",
+        "laneId",
+        "initiativeId",
+        "decisionClass",
+        "routingRuleId",
+        "packIndex",
+        "trigger",
+        "laneProjection",
+        "batch",
+        "findingRefs",
+        "permittedProposalTypes",
+        "budget",
+        "boundedContext",
+        "createdAt",
+        "expiresAt",
+        "semanticDigest"
       ],
       "type": "object"
     },
@@ -508,8 +892,77 @@
       ],
       "type": "object"
     },
+    "endpointAvailability": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "capacityPoolId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "eligibleCount": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "available",
+        "eligibleCount",
+        "capacityPoolId"
+      ],
+      "type": "object"
+    },
+    "envelopeReference": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "repository": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "repository",
+        "path",
+        "digest"
+      ],
+      "type": "object"
+    },
     "eventPage": {
       "$ref": "#/$defs/page"
+    },
+    "evidenceReference": {
+      "additionalProperties": false,
+      "properties": {
+        "reference": {
+          "$ref": "#/$defs/id"
+        },
+        "source": {
+          "enum": [
+            "index",
+            "journal",
+            "routing",
+            "untrusted"
+          ]
+        }
+      },
+      "required": [
+        "reference",
+        "source"
+      ],
+      "type": "object"
     },
     "id": {
       "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
@@ -693,6 +1146,117 @@
         "sourceBaselines",
         "files",
         "generatedAt"
+      ],
+      "type": "object"
+    },
+    "indexBatchSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "batchId": {
+          "$ref": "#/$defs/id"
+        },
+        "dependencyIds": {
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "primaryRepository": {
+          "$ref": "#/$defs/id"
+        },
+        "reasoningClass": {
+          "$ref": "#/$defs/id"
+        },
+        "requirementIds": {
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reviewBriefRef": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "title": {
+          "$ref": "#/$defs/id"
+        },
+        "workBriefRef": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "workload": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "batchId",
+        "title",
+        "primaryRepository",
+        "reasoningClass",
+        "workload",
+        "workBriefRef",
+        "reviewBriefRef",
+        "dependencyIds",
+        "requirementIds"
+      ],
+      "type": "object"
+    },
+    "journalEventReference": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "batchId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "causationId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cycleId": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "eventId": {
+          "$ref": "#/$defs/id"
+        },
+        "sequence": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "type": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "eventId",
+        "type",
+        "sequence",
+        "at",
+        "batchId",
+        "cycleId",
+        "causationId"
       ],
       "type": "object"
     },
@@ -1143,6 +1707,34 @@
         "limit",
         "nextCursor",
         "revision"
+      ],
+      "type": "object"
+    },
+    "projectionSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "eventCount": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "lastEventType": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "state",
+        "lastEventType",
+        "eventCount"
       ],
       "type": "object"
     },
@@ -2839,6 +3431,55 @@
       "required": [
         "implementer",
         "reviewer"
+      ],
+      "type": "object"
+    },
+    "untrustedEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "operator",
+            "coordinator-response",
+            "external"
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "content"
+      ],
+      "type": "object"
+    },
+    "untrustedSection": {
+      "additionalProperties": false,
+      "properties": {
+        "beginMarker": {
+          "const": "BEGIN UNTRUSTED CONTENT"
+        },
+        "endMarker": {
+          "const": "END UNTRUSTED CONTENT"
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/untrustedEntry"
+          },
+          "type": "array"
+        },
+        "trust": {
+          "const": "untrusted"
+        }
+      },
+      "required": [
+        "trust",
+        "beginMarker",
+        "entries",
+        "endMarker"
       ],
       "type": "object"
     },

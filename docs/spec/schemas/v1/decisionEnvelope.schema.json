@@ -1,0 +1,70 @@
+{
+  "x-watchtower-fragment": {"schemaVersion": 1, "id": "watchtower.v1.decision-envelope", "includes": ["watchtower.v1.core"]},
+  "$defs": {
+    "envelopeReference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "path", "digest"],
+      "properties": {"repository": {"$ref": "#/$defs/id"}, "path": {"$ref": "#/$defs/relativePath"}, "digest": {"$ref": "#/$defs/digest"}}
+    },
+    "evidenceReference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reference", "source"],
+      "properties": {"reference": {"$ref": "#/$defs/id"}, "source": {"enum": ["index", "journal", "routing", "untrusted"]}}
+    },
+    "indexBatchSummary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["batchId", "title", "primaryRepository", "reasoningClass", "workload", "workBriefRef", "reviewBriefRef", "dependencyIds", "requirementIds"],
+      "properties": {"batchId": {"$ref": "#/$defs/id"}, "title": {"$ref": "#/$defs/id"}, "primaryRepository": {"$ref": "#/$defs/id"}, "reasoningClass": {"$ref": "#/$defs/id"}, "workload": {"$ref": "#/$defs/id"}, "workBriefRef": {"$ref": "#/$defs/relativePath"}, "reviewBriefRef": {"$ref": "#/$defs/relativePath"}, "dependencyIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "requirementIds": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}
+    },
+    "projectionSummary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "lastEventType", "eventCount"],
+      "properties": {"state": {"$ref": "#/$defs/id"}, "lastEventType": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}, "eventCount": {"type": "integer", "minimum": 0}}
+    },
+    "journalEventReference": {
+      "type": "object", "additionalProperties": false,
+      "required": ["eventId", "type", "sequence", "at", "batchId", "cycleId", "causationId"],
+      "properties": {"eventId": {"$ref": "#/$defs/id"}, "type": {"$ref": "#/$defs/id"}, "sequence": {"type": "integer", "minimum": 0}, "at": {"type": "string", "format": "date-time"}, "batchId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}, "cycleId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}, "causationId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}}
+    },
+    "endpointAvailability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["available", "eligibleCount", "capacityPoolId"],
+      "properties": {"available": {"type": "boolean"}, "eligibleCount": {"type": "integer", "minimum": 0}, "capacityPoolId": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}}
+    },
+    "untrustedEntry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "content"],
+      "properties": {"source": {"enum": ["operator", "coordinator-response", "external"]}, "content": {"type": "string", "minLength": 1, "maxLength": 512}}
+    },
+    "untrustedSection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["trust", "beginMarker", "entries", "endMarker"],
+      "properties": {"trust": {"const": "untrusted"}, "beginMarker": {"const": "BEGIN UNTRUSTED CONTENT"}, "entries": {"type": "array", "items": {"$ref": "#/$defs/untrustedEntry"}}, "endMarker": {"const": "END UNTRUSTED CONTENT"}}
+    },
+    "boundedContext": {
+      "type": "object", "additionalProperties": false,
+      "required": ["indexContext", "journalContext", "routingContext", "untrustedContent"],
+      "properties": {
+        "indexContext": {"type": "object", "additionalProperties": false, "required": ["packSealId", "relevantBatches", "evidenceRefs", "impactScope", "truncated"], "properties": {"packSealId": {"$ref": "#/$defs/id"}, "relevantBatches": {"type": "array", "items": {"$ref": "#/$defs/indexBatchSummary"}}, "evidenceRefs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/evidenceReference"}}, "impactScope": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "truncated": {"type": "boolean"}}},
+        "journalContext": {"type": "object", "additionalProperties": false, "required": ["recentEvents", "cycle", "batch", "eventRefs", "impactScope", "maxJournalEntries", "truncated"], "properties": {"recentEvents": {"type": "array", "items": {"$ref": "#/$defs/journalEventReference"}}, "cycle": {"$ref": "#/$defs/projectionSummary"}, "batch": {"$ref": "#/$defs/projectionSummary"}, "eventRefs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/evidenceReference"}}, "impactScope": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "maxJournalEntries": {"type": "integer", "minimum": 1, "maximum": 200}, "truncated": {"type": "boolean"}}},
+        "routingContext": {"type": "object", "additionalProperties": false, "required": ["matchedRuleId", "decisionClass", "minimumCapability", "permittedProposalTypes", "policyVersion", "policyDigest", "endpointAvailability", "evidenceRefs", "impactScope"], "properties": {"matchedRuleId": {"$ref": "#/$defs/id"}, "decisionClass": {"enum": ["D1", "D2", "D3"]}, "minimumCapability": {"enum": ["C2", "C3", "C5"]}, "permittedProposalTypes": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "policyVersion": {"$ref": "#/$defs/id"}, "policyDigest": {"$ref": "#/$defs/digest"}, "endpointAvailability": {"$ref": "#/$defs/endpointAvailability"}, "evidenceRefs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/evidenceReference"}}, "impactScope": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+        "untrustedContent": {"$ref": "#/$defs/untrustedSection"}
+      }
+    },
+    "decisionEnvelope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "cycleId", "laneId", "initiativeId", "decisionClass", "routingRuleId", "packIndex", "trigger", "laneProjection", "batch", "findingRefs", "permittedProposalTypes", "budget", "boundedContext", "createdAt", "expiresAt", "semanticDigest"],
+      "properties": {
+        "schemaVersion": {"const": 1}, "cycleId": {"$ref": "#/$defs/id"}, "laneId": {"$ref": "#/$defs/id"}, "initiativeId": {"$ref": "#/$defs/id"},
+        "decisionClass": {"enum": ["D1", "D2", "D3"]}, "routingRuleId": {"$ref": "#/$defs/id"},
+        "packIndex": {"type": "object", "additionalProperties": false, "required": ["packSealId", "manifestDigest", "compilerVersion"], "properties": {"packSealId": {"$ref": "#/$defs/id"}, "manifestDigest": {"$ref": "#/$defs/digest"}, "compilerVersion": {"$ref": "#/$defs/id"}}},
+        "trigger": {"type": "object", "additionalProperties": false, "required": ["eventId", "event", "batchId"], "properties": {"eventId": {"$ref": "#/$defs/id"}, "event": {"$ref": "#/$defs/id"}, "batchId": {"$ref": "#/$defs/id"}}},
+        "laneProjection": {"type": "object", "additionalProperties": false, "required": ["status", "activeBatch", "accepted", "ready", "blocked"], "properties": {"status": {"$ref": "#/$defs/id"}, "activeBatch": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}, "accepted": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "ready": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "blocked": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+        "batch": {"type": "object", "additionalProperties": false, "required": ["id", "briefRef", "reasoningClass", "repositories"], "properties": {"id": {"$ref": "#/$defs/id"}, "briefRef": {"$ref": "#/$defs/envelopeReference"}, "reasoningClass": {"$ref": "#/$defs/id"}, "repositories": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+        "findingRefs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/envelopeReference"}}, "permittedProposalTypes": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "budget": {"type": "object", "additionalProperties": false, "required": ["inputSoft", "inputHard", "outputHard", "unit"], "properties": {"inputSoft": {"type": "integer", "minimum": 1}, "inputHard": {"type": "integer", "minimum": 1}, "outputHard": {"type": "integer", "minimum": 1}, "unit": {"const": "estimated-tokens"}}},
+        "boundedContext": {"$ref": "#/$defs/boundedContext"}, "createdAt": {"type": "string", "format": "date-time"}, "expiresAt": {"type": "string", "format": "date-time"}, "semanticDigest": {"$ref": "#/$defs/digest"}
+      }
+    }
+  }
+}

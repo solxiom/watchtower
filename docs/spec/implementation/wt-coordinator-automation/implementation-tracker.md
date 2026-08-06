@@ -10,7 +10,7 @@ Status: **Synchronized remediation candidate**
 | CA-04 | Ready set and resource-claim projection | ❌ Pending | DAG/dependency/claim/capacity blockers; no arbitrary winner |
 | CA-05 | Ordered routing policy and capability floors | ❌ Pending | Every v1 rule/guard; first-match determinism; installed-policy provenance; normative contradiction after safety as D3/C5; economics only after hard eligibility |
 | CA-06 | Provider-neutral endpoint eligibility and isolation core | ❌ Pending | Unattended/advisory/skill-only classification; hard eligibility; drift invalidation/shared pools; no concrete CLI adapter |
-| CA-07 | Immutable decision envelopes | ❌ Pending | Stable semantic digest; bounded default context; contradiction/advisor evidence references and impact scope; untrusted-content delimiting |
+| CA-07 | Immutable decision envelopes | ✅ Accepted | Stable semantic digest; bounded default context; contradiction/advisor evidence references and impact scope; untrusted-content delimiting |
 | CA-08 | Context broker and cycle budgets | ❌ Pending | Allowlisted queries; provenance/redaction; soft/hard limits; endpoint telemetry quality and shared-pool accounting |
 | CA-09 | Typed proposals and current-state validator | ❌ Pending | All 14 proposal types; specification-resolution authority/seal/independence checks; stale/illegal/invalid cases |
 | CA-10 | Atomic lane-local effect executor and invocation envelopes | ❌ Pending | One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync |
