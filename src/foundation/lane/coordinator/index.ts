@@ -17,12 +17,25 @@ export type {
     DecisionEnvelopeBuilderOptions, EnvelopeIndexQuery, EnvelopeJournalProjection, EnvelopeParams,
     EnvelopeRouteDecision, EnvelopeReason, EnvelopeVerificationInput
 } from './DecisionEnvelope.js';
+export {classifyRoute} from './routeClassifier.js';
+export {selectRouteEndpoint} from './routeEndpointSelector.js';
+export {verifyRoutingPolicy} from './routingPolicyVerifier.js';
 export type {
     ContextPolicyDocument,
     CoordinatorBaselineInputs,
     CoordinatorBaselineLayout,
+    CoordinatorRoutingPolicy,
     InstalledKnowledgeTag,
     KnowledgeProvenancePort,
     OperatorSessionPolicy,
     RoutingPolicyDocument
 } from './coordinatorBaselineContracts.js';
+export type {
+    EndpointSelectionInput,
+    InstalledRoutingPolicyArtifact,
+    InstalledRoutingPolicyManifest,
+    RouteClassificationInput,
+    RoutingPolicyVerificationInput,
+    RoutingPolicyVerificationResult,
+    VerifiedRoutingPolicy
+} from './routingPolicyContracts.js';
