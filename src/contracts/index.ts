@@ -129,6 +129,11 @@ export type {
     WorkspaceResolution,
     WorktreeMode
 } from './types.js';
+export type {
+    CapacityPoolSnapshot, CapacityPoolUsage, EndpointAvailability, EndpointCapabilityClass, EndpointCapabilities,
+    EndpointConformance, EndpointContextClass, EndpointFingerprint, EndpointProfile, EndpointReasoningClass,
+    EndpointSupportMode, EligibilityFacts, EligibilityReason, EligibilityRequirements, EligibilityResult
+} from './endpointEligibility.js';
 export {JOURNAL_REASONS, JournalError} from './runtimeJournal.js';
 export type {
     BatchProjection, BoundedEventPage, CorruptionReport, CycleProjection, DurableEvent, DurableEventPage,

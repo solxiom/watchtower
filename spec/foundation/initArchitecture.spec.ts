@@ -17,9 +17,10 @@ const L4_RUNTIME_SUBCAPSULE = /from\s+['"]\.\.\/runtime\/(catalog|distribution|k
 const OWNED_MODULE_LIMIT = 200;
 
 describe('init domain inventory (FR-18)', () => {
-    it('owns exactly six modules plus the barrel', () => {
+    it('owns the init modules plus the barrel', () => {
         const modules = OWNED_MODULES.map((file) => relative(INIT_DIR, file)).sort();
         expect(modules).toEqual([
+            'EndpointEligibility.ts',
             'InitContracts.ts',
             'InitPlanner.ts',
             'InitPorts.ts',
