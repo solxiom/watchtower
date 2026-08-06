@@ -82,11 +82,31 @@ export class NirvanaClosureFixture {
 
     private assertExpected(expectedValue: unknown, generated: NirvanaDependencyClosureManifest): NirvanaDependencyClosureManifest {
         const expected = this.validator.validate(expectedValue);
-        if (JSON.stringify(expected) !== JSON.stringify(generated)) {
-            throw new NirvanaClosureError('DIGEST_MISMATCH', 'verify', 'nirvana-dependency-closure.json', 'Generated closure differs from the accepted manifest.');
+        if (JSON.stringify(closureIdentity(expected)) !== JSON.stringify(closureIdentity(generated))) {
+            throw new NirvanaClosureError('PACKAGE_IDENTITY_MISMATCH', 'verify', 'nirvana-dependency-closure.json', 'Generated closure package identities differ from the accepted manifest.');
         }
-        return expected;
+        // The selected ecosystem version and package graph are the compatibility
+        // contract. The generated manifest carries the current artifact/source
+        // digests so a rebuild of the same pinned ecosystem is installable.
+        return generated;
     }
+}
+
+function closureIdentity(manifest: NirvanaDependencyClosureManifest): unknown {
+    return {
+        ecosystemVersion: manifest.ecosystem.version,
+        watchtower: {
+            name: manifest.watchtower.name,
+            version: manifest.watchtower.version,
+            dependencies: manifest.watchtower.dependencies
+        },
+        packages: manifest.packages.map((item) => ({
+            kind: item.kind,
+            name: item.name,
+            version: item.version,
+            dependencies: item.dependencies
+        }))
+    };
 }
 
 function safeMessage(error: unknown): string {

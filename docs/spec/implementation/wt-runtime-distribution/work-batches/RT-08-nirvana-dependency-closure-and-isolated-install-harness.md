@@ -60,8 +60,10 @@ consumes accepted predecessors without absorbing adjacent capabilities.
   mechanism must remain portable to another valid versions root.
 - Derive the complete transitive `@nirvana/*` closure. Reject wildcard ranges,
   missing components, name/version mismatches, duplicate identities, local or
-  workspace paths, source links, ecosystem links in the installed fixture,
-  undeclared registry fallback, and digest drift.
+  workspace paths, source links, ecosystem links in the installed fixture, and
+  undeclared registry fallback. A rebuild of the same pinned ecosystem version
+  may produce different source/artifact bytes; compare package identity and the
+  dependency graph, then use the generated manifest digests for that build.
 - Pack every selected component, install only those artifacts plus Watchtower
   into a fresh prefix with source/worktree resolution disabled, and execute a
   relocated CLI/schema smoke. An npm public-registry E404 is evidence of a
@@ -73,7 +75,7 @@ consumes accepted predecessors without absorbing adjacent capabilities.
 
 ## Concrete interface and negative-case plan
 
-**Implementation:** Files/interfaces: exact Nirvana closure manifest, artifact/source digest validator, component pack fixture and fresh-prefix verifier. Derive the transitive closure selected by nira.json; reject wildcard, missing/mismatched component, duplicate identity, local/workspace path, source/ecosystem symlink, digest drift and undeclared registry fallback. Pack every component, install only artifacts plus Watchtower in a fresh prefix and run relocated CLI/schema smoke.
+**Implementation:** Files/interfaces: exact Nirvana closure manifest, artifact/source digest validator, component pack fixture and fresh-prefix verifier. Derive the transitive closure selected by nira.json; reject wildcard, missing/mismatched component, duplicate identity, local/workspace path, source/ecosystem symlink, and undeclared registry fallback. Compare an accepted manifest by pinned ecosystem/package identity and dependency graph, not rebuild-sensitive byte digests. Pack every component, install only artifacts plus Watchtower in a fresh prefix and run relocated CLI/schema smoke.
 
 ## Mandatory proof
 

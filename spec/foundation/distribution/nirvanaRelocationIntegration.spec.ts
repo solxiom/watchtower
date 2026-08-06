@@ -39,6 +39,44 @@ describe('Nirvana closure fresh-prefix integration', () => {
             expect(result.manifest.packages.map(item => item.name)).toEqual(['@nirvana/base']);
         }
     });
+
+    it('accepts rebuilt bytes when the pinned ecosystem identity is unchanged', async () => {
+        const nodeCommand = process.execPath;
+        const npmCommand = path.join(path.dirname(nodeCommand), 'npm');
+        const runner = new NirvanaCommandProcessRunner({
+            PATH: `${path.dirname(nodeCommand)}:/usr/bin:/bin`,
+            HOME: os.homedir()
+        });
+        const fixture = new NirvanaClosureFixture(new NirvanaClosureFileStore(), runner);
+        const first = await fixture.run({
+            projectRoot: sandbox.projectRoot,
+            versionsRoot: sandbox.versionsRoot,
+            watchtowerPackageRoot: sandbox.projectRoot,
+            npmCommand,
+            nodeCommand,
+            verifyInstall: false
+        });
+        expect(first.ok).toBeTrue();
+        if (!first.ok) return;
+
+        await writeFile(path.join(sandbox.versionRoot, 'components', 'base', 'rebuilt.js'), 'export const rebuilt = true;\n', 'utf8');
+        const rebuilt = await fixture.run({
+            projectRoot: sandbox.projectRoot,
+            versionsRoot: sandbox.versionsRoot,
+            watchtowerPackageRoot: sandbox.projectRoot,
+            expectedManifest: first.manifest,
+            npmCommand,
+            nodeCommand,
+            verifyInstall: false
+        });
+
+        expect(rebuilt.ok).toBeTrue();
+        if (rebuilt.ok) {
+            expect(rebuilt.manifest.packages[0].name).toBe('@nirvana/base');
+            expect(rebuilt.manifest.packages[0].version).toBe('1.0.0');
+            expect(rebuilt.manifest.packages[0].source.sha256).not.toBe(first.manifest.packages[0].source.sha256);
+        }
+    });
 });
 
 async function addPackableWatchtower(projectRoot: string): Promise<void> {
