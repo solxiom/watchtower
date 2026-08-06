@@ -271,6 +271,33 @@ export type {
     UpgradeApplyFailure,
     UpgradeApplyReason
 } from './upgradeApply.js';
+export {EFFECT_TYPES, PROPOSAL_ORIGINS, PROPOSAL_REASONS, PROPOSAL_TYPES} from './proposals.js';
+export type {
+    AdmitPackAmendmentBody,
+    ClassifyRejectBody,
+    DecisionProposal,
+    EffectType,
+    EscalateBody,
+    GrantSessionBudgetBody,
+    OpenCorrectionBody,
+    PlaceHoldBody,
+    ProposalBody,
+    ProposalOrigin,
+    ProposalReason,
+    ProposalType,
+    ProposalValidationResult,
+    ProposeReconciliationBody,
+    ProposeSpecificationResolutionBody,
+    ReleaseHoldBody,
+    RequestedEffect,
+    RequestPackAmendmentBody,
+    RequestRerouteBody,
+    ResumeSpecificationBlockedSessionBody,
+    SelectCorrectionRouteBody,
+    SelectReadyBatchBody,
+    ValidationError,
+    ValidationWarning
+} from './proposals.js';
 export {BROKER_REASONS, BROKER_REFERENCE_KINDS} from './contextBroker.js';
 export type {
     BrokerContentProvenance,

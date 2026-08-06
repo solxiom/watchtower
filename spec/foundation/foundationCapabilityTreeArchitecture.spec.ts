@@ -24,6 +24,7 @@ const ALLOWED_TOP_LEVEL_DIRS = [
     'parsing',
     'paths',
     'presentation',
+    'proposal',
     'read',
     'runtime',
     'schemaComposition',
