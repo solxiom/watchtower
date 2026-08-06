@@ -105,3 +105,11 @@ Use the npm and node installed through nvm.
 
 Do correctly perform `nvb dist` make sure you are running as kavan through `sudo -u kavan -i` and using
 nvm installed node and npm
+
+Operational routing rule: RT-08 remains required for Nirvana closure, artifact,
+and isolated-install qualification. Future coordinators must treat only
+`DIST_CLOSURE_FAILED: DIGEST_MISMATCH` caused by comparing rebuild-sensitive
+bytes with the historical closure manifest as non-blocking external evidence.
+Do not route that mismatch to an implementer or refresh the historical
+manifest. RT-08’s closure/install checks still run; source-owned failures and
+package identity/dependency-graph failures remain actionable.
