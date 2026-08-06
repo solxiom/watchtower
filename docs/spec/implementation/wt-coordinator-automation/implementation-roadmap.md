@@ -12,7 +12,7 @@ Status: **Synchronized remediation candidate**
 | 14 | CA-06 | Provider-neutral endpoint eligibility and isolation core | `RT-05`, `CA-05` | provider-neutral contracts, eligibility, fingerprints, pools |
 | 15 | CA-07 | Immutable decision envelopes | `CA-02`–`CA-06` | envelope foundation |
 | 16 | CA-08 | Context broker and cycle budgets | `CA-02`, `CA-06`, `CA-07` | broker/usage foundation |
-| 17 | CA-09 | Typed proposals and current-state validator | `CA-05`, `CA-07`, `CA-08` | proposal contracts/validator |
+| 17 | CA-09 | Typed proposals and current-state validator | `CA-05`, `CA-07`, `CA-08` | proposal contracts/validator — ✅ Accepted |
 | 18 | CA-10 | Atomic lane-local effect executor and invocation envelopes | `LC-03`, `CA-09` | effect foundation/NVB task boundary |
 | 19 | CA-11 | Tmux prepare/attempt/verify effect handler | `RT-05`, `CA-10` | focused TaskHandler and tmux leaf |
 | 19 | CA-12 | Acceptance and Git publication handler | `RM-08`, `CA-10` | focused TaskHandler and Git leaf/verification |
