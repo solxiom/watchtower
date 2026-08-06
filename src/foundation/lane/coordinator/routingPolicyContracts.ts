@@ -11,6 +11,8 @@ export interface RoutingPolicyVerificationInput {
     /** LC-05's already validated, lane-owned coordinator-routing projection. */
     readonly routing: CoordinatorRoutingPolicy;
     readonly projection: unknown;
+    /** RT-02/LC-05 identity for the accepted installed rule artifact. */
+    readonly acceptedRulesDigest: Sha256Digest;
     /** Verified machine-readable policy artifact supplied by the installed pack. */
     readonly installedPolicyArtifact: unknown;
     readonly installedKnowledge?: unknown;

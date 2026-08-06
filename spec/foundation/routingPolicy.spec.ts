@@ -3,7 +3,7 @@ import {
     classifyRoute, selectRouteEndpoint, verifyRoutingPolicy, type CoordinatorRoutingPolicy,
     type VerifiedRoutingPolicy
 } from '../../src/foundation/lane/coordinator/index.js';
-import type {RoutingRule} from '../../src/contracts/index.js';
+import type {RoutingRule, Sha256Digest} from '../../src/contracts/index.js';
 
 describe('CA-05 ordered routing policy', function () {
     it('uses the first matching installed rule and carries policy provenance', function () {
@@ -33,20 +33,20 @@ describe('CA-05 ordered routing policy', function () {
         const rules = v1Rules();
         const installedPolicyArtifact = installedArtifact(rules);
         const projection = projectionFor(routing, installedPolicyArtifact.manifest.installedKnowledge);
-        expect(() => verifyRoutingPolicy({routing, projection: {...projection, policyDigest: `sha256:${'f'.repeat(64)}`}, installedPolicyArtifact})).toThrowError(/routing policy/);
+        expect(() => verifyRoutingPolicy({routing, projection: {...projection, policyDigest: `sha256:${'f'.repeat(64)}`}, acceptedRulesDigest: digestRules(rules), installedPolicyArtifact})).toThrowError(/routing policy/);
         const extra = [{...rules[0], future: true}, ...rules.slice(1)];
-        expect(() => verifyRoutingPolicy({routing, projection, installedPolicyArtifact: installedArtifact(extra)})).toThrowError(/routing policy/);
+        expect(() => verifyRoutingPolicy({routing, projection, acceptedRulesDigest: digestRules(rules), installedPolicyArtifact: installedArtifact(extra)})).toThrowError(/routing policy/);
         const invented = [rule('invented', 'invented', 'D1', 'C2', [], 'none')];
-        expect(() => verifyRoutingPolicy({routing, projection, installedPolicyArtifact: installedArtifact(invented, rules)})).toThrowError(/routing policy/);
+        expect(() => verifyRoutingPolicy({routing, projection, acceptedRulesDigest: digestRules(rules), installedPolicyArtifact: installedArtifact(invented)})).toThrowError(/routing policy/);
         const incomplete = rules.slice(0, -1);
-        expect(() => verifyRoutingPolicy({routing, projection, installedPolicyArtifact: installedArtifact(incomplete, rules)})).toThrowError(/routing policy/);
-        expect(() => verifyRoutingPolicy({routing, projection, installedPolicyArtifact: installedArtifact([...rules, rules[0]])})).toThrowError(/routing policy/);
+        expect(() => verifyRoutingPolicy({routing, projection, acceptedRulesDigest: digestRules(rules), installedPolicyArtifact: installedArtifact(incomplete)})).toThrowError(/routing policy/);
+        expect(() => verifyRoutingPolicy({routing, projection, acceptedRulesDigest: digestRules(rules), installedPolicyArtifact: installedArtifact([...rules, rules[0]])})).toThrowError(/routing policy/);
         const changed = v1Rules({'normative-contradiction-v1': {...rules[1], hold: 'none', permittedProposalTypes: ['escalate']}});
-        expect(() => verifyRoutingPolicy({routing, projection, installedPolicyArtifact: installedArtifact(changed, rules)})).toThrowError(/routing policy/);
+        expect(() => verifyRoutingPolicy({routing, projection, acceptedRulesDigest: digestRules(rules), installedPolicyArtifact: installedArtifact(changed)})).toThrowError(/routing policy/);
         const changedKnowledge = knowledge(`sha256:${'1'.repeat(64)}`);
         const changedArtifact = installedArtifact(changed, changed, changedKnowledge);
         const changedProjection = projectionFor(routing, changedKnowledge);
-        expect(verifyRoutingPolicy({routing, projection: changedProjection, installedPolicyArtifact: changedArtifact}).policy.rules[1].hold).toBe('none');
+        expect(verifyRoutingPolicy({routing, projection: changedProjection, acceptedRulesDigest: digestRules(changed), installedPolicyArtifact: changedArtifact}).policy.rules[1].hold).toBe('none');
     });
 
     it('enforces hard eligibility before economics and never routes M0', function () {
@@ -73,7 +73,7 @@ describe('CA-05 ordered routing policy', function () {
 
 function policy(rules: readonly RoutingRule[], routing = baseRouting()): VerifiedRoutingPolicy {
     const installedPolicyArtifact = installedArtifact(rules);
-    return verifyRoutingPolicy({routing, projection: projectionFor(routing, installedPolicyArtifact.manifest.installedKnowledge), installedPolicyArtifact}).policy;
+    return verifyRoutingPolicy({routing, projection: projectionFor(routing, installedPolicyArtifact.manifest.installedKnowledge), acceptedRulesDigest: digestRules(rules), installedPolicyArtifact}).policy;
 }
 
 function projectionFor(routing: CoordinatorRoutingPolicy, installedKnowledge: ReturnType<typeof knowledge>) {
@@ -130,4 +130,4 @@ function baseRouting(): CoordinatorRoutingPolicy {
 }
 
 function digest(value: CoordinatorRoutingPolicy): string { return semanticDigest(JSON.parse(JSON.stringify(value))); }
-function digestRules(value: readonly RoutingRule[]): string { return semanticDigest(JSON.parse(JSON.stringify(value))); }
+function digestRules(value: readonly RoutingRule[]): Sha256Digest { return semanticDigest(JSON.parse(JSON.stringify(value))) as Sha256Digest; }

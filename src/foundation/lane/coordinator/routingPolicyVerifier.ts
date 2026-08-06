@@ -15,7 +15,7 @@ export function verifyRoutingPolicy(input: RoutingPolicyVerificationInput): Rout
     if (!isJsonValue(routing) || projection.policyDigest !== semanticDigest(routing) || projection.policyVersion !== 'shipping-v1') invalid('policy digest or version');
     const provenance = provenanceValue(input.installedKnowledge ?? projection.installedKnowledge.provenance);
     if (JSON.stringify(provenance) !== JSON.stringify(projection.installedKnowledge.provenance)) invalid('installed knowledge provenance');
-    const rules = installedArtifactRules(input.installedPolicyArtifact, projection);
+    const rules = installedArtifactRules(input.installedPolicyArtifact, projection, input.acceptedRulesDigest);
     return {policy: Object.freeze({routing, projection, rules}), provenance};
 }
 
@@ -39,7 +39,7 @@ function parseRules(value: unknown): readonly RoutingRule[] {
     return Object.freeze(rules);
 }
 
-function installedArtifactRules(value: unknown, projection: RoutingPolicyDocument): readonly RoutingRule[] {
+function installedArtifactRules(value: unknown, projection: RoutingPolicyDocument, acceptedRulesDigest: string): readonly RoutingRule[] {
     if (!record(value) || !only(value, ['schemaVersion', 'policyVersion', 'rules', 'manifest']) ||
         value.schemaVersion !== 1 || value.policyVersion !== 'shipping-v1' || !record(value.manifest)) invalid('installed routing policy artifact');
     const manifest = value.manifest;
@@ -51,7 +51,7 @@ function installedArtifactRules(value: unknown, projection: RoutingPolicyDocumen
     const manifestProvenance = provenanceValue(manifest.installedKnowledge.provenance);
     if (JSON.stringify(manifestProvenance) !== JSON.stringify(projection.installedKnowledge.provenance)) invalid('installed routing policy manifest provenance');
     const rules = parseRules(value.rules);
-    if (rulesDigest(rules) !== manifest.rulesDigest) invalid('installed routing policy manifest rules digest');
+    if (manifest.rulesDigest !== acceptedRulesDigest || rulesDigest(rules) !== acceptedRulesDigest) invalid('installed routing policy manifest rules digest');
     return rules;
 }
 
