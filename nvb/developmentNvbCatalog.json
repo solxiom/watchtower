@@ -6,7 +6,8 @@
     "dist:copy-config", "dist:copy-help", "dist:fix-esm", "dist:package",
     "dist:runtime-nvb:compile", "dist:runtime-nvb:copy", "dist:copy-knowledge", "dist:copy-runtime",
     "dist:runtime-nvb:foundation-compile", "dist:runtime-nvb:leaf-copy", "dist:runtime-nvb:relocation-check",
-    "dist:runtime-nvb:schema-copy", "dist:validate", "runtime-nvb:validate",
+    "dist:runtime-nvb:schema-copy", "dist:prune:init-reservation-authority", "dist:restore:init-reservation-authority", "dist:stage:init-reservation-authority",
+    "dist:validate", "dist:validate:reservation-authority-seams", "runtime-nvb:validate",
     "runtime-nvb:catalog:check", "runtime-nvb:catalog:generate", "schema:stage-build",
     "schema:stage-dist", "test"
   ],

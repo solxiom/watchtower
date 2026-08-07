@@ -30,4 +30,5 @@ export {RuntimeCatalog, ManagedAssets} from './runtime/index.js';
 export type {RuntimeCatalogOptions, ManagedAssetsOptions} from './runtime/index.js';
 export {LaneTaskCatalog, NirvanaLaneTaskRunner} from './task/index.js';
 export type {LaneTaskRunner, NirvanaLaneTaskRunnerOptions} from './task/index.js';
+export {OpenCodeEndpointAdapter} from './endpoint/index.js';
 export {resolveWatchtowerDataHome, validateWatchtowerDataHome} from './paths/index.js';

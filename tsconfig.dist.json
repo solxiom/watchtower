@@ -3,5 +3,15 @@
   "compilerOptions": {
     "outDir": "./dist",
     "sourceMap": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "src/foundation/init/endpointReservationAuthorityCompositionAccess.ts",
+    "src/foundation/init/endpointReservationAuthorityLiveSnapshotStore.ts",
+    "src/foundation/init/endpointReservationAuthorityLiveSource.packaged.ts",
+    "src/foundation/init/endpointReservationAuthorityComposition.packaged.ts",
+    "src/foundation/init/endpointReservationAuthoritySeal.ts"
+  ]
 }

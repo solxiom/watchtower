@@ -40,10 +40,10 @@ describe('development NVB accepted identity', function () {
                 'build', 'build:runtime-nvb:foundation', 'build:tests', 'check:development-nvb', 'clean',
                 'dist:chmod-bin', 'dist:clean', 'dist:clean-build',
                 'dist:clean-esm-stamp', 'dist:closure:verify', 'dist:compile', 'dist:copy-bin', 'dist:copy-config',
-                'dist:copy-help', 'dist:copy-knowledge', 'dist:copy-runtime', 'dist:fix-esm', 'dist:package', 'dist:runtime-nvb:compile',
+                'dist:copy-help', 'dist:copy-knowledge', 'dist:copy-runtime', 'dist:fix-esm', 'dist:package', 'dist:prune:init-reservation-authority', 'dist:restore:init-reservation-authority', 'dist:runtime-nvb:compile',
                 'dist:runtime-nvb:copy', 'dist:runtime-nvb:foundation-compile',
                 'dist:runtime-nvb:leaf-copy', 'dist:runtime-nvb:relocation-check', 'dist:runtime-nvb:schema-copy',
-                'dist:validate', 'runtime-nvb:catalog:check',
+                'dist:stage:init-reservation-authority', 'dist:validate', 'dist:validate:reservation-authority-seams', 'runtime-nvb:catalog:check',
                 'runtime-nvb:catalog:generate', 'runtime-nvb:validate',
                 'schema:stage-build', 'schema:stage-dist', 'test'
             ],
