@@ -387,3 +387,20 @@ export type {
     ReadySetResult,
     WritableConflictReport
 } from './scheduling.js';
+
+export {
+    SESSION_HARD_GUARDS, SESSION_REUSE_REJECTIONS, SESSION_ROUTING_REASONS, SESSION_ROUTING_RULE_IDS
+} from './sessionRouting.js';
+export type {
+    SessionClassRoute, SessionClassificationRequest, SessionEndpointCandidate, SessionEndpointEscalation,
+    SessionHardGuard, SessionModelDecisionClass, SessionRequestForm, SessionReuseCandidate,
+    SessionReuseRejection, SessionRouteRequest, SessionRouteSelection, SessionRoutingPlan, SessionRoutingReason,
+    SessionRoutingRuleId, SessionTurnClassification
+} from './sessionRouting.js';
+export {SESSION_BUDGET_RECOMMENDATIONS, SESSION_GRANT_DIMENSIONS} from './sessionBudget.js';
+export type {
+    SessionBudgetAdmission, SessionBudgetCheck, SessionBudgetDebit, SessionBudgetLevel, SessionBudgetLimits,
+    SessionBudgetRecommendation, SessionBudgetResult, SessionBudgetState, SessionGrant, SessionGrantAllowance,
+    SessionGrantDimension, SessionGrantLedger, SessionGrantRequest, SessionGrantUsageConsumption,
+    SessionReserveSplit
+} from './sessionBudget.js';

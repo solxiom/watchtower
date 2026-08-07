@@ -301,6 +301,9 @@ The v1 decision plane is defined in
 | `OperatorSessionMemoryIndex` | Provide bounded recent/pinned/linked turn working sets |
 | `TurnReferenceCapsuleBuilder` | Project one same-lane referenced turn into bounded non-transitive evidence |
 | `OperatorSessionPolicyResolver` | Resolve versioned baseline plus lane-owned finite profiles, limits, reserves, and retention |
+| `OperatorSessionTurnClassifier` | Classify one operator turn as M0 or D1–D3 against registered forms, hard guards, and class floors |
+| `OperatorSessionRouteSelector` | Select the endpoint for one `coordinator:operator-session:D1–D3` allocation slot without drawing on protected cycle reserves |
+| `OperatorSessionBudgetLedger` | Account per-turn, per-session, and lane-wide operator-session usage and admit or refuse a model-backed turn |
 | `AmendmentRequestStore` | Record confirmed pack/spec handoffs without changing accepted artifacts |
 | `OperatorSessionBudgetGrantStore` | Track finite audited grants within lane-wide limits and reserves |
 | `OperatorSessionAttachment` | Own one ephemeral full-screen TUI lifecycle and bind it to one lane/session |

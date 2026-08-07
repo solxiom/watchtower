@@ -39,6 +39,16 @@ export type {
     RoutingPolicyVerificationResult,
     VerifiedRoutingPolicy
 } from './routingPolicyContracts.js';
+export {
+    activeGrants, admitModelBackedTurn, assertGrantBinding, assertLedgerBinding, beginSessionTurn,
+    classifySessionTurn, computeReserveSplit, consumeGrantTurn, consumeGrantUsage, debitSessionBudget,
+    effectiveSessionCeilings, emptySessionGrantLedger, evaluateSessionBudget, evaluateSessionGrant,
+    grantedAllowance, initialSessionBudgetState, parseSessionRoutingPlan, planGrantDrawsForDebit,
+    reclassifyAfterEndpointEscalation, recordSessionGrant, remainingAllowance, selectSessionRoute,
+    SessionRoutingError, sessionRoutingFailure, validateSessionBudgetLimits, validateSessionBudgetState,
+    validateSessionRoutingPlan
+} from './sessionRouting/index.js';
+export type {SessionCeilings, SessionGrantContext, SessionRoutingReason} from './sessionRouting/index.js';
 export {SessionLifecycle, SessionStore, OperatorSessionError} from './session/index.js';
 export type {
     CreateSessionParams, ForkSessionParams, OperatorSession, SessionFilters, SessionJournalEntry, SessionJsonObject, SessionJsonValue,
