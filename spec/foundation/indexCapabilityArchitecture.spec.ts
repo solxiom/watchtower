@@ -9,7 +9,7 @@ const FOUNDATION = join(SOURCE_ROOT, 'foundation');
 const INDEX_DIR = join(FOUNDATION, 'index');
 
 const FORBIDDEN_FLAT_INDEX_DIRS = ['indexStore', 'indexQuery'];
-const SUB_CAPSULES = ['store', 'query', 'runtime'] as const;
+const SUB_CAPSULES = ['store', 'query', 'runtime', 'sessions'] as const;
 
 describe('index capability tree inventory (FR-36)', () => {
     it('nests store and query under index/', () => {

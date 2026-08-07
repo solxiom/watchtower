@@ -1,0 +1,187 @@
+{
+  "ownershipId": "session-index-v2-ownership",
+  "amendmentId": "SA-CA16R-03, SA-CA16R-04",
+  "capabilityDirectory": "src/foundation/index/sessions/",
+  "amends": "CA-16 review brief, Scope Verification item 1 (exactly two new files: src/foundation/SessionIndexes.ts and src/foundation/SessionCompaction.ts)",
+  "standard": "docs/development/engineering-and-review-standard.md",
+  "categoryCeilings": {
+    "publicBarrel": {
+      "preferred": 120,
+      "warn": [
+        121,
+        160
+      ],
+      "hardReject": 180
+    },
+    "contractTypeOnly": {
+      "preferred": 240,
+      "warn": [
+        241,
+        320
+      ],
+      "hardReject": 400
+    },
+    "foundationService": {
+      "preferred": 200,
+      "warn": [
+        201,
+        260
+      ],
+      "hardReject": 300
+    }
+  },
+  "precedent": {
+    "note": "Measured by conformance gate C9, not estimated. These are the accepted, reviewed, in-tree sibling capabilities for derived SQLite indexes.",
+    "capabilities": [
+      {
+        "path": "src/foundation/index/runtime/",
+        "files": 8,
+        "lines": 701,
+        "largestModule": 192
+      },
+      {
+        "path": "src/foundation/index/store/",
+        "files": 4,
+        "lines": 444,
+        "largestModule": 177
+      },
+      {
+        "path": "src/foundation/index/query/",
+        "files": 3,
+        "lines": 379,
+        "largestModule": 229
+      }
+    ],
+    "conclusion": "The accepted runtime journal index is 701 lines across 8 files with a 4-line barrel. Two owned files at the 300-line foundation hard-reject ceiling permit 600 lines in total. The session index is strictly larger in scope than the runtime index: seven tables against one projection, plus capsules and compaction. The two-file scope is therefore not reachable by any decomposition, and the precedent fixes both the shape and the location."
+  },
+  "namingRules": {
+    "source": "engineering-and-review-standard.md - class-owning TypeScript modules use PascalCase filenames; function/value modules use lowerCamelCase; new source filenames do not use dashes or underscores.",
+    "enforced": true
+  },
+  "modules": [
+    {
+      "file": "index.ts",
+      "category": "publicBarrel",
+      "budget": 20,
+      "responsibility": "Public surface of the session-index capability tree. Re-exports only; owns no behavior.",
+      "mirrors": "src/foundation/index/runtime/index.ts (4 lines)"
+    },
+    {
+      "file": "sessionIndexSchema.ts",
+      "category": "contractTypeOnly",
+      "budget": 180,
+      "responsibility": "The closed table registry, column types, enums, and the index_meta identity row set. Declarations only, no I/O.",
+      "mirrors": "src/foundation/pack/index/packIndexSchema.ts"
+    },
+    {
+      "file": "sessionIndexSource.ts",
+      "category": "foundationService",
+      "budget": 160,
+      "responsibility": "Reads the CA-15 operator-session tree (identity, JSONL journal, turn content) and computes journal checkpoints. The only module that touches journal, turn, and proposal bytes.",
+      "mirrors": "src/foundation/index/runtime/journalIndexSource.ts (55 lines); larger because CA-15's format is multi-file and validated from unknown",
+      "sizeException": {
+        "amendmentId": "SA-CA16R-04",
+        "exactFile": "src/foundation/index/sessions/sessionIndexSource.ts",
+        "acceptedBudget": 120,
+        "temporaryMaximum": 160,
+        "categoryPreferredMaximum": 200,
+        "reason": "The CORRECTION-03 map sized this module against src/foundation/index/runtime/journalIndexSource.ts (55) and journalIndexRows.ts (48), which consume an already-typed DurableEvent. CA-16 consumes CA-15's multi-file operator-session tree from unknown bytes: identity, JSONL journal envelope, per-turn response/snapshot/usage sidecars, turn content, and proposals, each admitted fail-closed. The reader already binds CA-15's own accepted validators (parseSession, readJournalFile, isTurnRecord) rather than transcribing the format, so no further reduction is available without either deleting required fail-closed validation or adding an owned module, which this amendment does not do.",
+        "reviewer": "CA-16R independent implementation review gate. The exception was measured and assessed by the fresh independent review recorded at .local/agent-reports/wt-coordinator-automation/reviews/CA-16R-opus-independent-implementation-review.md (2026-08-07), which confirmed both files sit within their temporary maxima and their category preferred ceilings and required this record to name its reviewer explicitly. Confirmation of that named reviewer is owned by the next independent implementation review; no implementer may mark it confirmed.",
+        "authority": "Operator, direct order 2026-08-07, recorded before the implementation edit that relies on it",
+        "approvedBeforeImplementation": true,
+        "expiryRemovalBatch": "CA-16R",
+        "expiry": "Expires with removal batch CA-16R. It authorizes no other batch, no other file, and no larger maximum; any further increase, any module added beyond this map, or any reuse by a later batch requires a new amendment approved before that implementation.",
+        "warnBand": "None. Both files stay at or below the engineering standard foundationService PREFERRED maximum of 200.",
+        "standardFields": [
+          "exactFile",
+          "temporaryMaximum",
+          "reason",
+          "reviewer",
+          "expiryRemovalBatch"
+        ]
+      }
+    },
+    {
+      "file": "sessionIndexRows.ts",
+      "category": "foundationService",
+      "budget": 170,
+      "responsibility": "Translates validated journal-sourced turn records and verified turn files into typed registry rows, verifying identity/digests/byte lengths and capping excerpts. No SQLite access, no journal access.",
+      "mirrors": "src/foundation/index/runtime/journalIndexRows.ts (48 lines); larger because it re-verifies every predecessor field",
+      "sizeException": {
+        "amendmentId": "SA-CA16R-04",
+        "exactFile": "src/foundation/index/sessions/sessionIndexRows.ts",
+        "acceptedBudget": 120,
+        "temporaryMaximum": 170,
+        "categoryPreferredMaximum": 200,
+        "reason": "The CORRECTION-03 map sized this module against src/foundation/index/runtime/journalIndexSource.ts (55) and journalIndexRows.ts (48), which consume an already-typed DurableEvent. CA-16 consumes CA-15's multi-file operator-session tree from unknown bytes: identity, JSONL journal envelope, per-turn response/snapshot/usage sidecars, turn content, and proposals, each admitted fail-closed. The reader already binds CA-15's own accepted validators (parseSession, readJournalFile, isTurnRecord) rather than transcribing the format, so no further reduction is available without either deleting required fail-closed validation or adding an owned module, which this amendment does not do.",
+        "reviewer": "CA-16R independent implementation review gate. The exception was measured and assessed by the fresh independent review recorded at .local/agent-reports/wt-coordinator-automation/reviews/CA-16R-opus-independent-implementation-review.md (2026-08-07), which confirmed both files sit within their temporary maxima and their category preferred ceilings and required this record to name its reviewer explicitly. Confirmation of that named reviewer is owned by the next independent implementation review; no implementer may mark it confirmed.",
+        "authority": "Operator, direct order 2026-08-07, recorded before the implementation edit that relies on it",
+        "approvedBeforeImplementation": true,
+        "expiryRemovalBatch": "CA-16R",
+        "expiry": "Expires with removal batch CA-16R. It authorizes no other batch, no other file, and no larger maximum; any further increase, any module added beyond this map, or any reuse by a later batch requires a new amendment approved before that implementation.",
+        "warnBand": "None. Both files stay at or below the engineering standard foundationService PREFERRED maximum of 200.",
+        "standardFields": [
+          "exactFile",
+          "temporaryMaximum",
+          "reason",
+          "reviewer",
+          "expiryRemovalBatch"
+        ]
+      }
+    },
+    {
+      "file": "SessionIndexBuilder.ts",
+      "category": "foundationService",
+      "budget": 200,
+      "responsibility": "build and incrementalUpdate plus the query and capsule facade: sequences source, rows, and the derived store through the accepted staged rebuild and atomic switch, and admits before querying and before extending a generation.",
+      "mirrors": "src/foundation/index/runtime/JournalIndex.ts (192 lines)"
+    },
+    {
+      "file": "sessionIndexReads.ts",
+      "category": "foundationService",
+      "budget": 200,
+      "responsibility": "The bounded typed queries named by the CA-16 brief, over bounded indexed reads, with the shared cursor and the section 9.4 result envelope.",
+      "mirrors": "src/foundation/index/runtime/journalIndexReads.ts (109 lines)"
+    },
+    {
+      "file": "sessionCapsule.ts",
+      "category": "foundationService",
+      "budget": 160,
+      "responsibility": "Cross-session capsule construction and full capsule.schema.json validation: lane equality, prune resolution, excerpt and omission labelling, non-transitivity.",
+      "mirrors": "src/foundation/index/runtime/JournalProjection.ts (107 lines)"
+    },
+    {
+      "file": "SessionCompaction.ts",
+      "category": "foundationService",
+      "budget": 200,
+      "responsibility": "Derived-store lifecycle: open, fail-closed admission in two halves (admitGeneration = integrity, semantic root, index_meta identity; admitStore = that plus journal continuity), atomic manifest publication, and compaction with cross-session proposal preservation.",
+      "mirrors": "no direct sibling; sized as a foundation service"
+    }
+  ],
+  "budgetClaim": "Every module sits at or below the PREFERRED maximum for its category (publicBarrel 120, contractTypeOnly 240, foundationService 200), so no module enters a warning band. Six of the eight modules also sit at or below the CORRECTION-03 accepted budget verbatim. sessionIndexSource.ts and sessionIndexRows.ts carry the recorded SA-CA16R-04 per-file exception above; SA-CA16R-03 still amends file count and location only.",
+  "totalBudget": 1290,
+  "authorization": {
+    "proposedBy": "CA-16R CORRECTION-03 design contract",
+    "evidence": "conformance gate C9 (measured precedent) and this artifact",
+    "operatorDecision": "APPROVED",
+    "operatorDecisionRecordedBy": "direct operator order, 2026-08-07, recorded in handoff section 9",
+    "reviewerAction": "Design review confirms the contract and this scope amendment. Line counts, build, test, and dist are implementation-gate evidence and are not available in a documentation-only design.",
+    "expiry": "Applies to the CA-16R implementation batch only. Any module added beyond this map, or any budget exceeded, requires a new amendment before implementation.",
+    "amendments": [
+      {
+        "amendmentId": "SA-CA16R-03",
+        "scope": "file count and location",
+        "operatorDecision": "APPROVED",
+        "recorded": "2026-08-07 (CORRECTION-03 handoff section 9.1)"
+      },
+      {
+        "amendmentId": "SA-CA16R-04",
+        "scope": "per-file size exception for sessionIndexSource.ts and sessionIndexRows.ts only",
+        "operatorDecision": "APPROVED",
+        "recorded": "2026-08-07 direct operator order during the CA-16R implementation correction",
+        "reviewer": "CA-16R independent implementation review gate. The exception was measured and assessed by the fresh independent review recorded at .local/agent-reports/wt-coordinator-automation/reviews/CA-16R-opus-independent-implementation-review.md (2026-08-07), which confirmed both files sit within their temporary maxima and their category preferred ceilings and required this record to name its reviewer explicitly. Confirmation of that named reviewer is owned by the next independent implementation review; no implementer may mark it confirmed.",
+        "expiryRemovalBatch": "CA-16R"
+      }
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "queriesId": "session-index-queries",
+  "databaseSchemaVersion": 2,
+  "namedBy": "CA-16 work brief, 'Bounded typed queries (no raw SQL from consumers)'",
+  "cursorImplementation": "src/foundation/index/query/queryCursor.ts",
+  "envelopeConformsTo": "docs/spec/coordinator-automation.md 9.4",
+  "notes": [
+    "These are the brief's named methods. CORRECTION-02's Q-01..Q-12 surface is withdrawn: it renamed and re-specified an API the batch already names, and reinvented a cursor contract that already exists and is accepted.",
+    "No method accepts or returns a SQL string. Raw SQL is private to the store owner.",
+    "No method falls back to scanning journals. A missing or stale index fails with SESSION_INDEX_MISSING or SESSION_INDEX_STALE."
+  ],
+  "commonResultEnvelope": {
+    "required": [
+      "items",
+      "truncated",
+      "maxRecords",
+      "maxBytes",
+      "returnedBytes",
+      "nextCursor",
+      "provenance"
+    ],
+    "provenance": {
+      "required": ["semanticRoot", "databaseSchemaVersion", "compilerVersion", "checkpoint"],
+      "description": "Every result carries the identity of the store that produced it, so a caller can prove which index answered and detect a later rebuild."
+    },
+    "truncationRule": "truncated is true whenever a record or byte cap stopped the result short. Truncation never silently implies completeness; the caller must request the next page or escalate."
+  },
+  "defaults": {"maxRecords": 100, "maxBytes": 65536},
+  "methods": [
+    {
+      "name": "getSession",
+      "parameters": ["operatorSessionId"],
+      "returns": "one operator_sessions row or SESSION_NOT_FOUND",
+      "bounded": "single row",
+      "laneCheck": "required"
+    },
+    {
+      "name": "listSessions",
+      "parameters": ["filters{state?,origin?,parentOperatorSessionId?}", "limit", "cursor"],
+      "returns": "operator_sessions page",
+      "order": "last_turn_at DESC, operator_session_id ASC",
+      "bounded": "limit 1..100",
+      "laneCheck": "required"
+    },
+    {
+      "name": "getTurn",
+      "parameters": ["turnId"],
+      "returns": "one turns row or TURN_NOT_FOUND",
+      "bounded": "single row",
+      "laneCheck": "required"
+    },
+    {
+      "name": "listTurns",
+      "parameters": ["operatorSessionId", "filters{state?,decisionClass?,stale?}", "limit", "cursor"],
+      "returns": "turns page",
+      "order": "turn_number ASC",
+      "bounded": "limit 1..100",
+      "laneCheck": "required"
+    },
+    {
+      "name": "getTurnExcerpt",
+      "parameters": ["turnId", "which{operator|coordinator}"],
+      "returns": "stored excerpt with originalBytes, excerptBytes, and incomplete",
+      "bounded": "500 UTF-8 bytes",
+      "laneCheck": "required",
+      "note": "Returns only the stored excerpt. A consumer needing exact text reads the journal directly; this method never widens to full text and never scans history."
+    },
+    {
+      "name": "getPin",
+      "parameters": ["operatorSessionId", "refType", "refValue"],
+      "returns": "one session_pins row or null",
+      "bounded": "single row",
+      "laneCheck": "required"
+    },
+    {
+      "name": "listPins",
+      "parameters": ["operatorSessionId", "limit", "cursor"],
+      "returns": "session_pins page",
+      "order": "pinned_at ASC, ref_type ASC, ref_value ASC",
+      "bounded": "limit 1..100",
+      "laneCheck": "required"
+    },
+    {
+      "name": "getProposal",
+      "parameters": ["proposalId"],
+      "returns": "one session_proposals row or PROPOSAL_NOT_FOUND",
+      "bounded": "single row",
+      "laneCheck": "required"
+    },
+    {
+      "name": "listProposals",
+      "parameters": ["operatorSessionId", "filters{state?,proposalType?}", "limit", "cursor"],
+      "returns": "session_proposals page",
+      "order": "created_at ASC, proposal_id ASC",
+      "bounded": "limit 1..100",
+      "laneCheck": "required"
+    },
+    {
+      "name": "listOpenQuestions",
+      "parameters": ["turnId", "limit", "cursor"],
+      "returns": "turn_open_questions page",
+      "order": "question_index ASC",
+      "bounded": "limit 1..100",
+      "laneCheck": "required"
+    },
+    {
+      "name": "getReferenceCapsule",
+      "parameters": ["requestingOperatorSessionId", "sourceTurnId"],
+      "returns": "one capsule validated against capsule.schema.json",
+      "bounded": "one capsule, 4096 bytes",
+      "laneCheck": "required-before-source-access",
+      "note": "The lane of the requesting session and the lane of the source turn are compared before any source content is read. A mismatch fails with OPERATOR_SESSION_REFERENCE_DENIED. Pruned source content resolves to its tombstone with OPERATOR_SESSION_CONTENT_PRUNED. Capsules are never expanded transitively."
+    }
+  ],
+  "errors": [
+    {"code": "SESSION_INDEX_MISSING", "meaning": "No index is present. Queries block; journals are never scanned as a fallback."},
+    {"code": "SESSION_INDEX_STALE", "meaning": "Manifest, index_meta, semantic root, or journal continuity disagree. Queries block until a deterministic rebuild."},
+    {"code": "SESSION_NOT_FOUND", "meaning": "No such operator session in this lane."},
+    {"code": "TURN_NOT_FOUND", "meaning": "No such turn in this lane."},
+    {"code": "PROPOSAL_NOT_FOUND", "meaning": "No such proposal in this lane."},
+    {"code": "OPERATOR_SESSION_REFERENCE_DENIED", "meaning": "Cross-lane reference or capsule request."},
+    {"code": "OPERATOR_SESSION_CONTENT_PRUNED", "meaning": "Source content is pruned; the tombstone resolves instead."},
+    {"code": "QUERY_LIMIT_INVALID", "meaning": "limit outside 1..100."},
+    {"code": "QUERY_CURSOR_INVALID", "meaning": "Cursor is malformed or does not belong to this store identity."}
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://watchtower.local/schemas/session-index-v2/decommissioning-manifest.schema.json",
+  "title": "Legacy session-index decommissioning manifest",
+  "description": "Recorded once when a store written by the rejected CA-16 implementation is discarded and rebuilt from journals. It binds the frozen legacy schema and the signed equivalence proof to the specific store being removed, so the discard is auditable and cannot be performed without the proof that it is lossless. This replaces CORRECTION-02's migration manifest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifestVersion",
+    "laneId",
+    "discardedStore",
+    "legacySchema",
+    "equivalenceProof",
+    "rebuild",
+    "decidedAt"
+  ],
+  "properties": {
+    "manifestVersion": {"const": "session-index-decommissioning/1"},
+    "laneId": {"type": "string", "format": "uuid"},
+    "discardedStore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "databaseSchemaVersion", "fileDigest", "observedAt"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "databaseSchemaVersion": {
+          "type": "integer",
+          "const": 1,
+          "description": "Only a version-1 store is decommissioned. A version-2 store is current and is rebuilt in place by the normal staged rebuild, not decommissioned."
+        },
+        "fileDigest": {
+          "$ref": "#/$defs/digest",
+          "description": "Digest of the discarded file, recorded before removal so the audit names exactly which bytes were discarded."
+        },
+        "observedAt": {"type": "string", "format": "date-time"}
+      }
+    },
+    "legacySchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaId", "schemaVersion", "schemaDigest", "signature"],
+      "properties": {
+        "schemaId": {"const": "legacy-ca16-v1"},
+        "schemaVersion": {"const": 1},
+        "schemaDigest": {"const": "sha256:d7399ee3f8de42f64d6f330ab6b8ec224df55cba753f922d1d1626009bef8275"},
+        "signature": {"$ref": "#/$defs/signatureRecord"}
+      }
+    },
+    "equivalenceProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactId", "artifactVersion", "canonicalDigest", "signature"],
+      "properties": {
+        "artifactId": {"const": "legacy-ca16-v1-equivalence"},
+        "artifactVersion": {"const": 1},
+        "canonicalDigest": {
+          "$ref": "#/$defs/digest",
+          "description": "Digest of the canonical (sorted-key, minified) serialization of legacy-equivalence.json. The exact value is recorded in signatures.json and re-derived by the conformance runner; it is never transcribed into prose."
+        },
+        "signature": {"$ref": "#/$defs/signatureRecord"}
+      },
+      "description": "The discard is admissible only when this proof verifies. Without a verifying equivalence proof the legacy store is retained untouched and the operation fails closed."
+    },
+    "rebuild": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "semanticRoot", "databaseSchemaVersion", "completedAt"],
+      "properties": {
+        "source": {
+          "const": "operator-session-journals",
+          "description": "The replacement is built from journals only. The discarded store is never read as a source."
+        },
+        "semanticRoot": {"$ref": "#/$defs/digest"},
+        "databaseSchemaVersion": {"const": 2},
+        "completedAt": {"type": "string", "format": "date-time"}
+      }
+    },
+    "decidedAt": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9._/-]{1,512}$"
+    },
+    "signatureRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signatureAlgorithm", "signerId", "signerPublicKeyDerSpkiBase64", "signatureBase64"],
+      "properties": {
+        "signatureAlgorithm": {"const": "Ed25519"},
+        "signerId": {"type": "string", "minLength": 1},
+        "signerPublicKeyDerSpkiBase64": {"type": "string", "minLength": 1},
+        "signatureBase64": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

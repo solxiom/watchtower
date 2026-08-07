@@ -1,0 +1,100 @@
+{
+  "vectorsId": "session-index-v2-golden-vectors",
+  "databaseSchemaVersion": 2,
+  "producedBy": "src/foundation/storage/semanticRoot.ts computeSemanticRoot",
+  "note": "Generated, never transcribed. Regenerate with: node --experimental-strip-types goldenVectors.mjs",
+  "registryTableOrder": [
+    "index_meta",
+    "operator_sessions",
+    "session_pins",
+    "turns",
+    "turn_refs",
+    "turn_open_questions",
+    "session_proposals",
+    "turn_reference_capsules"
+  ],
+  "vectors": {
+    "GV-01": {
+      "description": "Empty store: every registry table present, no rows. Proves table order and the empty-table encoding.",
+      "tables": [
+        {
+          "name": "index_meta",
+          "rowCount": 0
+        },
+        {
+          "name": "operator_sessions",
+          "rowCount": 0
+        },
+        {
+          "name": "session_pins",
+          "rowCount": 0
+        },
+        {
+          "name": "turns",
+          "rowCount": 0
+        },
+        {
+          "name": "turn_refs",
+          "rowCount": 0
+        },
+        {
+          "name": "turn_open_questions",
+          "rowCount": 0
+        },
+        {
+          "name": "session_proposals",
+          "rowCount": 0
+        },
+        {
+          "name": "turn_reference_capsules",
+          "rowCount": 0
+        }
+      ],
+      "semanticRoot": "sha256:54a381006ab865272cf77b7233725bd5cc5299cb2c4957f16cbf520cb8679916"
+    },
+    "GV-02": {
+      "description": "Minimal populated store: identity rows, one session, one turn.",
+      "tables": [
+        {
+          "name": "index_meta",
+          "rowCount": 7
+        },
+        {
+          "name": "operator_sessions",
+          "rowCount": 1
+        },
+        {
+          "name": "session_pins",
+          "rowCount": 0
+        },
+        {
+          "name": "turns",
+          "rowCount": 1
+        },
+        {
+          "name": "turn_refs",
+          "rowCount": 0
+        },
+        {
+          "name": "turn_open_questions",
+          "rowCount": 0
+        },
+        {
+          "name": "session_proposals",
+          "rowCount": 0
+        },
+        {
+          "name": "turn_reference_capsules",
+          "rowCount": 0
+        }
+      ],
+      "semanticRoot": "sha256:2af97222abf736033218accd8502f0e37c7eed0f9935a22a4439c38c7d259b8c"
+    },
+    "GV-03": {
+      "description": "Executed cross-store fixture: identical logical rows inserted into a real node:sqlite database in reverse source order and read back in primary-key order. Insertion order must not affect the root.",
+      "crossStore": true,
+      "mustEqual": "GV-02",
+      "semanticRoot": "sha256:2af97222abf736033218accd8502f0e37c7eed0f9935a22a4439c38c7d259b8c"
+    }
+  }
+}

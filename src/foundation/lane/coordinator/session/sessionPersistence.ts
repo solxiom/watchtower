@@ -5,7 +5,10 @@ import {isLifecycleEvent, isLegalTransition, isRecord, isState, parseJournal} fr
 
 export type FaultInjector = (stage: SessionWriteStage) => void;
 
-export function writeJsonAtomic(path: string, value: unknown): void { writeTextAtomic(path, `${JSON.stringify(value)}\n`); }
+/** The exact durable byte form of a materialized JSON document. Readers that admit a materialized sidecar compare against this, so the serialization has one owner. */
+export function jsonDocumentText(value: unknown): string { return `${JSON.stringify(value)}\n`; }
+
+export function writeJsonAtomic(path: string, value: unknown): void { writeTextAtomic(path, jsonDocumentText(value)); }
 
 export function writeTextAtomic(path: string, text: string): void {
     const temp = `${path}.tmp-${Math.random().toString(16).slice(2)}`;

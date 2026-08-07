@@ -21,6 +21,11 @@ import type {PackIndexTables} from '../store/packIndexTables.js';
 import {MAX_DEPENDENCY_DEPTH, walkDependencies} from './dependencyTraversal.js';
 import {digest, MAX_PAGE_LIMIT, paginateIds, validateLimit} from './queryCursor.js';
 
+// The accepted CA-02 page cursor is the shared cursor for every derived-index
+// query capability, including the CA-16 session index; surface it on the query
+// capsule's public barrel so sibling capsules reuse it without a deep import.
+export {digest, paginateIds} from './queryCursor.js';
+
 const DEFAULT_DEPENDENTS_LIMIT = 50;
 const DEFAULT_REQUIREMENTS_LIMIT = 50;
 const DEFAULT_PROOFS_LIMIT = 50;

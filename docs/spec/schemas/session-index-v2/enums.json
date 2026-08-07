@@ -1,0 +1,148 @@
+{
+  "enumsId": "session-index-enums",
+  "databaseSchemaVersion": 2,
+  "note": "Every enumerated column in registry.json names one of these sets. A value outside its set fails decode before any SQLite write.",
+  "enums": {
+    "boolean": {
+      "source": "Integer truth column; SQLite has no boolean type.",
+      "values": [
+        0,
+        1
+      ]
+    },
+    "origin": {
+      "source": "src/contracts/operatorSession.ts SessionOrigin and docs/spec/operator-session.md 7 (session identity); reconciled against the accepted CA-15 producer (merge cd8e8bd). Forkness is carried by parent_operator_session_id, not by origin.",
+      "owner": "CA-15",
+      "values": [
+        "operator",
+        "system-escalation"
+      ]
+    },
+    "sessionState": {
+      "source": "docs/spec/operator-session.md 6 lifecycle table.",
+      "owner": "CA-15",
+      "values": [
+        "open",
+        "active-turn",
+        "suspended",
+        "closed",
+        "archived",
+        "pruned"
+      ]
+    },
+    "turnState": {
+      "source": "src/contracts/operatorSession.ts TurnState, reconciled against the accepted CA-15 producer (merge cd8e8bd); docs/spec/operator-session.md 8.3 turn record, including the interrupted, failed, and cancelled turns that section requires to remain journaled.",
+      "owner": "CA-15",
+      "values": [
+        "running",
+        "complete",
+        "interrupted",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "decisionClass": {
+      "source": "docs/spec/operator-session.md 10.3 (M0) and 10.4 (D1-D3).",
+      "values": [
+        "M0",
+        "D1",
+        "D2",
+        "D3"
+      ]
+    },
+    "refType": {
+      "source": "CA-16 work brief session_pins.ref_type, matching the explicit include options in docs/spec/operator-session.md 10.1.",
+      "values": [
+        "batch",
+        "event",
+        "requirement",
+        "finding",
+        "turn",
+        "artifact"
+      ]
+    },
+    "telemetryQuality": {
+      "source": "docs/spec/operator-session.md 8.3 usage.quality.",
+      "values": [
+        "reported",
+        "estimated",
+        "unavailable"
+      ]
+    },
+    "proposalType": {
+      "source": "docs/spec/operator-session.md 15.2 minimum effect set requiring confirmation.",
+      "values": [
+        "hold-place",
+        "hold-release",
+        "dispatch-pause",
+        "dispatch-resume",
+        "candidate-select",
+        "routing-override",
+        "budget-override",
+        "amendment-request",
+        "correction-supersede",
+        "escalation-close"
+      ]
+    },
+    "proposalState": {
+      "source": "docs/spec/operator-session.md 15.1 proposal lifecycle.",
+      "values": [
+        "proposed",
+        "operator-confirmed",
+        "revalidated",
+        "rejected-stale-or-illegal",
+        "effect-prepared",
+        "effect-verified",
+        "effect-uncertain",
+        "operator-rejected",
+        "expired"
+      ]
+    },
+    "capsuleOmission": {
+      "source": "docs/spec/operator-session.md 10.2 exclusions, reported so a truncated or withheld field is never mistaken for absence of the fact.",
+      "values": [
+        "operator-message",
+        "full-answer",
+        "transitive-references",
+        "pruned-content"
+      ]
+    }
+  },
+  "reconciliation": {
+    "note": "origin and turnState differ from the CORRECTION-03 design artifact. The design values were written before CA-15 was accepted; these are the values the accepted producer actually emits, verified against src/contracts/operatorSession.ts and src/foundation/lane/coordinator/session/ at merge cd8e8bd. An index that enumerated the design values could not admit a single real operator session.",
+    "changes": [
+      {
+        "enum": "origin",
+        "design": [
+          "operator",
+          "fork"
+        ],
+        "accepted": [
+          "operator",
+          "system-escalation"
+        ],
+        "evidence": "src/contracts/operatorSession.ts SessionOrigin; sessionValidation.ts isSessionValue. Forkness is carried by parent_operator_session_id, not by origin."
+      },
+      {
+        "enum": "turnState",
+        "design": [
+          "pending",
+          "active",
+          "complete",
+          "interrupted",
+          "failed"
+        ],
+        "accepted": [
+          "running",
+          "complete",
+          "interrupted",
+          "failed",
+          "cancelled"
+        ],
+        "evidence": "src/contracts/operatorSession.ts TurnState; sessionValidation.ts isTurnRecord."
+      }
+    ],
+    "authority": "Operator, direct order 2026-08-07, recorded during the CA-16R implementation correction. enums.json is not a signed artifact (signatures.json covers legacy-ca16-v1.schema.json and legacy-equivalence.json only), so gate C4 is unaffected.",
+    "proof": "spec/foundation/sessions/sessionIndexConformance.spec.ts asserts the runtime enum sets equal this artifact, and every positive spec is materialized by the accepted CA-15 producer itself."
+  }
+}

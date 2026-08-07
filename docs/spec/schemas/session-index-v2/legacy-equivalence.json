@@ -1,0 +1,123 @@
+{
+  "artifactId": "legacy-ca16-v1-equivalence",
+  "artifactVersion": 1,
+  "subject": {
+    "schemaId": "legacy-ca16-v1",
+    "schemaVersion": 1,
+    "schemaFile": "legacy-ca16-v1.schema.json",
+    "schemaDigest": "sha256:d7399ee3f8de42f64d6f330ab6b8ec224df55cba753f922d1d1626009bef8275"
+  },
+  "claim": "Every column of the frozen legacy CA-16 store is reconstructible from the CA-15 append-only session journals and turn files, or is content whose correct post-rebuild resolution is a tombstone rather than a copy. Therefore discarding the legacy store and rebuilding from journals loses no reconstructible fact, and no field-by-field migration path is required or permitted.",
+  "governing": [
+    "docs/spec/coordinator-automation.md 9.1 - derived stores are safe to delete and rebuild, and are never authority.",
+    "docs/spec/coordinator-automation.md 9.7 - truncation, replacement, or invalid continuity makes a derived store stale and requires a deterministic rebuild from the journal.",
+    "docs/spec/v1-contracts.md 8A.5 - runtime and session stores rebuild only from verified append-only journals and retained content checkpoints."
+  ],
+  "consequence": "A migration that reads the legacy derived store and writes the new derived store would recover a derived store from a derived store. That is the authority inversion CA-16 exists to prevent, and 8A.5 admits only the journal as a rebuild source. The migration manifest, field map, quarantine protocol, and MIGRATION_CONFLICT taxonomy specified in CORRECTION-02 are withdrawn. This artifact replaces them and is bound into decommissioning-manifest.schema.json.",
+  "sources": {
+    "sessionIdentity": "<lane>/coordinator/operator-sessions/<id>/operator-session.json (CA-15)",
+    "journal": "<lane>/coordinator/operator-sessions/<id>/journal.jsonl (CA-15, append-only)",
+    "turnFiles": "<lane>/coordinator/operator-sessions/<id>/turns/turn-NNNN/{operator.md,coordinator.md} (CA-15)"
+  },
+  "reconstruction": [
+    {
+      "table": "operator_sessions",
+      "columns": [
+        {"column": "session_id", "from": "sessionIdentity", "rule": "operatorSessionId, verbatim."},
+        {"column": "lane_id", "from": "sessionIdentity", "rule": "laneId, verbatim."},
+        {"column": "state", "from": "journal", "rule": "Terminal lifecycle state after folding every recorded transition in append order."},
+        {"column": "created_at_us", "from": "journal", "rule": "Timestamp of the operator-session-opened entry."},
+        {"column": "updated_at_us", "from": "journal", "rule": "Timestamp of the last complete entry."},
+        {"column": "journal_id", "from": "journal", "rule": "Journal identity recorded by CA-15; the index references it and mints none."},
+        {"column": "aggregate_checkpoint_digest", "from": "journal", "rule": "SHA-256 of the consumed journal prefix; recomputed on every build, never carried forward."}
+      ]
+    },
+    {
+      "table": "session_pins",
+      "columns": [
+        {"column": "session_id", "from": "journal", "rule": "Owning session of the pin entry."},
+        {"column": "pin_name", "from": "journal", "rule": "Pin entry name."},
+        {"column": "target_kind", "from": "journal", "rule": "Pin entry reference type."},
+        {"column": "target_id", "from": "journal", "rule": "Pin entry reference value."},
+        {"column": "target_digest", "from": "journal", "rule": "Digest recorded with the pin entry at pin time."},
+        {"column": "created_at_us", "from": "journal", "rule": "Pin entry timestamp."}
+      ]
+    },
+    {
+      "table": "turns",
+      "columns": [
+        {"column": "session_id", "from": "journal", "rule": "Owning session of the turn entries."},
+        {"column": "turn_seq", "from": "journal", "rule": "Turn number from the turn record."},
+        {"column": "turn_id", "from": "journal", "rule": "turnId from the turn record."},
+        {"column": "actor_kind", "from": "journal", "rule": "Recorded actor of the turn."},
+        {"column": "input_digest", "from": "turnFiles", "rule": "operatorMessage.sha256 in the turn record, verifiable against operator.md."},
+        {"column": "answer_digest", "from": "turnFiles", "rule": "response.sha256 in the turn record, verifiable against coordinator.md."},
+        {"column": "started_at_us", "from": "journal", "rule": "Turn-start entry timestamp."},
+        {"column": "ended_at_us", "from": "journal", "rule": "Turn-complete entry timestamp; absent for an interrupted or failed turn, matching the legacy nullability."},
+        {"column": "turn_file_ref", "from": "turnFiles", "rule": "Deterministic turn directory path derived from session id and turn number."}
+      ]
+    },
+    {
+      "table": "turn_refs",
+      "columns": [
+        {"column": "session_id", "from": "journal", "rule": "Owning session."},
+        {"column": "turn_seq", "from": "journal", "rule": "Owning turn."},
+        {"column": "ref_name", "from": "journal", "rule": "Entry in the turn record's resolvedRefs."},
+        {"column": "target_kind", "from": "journal", "rule": "Reference type parsed from the resolved reference."},
+        {"column": "target_id", "from": "journal", "rule": "Reference value parsed from the resolved reference."},
+        {"column": "target_digest", "from": "journal", "rule": "Digest recorded with the resolved reference."}
+      ]
+    },
+    {
+      "table": "turn_open_questions",
+      "columns": [
+        {"column": "session_id", "from": "journal", "rule": "Owning session."},
+        {"column": "turn_seq", "from": "journal", "rule": "Owning turn."},
+        {"column": "question_id", "from": "journal", "rule": "Question identity from the typed advisory response."},
+        {"column": "question_digest", "from": "journal", "rule": "SHA-256 of the recorded question text."},
+        {"column": "state", "from": "journal", "rule": "Open unless a later entry records resolution."},
+        {"column": "created_at_us", "from": "journal", "rule": "Timestamp of the entry that raised the question."},
+        {"column": "resolved_at_us", "from": "journal", "rule": "Timestamp of the resolving entry, absent while open."}
+      ]
+    },
+    {
+      "table": "session_proposals",
+      "columns": [
+        {"column": "proposal_id", "from": "journal", "rule": "Proposal entry identity."},
+        {"column": "session_id", "from": "journal", "rule": "Owning session."},
+        {"column": "turn_seq", "from": "journal", "rule": "Source turn."},
+        {"column": "effect_kind", "from": "journal", "rule": "Proposed effect type."},
+        {"column": "target_kind", "from": "journal", "rule": "Proposal target type."},
+        {"column": "target_id", "from": "journal", "rule": "Proposal target value."},
+        {"column": "expected_root", "from": "journal", "rule": "Snapshot revision recorded at proposal time."},
+        {"column": "proposal_digest", "from": "journal", "rule": "SHA-256 of the recorded proposal entry."},
+        {"column": "state", "from": "journal", "rule": "Terminal proposal state after folding the lifecycle entries."},
+        {"column": "created_at_us", "from": "journal", "rule": "Proposal entry timestamp."},
+        {"column": "applied_at_us", "from": "journal", "rule": "Effect-verified entry timestamp, absent unless applied."}
+      ]
+    },
+    {
+      "table": "turn_reference_capsules",
+      "columns": [
+        {"column": "capsule_id", "from": "derived", "rule": "Capsules are deterministic functions of their source turn (operator-session.md 10.2), so identity is recomputed, not carried."},
+        {"column": "session_id", "from": "journal", "rule": "Requesting session."},
+        {"column": "turn_seq", "from": "journal", "rule": "Source turn."},
+        {"column": "lane_id", "from": "sessionIdentity", "rule": "Lane of the source turn; re-checked for equality on rebuild."},
+        {"column": "source_session_id", "from": "journal", "rule": "Source session."},
+        {"column": "answer_digest", "from": "turnFiles", "rule": "Digest of the complete answer."},
+        {"column": "answer_excerpt", "from": "turnFiles", "rule": "Recomputed from coordinator.md under the current 500-byte UTF-8 cap. See notReconstructible for the pruned-source case."},
+        {"column": "operator_message_present", "from": "invariant", "rule": "Always 0. The capsule never carries the operator message."},
+        {"column": "full_answer_present", "from": "invariant", "rule": "Always 0. The capsule never carries the full answer."}
+      ]
+    }
+  ],
+  "notReconstructible": [
+    {
+      "column": "turn_reference_capsules.answer_excerpt",
+      "condition": "The source turn's content has been pruned since the legacy capsule was written.",
+      "assessment": "not-data-loss",
+      "reasoning": "operator-session.md 10.2 requires pruned source content to resolve to its tombstone with OPERATOR_SESSION_CONTENT_PRUNED. Carrying the legacy excerpt forward would retain content that the retention policy has already removed, which is a privacy regression rather than preserved value. The correct post-rebuild result for a pruned source is the tombstone, so the inability to reconstruct this excerpt is the specified behavior and not a migration gap."
+    }
+  ],
+  "conclusion": "No legacy column holds a fact that is both reconstructible and lost by discard-and-rebuild. The single non-reconstructible case resolves to the tombstone the governing contract requires. Decommissioning is therefore lossless with respect to every fact the contract permits the store to hold."
+}

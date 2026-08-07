@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://watchtower.local/schemas/session-index-v2/capsule.schema.json",
+  "title": "Cross-session turn reference capsule",
+  "description": "The bounded, non-transitive capsule stored in turn_reference_capsules.capsule_json, per docs/spec/operator-session.md 10.2. It never contains the operator message, the full coordinator answer, or any transitive turn or session reference.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "capsuleVersion",
+    "sourceOperatorSessionId",
+    "sourceTurnId",
+    "turnNumber",
+    "laneId",
+    "completedAt",
+    "decisionClass",
+    "snapshotRevision",
+    "stale",
+    "evidenceRefs",
+    "openQuestions",
+    "proposals",
+    "answerExcerpt",
+    "answerExcerptBytes",
+    "answerBytes",
+    "answerDigest",
+    "incomplete",
+    "omitted"
+  ],
+  "properties": {
+    "capsuleVersion": {"const": "session-index-capsule/2"},
+    "sourceOperatorSessionId": {"$ref": "#/$defs/identifier"},
+    "sourceTurnId": {"$ref": "#/$defs/identifier"},
+    "turnNumber": {"type": "integer", "minimum": 1},
+    "laneId": {
+      "$ref": "#/$defs/identifier",
+      "description": "Lane of the source turn. The resolver compares it to the requesting session's lane and denies a mismatch with OPERATOR_SESSION_REFERENCE_DENIED before reading any source content."
+    },
+    "completedAt": {"$ref": "#/$defs/timestamp"},
+    "decisionClass": {"enum": ["M0", "D1", "D2", "D3"]},
+    "routingRuleId": {"$ref": "#/$defs/identifier"},
+    "snapshotRevision": {"type": "integer", "minimum": 0},
+    "stale": {"type": "boolean"},
+    "evidenceRefs": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["refType", "refValue", "stale"],
+        "properties": {
+          "refType": {"enum": ["batch", "event", "requirement", "finding", "turn", "artifact"]},
+          "refValue": {"$ref": "#/$defs/identifier"},
+          "stale": {"type": "boolean"}
+        }
+      },
+      "description": "Resolved evidence references and their staleness. Reference targets are named, never expanded; expanding one would make the capsule transitive."
+    },
+    "openQuestions": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {"type": "string", "maxLength": 1000}
+    },
+    "proposals": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["proposalId", "proposalType"],
+        "properties": {
+          "proposalId": {"$ref": "#/$defs/identifier"},
+          "proposalType": {"$ref": "#/$defs/identifier"}
+        }
+      },
+      "description": "Proposal IDs and types only, exactly as operator-session.md 10.2 requires. No proposal body, state rationale, or effect payload."
+    },
+    "answerExcerpt": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "At most 500 UTF-8 bytes of the coordinator answer, truncated only on a code-point boundary. maxLength 500 is a necessary character-level bound; the byte cap is the normative rule and is enforced by the decoder and asserted by the conformance runner."
+    },
+    "answerExcerptBytes": {"type": "integer", "minimum": 0, "maximum": 500},
+    "answerBytes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Original byte length of the complete answer, required by operator-session.md 10.2."
+    },
+    "answerDigest": {
+      "$ref": "#/$defs/digest",
+      "description": "Digest of the complete answer, so a reader can verify exact length and content without the index holding either."
+    },
+    "incomplete": {
+      "type": "boolean",
+      "description": "True exactly when answerExcerptBytes < answerBytes. operator-session.md 10.2 requires the excerpt to be explicitly labeled incomplete when truncated; this field is that label and must equal the derivation."
+    },
+    "omitted": {
+      "type": "array",
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {"enum": ["operator-message", "full-answer", "transitive-references", "pruned-content"]},
+      "description": "Always states what was withheld, so truncation never silently implies completeness."
+    },
+    "prunedContent": {
+      "type": "boolean",
+      "description": "True when the source content is pruned. The capsule then resolves to its tombstone with OPERATOR_SESSION_CONTENT_PRUNED and carries no excerpt."
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
