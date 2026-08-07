@@ -21,7 +21,7 @@ Status: **Synchronized remediation candidate**
 | CA-15 | Operator-session persistence and lifecycle | ✅ Accepted | Many sessions; one active turn each; immutable closed history; crash-safe journals |
 | CA-16 | Session SQLite index, references, pins, and compaction | 🔒 DESIGN-ONLY/FROZEN | Original design entry; implementation acceptance is published only under the explicit CA-16R successor |
 | CA-16R | Session SQLite index, references, pins, and compaction — successor publication | ✅ Accepted | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback; R1-R8, C1-C10, and SA-CA16R-04 reviewer evidence |
-| CA-17 | Session routing and budgets | ❌ Pending | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
+| CA-17 | Session routing and budgets | ✅ Accepted | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority; correction-01 independently verified |
 | CA-18 | Accepted OpenTUI evidence promotion and packaging gate | ❌ Pending | Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment |
 | CA-19 | TUI shell, responsive layout, themes, and focus | ❌ Pending | Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation |
 | CA-20 | Conversation timeline, composer, history, and references | ❌ Pending | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
