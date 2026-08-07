@@ -15,6 +15,7 @@ const ALLOWED_TOP_LEVEL_DIRS = [
     'discovery',
     'distribution',
     'endpoint',
+    'effect',
     'hostAdapters',
     'index',
     'init',
