@@ -298,6 +298,23 @@ export type {
     ValidationError,
     ValidationWarning
 } from './proposals.js';
+export {EFFECT_PHASES, EFFECT_PHASE_EVENT_TYPES, EFFECT_REASONS, EffectExecutionError} from './effects.js';
+export type {
+    DeclaredRuntimeAction,
+    EffectApplied,
+    EffectJournalPayload,
+    EffectJournalRecord,
+    EffectPhase,
+    EffectPlan,
+    EffectReason,
+    EffectRefused,
+    EffectReplayed,
+    EffectScope,
+    EffectOutcome,
+    EffectUncertain,
+    EnvelopeDiscard,
+    InvocationEnvelopeDocument
+} from './effects.js';
 export {BROKER_REASONS, BROKER_REFERENCE_KINDS} from './contextBroker.js';
 export type {
     BrokerContentProvenance,
