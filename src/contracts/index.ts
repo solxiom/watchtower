@@ -368,3 +368,22 @@ export type {
     EndpointUsageRecord,
     TelemetryQuality
 } from './contextBroker.js';
+export type {
+    ActiveResourceClaim,
+    BlockedBatch,
+    BlockingReason,
+    BlockingReasonCode,
+    CandidateRepositoryBinding,
+    CapacityReservation,
+    ClaimBlocker,
+    ClaimBlockerKind,
+    ClaimConflictReason,
+    ClaimConflictReport,
+    EndpointRouteStatus,
+    OwnedRepositoryBinding,
+    ReadySetClassification,
+    ReadySetParams,
+    ReadySetPopulationReason,
+    ReadySetResult,
+    WritableConflictReport
+} from './scheduling.js';
