@@ -4,7 +4,7 @@ import {tmpdir} from 'node:os';
 import {JournalError, type DurableEvent} from '../../src/contracts/index.js';
 import {JournalIndex} from '../../src/foundation/index/runtime/JournalIndex.js';
 import {JournalProjection} from '../../src/foundation/index/runtime/JournalProjection.js';
-import {openJournalReader, openJournalStore} from '../../src/foundation/index/runtime/JournalWal.js';
+import {JOURNAL_INDEX_SCHEMA, openJournalReader, openJournalStore} from '../../src/foundation/index/runtime/JournalWal.js';
 
 function event(sequence: number, type = 'handoff', batchId = 'CA-03'): DurableEvent {
     return {
@@ -50,6 +50,40 @@ describe('JournalIndex', () => {
         } finally {
             await reader.close().catch(() => undefined);
             await index.close();
+            rmSync(paths.root, {recursive: true, force: true});
+        }
+    });
+
+    it('rejects duplicate event IDs without committing a second row or checkpoint', async () => {
+        const eventTable = JOURNAL_INDEX_SCHEMA.find((table) => table.name === 'journal_event');
+        const eventIdColumn = eventTable?.columns.find((column) => column.name === 'event_id');
+        const eventIdIndex = eventTable?.indexes?.find((index) => index.columns.length === 1 && index.columns[0] === 'event_id');
+        expect(eventIdColumn?.notNull).toBeTrue();
+        expect(eventIdIndex?.unique).toBeTrue();
+
+        const paths = fixture();
+        writeFileSync(paths.journal, '');
+        const index = await JournalIndex.open(paths.db, paths.journal);
+        const first = event(0);
+        const firstOffset = writeEvent(paths.journal, first);
+        await index.appendEvents([first], [firstOffset]);
+        const duplicate = {...event(1), eventId: first.eventId};
+        const duplicateOffset = writeEvent(paths.journal, duplicate);
+        try {
+            await expectAsync(index.appendEvents([duplicate], [duplicateOffset])).toBeRejectedWithError(/UNIQUE|constraint|corrupt/i);
+        } finally {
+            await index.close();
+        }
+
+        const reader = await openJournalReader(paths.db);
+        try {
+            expect(await reader.database.count('journal_event')).toBe(1);
+            expect(await reader.database.getByPrimaryKey('journal_event', 1)).toBeUndefined();
+            const checkpoint = await reader.database.getByPrimaryKey('journal_checkpoint', 1);
+            expect(Number(checkpoint?.last_sequence)).toBe(0);
+            expect(checkpoint?.last_event_id).toBe(first.eventId);
+        } finally {
+            await reader.close();
             rmSync(paths.root, {recursive: true, force: true});
         }
     });

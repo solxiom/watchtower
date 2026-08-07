@@ -18,6 +18,7 @@ export const JOURNAL_INDEX_SCHEMA: DerivedStoreSchema = [
         ],
         primaryKey: ['sequence'],
         indexes: [
+            {name: 'journal_event_event_id_uq', columns: ['event_id'], unique: true},
             {name: 'journal_event_batch_sequence_idx', columns: ['batch_id', 'sequence']},
             {name: 'journal_event_cycle_sequence_idx', columns: ['cycle_id', 'sequence']},
             {name: 'journal_event_type_sequence_idx', columns: ['event_type', 'sequence']}
