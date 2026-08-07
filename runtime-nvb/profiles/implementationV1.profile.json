@@ -3,6 +3,8 @@
   "profileId": "implementation-v1",
   "schemaVersion": 1,
   "taskIds": [
+    "wt:git:publish-commits",
+    "wt:git:record-acceptance",
     "wt:runtime:smoke"
   ]
 }

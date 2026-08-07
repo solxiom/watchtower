@@ -27,7 +27,13 @@ const DECLARED_ACTIONS: readonly DeclaredRuntimeAction[] = Object.freeze([
     action('grant-session-budget', 'effect.grantSessionBudget', 'lane-local', 'journaled-mutation', null),
     action('place-hold', 'effect.placeHold', 'lane-local', 'authoritative-effect', null),
     action('release-hold', 'effect.releaseHold', 'lane-local', 'authoritative-effect', null),
-    action('open-escalation', 'effect.openEscalation', 'lane-local', 'journaled-mutation', null)
+    action('open-escalation', 'effect.openEscalation', 'lane-local', 'journaled-mutation', null),
+    // CA-12: the `review-accept-v1` M0 result. `record-acceptance` is a
+    // durable lane-local journal write (no Git); `publish-commits` is the
+    // second permitted v1 external adapter (§5) — GitAcceptanceAdapter is
+    // their sole planner and caller, never a `DecisionProposal`.
+    action('record-acceptance', 'git.record-acceptance', 'lane-local', 'authoritative-effect', null),
+    action('publish-commits', 'git.publish-commits', 'external', 'external-effect', 'git-push')
 ]);
 
 const BY_EFFECT: ReadonlyMap<EffectType, DeclaredRuntimeAction> =

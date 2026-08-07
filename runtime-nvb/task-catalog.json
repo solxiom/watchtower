@@ -1,5 +1,11 @@
 {
   "actions": {
+    "git.publish-commits": {
+      "taskId": "wt:git:publish-commits"
+    },
+    "git.record-acceptance": {
+      "taskId": "wt:git:record-acceptance"
+    },
     "runtime.smoke": {
       "taskId": "wt:runtime:smoke"
     }
@@ -9,10 +15,14 @@
   "fragments": [
     "schema-composition",
     "catalog-composition",
+    "git-acceptance",
     "runtime-smoke"
   ],
   "groups": {},
   "handlers": {
+    "GitAcceptanceTaskHandler": {
+      "module": "./handlers/GitAcceptanceTaskHandler.js"
+    },
     "RuntimeSmokeTaskHandler": {
       "module": "./handlers/RuntimeSmokeTaskHandler.js"
     },
@@ -24,6 +34,12 @@
     }
   },
   "leaves": {
+    "git.push": {
+      "executable": true,
+      "mode": "0555",
+      "path": "./leaves/gitPush.sh",
+      "sha256": "sha256:79031c3060a8f1e1fb79a377603a203e5c32caf40172898ba4acfb2c61259510"
+    },
     "runtime.echo": {
       "executable": true,
       "mode": "0555",
@@ -38,12 +54,30 @@
   "profiles": {
     "implementation-v1": {
       "taskIds": [
+        "wt:git:publish-commits",
+        "wt:git:record-acceptance",
         "wt:runtime:smoke"
       ]
     }
   },
   "schemaVersion": 1,
   "schemas": {
+    "watchtower://runtime/schemas/git-publish-commits-input/v1": {
+      "path": "./schemas/gitPublishCommitsInput.schema.json",
+      "sha256": "sha256:3dda7a1a1ca0a9fab9add85be1fd05537cc169c5f0b9a874afb5d0bdc07c24da"
+    },
+    "watchtower://runtime/schemas/git-publish-commits-result/v1": {
+      "path": "./schemas/gitPublishCommitsResult.schema.json",
+      "sha256": "sha256:d9ccb81892dc44134a85bb92bb919ba23f152bc6240917831e02bf85c90ed6e5"
+    },
+    "watchtower://runtime/schemas/git-record-acceptance-input/v1": {
+      "path": "./schemas/gitRecordAcceptanceInput.schema.json",
+      "sha256": "sha256:c2e456c8100a8ed41e03dd6fb3c945b293e70f3c38b164610fdb9db0e1a10d8e"
+    },
+    "watchtower://runtime/schemas/git-record-acceptance-result/v1": {
+      "path": "./schemas/gitRecordAcceptanceResult.schema.json",
+      "sha256": "sha256:3f128cb82cf5750eedf5e668057add7e564145ea2f4819976417a70f72d9f3d7"
+    },
     "watchtower://runtime/schemas/lane-task-profile/v1": {
       "path": "./schemas/laneTaskProfile.schema.json",
       "sha256": "sha256:91bcf114ef202f23f10436a960d029420505beeaffa45115462d8a774d59d0da"
@@ -86,6 +120,26 @@
     }
   },
   "tasks": {
+    "wt:git:publish-commits": {
+      "executionScope": "lane-runtime",
+      "handlerId": "GitAcceptanceTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/git-publish-commits-input/v1",
+      "leafIds": [
+        "git.push"
+      ],
+      "mutationClass": "external-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/git-publish-commits-result/v1"
+    },
+    "wt:git:record-acceptance": {
+      "executionScope": "lane-runtime",
+      "handlerId": "GitAcceptanceTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/git-record-acceptance-input/v1",
+      "leafIds": [],
+      "mutationClass": "authoritative-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/git-record-acceptance-result/v1"
+    },
     "wt:runtime:catalog:check": {
       "executionScope": "repository-development",
       "handlerId": "TaskCatalogCompositionTaskHandler",

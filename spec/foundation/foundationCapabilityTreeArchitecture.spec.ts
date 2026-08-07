@@ -16,6 +16,7 @@ const ALLOWED_TOP_LEVEL_DIRS = [
     'distribution',
     'effect',
     'endpoint',
+    'gitAcceptance',
     'hostAdapters',
     'index',
     'init',

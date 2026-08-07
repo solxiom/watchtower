@@ -15,7 +15,7 @@ Status: **Synchronized remediation candidate**
 | CA-09 | Typed proposals and current-state validator | ✅ Accepted | All 14 proposal types; specification-resolution authority/seal/independence checks; stale/illegal/invalid cases; correction-08 operator-session identity binding |
 | CA-10 | Atomic lane-local effect executor and invocation envelopes | ✅ Accepted | One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync |
 | CA-11 | Tmux prepare/attempt/verify effect handler | ❌ Pending | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
-| CA-12 | Acceptance and Git publication handler | ❌ Pending | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
+| CA-12 | Acceptance and Git publication handler | ✅ Accepted | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
 | CA-13 | Coordinator queue, cursor, replay, and watcher task integration | ❌ Pending | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
 | CA-14 | Read-only coordinator, index, event, and ready-set commands | ❌ Pending | Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity |
 | CA-15 | Operator-session persistence and lifecycle | ✅ Accepted | Many sessions; one active turn each; immutable closed history; crash-safe journals |

@@ -16,9 +16,13 @@ it("accepts the committed manifests and verifies their complete asset/action obs
   expect(
     validator.verifyAssets(runtime, await observations("runtime-nvb")),
   ).toEqual({ ok: true });
-  expect(validator.verifyActions(runtime, ["wt:runtime:smoke"])).toEqual({
-    ok: true,
-  });
+  expect(
+    validator.verifyActions(runtime, [
+      "wt:git:publish-commits",
+      "wt:git:record-acceptance",
+      "wt:runtime:smoke",
+    ]),
+  ).toEqual({ ok: true });
   expect(
     validator.verifyAssets(knowledge, await observations("knowledge")),
   ).toEqual({ ok: true });
@@ -104,15 +108,20 @@ it("rejects missing and extra actions", async () => {
   expect(validator.verifyActions(manifest, [])).toEqual({
     ok: false,
     reason: "MANIFEST_ACTION_MISSING",
-    subject: "wt:runtime:smoke",
+    subject: "wt:git:publish-commits",
   });
-  expect(validator.verifyActions(manifest, ["wt:runtime:smoke", "wt:foreign"])).toEqual(
-    {
-      ok: false,
-      reason: "MANIFEST_ACTION_EXTRA",
-      subject: "wt:foreign",
-    },
-  );
+  expect(
+    validator.verifyActions(manifest, [
+      "wt:git:publish-commits",
+      "wt:git:record-acceptance",
+      "wt:runtime:smoke",
+      "wt:foreign",
+    ]),
+  ).toEqual({
+    ok: false,
+    reason: "MANIFEST_ACTION_EXTRA",
+    subject: "wt:foreign",
+  });
   expect(validator.verifyActions(manifest, ["wt:runtime:smoke", "wt:runtime:smoke"])).toEqual({
     ok: false,
     reason: "MANIFEST_ACTION_DUPLICATE",

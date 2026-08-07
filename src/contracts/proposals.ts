@@ -36,7 +36,15 @@ export const PROPOSAL_ORIGINS = [
 ] as const;
 export type ProposalOrigin = typeof PROPOSAL_ORIGINS[number];
 
-/** `classify-reject` and `propose-specification-resolution` map to no direct effect (journal/advisory only). */
+/**
+ * `classify-reject` and `propose-specification-resolution` map to no direct
+ * effect (journal/advisory only). `record-acceptance` and `publish-commits`
+ * are the `review-accept-v1` M0 routing rule's permitted result
+ * (`v1-contracts.md` §4/§5, `coordinator-automation.md` §13; CA-12) — they are
+ * never carried by a `DecisionProposal`, so they add no member to
+ * `PROPOSAL_TYPES`/`ProposalBody`. `GitAcceptanceAdapter` (CA-12) is their
+ * sole planner and the only consumer of these two declared actions.
+ */
 export const EFFECT_TYPES = [
     'dispatch-batch',
     'open-correction',
@@ -49,7 +57,9 @@ export const EFFECT_TYPES = [
     'grant-session-budget',
     'place-hold',
     'release-hold',
-    'open-escalation'
+    'open-escalation',
+    'record-acceptance',
+    'publish-commits'
 ] as const;
 export type EffectType = typeof EFFECT_TYPES[number];
 

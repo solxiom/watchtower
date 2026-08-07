@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/git-record-acceptance-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "targetId"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "targetId": {"type": "string", "minLength": 1}
+  }
+}

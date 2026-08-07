@@ -14,6 +14,18 @@
         type: "auto"
       }
     },
+    'dist:runtime-nvb:gitleaf-compile': {
+      doc: { summary: "Compile the CA-12 Git leaf/contracts dependency closure into staged runtime-nvb.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: {
+        handler: "TypeScriptBuildHandler",
+        args: [{
+          tsConfigFile: "./runtime-nvb/tsconfig.runtime-gitleaf.json",
+          destPath: "./dist/runtime-nvb"
+        }],
+        type: "auto"
+      }
+    },
     'dist:runtime-nvb:relocation-check': {
       doc: { summary: "Execute the staged catalog handler closure from a relocated runtime copy.", usage: "Internal distribution task." },
       runnerOpts: {},

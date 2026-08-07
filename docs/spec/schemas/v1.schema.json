@@ -660,7 +660,9 @@
                   "grant-session-budget",
                   "place-hold",
                   "release-hold",
-                  "open-escalation"
+                  "open-escalation",
+                  "record-acceptance",
+                  "publish-commits"
                 ]
               }
             },

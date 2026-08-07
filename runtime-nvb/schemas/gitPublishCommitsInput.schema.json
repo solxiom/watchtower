@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/git-publish-commits-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "targetId", "sha", "ref", "remote"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "targetId": {"type": "string", "minLength": 1},
+    "sha": {"type": "string", "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"},
+    "ref": {"type": "string", "pattern": "^refs/heads/[A-Za-z0-9][A-Za-z0-9._/-]*$"},
+    "remote": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"}
+  }
+}

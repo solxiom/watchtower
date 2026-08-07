@@ -1,0 +1,86 @@
+{
+  "actions": {
+    "git.publish-commits": {
+      "taskId": "wt:git:publish-commits"
+    },
+    "git.record-acceptance": {
+      "taskId": "wt:git:record-acceptance"
+    }
+  },
+  "fragmentId": "git-acceptance",
+  "groups": {},
+  "handlers": {
+    "GitAcceptanceTaskHandler": {
+      "module": "./handlers/GitAcceptanceTaskHandler.js"
+    }
+  },
+  "includes": [],
+  "leaves": {
+    "git.push": {
+      "executable": true,
+      "mode": "0555",
+      "path": "./leaves/gitPush.sh",
+      "sha256": "sha256:79031c3060a8f1e1fb79a377603a203e5c32caf40172898ba4acfb2c61259510"
+    }
+  },
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:git:publish-commits": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/git-publish-commits-input/v1",
+        "leafIds": [
+          "git.push"
+        ],
+        "mutationClass": "external-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/git-publish-commits-result/v1"
+      },
+      "doc": {
+        "summary": "Push one repository's verified accepted commit through the cataloged Git leaf.",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "schemaVersion": 1,
+            "targetId": "unset",
+            "sha": "0000000000000000000000000000000000000000",
+            "ref": "refs/heads/unset",
+            "remote": "origin"
+          }
+        ],
+        "handler": "GitAcceptanceTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:git:record-acceptance": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/git-record-acceptance-input/v1",
+        "leafIds": [],
+        "mutationClass": "authoritative-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/git-record-acceptance-result/v1"
+      },
+      "doc": {
+        "summary": "Confirm the durable batch-accepted acceptance effect. Never touches Git.",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "schemaVersion": 1,
+            "targetId": "unset"
+          }
+        ],
+        "handler": "GitAcceptanceTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    }
+  }
+}

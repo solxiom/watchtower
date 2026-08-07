@@ -78,9 +78,9 @@ describe('task catalog aggregate check and deterministic replay', function () {
         expect([...(await readFile(TASK_CATALOG))]).toEqual([...beforeCatalog]);
         if (result.ok) {
             expect(result.wrote).toBeFalse();
-            expect(result.fragmentCount).toBe(3);
+            expect(result.fragmentCount).toBe(4);
             expect(result.profileCount).toBe(1);
-            expect(result.taskCount).toBe(5);
+            expect(result.taskCount).toBe(7);
         }
     });
 

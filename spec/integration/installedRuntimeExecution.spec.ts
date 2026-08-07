@@ -116,8 +116,8 @@ describe('installed-package runtime execution against the package tree itself', 
 
     it('verifies the installed catalog identity and reports its declared surface', () => {
         expect(observed.catalogId as unknown).toBe(CATALOG_ID);
-        expect(observed.declaredActions as unknown).toEqual(['runtime.smoke']);
-        expect(observed.declaredLeaves as unknown).toEqual(['runtime.echo']);
+        expect(observed.declaredActions as unknown).toEqual(['git.publish-commits', 'git.record-acceptance', 'runtime.smoke']);
+        expect(observed.declaredLeaves as unknown).toEqual(['git.push', 'runtime.echo']);
     });
 
     it('authorizes the declared action through the relocated copy before any dependency-closure concern applies', () => {

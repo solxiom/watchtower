@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.runtime-gitleaf.json",
+  "compilerOptions": {
+    "outDir": "../build/runtime-nvb"
+  }
+}

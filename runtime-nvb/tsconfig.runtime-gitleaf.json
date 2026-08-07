@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "outDir": "../dist/runtime-nvb",
+    "rootDir": "../src",
+    "sourceMap": false,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": [
+    "../src/contracts/**/*.ts",
+    "../src/foundation/task/runtime/**/*.ts",
+    "../src/foundation/runtime/leaf/**/*.ts"
+  ],
+  "exclude": [
+    "../src/foundation/task/runtime/NirvanaLaneTaskRunner.ts",
+    "../src/foundation/task/runtime/index.ts",
+    "../src/foundation/task/runtime/laneTaskRuntimePinSource.ts",
+    "../src/foundation/runtime/leaf/index.ts"
+  ]
+}

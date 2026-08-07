@@ -328,6 +328,29 @@ postconditions and external prepare/attempt/verify rules are declared by the
 runtime action manifest. V1 external effect adapters are limited to tmux
 session creation and Git push. Any other external effect is rejected.
 
+`review-accept-v1` (§4) is the one M0 routing result outside this proposal
+table: a complete valid reviewer commit set is never carried by a
+`DecisionProposal` — it is a durable `accept` worker-event fact — so it maps
+directly to two declared effect types, `record-acceptance` and
+`publish-commits`, that add no member to the fourteen closed proposal types.
+`GitAcceptanceAdapter` (CA-12) is their sole planner:
+
+- `record-acceptance` is the durable `batch-accepted` journal write. It is
+  lane-local, never touches Git, and is never rolled back by a later
+  publication failure.
+- `publish-commits` is the second permitted v1 external adapter (`git-push`,
+  alongside `tmux-session`). Reviewer-session ownership is proved from the
+  durable `accept` event's session, never from Git author/committer text.
+  Commit-set validation proves, per repository, that the proposed SHA exists,
+  its ancestry reaches the expected review baseline, its committed tree
+  contains no unexpected files, and the repository is one of the lane's
+  declared bindings. Publication pushes each bound repository in declared
+  order; a partial failure records `publication-partial` and retries only the
+  repositories that did not verify, never the ones that already pushed.
+  Acceptance and publication remain distinct effect plans and distinct
+  idempotency keys, so acceptance can succeed while publication is partial or
+  retried.
+
 ## 6. Adapter contract
 
 Skill installation support and unattended decision support are separate

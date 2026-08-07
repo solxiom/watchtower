@@ -41,7 +41,9 @@ const WARNING_BAND: ReadonlyMap<string, string> = new Map([
     ['invocation envelopes are addressed, timely, and single use',
         'suite container: one envelope addressing or lifetime rule per `it`'],
     ['installed-package runtime execution against the package tree itself',
-        'suite container: one installed-root resolution or execution proof per `it`']
+        'suite container: one installed-root resolution or execution proof per `it`'],
+    ['CA-12 packaged Git leaf — real immutable runtime root',
+        'suite container: one packaged-runtime/leaf proof per `it`']
 ]);
 
 const OWNED_SPECS = [

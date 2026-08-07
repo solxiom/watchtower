@@ -1,9 +1,49 @@
 {
   "groups": {},
   "handlers": [
+    "./handlers/GitAcceptanceTaskHandler.js",
     "./handlers/RuntimeSmokeTaskHandler.js"
   ],
   "tasks": {
+    "wt:git:publish-commits": {
+      "doc": {
+        "summary": "Push one repository's verified accepted commit through the cataloged Git leaf.",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "ref": "refs/heads/unset",
+            "remote": "origin",
+            "schemaVersion": 1,
+            "sha": "0000000000000000000000000000000000000000",
+            "targetId": "unset"
+          }
+        ],
+        "handler": "GitAcceptanceTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:git:record-acceptance": {
+      "doc": {
+        "summary": "Confirm the durable batch-accepted acceptance effect. Never touches Git.",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "schemaVersion": 1,
+            "targetId": "unset"
+          }
+        ],
+        "handler": "GitAcceptanceTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
     "wt:runtime:smoke": {
       "doc": {
         "summary": "Verify that the packaged runtime TaskHandler emits a structured result.",

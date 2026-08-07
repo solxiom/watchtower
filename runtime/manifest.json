@@ -3,12 +3,21 @@
   "manifestId": "watchtower-runtime/v1",
   "runtimeVersion": "0.1.0",
   "minimumCliVersion": "0.1.0",
-  "compatibleLaneSchemaVersions": [1],
-  "compatibleKnowledgeVersions": ["0.1.0"],
+  "compatibleLaneSchemaVersions": [
+    1
+  ],
+  "compatibleKnowledgeVersions": [
+    "0.1.0"
+  ],
   "assets": [
     {
       "path": "catalog/capabilities/catalogComposition.catalog.json",
       "sha256": "sha256:b5947bd8b78497df1e5e32e0faddc7c2029cf38c1f69fdd03805fdd99ffdd074",
+      "mode": "0644"
+    },
+    {
+      "path": "catalog/capabilities/gitAcceptance.catalog.json",
+      "sha256": "sha256:c1ae82205709060eff4ee16894d163ebcaf820fd2b44b1cf14d8b71ba0e1ed77",
       "mode": "0644"
     },
     {
@@ -27,13 +36,48 @@
       "mode": "0644"
     },
     {
+      "path": "contracts/leafRuntime.d.ts",
+      "sha256": "sha256:2908354f3fbbe63d3d0b47609f0aa2dbacb518a8da2163003274903316c25a84",
+      "mode": "0644"
+    },
+    {
+      "path": "contracts/taskRuntime.d.ts",
+      "sha256": "sha256:9d91251db9b22113192254c02648eea47f250d3bfac2e97cd037839329a4b9e4",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/runtime/leaf/taskLeafCapability.d.ts",
+      "sha256": "sha256:453efc6bec0692af09ac954cb6fd9f73fe10b13da2efa7c321ea02df09b36d40",
+      "mode": "0644"
+    },
+    {
       "path": "foundation/schemaComposition/index.d.ts",
-      "sha256": "sha256:c27f1e586932c14357942d505f07948ebcff1efa6a91ad2d209833867e3cf208",
+      "sha256": "sha256:d9aac1ddf8ac8f8275fb5f2738acbbc42404c91fc5988091260221551dabaecb",
       "mode": "0644"
     },
     {
       "path": "foundation/task/catalog/taskCatalogCompositionFileAdapter.d.ts",
       "sha256": "sha256:0e5c0e653a1232c03fee95123fe5baca5c676aef72caa202d6b07a329d79fd9e",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/task/runtime/LaneTaskCatalog.d.ts",
+      "sha256": "sha256:c01e738c29607dc2b8300b7ba10d650161752d44380c43d6ae165ef44125a7f1",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/task/runtime/laneTaskRequest.d.ts",
+      "sha256": "sha256:34b73de1a5e5831d269cb883ff2be2716c640be2458f90bcad0d52f2e877b927",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/task/runtime/runtimeFileSystem.d.ts",
+      "sha256": "sha256:82e8eba88c29fb0fdf5281a2e5a266adc008e2b95f48f44fed5fc14eabf01624",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/GitAcceptanceTaskHandler.ts",
+      "sha256": "sha256:b59e96a7e6696e8372702cb729d3689091ddb6026d5a601db79d057de4ff39ce",
       "mode": "0644"
     },
     {
@@ -49,6 +93,21 @@
     {
       "path": "handlers/TaskCatalogCompositionTaskHandler.ts",
       "sha256": "sha256:4b03b1da86734dbf44df95202ab2191c69367f813b1ebd50d579a5b3b4b2e411",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/gitAcceptance/executingGitCatalog.ts",
+      "sha256": "sha256:b41e4ae60f20f20f1c9b20900138cd7f005296d5944722a8a6f5f6e102976692",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/gitAcceptance/gitAcceptanceTaskContracts.ts",
+      "sha256": "sha256:8b1a5e6a544900c0bd15ffae964283809a533711311c8be18230e898fc3092be",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/gitAcceptance/runtimeContextFromEnvironment.ts",
+      "sha256": "sha256:617b3e4f764e39ac11f406e0537103f1eab34c93ef3e6b41a8629fbb041653db",
       "mode": "0644"
     },
     {
@@ -77,6 +136,11 @@
       "mode": "0644"
     },
     {
+      "path": "leaves/gitPush.sh",
+      "sha256": "sha256:79031c3060a8f1e1fb79a377603a203e5c32caf40172898ba4acfb2c61259510",
+      "mode": "0755"
+    },
+    {
       "path": "leaves/runtimeEcho.sh",
       "sha256": "sha256:306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb",
       "mode": "0755"
@@ -88,17 +152,37 @@
     },
     {
       "path": "profiles/implementationV1.profile.json",
-      "sha256": "sha256:57655dfb2589ddac4b72f91e9e259bcb08564a7bda83dbdbdff0a09f4a441d3c",
+      "sha256": "sha256:a29ad2e015ef8213be3845d6394d6ec6ac11ad45a52a9cba34715904302bb077",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.json",
-      "sha256": "sha256:f3933f728d7572bd118ba36590bd20524fa751d2e1eaf1c3948340eb293c615a",
+      "sha256": "sha256:8214021dcfb057d5f79d9c4cbf73c04e63bec39ac8c34d36fa419dd86a1d2cd8",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.ts",
       "sha256": "sha256:85fd5247233a84684fd988c5ff0123148b8a51dad250677e22b60815be35f513",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/gitPublishCommitsInput.schema.json",
+      "sha256": "sha256:3dda7a1a1ca0a9fab9add85be1fd05537cc169c5f0b9a874afb5d0bdc07c24da",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/gitPublishCommitsResult.schema.json",
+      "sha256": "sha256:d9ccb81892dc44134a85bb92bb919ba23f152bc6240917831e02bf85c90ed6e5",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/gitRecordAcceptanceInput.schema.json",
+      "sha256": "sha256:c2e456c8100a8ed41e03dd6fb3c945b293e70f3c38b164610fdb9db0e1a10d8e",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/gitRecordAcceptanceResult.schema.json",
+      "sha256": "sha256:3f128cb82cf5750eedf5e668057add7e564145ea2f4819976417a70f72d9f3d7",
       "mode": "0644"
     },
     {
@@ -153,7 +237,7 @@
     },
     {
       "path": "task-catalog.json",
-      "sha256": "sha256:d741b110800427a7b2d7977d430b8e9507beb39601432f3f755e965862dfc928",
+      "sha256": "sha256:f7eda1e959b7a41767407e3761bf4a6eacd9f1891a8efe13c36e0fdbe5855997",
       "mode": "0644"
     },
     {
@@ -167,6 +251,16 @@
       "mode": "0644"
     },
     {
+      "path": "tsconfig.runtime-gitleaf.build.json",
+      "sha256": "sha256:049700abad2cdc6952be092ff97ba9257c0012ad3746039ae5de93d980145435",
+      "mode": "0644"
+    },
+    {
+      "path": "tsconfig.runtime-gitleaf.json",
+      "sha256": "sha256:a11bd5913cd61af40437bceb77e0f46f8923219ec522cde972ce2fa8dc3a121c",
+      "mode": "0644"
+    },
+    {
       "path": "tsconfig.runtime-nvb.json",
       "sha256": "sha256:fa365f9e252064f3d0ee77075be1625b850e13b29389a5349dc072b672bda327",
       "mode": "0644"
@@ -177,6 +271,10 @@
       "mode": "0644"
     }
   ],
-  "actions": ["wt:runtime:smoke"],
+  "actions": [
+    "wt:git:publish-commits",
+    "wt:git:record-acceptance",
+    "wt:runtime:smoke"
+  ],
   "requiredCommands": []
 }

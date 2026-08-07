@@ -55,7 +55,7 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const fragments = readdirSync(join('runtime-nvb', 'catalog', 'capabilities'));
         const profiles = readdirSync(join('runtime-nvb', 'profiles'));
         expect(fragments).toEqual([
-            'catalogComposition.catalog.json', 'runtimeSmoke.catalog.json',
+            'catalogComposition.catalog.json', 'gitAcceptance.catalog.json', 'runtimeSmoke.catalog.json',
             'schemaComposition.catalog.json'
         ]);
         expect(profiles).toEqual(['implementationV1.profile.json']);
@@ -81,8 +81,8 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const runtime = JSON.parse(readFileSync(join('runtime-nvb', 'runtime-nvb.json'), 'utf8')) as {
             handlers: string[]; tasks: Record<string, unknown>;
         };
-        expect(runtime.handlers).toEqual(['./handlers/RuntimeSmokeTaskHandler.js']);
-        expect(Object.keys(runtime.tasks)).toEqual(['wt:runtime:smoke']);
+        expect(runtime.handlers).toEqual(['./handlers/GitAcceptanceTaskHandler.js', './handlers/RuntimeSmokeTaskHandler.js']);
+        expect(Object.keys(runtime.tasks)).toEqual(['wt:git:publish-commits', 'wt:git:record-acceptance', 'wt:runtime:smoke']);
     });
 });
 
@@ -102,7 +102,7 @@ describe('runtime smoke task catalog bindings', function () {
         const actions: unknown = catalog.actions;
         const leafIds: unknown = task.leafIds;
         const leafEntry: unknown = leaf;
-        expect(actions).toEqual({'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
+        expect(actions).toEqual({'git.publish-commits': {taskId: 'wt:git:publish-commits'}, 'git.record-acceptance': {taskId: 'wt:git:record-acceptance'}, 'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
         expect(leafIds).toEqual(['runtime.echo']);
         expect(leafEntry).toEqual({
             executable: true, mode: '0555', path: './leaves/runtimeEcho.sh', sha256: `sha256:${digest}`
