@@ -21,11 +21,20 @@ describe('init domain inventory (FR-18)', () => {
         const modules = OWNED_MODULES.map((file) => relative(INIT_DIR, file)).sort();
         expect(modules).toEqual([
             'EndpointEligibility.ts',
+            'EndpointReservationEvidence.ts',
             'InitContracts.ts',
             'InitPlanner.ts',
             'InitPorts.ts',
             'InitPreflightHost.ts',
             'InitRoutingValidator.ts',
+            'endpointReservationAuthorityBinding.ts',
+            'endpointReservationAuthorityComposition.packaged.ts',
+            'endpointReservationAuthorityComposition.ts',
+            'endpointReservationAuthorityCompositionAccess.ts',
+            'endpointReservationAuthorityLiveSnapshotStore.ts',
+            'endpointReservationAuthorityLiveSource.packaged.ts',
+            'endpointReservationAuthorityLiveSource.ts',
+            'endpointReservationAuthoritySeal.ts',
             'index.ts',
             'initLocks.ts'
         ]);

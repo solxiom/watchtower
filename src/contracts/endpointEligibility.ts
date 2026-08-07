@@ -90,6 +90,63 @@ export interface EligibilityResult {
     readonly capacityPoolId: string;
 }
 
+export type EndpointReservationState = 'active' | 'expired' | 'revoked' | 'exhausted' | 'unknown';
+
+export type EndpointReservationReason =
+    | 'authorization-digest-mismatch' | 'state-digest-mismatch' | 'evidence-digest-mismatch'
+    | 'endpoint-mismatch' | 'pool-mismatch' | 'pool-member-mismatch' | 'reservation-stale-revision'
+    | 'reservation-expired' | 'reservation-revoked' | 'reservation-exhausted' | 'reservation-unknown'
+    | 'reservation-not-active' | 'reservation-consumed' | 'eligibility-not-eligible' | 'pool-capacity-exhausted';
+
+export interface EndpointReservationRecord {
+    readonly reservationId: string;
+    readonly reservationRevision: number;
+    readonly endpointId: string;
+    readonly capacityPoolId: string;
+    readonly reservationState: EndpointReservationState;
+    readonly holdsPoolSlot: boolean;
+}
+
+/** Closed CA-06 current reservation evidence produced by the router/eligibility owner. */
+export interface EndpointReservationEvidence {
+    readonly schemaVersion: 1;
+    readonly endpointId: string;
+    readonly capacityPoolId: string;
+    readonly reservationId: string;
+    readonly reservationRevision: number;
+    readonly poolSnapshotRevision: number;
+    readonly poolLimit: number;
+    readonly poolActiveReservations: number;
+    readonly sharedEndpointIds: readonly string[];
+    readonly holdsPoolSlot: boolean;
+    readonly eligibilityStatus: 'eligible';
+    readonly eligibilityDigest: `sha256:${string}`;
+    readonly reservationState: EndpointReservationState;
+    readonly observedAtMs: number;
+    readonly expiresAtMs: number;
+    readonly evidenceDigest: `sha256:${string}`;
+}
+
+export interface EndpointReservationCurrentState {
+    readonly schemaVersion: 1;
+    readonly capacityPoolId: string;
+    readonly poolSnapshotRevision: number;
+    readonly poolLimit: number;
+    readonly poolActiveReservations: number;
+    readonly sharedEndpointIds: readonly string[];
+    readonly reservation: EndpointReservationRecord;
+    readonly observedAtMs: number;
+    readonly expiresAtMs: number;
+    readonly stateDigest: `sha256:${string}`;
+}
+
+export interface EndpointReservationAuthorization {
+    readonly schemaVersion: 1;
+    readonly evidence: EndpointReservationEvidence;
+    readonly currentState: EndpointReservationCurrentState;
+    readonly authorizationDigest: `sha256:${string}`;
+}
+
 export interface CapacityPoolSnapshot {
     readonly capacityPoolId: string;
     readonly limit: number;

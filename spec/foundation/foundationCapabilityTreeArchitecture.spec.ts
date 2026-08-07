@@ -14,6 +14,7 @@ const ALLOWED_TOP_LEVEL_DIRS = [
     'broker',
     'discovery',
     'distribution',
+    'endpoint',
     'hostAdapters',
     'index',
     'init',
@@ -115,7 +116,8 @@ describe('foundation capability tree integration (FR-38)', () => {
         'laneCapabilityArchitecture.spec.ts',
         'packIndexArchitecture.spec.ts',
         'indexCapabilityArchitecture.spec.ts',
-        'brokerCapabilityArchitecture.spec.ts'
+        'brokerCapabilityArchitecture.spec.ts',
+        'endpointArchitecture.spec.ts'
     ] as const;
 
     it('ships per-capability architecture gates for each REF-03 tree', () => {

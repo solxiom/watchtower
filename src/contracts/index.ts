@@ -182,8 +182,17 @@ export type {
 export type {
     CapacityPoolSnapshot, CapacityPoolUsage, EndpointAvailability as EndpointAvailabilityStatus, EndpointCapabilityClass, EndpointCapabilities,
     EndpointConformance, EndpointContextClass, EndpointFingerprint, EndpointProfile, EndpointReasoningClass,
-    EndpointSupportMode, EligibilityFacts, EligibilityReason, EligibilityRequirements, EligibilityResult
+    EndpointSupportMode, EligibilityFacts, EligibilityReason, EligibilityRequirements, EligibilityResult,
+    EndpointReservationAuthorization, EndpointReservationCurrentState, EndpointReservationEvidence,
+    EndpointReservationRecord, EndpointReservationReason, EndpointReservationState
 } from './endpointEligibility.js';
+export type {EndpointReservationAuthority} from './endpointReservationAuthority.js';
+export {isEndpointReservationAuthority} from './endpointReservationAuthority.js';
+export {OPENCODE_ENDPOINT_REASONS} from './opencodeEndpoint.js';
+export type {
+    OpenCodeDecisionFailure, OpenCodeDecisionOutcome, OpenCodeDecisionRequest, OpenCodeDecisionResult,
+    OpenCodeEndpointAdapterOptions, OpenCodeEndpointReason
+} from './opencodeEndpoint.js';
 export {JOURNAL_REASONS, JournalError} from './runtimeJournal.js';
 export type {
     BatchProjection, BoundedEventPage, CorruptionReport, CycleProjection, DurableEvent, DurableEventPage,

@@ -104,12 +104,12 @@
     'dist': {
       doc: { summary: "Produce the full dist package for watchtower.", usage: "`nvb dist`" },
       tasks: [
-        "dist:clean-build", "dist:clean", "dist:compile", "dist:fix-esm",
+        "dist:clean-build", "dist:clean", "dist:stage:init-reservation-authority", "dist:compile", "dist:restore:init-reservation-authority", "dist:prune:init-reservation-authority", "dist:fix-esm",
         "dist:clean-esm-stamp", "dist:copy-bin", "dist:copy-help", "dist:copy-config",
         "dist:runtime-nvb:compile", "dist:runtime-nvb:foundation-compile",
         "dist:runtime-nvb:copy", "dist:runtime-nvb:schema-copy", "dist:copy-runtime", "dist:copy-knowledge",
         "dist:runtime-nvb:relocation-check", "dist:package",
-        "dist:chmod-bin", "dist:validate", "dist:closure:verify", "dist:clean-build"
+        "dist:chmod-bin", "dist:validate", "dist:validate:reservation-authority-seams", "dist:closure:verify", "dist:clean-build"
       ],
       runnerOpts: { multiExecPolicy: "series" }
     }

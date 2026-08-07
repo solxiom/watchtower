@@ -2,6 +2,21 @@
   /* Packaged aggregate validation and versioned runtime/knowledge staging. */
   parent: "./runtimeCatalogDistribution.nvb.json",
   tasks: {
+    'dist:stage:init-reservation-authority': {
+      doc: { summary: "Stage packaged init reservation authority modules before dist compile.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/stagePackagedInitReservationAuthority.mjs", "stage"] }], type: "auto" }
+    },
+    'dist:restore:init-reservation-authority': {
+      doc: { summary: "Restore dev init reservation authority modules after dist compile.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/stagePackagedInitReservationAuthority.mjs", "restore"] }], type: "auto" }
+    },
+    'dist:prune:init-reservation-authority': {
+      doc: { summary: "Remove dev-only init reservation authority artifacts from dist output.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/stagePackagedInitReservationAuthority.mjs", "prune-dist"] }], type: "auto" }
+    },
     'dist:copy-runtime': {
       doc: { summary: "Copy the runtime manifest required to stage the packaged runtime.", usage: "Internal distribution task." },
       runnerOpts: {},
@@ -16,6 +31,11 @@
       doc: { summary: "Validate the complete staged package, manifests, and executable bin.", usage: "Internal distribution task." },
       runnerOpts: {},
       handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/validatePackagedDistribution.mjs"] }], type: "auto" }
+    },
+    'dist:validate:reservation-authority-seams': {
+      doc: { summary: "Verify packaged reservation authority modules export no forgeable live-source seams.", usage: "Internal distribution task." },
+      runnerOpts: {},
+      handle: { handler: "CommandHandler", args: [{ name: "node", args: ["./scripts/validatePackagedReservationAuthoritySeams.mjs"] }], type: "auto" }
     },
     'dist:closure:verify': {
       doc: { summary: "Install the packaged tarball with the sealed Nirvana closure and prove SQLite loading.", usage: "Internal distribution task." },
