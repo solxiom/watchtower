@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://watchtower.local/schemas/session-index-v2/manifest.schema.json",
+  "title": "Session index manifest",
+  "description": "The adjacent index-manifest.json for coordinator/index/sessions. This is the accepted watchtower.v1.derived-store $defs.derivedStoreManifest fragment narrowed to storeKind 'sessions'; it defines no new record type. CORRECTION-02's wt-session-index-identity/2, -manifest/2, -commit/2 and -pointer/2 records are withdrawn: the accepted fragment already covers this store, and its storeKind enum already contains 'sessions'.",
+  "extends": "docs/spec/schemas/v1/derivedStore.schema.json#/$defs/derivedStoreManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "backend",
+    "storeKind",
+    "databaseSchemaVersion",
+    "compilerVersion",
+    "laneId",
+    "source",
+    "semanticRoot",
+    "counts",
+    "builtAt"
+  ],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "backend": {"const": "sqlite"},
+    "storeKind": {"const": "sessions"},
+    "databaseSchemaVersion": {
+      "const": 2,
+      "description": "Bumped from the rejected CA-16 implementation's version 1 so that a legacy store can never satisfy admission and is rebuilt from journals instead of adopted."
+    },
+    "compilerVersion": {"type": "string", "minLength": 1},
+    "laneId": {"type": "string", "format": "uuid"},
+    "packSealId": {"type": "null", "description": "Session indexes are journal-derived, not pack-derived."},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "checkpoint", "sessions"],
+      "properties": {
+        "identity": {
+          "const": "operator-session-journals",
+          "description": "The only admitted rebuild source. coordinator-automation.md 9.7 requires a deterministic rebuild from the journal; no derived store, including a previous session index, is an admissible source."
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/journalCheckpoint",
+          "description": "Aggregate checkpoint across every indexed session, covering offset, byte length, and continuity digest."
+        },
+        "sessions": {
+          "type": "array",
+          "description": "Per-session journal checkpoint at build time, so 9.7 continuity can be verified per session and not only in aggregate.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["operatorSessionId", "checkpoint"],
+            "properties": {
+              "operatorSessionId": {"$ref": "#/$defs/identifier"},
+              "checkpoint": {"$ref": "#/$defs/journalCheckpoint"}
+            }
+          }
+        }
+      }
+    },
+    "semanticRoot": {
+      "$ref": "#/$defs/digest",
+      "description": "Produced by src/foundation/storage/semanticRoot.ts computeSemanticRoot over the registry.json logical export. No session-specific root algorithm exists."
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0},
+      "description": "Row counts per table, from logicalExportCounts."
+    },
+    "builtAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Informational, and excluded from semantic identity per coordinator-automation.md 9.3."
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "journalCheckpoint": {"type": "string", "pattern": "^[0-9]{1,19}:sha256:[0-9a-f]{64}$"}
+  }
+}

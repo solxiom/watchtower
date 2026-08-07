@@ -1,0 +1,33 @@
+{
+  "signaturesId": "session-index-v2-contract-signatures",
+  "note": "Ed25519 over the stated bytes. The CORRECTION-03 key is derived from the published seed recorded below; it is a tamper-evidence binding over artifact content, not an authority credential.",
+  "signerSeedPhrase": "CA-16R-CORRECTION-03-design-contract",
+  "signerKeyDerivation": "privateKeySeed = SHA-256(UTF-8 signerSeedPhrase); Ed25519 PKCS8 = 302e020100300506032b657004220420 || seed",
+  "records": [
+    {
+      "subject": "legacy-ca16-v1.schema.json",
+      "signedOver": "exact file bytes",
+      "digest": "sha256:d7399ee3f8de42f64d6f330ab6b8ec224df55cba753f922d1d1626009bef8275",
+      "signatureAlgorithm": "Ed25519",
+      "signerId": "CA-16R-CORRECTION-03-design-contract",
+      "signerPublicKeyDerSpkiBase64": "MCowBQYDK2VwAyEAPNtbkZULrs+8ZEwr6CmP0x0SJ3A/B91EnwtJr3SYXFo=",
+      "signatureBase64": "p3Zy8fArUOY8ITqwxXhqM1vTRW3+Whd1hAW51sj8BwMDrTnUFOp7+fxxEMMMjY0xx5M5Klx03+1l5PWnoEk3CQ==",
+      "retainedCorrection02Signature": {
+        "note": "The CORRECTION-02 signature over these identical bytes is preserved and independently verifies. The schema is frozen; only the countersigning contract changed.",
+        "signatureAlgorithm": "Ed25519",
+        "signerId": "CA-16R-CORRECTION-02-design-contract",
+        "signerPublicKeyDerSpkiBase64": "MCowBQYDK2VwAyEAuozr7//X/8rqN/IGeiu1bxvk4cLOGOizjj/CMRen6iM=",
+        "signatureBase64": "vq7+9G5AFkX/cvf0zaYx4G4Q7l8cSAXnOlC7wJa/AU92ng9fWjPqf2QmYkANvY7lyoetI2HupXCmhVMS4F4cCA=="
+      }
+    },
+    {
+      "subject": "legacy-equivalence.json",
+      "signedOver": "canonical (sorted-key, minified) serialization",
+      "digest": "sha256:06803914d9e8c390be768d78d8bf2b7c89c3c9282df48a507a7360b3100e2874",
+      "signatureAlgorithm": "Ed25519",
+      "signerId": "CA-16R-CORRECTION-03-design-contract",
+      "signerPublicKeyDerSpkiBase64": "MCowBQYDK2VwAyEAPNtbkZULrs+8ZEwr6CmP0x0SJ3A/B91EnwtJr3SYXFo=",
+      "signatureBase64": "ckpiWAnnzMm+55Ze4PRVgvLlzsroNqA/WeyQl2FFKW5iQ/BajRkabYn+W0ZT0Y2BWC+xHBt1aDhIcirZgveABg=="
+    }
+  ]
+}

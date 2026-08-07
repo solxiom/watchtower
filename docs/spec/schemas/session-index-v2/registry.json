@@ -1,0 +1,529 @@
+{
+  "registryId": "session-index",
+  "databaseSchemaVersion": 2,
+  "storeKind": "sessions",
+  "backend": "sqlite",
+  "sourceOfTruth": "docs/spec/implementation/wt-coordinator-automation/work-batches/CA-16-session-sqlite-index-references-pins-and-compaction.md",
+  "shapeConformsTo": "src/foundation/storage/sqlitePorts.ts DerivedStoreSchema",
+  "semanticRootAlgorithm": "src/foundation/storage/semanticRoot.ts computeSemanticRoot",
+  "notes": [
+    "databaseSchemaVersion is 2 so that any store written by the rejected CA-16 implementation (schema version 1) fails admission and is rebuilt from journals rather than adopted in place.",
+    "index_meta participates in the semantic root exactly as it does for the pack index, and never carries a root-derived field, so the root stays a pure function of journal content plus compiler/schema identity.",
+    "Registry order below is the logical-export order and therefore part of the semantic root."
+  ],
+  "tables": [
+    {
+      "name": "index_meta",
+      "purpose": "Store identity recorded inside the database, verified against the adjacent manifest before any query becomes queryable.",
+      "columns": [
+        {
+          "name": "key",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "value",
+          "type": "text",
+          "notNull": true
+        }
+      ],
+      "primaryKey": [
+        "key"
+      ]
+    },
+    {
+      "name": "operator_sessions",
+      "purpose": "One row per operator session in this lane.",
+      "columns": [
+        {
+          "name": "operator_session_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "lane_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "origin",
+          "type": "text",
+          "notNull": true,
+          "enum": "origin"
+        },
+        {
+          "name": "policy_profile_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "notNull": true,
+          "enum": "sessionState"
+        },
+        {
+          "name": "topic",
+          "type": "text",
+          "notNull": true,
+          "maxBytes": 500
+        },
+        {
+          "name": "created_at",
+          "type": "text",
+          "notNull": true,
+          "format": "timestamp"
+        },
+        {
+          "name": "last_turn_at",
+          "type": "text",
+          "notNull": false,
+          "format": "timestamp"
+        },
+        {
+          "name": "turn_count",
+          "type": "integer",
+          "notNull": true,
+          "minimum": 0
+        },
+        {
+          "name": "parent_operator_session_id",
+          "type": "text",
+          "notNull": false
+        },
+        {
+          "name": "budget_segment_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "journal_checkpoint",
+          "type": "text",
+          "notNull": true,
+          "format": "journalCheckpoint"
+        },
+        {
+          "name": "content_root",
+          "type": "text",
+          "notNull": true,
+          "format": "relativePath"
+        }
+      ],
+      "primaryKey": [
+        "operator_session_id"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "parent_operator_session_id"
+          ],
+          "references": {
+            "table": "operator_sessions",
+            "columns": [
+              "operator_session_id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "session_pins",
+      "purpose": "Operator-pinned references that survive working-set selection.",
+      "columns": [
+        {
+          "name": "operator_session_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "ref_type",
+          "type": "text",
+          "notNull": true,
+          "enum": "refType"
+        },
+        {
+          "name": "ref_value",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "pinned_at",
+          "type": "text",
+          "notNull": true,
+          "format": "timestamp"
+        }
+      ],
+      "primaryKey": [
+        "operator_session_id",
+        "ref_type",
+        "ref_value"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "operator_session_id"
+          ],
+          "references": {
+            "table": "operator_sessions",
+            "columns": [
+              "operator_session_id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "turns",
+      "purpose": "Bounded per-turn metadata and capped excerpts. Exact text stays in the turn files.",
+      "columns": [
+        {
+          "name": "turn_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "operator_session_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "turn_number",
+          "type": "integer",
+          "notNull": true,
+          "minimum": 1
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "notNull": true,
+          "enum": "turnState"
+        },
+        {
+          "name": "decision_class",
+          "type": "text",
+          "notNull": false,
+          "enum": "decisionClass"
+        },
+        {
+          "name": "routing_rule_id",
+          "type": "text",
+          "notNull": false
+        },
+        {
+          "name": "endpoint_id",
+          "type": "text",
+          "notNull": false
+        },
+        {
+          "name": "snapshot_revision",
+          "type": "integer",
+          "notNull": false,
+          "minimum": 0
+        },
+        {
+          "name": "stale",
+          "type": "integer",
+          "notNull": true,
+          "enum": "boolean"
+        },
+        {
+          "name": "completed_at",
+          "type": "text",
+          "notNull": false,
+          "format": "timestamp"
+        },
+        {
+          "name": "content_excerpt",
+          "type": "text",
+          "notNull": true,
+          "maxBytes": 500,
+          "excerptOf": "operator_bytes"
+        },
+        {
+          "name": "answer_excerpt",
+          "type": "text",
+          "notNull": true,
+          "maxBytes": 500,
+          "excerptOf": "coordinator_bytes"
+        },
+        {
+          "name": "answer_digest",
+          "type": "text",
+          "notNull": true,
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "Digest of the complete coordinator answer. Restored from the frozen legacy CA-16 v1 turns table; legacy-equivalence.json records its reconstruction rule verbatim: \"response.sha256 in the turn record, verifiable against coordinator.md\". Without it a truncated turn_reference_capsules.answer_digest has no index-side anchor and stored-capsule admission would have to accept the capsule's own claim, which R7 forbids."
+        },
+        {
+          "name": "input_tokens",
+          "type": "integer",
+          "notNull": false,
+          "minimum": 0
+        },
+        {
+          "name": "output_tokens",
+          "type": "integer",
+          "notNull": false,
+          "minimum": 0
+        },
+        {
+          "name": "telemetry_quality",
+          "type": "text",
+          "notNull": true,
+          "enum": "telemetryQuality"
+        },
+        {
+          "name": "operator_bytes",
+          "type": "integer",
+          "notNull": true,
+          "minimum": 0
+        },
+        {
+          "name": "coordinator_bytes",
+          "type": "integer",
+          "notNull": true,
+          "minimum": 0
+        }
+      ],
+      "primaryKey": [
+        "turn_id"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "operator_session_id"
+          ],
+          "references": {
+            "table": "operator_sessions",
+            "columns": [
+              "operator_session_id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "turn_refs",
+      "purpose": "Resolved evidence references for one turn. Unresolved references carry no target and are not indexed.",
+      "columns": [
+        {
+          "name": "turn_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "ref_type",
+          "type": "text",
+          "notNull": true,
+          "enum": "refType"
+        },
+        {
+          "name": "ref_value",
+          "type": "text",
+          "notNull": true
+        }
+      ],
+      "primaryKey": [
+        "turn_id",
+        "ref_type",
+        "ref_value"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "turn_id"
+          ],
+          "references": {
+            "table": "turns",
+            "columns": [
+              "turn_id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "turn_open_questions",
+      "purpose": "Open questions recorded by one turn, in journal order.",
+      "columns": [
+        {
+          "name": "turn_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "question_index",
+          "type": "integer",
+          "notNull": true,
+          "minimum": 0
+        },
+        {
+          "name": "question_text",
+          "type": "text",
+          "notNull": true,
+          "maxBytes": 1000
+        }
+      ],
+      "primaryKey": [
+        "turn_id",
+        "question_index"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "turn_id"
+          ],
+          "references": {
+            "table": "turns",
+            "columns": [
+              "turn_id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "session_proposals",
+      "purpose": "Proposal metadata and lifecycle only. No proposal body, no effect authority.",
+      "columns": [
+        {
+          "name": "proposal_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "operator_session_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "source_turn_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "proposal_type",
+          "type": "text",
+          "notNull": true,
+          "enum": "proposalType"
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "notNull": true,
+          "enum": "proposalState"
+        },
+        {
+          "name": "created_at",
+          "type": "text",
+          "notNull": true,
+          "format": "timestamp"
+        },
+        {
+          "name": "expires_at",
+          "type": "text",
+          "notNull": true,
+          "format": "timestamp"
+        }
+      ],
+      "primaryKey": [
+        "proposal_id"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "operator_session_id"
+          ],
+          "references": {
+            "table": "operator_sessions",
+            "columns": [
+              "operator_session_id"
+            ]
+          }
+        },
+        {
+          "columns": [
+            "source_turn_id"
+          ],
+          "references": {
+            "table": "turns",
+            "columns": [
+              "turn_id"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "turn_reference_capsules",
+      "purpose": "One deterministic bounded capsule per source turn, per operator-session.md 10.2.",
+      "columns": [
+        {
+          "name": "source_turn_id",
+          "type": "text",
+          "notNull": true
+        },
+        {
+          "name": "capsule_json",
+          "type": "text",
+          "notNull": true,
+          "schema": "capsule.schema.json",
+          "maxBytes": 4096
+        },
+        {
+          "name": "created_at",
+          "type": "text",
+          "notNull": true,
+          "format": "timestamp"
+        }
+      ],
+      "primaryKey": [
+        "source_turn_id"
+      ],
+      "foreignKeys": [
+        {
+          "columns": [
+            "source_turn_id"
+          ],
+          "references": {
+            "table": "turns",
+            "columns": [
+              "turn_id"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "formats": {
+    "timestamp": {
+      "description": "RFC 3339 UTC instant with second precision and a literal Z.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "relativePath": {
+      "description": "Normalized lane-relative path with no absolute prefix, no . or .. component, and no symlink component.",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[A-Za-z0-9._/-]{1,512}$"
+    },
+    "journalCheckpoint": {
+      "description": "Consumed journal prefix as byte offset and the SHA-256 of exactly that prefix. Carries the offset, byte length, and continuity digest coordinator-automation.md 9.7 requires, in the single column the CA-16 brief names.",
+      "pattern": "^[0-9]{1,19}:sha256:[0-9a-f]{64}$"
+    },
+    "digest": {
+      "description": "Lowercase SHA-256 in the site-wide form.",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "excerptRule": {
+    "maxBytes": 500,
+    "boundary": "utf8-code-point",
+    "description": "Excerpts are capped at 500 UTF-8 bytes, truncated only on a code-point boundary, never splitting a character. Because a 500-byte UTF-8 string can never exceed 500 characters, this simultaneously satisfies operator-session.md 10.2 (byte-capped, with original byte length) and the CA-16 brief's 500-character cap.",
+    "originalByteLengthColumns": {
+      "content_excerpt": "operator_bytes",
+      "answer_excerpt": "coordinator_bytes"
+    },
+    "incompleteRule": "An excerpt is incomplete exactly when its UTF-8 byte length is less than the original byte length column. No stored flag is required, and none may disagree with the derivation."
+  },
+  "eventIdentity": {
+    "owner": "CA-15",
+    "rule": "This store mints no event identifiers. Journal event IDs and offsets are created and made globally unique by CA-15's append-only journal; the session index references them through journal_checkpoint and turn_refs rows of ref_type 'event'. Any global event-ID uniqueness obligation belongs to CA-15, not CA-16."
+  }
+}

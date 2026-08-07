@@ -79,6 +79,19 @@ export type {
     PackIndexReason,
     PackIndexRejection
 } from './packIndex.js';
+export {
+    SESSION_CAPSULE_OMISSIONS, SESSION_DECISION_CLASSES, SESSION_INDEX_REASONS, SESSION_LIFECYCLE_STATES,
+    SESSION_ORIGINS, SESSION_PROPOSAL_STATES, SESSION_PROPOSAL_TYPES, SESSION_REF_TYPES,
+    SESSION_TELEMETRY_QUALITIES, SESSION_TURN_STATES, SessionIndexError
+} from './sessionIndex.js';
+export type {
+    CapsuleEvidenceRef, CapsuleProposalRef, CompactOptions, CompactPreview, CompactResult,
+    OpenQuestionRecord, PinRecord, ProposalFilters, ProposalRecord, ReferenceCapsule,
+    SessionBuildResult, SessionCapsuleOmission, SessionDecisionClass, SessionFilters, SessionIndexReason,
+    SessionIndexRecord, SessionLifecycleState, SessionOrigin, SessionProposalState, SessionProposalType,
+    SessionProvenance, SessionQueryPage, SessionRefType, SessionTelemetryQuality, SessionTurnState,
+    SessionUpdateResult, TurnExcerpt, TurnFilters, TurnIndexRecord, TurnRefRecord
+} from './sessionIndex.js';
 export {INDEX_QUERY_REASONS, IndexQueryError} from './indexQuery.js';
 export type {
     ArtifactIndexEntry,
