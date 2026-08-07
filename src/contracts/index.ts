@@ -261,6 +261,14 @@ export type {
     TaskLeafCapability,
     TaskLeafRequest
 } from './leafRuntime.js';
+export {
+    HERMES_ENDPOINT_REASONS
+} from './hermesEndpoint.js';
+export type {
+    HermesEndpointIdentity, HermesEndpointOptions, HermesEndpointReason, HermesEndpointStatus,
+    HermesInvokeFailure, HermesInvokeRequest, HermesInvokeResult, HermesInvokeSuccess,
+    HermesProcessPort, HermesProcessRequest, HermesProcessResult, HermesProbeRequest, HermesProbeResult
+} from './hermesEndpoint.js';
 export type {
     ApplyResult,
     DowngradeGuardReason,

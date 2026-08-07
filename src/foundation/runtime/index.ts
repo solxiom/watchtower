@@ -24,3 +24,4 @@ export {parseKnowledgeManifest, parseRuntimeManifest} from './knowledge/index.js
 export {isManagedBinPath} from './distribution/index.js';
 export {grantExecutingTaskLeafCapability} from './leaf/index.js';
 export type {TaskLeafGrantOptions} from './leaf/index.js';
+export {HermesEndpointAdapter} from './endpoint/index.js';
