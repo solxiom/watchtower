@@ -14,6 +14,7 @@ const ALLOWED_TOP_LEVEL_DIRS = [
     'broker',
     'discovery',
     'distribution',
+    'doctor',
     'effect',
     'endpoint',
     'gitAcceptance',

@@ -22,6 +22,12 @@
       "usage": "wt config show [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color] [--verbose]"
     },
     {
+      "name": "doctor",
+      "group": "basic",
+      "summary": "Validate lane-local markers, configuration, bindings, permissions, and Git-ignore coverage without repair.",
+      "usage": "wt doctor [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] [--no-color]"
+    },
+    {
       "name": "hello",
       "group": "basic",
       "summary": "Say hello from watchtower.",
