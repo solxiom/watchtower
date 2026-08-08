@@ -1,13 +1,23 @@
 import type {ErrorCode} from './errors.js';
 import type {JsonObject} from './types.js';
 
-/** Closed doctor check identity for the lane-local checks LC-07 owns. */
+/**
+ * Closed doctor check identity. The first five are the lane-local checks
+ * LC-07 owns; the remaining five are the injected required-tools, runtime,
+ * account, watcher, and pack-index diagnostic providers LC-10 owns and
+ * composes through the unmodified LC-07 kernel.
+ */
 export type DoctorCheckId =
     | 'lane-marker'
     | 'lane-config'
     | 'repository-bindings'
     | 'repository-permissions'
-    | 'git-ignore-coverage';
+    | 'git-ignore-coverage'
+    | 'required-tools'
+    | 'runtime-catalog'
+    | 'account-access'
+    | 'watcher-heartbeat'
+    | 'pack-index';
 
 /** Closed doctor check outcome vocabulary (`docs/spec/v1.md` §11.7). */
 export type DoctorCheckStatus = 'pass' | 'warn' | 'fail' | 'skip';

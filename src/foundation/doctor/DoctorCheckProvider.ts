@@ -33,10 +33,18 @@ export interface DoctorLaneContext {
     readonly fileSystem: LaneDiscoveryFileSystem;
     readonly bindingInspector: RepositoryBindingInspector;
     readonly gitIgnored: (controlHome: string) => boolean;
+    /** The doctor query's normalized environment boundary — never ambient `process.env` read inside a check. */
+    readonly environment: NodeJS.ProcessEnv;
 }
 
-/** One immutable, independently testable lane-local diagnostic. */
+/**
+ * One immutable, independently testable diagnostic. Most lane-local checks
+ * are synchronous; the LC-10 runtime/index providers perform real async I/O
+ * (installed-runtime catalog reads, pack-index SQLite verification) and
+ * honestly declare that with a `Promise<DoctorCheck>` return instead of a
+ * cosmetic sync wrapper.
+ */
 export interface DoctorCheckProvider {
     readonly id: DoctorCheck['id'];
-    run(context: DoctorLaneContext): DoctorCheck;
+    run(context: DoctorLaneContext): DoctorCheck | Promise<DoctorCheck>;
 }
