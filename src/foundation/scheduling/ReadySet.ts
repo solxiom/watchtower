@@ -9,7 +9,7 @@
  */
 import type {BatchIndexEntry, BatchRepositoryClaim, DependencyEdge} from '../../contracts/indexQuery.js';
 import type {
-    BlockedBatch, BlockingReason, ReadySetClassification, ReadySetParams, ReadySetPopulationReason, ReadySetResult
+    BlockedBatch, BlockingReason, ReadySetClassification, ReadySetParams, ReadySetPopulationReason, ReadySetProjectionParseResult, ReadySetResult
 } from '../../contracts/scheduling.js';
 import {checkWritableOverlap, evaluateClaimConflict, registerBatchClaims} from './ResourceClaims.js';
 
@@ -154,3 +154,33 @@ export function computeReadySet(params: ReadySetParams): ReadySetResult {
         pendingBatchIds, candidateBatchIds: candidates.map((batch) => batch.id), classification, populationReason, blocked
     };
 }
+
+/** Validates the durable ready-set projection without recalculating policy in the command layer. */
+export function parseReadySetProjection(value: unknown): ReadySetProjectionParseResult {
+    const required = ['pendingBatchIds', 'candidateBatchIds', 'classification', 'populationReason', 'blocked'] as const;
+    if (!isRecord(value) || Object.keys(value).length !== required.length || !required.every(key => Object.hasOwn(value, key))) return {ok: false, reason: 'READY_SET_INVALID'};
+    if (!Array.isArray(value.pendingBatchIds) || !Array.isArray(value.candidateBatchIds) || !Array.isArray(value.blocked)) return {ok: false, reason: 'READY_SET_INVALID'};
+    if (!value.pendingBatchIds.every(item => typeof item === 'string' && item.length > 0) || !value.candidateBatchIds.every(item => typeof item === 'string' && item.length > 0)) return {ok: false, reason: 'READY_SET_INVALID'};
+    if (!isClassification(value.classification) || !(value.populationReason === null || isPopulationReason(value.populationReason))) return {ok: false, reason: 'READY_SET_INVALID'};
+    const candidateBatchIds: string[] = [];
+    for (const candidate of value.candidateBatchIds) candidateBatchIds.push(candidate);
+    const blocked: BlockedBatch[] = [];
+    for (const item of value.blocked) {
+        if (!isRecord(item) || typeof item.batchId !== 'string' || !Array.isArray(item.reasons)) return {ok: false, reason: 'READY_SET_INVALID'};
+        const reasons: BlockingReason[] = [];
+        for (const reason of item.reasons) {
+            if (!isRecord(reason) || !isBlockingReasonCode(reason.code) || typeof reason.detail !== 'string') return {ok: false, reason: 'READY_SET_INVALID'};
+            reasons.push({code: reason.code, detail: reason.detail});
+        }
+        blocked.push({batchId: item.batchId, reasons});
+    }
+    return {ok: true, value: {pendingBatchIds: value.pendingBatchIds, candidateBatchIds, classification: value.classification, populationReason: value.populationReason, blocked}};
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === 'object' && value !== null && !Array.isArray(value); }
+function isBlockingReasonCode(value: unknown): value is BlockingReason['code'] {
+    return value === 'DEPENDENCY_UNSATISFIED' || value === 'BASELINE_DRIFT' || value === 'CLAIM_CONFLICT' || value === 'ENDPOINT_UNAVAILABLE' || value === 'CAPACITY_EXHAUSTED';
+}
+function isClassification(value: unknown): value is ReadySetClassification { return value === 'none' || value === 'unique' || value === 'priority-resolved' || value === 'ambiguous' || value === 'ambiguous-critical'; }
+function isPopulationReason(value: unknown): value is ReadySetPopulationReason { return value === 'READY_SET_EMPTY' || value === 'READY_SET_BLOCKED_UNIVERSAL' || value === 'READY_SET_AMBIGUOUS'; }
+function classifyProjection(count: number): ReadySetClassification { return count === 0 ? 'none' : count === 1 ? 'unique' : 'ambiguous'; }

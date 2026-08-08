@@ -5,9 +5,15 @@ import SkillInstallCommand from './skill/SkillInstallCommand.js';
 import StatusCommand from './status/StatusCommand.js';
 import UpgradeCommand from './upgrade/UpgradeCommand.js';
 import VersionCommand from './version/VersionCommand.js';
+import CoordinatorCommand from './coordinator/CoordinatorCommand.js';
+import EventsCommand from './events/EventsCommand.js';
+import BatchCommand from './batch/BatchCommand.js';
 
 export const commandRegistry = [
     ConfigCommand,
+    CoordinatorCommand,
+    EventsCommand,
+    BatchCommand,
     DoctorCommand,
     ListCommand,
     SkillInstallCommand,

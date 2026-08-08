@@ -1275,6 +1275,38 @@
       ],
       "type": "object"
     },
+    "indexStatus": {
+      "additionalProperties": true,
+      "properties": {
+        "data": {
+          "additionalProperties": true,
+          "required": [
+            "available"
+          ],
+          "type": "object"
+        },
+        "laneId": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "operation": {
+          "const": "coordinator.index.status"
+        },
+        "schemaVersion": {
+          "const": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "laneId",
+        "operation",
+        "ok",
+        "data"
+      ],
+      "type": "object"
+    },
     "journalEventReference": {
       "additionalProperties": false,
       "properties": {
@@ -1832,18 +1864,129 @@
       ],
       "type": "object"
     },
-    "readySet": {
-      "additionalProperties": true,
+    "readFailure": {
+      "additionalProperties": false,
       "properties": {
-        "blocked": {
-          "type": "array"
+        "line": {
+          "minimum": 1,
+          "type": "integer"
         },
-        "candidates": {
-          "type": "array"
+        "ok": {
+          "const": false
+        },
+        "path": {
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "COORDINATOR_JSON_INVALID",
+            "COORDINATOR_JSONL_INVALID",
+            "COORDINATOR_INDEX_UNAVAILABLE",
+            "COORDINATOR_INDEX_CORRUPT",
+            "COORDINATOR_INDEX_STALE",
+            "COORDINATOR_INDEX_SCHEMA_MISMATCH",
+            "COORDINATOR_SCHEMA_MISMATCH",
+            "COORDINATOR_CYCLE_UNAVAILABLE",
+            "COORDINATOR_BATCH_NOT_FOUND",
+            "COORDINATOR_REQUIREMENT_NOT_FOUND",
+            "COORDINATOR_READY_SET_INVALID",
+            "COORDINATOR_ARGUMENT_INVALID",
+            "COORDINATOR_PATH_UNAUTHORIZED",
+            "COORDINATOR_CURSOR_INVALID",
+            "COORDINATOR_EVENT_UNAVAILABLE"
+          ]
         }
       },
       "required": [
-        "candidates",
+        "ok",
+        "reason",
+        "path"
+      ],
+      "type": "object"
+    },
+    "readySet": {
+      "additionalProperties": false,
+      "properties": {
+        "blocked": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "batchId": {
+                "type": "string"
+              },
+              "reasons": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "DEPENDENCY_UNSATISFIED",
+                        "BASELINE_DRIFT",
+                        "CLAIM_CONFLICT",
+                        "ENDPOINT_UNAVAILABLE",
+                        "CAPACITY_EXHAUSTED"
+                      ]
+                    },
+                    "detail": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "detail"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "batchId",
+              "reasons"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "candidateBatchIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "classification": {
+          "enum": [
+            "none",
+            "unique",
+            "priority-resolved",
+            "ambiguous",
+            "ambiguous-critical"
+          ]
+        },
+        "pendingBatchIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "populationReason": {
+          "enum": [
+            "READY_SET_EMPTY",
+            "READY_SET_BLOCKED_UNIVERSAL",
+            "READY_SET_AMBIGUOUS",
+            null
+          ],
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "pendingBatchIds",
+        "candidateBatchIds",
+        "classification",
+        "populationReason",
         "blocked"
       ],
       "type": "object"

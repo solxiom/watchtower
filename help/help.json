@@ -47,6 +47,24 @@
       "usage": "wt status [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color] [--verbose]"
     },
     {
+      "name": "coordinator",
+      "group": "basic",
+      "summary": "Inspect bounded coordinator, pack-index, and decision context projections without repair.",
+      "usage": "wt coordinator index <status|verify|explain <batch-or-requirement>> [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] | wt coordinator <status|context|explain> [--class=<D1|D2|D3>] [--trigger=<event-id>] [--cycle=<id>] [--json]"
+    },
+    {
+      "name": "events",
+      "group": "basic",
+      "summary": "Read validated durable coordinator events without advancing the cursor.",
+      "usage": "wt events <tail|latest> [--batch=<id>] [--limit=<1-200>] [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] [--no-color]"
+    },
+    {
+      "name": "batch",
+      "group": "basic",
+      "summary": "Show ready batches and blocking reasons without selecting a winner.",
+      "usage": "wt batch ready [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] [--no-color]"
+    },
+    {
       "name": "upgrade",
       "group": "basic",
       "summary": "Preview or atomically apply a compatible managed runtime upgrade.",

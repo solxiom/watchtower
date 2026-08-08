@@ -20,6 +20,8 @@ export type {
 export {classifyRoute} from './routeClassifier.js';
 export {selectRouteEndpoint} from './routeEndpointSelector.js';
 export {verifyRoutingPolicy} from './routingPolicyVerifier.js';
+export {CoordinatorReadService} from './CoordinatorReadService.js';
+export type {CoordinatorReadQuery, CoordinatorReadServiceOptions} from './CoordinatorReadService.js';
 export type {
     ContextPolicyDocument,
     CoordinatorBaselineInputs,

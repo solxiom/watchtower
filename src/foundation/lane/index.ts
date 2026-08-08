@@ -27,6 +27,8 @@ export {
     nodeKnowledgeProvenanceHost,
     resolveInstalledKnowledgeTag
 } from './coordinator/index.js';
+export {CoordinatorReadService} from './coordinator/index.js';
+export type {CoordinatorReadQuery, CoordinatorReadServiceOptions} from './coordinator/index.js';
 export type {
     ContextPolicyDocument,
     CoordinatorBaselineInputs,

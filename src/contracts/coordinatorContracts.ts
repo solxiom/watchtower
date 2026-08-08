@@ -106,6 +106,7 @@ export type {
     ReadySetClassification,
     ReadySetParams,
     ReadySetPopulationReason,
+    ReadySetProjectionParseResult,
     ReadySetResult,
     WritableConflictReport
 } from './scheduling.js';

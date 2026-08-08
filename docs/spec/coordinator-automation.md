@@ -504,6 +504,12 @@ After build:
 - default envelope byte/token limits do not increase merely because unrelated
   batches or artifacts are added.
 
+The public `batch ready` projection is a closed contract: `pendingBatchIds`,
+`candidateBatchIds`, `classification`, `populationReason`, and `blocked` are
+all required, and missing, extra, or unsupported fields fail closed. Index
+explain reads the immutable SQLite generation through the accepted typed
+`IndexStore`/`IndexQuery` surface; it never addresses per-row JSON paths.
+
 No v1 correctness guarantee depends on embeddings, vector search, a server or
 external database, model summarization, or provider prompt caching. The
 required embedded SQLite stores are local, derived, reproducible, and

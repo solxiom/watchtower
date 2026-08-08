@@ -38,19 +38,55 @@
     },
     "readySet": {
       "type": "object",
-      "required": [
-        "candidates",
-        "blocked"
-      ],
+      "required": ["pendingBatchIds", "candidateBatchIds", "classification", "populationReason", "blocked"],
       "properties": {
-        "candidates": {
-          "type": "array"
+        "pendingBatchIds": {
+          "type": "array",
+          "items": {"type": "string"}
         },
+        "candidateBatchIds": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "classification": {"enum": ["none", "unique", "priority-resolved", "ambiguous", "ambiguous-critical"]},
+        "populationReason": {"type": ["string", "null"], "enum": ["READY_SET_EMPTY", "READY_SET_BLOCKED_UNIVERSAL", "READY_SET_AMBIGUOUS", null]},
         "blocked": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["batchId", "reasons"],
+            "properties": {
+              "batchId": {"type": "string"},
+              "reasons": {"type": "array", "items": {"type": "object", "required": ["code", "detail"], "properties": {"code": {"enum": ["DEPENDENCY_UNSATISFIED", "BASELINE_DRIFT", "CLAIM_CONFLICT", "ENDPOINT_UNAVAILABLE", "CAPACITY_EXHAUSTED"]}, "detail": {"type": "string"}}, "additionalProperties": false}}
+            },
+            "additionalProperties": false
+          }
         }
       },
+      "additionalProperties": false
+    },
+    "indexStatus": {
+      "type": "object",
+      "required": ["schemaVersion", "laneId", "operation", "ok", "data"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "laneId": {"type": "string"},
+        "operation": {"const": "coordinator.index.status"},
+        "ok": {"const": true},
+        "data": {"type": "object", "required": ["available"], "additionalProperties": true}
+      },
       "additionalProperties": true
+    },
+    "readFailure": {
+      "type": "object",
+      "required": ["ok", "reason", "path"],
+      "properties": {
+        "ok": {"const": false},
+        "reason": {"enum": ["COORDINATOR_JSON_INVALID", "COORDINATOR_JSONL_INVALID", "COORDINATOR_INDEX_UNAVAILABLE", "COORDINATOR_INDEX_CORRUPT", "COORDINATOR_INDEX_STALE", "COORDINATOR_INDEX_SCHEMA_MISMATCH", "COORDINATOR_SCHEMA_MISMATCH", "COORDINATOR_CYCLE_UNAVAILABLE", "COORDINATOR_BATCH_NOT_FOUND", "COORDINATOR_REQUIREMENT_NOT_FOUND", "COORDINATOR_READY_SET_INVALID", "COORDINATOR_ARGUMENT_INVALID", "COORDINATOR_PATH_UNAUTHORIZED", "COORDINATOR_CURSOR_INVALID", "COORDINATOR_EVENT_UNAVAILABLE"]},
+        "path": {"type": "string"},
+        "line": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
     },
     "sessionPage": {
       "$ref": "#/$defs/page"

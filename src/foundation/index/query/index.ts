@@ -79,6 +79,10 @@ export class IndexQuery {
         return (await this.store.getBatch(batchId)) ?? null;
     }
 
+    async getRequirement(requirementId: string): Promise<RequirementIndexEntry | null> {
+        return (await this.store.getRequirement(requirementId)) ?? null;
+    }
+
     private async requireBatch(batchId: string): Promise<BatchIndexEntry> {
         const batch = await this.store.getBatch(batchId);
         if (batch === undefined) throw new IndexQueryError('INDEX_BATCH_NOT_FOUND', batchId, `no batch with id "${batchId}" is present in the pack index`);

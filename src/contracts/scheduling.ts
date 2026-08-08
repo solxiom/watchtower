@@ -115,3 +115,7 @@ export interface ReadySetResult {
     readonly populationReason: ReadySetPopulationReason | null;
     readonly blocked: readonly BlockedBatch[];
 }
+
+export type ReadySetProjectionParseResult =
+    | {readonly ok: true; readonly value: ReadySetResult}
+    | {readonly ok: false; readonly reason: 'READY_SET_INVALID'};

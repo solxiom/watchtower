@@ -124,7 +124,7 @@ export type {
     ActiveResourceClaim, BlockedBatch, BlockingReason, BlockingReasonCode, CandidateRepositoryBinding,
     CapacityReservation, ClaimBlocker, ClaimBlockerKind, ClaimConflictReason, ClaimConflictReport,
     EndpointRouteStatus, OwnedRepositoryBinding, ReadySetClassification, ReadySetParams,
-    ReadySetPopulationReason, ReadySetResult, WritableConflictReport,
+    ReadySetPopulationReason, ReadySetProjectionParseResult, ReadySetResult, WritableConflictReport,
     CoordinatorQueueDocument, CoordinatorQueueReason, CoordinatorTrigger, DequeueRefused,
     DequeueResult, DequeueTaken, EnqueueAccepted, EnqueueRefused, EnqueueResult, ImpactScopedHold,
     OpenCycleReservation, QueueEntry, TriggerClass,
