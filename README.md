@@ -18,8 +18,8 @@ validation, bounded operator session, and safe effect execution.
 
 ## Status
 
-Early development. The scaffold comes from `nira init:cli`; product commands and lane
-integration are spec-driven work in progress.
+Early development. Product commands and lane integration are spec-driven work in
+progress.
 
 **Ecosystem:** pinned to `1.0.0-alpha` in `nira.json` (Nirvana shared store).
 
@@ -60,7 +60,7 @@ nvb test
 Run locally after build:
 
 ```sh
-node build/src/cli.js hello
+node build/src/cli.js version --json
 node build/src/cli.js help
 ```
 

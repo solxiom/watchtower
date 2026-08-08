@@ -90,7 +90,7 @@ async function addPackableWatchtower(projectRoot: string): Promise<void> {
     const binRoot = path.join(projectRoot, 'bin');
     await mkdir(binRoot, {recursive: true});
     const binPath = path.join(binRoot, 'wt.js');
-    await writeFile(binPath, '#!/usr/bin/env node\nprocess.stdout.write("Hello, world! This is watchtower.\\n");\n', 'utf8');
+    await writeFile(binPath, '#!/usr/bin/env node\nprocess.stdout.write(JSON.stringify({data:{cliVersion:"0.1.0"}}));\n', 'utf8');
     await chmod(binPath, 0o755);
     await writeJson(path.join(projectRoot, 'runtime-nvb'), 'nvb-manifest.json', {schemaVersion: 1});
 }

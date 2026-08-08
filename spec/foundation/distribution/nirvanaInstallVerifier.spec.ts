@@ -34,7 +34,7 @@ class InstallProcessFixture implements NirvanaProcessRunner {
             await writeFile(path.join(prefix, 'lib', 'node_modules', 'watchtower', 'bin', 'wt.js'), '', 'utf8');
             return 'installed';
         }
-        return 'Hello, world! This is watchtower.';
+        return '{"cliVersion":"0.1.0"}';
     }
 }
 

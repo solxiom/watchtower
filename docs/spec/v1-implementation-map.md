@@ -107,7 +107,7 @@ evidence informs it but does not replace its acceptance proof.
 
 ### 2.1 Current source baseline
 
-The repository is a Nirvana CLI scaffold:
+The repository is a Nirvana CLI:
 
 ```text
 src/cli.ts                 thin outer host
@@ -121,9 +121,8 @@ spec/                      Jasmine specifications
 docs/spec/                 normative product contracts
 ```
 
-The scaffold `hello` command, help, test, and runtime task are temporary. They
-remain available until the first real command path and build smoke test exist,
-then are removed by `LC-08`.
+The initial scaffold command, help, and test were removed by `LC-08` after the
+real command paths and build smoke tests were established.
 
 ### 2.2 Target ownership
 

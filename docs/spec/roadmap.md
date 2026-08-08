@@ -168,7 +168,7 @@ Scope:
 - dependency, account CLI, tmux, Git-ignore, runtime-link, and pack checks;
 - initiative relations, repository bindings, and cross-lane conflict checks;
 - actionable status/doctor human rendering;
-- scaffold `hello` removal.
+- removal of the initial CLI scaffold.
 
 Key proof:
 

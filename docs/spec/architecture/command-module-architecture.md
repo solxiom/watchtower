@@ -104,8 +104,6 @@ src/commands/
     SkillInstallCommand.ts
     skillInstallOptions.ts
     skillInstallPresenter.ts
-  hello/                        ← interim scaffold; remove in REL-01
-    HelloCommand.ts
   coordinator/
     session/
       …

@@ -122,13 +122,13 @@ export class NirvanaInstallVerifier {
         const cliPath = path.join(prefix, 'lib', 'node_modules', 'watchtower', 'bin', 'wt.js');
         const output = await this.processes.run({
             command: nodeCommand,
-            args: [cliPath, 'hello'],
+            args: [cliPath, 'version', '--json'],
             cwd: prefix,
             environment: {HOME: home},
             phase: 'verify',
             failureReason: 'RELOCATION_FAILED'
         });
-        if (!output.includes('Hello, world! This is watchtower.')) {
+        if (!output.includes('"cliVersion":"0.1.0"')) {
             throw new NirvanaClosureError('RELOCATION_FAILED', 'verify', cliPath, 'Relocated CLI smoke returned unexpected output.');
         }
         const schemaPath = path.join(prefix, 'lib', 'node_modules', 'watchtower', 'runtime-nvb', 'nvb-manifest.json');

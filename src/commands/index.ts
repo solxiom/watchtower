@@ -1,5 +1,4 @@
 import DoctorCommand from './doctor/DoctorCommand.js';
-import HelloCommand from './hello/HelloCommand.js';
 import ConfigCommand from './read/ConfigCommand.js';
 import ListCommand from './read/ListCommand.js';
 import SkillInstallCommand from './skill/SkillInstallCommand.js';
@@ -10,7 +9,6 @@ import VersionCommand from './version/VersionCommand.js';
 export const commandRegistry = [
     ConfigCommand,
     DoctorCommand,
-    HelloCommand,
     ListCommand,
     SkillInstallCommand,
     StatusCommand,

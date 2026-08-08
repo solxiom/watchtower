@@ -28,12 +28,6 @@
       "usage": "wt doctor [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] [--no-color]"
     },
     {
-      "name": "hello",
-      "group": "basic",
-      "summary": "Say hello from watchtower.",
-      "usage": "wt hello [--name=<name>]"
-    },
-    {
       "name": "list",
       "group": "basic",
       "summary": "List Watchtower lanes relevant to the resolved repository without changing lane state.",
