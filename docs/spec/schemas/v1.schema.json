@@ -804,12 +804,37 @@
     "doctorReport": {
       "additionalProperties": true,
       "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "lane": {
+          "additionalProperties": true,
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "slug": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "required": [
+            "id",
+            "slug"
+          ],
+          "type": "object"
+        },
         "checks": {
           "items": {
             "additionalProperties": true,
             "properties": {
               "id": {
-                "$ref": "#/$defs/id"
+                "enum": [
+                  "lane-marker",
+                  "lane-config",
+                  "repository-bindings",
+                  "repository-permissions",
+                  "git-ignore-coverage"
+                ]
               },
               "status": {
                 "enum": [
@@ -818,19 +843,49 @@
                   "fail",
                   "skip"
                 ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
               }
             },
             "required": [
               "id",
-              "status"
+              "status",
+              "message",
+              "reason"
             ],
             "type": "object"
           },
           "type": "array"
+        },
+        "summary": {
+          "additionalProperties": true,
+          "properties": {
+            "pass": {"minimum": 0, "type": "integer"},
+            "warn": {"minimum": 0, "type": "integer"},
+            "fail": {"minimum": 0, "type": "integer"},
+            "skip": {"minimum": 0, "type": "integer"}
+          },
+          "required": [
+            "pass",
+            "warn",
+            "fail",
+            "skip"
+          ],
+          "type": "object"
         }
       },
       "required": [
-        "checks"
+        "schemaVersion",
+        "lane",
+        "checks",
+        "summary"
       ],
       "type": "object"
     },

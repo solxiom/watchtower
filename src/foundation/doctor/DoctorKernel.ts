@@ -38,8 +38,8 @@ export class DoctorKernel {
         options: DoctorKernelOptions = {}
     ) {
         this.providers = composeDoctorCheckProviders(providers);
-        this.discovery = options.discovery ?? new RelevantLaneDiscovery();
         this.fileSystem = options.fileSystem ?? nodeLaneDiscoveryFileSystem;
+        this.discovery = options.discovery ?? new RelevantLaneDiscovery({fileSystem: this.fileSystem});
         this.bindingInspector = options.bindingInspector ?? nodeRepositoryBindingInspector;
         this.gitIgnored = options.gitIgnored ?? nodeGitIgnored;
     }
