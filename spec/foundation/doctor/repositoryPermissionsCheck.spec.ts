@@ -16,6 +16,22 @@ function statusOf(checks: readonly {id: DoctorCheckId; status: string}[], id: Do
 }
 
 describe('binding-identity closed contract and single-read consistency (LC07-R3)', function () {
+    it('rejects a read binding that omits required access and worktreeMode fields', function () {
+        const fixture = createReadCommandFixture();
+        try {
+            const laneDir = createLane(fixture, {packAvailable: false, repositories: [
+                {id: 'main', path: fixture.controlHome, role: 'primary', access: 'read', worktreeMode: 'dedicated'}
+            ]});
+            ignoreWatchtower(fixture.controlHome);
+            writeFileSync(join(laneDir, 'repositories.local.json'), JSON.stringify({schemaVersion: 1, repositories: [{
+                id: 'main', path: fixture.controlHome, branch: 'main', role: 'primary'
+            }]}));
+            const report = new DoctorKernel().run({cwd: fixture.controlHome});
+            expect(statusOf(report.checks, 'repository-bindings')).toBe('fail');
+            expect(statusOf(report.checks, 'repository-permissions')).toBe('skip');
+        } finally { fixture.remove(); }
+    });
+
     it('rejects a repositories.local.json with a duplicate top-level JSON member', function () {
         const fixture = createReadCommandFixture();
         try {

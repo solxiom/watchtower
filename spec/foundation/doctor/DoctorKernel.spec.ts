@@ -211,25 +211,25 @@ describe('DoctorKernel lane-local checks', function () {
 });
 
 describe('DoctorKernel isolated check adversarial proof', function () {
-    it('fails the marker check independently of discovery for a corrupted lane.json read after selection', function () {
+    it('uses the injected file system for discovery as well as lane-local checks', function () {
         const fixture = createReadCommandFixture();
         try {
-            const laneDir = createLane(fixture, {packAvailable: false});
+            createLane(fixture, {packAvailable: false});
             ignoreWatchtower(fixture.controlHome);
-            const markerPath = join(laneDir, 'lane.json');
+            let listCalls = 0;
             const kernel = new DoctorKernel(undefined, {
                 fileSystem: {
-                    inspect(path: string) {
-                        return path === markerPath ? {kind: 'file' as const, size: 2} : nodeLaneDiscoveryFileSystem.inspect(path);
+                    inspect(path: string) { return nodeLaneDiscoveryFileSystem.inspect(path); },
+                    list(path: string) {
+                        listCalls += 1;
+                        return nodeLaneDiscoveryFileSystem.list(path);
                     },
-                    list(path: string) { return nodeLaneDiscoveryFileSystem.list(path); },
-                    readText(path: string) {
-                        return path === markerPath ? '{}' : nodeLaneDiscoveryFileSystem.readText(path);
-                    }
+                    readText(path: string) { return nodeLaneDiscoveryFileSystem.readText(path); }
                 }
             });
             const report = kernel.run({cwd: fixture.controlHome});
-            expect(statusOf(report.checks, 'lane-marker')).toBe('fail');
+            expect(statusOf(report.checks, 'lane-marker')).toBe('pass');
+            expect(listCalls).toBeGreaterThan(0);
         } finally { fixture.remove(); }
     });
 });

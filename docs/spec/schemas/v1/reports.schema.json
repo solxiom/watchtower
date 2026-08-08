@@ -8,20 +8,50 @@
     "doctorReport": {
       "type": "object",
       "required": [
-        "checks"
+        "schemaVersion",
+        "lane",
+        "checks",
+        "summary"
       ],
       "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "lane": {
+          "type": "object",
+          "required": [
+            "id",
+            "slug"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "slug": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "additionalProperties": true
+        },
         "checks": {
           "type": "array",
           "items": {
             "type": "object",
             "required": [
               "id",
-              "status"
+              "status",
+              "message",
+              "reason"
             ],
             "properties": {
               "id": {
-                "$ref": "#/$defs/id"
+                "enum": [
+                  "lane-marker",
+                  "lane-config",
+                  "repository-bindings",
+                  "repository-permissions",
+                  "git-ignore-coverage"
+                ]
               },
               "status": {
                 "enum": [
@@ -30,10 +60,35 @@
                   "fail",
                   "skip"
                 ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
               }
             },
             "additionalProperties": true
           }
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "pass",
+            "warn",
+            "fail",
+            "skip"
+          ],
+          "properties": {
+            "pass": {"type": "integer", "minimum": 0},
+            "warn": {"type": "integer", "minimum": 0},
+            "fail": {"type": "integer", "minimum": 0},
+            "skip": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": true
         }
       },
       "additionalProperties": true
