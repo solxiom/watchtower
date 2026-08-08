@@ -21,6 +21,7 @@ it("accepts the committed manifests and verifies their complete asset/action obs
       "wt:git:publish-commits",
       "wt:git:record-acceptance",
       "wt:runtime:smoke",
+      "wt:tmux:effect",
     ]),
   ).toEqual({ ok: true });
   expect(
@@ -115,6 +116,7 @@ it("rejects missing and extra actions", async () => {
       "wt:git:publish-commits",
       "wt:git:record-acceptance",
       "wt:runtime:smoke",
+      "wt:tmux:effect",
       "wt:foreign",
     ]),
   ).toEqual({

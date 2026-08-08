@@ -17,7 +17,14 @@ Status: ❌ Not started
 Pack: wt-coordinator-automation (Pack 5)
 Phase: Effect adapters
 Depends on: RT-05, CA-10 accepted
-Owned files: `src/foundation/TmuxEffect.ts`, `src/foundation/TmuxAdapter.ts`
+Owned files: `src/foundation/effect/TmuxEffect.ts`, `src/foundation/runtime/leaf/TmuxAdapter.ts`
+
+Path amendment (2026-08-07): the original root-level paths were superseded
+before handoff by the accepted foundation capability-tree guardrail. The effect
+bridge belongs to the existing `effect/` capability and the tmux leaf adapter
+belongs to the existing `runtime/leaf/` capability. This preserves exclusive
+CA-11 ownership while satisfying FLG-02's prohibition on new foundation-root
+files; no CA-10 or RT-05 owner was changed.
 
 **Required implementor reasoning class:** `R4`
 **Class rationale:** external effect adapter with prepare/attempt/verify journaling, unknown-launch recovery, duplicate suppression via idempotency key, and strict no-arbitrary-kill/no-shell-escape constraints. The class is a floor; escalate under the pack reasoning rules when source inspection exposes additional risk.
@@ -57,7 +64,7 @@ Any retained shell is a bounded audited tmux leaf, never workflow orchestration.
    for external-effect handling. Study accepted RT-05 for the central runtime
    `LaneTaskRunner`, TaskHandler, and leaf-invocation contracts.
 
-2. **Implement `src/foundation/TmuxAdapter.ts`:**
+2. **Implement `src/foundation/runtime/leaf/TmuxAdapter.ts`:**
    - `TmuxAdapter` class — wraps runtime invocation for all tmux operations.
    - `prepare(session: string, window: string, pane: string): PrepareResult` —
      validates that the session, window, and pane identifiers are sanitized
@@ -87,7 +94,7 @@ Any retained shell is a bounded audited tmux leaf, never workflow orchestration.
    - `VerifyResult` type: `{ok, verified, actualExitCode, actualPaneContent,
      postconditionResults: PostconditionCheck[]}`.
 
-3. **Implement `src/foundation/TmuxEffect.ts`:**
+3. **Implement `src/foundation/effect/TmuxEffect.ts`:**
    - `TmuxEffectExecutor` class — bridges CA-10's executor to tmux-specific
      effects.
    - `executeTmuxEffect(boundedEffect: BoundedEffect, plan: EffectPlan):
@@ -144,10 +151,10 @@ Any retained shell is a bounded audited tmux leaf, never workflow orchestration.
 
 ## Expected Ownership
 
-- `src/foundation/TmuxAdapter.ts` — owns the typed tmux capability used by the
+- `src/foundation/runtime/leaf/TmuxAdapter.ts` — owns the typed tmux capability used by the
   focused packaged handler. Only that handler reaches `LeafRuntimeInvoker`; no
   other module executes tmux commands.
-- `src/foundation/TmuxEffect.ts` — owns the prepare/attempt/verify pipeline,
+- `src/foundation/effect/TmuxEffect.ts` — owns the prepare/attempt/verify pipeline,
   unknown-launch recovery, duplicate suppression, and CA-10 integration.
 - No other module may launch tmux sessions/windows/panes or capture tmux
   output for coordinator effects.

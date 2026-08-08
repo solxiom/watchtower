@@ -37,7 +37,7 @@ import {compileSchemaValidator, type SchemaValidator} from './laneTaskSchemaVali
 import {readTaskRuntimePin, requireRuntimeRoot} from './taskRuntimePin.js';
 import {nodeRuntimeFileSystem, type RuntimeFileSystem} from './runtimeFileSystem.js';
 
-const ACTION_ID = /^[a-z0-9][a-z0-9.-]{0,127}$/u;
+const ACTION_ID = /^[a-z0-9][A-Za-z0-9.-]{0,127}$/u;
 
 export interface NirvanaLaneTaskRunnerOptions {
     readonly runtimeRoots: RuntimeRootResolver;

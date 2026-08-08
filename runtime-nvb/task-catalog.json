@@ -1,5 +1,8 @@
 {
   "actions": {
+    "effect.dispatchBatch": {
+      "taskId": "wt:tmux:effect"
+    },
     "git.publish-commits": {
       "taskId": "wt:git:publish-commits"
     },
@@ -16,7 +19,8 @@
     "schema-composition",
     "catalog-composition",
     "git-acceptance",
-    "runtime-smoke"
+    "runtime-smoke",
+    "tmux-effect"
   ],
   "groups": {},
   "handlers": {
@@ -31,6 +35,9 @@
     },
     "TaskCatalogCompositionTaskHandler": {
       "module": "./handlers/TaskCatalogCompositionTaskHandler.js"
+    },
+    "TmuxEffectTaskHandler": {
+      "module": "./handlers/tmux/TmuxEffectTaskHandler.js"
     }
   },
   "leaves": {
@@ -45,6 +52,12 @@
       "mode": "0555",
       "path": "./leaves/runtimeEcho.sh",
       "sha256": "sha256:306c6ca7407560340797866e077e053627ad409277d1b9da58106fce4cf717cb"
+    },
+    "tmux.command": {
+      "executable": true,
+      "mode": "0555",
+      "path": "./leaves/tmuxCommand.sh",
+      "sha256": "sha256:f405d7f4a1c2948d50bc157359d9dd916ce784e047d2c9d363c03709a994cfb7"
     }
   },
   "minimumRuntime": {
@@ -56,7 +69,8 @@
       "taskIds": [
         "wt:git:publish-commits",
         "wt:git:record-acceptance",
-        "wt:runtime:smoke"
+        "wt:runtime:smoke",
+        "wt:tmux:effect"
       ]
     }
   },
@@ -112,11 +126,19 @@
     },
     "watchtower://runtime/schemas/task-catalog-fragment/v1": {
       "path": "./schemas/taskCatalogFragment.schema.json",
-      "sha256": "sha256:e13edab6d300c89638e3099d7ae07c35cac1bf922b2982c7505e045277466216"
+      "sha256": "sha256:49aa5da9ca41d63564dd308cc968ba3e4c83a66180960304087f58ef4aff16a0"
     },
     "watchtower://runtime/schemas/task-catalog/v1": {
       "path": "./schemas/taskCatalog.schema.json",
       "sha256": "sha256:747142c4e30dac1c42e8e716055355a8f0fba10ab982170ed9f6bf99aadd7dc2"
+    },
+    "watchtower://runtime/schemas/tmux-effect-input/v1": {
+      "path": "./schemas/tmuxEffectInput.schema.json",
+      "sha256": "sha256:1f7b65b0b3bd35ba89ce2afa6659b0b7441d8bd8592a43e568aa26d5d5f58277"
+    },
+    "watchtower://runtime/schemas/tmux-effect-result/v1": {
+      "path": "./schemas/tmuxEffectResult.schema.json",
+      "sha256": "sha256:2db9201bac63bc5c4d65301d70a2650116c72202df5cfd58d2f9b79be099e80e"
     }
   },
   "tasks": {
@@ -186,6 +208,17 @@
       "mutationClass": "managed-runtime-write",
       "requiresInvocationEnvelope": false,
       "resultSchema": "watchtower://runtime/schemas/schema-composition-result/v1"
+    },
+    "wt:tmux:effect": {
+      "executionScope": "lane-runtime",
+      "handlerId": "TmuxEffectTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/tmux-effect-input/v1",
+      "leafIds": [
+        "tmux.command"
+      ],
+      "mutationClass": "external-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/tmux-effect-result/v1"
     }
   }
 }

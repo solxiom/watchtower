@@ -37,8 +37,17 @@ function sourceFiles(): string[] {
     return [
         ...readdirSync(SOURCE_ROOT).map((name) => join(SOURCE_ROOT, name)),
         join(HANDLER_ROOT, 'TaskCatalogCompositionTaskHandler.ts'),
+        join(HANDLER_ROOT, 'tmux', 'TmuxEffectTaskHandler.ts'),
         DEVELOPMENT_LEAF
     ];
+}
+
+function handlerFiles(root: string): string[] {
+    return readdirSync(root, {withFileTypes: true}).flatMap((entry) => {
+        const path = join(root, entry.name);
+        if (entry.isDirectory()) return handlerFiles(path);
+        return entry.name.endsWith('TaskHandler.ts') ? [path] : [];
+    });
 }
 
 function changedProofFiles(): string[] {
@@ -56,7 +65,7 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const profiles = readdirSync(join('runtime-nvb', 'profiles'));
         expect(fragments).toEqual([
             'catalogComposition.catalog.json', 'gitAcceptance.catalog.json', 'runtimeSmoke.catalog.json',
-            'schemaComposition.catalog.json'
+            'schemaComposition.catalog.json', 'tmuxEffect.catalog.json'
         ]);
         expect(profiles).toEqual(['implementationV1.profile.json']);
         for (const path of [...fragments.map((name) =>
@@ -72,8 +81,10 @@ describe('task catalog generated ownership and exact inclusion', function () {
         if (!isJsonObject(catalog) || !isJsonObject(catalog.handlers)) return;
         const declared = Object.values(catalog.handlers).flatMap((entry) =>
             isJsonObject(entry) && typeof entry.module === 'string' ? [entry.module] : []).sort();
-        const actual = readdirSync(HANDLER_ROOT).filter((name) => name.endsWith('TaskHandler.ts'))
-            .map((name) => `./handlers/${name.replace(/\.ts$/, '.js')}`).sort();
+        const actual = handlerFiles(HANDLER_ROOT).map((path) => {
+            const relative = path.slice(HANDLER_ROOT.length + 1).replace(/\.ts$/, '.js');
+            return `./handlers/${relative}`;
+        }).sort();
         expect(declared).toEqual(actual);
     });
 
@@ -81,8 +92,8 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const runtime = JSON.parse(readFileSync(join('runtime-nvb', 'runtime-nvb.json'), 'utf8')) as {
             handlers: string[]; tasks: Record<string, unknown>;
         };
-        expect(runtime.handlers).toEqual(['./handlers/GitAcceptanceTaskHandler.js', './handlers/RuntimeSmokeTaskHandler.js']);
-        expect(Object.keys(runtime.tasks)).toEqual(['wt:git:publish-commits', 'wt:git:record-acceptance', 'wt:runtime:smoke']);
+        expect(runtime.handlers).toEqual(['./handlers/GitAcceptanceTaskHandler.js', './handlers/RuntimeSmokeTaskHandler.js', './handlers/tmux/TmuxEffectTaskHandler.js']);
+        expect(Object.keys(runtime.tasks)).toEqual(['wt:git:publish-commits', 'wt:git:record-acceptance', 'wt:runtime:smoke', 'wt:tmux:effect']);
     });
 });
 
@@ -102,7 +113,7 @@ describe('runtime smoke task catalog bindings', function () {
         const actions: unknown = catalog.actions;
         const leafIds: unknown = task.leafIds;
         const leafEntry: unknown = leaf;
-        expect(actions).toEqual({'git.publish-commits': {taskId: 'wt:git:publish-commits'}, 'git.record-acceptance': {taskId: 'wt:git:record-acceptance'}, 'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
+        expect(actions).toEqual({'effect.dispatchBatch': {taskId: 'wt:tmux:effect'}, 'git.publish-commits': {taskId: 'wt:git:publish-commits'}, 'git.record-acceptance': {taskId: 'wt:git:record-acceptance'}, 'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
         expect(leafIds).toEqual(['runtime.echo']);
         expect(leafEntry).toEqual({
             executable: true, mode: '0555', path: './leaves/runtimeEcho.sh', sha256: `sha256:${digest}`

@@ -31,6 +31,11 @@
       "mode": "0644"
     },
     {
+      "path": "catalog/capabilities/tmuxEffect.catalog.json",
+      "sha256": "sha256:4342a3dfd600384fc2f1360eb91bc5cd923a2b64e505a84bdfafd5a95cda6dc2",
+      "mode": "0644"
+    },
+    {
       "path": "catalog/schemaComposition.nvb.json",
       "sha256": "sha256:c24ed87c1d7dc38d8af1e99d7ffb0fac700cf19122790449e1991358fdecfc74",
       "mode": "0644"
@@ -136,6 +141,16 @@
       "mode": "0644"
     },
     {
+      "path": "handlers/tmux/TmuxEffectTaskHandler.ts",
+      "sha256": "sha256:c9c91d64438698162fb5b545247e768cd25f656b4b437ef72165755276bb16a4",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/tmux/tmuxEffectTask.ts",
+      "sha256": "sha256:74f372223a755fb106d4deb70af43f4e6fada629bf4ce3edebefdd417b5ec206",
+      "mode": "0644"
+    },
+    {
       "path": "leaves/gitPush.sh",
       "sha256": "sha256:79031c3060a8f1e1fb79a377603a203e5c32caf40172898ba4acfb2c61259510",
       "mode": "0755"
@@ -146,18 +161,23 @@
       "mode": "0755"
     },
     {
+      "path": "leaves/tmuxCommand.sh",
+      "sha256": "sha256:f405d7f4a1c2948d50bc157359d9dd916ce784e047d2c9d363c03709a994cfb7",
+      "mode": "0755"
+    },
+    {
       "path": "nvb-manifest.json",
       "sha256": "sha256:aebe209db881959c64b4ccab8eff3cf08b475099069ca17b57b37067b972c779",
       "mode": "0644"
     },
     {
       "path": "profiles/implementationV1.profile.json",
-      "sha256": "sha256:a29ad2e015ef8213be3845d6394d6ec6ac11ad45a52a9cba34715904302bb077",
+      "sha256": "sha256:04914e42c88a19e80c981947d96df4921616f991e2be0921708d7cbc2e04c27e",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.json",
-      "sha256": "sha256:8214021dcfb057d5f79d9c4cbf73c04e63bec39ac8c34d36fa419dd86a1d2cd8",
+      "sha256": "sha256:82d02328472d397e6297eb5414d603806d4e188d9a743d55d71797e0bfd6cca6",
       "mode": "0644"
     },
     {
@@ -232,12 +252,22 @@
     },
     {
       "path": "schemas/taskCatalogFragment.schema.json",
-      "sha256": "sha256:e13edab6d300c89638e3099d7ae07c35cac1bf922b2982c7505e045277466216",
+      "sha256": "sha256:49aa5da9ca41d63564dd308cc968ba3e4c83a66180960304087f58ef4aff16a0",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/tmuxEffectInput.schema.json",
+      "sha256": "sha256:1f7b65b0b3bd35ba89ce2afa6659b0b7441d8bd8592a43e568aa26d5d5f58277",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/tmuxEffectResult.schema.json",
+      "sha256": "sha256:2db9201bac63bc5c4d65301d70a2650116c72202df5cfd58d2f9b79be099e80e",
       "mode": "0644"
     },
     {
       "path": "task-catalog.json",
-      "sha256": "sha256:f7eda1e959b7a41767407e3761bf4a6eacd9f1891a8efe13c36e0fdbe5855997",
+      "sha256": "sha256:42c44cdcb018155c74ac5a842c3e936195b57d7bdde2c27b015170ddae962017",
       "mode": "0644"
     },
     {
@@ -274,7 +304,8 @@
   "actions": [
     "wt:git:publish-commits",
     "wt:git:record-acceptance",
-    "wt:runtime:smoke"
+    "wt:runtime:smoke",
+    "wt:tmux:effect"
   ],
   "requiredCommands": []
 }

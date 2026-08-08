@@ -2,7 +2,8 @@
   "groups": {},
   "handlers": [
     "./handlers/GitAcceptanceTaskHandler.js",
-    "./handlers/RuntimeSmokeTaskHandler.js"
+    "./handlers/RuntimeSmokeTaskHandler.js",
+    "./handlers/tmux/TmuxEffectTaskHandler.js"
   ],
   "tasks": {
     "wt:git:publish-commits": {
@@ -57,6 +58,24 @@
           }
         ],
         "handler": "RuntimeSmokeTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:tmux:effect": {
+      "doc": {
+        "summary": "Execute one closed tmux operation through the cataloged leaf.",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "operation": "tmux-effect",
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "TmuxEffectTaskHandler",
         "preferType": "async",
         "type": "auto"
       },

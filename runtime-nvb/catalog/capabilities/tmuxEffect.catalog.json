@@ -1,0 +1,43 @@
+{
+  "actions": {
+    "effect.dispatchBatch": {"taskId": "wt:tmux:effect"}
+  },
+  "fragmentId": "tmux-effect",
+  "groups": {},
+  "handlers": {
+    "TmuxEffectTaskHandler": {"module": "./handlers/tmux/TmuxEffectTaskHandler.js"}
+  },
+  "includes": [],
+  "leaves": {
+    "tmux.command": {
+      "executable": true,
+      "mode": "0555",
+      "path": "./leaves/tmuxCommand.sh",
+      "sha256": "sha256:f405d7f4a1c2948d50bc157359d9dd916ce784e047d2c9d363c03709a994cfb7"
+    }
+  },
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:tmux:effect": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/tmux-effect-input/v1",
+        "leafIds": ["tmux.command"],
+        "mutationClass": "external-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/tmux-effect-result/v1"
+      },
+      "doc": {
+        "summary": "Execute one closed tmux operation through the cataloged leaf.",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [{"schemaVersion": 1, "operation": "tmux-effect"}],
+        "handler": "TmuxEffectTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    }
+  }
+}

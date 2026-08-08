@@ -87,6 +87,10 @@ async function verify() {
         const fixtureRoot = join(temporaryRoot, 'fixture');
         const sourceFixtureRoot = join(temporaryRoot, 'git-materialized-fixture');
         await cp(DIST_RUNTIME, runtimeRoot, {recursive: true});
+        // Packaged TaskHandlers may depend on the compiled product foundation
+        // under the package's own src/ root; relocate that closure with the
+        // runtime so no checkout source is consulted.
+        await cp(resolve('dist', 'src'), join(temporaryRoot, 'src'), {recursive: true});
         await copyFixture(runtimeRoot, fixtureRoot);
         const adapterUrl = pathToFileURL(join(runtimeRoot, 'foundation', 'task', 'catalog',
             'taskCatalogCompositionFileAdapter.js')).href;

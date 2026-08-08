@@ -27,7 +27,7 @@ import type {RuntimeFileSystem} from './runtimeFileSystem.js';
 
 const CATALOG_FILE = 'task-catalog.json';
 const MAX_CATALOG_BYTES = 4 * 1024 * 1024;
-const SIMPLE_ID = /^[a-z0-9][a-z0-9.-]{0,127}$/u;
+const SIMPLE_ID = /^[a-z0-9][A-Za-z0-9.-]{0,127}$/u;
 const TASK_ID = /^wt:[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)+$/u;
 const HANDLER_ID = /^[A-Z][A-Za-z0-9]{0,127}$/u;
 const SCHEMA_ID = /^watchtower:\/\/runtime\/schemas\/[a-z0-9-]+\/v1$/u;

@@ -28,7 +28,7 @@ import {
 const FRAGMENT_ID = /^[a-z0-9][a-z0-9.-]{0,127}$/;
 const HANDLER_ID = /^[A-Z][A-Za-z0-9]{0,127}$/;
 const RUNNABLE_ID = /^wt:[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)+$/;
-const ACTION_ID = /^[a-z][a-z0-9.-]{0,127}$/;
+const ACTION_ID = /^[a-z][A-Za-z0-9.-]{0,127}$/;
 const LEAF_ID = /^[a-z][a-z0-9.-]{0,127}$/;
 const SCHEMA_ID = /^watchtower:\/\/runtime\/schemas\/[a-z0-9-]+\/v1$/;
 const SHA256 = /^sha256:[a-f0-9]{64}$/;

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/tmux-effect-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "ok", "exitCode", "stdout", "stderr", "wallTimeMs"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "ok": {"type": "boolean"},
+    "exitCode": {"type": ["integer", "null"]},
+    "stdout": {"type": "string"},
+    "stderr": {"type": "string"},
+    "wallTimeMs": {"type": "integer", "minimum": 0}
+  }
+}

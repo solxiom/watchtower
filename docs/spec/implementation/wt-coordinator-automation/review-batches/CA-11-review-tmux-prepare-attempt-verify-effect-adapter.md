@@ -19,8 +19,9 @@ Reviewer owns the acceptance commit.
 
 ## Scope Verification
 
-1. **File ownership:** Verify `src/foundation/TmuxAdapter.ts` and
-   `src/foundation/TmuxEffect.ts` are the only files introduced by this batch.
+1. **File ownership:** Verify `src/foundation/runtime/leaf/TmuxAdapter.ts` and
+   `src/foundation/effect/TmuxEffect.ts` are the only implementation files
+   introduced by this batch.
    No other module gained tmux execution capability.
 2. **Dependency direction:** Verify the adapter depends on CA-10's typed
    external-effect interface and RT-05's `LaneTaskRunner`/TaskHandler/leaf

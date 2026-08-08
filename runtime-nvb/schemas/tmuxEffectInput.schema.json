@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/tmux-effect-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "operation", "command", "argv", "environment"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "operation": {"const": "tmux-effect"},
+    "command": {"enum": ["new-session", "new-window", "send-keys", "capture-pane", "list-panes", "list-windows", "list-sessions", "has-session"]},
+    "argv": {"type": "array", "minItems": 0, "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"}},
+    "session": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+-]{0,127}$"},
+    "window": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+-]{0,127}$"},
+    "pane": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+-]{0,127}$"},
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "WT_WORKSPACE": {"type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"},
+        "WT_LANE_ID": {"type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"},
+        "WT_LANE_SLUG": {"type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"},
+        "WT_LANE_DIR": {"type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"},
+        "WT_COORDINATOR_CYCLE_ID": {"type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"},
+        "WT_RUNTIME_VERSION": {"type": "string", "maxLength": 4096, "pattern": "^[^\\u0000-\\u001f\\u007f]*$"}
+      }
+    }
+  }
+}
