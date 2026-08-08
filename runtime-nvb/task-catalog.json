@@ -1,5 +1,11 @@
 {
   "actions": {
+    "coordinator.index.apply": {
+      "taskId": "wt:index:apply"
+    },
+    "coordinator.index.build": {
+      "taskId": "wt:index:build"
+    },
     "coordinator.poll-triggers": {
       "taskId": "wt:coordinator:poll-triggers"
     },
@@ -23,6 +29,7 @@
     "catalog-composition",
     "coordinator-watch",
     "git-acceptance",
+    "index-build",
     "runtime-smoke",
     "tmux-effect"
   ],
@@ -33,6 +40,9 @@
     },
     "GitAcceptanceTaskHandler": {
       "module": "./handlers/GitAcceptanceTaskHandler.js"
+    },
+    "IndexBuildTaskHandler": {
+      "module": "./handlers/IndexBuildTaskHandler.js"
     },
     "RuntimeSmokeTaskHandler": {
       "module": "./handlers/RuntimeSmokeTaskHandler.js"
@@ -76,6 +86,8 @@
       "taskIds": [
         "wt:git:publish-commits",
         "wt:git:record-acceptance",
+        "wt:index:apply",
+        "wt:index:build",
         "wt:runtime:smoke",
         "wt:tmux:effect"
       ]
@@ -106,6 +118,22 @@
     "watchtower://runtime/schemas/git-record-acceptance-result/v1": {
       "path": "./schemas/gitRecordAcceptanceResult.schema.json",
       "sha256": "sha256:3f128cb82cf5750eedf5e668057add7e564145ea2f4819976417a70f72d9f3d7"
+    },
+    "watchtower://runtime/schemas/index-build-apply-input/v1": {
+      "path": "./schemas/indexBuildApplyInput.schema.json",
+      "sha256": "sha256:8909a9bb663eed16ffa2f009f6f97fbedbb5cf3ea76c9b1cbe3cb14a474e347c"
+    },
+    "watchtower://runtime/schemas/index-build-apply-result/v1": {
+      "path": "./schemas/indexBuildApplyResult.schema.json",
+      "sha256": "sha256:6f32425ac467c01ef20003ea4d81d49633b3b289394d7a84bae697a084bf5d38"
+    },
+    "watchtower://runtime/schemas/index-build-input/v1": {
+      "path": "./schemas/indexBuildInput.schema.json",
+      "sha256": "sha256:39606378072219f2be2be39d314bf205bdaa089589fa1733d7eae6e2654af5d1"
+    },
+    "watchtower://runtime/schemas/index-build-result/v1": {
+      "path": "./schemas/indexBuildResult.schema.json",
+      "sha256": "sha256:9cc24b854dbab9a9b6c283060d7abd041049c6b8820c7414e9232883d5ecd740"
     },
     "watchtower://runtime/schemas/lane-task-profile/v1": {
       "path": "./schemas/laneTaskProfile.schema.json",
@@ -185,6 +213,24 @@
       "mutationClass": "authoritative-effect",
       "requiresInvocationEnvelope": true,
       "resultSchema": "watchtower://runtime/schemas/git-record-acceptance-result/v1"
+    },
+    "wt:index:apply": {
+      "executionScope": "lane-runtime",
+      "handlerId": "IndexBuildTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/index-build-apply-input/v1",
+      "leafIds": [],
+      "mutationClass": "authoritative-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/index-build-apply-result/v1"
+    },
+    "wt:index:build": {
+      "executionScope": "lane-runtime",
+      "handlerId": "IndexBuildTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/index-build-input/v1",
+      "leafIds": [],
+      "mutationClass": "read-only",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/index-build-result/v1"
     },
     "wt:runtime:catalog:check": {
       "executionScope": "repository-development",

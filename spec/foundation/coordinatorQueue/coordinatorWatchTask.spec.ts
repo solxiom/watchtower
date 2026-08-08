@@ -82,7 +82,7 @@ describe('CA-13 packaged poll-triggers catalog surface (F4)', () => {
 
     it('is the only coordinator action CA-13 contributes to the catalog', () => {
         const coordinatorActions = Object.keys(CATALOG.actions).filter((action) => action.startsWith('coordinator.'));
-        expect(coordinatorActions).toEqual([POLL_TRIGGERS_ACTION]);
+        expect(coordinatorActions).toEqual(['coordinator.index.apply', 'coordinator.index.build', POLL_TRIGGERS_ACTION]);
     });
 });
 

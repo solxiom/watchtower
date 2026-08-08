@@ -4,15 +4,16 @@
     "module": "ES2022",
     "moduleResolution": "node",
     "ignoreDeprecations": "6.0",
-    "outDir": "../dist/runtime-nvb/foundation",
-    "rootDir": "../src/foundation",
+    "outDir": "../dist/runtime-nvb",
+    "rootDir": "../src",
     "sourceMap": false,
     "skipLibCheck": true,
     "types": ["node"]
   },
   "include": [
     "../src/foundation/schemaComposition/**/*.ts",
-    "../src/foundation/task/catalog/**/*.ts"
+    "../src/foundation/task/catalog/**/*.ts",
+    "../src/foundation/index/assembly/IndexBuildTask.ts"
   ],
   "exclude": [
     "../src/foundation/schemaComposition/schemaBundle.ts",

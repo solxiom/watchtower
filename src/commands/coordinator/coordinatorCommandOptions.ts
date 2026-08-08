@@ -2,13 +2,13 @@ import type {CArgMap} from '@nirvana/base/cli/contracts';
 import {createWatchtowerError} from '../../contracts/index.js';
 
 export type CoordinatorAction = 'index' | 'status' | 'context' | 'explain';
-export type CoordinatorIndexSubject = 'status' | 'verify' | 'explain';
-export interface CoordinatorCommandOptions { readonly action: CoordinatorAction; readonly subject?: CoordinatorIndexSubject; readonly target?: string; readonly workspace?: string; readonly lane?: string; readonly decisionClass?: string; readonly trigger?: string; readonly cycle?: string; readonly json: boolean; readonly noColor: boolean; }
+export type CoordinatorIndexSubject = 'status' | 'verify' | 'explain' | 'build';
+export interface CoordinatorCommandOptions { readonly action: CoordinatorAction; readonly subject?: CoordinatorIndexSubject; readonly target?: string; readonly workspace?: string; readonly lane?: string; readonly initiative?: string; readonly decisionClass?: string; readonly trigger?: string; readonly cycle?: string; readonly runtime: boolean; readonly dryRun: boolean; readonly json: boolean; readonly noColor: boolean; }
 
-const VALUE_FLAGS = ['workspace', 'lane', 'class', 'trigger', 'cycle'] as const;
-const BOOLEAN_FLAGS = ['json', 'no-color'] as const;
+const VALUE_FLAGS = ['--workspace', '--lane', '--initiative', '--class', '--trigger', '--cycle'] as const;
+const BOOLEAN_FLAGS = ['--runtime', '--dry-run', '--json', '--no-color'] as const;
 const ACTIONS = new Set<CoordinatorAction>(['index', 'status', 'context', 'explain']);
-const INDEX_SUBJECTS = new Set<CoordinatorIndexSubject>(['status', 'verify', 'explain']);
+const INDEX_SUBJECTS = new Set<CoordinatorIndexSubject>(['status', 'verify', 'explain', 'build']);
 
 export function parseCoordinatorOptions(args: CArgMap): CoordinatorCommandOptions {
     const positional = [...args.entries()].filter(([key]) => !key.startsWith('--')).map(([key]) => key);
@@ -28,12 +28,12 @@ export function parseCoordinatorOptions(args: CArgMap): CoordinatorCommandOption
         invalid(`--${key}`);
     }
     for (const flag of [...VALUE_FLAGS, ...BOOLEAN_FLAGS]) if (args.getAll(flag).length > 1) invalid(`--${flag}`);
-    const result: CoordinatorCommandOptions = {action: typedAction, ...(subject === undefined ? {} : {subject: subject as CoordinatorIndexSubject}), ...(target === undefined ? {} : {target}), ...optional(args, 'workspace', 'lane'), ...optional(args, 'class', 'decisionClass'), ...optional(args, 'trigger', 'trigger'), ...optional(args, 'cycle', 'cycle'), json: args.hasFlag('json', true), noColor: args.hasFlag('no-color', true)};
+    const result: CoordinatorCommandOptions = {action: typedAction, ...(subject === undefined ? {} : {subject: subject as CoordinatorIndexSubject}), ...(target === undefined ? {} : {target}), ...optional(args, '--workspace', 'workspace'), ...optional(args, '--lane', 'lane'), ...optional(args, '--initiative', 'initiative'), ...optional(args, '--class', 'decisionClass'), ...optional(args, '--trigger', 'trigger'), ...optional(args, '--cycle', 'cycle'), runtime: args.hasFlag('--runtime', true), dryRun: args.hasFlag('--dry-run', true), json: args.hasFlag('--json', true), noColor: args.hasFlag('--no-color', true)};
     if (typedAction === 'context' && (result.decisionClass === undefined || result.trigger === undefined)) invalid('context requires --class and --trigger');
     return result;
 }
 
-function optional(args: CArgMap, flag: string, field: 'workspace' | 'lane' | 'decisionClass' | 'trigger' | 'cycle'): Pick<CoordinatorCommandOptions, typeof field> {
+function optional(args: CArgMap, flag: string, field: 'workspace' | 'lane' | 'initiative' | 'decisionClass' | 'trigger' | 'cycle'): Pick<CoordinatorCommandOptions, typeof field> {
     const value = args.getFlag(flag, true); return value === null ? {} : {[field]: value} as Pick<CoordinatorCommandOptions, typeof field>;
 }
 function invalid(target: string): never { throw createWatchtowerError('ERR_INVALID_ARGUMENT', {operation: 'parse coordinator command options', target, remediation: 'Use one documented read-only coordinator action with unique options and no unknown subjects.'}); }

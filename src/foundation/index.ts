@@ -29,6 +29,9 @@ export type {HostAdapter, HostName, InstallScope, PreviewResult, ResolvedKnowled
 export {RuntimeCatalog, ManagedAssets} from './runtime/index.js';
 export type {RuntimeCatalogOptions, ManagedAssetsOptions} from './runtime/index.js';
 export {LaneTaskCatalog, NirvanaLaneTaskRunner} from './task/index.js';
+export {CoordinatorIndexBuildService, INDEX_BUILD_ACTION} from './index/assembly/index.js';
+export {createDefaultIndexBuildComposition} from './index/assembly/IndexBuildComposition.js';
+export type {IndexBuildService, IndexBuildRequestSource} from './index/assembly/index.js';
 export type {LaneTaskRunner, NirvanaLaneTaskRunnerOptions} from './task/index.js';
 export {OpenCodeEndpointAdapter} from './endpoint/index.js';
 export {resolveWatchtowerDataHome, validateWatchtowerDataHome} from './paths/index.js';

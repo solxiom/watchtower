@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/index-build-apply-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["applied", "changed", "unchanged", "warnings", "indexBuild"],
+  "properties": {
+    "applied": {"type": "boolean"},
+    "changed": {"type": "array", "items": {"type": "string"}},
+    "unchanged": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "indexBuild": {"$ref": "indexBuildResult.schema.json"}
+  }
+}

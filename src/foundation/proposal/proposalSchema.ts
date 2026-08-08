@@ -166,8 +166,9 @@ function effectArray(value: unknown, subject: string): readonly RequestedEffect[
 
 function effectValue(value: unknown, subject: string): RequestedEffect {
     const record = object(value, subject);
+    if (Object.keys(record).length !== 1 || !Object.hasOwn(record, 'effect')) fail(subject, 'contains missing, extra, or unsupported members');
     if (typeof record.effect !== 'string' || !EFFECT_TYPES.includes(record.effect as EffectType)) fail(`${subject}.effect`, 'unsupported effect type');
-    return Object.freeze({...record}) as RequestedEffect;
+    return Object.freeze({effect: record.effect as EffectType});
 }
 
 function object(value: unknown, subject: string): Record<string, unknown> {

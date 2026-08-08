@@ -28,7 +28,7 @@ const MATRIX: Readonly<Record<ProposalType, ProposalRule>> = Object.freeze({
     'open-correction': {minimumClass: 'D2', permittedOrigins: ['coordinator-D2'], legalEffects: ['open-correction'], confirmation: 'never', requiresSpecAuthority: false, minimumCapability: null},
     'select-correction-route': {minimumClass: 'D2', permittedOrigins: ['coordinator-D2'], legalEffects: ['route-correction'], confirmation: 'never', requiresSpecAuthority: false, minimumCapability: null},
     'request-reroute': {minimumClass: 'D1', permittedOrigins: ['coordinator-D1'], legalEffects: ['reroute-endpoint'], confirmation: 'never', requiresSpecAuthority: false, minimumCapability: null},
-    'propose-reconciliation': {minimumClass: 'D3', permittedOrigins: ['coordinator-D3'], legalEffects: ['reconcile-projection'], confirmation: 'always', requiresSpecAuthority: false, minimumCapability: null},
+    'propose-reconciliation': {minimumClass: 'D3', permittedOrigins: ['coordinator-D3'], legalEffects: ['reconcile-projection', 'rebuild-index'], confirmation: 'always', requiresSpecAuthority: false, minimumCapability: null},
     'request-pack-amendment': {minimumClass: 'D2', permittedOrigins: ['coordinator-D2'], legalEffects: ['create-amendment-request'], confirmation: 'always', requiresSpecAuthority: false, minimumCapability: null},
     'propose-specification-resolution': {minimumClass: 'D3', permittedOrigins: ['architect-advisor'], legalEffects: [], confirmation: 'never', requiresSpecAuthority: false, minimumCapability: 'C5'},
     'admit-pack-amendment': {minimumClass: null, permittedOrigins: ['operator'], legalEffects: ['activate-pack-revision'], confirmation: 'always', requiresSpecAuthority: true, minimumCapability: null},

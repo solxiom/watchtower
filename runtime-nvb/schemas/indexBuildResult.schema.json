@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/index-build-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runtime", "dryRun", "changed", "indexId", "reused", "runtimeIndexes"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "runtime": {"type": "boolean"},
+    "dryRun": {"type": "boolean"},
+    "changed": {"type": "boolean"},
+    "indexId": {"type": ["string", "null"]},
+    "reused": {"type": "boolean"},
+    "runtimeIndexes": {"type": "integer", "minimum": 0}
+  }
+}
+

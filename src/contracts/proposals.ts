@@ -51,6 +51,7 @@ export const EFFECT_TYPES = [
     'route-correction',
     'reroute-endpoint',
     'reconcile-projection',
+    'rebuild-index',
     'create-amendment-request',
     'activate-pack-revision',
     'resume-blocked-session',

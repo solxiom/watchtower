@@ -6,6 +6,11 @@
       "name": "basic",
       "label": "Basic commands",
       "description": "Core watchtower CLI commands."
+    },
+    {
+      "name": "coordinator",
+      "label": "Coordinator commands",
+      "description": "Bounded, validated coordinator operations."
     }
   ],
   "commands": [
@@ -50,7 +55,7 @@
       "name": "coordinator",
       "group": "basic",
       "summary": "Inspect bounded coordinator, pack-index, and decision context projections without repair.",
-      "usage": "wt coordinator index <status|verify|explain <batch-or-requirement>> [--workspace=<path>] [--lane=<slug-or-uuid>] [--json] | wt coordinator <status|context|explain> [--class=<D1|D2|D3>] [--trigger=<event-id>] [--cycle=<id>] [--json]"
+      "usage": "wt coordinator index <status|verify|explain <batch-or-requirement>|build> [--runtime] [--dry-run] [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] | wt coordinator <status|context|explain> [--class=<D1|D2|D3>] [--trigger=<event-id>] [--cycle=<id>] [--json]"
     },
     {
       "name": "events",

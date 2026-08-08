@@ -5,6 +5,8 @@
   "taskIds": [
     "wt:git:publish-commits",
     "wt:git:record-acceptance",
+    "wt:index:apply",
+    "wt:index:build",
     "wt:runtime:smoke",
     "wt:tmux:effect"
   ]

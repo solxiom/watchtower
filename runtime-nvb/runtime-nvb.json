@@ -3,6 +3,7 @@
   "handlers": [
     "./handlers/CoordinatorWatchTaskHandler.js",
     "./handlers/GitAcceptanceTaskHandler.js",
+    "./handlers/IndexBuildTaskHandler.js",
     "./handlers/RuntimeSmokeTaskHandler.js",
     "./handlers/tmux/TmuxEffectTaskHandler.js"
   ],
@@ -64,6 +65,62 @@
           }
         ],
         "handler": "GitAcceptanceTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:index:apply": {
+      "doc": {
+        "summary": "Apply a validated sealed-pack or runtime index rebuild.",
+        "usage": "Internal Watchtower index effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "dryRun": false,
+            "indexRoot": "/lane/coordinator/index/runtime",
+            "laneDir": "/lane",
+            "laneId": "lane",
+            "runtime": true,
+            "runtimeIndexes": [
+              {
+                "databasePath": "/lane/db",
+                "journalPath": "/lane/journal"
+              }
+            ],
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "IndexBuildTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:index:build": {
+      "doc": {
+        "summary": "Build the sealed-pack or runtime derived index.",
+        "usage": "Internal Watchtower index task."
+      },
+      "handle": {
+        "args": [
+          {
+            "dryRun": true,
+            "indexRoot": "/lane/coordinator/index/runtime",
+            "laneDir": "/lane",
+            "laneId": "lane",
+            "runtime": true,
+            "runtimeIndexes": [
+              {
+                "databasePath": "/lane/db",
+                "journalPath": "/lane/journal"
+              }
+            ],
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "IndexBuildTaskHandler",
         "preferType": "async",
         "type": "auto"
       },

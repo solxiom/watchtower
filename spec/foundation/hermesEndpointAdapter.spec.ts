@@ -74,15 +74,13 @@ describe('HermesEndpointAdapter', function () {
         }
     });
 
-    it('preserves bounded additional requestedEffect fields allowed by the canonical contract', async function () {
+    it('rejects additional requestedEffect fields outside the closed canonical contract', async function () {
         const root = fixtureRoot();
         const candidate = wireProposal('select-ready-batch', {requestedEffects: [{effect: 'dispatch-batch', batchId: 'B1'}]});
         const adapter = new HermesEndpointAdapter({...options(root), process: sequenceProcess([result('exited', 'hermes 0.18.2'), result('exited', JSON.stringify(candidate))])});
         const output = await adapter.invoke({cwd: root, envelope: {schemaVersion: 1}});
-        expect(output.outcome).toBe('completed');
-        if (output.outcome === 'completed') {
-            expect(output.result.requestedEffects[0]).toEqual(Object.freeze({effect: 'dispatch-batch', batchId: 'B1'}));
-        }
+        expect(output.outcome).toBe('failed');
+        if (output.outcome === 'failed') expect(output.reason).toBe('HERMES_RESULT_SCHEMA_INVALID');
     });
 
     it('rejects structurally invalid proposal output without completion', async function () {

@@ -21,6 +21,7 @@ const DECLARED_ACTIONS: readonly DeclaredRuntimeAction[] = Object.freeze([
     action('route-correction', 'effect.routeCorrection', 'lane-local', 'authoritative-effect', null),
     action('reroute-endpoint', 'effect.rerouteEndpoint', 'lane-local', 'authoritative-effect', null),
     action('reconcile-projection', 'effect.reconcileProjection', 'lane-local', 'journaled-mutation', null),
+    action('rebuild-index', 'coordinator.index.apply', 'lane-local', 'authoritative-effect', null),
     action('create-amendment-request', 'effect.createAmendmentRequest', 'lane-local', 'journaled-mutation', null),
     action('activate-pack-revision', 'effect.activatePackRevision', 'lane-local', 'authoritative-effect', null),
     action('resume-blocked-session', 'effect.resumeBlockedSession', 'lane-local', 'authoritative-effect', null),

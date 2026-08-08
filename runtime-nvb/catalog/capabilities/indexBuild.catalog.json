@@ -1,0 +1,37 @@
+{
+  "actions": {"coordinator.index.apply": {"taskId": "wt:index:apply"}, "coordinator.index.build": {"taskId": "wt:index:build"}},
+  "fragmentId": "index-build",
+  "groups": {},
+  "handlers": {"IndexBuildTaskHandler": {"module": "./handlers/IndexBuildTaskHandler.js"}},
+  "includes": [],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:index:apply": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/index-build-apply-input/v1",
+        "leafIds": [],
+        "mutationClass": "authoritative-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/index-build-apply-result/v1"
+      },
+      "doc": {"summary": "Apply a validated sealed-pack or runtime index rebuild.", "usage": "Internal Watchtower index effect task."},
+      "handle": {"args": [{"schemaVersion": 1, "runtime": true, "dryRun": false, "laneDir": "/lane", "laneId": "lane", "indexRoot": "/lane/coordinator/index/runtime", "runtimeIndexes": [{"databasePath": "/lane/db", "journalPath": "/lane/journal"}]}], "handler": "IndexBuildTaskHandler", "preferType": "async", "type": "auto"},
+      "runnerOpts": {}
+    },
+    "wt:index:build": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/index-build-input/v1",
+        "leafIds": [],
+        "mutationClass": "read-only",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/index-build-result/v1"
+      },
+      "doc": {"summary": "Build the sealed-pack or runtime derived index.", "usage": "Internal Watchtower index task."},
+      "handle": {"args": [{"schemaVersion": 1, "runtime": true, "dryRun": true, "laneDir": "/lane", "laneId": "lane", "indexRoot": "/lane/coordinator/index/runtime", "runtimeIndexes": [{"databasePath": "/lane/db", "journalPath": "/lane/journal"}]}], "handler": "IndexBuildTaskHandler", "preferType": "async", "type": "auto"},
+      "runnerOpts": {}
+    }
+  }
+}

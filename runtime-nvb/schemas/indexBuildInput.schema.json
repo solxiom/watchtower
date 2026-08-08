@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/index-build-input/v1",
+  "$comment": "Read-only planning input for the coordinator index task.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runtime", "dryRun"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "runtime": {"type": "boolean"},
+    "dryRun": {"const": true},
+    "laneDir": {"type": "string", "minLength": 1},
+    "packRoot": {"type": "string", "minLength": 1},
+    "packPath": {"type": "string", "minLength": 1},
+    "indexRoot": {"type": "string", "minLength": 1},
+    "laneId": {"type": "string", "minLength": 1},
+    "acceptedPack": {"$ref": "#/$defs/consumedPack"},
+    "runtimeIndexes": {"type": "array", "items": {"$ref": "#/$defs/runtimeIndex"}, "minItems": 1}
+  },
+  "allOf": [{
+    "if": {"properties": {"runtime": {"const": true}}},
+    "then": {"required": ["laneDir", "laneId", "indexRoot", "runtimeIndexes"], "not": {"anyOf": [{"required": ["packRoot"]}, {"required": ["packPath"]}, {"required": ["acceptedPack"]}]}}
+  }, {
+    "if": {"properties": {"runtime": {"const": false}}},
+    "then": {"required": ["laneDir", "laneId", "packRoot", "packPath", "indexRoot", "acceptedPack"], "not": {"required": ["runtimeIndexes"]}}
+  }],
+  "$defs": {
+    "runtimeIndex": {
+      "type": "object", "additionalProperties": false,
+      "required": ["databasePath", "journalPath"],
+      "properties": {"databasePath": {"type": "string", "minLength": 1}, "journalPath": {"type": "string", "minLength": 1}}
+    },
+    "sealedFile": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256", "bytes"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, "bytes": {"type": "integer", "minimum": 0}}
+    },
+    "acceptedInput": {
+      "type": "object", "additionalProperties": false, "required": ["repository", "path", "sha256", "acceptanceRef"],
+      "properties": {"repository": {"type": "string", "minLength": 1}, "path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, "acceptanceRef": {"type": "string", "minLength": 1}}
+    },
+    "sourceBaseline": {
+      "type": "object", "additionalProperties": false, "required": ["repository", "revision", "dirty"],
+      "properties": {"repository": {"type": "string", "minLength": 1}, "revision": {"type": "string", "minLength": 1}, "dirty": {"type": "boolean"}}
+    },
+    "claimPath": {
+      "type": "object", "additionalProperties": false, "required": ["repository", "path", "writable"],
+      "properties": {"repository": {"type": "string", "minLength": 1}, "path": {"type": "string", "minLength": 1}, "writable": {"type": "boolean"}}
+    },
+    "consumedPack": {
+      "type": "object", "additionalProperties": false,
+      "required": ["packId", "initiativeId", "packRepository", "manifestDigest", "acceptanceDigest", "sealId", "reviewedCommit", "repositories", "sealedFiles", "acceptedInputs", "sourceBaselines", "claimPaths"],
+      "properties": {
+        "packId": {"type": "string", "minLength": 1}, "initiativeId": {"type": "string", "minLength": 1}, "packRepository": {"type": "string", "minLength": 1},
+        "manifestDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, "acceptanceDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, "sealId": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, "reviewedCommit": {"type": "string", "minLength": 1},
+        "repositories": {"type": "array", "items": {"type": "string", "minLength": 1}}, "sealedFiles": {"type": "array", "items": {"$ref": "#/$defs/sealedFile"}}, "acceptedInputs": {"type": "array", "items": {"$ref": "#/$defs/acceptedInput"}}, "sourceBaselines": {"type": "array", "items": {"$ref": "#/$defs/sourceBaseline"}}, "claimPaths": {"type": "array", "items": {"$ref": "#/$defs/claimPath"}}
+      }
+    }
+  }
+}

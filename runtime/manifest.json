@@ -26,6 +26,11 @@
       "mode": "0644"
     },
     {
+      "path": "catalog/capabilities/indexBuild.catalog.json",
+      "sha256": "sha256:de466052d86b795ad9ed77a4d805d1c748564cc33913d170c128fb3c1f895915",
+      "mode": "0644"
+    },
+    {
       "path": "catalog/capabilities/runtimeSmoke.catalog.json",
       "sha256": "sha256:15c773a5b987dd51daed7feb13822b0ab1a6fc96c13daecb34a6e03fd2bb0911",
       "mode": "0644"
@@ -103,6 +108,11 @@
     {
       "path": "handlers/GitAcceptanceTaskHandler.ts",
       "sha256": "sha256:b59e96a7e6696e8372702cb729d3689091ddb6026d5a601db79d057de4ff39ce",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/IndexBuildTaskHandler.ts",
+      "sha256": "sha256:a074d767b08cb93ed473009a87bb720b7432c187930bb32aa52743332a507450",
       "mode": "0644"
     },
     {
@@ -202,12 +212,12 @@
     },
     {
       "path": "profiles/implementationV1.profile.json",
-      "sha256": "sha256:04914e42c88a19e80c981947d96df4921616f991e2be0921708d7cbc2e04c27e",
+      "sha256": "sha256:dd7283ec99d89e8339b08f10a134112f4a05941f0b3b12757a091e44ac8ffbaf",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.json",
-      "sha256": "sha256:96ab47b7773fb681e25bcf254ca6fd4ff932693a08cef4b1c2d99abb593e00ad",
+      "sha256": "sha256:ee77f37d6981155cbdaa1ca919edfd43c17205fe17187a938f8a7593ca669fc5",
       "mode": "0644"
     },
     {
@@ -243,6 +253,26 @@
     {
       "path": "schemas/gitRecordAcceptanceResult.schema.json",
       "sha256": "sha256:3f128cb82cf5750eedf5e668057add7e564145ea2f4819976417a70f72d9f3d7",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/indexBuildApplyInput.schema.json",
+      "sha256": "sha256:8909a9bb663eed16ffa2f009f6f97fbedbb5cf3ea76c9b1cbe3cb14a474e347c",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/indexBuildApplyResult.schema.json",
+      "sha256": "sha256:6f32425ac467c01ef20003ea4d81d49633b3b289394d7a84bae697a084bf5d38",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/indexBuildInput.schema.json",
+      "sha256": "sha256:39606378072219f2be2be39d314bf205bdaa089589fa1733d7eae6e2654af5d1",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/indexBuildResult.schema.json",
+      "sha256": "sha256:9cc24b854dbab9a9b6c283060d7abd041049c6b8820c7414e9232883d5ecd740",
       "mode": "0644"
     },
     {
@@ -307,17 +337,17 @@
     },
     {
       "path": "task-catalog.json",
-      "sha256": "sha256:a1dac2c5ccb18df4949fa47b7512cf57879cce069b4d4134e1d93b6b1512fbfc",
+      "sha256": "sha256:b2b8c5a28192c1090507a5e6fa8f337e73a2741c1d37a25b91735b7bbc3abaa6",
       "mode": "0644"
     },
     {
       "path": "tsconfig.runtime-foundation.build.json",
-      "sha256": "sha256:b69ca586d2b89cc50385aa222982c5c8b57262ac6245017f715a6f46bc952802",
+      "sha256": "sha256:000d2f8f568a0246f98ceb2438da38a93f3d98fad646af17d4fc8fd26a37ccbb",
       "mode": "0644"
     },
     {
       "path": "tsconfig.runtime-foundation.json",
-      "sha256": "sha256:2397ce99e33666cbeea02a69a43f56dfd1f8b935104ff75e4afd7c79c26762f8",
+      "sha256": "sha256:1da42bdc269636eb704199650cbd703c8df992ab11acc36f65d20c0a88044c02",
       "mode": "0644"
     },
     {
