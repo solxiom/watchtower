@@ -804,8 +804,46 @@
     "doctorReport": {
       "additionalProperties": true,
       "properties": {
-        "schemaVersion": {
-          "const": 1
+        "checks": {
+          "items": {
+            "additionalProperties": true,
+            "properties": {
+              "id": {
+                "enum": [
+                  "lane-marker",
+                  "lane-config",
+                  "repository-bindings",
+                  "repository-permissions",
+                  "git-ignore-coverage"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "pass",
+                  "warn",
+                  "fail",
+                  "skip"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "status",
+              "message",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "type": "array"
         },
         "lane": {
           "additionalProperties": true,
@@ -823,54 +861,28 @@
           ],
           "type": "object"
         },
-        "checks": {
-          "items": {
-            "additionalProperties": true,
-            "properties": {
-              "id": {
-                "enum": [
-                  "lane-marker",
-                  "lane-config",
-                  "repository-bindings",
-                  "repository-permissions",
-                  "git-ignore-coverage"
-                ]
-              },
-              "status": {
-                "enum": [
-                  "pass",
-                  "warn",
-                  "fail",
-                  "skip"
-                ]
-              },
-              "message": {
-                "type": "string"
-              },
-              "reason": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            },
-            "required": [
-              "id",
-              "status",
-              "message",
-              "reason"
-            ],
-            "type": "object"
-          },
-          "type": "array"
+        "schemaVersion": {
+          "const": 1
         },
         "summary": {
           "additionalProperties": true,
           "properties": {
-            "pass": {"minimum": 0, "type": "integer"},
-            "warn": {"minimum": 0, "type": "integer"},
-            "fail": {"minimum": 0, "type": "integer"},
-            "skip": {"minimum": 0, "type": "integer"}
+            "fail": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "pass": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "skip": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "warn": {
+              "minimum": 0,
+              "type": "integer"
+            }
           },
           "required": [
             "pass",

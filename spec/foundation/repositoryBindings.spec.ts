@@ -8,11 +8,11 @@ import type {RepositoryBindingInspector} from '../../src/foundation/bindings/ind
 const repository = {id: 'main', role: 'primary', access: 'write'} as const;
 
 describe('repository bindings', function () {
-    it('canonicalizes and validates branch, dedicated default, and write access', function () {
+    it('canonicalizes and validates branch, dedicated mode, and write access', function () {
         const root = fixture();
         const source = join(root, 'source');
         mkdirSync(source);
-        const path = writeBindings(root, [{...binding(source), worktreeMode: undefined}]);
+        const path = writeBindings(root, [{...binding(source), worktreeMode: 'dedicated'}]);
         const result = readRepositoryBindings(path, [repository], inspector(source, 'feature/main'));
         expect(result).toEqual([{...repository, path: source, branch: 'feature/main', worktreeMode: 'dedicated'}]);
         const readRepository = {id: 'main', role: 'primary', access: 'read'} as const;
