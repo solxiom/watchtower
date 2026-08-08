@@ -17,14 +17,32 @@ export interface RepositoryBindingInspector {
     branch(path: string): string | undefined;
 }
 
-/** Reads, validates, and observes the local bindings for one lane. */
-export function readRepositoryBindings(
+/**
+ * Reads and validates only the closed schema/identity contract of a lane's
+ * local bindings against the manifest's expected repository set: schema
+ * version, allowed keys, duplicate JSON members, the byte bound, slug
+ * grammar, canonical-path identity, and the exact `read`/`write` access
+ * vocabulary. Performs no filesystem/Git observation. This is the sole
+ * validated identity projection; callers that need real access/worktree/
+ * branch observation call `validateObservedBinding` against the same
+ * returned array rather than re-parsing, so identity and observed state can
+ * never diverge from independently re-reading the file.
+ */
+export function readRepositoryBindingIdentity(
     bindingsPath: string, expected: readonly RepositoryRef[], inspector: RepositoryBindingInspector = nodeRepositoryBindingInspector
 ): readonly RepositoryBinding[] {
     const bindings = parseBindings(bindingsPath, inspector);
     validateExpectedBindings(bindings, expected, bindingsPath);
-    for (const binding of bindings) validateObservedBinding(binding, inspector);
     return Object.freeze(bindings.map(binding => Object.freeze(binding)));
+}
+
+/** Reads, validates, and observes the local bindings for one lane. */
+export function readRepositoryBindings(
+    bindingsPath: string, expected: readonly RepositoryRef[], inspector: RepositoryBindingInspector = nodeRepositoryBindingInspector
+): readonly RepositoryBinding[] {
+    const bindings = readRepositoryBindingIdentity(bindingsPath, expected, inspector);
+    for (const binding of bindings) validateObservedBinding(binding, inspector);
+    return bindings;
 }
 
 function parseBindings(path: string, inspector: RepositoryBindingInspector): RepositoryBinding[] {
@@ -61,7 +79,8 @@ function validateExpectedBindings(bindings: readonly RepositoryBinding[], expect
     }
 }
 
-function validateObservedBinding(binding: RepositoryBinding, inspector: RepositoryBindingInspector): void {
+/** Observes real filesystem/Git state for one already schema-validated binding. */
+export function validateObservedBinding(binding: RepositoryBinding, inspector: RepositoryBindingInspector): void {
     if (!inspector.isDirectory(binding.path) || !inspector.hasAccess(binding.path, 'read') ||
         (binding.access === 'write' && !inspector.hasAccess(binding.path, 'write'))) throw preflight(binding.path, 'Restore the declared repository and its required local access.');
     if (inspector.worktreeRoot(binding.path) !== binding.path) {

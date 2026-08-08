@@ -14,13 +14,13 @@ const CAPABILITY_BARREL_PATTERN = /^\.\.\/foundation\/(runtime|task|lane|index)\
 const L1_DOMAIN = /foundation\/(paths|parsing|presentation|schemaComposition)\//;
 const L2_DOMAIN = /foundation\/(discovery|bindings|observation)\//;
 const L3_DOMAIN = /foundation\/(read|status)\//;
-const L4_DOMAIN = /foundation\/(init|lifecycle|upgrade)\//;
+const L4_DOMAIN = /foundation\/(init|lifecycle|upgrade|doctor)\//;
 const L4_PACK_DOMAIN = /foundation\/pack\/[^/]+\.ts$/;
 
-const L2_PLUS_IMPORT = /from\s+['"]\.\.\/(discovery|bindings|observation|read|status|init|lifecycle|pack|upgrade|runtime|task|lane|index|storage|hostAdapters|distribution)\//;
-const L3_PLUS_IMPORT = /from\s+['"]\.\.\/(read|status|init|lifecycle|pack|upgrade|runtime|task|lane|index|storage|hostAdapters|distribution)\//;
-const L4_PLUS_IMPORT = /from\s+['"]\.\.\/(init|lifecycle|pack|upgrade|runtime|task|lane|index|storage|hostAdapters|distribution)\//;
-const L4_PEER_IMPORT = /from\s+['"]\.\.\/(init|pack|upgrade|lifecycle)\//;
+const L2_PLUS_IMPORT = /from\s+['"]\.\.\/(discovery|bindings|observation|read|status|init|lifecycle|pack|upgrade|runtime|task|lane|index|storage|hostAdapters|distribution|doctor)\//;
+const L3_PLUS_IMPORT = /from\s+['"]\.\.\/(read|status|init|lifecycle|pack|upgrade|runtime|task|lane|index|storage|hostAdapters|distribution|doctor)\//;
+const L4_PLUS_IMPORT = /from\s+['"]\.\.\/(init|lifecycle|pack|upgrade|runtime|task|lane|index|storage|hostAdapters|distribution|doctor)\//;
+const L4_PEER_IMPORT = /from\s+['"]\.\.\/(init|pack|upgrade|lifecycle|doctor)\//;
 const L4_SUBCAPSULE_IMPORT = /from\s+['"]\.\.\/(runtime\/(catalog|distribution|knowledge|leaf)|task\/(runtime|catalog)|lane\/(store|writer|coordinator)|index\/(store|query)|pack\/index)\//;
 const CHILD_PROCESS_IMPORT = /from\s+['"]node:child_process['"]/;
 
