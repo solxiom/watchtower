@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/coordinator-poll-triggers-result/v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "ok", "operation", "candidates", "partialTail",
+        "endByteOffset", "journalByteLength", "readRanges", "exhausted"
+      ],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "ok": {"const": true},
+        "operation": {"const": "poll-triggers"},
+        "partialTail": {"type": "boolean"},
+        "endByteOffset": {"type": "integer", "minimum": 0},
+        "journalByteLength": {"type": "integer", "minimum": 0},
+        "exhausted": {"type": "boolean"},
+        "readRanges": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["offset", "length"],
+            "properties": {
+              "offset": {"type": "integer", "minimum": 0},
+              "length": {"type": "integer", "minimum": 0}
+            }
+          }
+        },
+        "candidates": {
+          "type": "array",
+          "maxItems": 200,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "eventId", "sequence", "eventType", "correlationId", "batchId", "at", "byteOffset",
+              "recordDigest"
+            ],
+            "properties": {
+              "eventId": {"type": "string", "minLength": 1},
+              "sequence": {"type": "integer", "minimum": 0},
+              "eventType": {"type": "string", "minLength": 1},
+              "correlationId": {"type": "string", "minLength": 1},
+              "batchId": {"type": ["string", "null"]},
+              "at": {"type": "string", "minLength": 1},
+              "byteOffset": {"type": "integer", "minimum": 0},
+              "recordDigest": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "ok", "failure"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "ok": {"const": false},
+        "failure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code"],
+          "properties": {
+            "code": {
+              "enum": [
+                "COORDINATOR_POLL_INPUT_INVALID",
+                "COORDINATOR_POLL_PATH_ESCAPE",
+                "COORDINATOR_POLL_JOURNAL_UNREADABLE",
+                "COORDINATOR_POLL_CURSOR_MISMATCH"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -18,6 +18,7 @@ it("accepts the committed manifests and verifies their complete asset/action obs
   ).toEqual({ ok: true });
   expect(
     validator.verifyActions(runtime, [
+      "wt:coordinator:poll-triggers",
       "wt:git:publish-commits",
       "wt:git:record-acceptance",
       "wt:runtime:smoke",
@@ -109,10 +110,11 @@ it("rejects missing and extra actions", async () => {
   expect(validator.verifyActions(manifest, [])).toEqual({
     ok: false,
     reason: "MANIFEST_ACTION_MISSING",
-    subject: "wt:git:publish-commits",
+    subject: "wt:coordinator:poll-triggers",
   });
   expect(
     validator.verifyActions(manifest, [
+      "wt:coordinator:poll-triggers",
       "wt:git:publish-commits",
       "wt:git:record-acceptance",
       "wt:runtime:smoke",

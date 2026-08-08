@@ -1,0 +1,50 @@
+{
+  "actions": {
+    "coordinator.poll-triggers": {
+      "taskId": "wt:coordinator:poll-triggers"
+    }
+  },
+  "fragmentId": "coordinator-watch",
+  "groups": {},
+  "handlers": {
+    "CoordinatorWatchTaskHandler": {
+      "module": "./handlers/CoordinatorWatchTaskHandler.js"
+    }
+  },
+  "includes": [],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:coordinator:poll-triggers": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/coordinator-poll-triggers-input/v1",
+        "leafIds": [],
+        "mutationClass": "read-only",
+        "requiresInvocationEnvelope": false,
+        "resultSchema": "watchtower://runtime/schemas/coordinator-poll-triggers-result/v1"
+      },
+      "doc": {
+        "summary": "Read one bounded page of durable watcher events from the lane coordinator journal.",
+        "usage": "Internal Watchtower coordinator ingestion task."
+      },
+      "handle": {
+        "args": [
+          {
+            "expected": null,
+            "fromByteOffset": 0,
+            "fromSequence": 0,
+            "laneDir": "/unset",
+            "limit": 128,
+            "operation": "poll-triggers",
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "CoordinatorWatchTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    }
+  }
+}

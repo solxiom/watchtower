@@ -1,11 +1,35 @@
 {
   "groups": {},
   "handlers": [
+    "./handlers/CoordinatorWatchTaskHandler.js",
     "./handlers/GitAcceptanceTaskHandler.js",
     "./handlers/RuntimeSmokeTaskHandler.js",
     "./handlers/tmux/TmuxEffectTaskHandler.js"
   ],
   "tasks": {
+    "wt:coordinator:poll-triggers": {
+      "doc": {
+        "summary": "Read one bounded page of durable watcher events from the lane coordinator journal.",
+        "usage": "Internal Watchtower coordinator ingestion task."
+      },
+      "handle": {
+        "args": [
+          {
+            "expected": null,
+            "fromByteOffset": 0,
+            "fromSequence": 0,
+            "laneDir": "/unset",
+            "limit": 128,
+            "operation": "poll-triggers",
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "CoordinatorWatchTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
     "wt:git:publish-commits": {
       "doc": {
         "summary": "Push one repository's verified accepted commit through the cataloged Git leaf.",

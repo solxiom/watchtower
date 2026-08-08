@@ -55,3 +55,20 @@ export type {
     SessionJournalEventType, SessionLifecycleEventType, SessionOrigin, SessionState, SessionStoreOptions, SessionJournalReadResult, SessionPersistencePort,
     SessionLifecycleOptions, TurnFilters, TurnMessage, TurnRecord, TurnState, ValidationResult
 } from './session/index.js';
+export {
+    CoordinatorQueue, CoordinatorReplay, CursorManager, DEFAULT_MAX_QUEUE_LENGTH, DEFAULT_POLL_LIMIT,
+    WatcherPoller, commitProjection, compareQueueEntries, cursorPath, cycleHistoryFromIndex,
+    effectEvidenceFromJournal, emptyCursorDocument, emptyQueueDocument, escalateUncertain,
+    escalationEventIdFor, isCyclePhaseEvent, laneMutationLockOver, nodeLaneMutationLock,
+    nodeQueueFileSystem, orderedEntries, outcomeEventId, parseCursorDocument, parseQueueDocument,
+    parseTrigger, phaseRank, planCycleRecovery, positionOf, priorityOf,
+    POLL_TRIGGERS_ACTION, queueFileSystemOver, queuePath, readCursorDocument, readQueueDocument,
+    triggerIngestFromIndex, triggerIngestFromTask, writeCursorDocument, writeQueueDocument
+} from './queue/index.js';
+export type {
+    CoordinatorQueueOptions, CoordinatorReplayOptions, CoordinatorTaskRunner, CursorManagerOptions,
+    CursorTarget, CycleHistoryEntry, CycleHistorySource, EffectEvidence, EffectEvidenceSource,
+    LaneMutationLock, ProjectionDecision, QueueClock, QueueFileSystem, QueueIdFactory,
+    RevisionedProjection, RuntimeEventReader, ScanCheckpoint, SettledIdentities, TriggerClassification,
+    TriggerClassifier, TriggerIngestSource, TriggerScanPage, TriggerScanWindow, WatcherPollerOptions
+} from './queue/index.js';

@@ -97,7 +97,9 @@ export type {
 export {
     EFFECT_TYPES, PROPOSAL_ORIGINS, PROPOSAL_REASONS, PROPOSAL_TYPES,
     EFFECT_PHASES, EFFECT_PHASE_EVENT_TYPES, EFFECT_REASONS, EffectExecutionError,
-    BROKER_REASONS, BROKER_REFERENCE_KINDS
+    BROKER_REASONS, BROKER_REFERENCE_KINDS,
+    COORDINATOR_QUEUE_REASONS, CoordinatorQueueError, CYCLE_PHASE_EVENTS,
+    TRIGGER_CLASSES, TRIGGER_CLASS_PRIORITY
 } from './coordinatorContracts.js';
 export type {
     DecisionBoundedContext, DecisionCapabilityClass, DecisionClass, DecisionEnvelope, EnvelopeBatch,
@@ -122,7 +124,13 @@ export type {
     ActiveResourceClaim, BlockedBatch, BlockingReason, BlockingReasonCode, CandidateRepositoryBinding,
     CapacityReservation, ClaimBlocker, ClaimBlockerKind, ClaimConflictReason, ClaimConflictReport,
     EndpointRouteStatus, OwnedRepositoryBinding, ReadySetClassification, ReadySetParams,
-    ReadySetPopulationReason, ReadySetResult, WritableConflictReport
+    ReadySetPopulationReason, ReadySetResult, WritableConflictReport,
+    CoordinatorQueueDocument, CoordinatorQueueReason, CoordinatorTrigger, DequeueRefused,
+    DequeueResult, DequeueTaken, EnqueueAccepted, EnqueueRefused, EnqueueResult, ImpactScopedHold,
+    OpenCycleReservation, QueueEntry, TriggerClass,
+    CoordinatorCursorDocument, CursorAdvanceAuthority, CursorAdvanceRefused, CursorAdvanceResult,
+    CursorAdvanced, CycleRecoveryAction, CycleRecoveryPlan, CyclePhaseEvent, EscalationAdmission,
+    M0Disposition, ReplayRecoveryReport, TriggerCandidate, UncertainEscalation, WatcherPollReport
 } from './coordinatorContracts.js';
 
 export {

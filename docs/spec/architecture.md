@@ -296,6 +296,16 @@ The v1 decision plane is defined in
 | `CoordinatorEffectPlanner` | Convert a valid proposal into bounded previewable effects |
 | `CoordinatorEffectExecutor` | Apply one idempotent effect plan and journal external attempts |
 | `CoordinatorProjection` | Derive ready set, lane, batch, and publication read models |
+| `CoordinatorQueue` | Hold unhandled triggers in stable priority order, enforce one active cycle, and honour recorded impact-scoped holds and revision invalidation |
+| `CursorManager` | Advance the watcher event cursor only after the terminal effect outcome is durable in the effect journal |
+| `CoordinatorReplay` | Derive interrupted-cycle recovery, duplicate suppression, and uncertain-outcome escalation from durable journals |
+| `WatcherPoller` | Ingest new durable watcher events through typed indexes, deduplicate them, and enqueue judgment cycles without touching M0 work |
+| `uncertainEscalation` | Admit exactly one durable D2 escalation per uncertain outcome, idempotent across restarts |
+| `projectionTransaction` | Serialize every queue and cursor mutation as lane-locked read, decide, compare-and-swap, write |
+| `laneMutationLock` | Expose the accepted lane level of the §11 lock as the queue capsule's serialization port |
+| `cycleReservations` | Hold the lane's durable claim on a dequeued trigger until its cycle reaches a terminal journal state |
+| `pollCursorFence` | Translate between the durable cursor and one poll's scan fence and checkpoint targets |
+| `journalWindowReader` | Read a bounded journal window from a verified cursor checkpoint, refusing replacement, truncation, or divergence |
 | `OperatorSessionManager` | Own operator-session identity, lifecycle, turns, retention, and forks |
 | `OperatorReferenceResolver` | Resolve exact lane/turn references conservatively through indexes |
 | `OperatorSessionMemoryIndex` | Provide bounded recent/pinned/linked turn working sets |

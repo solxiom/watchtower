@@ -109,3 +109,17 @@ export type {
     ReadySetResult,
     WritableConflictReport
 } from './scheduling.js';
+export {
+    COORDINATOR_QUEUE_REASONS, CoordinatorQueueError, TRIGGER_CLASSES, TRIGGER_CLASS_PRIORITY
+} from './coordinatorQueue.js';
+export type {
+    CoordinatorQueueDocument, CoordinatorQueueReason, CoordinatorTrigger, DequeueRefused,
+    DequeueResult, DequeueTaken, EnqueueAccepted, EnqueueRefused, EnqueueResult, ImpactScopedHold,
+    OpenCycleReservation, QueueEntry, TriggerClass
+} from './coordinatorQueue.js';
+export {CYCLE_PHASE_EVENTS} from './coordinatorReplay.js';
+export type {
+    CoordinatorCursorDocument, CursorAdvanceAuthority, CursorAdvanceRefused, CursorAdvanceResult,
+    CursorAdvanced, CycleRecoveryAction, CycleRecoveryPlan, CyclePhaseEvent, EscalationAdmission,
+    M0Disposition, ReplayRecoveryReport, TriggerCandidate, UncertainEscalation, WatcherPollReport
+} from './coordinatorReplay.js';

@@ -16,6 +16,11 @@
       "mode": "0644"
     },
     {
+      "path": "catalog/capabilities/coordinatorWatch.catalog.json",
+      "sha256": "sha256:91fcaa61b0d379a8312fdb3c3305da4be95b5e9b8fcbde1139a33de12f948c76",
+      "mode": "0644"
+    },
+    {
       "path": "catalog/capabilities/gitAcceptance.catalog.json",
       "sha256": "sha256:c1ae82205709060eff4ee16894d163ebcaf820fd2b44b1cf14d8b71ba0e1ed77",
       "mode": "0644"
@@ -51,6 +56,16 @@
       "mode": "0644"
     },
     {
+      "path": "foundation/index/runtime/journalIndexSource.d.ts",
+      "sha256": "sha256:14bd5bf7f94dc8919f709824a6a394c02992cd632d521b6c6dcb66d9c383d280",
+      "mode": "0644"
+    },
+    {
+      "path": "foundation/index/runtime/journalWindowReader.d.ts",
+      "sha256": "sha256:a1fea9cd82b04ab0221a042110b21b086abc37d30d7f0fbfe315695a0243d351",
+      "mode": "0644"
+    },
+    {
       "path": "foundation/runtime/leaf/taskLeafCapability.d.ts",
       "sha256": "sha256:453efc6bec0692af09ac954cb6fd9f73fe10b13da2efa7c321ea02df09b36d40",
       "mode": "0644"
@@ -81,6 +96,11 @@
       "mode": "0644"
     },
     {
+      "path": "handlers/CoordinatorWatchTaskHandler.ts",
+      "sha256": "sha256:be457ee4f3d42a87ac53f3809e93cafbd83d1551bad332ba55922b9f9f7ce177",
+      "mode": "0644"
+    },
+    {
       "path": "handlers/GitAcceptanceTaskHandler.ts",
       "sha256": "sha256:b59e96a7e6696e8372702cb729d3689091ddb6026d5a601db79d057de4ff39ce",
       "mode": "0644"
@@ -98,6 +118,16 @@
     {
       "path": "handlers/TaskCatalogCompositionTaskHandler.ts",
       "sha256": "sha256:4b03b1da86734dbf44df95202ab2191c69367f813b1ebd50d579a5b3b4b2e411",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/coordinatorWatch/coordinatorWatchTaskContracts.ts",
+      "sha256": "sha256:88d2229f987f13938bfc4fbfb4c66b7154a0c14f8036fad64e971ff7ea7b1133",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/coordinatorWatch/pollTriggersScan.ts",
+      "sha256": "sha256:e93870d8ff0ddb52a2a67ea05ba6ed57bccefb5f6ed6d861420ecf8b8e2d67ee",
       "mode": "0644"
     },
     {
@@ -177,12 +207,22 @@
     },
     {
       "path": "runtime-nvb.json",
-      "sha256": "sha256:82d02328472d397e6297eb5414d603806d4e188d9a743d55d71797e0bfd6cca6",
+      "sha256": "sha256:96ab47b7773fb681e25bcf254ca6fd4ff932693a08cef4b1c2d99abb593e00ad",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.ts",
       "sha256": "sha256:85fd5247233a84684fd988c5ff0123148b8a51dad250677e22b60815be35f513",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/coordinatorPollTriggersInput.schema.json",
+      "sha256": "sha256:df35e44fde356c770ac7910d91b25320f08b4fac3a7c0a8b8c02e33fb68cfb51",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/coordinatorPollTriggersResult.schema.json",
+      "sha256": "sha256:ca931c594e789b55fde549c5ba12b9e4e8741fe91064e135c49f25dd92eccf3a",
       "mode": "0644"
     },
     {
@@ -267,7 +307,7 @@
     },
     {
       "path": "task-catalog.json",
-      "sha256": "sha256:42c44cdcb018155c74ac5a842c3e936195b57d7bdde2c27b015170ddae962017",
+      "sha256": "sha256:a1dac2c5ccb18df4949fa47b7512cf57879cce069b4d4134e1d93b6b1512fbfc",
       "mode": "0644"
     },
     {
@@ -287,7 +327,7 @@
     },
     {
       "path": "tsconfig.runtime-gitleaf.json",
-      "sha256": "sha256:a11bd5913cd61af40437bceb77e0f46f8923219ec522cde972ce2fa8dc3a121c",
+      "sha256": "sha256:ae08de8392fb46cc4a48f38b4a6855795eff9826b890ea9536caa602e6de33dc",
       "mode": "0644"
     },
     {
@@ -302,6 +342,7 @@
     }
   ],
   "actions": [
+    "wt:coordinator:poll-triggers",
     "wt:git:publish-commits",
     "wt:git:record-acceptance",
     "wt:runtime:smoke",

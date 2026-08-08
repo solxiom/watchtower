@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/coordinator-poll-triggers-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "operation", "laneDir", "fromSequence", "fromByteOffset", "expected", "limit"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "operation": {"const": "poll-triggers"},
+    "laneDir": {"type": "string", "minLength": 1},
+    "fromSequence": {"type": "integer", "minimum": 0},
+    "fromByteOffset": {"type": "integer", "minimum": 0},
+    "expected": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["anchorDigest", "lastEventId", "byteLength"],
+          "properties": {
+            "anchorDigest": {"type": "string", "minLength": 1},
+            "lastEventId": {"type": "string", "minLength": 1},
+            "byteLength": {"type": "integer", "minimum": 0}
+          }
+        }
+      ]
+    },
+    "limit": {"type": "integer", "minimum": 1, "maximum": 200}
+  }
+}

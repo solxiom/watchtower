@@ -1,5 +1,8 @@
 {
   "actions": {
+    "coordinator.poll-triggers": {
+      "taskId": "wt:coordinator:poll-triggers"
+    },
     "effect.dispatchBatch": {
       "taskId": "wt:tmux:effect"
     },
@@ -18,12 +21,16 @@
   "fragments": [
     "schema-composition",
     "catalog-composition",
+    "coordinator-watch",
     "git-acceptance",
     "runtime-smoke",
     "tmux-effect"
   ],
   "groups": {},
   "handlers": {
+    "CoordinatorWatchTaskHandler": {
+      "module": "./handlers/CoordinatorWatchTaskHandler.js"
+    },
     "GitAcceptanceTaskHandler": {
       "module": "./handlers/GitAcceptanceTaskHandler.js"
     },
@@ -76,6 +83,14 @@
   },
   "schemaVersion": 1,
   "schemas": {
+    "watchtower://runtime/schemas/coordinator-poll-triggers-input/v1": {
+      "path": "./schemas/coordinatorPollTriggersInput.schema.json",
+      "sha256": "sha256:df35e44fde356c770ac7910d91b25320f08b4fac3a7c0a8b8c02e33fb68cfb51"
+    },
+    "watchtower://runtime/schemas/coordinator-poll-triggers-result/v1": {
+      "path": "./schemas/coordinatorPollTriggersResult.schema.json",
+      "sha256": "sha256:ca931c594e789b55fde549c5ba12b9e4e8741fe91064e135c49f25dd92eccf3a"
+    },
     "watchtower://runtime/schemas/git-publish-commits-input/v1": {
       "path": "./schemas/gitPublishCommitsInput.schema.json",
       "sha256": "sha256:3dda7a1a1ca0a9fab9add85be1fd05537cc169c5f0b9a874afb5d0bdc07c24da"
@@ -142,6 +157,15 @@
     }
   },
   "tasks": {
+    "wt:coordinator:poll-triggers": {
+      "executionScope": "lane-runtime",
+      "handlerId": "CoordinatorWatchTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/coordinator-poll-triggers-input/v1",
+      "leafIds": [],
+      "mutationClass": "read-only",
+      "requiresInvocationEnvelope": false,
+      "resultSchema": "watchtower://runtime/schemas/coordinator-poll-triggers-result/v1"
+    },
     "wt:git:publish-commits": {
       "executionScope": "lane-runtime",
       "handlerId": "GitAcceptanceTaskHandler",

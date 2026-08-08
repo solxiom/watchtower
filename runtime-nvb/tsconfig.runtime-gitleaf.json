@@ -13,7 +13,9 @@
   "include": [
     "../src/contracts/**/*.ts",
     "../src/foundation/task/runtime/**/*.ts",
-    "../src/foundation/runtime/leaf/**/*.ts"
+    "../src/foundation/runtime/leaf/**/*.ts",
+    "../src/foundation/index/runtime/journalIndexSource.ts",
+    "../src/foundation/index/runtime/journalWindowReader.ts"
   ],
   "exclude": [
     "../src/foundation/task/runtime/NirvanaLaneTaskRunner.ts",
