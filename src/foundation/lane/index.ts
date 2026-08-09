@@ -46,3 +46,11 @@ export type {
     RoutingPolicyVerificationResult,
     VerifiedRoutingPolicy
 } from './coordinator/index.js';
+export {
+    Ca10CoordinatorEffectAuthority, SpecificationResolutionReadService,
+    createDefaultCoordinatorMutationComposition, permittedProposalTypes
+} from './coordinator/index.js';
+export type {
+    CoordinatorEffectAuthority, CoordinatorMutationComposition, CoordinatorMutationRequestSource,
+    CoordinatorMutationResolution, CoordinatorMutationSelection, SpecificationResolutionReadOptions
+} from './coordinator/index.js';

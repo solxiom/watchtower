@@ -54,8 +54,8 @@
     {
       "name": "coordinator",
       "group": "basic",
-      "summary": "Inspect bounded coordinator, pack-index, and decision context projections without repair.",
-      "usage": "wt coordinator index <status|verify|explain <batch-or-requirement>|build> [--runtime] [--dry-run] [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] | wt coordinator <status|context|explain> [--class=<D1|D2|D3>] [--trigger=<event-id>] [--cycle=<id>] [--json]"
+      "summary": "Inspect bounded coordinator projections and run cycle, escalation, index, and specification-resolution operations through the validated effect boundary.",
+      "usage": "wt coordinator status | wt coordinator context --class=<D1|D2|D3> --trigger=<event-id> | wt coordinator explain [--cycle=<id>] | wt coordinator index <status|verify> | wt coordinator index explain <batch-or-requirement> | wt coordinator index build [--runtime] [--dry-run] | wt coordinator cycle --trigger=<event-id> [--dry-run] | wt coordinator escalate --reason=<text> [--cycle=<id>] [--dry-run] | wt coordinator resolution show <blocker-id> | wt coordinator resolution <propose|resume> <blocker-id> [--dry-run] | wt coordinator resolution sync-check <blocker-id> --worktree=<id>; every form also accepts [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color]"
     },
     {
       "name": "events",

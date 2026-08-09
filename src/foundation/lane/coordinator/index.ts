@@ -106,3 +106,14 @@ export type {
     AmendmentRequestRecord, AmendmentRequestStatus, AmendmentDecision, AmendmentTransactionOptions,
     AmendmentIdFactory
 } from './amendment/index.js';
+export {
+    Ca10CoordinatorEffectAuthority, DurableCoordinatorAuthorizationSource, LaneCoordinatorMutationContextSource,
+    SpecificationResolutionReadService, capsuleRelativePath, checkMutationFences,
+    createDefaultCoordinatorMutationComposition, effectParametersFor, isAdvisoryOperation, permittedProposalTypes
+} from './mutation/index.js';
+export type {
+    CapsuleRead, CoordinatorAuthorizationSource, CoordinatorEffectAuthority, CoordinatorEffectAuthorityOptions,
+    CoordinatorMutationComposition, CoordinatorMutationContextOptions, CoordinatorMutationRequestSource,
+    CoordinatorMutationResolution, CoordinatorMutationSelection, EffectParameterInput, EffectParameters,
+    SpecificationResolutionReadOptions
+} from './mutation/index.js';

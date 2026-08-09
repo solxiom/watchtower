@@ -46,6 +46,54 @@ export function hasExactShape(value: JsonValue, required: readonly string[], all
     return required.every(key => keys.includes(key)) && keys.every(key => allowed.includes(key));
 }
 
+/**
+ * Whether a JSON document repeats any object member name, at any depth.
+ *
+ * `JSON.parse` silently keeps the last of a repeated name, so a record whose
+ * duplicate values are each individually valid still parses — and the reader
+ * would then project one of two meanings the writer never disambiguated. A
+ * durable read boundary cannot choose for the writer, so it refuses the
+ * document. Callers scan text `JSON.parse` has already accepted; the walk
+ * therefore assumes well-formed JSON and only has to tell a member name from a
+ * string value, which in valid JSON is exactly "the next significant character
+ * is `:`".
+ */
+export function hasDuplicateMembers(text: string): boolean {
+    // One frame per open container: a name set for an object, null for an array.
+    const frames: Array<Set<string> | null> = [];
+    let index = 0;
+    while (index < text.length) {
+        const char = text[index];
+        if (char === '{' || char === '[') { frames.push(char === '{' ? new Set<string>() : null); index += 1; continue; }
+        if (char === '}' || char === ']') { frames.pop(); index += 1; continue; }
+        if (char !== '"') { index += 1; continue; }
+        const end = stringEnd(text, index);
+        const frame = frames[frames.length - 1];
+        if (frame !== undefined && frame !== null && significantAt(text, end) === ':') {
+            // Compare decoded names: `"a"` and `"a"` name the same member.
+            const name = JSON.parse(text.slice(index, end)) as string;
+            if (frame.has(name)) return true;
+            frame.add(name);
+        }
+        index = end;
+    }
+    return false;
+}
+
+/** The index just past the closing quote of the string literal opening at `start`. */
+function stringEnd(text: string, start: number): number {
+    for (let index = start + 1; index < text.length; index += 1) {
+        if (text[index] === '\\') { index += 1; continue; }
+        if (text[index] === '"') return index + 1;
+    }
+    return text.length;
+}
+
+function significantAt(text: string, from: number): string {
+    for (let index = from; index < text.length; index += 1) if (!/\s/u.test(text[index])) return text[index];
+    return '';
+}
+
 export function failure(reason: CoordinatorReadReason, path: string, line?: number): JsonObject {
     return line === undefined ? {ok: false, reason, path} : {ok: false, reason, path, line};
 }

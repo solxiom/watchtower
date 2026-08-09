@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import {dirname, isAbsolute, relative, resolve} from 'node:path';
 import {realpathSync} from 'node:fs';
 import type {JsonValue} from '../../../contracts/index.js';
-import {jsonValue, readFailure, type JsonLineRecord, type ReadResult} from './coordinatorReadContracts.js';
+import {hasDuplicateMembers, jsonValue, readFailure, type JsonLineRecord, type ReadResult} from './coordinatorReadContracts.js';
 
 export interface CoordinatorReadFileStore {
     path(laneDir: string, relativePath: string): string | undefined;
@@ -39,6 +39,9 @@ export class NodeCoordinatorReadFileStore implements CoordinatorReadFileStore {
         if (!text.ok) return text;
         try {
             const parsed: unknown = JSON.parse(text.value);
+            // A repeated member name parses, but names two documents; refuse it
+            // rather than project whichever value happened to survive.
+            if (hasDuplicateMembers(text.value)) return readFailure('COORDINATOR_JSON_INVALID', relativePath);
             const value = jsonValue(parsed);
             return value === null && parsed !== null ? readFailure('COORDINATOR_JSON_INVALID', relativePath) : {ok: true, value};
         } catch { return readFailure('COORDINATOR_JSON_INVALID', relativePath); }
@@ -55,7 +58,7 @@ export class NodeCoordinatorReadFileStore implements CoordinatorReadFileStore {
             try {
                 const parsed: unknown = JSON.parse(line);
                 const value = jsonValue(parsed);
-                if (value === null && parsed !== null) return readFailure('COORDINATOR_JSONL_INVALID', relativePath, index + 1);
+                if ((value === null && parsed !== null) || hasDuplicateMembers(line)) return readFailure('COORDINATOR_JSONL_INVALID', relativePath, index + 1);
                 records.push({line: index + 1, value});
             } catch { return readFailure('COORDINATOR_JSONL_INVALID', relativePath, index + 1); }
         }
