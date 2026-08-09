@@ -30,7 +30,7 @@ Status: **Synchronized remediation candidate**
 | CA-23 | Accessibility, terminal lifecycle, recovery, and PTY matrix | ❌ Pending | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
 | CA-24 | Session command integration, specification-resolution proof, scale/replay, and M6 acceptance | ❌ Pending | Full contradiction→advice→authority→re-seal→activation→explicit sync→same-session resume fixture; 30–10k pack scale; complete M6 gate |
 | CA-25 | Cycle, escalation, and specification-resolution commands | ❌ Pending | Cycle/escalate/resolution dry-run purity; normal validator/executor only; no command-local authority |
-| CA-26 | Session proposals, confirmation, revalidation, and apply | ❌ Pending | Explicit confirmation; current-state validation; stale/illegal refusal; sole executor handoff |
+| CA-26 | Session proposals, confirmation, revalidation, and apply | ✅ Accepted | Explicit confirmation; current-state validation; stale/illegal refusal; sole executor handoff; fresh lifecycle metadata and rejection-input review for handoff `20260809T152500Z-4021915-23667` |
 | CA-27 | Scoped holds, amendment requests, and amendment admission | ✅ Accepted | Impact-scoped expiry/interleaving; authority/independence/seal checks; no implicit pack edit |
 | CA-28 | OpenCode decision-endpoint adapter | ✅ Accepted | Required unattended conformance; bounded argv/env/cwd/result; fresh catalog/model fingerprint; correction-09 independent review |
 | CA-29 | Hermes decision-endpoint adapter | ✅ Accepted | Same conformance when installed; explicit healthy `not-installed` outcome |
