@@ -85,3 +85,24 @@ export type {
     SessionGrantUsageConsumption,
     SessionReserveSplit
 } from './sessionBudget.js';
+
+export {SESSION_PROPOSAL_COORDINATOR_TYPES, SESSION_PROPOSAL_REASONS} from './sessionProposal.js';
+export type {
+    SessionProposalApplied,
+    SessionProposalApplyResult,
+    SessionProposalConfirmation,
+    SessionProposalConfirmResult,
+    SessionProposalConfirmed,
+    SessionProposalDocument,
+    SessionProposalEffectRecord,
+    SessionProposalPreview,
+    SessionProposalPreviewResult,
+    SessionProposalReason,
+    SessionProposalRecorded,
+    SessionProposalPublication,
+    SessionProposalPublicationIntent,
+    SessionProposalRecordResult,
+    SessionProposalRefused,
+    SessionProposalRejected,
+    SessionProposalRejectResult
+} from './sessionProposal.js';

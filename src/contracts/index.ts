@@ -138,7 +138,8 @@ export {
     SESSION_LIFECYCLE_STATES, SESSION_ORIGINS, SESSION_PROPOSAL_STATES, SESSION_PROPOSAL_TYPES,
     SESSION_REF_TYPES, SESSION_TELEMETRY_QUALITIES, SESSION_TURN_STATES, SessionIndexError,
     SESSION_HARD_GUARDS, SESSION_REUSE_REJECTIONS, SESSION_ROUTING_REASONS,
-    SESSION_ROUTING_RULE_IDS, SESSION_BUDGET_RECOMMENDATIONS, SESSION_GRANT_DIMENSIONS
+    SESSION_ROUTING_RULE_IDS, SESSION_BUDGET_RECOMMENDATIONS, SESSION_GRANT_DIMENSIONS,
+    SESSION_PROPOSAL_COORDINATOR_TYPES, SESSION_PROPOSAL_REASONS
 } from './sessionContracts.js';
 export type {
     CapsuleEvidenceRef, CapsuleProposalRef, CompactOptions, CompactPreview, CompactResult,
@@ -155,5 +156,10 @@ export type {
     SessionBudgetAdmission, SessionBudgetCheck, SessionBudgetDebit, SessionBudgetLevel,
     SessionBudgetLimits, SessionBudgetRecommendation, SessionBudgetResult, SessionBudgetState,
     SessionGrant, SessionGrantAllowance, SessionGrantDimension, SessionGrantLedger,
-    SessionGrantRequest, SessionGrantUsageConsumption, SessionReserveSplit
+    SessionGrantRequest, SessionGrantUsageConsumption, SessionReserveSplit,
+    SessionProposalApplied, SessionProposalApplyResult, SessionProposalConfirmation,
+    SessionProposalConfirmResult, SessionProposalConfirmed, SessionProposalDocument,
+    SessionProposalEffectRecord, SessionProposalPreview, SessionProposalPreviewResult,
+    SessionProposalReason, SessionProposalRecorded, SessionProposalRecordResult, SessionProposalRefused,
+    SessionProposalPublication, SessionProposalPublicationIntent, SessionProposalRejected, SessionProposalRejectResult
 } from './sessionContracts.js';

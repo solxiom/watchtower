@@ -58,6 +58,19 @@ export type {
     SessionLifecycleOptions, TurnFilters, TurnMessage, TurnRecord, TurnState, ValidationResult
 } from './session/index.js';
 export {
+    APPLY_ENTRY_STATE, SessionProposalDocumentError, SessionProposalRecorder, SessionProposalService,
+    SessionProposalStore, buildEffectRequest, canTransition, candidateDocument, candidateFor, computeConfirmationBinding, confirmationFor,
+    effectRequestFor, isEffectBearingCategory, isRetryableEffectReason, isSessionConfirmableType,
+    isSessionProposalRefusal, isTerminalState, loadShapedProposal, nextStates, parseSessionProposalDocument,
+    requiredCoordinatorType, sessionReasonFor, settledEffectOf, settledOutcome, withPublication
+} from './sessionProposal/index.js';
+export type {
+    ApplyRequestFields, ApplySessionProposalRequest, CandidateDocumentInput, ConfirmationBinding,
+    ConfirmationBindingInput, EffectRequestInput, RecordSessionProposalRequest, SessionProposalClock,
+    SessionProposalEffectPort, SessionProposalJournalPort, SessionProposalRead, SessionProposalRef,
+    SessionProposalServiceDeps, SessionProposalStatePort, SessionProposalValidatorPort
+} from './sessionProposal/index.js';
+export {
     CoordinatorQueue, CoordinatorReplay, CursorManager, DEFAULT_MAX_QUEUE_LENGTH, DEFAULT_POLL_LIMIT,
     WatcherPoller, commitProjection, compareQueueEntries, cursorPath, cycleHistoryFromIndex,
     effectEvidenceFromJournal, emptyCursorDocument, emptyQueueDocument, escalateUncertain,
