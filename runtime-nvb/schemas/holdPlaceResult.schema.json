@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/hold-place-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "applied", "holdId"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "applied": {"const": true},
+    "holdId": {"type": "string", "minLength": 1}
+  }
+}

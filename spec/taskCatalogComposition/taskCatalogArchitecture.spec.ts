@@ -63,7 +63,7 @@ describe('task catalog generated ownership and exact inclusion', function () {
         expect(() => JSON.parse(readFileSync(join('runtime-nvb', 'task-catalog.json'), 'utf8'))).not.toThrow();
         const fragments = readdirSync(join('runtime-nvb', 'catalog', 'capabilities'));
         const profiles = readdirSync(join('runtime-nvb', 'profiles'));
-        expect(fragments).toEqual(['catalogComposition.catalog.json', 'coordinatorWatch.catalog.json', 'gitAcceptance.catalog.json', 'indexBuild.catalog.json', 'runtimeSmoke.catalog.json', 'schemaComposition.catalog.json', 'tmuxEffect.catalog.json']);
+        expect(fragments).toEqual(['amendment.catalog.json', 'catalogComposition.catalog.json', 'coordinatorWatch.catalog.json', 'gitAcceptance.catalog.json', 'hold.catalog.json', 'indexBuild.catalog.json', 'runtimeSmoke.catalog.json', 'schemaComposition.catalog.json', 'tmuxEffect.catalog.json']);
         expect(profiles).toEqual(['implementationV1.profile.json']);
         for (const path of [...fragments.map((name) =>
             join('runtime-nvb', 'catalog', 'capabilities', name)),
@@ -89,11 +89,12 @@ describe('task catalog generated ownership and exact inclusion', function () {
         const runtime = JSON.parse(readFileSync(join('runtime-nvb', 'runtime-nvb.json'), 'utf8')) as {
             handlers: string[]; tasks: Record<string, unknown>;
         };
-        expect(runtime.handlers).toEqual(['./handlers/CoordinatorWatchTaskHandler.js',
-            './handlers/GitAcceptanceTaskHandler.js', './handlers/IndexBuildTaskHandler.js', './handlers/RuntimeSmokeTaskHandler.js',
-            './handlers/tmux/TmuxEffectTaskHandler.js']);
-        expect(Object.keys(runtime.tasks)).toEqual(['wt:coordinator:poll-triggers',
-            'wt:git:publish-commits', 'wt:git:record-acceptance', 'wt:index:apply', 'wt:index:build', 'wt:runtime:smoke', 'wt:tmux:effect']);
+        expect(runtime.handlers).toEqual(['./handlers/AmendmentTaskHandler.js', './handlers/CoordinatorWatchTaskHandler.js',
+            './handlers/GitAcceptanceTaskHandler.js', './handlers/HoldTaskHandler.js', './handlers/IndexBuildTaskHandler.js',
+            './handlers/RuntimeSmokeTaskHandler.js', './handlers/tmux/TmuxEffectTaskHandler.js']);
+        expect(Object.keys(runtime.tasks)).toEqual(['wt:amendment:admit', 'wt:amendment:create-request', 'wt:coordinator:poll-triggers',
+            'wt:git:publish-commits', 'wt:git:record-acceptance', 'wt:hold:place', 'wt:hold:release',
+            'wt:index:apply', 'wt:index:build', 'wt:runtime:smoke', 'wt:tmux:effect']);
     });
 });
 
@@ -113,7 +114,7 @@ describe('runtime smoke task catalog bindings', function () {
         const actions: unknown = catalog.actions;
         const leafIds: unknown = task.leafIds;
         const leafEntry: unknown = leaf;
-        expect(actions).toEqual({'coordinator.index.apply': {taskId: 'wt:index:apply'}, 'coordinator.index.build': {taskId: 'wt:index:build'}, 'coordinator.poll-triggers': {taskId: 'wt:coordinator:poll-triggers'}, 'effect.dispatchBatch': {taskId: 'wt:tmux:effect'}, 'git.publish-commits': {taskId: 'wt:git:publish-commits'}, 'git.record-acceptance': {taskId: 'wt:git:record-acceptance'}, 'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
+        expect(actions).toEqual({'coordinator.index.apply': {taskId: 'wt:index:apply'}, 'coordinator.index.build': {taskId: 'wt:index:build'}, 'coordinator.poll-triggers': {taskId: 'wt:coordinator:poll-triggers'}, 'effect.activatePackRevision': {taskId: 'wt:amendment:admit'}, 'effect.createAmendmentRequest': {taskId: 'wt:amendment:create-request'}, 'effect.dispatchBatch': {taskId: 'wt:tmux:effect'}, 'effect.placeHold': {taskId: 'wt:hold:place'}, 'effect.releaseHold': {taskId: 'wt:hold:release'}, 'git.publish-commits': {taskId: 'wt:git:publish-commits'}, 'git.record-acceptance': {taskId: 'wt:git:record-acceptance'}, 'runtime.smoke': {taskId: 'wt:runtime:smoke'}});
         expect(leafIds).toEqual(['runtime.echo']);
         expect(leafEntry).toEqual({
             executable: true, mode: '0555', path: './leaves/runtimeEcho.sh', sha256: `sha256:${digest}`

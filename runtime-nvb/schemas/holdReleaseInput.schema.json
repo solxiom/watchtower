@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/hold-release-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "operation", "laneDir", "laneId", "holdId"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "operation": {"const": "release"},
+    "laneDir": {"type": "string", "minLength": 1},
+    "laneId": {"type": "string", "minLength": 1},
+    "holdId": {"type": "string", "minLength": 1}
+  }
+}

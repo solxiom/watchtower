@@ -1,13 +1,71 @@
 {
   "groups": {},
   "handlers": [
+    "./handlers/AmendmentTaskHandler.js",
     "./handlers/CoordinatorWatchTaskHandler.js",
     "./handlers/GitAcceptanceTaskHandler.js",
+    "./handlers/HoldTaskHandler.js",
     "./handlers/IndexBuildTaskHandler.js",
     "./handlers/RuntimeSmokeTaskHandler.js",
     "./handlers/tmux/TmuxEffectTaskHandler.js"
   ],
   "tasks": {
+    "wt:amendment:admit": {
+      "doc": {
+        "summary": "Atomically admit an accepted amendment and activate its pack revision (`effect.activatePackRevision`).",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "affectedWorktreeIds": [],
+            "authority": {
+              "packActiveSeal": ""
+            },
+            "body": {
+              "amendmentRequestId": "unset",
+              "blockerId": "unset",
+              "candidateSeal": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+              "packAcceptanceRef": "unset",
+              "resolutionId": "unset",
+              "reviewedCommit": "0000000000000000000000000000000000000000",
+              "specAuthoritySessionId": "unset",
+              "supersedesSeal": ""
+            },
+            "laneDir": "/lane",
+            "laneId": "lane",
+            "operation": "admit",
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "AmendmentTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:amendment:create-request": {
+      "doc": {
+        "summary": "Record a durable pending amendment-request handoff (`effect.createAmendmentRequest`).",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "laneDir": "/lane",
+            "laneId": "lane",
+            "operation": "create-request",
+            "packId": "unset",
+            "reason": "unset",
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "AmendmentTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
     "wt:coordinator:poll-triggers": {
       "doc": {
         "summary": "Read one bounded page of durable watcher events from the lane coordinator journal.",
@@ -65,6 +123,53 @@
           }
         ],
         "handler": "GitAcceptanceTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:hold:place": {
+      "doc": {
+        "summary": "Place a scoped automation hold (`effect.placeHold`).",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "expiresAt": "1970-01-01T00:00:00Z",
+            "laneDir": "/lane",
+            "laneId": "lane",
+            "operation": "place",
+            "origin": "operator",
+            "reason": "unset",
+            "schemaVersion": 1,
+            "scope": [
+              "unset"
+            ]
+          }
+        ],
+        "handler": "HoldTaskHandler",
+        "preferType": "async",
+        "type": "auto"
+      },
+      "runnerOpts": {}
+    },
+    "wt:hold:release": {
+      "doc": {
+        "summary": "Release a scoped automation hold (`effect.releaseHold`).",
+        "usage": "Internal Watchtower coordinator effect task."
+      },
+      "handle": {
+        "args": [
+          {
+            "holdId": "unset",
+            "laneDir": "/lane",
+            "laneId": "lane",
+            "operation": "release",
+            "schemaVersion": 1
+          }
+        ],
+        "handler": "HoldTaskHandler",
         "preferType": "async",
         "type": "auto"
       },

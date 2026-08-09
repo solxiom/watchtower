@@ -1,0 +1,48 @@
+{
+  "actions": {
+    "effect.activatePackRevision": {
+      "taskId": "wt:amendment:admit"
+    },
+    "effect.createAmendmentRequest": {
+      "taskId": "wt:amendment:create-request"
+    }
+  },
+  "fragmentId": "amendment",
+  "groups": {},
+  "handlers": {
+    "AmendmentTaskHandler": {
+      "module": "./handlers/AmendmentTaskHandler.js"
+    }
+  },
+  "includes": [],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:amendment:admit": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/amendment-admit-input/v1",
+        "leafIds": [],
+        "mutationClass": "authoritative-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/amendment-admit-result/v1"
+      },
+      "doc": {"summary": "Atomically admit an accepted amendment and activate its pack revision (`effect.activatePackRevision`).", "usage": "Internal Watchtower coordinator effect task."},
+      "handle": {"args": [{"schemaVersion": 1, "operation": "admit", "laneDir": "/lane", "laneId": "lane", "affectedWorktreeIds": [], "body": {"amendmentRequestId": "unset", "blockerId": "unset", "resolutionId": "unset", "supersedesSeal": "", "candidateSeal": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "reviewedCommit": "0000000000000000000000000000000000000000", "packAcceptanceRef": "unset", "specAuthoritySessionId": "unset"}, "authority": {"packActiveSeal": ""}}], "handler": "AmendmentTaskHandler", "preferType": "async", "type": "auto"},
+      "runnerOpts": {}
+    },
+    "wt:amendment:create-request": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/amendment-create-request-input/v1",
+        "leafIds": [],
+        "mutationClass": "journaled-mutation",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/amendment-create-request-result/v1"
+      },
+      "doc": {"summary": "Record a durable pending amendment-request handoff (`effect.createAmendmentRequest`).", "usage": "Internal Watchtower coordinator effect task."},
+      "handle": {"args": [{"schemaVersion": 1, "operation": "create-request", "laneDir": "/lane", "laneId": "lane", "packId": "unset", "reason": "unset"}], "handler": "AmendmentTaskHandler", "preferType": "async", "type": "auto"},
+      "runnerOpts": {}
+    }
+  }
+}

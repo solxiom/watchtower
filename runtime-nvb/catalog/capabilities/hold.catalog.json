@@ -1,0 +1,48 @@
+{
+  "actions": {
+    "effect.placeHold": {
+      "taskId": "wt:hold:place"
+    },
+    "effect.releaseHold": {
+      "taskId": "wt:hold:release"
+    }
+  },
+  "fragmentId": "hold",
+  "groups": {},
+  "handlers": {
+    "HoldTaskHandler": {
+      "module": "./handlers/HoldTaskHandler.js"
+    }
+  },
+  "includes": [],
+  "leaves": {},
+  "schemaVersion": 1,
+  "tasks": {
+    "wt:hold:place": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/hold-place-input/v1",
+        "leafIds": [],
+        "mutationClass": "authoritative-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/hold-place-result/v1"
+      },
+      "doc": {"summary": "Place a scoped automation hold (`effect.placeHold`).", "usage": "Internal Watchtower coordinator effect task."},
+      "handle": {"args": [{"schemaVersion": 1, "operation": "place", "laneDir": "/lane", "laneId": "lane", "scope": ["unset"], "reason": "unset", "expiresAt": "1970-01-01T00:00:00Z", "origin": "operator"}], "handler": "HoldTaskHandler", "preferType": "async", "type": "auto"},
+      "runnerOpts": {}
+    },
+    "wt:hold:release": {
+      "catalog": {
+        "executionScope": "lane-runtime",
+        "inputSchema": "watchtower://runtime/schemas/hold-release-input/v1",
+        "leafIds": [],
+        "mutationClass": "authoritative-effect",
+        "requiresInvocationEnvelope": true,
+        "resultSchema": "watchtower://runtime/schemas/hold-release-result/v1"
+      },
+      "doc": {"summary": "Release a scoped automation hold (`effect.releaseHold`).", "usage": "Internal Watchtower coordinator effect task."},
+      "handle": {"args": [{"schemaVersion": 1, "operation": "release", "laneDir": "/lane", "laneId": "lane", "holdId": "unset"}], "handler": "HoldTaskHandler", "preferType": "async", "type": "auto"},
+      "runnerOpts": {}
+    }
+  }
+}

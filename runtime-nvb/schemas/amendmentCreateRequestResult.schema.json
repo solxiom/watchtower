@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/amendment-create-request-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "applied", "amendmentRequestId"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "applied": {"const": true},
+    "amendmentRequestId": {"type": "string", "minLength": 1}
+  }
+}

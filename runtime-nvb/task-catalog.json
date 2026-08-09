@@ -9,8 +9,20 @@
     "coordinator.poll-triggers": {
       "taskId": "wt:coordinator:poll-triggers"
     },
+    "effect.activatePackRevision": {
+      "taskId": "wt:amendment:admit"
+    },
+    "effect.createAmendmentRequest": {
+      "taskId": "wt:amendment:create-request"
+    },
     "effect.dispatchBatch": {
       "taskId": "wt:tmux:effect"
+    },
+    "effect.placeHold": {
+      "taskId": "wt:hold:place"
+    },
+    "effect.releaseHold": {
+      "taskId": "wt:hold:release"
     },
     "git.publish-commits": {
       "taskId": "wt:git:publish-commits"
@@ -25,21 +37,29 @@
   "catalogId": "watchtower-runtime-nvb/v1",
   "catalogVersion": 1,
   "fragments": [
+    "amendment",
     "schema-composition",
     "catalog-composition",
     "coordinator-watch",
     "git-acceptance",
+    "hold",
     "index-build",
     "runtime-smoke",
     "tmux-effect"
   ],
   "groups": {},
   "handlers": {
+    "AmendmentTaskHandler": {
+      "module": "./handlers/AmendmentTaskHandler.js"
+    },
     "CoordinatorWatchTaskHandler": {
       "module": "./handlers/CoordinatorWatchTaskHandler.js"
     },
     "GitAcceptanceTaskHandler": {
       "module": "./handlers/GitAcceptanceTaskHandler.js"
+    },
+    "HoldTaskHandler": {
+      "module": "./handlers/HoldTaskHandler.js"
     },
     "IndexBuildTaskHandler": {
       "module": "./handlers/IndexBuildTaskHandler.js"
@@ -95,6 +115,22 @@
   },
   "schemaVersion": 1,
   "schemas": {
+    "watchtower://runtime/schemas/amendment-admit-input/v1": {
+      "path": "./schemas/amendmentAdmitInput.schema.json",
+      "sha256": "sha256:4fa1608d60c8449ccf985b7b0adffc33a506842b4dd533e483a23ccea5198da6"
+    },
+    "watchtower://runtime/schemas/amendment-admit-result/v1": {
+      "path": "./schemas/amendmentAdmitResult.schema.json",
+      "sha256": "sha256:b3c654741c1bc7e77cd57d8235b8afcfe0335e7b73e42dacb25163f74b719077"
+    },
+    "watchtower://runtime/schemas/amendment-create-request-input/v1": {
+      "path": "./schemas/amendmentCreateRequestInput.schema.json",
+      "sha256": "sha256:48bbc961a515f442802e10d3e32d979768152126749cde6782d8e3a2ebdc6ce6"
+    },
+    "watchtower://runtime/schemas/amendment-create-request-result/v1": {
+      "path": "./schemas/amendmentCreateRequestResult.schema.json",
+      "sha256": "sha256:46e295337b7667e033e0e269437a49e562b7e82fb56a15cf19d227e66c2986b5"
+    },
     "watchtower://runtime/schemas/coordinator-poll-triggers-input/v1": {
       "path": "./schemas/coordinatorPollTriggersInput.schema.json",
       "sha256": "sha256:df35e44fde356c770ac7910d91b25320f08b4fac3a7c0a8b8c02e33fb68cfb51"
@@ -118,6 +154,22 @@
     "watchtower://runtime/schemas/git-record-acceptance-result/v1": {
       "path": "./schemas/gitRecordAcceptanceResult.schema.json",
       "sha256": "sha256:3f128cb82cf5750eedf5e668057add7e564145ea2f4819976417a70f72d9f3d7"
+    },
+    "watchtower://runtime/schemas/hold-place-input/v1": {
+      "path": "./schemas/holdPlaceInput.schema.json",
+      "sha256": "sha256:cbb8eb5a4e30af0543b546dae31f68af806d7c7baf84d0bf75621f9741bd2bd6"
+    },
+    "watchtower://runtime/schemas/hold-place-result/v1": {
+      "path": "./schemas/holdPlaceResult.schema.json",
+      "sha256": "sha256:1e2a0c78c38e9b51382b8de22953ad152798c7091b8aca0e9019d9f5b9fa2418"
+    },
+    "watchtower://runtime/schemas/hold-release-input/v1": {
+      "path": "./schemas/holdReleaseInput.schema.json",
+      "sha256": "sha256:11c3061b79a6ac46116933ee70d04eac3d4941367230867d3fc66a8c7b269618"
+    },
+    "watchtower://runtime/schemas/hold-release-result/v1": {
+      "path": "./schemas/holdReleaseResult.schema.json",
+      "sha256": "sha256:d94142c3f1b1951bc12fb51205d23fe7d3f356e685e649c808042ecb50a50371"
     },
     "watchtower://runtime/schemas/index-build-apply-input/v1": {
       "path": "./schemas/indexBuildApplyInput.schema.json",
@@ -185,6 +237,24 @@
     }
   },
   "tasks": {
+    "wt:amendment:admit": {
+      "executionScope": "lane-runtime",
+      "handlerId": "AmendmentTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/amendment-admit-input/v1",
+      "leafIds": [],
+      "mutationClass": "authoritative-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/amendment-admit-result/v1"
+    },
+    "wt:amendment:create-request": {
+      "executionScope": "lane-runtime",
+      "handlerId": "AmendmentTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/amendment-create-request-input/v1",
+      "leafIds": [],
+      "mutationClass": "journaled-mutation",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/amendment-create-request-result/v1"
+    },
     "wt:coordinator:poll-triggers": {
       "executionScope": "lane-runtime",
       "handlerId": "CoordinatorWatchTaskHandler",
@@ -213,6 +283,24 @@
       "mutationClass": "authoritative-effect",
       "requiresInvocationEnvelope": true,
       "resultSchema": "watchtower://runtime/schemas/git-record-acceptance-result/v1"
+    },
+    "wt:hold:place": {
+      "executionScope": "lane-runtime",
+      "handlerId": "HoldTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/hold-place-input/v1",
+      "leafIds": [],
+      "mutationClass": "authoritative-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/hold-place-result/v1"
+    },
+    "wt:hold:release": {
+      "executionScope": "lane-runtime",
+      "handlerId": "HoldTaskHandler",
+      "inputSchema": "watchtower://runtime/schemas/hold-release-input/v1",
+      "leafIds": [],
+      "mutationClass": "authoritative-effect",
+      "requiresInvocationEnvelope": true,
+      "resultSchema": "watchtower://runtime/schemas/hold-release-result/v1"
     },
     "wt:index:apply": {
       "executionScope": "lane-runtime",

@@ -116,7 +116,7 @@ describe('installed-package runtime execution against the package tree itself', 
 
     it('verifies the installed catalog identity and reports its declared surface', () => {
         expect(observed.catalogId as unknown).toBe(CATALOG_ID);
-        expect(observed.declaredActions as unknown).toEqual(['coordinator.index.apply', 'coordinator.index.build', 'coordinator.poll-triggers', 'effect.dispatchBatch', 'git.publish-commits', 'git.record-acceptance', 'runtime.smoke']);
+        expect(observed.declaredActions as unknown).toEqual(['coordinator.index.apply', 'coordinator.index.build', 'coordinator.poll-triggers', 'effect.activatePackRevision', 'effect.createAmendmentRequest', 'effect.dispatchBatch', 'effect.placeHold', 'effect.releaseHold', 'git.publish-commits', 'git.record-acceptance', 'runtime.smoke']);
         expect(observed.declaredLeaves as unknown).toEqual(['git.push', 'runtime.echo', 'tmux.command']);
     });
 

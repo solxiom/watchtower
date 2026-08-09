@@ -74,3 +74,22 @@ export type {
     RevisionedProjection, RuntimeEventReader, ScanCheckpoint, SettledIdentities, TriggerClassification,
     TriggerClassifier, TriggerIngestSource, TriggerScanPage, TriggerScanWindow, WatcherPollerOptions
 } from './queue/index.js';
+export {
+    ScopedHoldService, SCOPED_HOLD_REASONS, ScopedHoldError, emptyHoldDocument, holdsDir, holdsPath,
+    readHoldDocument, writeHoldDocument, commitHoldDocument, nodeHoldIdFactory
+} from './hold/index.js';
+export type {
+    ScopedHoldServiceOptions, ScopedHoldDocument, ScopedHoldReason, ScopedHoldRecord, HoldDecision,
+    HoldTransactionOptions, HoldIdFactory
+} from './hold/index.js';
+export {
+    AmendmentRequestStore, AmendmentAdmissionService, AMENDMENT_REASONS, AmendmentError,
+    emptyAmendmentDocument, amendmentRequestsDir, amendmentRequestsPath, readAmendmentDocument,
+    writeAmendmentDocument, commitAmendmentDocument, nodeAmendmentIdFactory, assertAdmissionAuthority
+} from './amendment/index.js';
+export type {
+    AmendmentRequestStoreOptions, AdmissionRequest, AmendmentAdmissionServiceOptions, AdmissionAuthorityContext,
+    AcceptedAmendmentRecord, AdmittedRevisionState, AmendmentReason, AmendmentRequestDocument,
+    AmendmentRequestRecord, AmendmentRequestStatus, AmendmentDecision, AmendmentTransactionOptions,
+    AmendmentIdFactory
+} from './amendment/index.js';

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/amendment-create-request-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "operation", "laneDir", "laneId", "packId", "reason"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "operation": {"const": "create-request"},
+    "laneDir": {"type": "string", "minLength": 1},
+    "laneId": {"type": "string", "minLength": 1},
+    "packId": {"type": "string", "minLength": 1},
+    "reason": {"type": "string", "minLength": 1}
+  }
+}

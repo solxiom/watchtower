@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "watchtower://runtime/schemas/amendment-admit-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "applied", "activeSeal", "supersedesSeal", "requiredCommit"],
+  "properties": {
+    "schemaVersion": {"const": 1},
+    "applied": {"const": true},
+    "activeSeal": {"type": "string", "minLength": 1},
+    "supersedesSeal": {"type": ["string", "null"]},
+    "requiredCommit": {"type": "string", "minLength": 1}
+  }
+}

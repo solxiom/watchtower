@@ -11,6 +11,11 @@
   ],
   "assets": [
     {
+      "path": "catalog/capabilities/amendment.catalog.json",
+      "sha256": "sha256:664abf2eae62666e6e82e6d5c9b48319bce738afce90c7555454718384a3f078",
+      "mode": "0644"
+    },
+    {
       "path": "catalog/capabilities/catalogComposition.catalog.json",
       "sha256": "sha256:b5947bd8b78497df1e5e32e0faddc7c2029cf38c1f69fdd03805fdd99ffdd074",
       "mode": "0644"
@@ -23,6 +28,11 @@
     {
       "path": "catalog/capabilities/gitAcceptance.catalog.json",
       "sha256": "sha256:c1ae82205709060eff4ee16894d163ebcaf820fd2b44b1cf14d8b71ba0e1ed77",
+      "mode": "0644"
+    },
+    {
+      "path": "catalog/capabilities/hold.catalog.json",
+      "sha256": "sha256:758ec98e86b69e399a3f64d2233fac62f6098b7c6c000d6bbf0eb2123b9c5717",
       "mode": "0644"
     },
     {
@@ -101,6 +111,11 @@
       "mode": "0644"
     },
     {
+      "path": "handlers/AmendmentTaskHandler.ts",
+      "sha256": "sha256:a70313a859f47012b6a51f720ec0e9eda2ef0c46c1f8a2c6a5bf5bed9b0335e1",
+      "mode": "0644"
+    },
+    {
       "path": "handlers/CoordinatorWatchTaskHandler.ts",
       "sha256": "sha256:be457ee4f3d42a87ac53f3809e93cafbd83d1551bad332ba55922b9f9f7ce177",
       "mode": "0644"
@@ -108,6 +123,11 @@
     {
       "path": "handlers/GitAcceptanceTaskHandler.ts",
       "sha256": "sha256:b59e96a7e6696e8372702cb729d3689091ddb6026d5a601db79d057de4ff39ce",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/HoldTaskHandler.ts",
+      "sha256": "sha256:1e883b458714c4be176fc88db99be7aed6e4ef207b1dfa2e9cac7a2e8c9eb984",
       "mode": "0644"
     },
     {
@@ -128,6 +148,11 @@
     {
       "path": "handlers/TaskCatalogCompositionTaskHandler.ts",
       "sha256": "sha256:4b03b1da86734dbf44df95202ab2191c69367f813b1ebd50d579a5b3b4b2e411",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/amendment/amendmentTaskContracts.ts",
+      "sha256": "sha256:50a3da8d09829115eab7dd857dd085be1fe78dc14ca2b21ae71278cd3417e660",
       "mode": "0644"
     },
     {
@@ -153,6 +178,11 @@
     {
       "path": "handlers/gitAcceptance/runtimeContextFromEnvironment.ts",
       "sha256": "sha256:617b3e4f764e39ac11f406e0537103f1eab34c93ef3e6b41a8629fbb041653db",
+      "mode": "0644"
+    },
+    {
+      "path": "handlers/hold/holdTaskContracts.ts",
+      "sha256": "sha256:1ddab61a81e095232df1a210c1e0d568cd278a5778b2d2f1fb46a3547ff7afdc",
       "mode": "0644"
     },
     {
@@ -217,12 +247,32 @@
     },
     {
       "path": "runtime-nvb.json",
-      "sha256": "sha256:ee77f37d6981155cbdaa1ca919edfd43c17205fe17187a938f8a7593ca669fc5",
+      "sha256": "sha256:2d0744a2f51179fbba53d6bafc2a13fbfa087c0cbf515d65c1d16433a5c90a1b",
       "mode": "0644"
     },
     {
       "path": "runtime-nvb.ts",
       "sha256": "sha256:85fd5247233a84684fd988c5ff0123148b8a51dad250677e22b60815be35f513",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/amendmentAdmitInput.schema.json",
+      "sha256": "sha256:4fa1608d60c8449ccf985b7b0adffc33a506842b4dd533e483a23ccea5198da6",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/amendmentAdmitResult.schema.json",
+      "sha256": "sha256:b3c654741c1bc7e77cd57d8235b8afcfe0335e7b73e42dacb25163f74b719077",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/amendmentCreateRequestInput.schema.json",
+      "sha256": "sha256:48bbc961a515f442802e10d3e32d979768152126749cde6782d8e3a2ebdc6ce6",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/amendmentCreateRequestResult.schema.json",
+      "sha256": "sha256:46e295337b7667e033e0e269437a49e562b7e82fb56a15cf19d227e66c2986b5",
       "mode": "0644"
     },
     {
@@ -253,6 +303,26 @@
     {
       "path": "schemas/gitRecordAcceptanceResult.schema.json",
       "sha256": "sha256:3f128cb82cf5750eedf5e668057add7e564145ea2f4819976417a70f72d9f3d7",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/holdPlaceInput.schema.json",
+      "sha256": "sha256:cbb8eb5a4e30af0543b546dae31f68af806d7c7baf84d0bf75621f9741bd2bd6",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/holdPlaceResult.schema.json",
+      "sha256": "sha256:1e2a0c78c38e9b51382b8de22953ad152798c7091b8aca0e9019d9f5b9fa2418",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/holdReleaseInput.schema.json",
+      "sha256": "sha256:11c3061b79a6ac46116933ee70d04eac3d4941367230867d3fc66a8c7b269618",
+      "mode": "0644"
+    },
+    {
+      "path": "schemas/holdReleaseResult.schema.json",
+      "sha256": "sha256:d94142c3f1b1951bc12fb51205d23fe7d3f356e685e649c808042ecb50a50371",
       "mode": "0644"
     },
     {
@@ -337,7 +407,7 @@
     },
     {
       "path": "task-catalog.json",
-      "sha256": "sha256:b2b8c5a28192c1090507a5e6fa8f337e73a2741c1d37a25b91735b7bbc3abaa6",
+      "sha256": "sha256:354f207823169adbd85ee46f018ec07658ba80cec444615e84ca6da16ced7fed",
       "mode": "0644"
     },
     {
@@ -347,7 +417,7 @@
     },
     {
       "path": "tsconfig.runtime-foundation.json",
-      "sha256": "sha256:1da42bdc269636eb704199650cbd703c8df992ab11acc36f65d20c0a88044c02",
+      "sha256": "sha256:ff08be00afd5edcf5400623873acd0fa56bc157b5914ca7b9e5e52ef5e54823d",
       "mode": "0644"
     },
     {
@@ -372,9 +442,13 @@
     }
   ],
   "actions": [
+    "wt:amendment:admit",
+    "wt:amendment:create-request",
     "wt:coordinator:poll-triggers",
     "wt:git:publish-commits",
     "wt:git:record-acceptance",
+    "wt:hold:place",
+    "wt:hold:release",
     "wt:runtime:smoke",
     "wt:tmux:effect"
   ],

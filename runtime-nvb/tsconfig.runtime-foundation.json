@@ -13,7 +13,9 @@
   "include": [
     "../src/foundation/schemaComposition/**/*.ts",
     "../src/foundation/task/catalog/**/*.ts",
-    "../src/foundation/index/assembly/IndexBuildTask.ts"
+    "../src/foundation/index/assembly/IndexBuildTask.ts",
+    "../src/foundation/lane/coordinator/hold/**/*.ts",
+    "../src/foundation/lane/coordinator/amendment/**/*.ts"
   ],
   "exclude": [
     "../src/foundation/schemaComposition/schemaBundle.ts",
