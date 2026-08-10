@@ -3,7 +3,7 @@
 ## Synchronized batch execution matrix
 
 - **Accepted-map title:** Session routing and budgets
-- **Dependencies:** `CA-06`, `CA-08`, `CA-15`, `CA-16`
+- **Dependencies:** `CA-06`, `CA-08`, `CA-15`, `CA-16R`
 - **Exclusive ownership/interface:** turn classification, route selection, grants/reserves/accounting
 - **Implementer/reviewer floor:** R5 / R5
 - **Mandatory batch proof:** M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority
@@ -15,7 +15,7 @@
 
 Status: ⏳ Awaiting independent review
 Paired work: ../work-batches/CA-17-session-routing-budgets-proposals-holds-and-amendments.md
-Dependencies: CA-06, CA-08, CA-15, CA-16
+Dependencies: CA-06, CA-08, CA-15, CA-16R
 
 Read AGENTS.md; docs/development/engineering-and-review-standard.md; docs/spec/v1.md; docs/spec/v1-contracts.md; docs/spec/nirvana-integration-architecture.md; docs/spec/v1-implementation-map.md; docs/spec/implementation/planning-remediation-amendment.md; pack quality rules. Review the exact diff/source/artifacts/report, not implementer conclusions. Verify exclusive ownership: turn classification, route selection, grants/reserves/accounting. Own turn classification, endpoint/account routing, finite grants, reserves and accounting only. Proposal confirmation/apply belongs CA-26; holds/amendments belong CA-27.
 
@@ -27,7 +27,7 @@ Independently reproduce M0/D1–D3; hard floors; finite grants; protected reserv
 This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
 - Exact map title: **Session routing and budgets**
-- Accepted dependencies: `CA-06`, `CA-08`, `CA-15`, `CA-16`
+- Accepted dependencies: `CA-06`, `CA-08`, `CA-15`, `CA-16R`
 - Exclusive owner: turn classification, route selection, grants/reserves/accounting
 - Required proof claim: M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority
 - Reasoning floor: implementer **R5**, independent reviewer **R5**; the reviewer may never use a weaker class.
@@ -66,7 +66,7 @@ Inspect the actual diff and source independently; the implementation report is e
 
 The exclusive owned interface set is **turn classification, route selection, grants/reserves/accounting**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/reviews/CA-17-session-routing-budgets-proposals-holds-and-amendments-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-Accepted predecessor input is exactly **`CA-06`, `CA-08`, `CA-15`, `CA-16`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority**.
+Accepted predecessor input is exactly **`CA-06`, `CA-08`, `CA-15`, `CA-16R`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority**.
 
 Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 

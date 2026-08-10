@@ -60,7 +60,7 @@ superseded and must not initialize an implementation lane. Pack authors must:
 
 1. add the `DB-01` work/review pair to `wt-read-model`;
 2. add the SQLite driver packaging dependency and proof to `RT-03`;
-3. rewrite `CA-01`, `CA-02`, `CA-03`, and `CA-16` for the derived SQLite
+3. rewrite `CA-01`, `CA-02`, `CA-03`, and the superseded `CA-16` lineage through successor `CA-16R` for the derived SQLite
    contracts;
 4. extend `REL-03` with driver/global-install, integrity, busy/WAL/permission,
    corruption, semantic-root, and rebuild qualification;
@@ -338,11 +338,11 @@ effect authority, and durable bounded operator sessions.
 | `CA-13` | Coordinator queue, cursor, replay, and watcher task integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator TaskHandlers | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
 | `CA-14` | Read-only coordinator, index, event, and ready-set commands | `CA-01`–`CA-13` | commands/help/rendering | Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity |
 | `CA-15` | Operator-session persistence and lifecycle | `CA-03`, `UK-02` | session store/contracts | Many sessions; one active turn each; immutable closed history; crash-safe journals |
-| `CA-16` | Session SQLite index, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
-| `CA-17` | Session routing and budgets | `CA-06`, `CA-08`, `CA-15`, `CA-16` | turn classification, route selection, grants/reserves/accounting | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
-| `CA-18` | Accepted OpenTUI evidence promotion and packaging gate | `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29` | generic TUI adapter/architecture fixtures | Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment |
+| `CA-16R` | Session SQLite index, references, pins, and compaction — successor publication | `CA-02`, `CA-15` | session memory foundation | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
+| `CA-17` | Session routing and budgets | `CA-06`, `CA-08`, `CA-15`, `CA-16R` | turn classification, route selection, grants/reserves/accounting | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
+| `CA-18` | Accepted OpenTUI evidence promotion and packaging gate | `RT-03`, `RT-05`, `CA-14`, `CA-15`, `CA-16R`, `CA-17`, `CA-25`, `CA-28`, `CA-29` | generic TUI adapter/architecture fixtures | Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment |
 | `CA-19` | TUI shell, responsive layout, themes, and focus | `CA-18` | TUI application shell/components | Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation |
-| `CA-20` | Conversation timeline, composer, history, and references | `CA-16`, `CA-19` | conversation/composer components | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
+| `CA-20` | Conversation timeline, composer, history, and references | `CA-16R`, `CA-19` | conversation/composer components | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
 | `CA-21` | Inspector views, command palette, and overlays | `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27` | inspector/action/overlay components | All bounded inspector states; projection-only agent/allocation view; bounded search/attention; canonical action parity; confirmation, diagnostics, and details overlays |
 | `CA-22` | Turn streaming, notifications, concurrency, and observer UI | `CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27` | turn/event reducers and attachment controller | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |
 | `CA-23` | Accessibility, terminal lifecycle, recovery, and PTY matrix | `CA-18`–`CA-22` | accessibility/restoration/test adapters | Exact promoted matrix; no-color/high-contrast/reduced motion; signals/suspend/crash restore; preference/cache migration; semantic visual catalog; emulator/Unicode/resize fixtures |
@@ -353,7 +353,7 @@ effect authority, and durable bounded operator sessions.
 | `CA-28` | OpenCode decision-endpoint adapter | `CA-06`, `RT-05` | focused OpenCode CLI adapter | Required unattended conformance; bounded argv/env/cwd/result; fresh catalog/model fingerprint |
 | `CA-29` | Hermes decision-endpoint adapter | `CA-06`, `RT-05` | focused Hermes CLI adapter | Same conformance when installed; explicit healthy `not-installed` outcome |
 | `CA-30` | Pack-index build and runtime-index rebuild command | `CA-01`, `CA-10`, `CA-13`, `CA-14`, `RT-05`, `RT-09` | public command/help, proposal/effect integration, allowlisted NVB task | `index build [--runtime]`; dry-run purity; staged compile/rebuild; current-state validation; no command-local mutation |
-| `CA-31` | Coordinator, session, and TUI doctor providers | `LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23` | immutable injected diagnostic providers | Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior |
+| `CA-31` | Coordinator, session, and TUI doctor providers | `LC-07`, `CA-13`, `CA-16R`, `CA-19`–`CA-23` | immutable injected diagnostic providers | Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior |
 
 ### CA implementation notes
 
@@ -436,7 +436,7 @@ unless a batch row names it explicitly.
 | 10 | `LC-07`, `LC-09`, `UK-02`, `CA-02` |
 | 11 | `LC-06`, `UK-03`, `CA-03` |
 | 12 | `LC-10`, `UK-05`, `CA-04`, `CA-15` |
-| 13 | `LC-08`, `CA-05`, `CA-16` |
+| 13 | `LC-08`, `CA-05`, `CA-16R` |
 | 14 | `CA-06` |
 | 15 | `CA-07`, `CA-28`, `CA-29` |
 | 16 | `CA-08` |
@@ -494,7 +494,7 @@ pack is accepted:
 | Runtime/knowledge/task manifests, dependency closure, and `WT_*` invocation | `RT-02`, `RT-08`, `RT-09`, `RT-05` |
 | Managed runtime script names and wake behavior | `RT-06`, `RT-07`, `LC-06` |
 | Pack manifest/acceptance/lock/seal | `LC-02`, `CA-01` |
-| Derived-store manifest, SQLite schema, semantic root, and rebuild | `DB-01`, `CA-01`–`CA-03`, `CA-16` |
+| Derived-store manifest, SQLite schema, semantic root, and rebuild | `DB-01`, `CA-01`–`CA-03`, `CA-16R` |
 | Worker/coordinator/effect/session JSONL | `RM-05`, `CA-03`, `CA-13`, `CA-15` |
 | Routing/proposal/effect registries | `CA-05`, `CA-09`, `CA-10`, `CA-26`, `CA-27` |
 | Session CLI, TUI layout/input/rendering, PTY signals, presentation events | `CA-18`–`CA-24`, `CA-31` |
@@ -510,7 +510,7 @@ types, transitions, events, or effects as authority.
 | Unit/contract fixtures | Owning work batch | Matching review batch |
 | Filesystem and Git integration | `RM-03`–`RM-08`, `LC-02`–`LC-04` | `REL-03` |
 | Runtime packaging/smoke | `RT-02`–`RT-10` | `REL-01`, `REL-03` |
-| SQLite driver/storage feasibility | `DB-01`, `CA-01`–`CA-03`, `CA-16` | `REL-03` |
+| SQLite driver/storage feasibility | `DB-01`, `CA-01`–`CA-03`, `CA-16R` | `REL-03` |
 | Transaction crash/replay | `LC-03`, `UK-03`, `CA-03`, `CA-10`–`CA-13` | `REL-02`, `REL-03` |
 | Normative contradiction, architect advice, accepted amendment activation, worktree sync, and same-session resume | `CA-05`, `CA-07`, `CA-09`, `CA-10`, `CA-13`, `CA-25`, `CA-27`, `CA-24` | `REL-03` |
 | PTY/accessibility | `CA-18`, `CA-19`, `CA-23`, `CA-24` | `REL-01`, `REL-03` |

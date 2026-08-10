@@ -3,7 +3,7 @@
 ## Synchronized batch execution matrix
 
 - **Accepted-map title:** Coordinator, session, and TUI doctor providers
-- **Dependencies:** `LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23`
+- **Dependencies:** `LC-07`, `CA-13`, `CA-16R`, `CA-19`–`CA-23`
 - **Exclusive ownership/interface:** immutable injected diagnostic providers
 - **Implementer/reviewer floor:** R5 / R5
 - **Mandatory batch proof:** Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior
@@ -15,7 +15,7 @@
 
 Status: ⏳ Awaiting independent review
 Paired work brief: `work-batches/CA-31-coordinator-session-and-tui-doctor-providers.md`
-Depends on accepted evidence from: LC-07, CA-13, CA-16, CA-19–CA-23
+Depends on accepted evidence from: LC-07, CA-13, CA-16R, CA-19–CA-23
 
 ## Governing references
 
@@ -44,7 +44,7 @@ acceptance commit, separately from publication.
 
 The exclusive owned interface set is **immutable injected diagnostic providers**. Before issuing a verdict, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/reviews/CA-31-coordinator-session-and-tui-doctor-providers-review.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-Accepted predecessor input is exactly **`LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior**.
+Accepted predecessor input is exactly **`LC-07`, `CA-13`, `CA-16R`, `CA-19`–`CA-23`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior**.
 
 Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 

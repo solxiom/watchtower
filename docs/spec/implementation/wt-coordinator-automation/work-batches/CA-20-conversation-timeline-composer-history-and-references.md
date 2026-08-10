@@ -3,7 +3,7 @@
 ## Synchronized batch execution matrix
 
 - **Accepted-map title:** Conversation timeline, composer, history, and references
-- **Dependencies:** `CA-16`, `CA-19`
+- **Dependencies:** `CA-16R`, `CA-19`
 - **Exclusive ownership/interface:** conversation/composer components
 - **Implementer/reviewer floor:** R5 / R5
 - **Mandatory batch proof:** Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring
@@ -14,7 +14,7 @@
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Not started
-Depends on: CA-16 and CA-19 accepted
+Depends on: CA-16R and CA-19 accepted
 Unblocks: CA-22
 Reasoning floor: implementor `R5`; reviewer `R5`
 
@@ -53,7 +53,7 @@ No unnamed helper or alternative owner may be added without amending the brief.
 
 ## Required Interfaces And Work
 
-1. Consume CA-16 bounded session queries/cursors and CA-19 shell/focus/action
+1. Consume CA-16R bounded session queries/cursors and CA-19 shell/focus/action
    contracts. Components never read journals, SQLite, stores, or files directly.
 2. Render retained validated turns, failures, interruptions, proposals, stable
    IDs, routing/budget/staleness metadata, and a provisional slot for CA-22.
@@ -123,7 +123,7 @@ path-security, retention, structure, and test evidence.
 
 The exclusive owned interface set is **conversation/composer components**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-20-conversation-timeline-composer-history-and-references.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-Accepted predecessor input is exactly **`CA-16`, `CA-19`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring**.
+Accepted predecessor input is exactly **`CA-16R`, `CA-19`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring**.
 
 Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 

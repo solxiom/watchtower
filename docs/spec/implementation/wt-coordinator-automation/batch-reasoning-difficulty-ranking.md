@@ -13,7 +13,7 @@ This is an allocation aid, not scheduling authority. The accepted implementation
 | 5 | CA-09 | R5 | R5 | Typed proposals and current-state validator | All 14 proposal types; specification-resolution authority/seal/independence checks; stale/illegal/invalid cases |
 | 6 | CA-10 | R5 | R5 | Atomic lane-local effect executor and invocation envelopes | One authority; lock/revalidation/idempotency; atomic pack-revision activation and same-session resume; no automatic Git sync |
 | 7 | CA-13 | R5 | R5 | Coordinator queue, cursor, replay, and watcher task integration | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
-| 8 | CA-16 | R5 | R5 | Session SQLite index, references, pins, and compaction | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
+| 8 | CA-16R | R5 | R5 | Session SQLite index, references, pins, and compaction — successor publication | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
 | 9 | CA-17 | R5 | R5 | Session routing and budgets | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
 | 10 | CA-20 | R5 | R5 | Conversation timeline, composer, history, and references | Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring |
 | 11 | CA-22 | R5 | R5 | Turn streaming, notifications, concurrency, and observer UI | Provisional validation; live edge; stale confirmation invalidation; cross-attachment contention/wait; observer restrictions; priority-preserving coalesced refresh |

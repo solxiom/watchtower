@@ -3,7 +3,7 @@
 ## Synchronized batch execution matrix
 
 - **Accepted-map title:** Accepted OpenTUI evidence promotion and packaging gate
-- **Dependencies:** `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`
+- **Dependencies:** `RT-03`, `RT-05`, `CA-14`, `CA-15`, `CA-16R`, `CA-17`, `CA-25`, `CA-28`, `CA-29`
 - **Exclusive ownership/interface:** generic TUI adapter/architecture fixtures
 - **Implementer/reviewer floor:** R4 / R4
 - **Mandatory batch proof:** Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment
@@ -14,7 +14,7 @@
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Depends on: RT-03, RT-05, CA-14–CA-17, CA-25, CA-28, CA-29
+Depends on: RT-03, RT-05, CA-14, CA-15, CA-16R, CA-17, CA-25, CA-28, CA-29
 
 ## Governing authority
 
@@ -47,7 +47,7 @@ No product logic in src/cli.ts; no participating-repository nvb.json edits; no b
 This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
 - Exact map title: **Accepted OpenTUI evidence promotion and packaging gate**
-- Accepted dependencies: `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`
+- Accepted dependencies: `RT-03`, `RT-05`, `CA-14`, `CA-15`, `CA-16R`, `CA-17`, `CA-25`, `CA-28`, `CA-29`
 - Exclusive owner: generic TUI adapter/architecture fixtures
 - Required proof claim: Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment
 - Reasoning floor: implementer **R4**, independent reviewer **R4**; the reviewer may never use a weaker class.
@@ -87,7 +87,7 @@ Do not commit and do not issue a verdict. Update the pack tracker only to a trut
 
 The exclusive owned interface set is **generic TUI adapter/architecture fixtures**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-18-nirvana-opentui-feasibility-and-packaging-gate.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-Accepted predecessor input is exactly **`RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment**.
+Accepted predecessor input is exactly **`RT-03`, `RT-05`, `CA-14`, `CA-15`, `CA-16R`, `CA-17`, `CA-25`, `CA-28`, `CA-29`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment**.
 
 Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 

@@ -177,7 +177,7 @@ is a durable JSON record.
 - Do not limit sessions to one per lane.
 - Do not modify existing turns after a session is closed.
 - Do not modify UK-02 migration registry.
-- Do not create session indexes — that is CA-16.
+- Do not create session indexes — that is CA-16R.
 
 ## Review Procedure Highlights
 
@@ -254,7 +254,7 @@ line-count check never overrides the responsibility gate.
 ## Completion And Handoff
 
 - Implementation report, updated tracker/roadmap.
-- CA-16 will build the SQLite session index on top of this persistence layer.
+- CA-16R builds the SQLite session index on top of this persistence layer.
 - CA-17 will build session routing, budgets, proposals, and holds on top of
   the lifecycle and store.
 - Leave the exact session identity schema, lifecycle state machine, and journal

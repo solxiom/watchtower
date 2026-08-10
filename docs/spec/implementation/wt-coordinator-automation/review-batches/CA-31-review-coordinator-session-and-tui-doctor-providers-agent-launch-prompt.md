@@ -9,7 +9,7 @@
 ## Complete batch-specific scope
 
 - **Title:** Coordinator, session, and TUI doctor providers
-- **Dependencies:** `LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23`
+- **Dependencies:** `LC-07`, `CA-13`, `CA-16R`, `CA-19`–`CA-23`
 - **Exclusive ownership/interface:** immutable injected diagnostic providers
 - **Implementer/reviewer floors:** R5 / R5
 - **Mandatory proof:** Coordinator/session/TUI checks; exact pass/warn/fail/skip; read-only; release only qualifies behavior

@@ -9,7 +9,7 @@
 ## Complete batch-specific scope
 
 - **Title:** Conversation timeline, composer, history, and references
-- **Dependencies:** `CA-16`, `CA-19`
+- **Dependencies:** `CA-16R`, `CA-19`
 - **Exclusive ownership/interface:** conversation/composer components
 - **Implementer/reviewer floors:** R5 / R5
 - **Mandatory proof:** Virtualized paging; multiline input; bounded draft recovery; paste; completion; index-bounded timeline search/reference pickers; scroll anchoring

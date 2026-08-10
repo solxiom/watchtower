@@ -19,11 +19,11 @@ Status: **Synchronized remediation candidate**
 | 20 | CA-13 | Coordinator queue, cursor, replay, and watcher task integration | `CA-03`, `CA-05`, `CA-10`–`CA-12` | watcher/coordinator TaskHandlers |
 | 21 | CA-14 | Read-only coordinator, index, event, and ready-set commands | `CA-01`–`CA-13` | commands/help/rendering |
 | 12 | CA-15 | Operator-session persistence and lifecycle | `CA-03`, `UK-02` | session store/contracts |
-| 13 | CA-16 | Session SQLite index, references, pins, and compaction | `CA-02`, `CA-15` | session memory foundation |
-| 17 | CA-17 | Session routing and budgets | `CA-06`, `CA-08`, `CA-15`, `CA-16` | turn classification, route selection, grants/reserves/accounting |
-| 23 | CA-18 | Accepted OpenTUI evidence promotion and packaging gate | `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29` | generic TUI adapter/architecture fixtures |
+| 13 | CA-16R | Session SQLite index, references, pins, and compaction — successor publication | `CA-02`, `CA-15` | session memory foundation |
+| 17 | CA-17 | Session routing and budgets | `CA-06`, `CA-08`, `CA-15`, `CA-16R` | turn classification, route selection, grants/reserves/accounting |
+| 23 | CA-18 | Accepted OpenTUI evidence promotion and packaging gate | `RT-03`, `RT-05`, `CA-14`, `CA-15`, `CA-16R`, `CA-17`, `CA-25`, `CA-28`, `CA-29` | generic TUI adapter/architecture fixtures |
 | 24 | CA-19 | TUI shell, responsive layout, themes, and focus | `CA-18` | TUI application shell/components |
-| 25 | CA-20 | Conversation timeline, composer, history, and references | `CA-16`, `CA-19` | conversation/composer components |
+| 25 | CA-20 | Conversation timeline, composer, history, and references | `CA-16R`, `CA-19` | conversation/composer components |
 | 25 | CA-21 | Inspector views, command palette, and overlays | `CA-14`, `CA-17`, `CA-19`, `CA-26`, `CA-27` | inspector/action/overlay components |
 | 26 | CA-22 | Turn streaming, notifications, concurrency, and observer UI | `CA-17`, `CA-20`, `CA-21`, `CA-26`, `CA-27` | turn/event reducers and attachment controller |
 | 27 | CA-23 | Accessibility, terminal lifecycle, recovery, and PTY matrix | `CA-18`–`CA-22` | accessibility/restoration/test adapters |
@@ -34,6 +34,6 @@ Status: **Synchronized remediation candidate**
 | 15 | CA-28 | OpenCode decision-endpoint adapter | `CA-06`, `RT-05` | focused OpenCode CLI adapter |
 | 15 | CA-29 | Hermes decision-endpoint adapter | `CA-06`, `RT-05` | focused Hermes CLI adapter |
 | 22 | CA-30 | Pack-index build and runtime-index rebuild command | `CA-01`, `CA-10`, `CA-13`, `CA-14`, `RT-05`, `RT-09` | public command/help, proposal/effect integration, allowlisted NVB task |
-| 28 | CA-31 | Coordinator, session, and TUI doctor providers | `LC-07`, `CA-13`, `CA-16`, `CA-19`–`CA-23` | immutable injected diagnostic providers |
+| 28 | CA-31 | Coordinator, session, and TUI doctor providers | `LC-07`, `CA-13`, `CA-16R`, `CA-19`–`CA-23` | immutable injected diagnostic providers |
 
 Only the implementation-map DAG controls readiness. ACCEPT_PACKS activates these contracts atomically; it does not accept product code.

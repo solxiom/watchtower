@@ -9,7 +9,7 @@
 ## Complete batch-specific scope
 
 - **Title:** Session routing and budgets
-- **Dependencies:** `CA-06`, `CA-08`, `CA-15`, `CA-16`
+- **Dependencies:** `CA-06`, `CA-08`, `CA-15`, `CA-16R`
 - **Exclusive ownership/interface:** turn classification, route selection, grants/reserves/accounting
 - **Implementer/reviewer floors:** R5 / R5
 - **Mandatory proof:** M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority

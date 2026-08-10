@@ -397,7 +397,7 @@ This table is the authoritative assignment floor and supersedes earlier illustra
 | CA-13 | R5 | R5 | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
 | CA-14 | R4 | R4 | Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity |
 | CA-15 | R4 | R4 | Many sessions; one active turn each; immutable closed history; crash-safe journals |
-| CA-16 | R5 | R5 | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
+| CA-16R | R5 | R5 | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback |
 | CA-17 | R5 | R5 | M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority |
 | CA-18 | R4 | R4 | Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment |
 | CA-19 | R4 | R4 | Wide right inspector shell; model-free lane entry; P0–P5 attention; standard/narrow layouts; resize; focus/keymap; themes; transactional preferences; bounded animation |

@@ -3,7 +3,7 @@
 ## Synchronized batch execution matrix
 
 - **Accepted-map title:** Session routing and budgets
-- **Dependencies:** `CA-06`, `CA-08`, `CA-15`, `CA-16`
+- **Dependencies:** `CA-06`, `CA-08`, `CA-15`, `CA-16R`
 - **Exclusive ownership/interface:** turn classification, route selection, grants/reserves/accounting
 - **Implementer/reviewer floor:** R5 / R5
 - **Mandatory batch proof:** M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority
@@ -14,7 +14,7 @@
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
 Status: ❌ Pending
-Depends on: CA-06, CA-08, CA-15, CA-16
+Depends on: CA-06, CA-08, CA-15, CA-16R
 
 ## Governing authority
 
@@ -47,7 +47,7 @@ No product logic in src/cli.ts; no participating-repository nvb.json edits; no b
 This section is mandatory and batch-specific. It closes the accepted-map boundary without transferring adjacent ownership.
 
 - Exact map title: **Session routing and budgets**
-- Accepted dependencies: `CA-06`, `CA-08`, `CA-15`, `CA-16`
+- Accepted dependencies: `CA-06`, `CA-08`, `CA-15`, `CA-16R`
 - Exclusive owner: turn classification, route selection, grants/reserves/accounting
 - Required proof claim: M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority
 - Reasoning floor: implementer **R5**, independent reviewer **R5**; the reviewer may never use a weaker class.
@@ -86,7 +86,7 @@ Do not commit and do not issue a verdict. Update the pack tracker only to a trut
 
 The exclusive owned interface set is **turn classification, route selection, grants/reserves/accounting**. Before editing, resolve those named owners to exact existing or proposed modules, public symbols, schema/help/task identifiers, and focused specs in the assigned checkout. Record that source-backed mapping in `.local/agent-reports/wt-coordinator-automation/CA-17-session-routing-budgets-proposals-holds-and-amendments.md`. Do not move behavior into a generic helper, a command, a TaskHandler, a mutable registry, workflow shell, or an adjacent batch owner.
 
-Accepted predecessor input is exactly **`CA-06`, `CA-08`, `CA-15`, `CA-16`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority**.
+Accepted predecessor input is exactly **`CA-06`, `CA-08`, `CA-15`, `CA-16R`**. Treat predecessor artifacts, filesystem bytes, JSON, SQLite values, environment values, and process output as `unknown` until validated into a closed contract. The required observable assertion is exactly: **M0/D1–D3; hard floors; finite grants; protected reserves; no proposal/effect authority**.
 
 Apply this failure order and report the first stable typed reason at each boundary: syntax/schema validation; canonical identity and accepted predecessor validation; authorization/capability/current-state fences; side-effect-free planning; bounded lock acquisition only when mutation is authorized; one effect through the accepted owner; durable verification; then replay-safe event publication. Any pre-commit failure leaves authoritative bytes unchanged. Resolve any uncertain or post-commit outcome from durable state before retry.
 

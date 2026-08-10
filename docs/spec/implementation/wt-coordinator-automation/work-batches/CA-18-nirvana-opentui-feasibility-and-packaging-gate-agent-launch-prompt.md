@@ -9,7 +9,7 @@
 ## Complete batch-specific scope
 
 - **Title:** Accepted OpenTUI evidence promotion and packaging gate
-- **Dependencies:** `RT-03`, `RT-05`, `CA-14`–`CA-17`, `CA-25`, `CA-28`, `CA-29`
+- **Dependencies:** `RT-03`, `RT-05`, `CA-14`, `CA-15`, `CA-16R`, `CA-17`, `CA-25`, `CA-28`, `CA-29`
 - **Exclusive ownership/interface:** generic TUI adapter/architecture fixtures
 - **Implementer/reviewer floors:** R4 / R4
 - **Mandatory proof:** Revalidate TUI-EXP-01 against current exact package/target; no renderer reselection or repeated disposable experiment
