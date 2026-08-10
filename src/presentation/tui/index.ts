@@ -15,3 +15,13 @@ export {TuiInspectorController, TuiInspectorError} from './InspectorController.j
 export {TuiInspectorRegistry} from './InspectorRegistry.js';
 export {TuiOverlayController, TuiOverlayError} from './TuiOverlayController.js';
 export {DEFAULT_TUI_PREFERENCES, loadTuiPreferences} from './TuiPreferences.js';
+export {ConversationViewport} from './ConversationViewport.js';
+export type {ConversationViewportOptions} from './ConversationViewport.js';
+export {TimelineWindow} from './TimelineWindow.js';
+export {presentProvisionalBlock, presentTombstoneBlock, presentTurnBlock} from './TurnBlock.js';
+export {presentProposalBlock, proposalIsActionable} from './ProposalBlock.js';
+export {Composer} from './Composer.js';
+export type {ComposerOptions} from './Composer.js';
+export {CompletionController} from './CompletionController.js';
+export {parseExplicitReference, ReferencePicker, referenceToken} from './ReferencePicker.js';
+export {PasteCapsuleStore} from './PasteCapsuleStore.js';

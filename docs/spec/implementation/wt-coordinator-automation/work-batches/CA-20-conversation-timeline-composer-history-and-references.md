@@ -43,9 +43,16 @@ Exact owned production modules:
 - `src/presentation/tui/TurnBlock.ts`
 - `src/presentation/tui/ProposalBlock.ts`
 - `src/presentation/tui/Composer.ts`
+- `src/presentation/tui/PasteCapsuleStore.ts` — the bounded attachment-local paste
+  payload owner required by review correction 01 finding 3
 - `src/presentation/tui/CompletionController.ts`
 - `src/presentation/tui/ReferencePicker.ts`
-- `src/foundation/OperatorHistoryCache.ts` only if the optional cache ships
+- `src/foundation/presentation/OperatorDraftStore.ts` — the durable owner-only
+  draft file store; the `foundation` root is closed to modules by the accepted
+  `foundation root layout (FR-24)` gate, so the optional cache lives in the
+  `presentation` capsule
+- `src/foundation/presentation/OperatorHistoryCache.ts` only if the optional
+  bounded history cache ships
 
 Exact focused specs use matching names under `spec/basic/tui/`; path/security
 integration belongs in `spec/integration/tui/ConversationReferenceSpec.ts`.
@@ -109,7 +116,7 @@ No unnamed helper or alternative owner may be added without amending the brief.
 ## Documentation And Report
 
 No public command change is expected. Write
-`.local/agent-reports/coordinator-automation/CA-20-conversation-timeline-composer-history-and-references.md`
+`.local/agent-reports/wt-coordinator-automation/CA-20-conversation-timeline-composer-history-and-references.md`
 with query/page bounds, memory measurements, reference matrix, cache policy,
 files, line counts, and the CA-22 handoff. Do not commit.
 

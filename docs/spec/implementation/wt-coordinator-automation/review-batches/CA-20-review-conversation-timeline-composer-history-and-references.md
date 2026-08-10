@@ -52,7 +52,7 @@ store/filesystem/provider imports, or any failed mandatory gate. No conditional
 acceptance.
 
 Write
-`.local/agent-reports/coordinator-automation/reviews/CA-20-conversation-timeline-composer-history-and-references-review.md`;
+`.local/agent-reports/wt-coordinator-automation/reviews/CA-20-conversation-timeline-composer-history-and-references-review.md`;
 handoff exact bounds and interfaces to CA-22.
 
 ## Batch-specific interface and negative-case contract
