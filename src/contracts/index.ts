@@ -30,6 +30,17 @@ export type {
 export {
     PROMOTED_TUI_NATIVE_INTEGRITY, PROMOTED_TUI_TARGET, TUI_ADAPTER_CONTRACT_REVISION, TUI_ENGINE_PACKAGES, validateTuiFeasibilityDecision
 } from './tuiAdapter.js';
+export {
+    measureTuiCells, normalizeTuiMouseSelection, reduceAttention, resolveLaneEntry, resolveTuiColorMode
+} from './tuiShell.js';
+export type {
+    TuiActionContext, TuiActionDescriptor, TuiActionResolution, TuiAttentionItem, TuiAttentionPriority,
+    TuiColorMode, TuiConversationViewModel, TuiDisplayPreferences, TuiFocusIntent, TuiFocusTarget,
+    TuiFocusScope, TuiFocusScopeKind, TuiFocusTransition, TuiHeaderViewModel, TuiInspectorSide, TuiInspectorViewModel, TuiLaneCandidate,
+    TuiLaneEntry, TuiLayout, TuiLayoutMode, TuiOverlayViewModel, TuiPreferenceDiagnostic,
+    TuiPreferenceLoadResult, TuiRegion, TuiSemanticToken, TuiShellViewModel, TuiTheme, TuiThemeName,
+    TuiAnimationPolicy
+} from './tuiShell.js';
 export type {
     NirvanaTuiAdapter, TuiBootstrapStrategy, TuiCapabilities, TuiCell, TuiCloseReason,
     TuiEnginePackage, TuiFeasibilityDecision, TuiFeasibilityVerdict, TuiFrame, TuiInputEvent,
