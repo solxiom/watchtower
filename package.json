@@ -19,6 +19,8 @@
     "@nirvana/builder": "1.0.0",
     "@nirvana/commons": "1.0.0",
     "@nirvana/framework": "1.0.0",
+    "@opentui/core": "0.4.5",
+    "@opentui/keymap": "0.4.5",
     "ajv": "8.17.1",
     "json5": "2.2.3",
     "strip-ansi": "7.1.0"

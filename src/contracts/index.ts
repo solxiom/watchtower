@@ -27,6 +27,14 @@ export type {
     LaneListWarning, LaneSelectionSource, RepositoryBindingView, ResolvedConfigDiagnostics,
     ResolvedConfigPaths, ResolvedConfigV1
 } from './coreContracts.js';
+export {
+    PROMOTED_TUI_NATIVE_INTEGRITY, PROMOTED_TUI_TARGET, TUI_ADAPTER_CONTRACT_REVISION, TUI_ENGINE_PACKAGES, validateTuiFeasibilityDecision
+} from './tuiAdapter.js';
+export type {
+    NirvanaTuiAdapter, TuiBootstrapStrategy, TuiCapabilities, TuiCell, TuiCloseReason,
+    TuiEnginePackage, TuiFeasibilityDecision, TuiFeasibilityVerdict, TuiFrame, TuiInputEvent,
+    TuiOpenOptions, TuiRuntimeTarget, TuiSize, TuiSurface
+} from './tuiAdapter.js';
 
 export {
     PACK_DRIFT_CODES, PACK_REJECTION_REASONS, PACK_INDEX_REASONS, packIndexRejection,
