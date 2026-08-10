@@ -160,6 +160,20 @@ export {
     SESSION_ROUTING_RULE_IDS, SESSION_BUDGET_RECOMMENDATIONS, SESSION_GRANT_DIMENSIONS,
     SESSION_PROPOSAL_COORDINATOR_TYPES, SESSION_PROPOSAL_REASONS
 } from './sessionContracts.js';
+export {TUI_ATTENTION_MAX_ITEMS, TUI_INSPECTOR_VIEW_IDS, TUI_SEARCH_LIMITS} from './tuiInspector.js';
+export type {
+    TuiAgentProjection, TuiAgentProjectionPage, TuiAttentionNavigatorState, TuiSearchLimits,
+    TuiInspectorField, TuiInspectorPage, TuiInspectorQueryPort, TuiInspectorQueryRequest,
+    TuiInspectorRow, TuiInspectorState, TuiInspectorViewDescriptor, TuiInspectorViewId,
+    TuiSearchPage, TuiSearchPort, TuiSearchRequest, TuiSearchResult,
+    TuiSearchScope
+} from './tuiInspector.js';
+export {TUI_ACTION_REASONS} from './tuiActions.js';
+export type {
+    ConfirmedTuiAction, TuiAcceptedActionPort, TuiActionExecutionContext,
+    TuiActionIntent, TuiActionPreview, TuiActionResult
+} from './tuiActions.js';
+export type {TuiOverlayChoice, TuiOverlayIntent, TuiOverlayKind, TuiOverlayRequest, TuiOverlayTransition} from './tuiOverlay.js';
 export type {
     CapsuleEvidenceRef, CapsuleProposalRef, CompactOptions, CompactPreview, CompactResult,
     OpenQuestionRecord, PinRecord, ProposalFilters, ProposalRecord, ReferenceCapsule,

@@ -45,7 +45,18 @@ export interface TuiFocusScope { readonly kind: TuiFocusScopeKind; readonly targ
 export interface TuiFocusIntent { readonly type: 'target' | 'next' | 'previous' | 'open-overlay' | 'close-overlay'; readonly target?: TuiFocusTarget; readonly overlayTarget?: string; }
 export interface TuiFocusTransition { readonly from: TuiFocusTarget; readonly to: TuiFocusTarget; readonly restored: boolean; readonly scope: TuiFocusScope; }
 export interface TuiActionContext { readonly focus: TuiFocusTarget; readonly observer: boolean; readonly overlayOpen: boolean; readonly conflictingActionIds?: readonly string[]; }
-export interface TuiActionDescriptor { readonly id: string; readonly key: string; readonly label: string; readonly focusScope: readonly TuiFocusTarget[]; readonly mutation: TuiMutationClass; readonly requiresConfirmation: boolean; readonly observerEligible: boolean; }
+export interface TuiActionDescriptor {
+    readonly id: string;
+    readonly key: string;
+    readonly label: string;
+    readonly focusScope: readonly TuiFocusTarget[];
+    readonly mutation: TuiMutationClass;
+    readonly requiresConfirmation: boolean;
+    readonly observerEligible: boolean;
+    readonly slash?: string;
+    readonly aliases?: readonly string[];
+    readonly keywords?: readonly string[];
+}
 export interface TuiActionResolution extends TuiActionDescriptor { readonly available: boolean; readonly reason?: string; }
 
 export interface TuiTheme {
@@ -69,7 +80,7 @@ export interface TuiShellViewModel {
 export interface TuiHeaderViewModel { readonly lane: string; readonly lifecycle: string; readonly batch: string | null; readonly session: string | null; readonly budget: string; }
 export interface TuiConversationViewModel { readonly title: string; readonly composerPlaceholder: string; readonly timelineAnchor: string | null; }
 export interface TuiInspectorViewModel { readonly title: string; readonly lines: readonly string[]; }
-export interface TuiOverlayViewModel { readonly title: string; readonly reasonCode: string; readonly options: readonly string[]; readonly focusedOption: number; }
+export interface TuiOverlayViewModel { readonly title: string; readonly reasonCode: string; readonly body: readonly string[]; readonly options: readonly string[]; readonly focusedOption: number; }
 export interface TuiAttentionItem { readonly priority: TuiAttentionPriority; readonly sequence: number; readonly eventId: string; readonly label: string; readonly stealsFocus: false; }
 
 export interface TuiLaneCandidate { readonly laneId: string; readonly slug: string; readonly controlHome: string; readonly lifecycle: string; readonly activeSessions: number; readonly available: boolean; readonly reason?: string; }
