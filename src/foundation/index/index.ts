@@ -4,4 +4,5 @@ export type {IndexBuildRequestSource, IndexBuildService} from './assembly/index.
 export {IndexStore} from './store/index.js';
 export type {IndexIdentity} from './store/index.js';
 export {IndexQuery} from './query/index.js';
+export {SessionIndex} from './sessions/index.js';
 export {buildCommandResult, renderResult} from '../presentation/index.js';

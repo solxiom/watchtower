@@ -54,3 +54,16 @@ export type {
     CoordinatorEffectAuthority, CoordinatorMutationComposition, CoordinatorMutationRequestSource,
     CoordinatorMutationResolution, CoordinatorMutationSelection, SpecificationResolutionReadOptions
 } from './coordinator/index.js';
+
+/**
+ * Read-side surface of the CA-13 coordinator queue/cursor projections and the
+ * CA-15 operator-session store. Exported so the CA-31 diagnostic providers can
+ * reach the accepted owners through this capability barrel instead of reaching
+ * into `lane/coordinator/**` internals.
+ */
+export {readCursorDocument, readQueueDocument} from './coordinator/index.js';
+export type {QueueFileSystem} from './coordinator/index.js';
+export {SessionStore, OperatorSessionError} from './coordinator/index.js';
+export type {
+    OperatorSession, SessionJournalReadResult, TurnRecord
+} from './coordinator/index.js';

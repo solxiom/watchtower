@@ -20,11 +20,12 @@ describe('wt doctor real CLI proof', function () {
             const report = JSON.parse(healthy.stdout).data;
             // Every lane-local (LC-07) check and the injected tools/runtime/
             // account checks pass against this real environment and staged
-            // runtime. No watcher is attached and no pack index is activated
-            // in this fixture, so those two injected checks correctly `skip`
+            // runtime. No watcher is attached, no pack index is activated, and
+            // this lane has never run a coordinator cycle or opened an
+            // operator session, so those six injected checks correctly `skip`
             // rather than fail — `injectedCheckProviders.spec.ts` proves the
-            // full 10/10-pass path including an activated pack-index
-            // generation.
+            // full pass path including an activated pack-index generation, and
+            // the CA-31 provider specs prove the coordinator/session paths.
             const statusOf = (id: string) => report.checks.find((check: {id: string}) => check.id === id).status;
             expect(statusOf('lane-marker')).toBe('pass');
             expect(statusOf('lane-config')).toBe('pass');
@@ -36,7 +37,11 @@ describe('wt doctor real CLI proof', function () {
             expect(statusOf('account-access')).toBe('pass');
             expect(statusOf('watcher-heartbeat')).toBe('skip');
             expect(statusOf('pack-index')).toBe('skip');
-            expect(report.summary).toEqual({pass: 8, warn: 0, fail: 0, skip: 2});
+            expect(statusOf('coordinator-queue')).toBe('skip');
+            expect(statusOf('coordinator-cursor')).toBe('skip');
+            expect(statusOf('session-index')).toBe('skip');
+            expect(statusOf('session-turns')).toBe('skip');
+            expect(report.summary).toEqual({pass: 8, warn: 0, fail: 0, skip: 6});
             expect(treeSnapshot(fixture.root)).toBe(before);
         } finally { cleanupFixture(fixture.root); cleanupFixture(runtimeSource.root); }
 

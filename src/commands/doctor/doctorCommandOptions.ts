@@ -7,10 +7,12 @@ export interface DoctorCommandOptions {
     readonly json: boolean;
     readonly noColor: boolean;
     readonly verbose: boolean;
+    /** Selects the composition that also qualifies the promoted TUI terminal target. */
+    readonly tui: boolean;
 }
 
 const valueFlags = new Set(['--workspace', '--lane']);
-const booleanFlags = new Set(['--json', '--no-color', '--verbose']);
+const booleanFlags = new Set(['--json', '--no-color', '--verbose', '--tui']);
 
 export function parseDoctorCommandOptions(args: CArgMap): DoctorCommandOptions {
     for (const [key, value] of args.entries()) validateArgument(key, value);
@@ -24,7 +26,8 @@ export function parseDoctorCommandOptions(args: CArgMap): DoctorCommandOptions {
         ...(lane === null ? {} : {lane}),
         json: args.hasFlag('json', true),
         noColor: args.hasFlag('no-color', true),
-        verbose: args.hasFlag('verbose', true)
+        verbose: args.hasFlag('verbose', true),
+        tui: args.hasFlag('tui', true)
     };
 }
 
@@ -43,6 +46,6 @@ function validateArgument(key: string, value: string): void {
 function invalid(target: string): never {
     throw createWatchtowerError('ERR_INVALID_ARGUMENT', {
         operation: 'parse doctor command options', target,
-        remediation: 'Use only --workspace, --lane, --json, --no-color, and --verbose, each at most once.'
+        remediation: 'Use only --workspace, --lane, --json, --no-color, --verbose, and --tui, each at most once.'
     });
 }

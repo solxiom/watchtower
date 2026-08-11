@@ -28,7 +28,7 @@ async function runWithDataHome(fixture: WatchLaneFixture, cwd: string): Promise<
 }
 
 describe('injected diagnostic check providers (LC-10) composed through the unmodified LC-07 kernel', function () {
-    it('reports pass for every one of the ten checks against a real staged runtime, activated pack index, and fresh heartbeat', async function () {
+    it('reports pass for the ten LC-07/LC-10 checks against a real staged runtime, activated pack index, and fresh heartbeat, and skips the four CA-31 coordinator/session checks this untouched lane has no evidence for', async function () {
         const fixture = createWatchLaneFixture();
         try {
             ignoreWatchtower(fixture.fixture.controlHome);
@@ -36,12 +36,12 @@ describe('injected diagnostic check providers (LC-10) composed through the unmod
             mkdirSync(join(fixture.laneDir, 'state'), {recursive: true});
             writeFileSync(join(fixture.laneDir, 'state', 'watcher-heartbeat.txt'), new Date().toISOString());
             const report = await runWithDataHome(fixture, fixture.fixture.controlHome);
-            expect(report.checks.length).toBe(10);
-            expect(report.checks.every(check => check.status === 'pass')).toBeTrue();
+            expect(report.checks.length).toBe(14);
+            expect(report.checks.every(check => check.status === 'pass' || check.status === 'skip')).toBeTrue();
             expect(report.summary.pass).toBe(10);
             expect(report.summary.warn).toBe(0);
             expect(report.summary.fail).toBe(0);
-            expect(report.summary.skip).toBe(0);
+            expect(report.summary.skip).toBe(4);
         } finally { fixture.remove(); }
     }, 30000);
 
@@ -54,6 +54,10 @@ describe('injected diagnostic check providers (LC-10) composed through the unmod
             expect(statusOf(report.checks, 'account-access')).toBe('skip');
             expect(statusOf(report.checks, 'watcher-heartbeat')).toBe('skip');
             expect(statusOf(report.checks, 'pack-index')).toBe('skip');
+            expect(statusOf(report.checks, 'coordinator-queue')).toBe('skip');
+            expect(statusOf(report.checks, 'coordinator-cursor')).toBe('skip');
+            expect(statusOf(report.checks, 'session-index')).toBe('skip');
+            expect(statusOf(report.checks, 'session-turns')).toBe('skip');
         } finally { fixture.remove(); }
     }, 20000);
 });
