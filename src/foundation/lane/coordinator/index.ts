@@ -117,3 +117,16 @@ export type {
     CoordinatorMutationResolution, CoordinatorMutationSelection, EffectParameterInput, EffectParameters,
     SpecificationResolutionReadOptions
 } from './mutation/index.js';
+export {
+    DurableAttachmentSessionPort, OperatorSessionAmendmentService, OperatorSessionApplyService,
+    OperatorSessionCompactionService, OperatorSessionEntryService, OperatorSessionLifecycleService,
+    OperatorSessionReadService, SessionCommandTargetResolver, ASK_PROJECTION_FORM_ID, interactiveTerminal,
+    DEFAULT_COMPACT_OPTIONS, MAX_EXPORT_RECORDS, budgetProjection, effectivePins, journalRow,
+    proposalProjection, resolveSessionEffectContext, sessionCapsuleRelativePath, sessionRow, turnRow
+} from './sessionCommand/index.js';
+export type {
+    AmendmentRequestInput, AskRequest, BudgetProjection, DurableAttachmentPortOptions, M0TurnAnswer,
+    PreparedAttachment, PreparedAttachmentResult, SessionCommandQuery, SessionCommandTarget,
+    SessionCommandTargetOptions, SessionEffectContext, SessionEffectContextOptions,
+    SessionEffectOperation, SessionEntryRequest
+} from './sessionCommand/index.js';

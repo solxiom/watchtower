@@ -26,7 +26,13 @@ const ERROR_DEFINITIONS_SOURCE = {
     ERR_UNSAFE_MUTATION: {messageTemplate: 'Unsafe mutation prevention blocked {operation} for {target}.'}
 } as const;
 
-const MAX_CONTEXT_VALUE_LENGTH = 200;
+/**
+ * The maximum length of an error-context value. Exported so a presenter that
+ * composes a remediation from an owner's own detail text can bound it to the
+ * same limit this module enforces, instead of duplicating the number and
+ * drifting from it (CA-24 correction 01).
+ */
+export const MAX_CONTEXT_VALUE_LENGTH = 200;
 const secretPattern = /\b(?:token|secret|password|credential|api[ _-]?key)\b\s*[:=]/i;
 const constructionToken = Symbol('watchtower-error-construction');
 

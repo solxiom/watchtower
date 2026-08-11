@@ -1,6 +1,7 @@
 /** Core lane, routing, error, event, and read/status contract surface. */
 export {
     ERROR_DEFINITIONS,
+    MAX_CONTEXT_VALUE_LENGTH,
     WatchtowerError,
     createWatchtowerError,
     isErrorCode

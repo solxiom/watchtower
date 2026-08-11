@@ -67,3 +67,19 @@ export {SessionStore, OperatorSessionError} from './coordinator/index.js';
 export type {
     OperatorSession, SessionJournalReadResult, TurnRecord
 } from './coordinator/index.js';
+
+/**
+ * CA-24's session command capsule, exposed through this capability barrel so
+ * the `wt coordinator session`/`ask` front doors reach the accepted owners
+ * without importing `lane/coordinator/**` internals.
+ */
+export {
+    DurableAttachmentSessionPort, OperatorSessionAmendmentService, OperatorSessionApplyService,
+    OperatorSessionCompactionService, OperatorSessionEntryService, OperatorSessionLifecycleService,
+    OperatorSessionReadService, ASK_PROJECTION_FORM_ID, DEFAULT_COMPACT_OPTIONS, MAX_EXPORT_RECORDS, interactiveTerminal,
+    sessionCapsuleRelativePath
+} from './coordinator/index.js';
+export type {
+    AmendmentRequestInput, AskRequest, PreparedAttachment, PreparedAttachmentResult,
+    SessionCommandQuery, SessionEntryRequest
+} from './coordinator/index.js';

@@ -1,6 +1,6 @@
 /** Public contract surface assembled from capability-owned contract facades. */
 export {
-    ERROR_DEFINITIONS, WatchtowerError, createWatchtowerError, isErrorCode,
+    ERROR_DEFINITIONS, MAX_CONTEXT_VALUE_LENGTH, WatchtowerError, createWatchtowerError, isErrorCode,
     ROUTING_CAPABILITY_CLASSES, ROUTING_DECISION_CLASSES,
     EXIT_CONFLICT, EXIT_INTERNAL, EXIT_INVALID_INPUT, EXIT_NOT_FOUND, EXIT_UNAVAILABLE,
     errorCodeExitCodes, exitCodeFor, roleEventCompatibility, validateEventCompatibility

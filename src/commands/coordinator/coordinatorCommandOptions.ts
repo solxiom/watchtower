@@ -1,14 +1,14 @@
 import type {CArgMap} from '@nirvana/base/cli/contracts';
 import {createWatchtowerError} from '../../contracts/index.js';
 
-export type CoordinatorAction = 'index' | 'status' | 'context' | 'explain' | 'cycle' | 'escalate' | 'resolution';
+export type CoordinatorAction = 'index' | 'status' | 'context' | 'explain' | 'cycle' | 'escalate' | 'resolution' | 'session' | 'ask';
 export type CoordinatorIndexSubject = 'status' | 'verify' | 'explain' | 'build';
 export type CoordinatorResolutionSubject = 'show' | 'propose' | 'sync-check' | 'resume';
 export interface CoordinatorCommandOptions { readonly action: CoordinatorAction; readonly subject?: CoordinatorIndexSubject | CoordinatorResolutionSubject; readonly target?: string; readonly workspace?: string; readonly lane?: string; readonly initiative?: string; readonly decisionClass?: string; readonly trigger?: string; readonly cycle?: string; readonly reason?: string; readonly worktree?: string; readonly runtime: boolean; readonly dryRun: boolean; readonly json: boolean; readonly noColor: boolean; }
 
 const VALUE_FLAGS = ['--workspace', '--lane', '--initiative', '--class', '--trigger', '--cycle', '--reason', '--worktree'] as const;
 const BOOLEAN_FLAGS = ['--runtime', '--dry-run', '--json', '--no-color'] as const;
-const ACTIONS = new Set<CoordinatorAction>(['index', 'status', 'context', 'explain', 'cycle', 'escalate', 'resolution']);
+const ACTIONS = new Set<CoordinatorAction>(['index', 'status', 'context', 'explain', 'cycle', 'escalate', 'resolution', 'session', 'ask']);
 const INDEX_SUBJECTS = new Set<CoordinatorIndexSubject>(['status', 'verify', 'explain', 'build']);
 const RESOLUTION_SUBJECTS = new Set<CoordinatorResolutionSubject>(['show', 'propose', 'sync-check', 'resume']);
 /** Lane selection and output shape are meaningful on every coordinator form. */
@@ -31,8 +31,35 @@ const FORM_FLAGS: Readonly<Record<string, readonly string[]>> = {
     'resolution sync-check': ['--worktree'], 'resolution resume': ['--dry-run']
 };
 
-export function parseCoordinatorOptions(args: CArgMap): CoordinatorCommandOptions {
+const COMMAND_NAME = 'coordinator';
+
+/**
+ * The `coordinator` positional list, normalized to always begin with the
+ * command name, for the forms this parser owns. CA-24's `session`/`ask` forms
+ * carry their own subject grammar and are parsed by `sessionCommandOptions`,
+ * so this function only normalizes the list and hands it on.
+ *
+ * Correction 01: the Nirvana command host strips the command name before it
+ * hands argv to the command — `BasicCli.run` dispatches
+ * `applyCommand(cmdName, args.slice(1))` — so a packaged `wt coordinator
+ * status` reaches this parser as `['status']`, not `['coordinator', 'status']`.
+ * The grammar below is written against the name-prefixed form, and every
+ * existing focused spec supplies it directly, so normalizing here restores the
+ * one shape both callers mean without loosening a single rule about which
+ * actions, subjects, and options are legal. The name is accepted when already
+ * present so a direct caller and the host agree on one parser.
+ */
+export function coordinatorPositionalArguments(args: CArgMap): string[] {
     const positional = [...args.entries()].filter(([key]) => !key.startsWith('--')).map(([key]) => key);
+    return positional[0] === COMMAND_NAME ? positional : [COMMAND_NAME, ...positional];
+}
+
+export function isSessionAction(positional: readonly string[]): boolean {
+    return positional[0] === 'coordinator' && (positional[1] === 'session' || positional[1] === 'ask');
+}
+
+export function parseCoordinatorOptions(args: CArgMap): CoordinatorCommandOptions {
+    const positional = coordinatorPositionalArguments(args);
     if (positional[0] !== 'coordinator' || positional.length < 2 || positional.length > 4) invalid('coordinator positional arguments');
     const action = positional[1]; if (!ACTIONS.has(action as CoordinatorAction)) invalid(action);
     const typedAction = action as CoordinatorAction;

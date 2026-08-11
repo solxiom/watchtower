@@ -8,20 +8,26 @@ import type {CoordinatorMutationOperation} from '../../contracts/coordinatorMuta
 import {output as prettyOutput} from '@nirvana/base/utils/pretty';
 import {presentReadCommand} from '../shared/readCommandPresenter.js';
 import {mutationError, presentMutationResult} from './coordinatorMutationPresenter.js';
-import {parseCoordinatorOptions, type CoordinatorCommandOptions} from './coordinatorCommandOptions.js';
+import {coordinatorPositionalArguments, isSessionAction, parseCoordinatorOptions, type CoordinatorCommandOptions} from './coordinatorCommandOptions.js';
+import {SessionCommandFront} from './session/SessionCommandFront.js';
+import {parseSessionOptions} from './session/sessionCommandOptions.js';
+import {presentSessionResult} from './session/sessionCommandPresenter.js';
 
 /** `resolution propose` carries an advisory-only proposal, so it is previewed, never applied. */
 const ADVISORY: CoordinatorMutationOperation = 'resolution-propose';
 
 export default class CoordinatorCommand extends BaseCommand implements Command {
-    name = 'coordinator'; description = 'Inspect bounded coordinator state and run cycle, escalation, index, and specification-resolution operations through the validated effect boundary.';
-    usage = 'coordinator status | coordinator context --class=<D1|D2|D3> --trigger=<event-id> | coordinator explain [--cycle=<id>] | coordinator index <status|verify> | coordinator index explain <batch-or-requirement> | coordinator index build [--runtime] [--dry-run] | coordinator cycle --trigger=<event-id> [--dry-run] | coordinator escalate --reason=<text> [--cycle=<id>] [--dry-run] | coordinator resolution show <blocker-id> | coordinator resolution <propose|resume> <blocker-id> [--dry-run] | coordinator resolution sync-check <blocker-id> --worktree=<id>; every form also accepts [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color]'; group = 'basic'; keywords = ['coordinator', 'index', 'context', 'build', 'cycle', 'escalate', 'resolution', 'mutation', 'read-only'];
+    name = 'coordinator'; description = 'Inspect bounded coordinator state, run cycle, escalation, index, and specification-resolution operations through the validated effect boundary, and manage operator sessions and bounded questions.';
+    usage = 'coordinator status | coordinator context --class=<D1|D2|D3> --trigger=<event-id> | coordinator explain [--cycle=<id>] | coordinator index <status|verify> | coordinator index explain <batch-or-requirement> | coordinator index build [--runtime] [--dry-run] | coordinator cycle --trigger=<event-id> [--dry-run] | coordinator escalate --reason=<text> [--cycle=<id>] [--dry-run] | coordinator resolution show <blocker-id> | coordinator resolution <propose|resume> <blocker-id> [--dry-run] | coordinator resolution sync-check <blocker-id> --worktree=<id> | coordinator session --topic=<text> [--policy-profile=<id>] [--stream|--no-stream] | coordinator session attach <id> [--observe] [--stream|--no-stream] [--wait-for-active-turn] | coordinator session list | coordinator session <show|history|export|budget|proposals> <id> [--since=<cursor>] | coordinator session <suspend|resume|close|prune|fork|compact> <id> [--dry-run] | coordinator session <pin|unpin> <id> <ref> [--dry-run] | coordinator session apply <id> <proposal-id> [--dry-run] | coordinator session amendment <request <id> --pack=<id> --reason=<text> | list | admit <request-id>> [--dry-run] | coordinator ask --question=<text> --session=<id> [--query-form=<id>]; every form also accepts [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--json] [--no-color]'; group = 'basic'; keywords = ['coordinator', 'index', 'context', 'build', 'cycle', 'escalate', 'resolution', 'mutation', 'read-only', 'session', 'ask', 'attach', 'amendment'];
     constructor(private readonly service: CoordinatorReadService = new CoordinatorReadService(),
         private readonly indexBuild = createDefaultIndexBuildComposition(),
         private readonly mutation: CoordinatorMutationComposition = createDefaultCoordinatorMutationComposition(),
-        private readonly resolutionReads: SpecificationResolutionReadService = new SpecificationResolutionReadService()) { super(); }
+        private readonly resolutionReads: SpecificationResolutionReadService = new SpecificationResolutionReadService(),
+        private readonly sessions: SessionCommandFront = new SessionCommandFront()) { super(); }
 
     async run(): Promise<void> {
+        const positional = coordinatorPositionalArguments(this.args);
+        if (isSessionAction(positional)) return await this.session(positional);
         const options = parseCoordinatorOptions(this.args);
         const query = {cwd: this.originalCwd, workspace: options.workspace, lane: options.lane, environment: process.env};
         if (options.action === 'index' && options.subject === 'build') {
@@ -49,6 +55,14 @@ export default class CoordinatorCommand extends BaseCommand implements Command {
             : options.action === 'index' && options.subject === 'explain' ? await this.service.indexExplain(query, options.target ?? '')
             : (() => { throw new Error(`unsupported coordinator read action: ${options.action}`); })();
         presentReadCommand(`coordinator ${options.action}`, data, options);
+    }
+
+    /** CA-24's session/ask forms: parse this grammar, delegate, and present one typed result. */
+    private async session(positional: readonly string[]): Promise<void> {
+        const options = parseSessionOptions(this.args, positional);
+        const query = {cwd: this.originalCwd, workspace: options.workspace, lane: options.lane, environment: process.env};
+        const command = `coordinator ${positional.slice(1).join(' ')}`;
+        presentSessionResult(command, await this.sessions.run(query, options), options);
     }
 
     /** Resolve the lane and durable authorization, then preview or hand off to the sole effect authority. */
