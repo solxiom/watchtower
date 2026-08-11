@@ -174,6 +174,19 @@ export type {
     TuiActionIntent, TuiActionPreview, TuiActionResult
 } from './tuiActions.js';
 export type {TuiOverlayChoice, TuiOverlayIntent, TuiOverlayKind, TuiOverlayRequest, TuiOverlayTransition} from './tuiOverlay.js';
+export {
+    ATTACHMENT_LIMITS, ATTACHMENT_REASONS, AttachmentError, PRESENTATION_EVENT_TYPES, attachmentAcceptsTurns,
+    orderAttentionItems, presentationEventPriority, turnStreamTransitionAllowed, validateDurableCheckpoint
+} from './tuiAttachment.js';
+export {PRESENTATION_EVENT_DETAIL_SCHEMA, validateBoundedUsage, validateEventDetail, validatePresentationEvent} from './attachmentDetailSchema.js';
+export type {
+    ActiveTurnOwner, AttachmentAttentionItem, AttachmentBinding, AttachmentJsonValue, AttachmentReason,
+    AttachmentResult, AttachmentRole, AttachmentSessionPort, AttachmentState, AttachmentViewModel,
+    BoundedTurnRequest, ConfirmationView, DurableCheckpoint, DurableTurnResult, InterruptedReplacement,
+    DurableSessionIdentity, NormalizedTurnChunk, NotificationCheckpointPort, NotificationPage, NotificationUpdate, PresentationEventIdentity,
+    PresentationEventType, ProvisionalUpdate, ProvisionalView, TurnAdmission, TurnStreamState,
+    ValidatedPresentationEvent, ValidatedReplacement, ValidatedTurnResult
+} from './tuiAttachment.js';
 export type {
     CapsuleEvidenceRef, CapsuleProposalRef, CompactOptions, CompactPreview, CompactResult,
     OpenQuestionRecord, PinRecord, ProposalFilters, ProposalRecord, ReferenceCapsule,
