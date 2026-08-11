@@ -37,3 +37,9 @@ export type {TuiAttachmentControllerOptions} from './TuiAttachmentController.js'
 export {NotificationRefreshController} from './NotificationRefreshController.js';
 export type {NotificationRefreshControllerOptions} from './NotificationRefreshController.js';
 export {parseAttachmentBinding, parseAttachmentOpen, parseDurableTurnResult, parseTurnAdmission} from './attachmentPortValidation.js';
+export {TerminalLifecycleController, validateModeState} from './TerminalLifecycleController.js';
+export type {TerminalLifecycleControllerOptions} from './TerminalLifecycleController.js';
+export {TerminalContentSanitizer} from './TerminalContentSanitizer.js';
+export type {TerminalContentSanitizerOptions, TuiHyperlinkRequest} from './TerminalContentSanitizer.js';
+export {AccessibleTuiPresenter} from './AccessibleTuiPresenter.js';
+export type {AccessibleTuiPresenterOptions, TuiActivityState} from './AccessibleTuiPresenter.js';

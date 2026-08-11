@@ -41,6 +41,19 @@ export type {
     TuiPreferenceLoadResult, TuiRegion, TuiSemanticToken, TuiShellViewModel, TuiTheme, TuiThemeName,
     TuiAnimationPolicy
 } from './tuiShell.js';
+export {
+    BASELINE_TERMINAL_MODE, FULLSCREEN_TERMINAL_MODE, PROMOTED_TUI_PTY_MATRIX, qualifyTuiPtyTuple, reconcileTuiPtyMatrix,
+    TUI_CATALOG_DIMENSIONS, TUI_CONTENT_LIMITS, TUI_CONTENT_SURFACES, TUI_MIGRATION_LIMITS, TUI_RESTORE_REASONS,
+    TUI_SANITIZER_FINDINGS, TUI_SEMANTIC_STATE_LABELS, TUI_SEMANTIC_STATES, TUI_SIGNALS, TUI_TERMINAL_REASONS,
+    TUI_VISUAL_CATALOG_STATES, TuiTerminalError, qualifyTuiCacheEntry, retainPreferenceBackups
+} from './tuiAccessibility.js';
+export type {
+    TuiBackupRetention, TuiPreferenceBackup, TuiAccessibleRegion, TuiAccessibleView, TuiAnnouncement, TuiCacheDecision, TuiCacheEntryIdentity,
+    TuiCatalogDimension, TuiClipboardDecision, TuiClipboardRequest, TuiContentSurface, TuiHyperlinkDecision,
+    TuiInstallPath, TuiInterruptStage, TuiLifecyclePhase, TuiMatrixReconciliation, TuiPtyInvocation,
+    TuiPtyQualification, TuiPtyTuple, TuiRestoreOutcome, TuiRestoreReason, TuiSanitizedText, TuiSanitizerFinding,
+    TuiSemanticState, TuiSignalAction, TuiSignalName, TuiSignalOutcome, TuiTerminalModeState, TuiTerminalPort, TuiTerminalReason
+} from './tuiAccessibility.js';
 export type {
     NirvanaTuiAdapter, TuiBootstrapStrategy, TuiCapabilities, TuiCell, TuiCloseReason,
     TuiEnginePackage, TuiFeasibilityDecision, TuiFeasibilityVerdict, TuiFrame, TuiInputEvent,

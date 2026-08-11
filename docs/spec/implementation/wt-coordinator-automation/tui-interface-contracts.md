@@ -163,26 +163,45 @@ accumulator, refresh, and cache maxima are mandatory constructor policy.
 
 ```ts
 interface TerminalLifecycleController {
-  enter(): Promise<TerminalLease>
-  suspend(lease: TerminalLease): Promise<void>
-  resume(lease: TerminalLease): Promise<void>
-  restore(lease: TerminalLease, reason: TerminalRestoreReason): Promise<void>
-  emergencyRestore(): void
+  enter(runtimeTuple: unknown): TuiPtyQualification
+  restore(reason: TuiRestoreReason): TuiRestoreOutcome
+  suspend(): TuiSignalOutcome
+  resume(): TuiSignalOutcome
+  signal(name: TuiSignalName, stage?: TuiInterruptStage): TuiSignalOutcome
+  interrupt(key: 'CTRL_C' | 'CTRL_D', stage: TuiInterruptStage, composerEmpty?: boolean): TuiSignalOutcome
+  currentPhase(): TuiLifecyclePhase
+  currentMode(): TuiTerminalModeState
 }
 
 interface TerminalContentSanitizer {
-  sanitize(input: UntrustedTerminalText, context: TerminalTextContext): SafeTerminalText
-  copy(input: SafeTerminalText, action: ExplicitCopyAction): CopyPayload
+  sanitize(surface: TuiContentSurface, value: unknown): TuiSanitizedText
+  hyperlink(request: TuiHyperlinkRequest): TuiHyperlinkDecision
+  clipboard(request: TuiClipboardRequest): TuiClipboardDecision
 }
 
 interface AccessibleTuiPresenter {
-  present(model: TuiViewModel, mode: AccessibilityMode): AccessibleFrame
-  announcements(previous: TuiViewModel, next: TuiViewModel): readonly Announcement[]
+  present(model: TuiShellViewModel, activity?: TuiActivityState): TuiAccessibleView
+  announce(text: unknown, states?: readonly TuiSemanticState[]): readonly TuiAnnouncement[]
+  progress(label: unknown, percent?: number | null): string
 }
 ```
 
-Restoration is idempotent. Emergency restoration accepts no lane/session input
-and writes no product state.
+The accepted shape is synchronous and lease-free. The terminal port is a
+synchronous effect boundary, so a `Promise` return would be a cosmetic async
+wrapper; and a handed-out lease token would be a second restoration handle,
+which `cli-session.md §13` forbids — the controller itself is the one owner and
+its phase is the only lease. Qualification is part of `enter` so that an
+unpromoted tuple is refused before alternate-screen entry rather than after a
+lease exists. Emergency restoration accepts no lane/session input and writes no
+product state: the controller's only collaborator is the terminal port, so
+`TuiRestoreOutcome.wroteDurableState` is structurally `false`.
+
+Restoration is idempotent: a repeated restore on an already-restored terminal
+writes nothing and reports `applied: false`. The promoted local/tmux/direct-SSH/
+SSH+tmux matrix, the visual-acceptance catalog vocabulary, and the preference
+backup/derived-cache qualification live in `src/contracts/tuiAccessibility.ts`
+and are reconciled against the CA-18 `PROMOTED_TUI_TARGET` by
+`reconcileTuiPtyMatrix`.
 
 ## CA-24 Composition And Command Contract
 

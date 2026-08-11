@@ -322,6 +322,9 @@ The v1 decision plane is defined in
 | `OperatorTuiLayout` | Resolve canonical right-inspector and responsive drawer/single-pane layouts |
 | `OperatorTuiRenderScheduler` | Coalesce bounded frames, provisional rendering, resize, and animation without dropping product events |
 | `NirvanaTuiAdapter` | Supply generic terminal input, layout, rendering, theme, and restoration capabilities behind a tested port |
+| `TerminalLifecycleController` | Own the single idempotent terminal mode/restoration lifecycle plus exact signal, suspend, and resume semantics over the CA-18 adapter |
+| `TerminalContentSanitizer` | Neutralize untrusted terminal content and gate hyperlink and clipboard emission on every presentation, copy, and debug path |
+| `AccessibleTuiPresenter` | Present every semantic state in one linear order without colour, motion, icons, or hyperlinks, with bounded append-only announcements |
 | `OperatorDraftStore` | Own the owner-only, symlink-refusing, atomically flushed local draft files under the exact §5 identity and retention bounds |
 | `OperatorHistoryCache` | Hold bounded identity-keyed operator command history and couple every retention or privacy action to the matching draft |
 | `ScopedHoldStore` | Manage explicit scoped expiring blocks on future effects |
