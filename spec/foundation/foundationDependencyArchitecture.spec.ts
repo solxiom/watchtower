@@ -24,8 +24,21 @@ const L4_PEER_IMPORT = /from\s+['"]\.\.\/(init|pack|upgrade|lifecycle|doctor)\//
 const L4_SUBCAPSULE_IMPORT = /from\s+['"]\.\.\/(runtime\/(catalog|distribution|knowledge|leaf)|task\/(runtime|catalog)|lane\/(store|writer|coordinator)|index\/(store|query)|pack\/index)\//;
 const CHILD_PROCESS_IMPORT = /from\s+['"]node:child_process['"]/;
 
-/** Presentation plan renderers type-import init plans without pulling L4 behavior. */
+/**
+ * The init presenter renders both the LC-01 preview plan and the LC-11 applied
+ * result, so it type-imports those two closed contracts — and nothing else —
+ * from their owning barrels. Both imports are type-only and erased at compile
+ * time, so no L4/L5 behavior reaches this L1 domain.
+ */
 const L1_INIT_PLAN_TYPE_IMPORT = /import\s+type\s+\{InitPlan\}\s+from\s+['"]\.\.\/init\/index\.js['"]/;
+const L1_INIT_RESULT_TYPE_IMPORT = /import\s+type\s+\{InitEffectResult\}\s+from\s+['"]\.\.\/lane\/index\.js['"]/;
+const L1_INIT_PRESENTER = 'foundation/presentation/initPlanPresenter.ts';
+
+/** Every upward import in the presenter must be one of the two declared type-only contracts. */
+function onlyDeclaredInitTypeImports(text: string): boolean {
+    const upward = text.split('\n').filter((line) => L2_PLUS_IMPORT.test(line));
+    return upward.every((line) => L1_INIT_PLAN_TYPE_IMPORT.test(line) || L1_INIT_RESULT_TYPE_IMPORT.test(line));
+}
 
 /** Lifecycle orchestration delegates init lock acquisition to the init capsule owner. */
 const L4_LIFECYCLE_INIT_LOCK_IMPORT = /from\s+['"]\.\.\/init\/index\.js['"]/;
@@ -134,7 +147,7 @@ describe('foundation layer import matrix (FR-29)', () => {
 
     it('keeps L1 domains from importing L2+ foundation modules', () => {
         const offenders = scanDomain(L1_DOMAIN, L2_PLUS_IMPORT, (rel, text) =>
-            rel === 'foundation/presentation/initPlanPresenter.ts' && L1_INIT_PLAN_TYPE_IMPORT.test(text)
+            rel === L1_INIT_PRESENTER && L1_INIT_PLAN_TYPE_IMPORT.test(text) && onlyDeclaredInitTypeImports(text)
         );
         expect(offenders).toEqual([]);
     });

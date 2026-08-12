@@ -296,6 +296,7 @@ Purpose: create and operate new managed lanes safely.
 | `LC-08` | Lifecycle integration and scaffold removal | `LC-10`, `RM-10`, `RM-12` | end-to-end specs, help registry | Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely |
 | `LC-09` | Initial sealed pack-index activation | `CA-01`, `LC-05` | initialization adapter over accepted pack-index compiler | Seal-bound compile/verify/atomic activation; no duplicate compiler or JSON authority |
 | `LC-10` | Runtime, account, watcher, and index doctor providers | `LC-06`, `LC-07`, `LC-09`, `RT-07` | injected diagnostic providers and integration | Tool/account/runtime/index checks; exact pass/fail/skip; no global registry or repair |
+| `LC-11` | Init effect composition and command wiring | `LC-01`, `LC-02`, `LC-03`, `LC-04`, `LC-05`, `LC-09` | single installed init effect orchestrator | Real init apply path; Phase 4 refusal matrix; transactional rollback/recovery; init→status→watch/doctor |
 
 Pack exit: an operator can preview and create a valid new lane, inspect it,
 run its watcher, and diagnose it without copied runtime trees or partial state.
@@ -391,7 +392,7 @@ Purpose: qualify the assembled product rather than add features.
 
 | ID | Work batch | Depends on | Primary ownership | Required proof |
 |----|------------|------------|-------------------|----------------|
-| `REL-01` | Fresh-lane implementer→reviewer→accept trial | `LC-08`, `UK-05`, `CA-24` | end-to-end fixture/release evidence | Global install; init; dispatch; handoff; independent accept; publication |
+| `REL-01` | Fresh-lane implementer→reviewer→accept trial | `LC-08`, `LC-11`, `UK-05`, `CA-24` | end-to-end fixture/release evidence | Global install; init; dispatch; handoff; independent accept; publication |
 | `REL-02` | Concurrent and multi-repository recovery trials | `REL-01` | system acceptance fixtures | Two isolated lanes; multi-repo commit set; shared-write refusal; partial push recovery |
 | `REL-03` | Security, ownership, performance, package, and endpoint qualification | `REL-01`, `REL-02` | release/security/performance evidence | Traversal/config/permission suite; bounded discovery/status; manifest/global install proof; real OpenCode and conditional Hermes adapter matrix |
 | `REL-04` | Documentation consistency and release gate | `REL-01`–`REL-03` | help/docs/release notes | Every v1 acceptance item traced; no scaffold/generated artifacts; final package version/readme |
@@ -436,7 +437,7 @@ unless a batch row names it explicitly.
 | 10 | `LC-07`, `LC-09`, `UK-02`, `CA-02` |
 | 11 | `LC-06`, `UK-03`, `CA-03` |
 | 12 | `LC-10`, `UK-05`, `CA-04`, `CA-15` |
-| 13 | `LC-08`, `CA-05`, `CA-16R` |
+| 13 | `LC-08`, `LC-11`, `CA-05`, `CA-16R` |
 | 14 | `CA-06` |
 | 15 | `CA-07`, `CA-28`, `CA-29` |
 | 16 | `CA-08` |

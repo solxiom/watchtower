@@ -14,6 +14,7 @@ Status: **74-batch remediation synchronization candidate**
 | LC-08 | [brief](LC-08-lifecycle-integration-and-scaffold-removal.md) | [prompt](LC-08-lifecycle-integration-and-scaffold-removal-agent-launch-prompt.md) | `LC-10`, `RM-10`, `RM-12` | 13 |
 | LC-09 | [brief](LC-09-initial-sealed-pack-index-activation.md) | [prompt](LC-09-initial-sealed-pack-index-activation-agent-launch-prompt.md) | `CA-01`, `LC-05` | 10 |
 | LC-10 | [brief](LC-10-runtime-account-watcher-and-index-doctor-providers.md) | [prompt](LC-10-runtime-account-watcher-and-index-doctor-providers-agent-launch-prompt.md) | `LC-06`, `LC-07`, `LC-09`, `RT-07` | 12 |
+| LC-11 | [brief](LC-11-init-effect-composition-and-command-wiring.md) | [prompt](LC-11-init-effect-composition-and-command-wiring-agent-launch-prompt.md) | `LC-01`, `LC-02`, `LC-03`, `LC-04`, `LC-05`, `LC-09` | 13 |
 
 The explicit implementation-map DAG is the sole dispatch authority. A batch
 requires accepted predecessors, a complete synchronized quartet, a current

@@ -20,6 +20,8 @@ import {nodeTransactionalWriterFileSystem, type TransactionalWriterFileSystem} f
 
 export type {WriteError, WriteResult, WriteStage} from './transactionalWriterContracts.js';
 export {TransactionalWriteError} from './transactionalWriterContracts.js';
+export {nodeTransactionalWriterFileSystem} from './transactionalWriterFileSystem.js';
+export type {TransactionalWriterFileHandle, TransactionalWriterFileSystem} from './transactionalWriterFileSystem.js';
 
 type PreCommitWriteStage = Extract<WriteStage, 'mkdir' | 'mkdtemp' | 'rename'>;
 

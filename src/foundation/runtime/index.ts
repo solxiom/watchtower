@@ -11,7 +11,8 @@ export {
     resolveCompatibilityNameFrom,
     requireCompatibilityAction,
     nodeManagedLinkFileSystem,
-    parseInstallManifest
+    parseInstallManifest,
+    readStagedRuntimeManifest
 } from './distribution/index.js';
 export type {
     CompatibilityNameTable,

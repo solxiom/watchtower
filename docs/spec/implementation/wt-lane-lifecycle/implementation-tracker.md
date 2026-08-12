@@ -14,5 +14,6 @@ Status: **Synchronized remediation candidate**
 | LC-08 | Lifecycle integration and scaffold removal | ✅ Accepted | Init→status→watch/doctor fixture; rollback proof; remove all hello artifacts safely |
 | LC-09 | Initial sealed pack-index activation | ✅ Accepted | Seal-bound compile/verify/atomic activation; no duplicate compiler or JSON authority |
 | LC-10 | Runtime, account, watcher, and index doctor providers | ✅ Accepted | Tool/account/runtime/index checks; exact pass/fail/skip; no global registry or repair |
+| LC-11 | Init effect composition and command wiring | ✅ Accepted | Real installed init apply path; Phase 4 refusal matrix; transactional rollback/recovery; init→status→watch/doctor |
 
 RM-02 has no pending human dependency-source decision. It resumes in its preserved lineage only after ACCEPT_PACKS activation, accepted RM-13 and RT-08, and explicit worktree synchronization.

@@ -17,7 +17,7 @@
     {
       "name": "init",
       "group": "basic",
-      "summary": "Validate and preview an implementation-lane initialization plan without creating lane state.",
+      "summary": "Create a validated implementation lane, or preview the plan with --dry-run.",
       "usage": "wt init <slug> --tmux-prefix=<prefix> --impl-pack=<path> --coordinator-routing=<path> [--scope=<bindings.json>] [--runtime=<version>] [--workspace=<path>] [--update-gitignore] [--dry-run]"
     },
     {

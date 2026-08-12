@@ -1,11 +1,27 @@
 import {output as prettyOutput} from '@nirvana/base/utils/pretty';
 import type {JsonValue} from '../../contracts/types.js';
 import type {InitPlan} from '../init/index.js';
+import type {InitEffectResult} from '../lane/index.js';
 import {buildCommandResult} from './commandEnvelopeSerializer.js';
 import {renderResult} from './ResultRenderer.js';
 
 export function presentInitPlan(plan: InitPlan, options: {readonly json: boolean; readonly noColor: boolean}): void {
-    prettyOutput.write(renderResult(buildCommandResult('init', toJson(plan)), options), 'basic', 0, true);
+    write(toJson(plan), options);
+}
+
+/**
+ * The applied init result (LC-11). Same envelope as the preview: one
+ * `commandResult` whose data is the public `mutationResult` shape, with
+ * `applied: true` (`docs/spec/v1-contracts.md` §8).
+ */
+export function presentInitApplyResult(
+    result: InitEffectResult, options: {readonly json: boolean; readonly noColor: boolean}
+): void {
+    write(toJson(result), options);
+}
+
+function write(data: JsonValue, options: {readonly json: boolean; readonly noColor: boolean}): void {
+    prettyOutput.write(renderResult(buildCommandResult('init', data), options), 'basic', 0, true);
 }
 
 function toJson(value: unknown): JsonValue {

@@ -16,6 +16,17 @@ export type {
 } from './store/index.js';
 export {commitLane, rollbackStaging, TransactionalWriteError} from './writer/index.js';
 export type {WriteError, WriteResult, WriteStage} from './writer/index.js';
+
+/**
+ * LC-11's single `wt init` effect orchestrator: the one composition that turns
+ * an accepted `InitPlan` into a live lane through the accepted LC-02…LC-09
+ * owners. `InitCommand` reaches it through this capability barrel.
+ */
+export {InitEffect, createInitEffect, createInitEffectPorts, projectLaneState} from './init/index.js';
+export type {
+    InitEffectCompositionOptions, InitEffectPhase, InitEffectPorts, InitEffectRequest, InitEffectResult,
+    InitEffectWarning, InitLaneLifecycle
+} from './init/index.js';
 export {
     buildCoordinatorBaseline,
     composeLaneLayoutWithCoordinatorBaseline,

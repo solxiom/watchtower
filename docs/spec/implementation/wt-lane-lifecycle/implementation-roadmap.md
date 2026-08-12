@@ -14,5 +14,6 @@ Status: **Synchronized remediation candidate**
 | 13 | LC-08 | Lifecycle integration and scaffold removal | `LC-10`, `RM-10`, `RM-12` | end-to-end specs, help registry |
 | 10 | LC-09 | Initial sealed pack-index activation | `CA-01`, `LC-05` | initialization adapter over accepted pack-index compiler |
 | 12 | LC-10 | Runtime, account, watcher, and index doctor providers | `LC-06`, `LC-07`, `LC-09`, `RT-07` | injected diagnostic providers and integration |
+| 13 | LC-11 | Init effect composition and command wiring | `LC-01`, `LC-02`, `LC-03`, `LC-04`, `LC-05`, `LC-09` | single installed init effect path, refusal and transactional recovery |
 
 Only the implementation-map DAG controls readiness. ACCEPT_PACKS activates these contracts atomically; it does not accept product code.

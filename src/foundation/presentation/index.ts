@@ -1,7 +1,7 @@
 export {buildCommandError, buildCommandResult, validateEnvelope} from './commandEnvelopeSerializer.js';
 export {renderError, renderResult} from './ResultRenderer.js';
 export type {RenderOptions} from './ResultRenderer.js';
-export {presentInitPlan} from './initPlanPresenter.js';
+export {presentInitApplyResult, presentInitPlan} from './initPlanPresenter.js';
 export {presentUpgradeApplyResult, presentUpgradePlan} from './upgradePlanPresenter.js';
 export {OperatorDraftStore} from './OperatorDraftStore.js';
 export type {OperatorDraftStoreOptions} from './OperatorDraftStore.js';

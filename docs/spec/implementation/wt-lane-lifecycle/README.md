@@ -16,5 +16,6 @@ This pack is one part of the accepted 74-batch/33-wave architecture. The explici
 | LC-08 | Lifecycle integration and scaffold removal | [work](work-batches/LC-08-lifecycle-integration-and-scaffold-removal.md) | [review](review-batches/LC-08-review-lifecycle-integration-and-scaffold-removal.md) | ❌ Pending |
 | LC-09 | Initial sealed pack-index activation | [work](work-batches/LC-09-initial-sealed-pack-index-activation.md) | [review](review-batches/LC-09-review-initial-sealed-pack-index-activation.md) | ❌ Pending |
 | LC-10 | Runtime, account, watcher, and index doctor providers | [work](work-batches/LC-10-runtime-account-watcher-and-index-doctor-providers.md) | [review](review-batches/LC-10-review-runtime-account-watcher-and-index-doctor-providers.md) | ❌ Pending |
+| LC-11 | Init effect composition and command wiring | [work](work-batches/LC-11-init-effect-composition-and-command-wiring.md) | [review](review-batches/LC-11-review-init-effect-composition-and-command-wiring.md) | ❌ Pending |
 
 All batches follow [the mandatory engineering standard](../../../development/engineering-and-review-standard.md), [Nirvana integration architecture](../../nirvana-integration-architecture.md), and this pack's quality rules.

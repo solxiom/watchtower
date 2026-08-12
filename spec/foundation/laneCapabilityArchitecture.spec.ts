@@ -9,10 +9,16 @@ const FOUNDATION = join(SOURCE_ROOT, 'foundation');
 const LANE_DIR = join(FOUNDATION, 'lane');
 
 const FORBIDDEN_FLAT_LANE_DIRS = ['laneStore', 'transactionalWriter', 'coordinatorBaseline'];
-const SUB_CAPSULES = ['store', 'writer', 'coordinator'] as const;
+/**
+ * `init` joined the tree with LC-11's single `wt init` effect orchestrator:
+ * composing the accepted L4 init/pack/lifecycle owners is only legal above
+ * them, and FR-38 fixes the top-level foundation directories, so the capsule
+ * lives here and is held to the same structural rules as its siblings.
+ */
+const SUB_CAPSULES = ['store', 'writer', 'coordinator', 'init'] as const;
 
 describe('lane capability tree inventory (FR-34)', () => {
-    it('nests store, writer, and coordinator under lane/', () => {
+    it('nests store, writer, coordinator, and init under lane/', () => {
         for (const sub of SUB_CAPSULES) {
             expect(existsSync(join(LANE_DIR, sub))).withContext(sub).toBeTrue();
             expect(existsSync(join(LANE_DIR, sub, 'index.ts'))).withContext(sub).toBeTrue();

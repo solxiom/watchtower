@@ -24,17 +24,23 @@ describe('InitCommand', function () {
         expect(execFileSync('find', [root, '-print'], {encoding: 'utf8'})).toBe(before);
     });
 
-    it('describes every supported init option', function () {
+    it('describes every supported init option and no apply or force flag', function () {
         expect(new InitCommand().usage).toContain('--coordinator-routing=<path>');
         expect(new InitCommand().usage).toContain('--dry-run');
+        expect(new InitCommand().usage).not.toContain('--apply');
+        expect(new InitCommand().usage).not.toContain('--force');
+        expect(new InitCommand().description).toContain('Create a validated implementation lane');
     });
 
     it('rejects unknown flags, values, duplicates, aliases, and extra positionals before planning', async function () {
         const cli = await createCli();
         const base = ['init', 'lane-1', '--tmux-prefix=lane', '--impl-pack=pack',
             `--coordinator-routing=${join(root, 'routing.json')}`, `--workspace=${root}`, '--dry-run'];
+        // `--apply` is deliberately absent from the v1 grammar (v1-contracts.md
+        // §2): `--dry-run` previews and every other invocation applies, so an
+        // ad hoc apply flag must be rejected like any other unknown option.
         for (const extra of [['--bogus'], ['--bogus=value'], ['--from-pack=pack'], ['extra'],
-            ['--tmux-prefix=again'], ['--cmd-unsafe=value']]) {
+            ['--tmux-prefix=again'], ['--cmd-unsafe=value'], ['--apply'], ['--force']]) {
             const before = execFileSync('find', [root, '-print'], {encoding: 'utf8'});
             await expectAsync(cli.run({args: [...base, ...extra]})).toBeRejectedWith(jasmine.objectContaining({code: 'ERR_INVALID_ARGUMENT'}));
             expect(execFileSync('find', [root, '-print'], {encoding: 'utf8'})).toBe(before);

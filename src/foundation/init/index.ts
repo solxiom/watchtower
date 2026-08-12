@@ -6,7 +6,7 @@ export type {
 export type {InitPreflightPort, ScopeReadResult} from './InitPorts.js';
 export {InitPreflightHost} from './InitPreflightHost.js';
 export {validateRoutingPolicy} from './InitRoutingValidator.js';
-export {acquireInitLockLease, acquireInitLocks, releaseInitLocks} from './initLocks.js';
+export {acquireInitLockLease, acquireInitLocks, acquireInitStagingLockLease, releaseInitLocks} from './initLocks.js';
 export type {InitLockLease, InitLockOptions} from './initLocks.js';
 export {
     assertEndpointReservationAuthorization, buildEndpointReservationAuthorization, buildEndpointReservationCurrentState,
