@@ -17,7 +17,7 @@ Status: **Synchronized remediation candidate**
 | CA-11 | Tmux prepare/attempt/verify effect handler | ✅ Accepted | Unknown launch recovery; duplicate suppression; no arbitrary task/kill/shell |
 | CA-12 | Acceptance and Git publication handler | ✅ Accepted | Reviewer-session ownership; commit-set validation; partial push recovery; Nirvana Git API audit |
 | CA-13 | Coordinator queue, cursor, replay, and watcher task integration | ✅ Accepted | Stable priority; impact-scoped blocker with unrelated progress; activation invalidation; interrupted/duplicate/uncertain replay |
-| CA-14 | Read-only coordinator, index, event, and ready-set commands | ✅ Accepted | Index status/verify/explain, coordinator status/context/explain, events, ready; read-only purity |
+| CA-14 | Read-only coordinator, index, event, and ready-set commands | ✅ Accepted | Independent correction review `wt-review-CA-14-kavan2`: packaged batch/events argv normalization; 14 focused specs, packaged dispatch, `nvb build`, `nvb dist`, and read-only purity; full suite only external OpenCode drift |
 | CA-15 | Operator-session persistence and lifecycle | ✅ Accepted | Many sessions; one active turn each; immutable closed history; crash-safe journals |
 | CA-16 | Session SQLite index, references, pins, and compaction | 🔒 DESIGN-ONLY/FROZEN | Original design entry; implementation acceptance is published only under the explicit CA-16R successor |
 | CA-16R | Session SQLite index, references, pins, and compaction — successor publication | ✅ Accepted | Bounded metadata/excerpts; exact text remains journal-owned; same-lane capsules; no full-history fallback; R1-R8, C1-C10, and SA-CA16R-04 reviewer evidence |
