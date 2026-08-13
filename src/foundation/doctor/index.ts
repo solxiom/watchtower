@@ -7,6 +7,8 @@ export {createRequiredToolsCheck, requiredToolsCheck, REQUIRED_TOOLS} from './ch
 export type {RequiredToolsCheckOptions} from './checks/requiredToolsCheck.js';
 export {createRuntimeCatalogCheck, runtimeCatalogCheck} from './checks/runtimeCatalogCheck.js';
 export type {RuntimeCatalogCheckOptions} from './checks/runtimeCatalogCheck.js';
+export {createManagedLinksCheck, managedLinksCheck} from './checks/managedLinksCheck.js';
+export type {ManagedLinksCheckOptions} from './checks/managedLinksCheck.js';
 export {createAccountAccessCheck, accountAccessCheck} from './checks/accountAccessCheck.js';
 export type {AccountAccessCheckOptions} from './checks/accountAccessCheck.js';
 export {createWatcherHeartbeatCheck, watcherHeartbeatCheck} from './checks/watcherHeartbeatCheck.js';

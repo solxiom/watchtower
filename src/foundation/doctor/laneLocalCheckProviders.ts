@@ -18,7 +18,7 @@ export const laneLocalCheckProviders: readonly DoctorCheckProvider[] = Object.fr
 
 const CLOSED_PROVIDER_IDS: readonly DoctorCheckId[] = Object.freeze([
     'lane-marker', 'lane-config', 'repository-bindings', 'repository-permissions', 'git-ignore-coverage',
-    'required-tools', 'runtime-catalog', 'account-access', 'watcher-heartbeat', 'pack-index',
+    'required-tools', 'runtime-catalog', 'managed-links', 'account-access', 'watcher-heartbeat', 'pack-index',
     'coordinator-queue', 'coordinator-cursor', 'session-index', 'session-turns', 'tui-terminal'
 ]);
 const CLOSED_PROVIDER_ID_SET: ReadonlySet<DoctorCheckId> = new Set(CLOSED_PROVIDER_IDS);

@@ -26,6 +26,8 @@ export interface LaneFixtureOptions {
     readonly runtimeVersion?: string;
     readonly configLines?: readonly string[];
     readonly install?: unknown;
+    /** `install.json.managedAssets`; empty by default so a fixture lane declares no managed runtime links. */
+    readonly managedAssets?: Readonly<Record<string, {readonly target: string; readonly sha256: string}>>;
     readonly packAvailable?: boolean;
     readonly runtimeAvailable?: boolean;
     readonly repositories?: readonly FixtureRepository[];
@@ -103,7 +105,10 @@ export function createLane(fixture: ReadCommandFixture, options: LaneFixtureOpti
             worktreeMode: item.worktreeMode, role: item.role, access: item.access}))
     });
     const install = options.install ?? {schemaVersion: 1, cliVersion: '1.0.0',
-        runtimeVersion: options.runtimeVersion ?? '1.0.0', knowledgeVersion: '1.0.0', mode: 'linked'};
+        runtimeVersion: options.runtimeVersion ?? '1.0.0', knowledgeVersion: '1.0.0', mode: 'linked',
+        taskRuntime: {catalogId: 'watchtower-lane-tasks', catalogSha256: `sha256:${'0'.repeat(64)}`,
+            configTarget: 'nvb.json', moduleTarget: 'tasks.js', profile: 'lane'},
+        managedAssets: options.managedAssets ?? {}};
     writeJson(join(laneDir, 'install.json'), install);
     const defaultConfig = [
         `LANE_ID="${laneId}"`, `LANE_SLUG="${slug}"`, `INITIATIVE_ID="${initiativeId}"`,

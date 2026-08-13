@@ -3,12 +3,12 @@ import type {JsonObject} from './types.js';
 
 /**
  * Closed doctor check identity. The first five are the lane-local checks
- * LC-07 owns; the next five are the injected required-tools, runtime,
- * account, watcher, and pack-index diagnostic providers LC-10 owns; the last
- * five are the coordinator queue/cursor, session index/turn, and TUI terminal
- * diagnostic providers CA-31 owns. Every one of them is composed through the
- * unmodified LC-07 kernel — there is no mutable registry and no provider that
- * discovers itself.
+ * LC-07 owns; the next six are the injected required-tools, runtime,
+ * managed-link, account, watcher, and pack-index diagnostic providers LC-10
+ * owns; the last five are the coordinator queue/cursor, session index/turn,
+ * and TUI terminal diagnostic providers CA-31 owns. Every one of them is
+ * composed through the unmodified LC-07 kernel — there is no mutable registry
+ * and no provider that discovers itself.
  */
 export type DoctorCheckId =
     | 'lane-marker'
@@ -18,6 +18,7 @@ export type DoctorCheckId =
     | 'git-ignore-coverage'
     | 'required-tools'
     | 'runtime-catalog'
+    | 'managed-links'
     | 'account-access'
     | 'watcher-heartbeat'
     | 'pack-index'

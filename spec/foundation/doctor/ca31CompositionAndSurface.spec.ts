@@ -29,7 +29,7 @@ describe('CA-31 injected provider composition', function () {
         expect(Object.isFrozen(tuiDiagnosticCheckProviders)).toBeTrue();
         const mutable = injectedDiagnosticCheckProviders as DoctorCheckProvider[];
         expect(() => mutable.push(mutable[0])).toThrow();
-        expect(injectedDiagnosticCheckProviders.length).toBe(14);
+        expect(injectedDiagnosticCheckProviders.length).toBe(15);
     });
 
     it('still refuses an unsupported or duplicated CA-31 provider ID at the kernel boundary', function () {
