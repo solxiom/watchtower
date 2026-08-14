@@ -159,14 +159,11 @@ if (requireDist()) {
         }, RUN_TIMEOUT);
 
         /**
-         * UK-03 correction filed by REL-01 (§23.5) for content-unchanged assets
-         * whose declared target path advances with the runtime root. The earlier
-         * UK-03 correction-01 (UK03-R1) addressed pre-pointer crash recovery only;
-         * this contract stays pending until that relink gap is accepted.
+         * UK-03 relink correction: digest-equal assets in a new runtime root must
+         * still be relinked when their declared target path advances.
          */
         it('leaves every managed link consistent with install.json after an apply', () => {
-            pending('Upgrade-apply gap: a content-unchanged managed asset keeps its old link while install.json advances to the new runtime root.');
-            expect(upgrade(fixture, [`--to=${TARGET}`, '--apply']).status).toBe(0);
+            expect(upgrade(fixture, [`--to=${TARGET}`, '--apply']).status).withContext('apply before doctor').toBe(0);
 
             const doctor = wt(fixture.controlHome, fixture.dataHome, ['doctor', `--lane=${SLUG}`, '--json', '--no-color']);
             const checks = (envelope(doctor).data as {checks?: {id: string; status: string}[]}).checks ?? [];
