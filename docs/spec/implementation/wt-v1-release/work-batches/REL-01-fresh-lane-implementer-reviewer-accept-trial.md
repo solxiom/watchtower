@@ -103,33 +103,45 @@ This batch does **not** exercise concurrent lanes, multi-repository recovery, se
 4. Verify the watcher does not daemonize (the foreground process is the watcher).
 5. Inspect the watcher state file after exit. Verify it records the last heartbeat time.
 
-### Phase 7: Implementer→reviewer→accept cycle trial
+### Phase 7: Coordinator mutation authorization trial
 
-This is the core acceptance trial. It exercises the coordinator, worker dispatch,
-handoff, independent acceptance, and publication pipeline.
+REL-01 qualifies the shipped decision plane without requiring a full tmux
+dispatch→handoff→review→accept→publication replay in the piped e2e harness.
+That end-to-end cycle remains corroboration for the watchtower-v1 lane
+coordinator; this batch proves the authorization boundary and a bounded cycle
+preview under operator witness.
 
-1. **Dispatch implementer:** Using the coordinator routing policy from init:
-   - Trigger a ready-batch calculation. Verify the coordinator identifies the next working batch.
-   - Dispatch an implementer worker for that batch (in a real or simulated tmux session).
-   - Run the implementation brief. The worker produces code changes and a handoff event.
-2. **Verify coordinator behavior:**
-   - The coordinator detects the implementer `handoff` event.
-   - The ready set excludes the in-progress batch.
-   - The coordinator proposes a reviewer dispatch through a typed decision envelope.
-   - The proposal passes validation against the current routing policy.
-3. **Dispatch reviewer:**
-   - An independent reviewer session begins.
-   - The reviewer inspects the implementer's changes.
-   - The reviewer accepts the batch, producing an `accept` event with a per-repository commit set.
-4. **Verify acceptance:**
-   - The `accept` event is durably recorded in the coordinator journal.
-   - The commit set maps each writable repository to a valid, reachable commit.
-   - The commit was created after reviewer launch and was not emitted by the implementer.
-   - Per-repository push journals are created.
-5. **Publication:**
-   - Git push succeeds for each acceptance commit.
-   - The lane state advances to the next batch or to `complete` if all batches are accepted.
-   - Per-repository push journals record success.
+#### Phase 7a — Automated fence and read-only coordinator proof (implementer-owned)
+
+1. On a freshly initialized trial lane with **no** `coordinator/authorizations/cycle.json`,
+   run `wt coordinator cycle --dry-run --trigger=<event-id> --lane=<slug>`.
+   Verify refusal with exit code 4, `ERR_MISSING_DEPENDENCY`, and typed reason
+   `COORDINATOR_MUTATION_AUTHORIZATION_UNAVAILABLE`.
+2. Cross-reference phases 8 and 10: operator-session apply and index-build paths
+   already refuse without their respective durable authorization capsules in the
+   shipped product.
+3. Record refusal codes, targets, and paths in the evidence packet.
+
+#### Phase 7b — Operator witness for cycle mutation authorization (operator-owned)
+
+1. Operator (not the REL-01 implementer during blocked recovery) authors a valid
+   `coordinator/authorizations/cycle.json` through the supported decision path —
+   a CA-25-valid capsule whose proposal cites the named trigger in
+   `evidenceRefs` and passes CA-09 validation against the bundled `currentState`.
+2. Operator runs `wt coordinator cycle --dry-run --trigger=<event-id> --lane=<slug>`
+   and verifies preview success (`status: previewed`) without further lane mutation
+   beyond the operator-written capsule.
+3. Implementer records the witness transcript, capsule path, and dry-run envelope
+   in the evidence packet (`§31`). Automated replay may use
+   `spec/e2e/support/operatorWitnessCycleCapsule.ts`, which writes CA-25-valid
+   bytes only to simulate operator authority — never from implementer authority
+   while blocked.
+
+#### Deferred corroboration (watchtower-v1 lane coordinator, out of REL-01 scope)
+
+Full implementer→reviewer→accept→publication under live tmux coordination is
+not a REL-01 deliverable after this amendment. Record any live-lane corroboration
+separately when the watchtower-v1 coordinator runs that pipeline.
 
 ### Phase 8: Operator-session trial
 
@@ -195,7 +207,8 @@ Produce a release evidence document at `.local/agent-reports/watchtower-release/
 
 ## Expected Ownership
 
-- `spec/e2e/accept-trial.spec.ts` — end-to-end Jasmine spec exercising the full pipeline.
+- `spec/e2e/accept-trial.spec.ts` — end-to-end Jasmine spec for phases 2–6 and 9.
+- `spec/e2e/acceptTrialPhase7.spec.ts` — phase 7a fence and 7b operator-witness replay.
 - Release evidence fixtures: temporary workspace directories created and cleaned up by the spec.
 - `docs/spec/implementation/wt-v1-release/implementation-tracker.md` — updated with REL-01 status.
 - `docs/spec/implementation/wt-v1-release/implementation-roadmap.md` — updated with REL-01 status.
@@ -224,7 +237,8 @@ Reject Batch REL-01 if any of the following is true:
 - Lane discovery fails from any documented discovery path.
 - `wt status --json` output does not validate against the JSON Schema.
 - `wt watch` daemonizes or fails to emit heartbeat lines.
-- The implementer→reviewer→accept cycle does not complete.
+- Phase 7a does not prove the cycle authorization fence, or phase 7b operator
+  witness does not produce a successful bounded `wt coordinator cycle --dry-run`.
 - Reviewer acceptance is not durably recorded and distinct from Git publication.
 - `wt doctor` misses a deliberately introduced violation.
 - `wt upgrade --apply` overwrites lane-owned config or operator-session history.

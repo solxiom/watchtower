@@ -9,8 +9,8 @@
  * Scope note (brief §"Structural Constraints" permits splitting by trial
  * phase). This file covers the phases reachable through the shipped product:
  * global install (2), lane initialization (3), init refusals (4), discovery (5),
- * watch signal behaviour (6), and doctor (9). Phase 7 remains blocked on
- * coordinator mutation authorization. Phase 8 is in
+ * watch signal behaviour (6), and doctor (9). Phase 7 is in
+ * `acceptTrialPhase7.spec.ts`. Phase 8 is in
  * `acceptTrialOperatorSession.spec.ts`; phase 10 is in `acceptTrialUpgrade.spec.ts`.
  */
 import {existsSync, lstatSync, readFileSync, readdirSync, readlinkSync, rmSync} from 'node:fs';

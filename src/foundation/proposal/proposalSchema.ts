@@ -64,7 +64,7 @@ function validateBody(type: ProposalType, body: Record<string, unknown>): void {
     const required = BODY_FIELDS[type];
     const optional = BODY_OPTIONAL_FIELDS[type] ?? [];
     const keys = Object.keys(body);
-    if (required.some((field) => !(field in body)) || keys.some((key) => !required.includes(key) && !optional.includes(key))) {
+    if (required.some((field) => !(field in body)) || keys.some((key) => key !== 'type' && !required.includes(key) && !optional.includes(key))) {
         fail(`body(${type})`, 'contains missing, extra, or unsupported members');
     }
     for (const field of required) validateBodyField(type, field, body[field]);
