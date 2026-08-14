@@ -9,6 +9,7 @@
  * batch does not fabricate that behavior ahead of its owning batch.
  */
 import type {DiscoveredLane} from '../../discovery/index.js';
+import {WatchHeartbeat} from './WatchHeartbeat.js';
 import {
     nodeEventLoopKeepAlive, nodeWatchSignalSource,
     type WatchEventLoopKeepAlive, type WatchSignalSource, type WatchTerminationSignal
@@ -37,29 +38,36 @@ export interface WatchAttachmentOptions {
     readonly sink: WatchSink;
     readonly signals?: WatchSignalSource;
     readonly keepAlive?: WatchEventLoopKeepAlive;
+    readonly heartbeat?: WatchHeartbeat;
 }
 
 export class WatchAttachment {
     private readonly signals: WatchSignalSource;
     private readonly sink: WatchSink;
     private readonly keepAlive: WatchEventLoopKeepAlive;
+    private readonly heartbeat: WatchHeartbeat;
 
     constructor(options: WatchAttachmentOptions) {
         this.signals = options.signals ?? nodeWatchSignalSource;
         this.sink = options.sink;
         this.keepAlive = options.keepAlive ?? nodeEventLoopKeepAlive;
+        this.heartbeat = options.heartbeat ?? new WatchHeartbeat();
     }
 
     /** Attaches to the foreground for exactly one preflight-validated lane and resolves once interrupted. */
     async attach(lane: DiscoveredLane): Promise<WatchAttachmentOutcome> {
         this.sink.write(`Watching lane ${lane.slug} (${lane.laneId}). Press Ctrl-C to stop.`);
-        const release = this.keepAlive.hold();
+        let release: (() => void) | undefined;
+        let stopHeartbeat: (() => void) | undefined;
         try {
+            release = this.keepAlive.hold();
+            stopHeartbeat = this.heartbeat.start(lane, this.sink);
             const signal = await this.awaitTermination();
             this.sink.write(`Stopping watch (${signal}).`);
             return {outcome: 'interrupted', signal};
         } finally {
-            release();
+            stopHeartbeat?.();
+            release?.();
         }
     }
 

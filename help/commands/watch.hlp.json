@@ -1,7 +1,7 @@
 {
   "name": "watch",
   "group": "basic",
-  "summary": "Run the lane watcher in the foreground; never daemonizes and never emits JSON.",
+  "summary": "Run the lane watcher in the foreground; emits local heartbeats, never daemonizes, and never emits JSON.",
   "usage": "wt watch [--workspace=<path>] [--lane=<slug-or-uuid>] [--initiative=<id>] [--no-color]",
   "flags": [
     {"name": "workspace", "description": "Resolve the lane from this existing repository or control-home path.", "optional": true},

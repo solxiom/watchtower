@@ -36,9 +36,14 @@ export type {
 export {
     WatchPreflight,
     WatchAttachment,
+    WatchHeartbeat,
     createNodeWatchSignalSource,
     nodeWatchSignalSource,
-    nodeEventLoopKeepAlive
+    nodeEventLoopKeepAlive,
+    nodeWatchHeartbeatWriter,
+    renderWatchHeartbeatStdoutLine,
+    WATCH_HEARTBEAT_INTERVAL_SEC,
+    WATCH_HEARTBEAT_RELATIVE_PATH
 } from './watch/index.js';
 export type {
     WatchPreflightOptions,
@@ -49,5 +54,9 @@ export type {
     WatchSink,
     WatchSignalSource,
     WatchTerminationSignal,
-    WatchEventLoopKeepAlive
+    WatchEventLoopKeepAlive,
+    WatchHeartbeatClock,
+    WatchHeartbeatStartOptions,
+    WatchHeartbeatTimer,
+    WatchHeartbeatWriter
 } from './watch/index.js';
