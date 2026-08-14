@@ -83,8 +83,8 @@ export function assertChecksum(
     const relativePath = relative(targetRuntimeRoot, targetPath).split(sep).join('/');
     const asset = targetRuntime.assets.find((candidate) => candidate.path === relativePath);
     if (asset === undefined) throw stagingError('TARGET_MISSING', path, 'The target is not a declared target-runtime-manifest asset.');
-    if (asset.sha256 !== declaredSha256 || asset.mode !== '0755') {
-        throw stagingError('CHECKSUM_MISMATCH', path, 'The target-runtime-manifest asset disagrees with the declared checksum or mode.');
+    if (asset.sha256 !== declaredSha256) {
+        throw stagingError('CHECKSUM_MISMATCH', path, 'The target-runtime-manifest asset disagrees with the declared checksum.');
     }
 }
 
