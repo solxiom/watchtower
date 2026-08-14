@@ -69,7 +69,10 @@ function classifyOne(
     if (liveKind === 'regular') return entry(path, 'conflict', current, target);
     if (current === undefined) return entry(path, 'added', current, target);
     if (target === undefined) return entry(path, 'removed', current, target);
-    return entry(path, current.sha256 === target.sha256 ? 'preserved' : 'changed', current, target);
+    if (current.sha256 === target.sha256 && current.target === target.target) {
+        return entry(path, 'preserved', current, target);
+    }
+    return entry(path, 'changed', current, target);
 }
 
 function entry(

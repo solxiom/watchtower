@@ -32,6 +32,16 @@ describe('UpgradePlanner', () => {
         expect(plan.changed[0].currentSha256).not.toBe(plan.changed[0].targetSha256);
     });
 
+    it('classifies a target-path change with an unchanged checksum as changed', () => {
+        const current = assets('a');
+        const unchanged = current['bin/a.sh'].sha256;
+        const target = {'bin/a.sh': {target: '/runtime/v2/a.sh', sha256: unchanged}};
+        const plan = makePlanner().plan(input({current, target}));
+        expect(plan.changed.map(item => item.path)).toEqual(['bin/a.sh']);
+        expect(plan.preserved).toEqual([]);
+        expect(plan.changed[0].currentSha256).toBe(plan.changed[0].targetSha256);
+    });
+
     it('classifies a regular file at a managed path as a conflict', () => {
         const fileSystem = new TrackingFileSystem({'/lane/bin/a.sh': 'regular'});
         const plan = makePlanner(fileSystem).plan(input({current: assets('a'), target: assets('a')}));
