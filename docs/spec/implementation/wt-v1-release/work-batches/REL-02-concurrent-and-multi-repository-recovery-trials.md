@@ -91,8 +91,15 @@ Open and read the relevant accepted source:
    ```
    Verify refusal. The diagnostic must identify the conflicting lane and worktree.
 3. Create a second dedicated worktree from the same repository.
+
+#### Phase 4a — Dedicated worktree coexistence (implementer-owned)
+
 4. Initialize Lane B on the dedicated worktree. Verify success — dedicated worktrees are isolated.
-5. Run `wt status` and `wt doctor` on Lane A. Verify a warning reflects that the repository has another active lane bound (even if on a different worktree).
+5. Run `wt status` and `wt doctor` on Lane A immediately after Lane B's init. Verify both succeed and Lane A's status `conflicts` does not falsely report a writable-path collision against Lane B (distinct worktree paths are isolated).
+
+#### Phase 4b — Same-repository cross-worktree warning (deferred product corroboration)
+
+A `wt status`/`wt doctor` warning that another active lane binds the same underlying repository on a different dedicated worktree is **not** a REL-02 deliverable after this amendment. The shipped product compares writable bindings by literal path only; no status warning code or doctor check emits this today. REL-02 records the gap (`SAME_REPOSITORY_DIFFERENT_WORKTREE_WARNING_GAP`) with source-backed negative proof in the e2e fixture. Full cross-worktree related-lane surfacing remains corroboration for a separately-owned product batch.
 
 ### Phase 5: Partial push recovery trial
 
@@ -100,12 +107,16 @@ Open and read the relevant accepted source:
    - Accept a batch that modified both repositories.
    - Simulate a push failure on Repo B (e.g., by setting a protected branch or using a mock Git remote that rejects).
    - Attempt publication.
-2. Verify the outcome:
-   - Repo A's push succeeds. Its push journal records success.
-   - Repo B's push fails. Its push journal records failure with the rejection reason.
+2. Verify the outcome (implementer-owned journal and API proof):
+   - Repo A's push succeeds. Its push journal records success (`verified` phase).
+   - Repo B's push fails. Its push journal records failure with the rejection reason (`uncertain` or `failed` phase and typed outcome).
    - The lane does **not** revoke semantic acceptance. The `accept` event remains authoritative.
-   - `wt status` reports the partial push state with a warning.
-3. Retry the failed push after the simulated block is removed. Verify Repo B's push succeeds and its push journal is updated.
+   - `GitAcceptanceAdapter.publishCommits` reports `partialRecovery: true` with per-repository results.
+3. Retry the failed push after the simulated block is removed. Verify Repo B's push succeeds, its push journal updates to `verified` at a later sequence, and primary's original journal record is unchanged.
+
+#### Phase 5b — Status partial-push warning (deferred product corroboration)
+
+`wt status` reporting partial-push state via a stable warning is **not** a REL-02 deliverable after this amendment. Status projection does not read the push/effect journal today (`WT_STATUS_PUSH_JOURNAL_WARNING_GAP`). REL-02 records the gap with source-backed negative proof. Surfacing partial push on `wt status` remains corroboration for a separately-owned product batch.
 
 ### Phase 6: Idempotency replay trial
 
