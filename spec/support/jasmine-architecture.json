@@ -1,0 +1,12 @@
+{
+  "spec_dir": "build/spec",
+  "spec_files": [
+    "**/*[Aa]rchitecture*.spec.js",
+    "**/sourceArchitectureCheck.spec.js"
+  ],
+  "helpers": [],
+  "env": {
+    "stopSpecOnExpectationFailure": false,
+    "random": true
+  }
+}

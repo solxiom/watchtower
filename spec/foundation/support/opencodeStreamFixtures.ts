@@ -1,5 +1,5 @@
 /** Captured OpenCode 1.18.14 `--format json` stdout (2026-08-07, deepseek-v4-flash-free). */
-export const OPENCODE_11814_VERSION = '1.18.14';
+export const OPENCODE_11814_VERSION = '1.18.16';
 
 export const OPENCODE_11814_SUCCESS_STREAM = [
     '{"type":"step_start","timestamp":1786100526626,"sessionID":"ses_0241cdabbffeWjrWIUTn4zKWF4","part":{"id":"prt_fdbe32e1f001q1W0raR3S4JXOQ","messageID":"msg_fdbe3269f001e4E62QagIvyfDC","sessionID":"ses_0241cdabbffeWjrWIUTn4zKWF4","type":"step-start"}}',
