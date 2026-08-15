@@ -13,7 +13,7 @@
 - **Shared execution/review method:** [agent launch contract](../agent-launch-contract.md)
 - **Status authority:** the implementer records only handoff/correction readiness for this batch; only an independent reviewer records reject/accept, and publication remains a separate serialized effect.
 
-Status: ❌ Pending
+Status: ✅ Accepted
 Phase: Release qualification
 Depends on: LC-08, UK-05, CA-24 accepted (Packs 3, 4, 5 complete); all packs 1–5 accepted
 Work ID: `REL-01`
