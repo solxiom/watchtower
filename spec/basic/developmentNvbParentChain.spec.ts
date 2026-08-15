@@ -37,7 +37,7 @@ describe('development NVB accepted identity', function () {
         const output = validate();
         expect(JSON.parse(output)).toEqual({
             tasks: [
-                'build', 'build:runtime-nvb:foundation', 'build:runtime-nvb:gitleaf', 'build:tests', 'check:development-nvb', 'clean',
+                'build', 'build:runtime-nvb:foundation', 'build:runtime-nvb:gitleaf', 'build:tests', 'check:architecture', 'check:development-nvb', 'clean',
                 'dist:chmod-bin', 'dist:clean', 'dist:clean-build',
                 'dist:clean-esm-stamp', 'dist:closure:verify', 'dist:compile', 'dist:copy-bin', 'dist:copy-config',
                 'dist:copy-help', 'dist:copy-knowledge', 'dist:copy-runtime', 'dist:fix-esm', 'dist:package', 'dist:prune:init-reservation-authority', 'dist:restore:init-reservation-authority', 'dist:runtime-nvb:compile',

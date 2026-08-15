@@ -1,7 +1,7 @@
 import type {JsonValue, OpenCodeEndpointReason} from '../../contracts/index.js';
 
-/** Installed OpenCode JSONL contract pinned for unattended parsing (1.18.14). */
-export const OPENCODE_JSONL_FORMAT_VERSION = '1.18.14';
+/** Installed OpenCode JSONL contract pinned for unattended parsing (1.18.16). */
+export const OPENCODE_JSONL_FORMAT_VERSION = '1.18.16';
 export const OPENCODE_JSONL_EVENT_TYPES = ['step_start', 'text', 'tool_use', 'step_finish', 'error'] as const;
 
 export const OPENCODE_MAX_LINE_BYTES = 65_536;

@@ -10,7 +10,7 @@ function opencodeExecutable(): string {
     return execFileSync('bash', ['-lc', 'source ~/.nvm/nvm.sh && command -v opencode'], {encoding: 'utf8'}).trim();
 }
 
-describe('OpenCode 1.18.14 executable JSONL conformance', () => {
+describe('OpenCode 1.18.16 executable JSONL conformance', () => {
     it('matches the pinned compatible version and parses a live unattended stream', () => {
         const executable = opencodeExecutable();
         const version = execFileSync(executable, ['--version'], {encoding: 'utf8'}).trim();

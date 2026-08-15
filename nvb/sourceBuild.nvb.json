@@ -33,6 +33,19 @@
         type: "auto"
       }
     },
+    'check:architecture': {
+      doc: { summary: "Run architecture guardrail specs.", usage: "`nvb check:architecture`" },
+      runnerOpts: { preTasks: ["build:tests"], postTasks: [] },
+      handle: {
+        handler: "JasmineRunHandler",
+        args: [{
+          title: "Running architecture specs:",
+          jasmineExecPath: "./node_modules/.bin/jasmine",
+          jasminConfigPath: "./spec/support/jasmine-architecture.json"
+        }],
+        type: "auto"
+      }
+    },
     'clean': {
       doc: { summary: "Remove the build output directory.", usage: "`nvb clean`" },
       runnerOpts: {},

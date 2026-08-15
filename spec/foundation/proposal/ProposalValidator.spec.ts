@@ -1,5 +1,6 @@
 import {PROPOSAL_TYPES} from '../../../src/contracts/index.js';
 import {ProposalValidator, computeIdempotencyKey} from '../../../src/foundation/proposal/ProposalValidator.js';
+import {validateProposalShape} from '../../../src/foundation/proposal/proposalSchema.js';
 import {baseContext, contextFor, FIXTURES, fixtureFor, proposalFor, typedProposalFor, PAST, SNAPSHOT_DIGEST} from './support/proposalFixtures.js';
 
 describe('ProposalValidator — all 14 proposal types', function () {
@@ -126,6 +127,13 @@ describe('ProposalValidator — schema-invalid, illegal, and malformed input', f
         const proposal = {...proposalFor(fixture), rationale: 'bounded operator-facing rationale'};
         const result = validator.validateProposal(proposal, context);
         expect(result.valid).toBeTrue();
+    });
+
+    it('re-validates a shaped proposal whose body carries the type discriminant', function () {
+        const hold = fixtureFor('place-hold');
+        const shaped = validateProposalShape(proposalFor(hold));
+        expect(() => validateProposalShape(shaped)).not.toThrow();
+        expect(validator.validateProposal(shaped, contextFor(hold)).valid).toBeTrue();
     });
 
     it('rejects an extra unsupported body field for its type', function () {
