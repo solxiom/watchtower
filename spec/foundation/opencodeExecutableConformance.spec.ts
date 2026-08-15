@@ -18,8 +18,11 @@ describe('OpenCode 1.18.16 executable JSONL conformance', () => {
         expect(OPENCODE_JSONL_FORMAT_VERSION).toBe(OPENCODE_11814_VERSION);
 
         const workspace = mkdtempSync(join(tmpdir(), 'wt-opencode-'));
+        // `opencode/deepseek-v4-flash-free` intermittently hangs past 120s on the
+        // real free tier; `nemotron-3.5-lightning-free` completes reliably for
+        // the same unattended JSONL conformance probe (REL-03 C03 evidence).
         const stdout = execFileSync(executable, [
-            'run', '--pure', '--format', 'json', '--model', 'opencode/deepseek-v4-flash-free', '--dir', workspace,
+            'run', '--pure', '--format', 'json', '--model', 'opencode/nemotron-3.5-lightning-free', '--dir', workspace,
             'Reply with ONLY this JSON object, no markdown: {"decision":"hold"}'
         ], {encoding: 'utf8', timeout: 120_000, env: {...process.env, NO_COLOR: '1'}});
 
