@@ -18,10 +18,21 @@ validation, bounded operator session, and safe effect execution.
 
 ## Status
 
-Early development. Product commands and lane integration are spec-driven work in
-progress.
+**v1 implementation:** all 74 batches accepted, including the `REL-04`
+documentation consistency and release gate. The v1 release verdict is recorded
+by the accepted `REL-04` review commit per the
+[v1 map completion gate](docs/spec/v1-implementation-map.md#15-v1-map-completion-gate).
+
+Release qualification (`REL-01`–`REL-04`) — global install, lane lifecycle,
+coordinator automation, and security/packaging conformance — is reproducible
+from `nvb dist` and the `spec/e2e/` acceptance suite.
+
+**Package:** `watchtower` @ `0.1.0` (CLI bin `wt`).
 
 **Ecosystem:** pinned to `1.0.0-alpha` in `nira.json` (Nirvana shared store).
+
+New operators: start with the [operator quick start](docs/operator-quick-start.md)
+and [v1.0.0 release notes](docs/release-notes/v1.0.0.md).
 
 Start with the [v1 product specification](docs/spec/v1.md), then read the
 [architecture baseline](docs/spec/architecture.md) and
@@ -109,7 +120,7 @@ inside watchtower unless you explicitly want Nira lifecycle forwarding.
 | implementation-lane-coordinator | watchtower |
 |---------------------------------|------------|
 | Template copied into `.local/.../coordinator/` | Global CLI + `.watchtower/lanes/<slug>/` local overlay |
-| `./bin/init-lane.sh <workspace> ...` | `wt init <lane-slug> ...` (planned) |
+| `./bin/init-lane.sh <workspace> ...` | `wt init <lane-slug> ...` |
 | Scripts live in each project | Canonical scripts bundled with `wt` install |
 | Docs/playbook in template repo | Shipped with watchtower; referenced by lane config |
 
