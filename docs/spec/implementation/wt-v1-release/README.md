@@ -1,6 +1,6 @@
 # V1 release Implementation Pack
 
-Status: **Synchronized remediation candidate; dispatch requires ACCEPT_PACKS and activation**
+Status: **Complete — all four REL batches accepted; v1 release qualification closed 2026-08-16**
 
 This pack is one part of the accepted 74-batch/33-wave architecture. The explicit batch DAG is the sole scheduler; pack numbering adds no hidden dependency.
 
